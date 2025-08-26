@@ -22,6 +22,11 @@ class Todo extends Model
         return $this->belongsTo(Collaboration::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function assignee()
     {
         return $this->belongsTo(User::class, 'assigned_to');

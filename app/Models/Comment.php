@@ -20,6 +20,11 @@ class Comment extends Model
         return $this->belongsTo(Collaboration::class);
     }
 
+    public function todo()
+    {
+        return $this->belongsTo(Todo::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

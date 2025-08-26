@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('collaborations', ListCollaboration::class)->name('collaborations');
     Route::get('collaborations/create', Create::class)->name('collaborations.create');
     Route::get('collaborations/new', NewCollaboration::class)->name('collaborations.new-collaboration');
+    Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
 
 });
 
