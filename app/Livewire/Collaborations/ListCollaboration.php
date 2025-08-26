@@ -19,6 +19,7 @@ class ListCollaboration extends Component
     {
         $myCollab = CollaborationUser::with(['collaboration', 'user'])
             ->where('user_id', auth()->id())
+            ->where('status', 'accepted')
             ->get();
             
         $collabIds = $myCollab->pluck('collaboration_id');
