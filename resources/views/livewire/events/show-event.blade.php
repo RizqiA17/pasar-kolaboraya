@@ -13,6 +13,15 @@
             <div>
                 <h1 class="text-3xl font-bold mb-2">{{ $event->title }}</h1>
                 <p class="text-gray-600">{{ $event->description }}</p>
+                @if($event->location)
+                    <p class="mt-2 flex items-center text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {{ $event->location }}
+                    </p>
+                @endif
             </div>
             <div>
                 @if(!$isParticipant)
@@ -29,6 +38,33 @@
             </div>
         </div>
     </div>
+
+    {{-- Map --}}
+    @if($event->latitude && $event->longitude)
+        <div class="mb-8">
+            <div id="map" class="h-96 rounded-lg shadow-md"></div>
+        </div>
+        @push('scripts')
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            <script>
+                document.addEventListener('livewire:initialized', () => {
+                    const map = L.map('map').setView([{{ $event->latitude }}, {{ $event->longitude }}], 15);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+
+                    L.marker([{{ $event->latitude }}, {{ $event->longitude }}])
+                        .addTo(map)
+                        .bindPopup("{{ $event->title }}");
+                });
+            </script>
+        @endpush
+        @push('styles')
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        @endpush
+    @endif
 
     {{-- Event Details --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

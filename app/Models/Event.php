@@ -14,7 +14,9 @@ class Event extends Model
         'description',
         'start_date',
         'end_date',
-        'banner',
+        'location',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
