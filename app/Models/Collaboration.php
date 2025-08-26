@@ -17,9 +17,9 @@ class Collaboration extends Model
         'status',
     ];
 
-    public function event()
+    public function getCollaboration()
     {
-        return $this->belongsTo(Event::class);
+        return $this->hasMany(CollaborationUser::class);
     }
 
     public function creator()

@@ -66,7 +66,7 @@ class Suggestion extends Component
         }
 
         Connection::create([
-            'sender_id' => $senderId,
+            'requester_id' => $senderId,
             'receiver_id' => $receiverId,
             'status' => 'pending'
         ]);

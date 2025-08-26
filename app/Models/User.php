@@ -72,8 +72,6 @@ class User extends Authenticatable
     public function connections()
     {
         return $this->hasMany(Connection::class, 'requester_id')
-            ->orwhere('requester_id', $this->id)
-            ->orWhere('receiver_id', $this->id)
             ->where('status', 'accepted');
     }
 }

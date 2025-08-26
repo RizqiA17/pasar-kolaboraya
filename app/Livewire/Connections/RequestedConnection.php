@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Connections;
 
-use App\Models\Connection;
 use Livewire\Component;
+use App\Models\Connection;
+use Illuminate\Support\Facades\Http;
 
 class RequestedConnection extends Component
 {
@@ -23,14 +24,21 @@ class RequestedConnection extends Component
 
     public function loadRequests()
     {
-        $this->requests = Connection::where('receiver_id', auth()->id())
-            ->where('status', 'pending')
+        $request = Connection::where('status', 'pending')
             ->get();
+        $this->requests = $request->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'sender' => $item->requester,
+                'receiver' => $item->receiver->id,
+            ];
+        });
     }
 
     public function accept($id)
     {
-        Http::post(route('connections.accept', $id));
+        Connection::where('id', $id)->update(['status' => 'accepted']);
+
         $this->loadRequests();
 
         // notify FriendList untuk refresh
@@ -39,7 +47,7 @@ class RequestedConnection extends Component
 
     public function reject($id)
     {
-        Http::post(route('connections.reject', $id));
+        Connection::where('id', $id)->delete();
         $this->loadRequests();
     }
     public function render()
