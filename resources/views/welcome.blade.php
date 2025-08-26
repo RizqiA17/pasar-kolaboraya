@@ -85,7 +85,7 @@
     </div>
 
     <style>
-        .bg-cream { background-color: #FFFBF5; }
+        /* .bg-cream { background-color: #FFFBF5; }
         .bg-navy { background-color: #1E365C; }
         .text-navy { color: #1E365C; }
         .bg-coral { background-color: #FF6B6B; }
@@ -93,6 +93,6 @@
         .bg-sky { background-color: #4ECDC4; }
         .text-sky { color: #4ECDC4; }
         .bg-purple { background-color: #9C6BFF; }
-        .text-purple { color: #9C6BFF; }
+        .text-purple { color: #9C6BFF; } */
     </style>
 </x-layouts.guest>
