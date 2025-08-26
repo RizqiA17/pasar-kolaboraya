@@ -25,6 +25,7 @@ class RequestedConnection extends Component
     public function loadRequests()
     {
         $request = Connection::where('status', 'pending')
+            ->where('receiver_id', auth()->id())
             ->get();
         $this->requests = $request->map(function ($item) {
             return [
