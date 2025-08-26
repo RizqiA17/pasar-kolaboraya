@@ -18,6 +18,7 @@ class CreateEvent extends Component
     public $location;
     public $latitude = -7.4292;
     public $longitude = 109.2290;
+    public $banner;
 
     protected $listeners = [
         'set-coordinates' => 'setCoordinates',
@@ -30,12 +31,27 @@ class CreateEvent extends Component
         'start_date' => 'required|date|after:today',
         'end_date' => 'required|date|after:start_date',
         'latitude' => 'required|numeric|between:-90,90',
-        'longitude' => 'required|numeric|between:-180,180'
+        'longitude' => 'required|numeric|between:-180,180',
+        'banner' => 'nullable|image|max:2048'
     ];
+
+    public function updatedBanner()
+    {
+        $this->validate([
+            'banner' => 'image|max:2048'
+        ]);
+        
+        $this->dispatch('refresh-map');
+    }
 
     public function save()
     {
         $this->validate();
+
+        $banner_path = null;
+        if ($this->banner) {
+            $banner_path = $this->banner->store('event-banners', 'public');
+        }
 
         $event = Event::create([
             'title' => $this->title,
@@ -44,17 +60,9 @@ class CreateEvent extends Component
             'end_date' => $this->end_date,
             'location' => $this->location,
             'latitude' => $this->latitude,
-            'longitude' => $this->longitude
+            'longitude' => $this->longitude,
+            'banner' => $banner_path
         ]);
-
-        return redirect()->route('events')->with('success', 'Event berhasil dibuat!');
-
-        if ($this->banner) {
-            $path = $this->banner->store('event-banners', 'public');
-            $event->banner = $path;
-        }
-
-        $event->save();
 
         // Add current user as participant
         $event->participants()->attach(auth()->id());

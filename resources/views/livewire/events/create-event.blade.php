@@ -6,43 +6,83 @@
         <h1 class="text-3xl font-bold">Buat Event Baru</h1>
     </div>
 
-        <form wire:submit.prevent="save" class="space-y-6" id="eventForm" x-data="{
-        map: null,
-        marker: null,
-        latitude: @entangle('latitude').defer,
-        longitude: @entangle('longitude').defer,
+        <form wire:submit.prevent="save" class="space-y-6" id="eventForm" 
+            x-data="{
+                map: null,
+                marker: null,
+                latitude: @entangle('latitude').defer,
+                longitude: @entangle('longitude').defer,
+
+                initializeMap() {
+                    if (this.map) {
+                        this.map.remove();
+                    }
+
+                    const defaultLat = this.latitude || -7.4292;
+                    const defaultLng = this.longitude || 109.2290;
+
+                    // Initialize map
+                    this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
+
+                    // Add tile layer
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(this.map);
+
+                    // Add marker
+                    this.marker = L.marker([defaultLat, defaultLng], {
+                        draggable: true
+                    }).addTo(this.map);
+
+                    // Handle marker drag
+                    this.marker.on('dragend', () => {
+                        const pos = this.marker.getLatLng();
+                        this.latitude = pos.lat;
+                        this.longitude = pos.lng;
+                    });
+
+                    // Update map size
+                    setTimeout(() => this.map.invalidateSize(), 250);
+                },
         
         init() {
-            this.$nextTick(() => {
-                // Default coordinates (Banyumas)
-                const defaultLat = this.latitude || -7.4292;
-                const defaultLng = this.longitude || 109.2290;
+            this.initializeMap();
+            this.$watch('latitude', () => this.updateMarker());
+            this.$watch('longitude', () => this.updateMarker());
 
-                // Initialize map
-                this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
-
-                // Add tile layer
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(this.map);
-
-                // Add marker
-                this.marker = L.marker([defaultLat, defaultLng], {
-                    draggable: true
-                }).addTo(this.map);
-
-                // Handle marker drag
-                this.marker.on('dragend', () => {
-                    const pos = this.marker.getLatLng();
-                    this.latitude = pos.lat;
-                    this.longitude = pos.lng;
+            Livewire.on('refresh-map', () => {
+                this.$nextTick(() => {
+                    this.initializeMap();
                 });
-
-                // Update map size
-                setTimeout(() => this.map.invalidateSize(), 250);
             });
+        },
+
+        updateMarker() {
+            if (this.map && this.marker) {
+                const lat = this.latitude || -7.4292;
+                const lng = this.longitude || 109.2290;
+                this.marker.setLatLng([lat, lng]);
+                this.map.setView([lat, lng]);
+            }
         }
     }">
+        <div>
+            <label for="banner" class="block text-sm font-medium text-gray-700">Event Banner</label>
+            <div class="mt-1">
+                <input type="file" name="banner" id="banner" wire:model="banner" accept="image/*"
+                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                <div wire:loading wire:target="banner">
+                    <span class="text-sm text-gray-500">Uploading...</span>
+                </div>
+                @if($banner)
+                    <div class="mt-2">
+                        <img src="{{ $banner->temporaryUrl() }}" alt="Banner Preview" class="h-32 w-full object-cover rounded-lg">
+                    </div>
+                @endif
+            </div>
+            @error('banner') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        </div>
+
         <div>
             <label for="title" class="block text-sm font-medium text-gray-700">Title Event</label>
             <div class="mt-1">
