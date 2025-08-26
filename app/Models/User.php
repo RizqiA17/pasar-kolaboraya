@@ -72,6 +72,15 @@ class User extends Authenticatable
     public function connections()
     {
         return $this->hasMany(Connection::class, 'requester_id')
-            ->where('status', 'accepted');
+            ->where('status', 'accepted')->where('receiver_id', auth()->id())->orWhere('requester_id', auth()->id());
+    }
+
+    public function collaborations(){
+        return $this->hasMany(CollaborationUser::class)->where('status', 'accepted')->where('user_id', auth()->id());
+    }
+
+    public function events()
+    {
+        return $this->hasMany(EventUser::class)->where('user_id', auth()->id());
     }
 }

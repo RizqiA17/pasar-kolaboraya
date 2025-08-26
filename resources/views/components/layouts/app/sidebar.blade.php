@@ -85,7 +85,7 @@
     </flux:sidebar>
 
     <!-- Mobile User Menu -->
-    <flux:header class="border-b border-zinc-200 dark:border-zinc-700">
+    <flux:header sticky class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
         <livewire:components.search-bar align="center"/>
