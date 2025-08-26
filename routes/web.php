@@ -38,6 +38,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('collaborations/new', NewCollaboration::class)->name('collaborations.new-collaboration');
     Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
 
+    // Event Routes
+    Route::get('events', \App\Livewire\Events\ListEvent::class)->name('events');
+    Route::get('events/create', \App\Livewire\Events\CreateEvent::class)->name('events.create');
+    Route::get('events/{event}', \App\Livewire\Events\ShowEvent::class)->name('events.show');
+
 });
 
 require __DIR__ . '/auth.php';

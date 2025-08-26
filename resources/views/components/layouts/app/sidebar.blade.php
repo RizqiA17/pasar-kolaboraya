@@ -16,7 +16,7 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="link" :href="route('connections')" :current="request()->routeIs('connections')" wire:navigate>{{ __('Koneksi') }}</flux:navlist.item>
                     <flux:navlist.item icon="users" :href="route('collaborations')" :current="request()->routeIs('collaborations')" wire:navigate>{{ __('Kolaborasi') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Aksi Bersama') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')" wire:navigate>{{ __('Aksi Bersama') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
