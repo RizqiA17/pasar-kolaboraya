@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -82,5 +83,113 @@ class User extends Authenticatable
     public function events()
     {
         return $this->hasMany(EventUser::class)->where('user_id', auth()->id());
+    }
+
+    public function interests(): BelongsToMany
+    {
+        return $this->belongsToMany(Interest::class, 'user_interests')
+            ->withPivot('level')
+            ->withTimestamps();
+    }
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'user_skills')
+            ->withPivot('level', 'is_primary')
+            ->withTimestamps();
+    }
+
+    public function contributions(): BelongsToMany
+    {
+        return $this->belongsToMany(Contribution::class, 'user_contributions')
+            ->withPivot('description', 'date')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get recommended users based on common interests
+     */
+    public function getInterestBasedRecommendations($limit = 5)
+    {
+        $userInterests = $this->interests()->pluck('interests.id');
+        
+        return User::whereHas('interests', function ($query) use ($userInterests) {
+            $query->whereIn('interests.id', $userInterests);
+        })
+        ->where('id', '!=', $this->id)
+        ->withCount(['interests' => function ($query) use ($userInterests) {
+            $query->whereIn('interests.id', $userInterests);
+        }])
+        ->orderByDesc('interests_count')
+        ->limit($limit)
+        ->get();
+    }
+
+    /**
+     * Get recommended users based on common skills
+     */
+    public function getSkillBasedRecommendations($limit = 5)
+    {
+        $userSkills = $this->skills()->pluck('skills.id');
+        
+        return User::whereHas('skills', function ($query) use ($userSkills) {
+            $query->whereIn('skills.id', $userSkills);
+        })
+        ->where('id', '!=', $this->id)
+        ->withCount(['skills' => function ($query) use ($userSkills) {
+            $query->whereIn('skills.id', $userSkills);
+        }])
+        ->orderByDesc('skills_count')
+        ->limit($limit)
+        ->get();
+    }
+
+    /**
+     * Get recommended users based on event participation
+     */
+    public function getEventBasedRecommendations($limit = 5)
+    {
+        $userEventIds = $this->events()->pluck('event_id');
+        
+        return User::whereHas('events', function ($query) use ($userEventIds) {
+            $query->whereIn('event_id', $userEventIds);
+        })
+        ->where('id', '!=', $this->id)
+        ->withCount(['events' => function ($query) use ($userEventIds) {
+            $query->whereIn('event_id', $userEventIds);
+        }])
+        ->orderByDesc('events_count')
+        ->limit($limit)
+        ->get();
+    }
+
+    /**
+     * Get recommended users based on mutual friends
+     */
+    public function getMutualFriendsRecommendations($limit = 5)
+    {
+        // Get IDs of current user's friends
+        $myFriendIds = $this->connections()
+            ->where('status', 'accepted')
+            ->pluck('receiver_id')
+            ->toArray();
+
+        // Get users who are friends with my friends but not with me
+        return User::whereHas('connections', function ($query) use ($myFriendIds) {
+                $query->whereIn('receiver_id', $myFriendIds)
+                    ->where('status', 'accepted');
+            })
+            ->where('id', '!=', $this->id)
+            ->whereNotIn('id', $myFriendIds)  // Exclude users who are already friends
+            ->whereDoesntHave('receivedConnections', function ($query) {  // Exclude pending requests
+                $query->where('requester_id', $this->id);
+            })
+            ->withCount(['connections' => function ($query) use ($myFriendIds) {
+                $query->whereIn('receiver_id', $myFriendIds)
+                    ->where('status', 'accepted');
+            }])
+            ->orderByDesc('connections_count')  // Order by number of mutual friends
+            ->limit($limit)
+            ->get();
     }
 }

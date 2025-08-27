@@ -2,21 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Event extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
         'description',
+        'location',
         'start_date',
         'end_date',
-        'location',
-        'latitude',
-        'longitude',
+        'status',
+        'created_by',
+        'max_participants',
     ];
 
     protected $casts = [
@@ -24,15 +27,21 @@ class Event extends Model
         'end_date' => 'datetime',
     ];
 
-    public function participants()
+    public function creator(): BelongsTo
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function collaborations()
+    public function participants(): BelongsToMany
     {
-        return $this->hasMany(Collaboration::class);
+        return $this->belongsToMany(User::class, 'event_users')
+            ->withPivot('role', 'status')
+            ->withTimestamps();
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(EventCategory::class, 'event_category_relations', 'event_id', 'category_id')
+            ->withTimestamps();
     }
 }
-
-

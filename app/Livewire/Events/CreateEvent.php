@@ -56,6 +56,7 @@ class CreateEvent extends Component
         $event = Event::create([
             'title' => $this->title,
             'description' => $this->description,
+            'created_by' => auth()->id(),
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,

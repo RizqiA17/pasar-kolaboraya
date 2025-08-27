@@ -17,6 +17,9 @@ class EventSeeder extends Seeder
         
         // Create 10 events
         foreach(range(1, 10) as $index) {
+            // Get a random user as event creator
+            $creator = $users->random();
+            
             $event = Event::create([
                 'title' => fake()->sentence(),
                 'description' => fake()->paragraph(),
@@ -26,11 +29,25 @@ class EventSeeder extends Seeder
                 'location' => fake()->city(),
                 'latitude' => fake()->latitude(),
                 'longitude' => fake()->longitude(),
+                'status' => fake()->randomElement(['draft', 'published', 'completed']),
+                'created_by' => $creator->id,
+                'max_participants' => fake()->numberBetween(10, 50),
+            ]);
+
+            // Add creator as organizer
+            $event->participants()->attach($creator->id, [
+                'role' => 'organizer',
+                'status' => 'approved'
             ]);
 
             // Attach 3-7 random participants to each event
-            $participants = $users->random(fake()->numberBetween(3, 7));
-            $event->participants()->attach($participants->pluck('id'));
+            $participants = $users->where('id', '!=', $creator->id)->random(fake()->numberBetween(3, 7));
+            foreach ($participants as $participant) {
+                $event->participants()->attach($participant->id, [
+                    'role' => 'participant',
+                    'status' => fake()->randomElement(['pending', 'approved', 'rejected'])
+                ]);
+            }
         }
     }
 }
