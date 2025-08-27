@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900">
-        <div class="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-            <div class="flex w-full max-w-sm flex-col gap-2">
-                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                    <span class="flex h-9 w-9 mb-1 items-center justify-center rounded-md">
-                        <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
-                    </span>
-                    <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
-                </a>
-                <div class="flex flex-col gap-6">
-                    {{ $slot }}
+    <body class="min-h-screen antialiased bg-gradient-to-b from-[#FFF7ED] via-[#F0F7FF] to-white relative">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute -top-24 -left-24 size-[380px] rounded-full bg-[#FFE3E3] blur-3xl opacity-60"></div>
+            <div class="absolute -bottom-24 -right-24 size-[420px] rounded-full bg-[#E3F2FF] blur-3xl opacity-60"></div>
+        </div>
+
+        <div class="relative flex min-h-svh flex-col items-center justify-center gap-8 p-6 md:p-10">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-zinc-800" wire:navigate>
+                <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="Logo Pasar Kolaboraya" class="h-10 w-auto" />
+            </a>
+
+            <div class="w-full max-w-md">
+                <div class="rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-xl">
+                    <div class="px-8 py-7">
+                        {{ $slot }}
+                    </div>
                 </div>
             </div>
         </div>
         @fluxScripts
     </body>
-</html>
+    </html>

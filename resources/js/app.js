@@ -1,0 +1,1 @@
+localStorage.setItem('flux.appearance', 'light')

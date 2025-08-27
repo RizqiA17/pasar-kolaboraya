@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-neutral-100 antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900">
-        <div class="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-            <div class="flex w-full max-w-md flex-col gap-6">
-                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                    <span class="flex h-9 w-9 items-center justify-center rounded-md">
-                        <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
-                    </span>
+    <body class="min-h-screen antialiased bg-gradient-to-b from-[#FFF7ED] via-[#F0F7FF] to-white relative">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute -top-24 -left-24 size-[360px] rounded-full bg-[#FFE3E3] blur-3xl opacity-60"></div>
+            <div class="absolute -bottom-28 -right-28 size-[460px] rounded-full bg-[#E3F2FF] blur-3xl opacity-60"></div>
+        </div>
 
-                    <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
-                </a>
+        <div class="relative flex min-h-svh flex-col items-center justify-center gap-8 p-6 md:p-10">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-zinc-800" wire:navigate>
+                <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="Logo Pasar Kolaboraya" class="h-10 w-auto" />
+            </a>
 
-                <div class="flex flex-col gap-6">
-                    <div class="rounded-xl border bg-white dark:bg-stone-950 dark:border-stone-800 text-stone-800 shadow-xs">
-                        <div class="px-10 py-8">{{ $slot }}</div>
+            <div class="w-full max-w-lg">
+                <div class="rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-xl">
+                    <div class="px-10 py-9">
+                        {{ $slot }}
                     </div>
                 </div>
             </div>

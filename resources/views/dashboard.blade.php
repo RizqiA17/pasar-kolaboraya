@@ -58,7 +58,7 @@
             </div>
 
         </div>
-        <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
             <div
                 class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-800">
                 <div class="border-b border-neutral-200 p-6 dark:border-neutral-700">
