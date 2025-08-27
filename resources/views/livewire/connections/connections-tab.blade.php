@@ -41,7 +41,9 @@
                 <h2 class="text-lg font-semibold">Permintaan Koneksi</h2>
                 <a href="#" class="text-sm text-sky-600 hover:text-sky-700">Lihat Semua</a>
             </div>
-            <livewire:connections.requests />
+            <div class="p-4">
+                <livewire:connections.requested-connection />
+            </div>
         </div>
     @endif
 
