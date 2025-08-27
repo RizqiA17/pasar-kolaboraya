@@ -1,8 +1,4 @@
 <section>
-    {{-- Modals --}}
-    <flux:modal name="create-collaboration" variant="flyout">
-        <livewire:collaborations.new-collaboration :friend-id="null" />
-    </flux:modal>
 
     {{-- Connection List --}}
     <div class="grid gap-4">
