@@ -22,7 +22,7 @@
         <flux:spacer />
 
         {{-- Notification --}}
-        <x-flux::dropdown align="right" width="64" class="relative" 
+        <x-flux::dropdown align="right" width="96" class="relative" 
             x-on:show="Livewire.dispatch('dropdown-shown')"
             x-on:hide="Livewire.dispatch('dropdown-hidden')">
             <flux:button icon="bell"
@@ -30,7 +30,7 @@
             </flux:button>
             <flux:menu
                 class="-translate-x-8 bg-white border border-blue-200 dark:bg-gray-800 dark:border-blue-600 shadow-lg">
-                <div class="p-3 w-64">
+                <div class="p-3 w-96">
                     {{-- Panggil komponen Livewire di dalam dropdown --}}
                     <livewire:connections.requested-connection wire:key="requested-connection" />
                 </div>
