@@ -8,7 +8,7 @@
 <body class="min-h-screen bg-white dark:bg-zinc-800">
 
     <flux:header sticky
-        class="border-b border-blue-200 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-800 dark:via-indigo-800 dark:to-purple-800 dark:border-blue-600 shadow-lg">
+        class="border-b border-blue-200 bg-navy shadow-lg">
         <flux:sidebar.toggle
             class="lg:hidden text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" icon="bars-2"
             inset="left" />
@@ -24,7 +24,7 @@
 
         <x-flux::dropdown align="right" width="64" class="relative">
             <flux:button icon="bell"
-                class="m-auto text-white bg-blue-500 hover:from-blue-600 hover:to-purple-700 rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300">
+                class="m-auto text-white bg-cream! rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300">
             </flux:button>
             <flux:menu
                 class="-translate-x-8 bg-white border border-blue-200 dark:bg-gray-800 dark:border-blue-600 shadow-lg">
@@ -82,7 +82,7 @@
     </flux:header>
 
     <flux:sidebar sticky stashable
-        class="border-e border-blue-200 bg-gradient-to-b from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-800 dark:via-indigo-800 dark:to-purple-800 dark:border-blue-600">
+        class="border-e border-blue-200">
         <flux:sidebar.toggle
             class="lg:hidden text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             icon="x-mark" />

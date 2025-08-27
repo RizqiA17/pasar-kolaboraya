@@ -9,6 +9,7 @@
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Koneksi</h3>
                         <div
                             class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+                            <flux:icon.link class="size-5" />
                         </div>
                     </div>
                     <div class="mt-4">
@@ -27,6 +28,7 @@
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Kolaborasi</h3>
                         <div
                             class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
+                            <flux:icon.users class="size-5" />
                         </div>
                     </div>
                     <div class="mt-4">
@@ -45,6 +47,7 @@
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Aksi</h3>
                         <div
                             class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
+                            <flux:icon.user-group class="size-5" />
                         </div>
                     </div>
                     <div class="mt-4">
