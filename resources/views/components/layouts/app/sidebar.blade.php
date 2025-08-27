@@ -29,7 +29,7 @@
                 class="-translate-x-8 bg-white border border-blue-200 dark:bg-gray-800 dark:border-blue-600 shadow-lg">
                 <div class="p-3 w-64">
                     {{-- Panggil komponen Livewire di dalam dropdown --}}
-                    <livewire:connections.requested-connection />
+                    <livewire:connections.requested-connection wire:poll.3s/>
                 </div>
             </flux:menu>
         </x-flux::dropdown>
