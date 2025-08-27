@@ -14,6 +14,11 @@ class ConnectionsTab extends Component
         $this->tab = $tab;
     }
 
+    public function mount()
+    {
+        $this->tab = request()->get('tab', 'suggestion');
+    }
+
     public function render()
     {
         return view('livewire.connections.connections-tab');
