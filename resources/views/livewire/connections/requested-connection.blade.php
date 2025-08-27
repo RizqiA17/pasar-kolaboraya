@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.3s="loadRequests" wire:poll.stop="!pollingState">
     <h2 class="text-sm font-bold mb-2">Permintaan Pertemanan</h2>
     <ul class="space-y-2 max-h-60 overflow-y-auto">
         @forelse ($requests as $req)

@@ -5,27 +5,28 @@ namespace App\Livewire\Connections;
 use Livewire\Component;
 use App\Models\Connection;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class RequestedConnection extends Component
 {
     public $requests = [];
+    public $isOpen = false;
 
-    protected $listeners = ['refresh-requests' => 'loadRequests'];
+    protected $listeners = [
+        'refresh-requests' => 'loadRequests',
+        'dropdown-shown' => 'dropdownOpened',
+        'dropdown-hidden' => 'dropdownClosed'
+    ];
 
     public function mount()
     {
         $this->loadRequests();
     }
 
-    public function setTab($tab)
-    {
-        $this->tab = $tab;
-    }
-
     public function loadRequests()
     {
         $request = Connection::where('status', 'pending')
-            ->where('receiver_id', auth()->id())
+            ->where('receiver_id', Auth::id())
             ->get();
         $this->requests = $request->map(function ($item) {
             return [
@@ -51,6 +52,26 @@ class RequestedConnection extends Component
         Connection::where('id', $id)->delete();
         $this->loadRequests();
     }
+    public function dropdownOpened()
+    {
+        $this->isOpen = true;
+        $this->loadRequests();
+        // Start polling when dropdown is opened
+        $this->dispatch('poll-start');
+    }
+
+    public function dropdownClosed()
+    {
+        $this->isOpen = false;
+        // Stop polling when dropdown is closed
+        $this->dispatch('poll-stop');
+    }
+
+    public function getPollingStateProperty()
+    {
+        return $this->isOpen;
+    }
+
     public function render()
     {
         return view('livewire.connections.requested-connection');
