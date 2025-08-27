@@ -22,9 +22,10 @@ class CommentSeeder extends Seeder
             
             foreach(range(1, $numberOfComments) as $index) {
                 Comment::create([
+                    'collaboration_id' => $todo->collaboration_id,
                     'todo_id' => $todo->id,
                     'user_id' => $todo->collaboration->members->random()->id,
-                    'comment' => fake()->paragraph(),
+                    'message' => fake()->paragraph(),
                 ]);
             }
         }

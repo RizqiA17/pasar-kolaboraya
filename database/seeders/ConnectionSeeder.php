@@ -22,10 +22,9 @@ class ConnectionSeeder extends Seeder
             
             foreach ($otherUsers as $otherUser) {
                 Connection::create([
-                    'user_id' => $user->id,
-                    'connected_user_id' => $otherUser->id,
-                    'status' => 'accepted',
-                    'connected_at' => now(),
+                    'requester_id' => $user->id,
+                    'receiver_id' => $otherUser->id,
+                    'status' => fake()->randomElement(['pending', 'accepted', 'rejected']),
                 ]);
             }
         }

@@ -20,8 +20,8 @@ class CollaborationSeeder extends Seeder
             $collaboration = Collaboration::create([
                 'title' => fake()->sentence(),
                 'description' => fake()->paragraph(),
-                'status' => fake()->randomElement(['active', 'completed', 'on-hold']),
-                'creator_id' => $users->random()->id,
+                'status' => fake()->randomElement(['pending', 'active']),
+                'created_by' => $users->random()->id,
             ]);
 
             // Attach 2-5 random members to each collaboration

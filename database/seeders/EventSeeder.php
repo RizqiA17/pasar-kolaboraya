@@ -22,8 +22,10 @@ class EventSeeder extends Seeder
                 'description' => fake()->paragraph(),
                 'start_date' => fake()->dateTimeBetween('now', '+2 months'),
                 'end_date' => fake()->dateTimeBetween('+2 months', '+4 months'),
+                'banner' => null, // You can set a default banner image if needed
                 'location' => fake()->city(),
-                'creator_id' => $users->random()->id,
+                'latitude' => fake()->latitude(),
+                'longitude' => fake()->longitude(),
             ]);
 
             // Attach 3-7 random participants to each event

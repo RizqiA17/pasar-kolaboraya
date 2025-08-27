@@ -20,11 +20,10 @@ class TodoSeeder extends Seeder
             foreach(range(1, fake()->numberBetween(3, 8)) as $index) {
                 Todo::create([
                     'collaboration_id' => $collaboration->id,
-                    'creator_id' => $collaboration->members->random()->id,
                     'title' => fake()->sentence(),
                     'description' => fake()->optional()->paragraph(),
-                    'completed' => fake()->boolean(30), // 30% chance of being completed
-                    'due_date' => fake()->optional()->dateTimeBetween('now', '+1 month'),
+                    'status' => fake()->randomElement(['pending', 'completed']),
+                    'created_by' => $collaboration->members->random()->id,
                 ]);
             }
         }

@@ -13,12 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            // ProfileSeeder::class,
-            // ConnectionSeeder::class,
-            // EventSeeder::class,
-            // CollaborationSeeder::class,
-            // TodoSeeder::class,
-            // CommentSeeder::class,
+            ProfileSeeder::class,
+            ConnectionSeeder::class,
+            EventSeeder::class,
+            CollaborationSeeder::class,
+            TodoSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }
