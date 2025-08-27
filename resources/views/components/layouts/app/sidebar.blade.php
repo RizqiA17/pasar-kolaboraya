@@ -14,7 +14,7 @@
             inset="left" />
 
         <a href="{{ route('dashboard') }}"
-            class="lg:flex items-center p-y-3 rounded-lg transition-all duration-300 lg:me-8 mx-2 hidden"wire:navigate>
+            class="lg:flex items-center p-y-3 rounded-lg transition-all duration-300 lg:me-8 hidden"wire:navigate>
             <x-app-logo />
         </a>
 
@@ -88,7 +88,7 @@
             icon="x-mark" />
 
         <flux:navlist variant="outline" class="space-y-2">
-            <flux:navlist.group :heading="__('Platform')" class="grid">
+            <flux:navlist.group :heading="__('Menu')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     class="text-gray-700 hover:text-blue-600 hover:bg-blue-200 dark:text-gray-200 dark:hover:text-blue-300 dark:hover:bg-blue-700 transition-all duration-200"
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
@@ -174,7 +174,7 @@
 
     <div class="fixed size-0">
         <div
-            class="pointer-events-none absolute inset-0 overflow-hidden lg:ml-64 h-[100svh] lg:w-[100svw_-_16rem] w-[100svw]">
+            class="pointer-events-none absolute inset-0 overflow-hidden lg:ml-64 h-[100svh] lg:w-[100svw_-_16rem] w-[100svw] bg-cream">
             <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-coral/30 blur-3xl"></div>
             <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-sky/30 blur-3xl"></div>
             <div class="absolute top-1/3 -left-10 h-64 w-64 rounded-full bg-purple/20 blur-3xl"></div>
