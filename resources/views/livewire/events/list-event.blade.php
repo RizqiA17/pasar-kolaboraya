@@ -13,9 +13,9 @@
         {{-- Search and Filter --}}
         <div class="flex gap-4">
             <select wire:model.live="filter" class="border-gray-300 rounded-md shadow-sm">
-                <option value="all">Semua Event</option>
-                <option value="upcoming">Event Mendatang</option>
-                <option value="past">Event Selesai</option>
+                <option value="all">Semua Aksi</option>
+                <option value="upcoming">Aksi Mendatang</option>
+                <option value="past">Aksi Selesai</option>
             </select>
         </div>
     </div>

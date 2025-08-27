@@ -5,7 +5,7 @@
         <nav class="absolute top-0 w-full z-50 p-6">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="text-navy text-2xl font-bold">
-                    Pasar Kolaboraya
+                   <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo" class="h-10">
                 </div>
                 @if (Route::has('login'))
                     <div class="space-x-4">
