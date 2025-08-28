@@ -26,19 +26,30 @@ class ProfileSettings extends Component
         $this->skills = Skill::all();
         $this->contributions = Contribution::all();
         
-        // Load user's current selections
-        $this->selectedInterests = auth()->user()->interests()
+        // Get or create user profile
+        $profile = auth()->user()->profile;
+        if (!$profile) {
+            $profile = auth()->user()->profile()->create();
+        }
+        
+        // Load user's current selections from profile
+        $this->selectedInterests = $profile->interests()
             ->pluck('interest_id')
             ->toArray();
             
-        $this->selectedSkills = auth()->user()->skills()
+        $this->selectedSkills = $profile->skills()
             ->pluck('skill_id')
             ->toArray();
     }
 
     public function updateInterests()
     {
-        auth()->user()->interests()->sync(
+        $profile = auth()->user()->profile;
+        if (!$profile) {
+            $profile = auth()->user()->profile()->create();
+        }
+
+        $profile->interests()->sync(
             collect($this->selectedInterests)->mapWithKeys(function ($id) {
                 return [$id => ['level' => 1]];
             })
@@ -49,7 +60,12 @@ class ProfileSettings extends Component
 
     public function updateSkills()
     {
-        auth()->user()->skills()->sync(
+        $profile = auth()->user()->profile;
+        if (!$profile) {
+            $profile = auth()->user()->profile()->create();
+        }
+
+        $profile->skills()->sync(
             collect($this->selectedSkills)->mapWithKeys(function ($id) {
                 return [$id => ['level' => 1, 'is_primary' => false]];
             })
@@ -66,7 +82,12 @@ class ProfileSettings extends Component
             'newContribution.date' => 'required|date',
         ]);
 
-        auth()->user()->contributions()->attach(
+        $profile = auth()->user()->profile;
+        if (!$profile) {
+            $profile = auth()->user()->profile()->create();
+        }
+
+        $profile->contributions()->attach(
             $this->newContribution['contribution_id'],
             [
                 'description' => $this->newContribution['description'],
@@ -85,13 +106,21 @@ class ProfileSettings extends Component
 
     public function removeContribution($contributionId)
     {
-        auth()->user()->contributions()->detach($contributionId);
+        $profile = auth()->user()->profile;
+        if ($profile) {
+            $profile->contributions()->detach($contributionId);
+        }
         $this->dispatch('profile-updated');
     }
 
     public function render()
     {
-        $userContributions = auth()->user()->contributions()
+        $profile = auth()->user()->profile;
+        if (!$profile) {
+            $profile = auth()->user()->profile()->create();
+        }
+
+        $userContributions = $profile->contributions()
             ->withPivot('description', 'date')
             ->orderByDesc('user_contributions.date')
             ->get();

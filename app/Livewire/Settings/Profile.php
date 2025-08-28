@@ -31,15 +31,20 @@ class Profile extends Component
         /** @var User $user */
         $user = Auth::user();
         $profile = $user->profile;
+        
+        // Create profile if it doesn't exist
+        if (!$profile) {
+            $profile = $user->profile()->create();
+        }
 
         $this->name = $user->name;
         $this->email = $user->email;
         $this->organization = $profile?->organization ?? '';
         $this->phone = $profile?->phone ?? '';
         $this->social_media = is_array($profile?->social_media) ? $profile->social_media : [];
-        $this->selectedSkills = $user->skills()->pluck('skills.id')->toArray();
-        $this->selectedInterests = $user->interests()->pluck('interests.id')->toArray();
-        $this->userContributions = $user->contributions()->get()->toArray();
+        $this->selectedSkills = $profile ? $profile->skills()->pluck('skills.id')->toArray() : [];
+        $this->selectedInterests = $profile ? $profile->interests()->pluck('interests.id')->toArray() : [];
+        $this->userContributions = $profile ? $profile->contributions()->get()->toArray() : [];
         $this->vision = $profile?->vision ?? '';
     }
 
@@ -92,13 +97,19 @@ class Profile extends Component
     {
         /** @var User $user */
         $user = Auth::user();
+        $profile = $user->profile;
+        
+        // Create profile if it doesn't exist
+        if (!$profile) {
+            $profile = $user->profile()->create();
+        }
 
         // Sync skills with pivot data
         $skillsData = collect($this->selectedSkills)->mapWithKeys(function ($skillId) {
             return [$skillId => ['level' => 1]]; // Default level 1
         })->toArray();
 
-        $user->skills()->sync($skillsData);
+        $profile->skills()->sync($skillsData);
 
         $this->dispatch('skills-updated');
     }
@@ -107,13 +118,19 @@ class Profile extends Component
     {
         /** @var User $user */
         $user = Auth::user();
+        $profile = $user->profile;
+        
+        // Create profile if it doesn't exist
+        if (!$profile) {
+            $profile = $user->profile()->create();
+        }
 
         // Sync interests with pivot data
         $interestsData = collect($this->selectedInterests)->mapWithKeys(function ($interestId) {
             return [$interestId => ['level' => 1]]; // Default level 1
         })->toArray();
 
-        $user->interests()->sync($interestsData);
+        $profile->interests()->sync($interestsData);
 
         $this->dispatch('interests-updated');
     }
@@ -128,8 +145,14 @@ class Profile extends Component
 
         /** @var User $user */
         $user = Auth::user();
+        $profile = $user->profile;
+        
+        // Create profile if it doesn't exist
+        if (!$profile) {
+            $profile = $user->profile()->create();
+        }
 
-        $user->contributions()->attach($validated['newContribution']['contribution_id'], [
+        $profile->contributions()->attach($validated['newContribution']['contribution_id'], [
             'description' => $validated['newContribution']['description'],
             'date' => $validated['newContribution']['date'],
         ]);
@@ -142,7 +165,7 @@ class Profile extends Component
         ];
 
         // Refresh contributions list
-        $this->userContributions = $user->contributions()->get()->toArray();
+        $this->userContributions = $profile->contributions()->get()->toArray();
 
         $this->dispatch('contribution-added');
     }
@@ -151,11 +174,14 @@ class Profile extends Component
     {
         /** @var User $user */
         $user = Auth::user();
+        $profile = $user->profile;
+        
+        if ($profile) {
+            $profile->contributions()->detach($contributionId);
 
-        $user->contributions()->detach($contributionId);
-
-        // Refresh contributions list
-        $this->userContributions = $user->contributions()->get()->toArray();
+            // Refresh contributions list
+            $this->userContributions = $profile->contributions()->get()->toArray();
+        }
     }
 
     public function render()

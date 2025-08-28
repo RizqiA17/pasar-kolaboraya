@@ -91,42 +91,31 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(EventUser::class)->where('user_id', auth()->id());
     }
 
-    public function interests(): BelongsToMany
-    {
-        return $this->belongsToMany(Interest::class, 'user_interests')
-            ->withPivot('level')
-            ->withTimestamps();
-    }
 
-    public function skills(): BelongsToMany
-    {
-        return $this->belongsToMany(Skill::class, 'user_skills')
-            ->withPivot('level', 'is_primary')
-            ->withTimestamps();
-    }
-
-    public function contributions(): BelongsToMany
-    {
-        return $this->belongsToMany(Contribution::class, 'user_contributions')
-            ->withPivot('description', 'date')
-            ->withTimestamps();
-    }
 
     /**
      * Get recommended users based on common interests
      */
     public function getInterestBasedRecommendations($limit = 5)
     {
-        $userInterests = $this->interests()->pluck('interests.id');
+        $profile = $this->profile;
+        if (!$profile) {
+            return collect();
+        }
         
-        return User::whereHas('interests', function ($query) use ($userInterests) {
-            $query->whereIn('interests.id', $userInterests);
+        $userInterests = $profile->interests()->pluck('interests.id');
+        
+        if ($userInterests->isEmpty()) {
+            return collect();
+        }
+        
+        // Get users who have similar interests through their profile
+        return User::whereHas('profile', function ($query) use ($userInterests) {
+            $query->whereHas('interests', function ($subQuery) use ($userInterests) {
+                $subQuery->whereIn('interests.id', $userInterests);
+            });
         })
         ->where('id', '!=', $this->id)
-        ->withCount(['interests' => function ($query) use ($userInterests) {
-            $query->whereIn('interests.id', $userInterests);
-        }])
-        ->orderByDesc('interests_count')
         ->limit($limit)
         ->get();
     }
@@ -136,16 +125,24 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getSkillBasedRecommendations($limit = 5)
     {
-        $userSkills = $this->skills()->pluck('skills.id');
+        $profile = $this->profile;
+        if (!$profile) {
+            return collect();
+        }
         
-        return User::whereHas('skills', function ($query) use ($userSkills) {
-            $query->whereIn('skills.id', $userSkills);
+        $userSkills = $profile->skills()->pluck('skills.id');
+        
+        if ($userSkills->isEmpty()) {
+            return collect();
+        }
+        
+        // Get users who have similar skills through their profile
+        return User::whereHas('profile', function ($query) use ($userSkills) {
+            $query->whereHas('skills', function ($subQuery) use ($userSkills) {
+                $subQuery->whereIn('skills.id', $userSkills);
+            });
         })
         ->where('id', '!=', $this->id)
-        ->withCount(['skills' => function ($query) use ($userSkills) {
-            $query->whereIn('skills.id', $userSkills);
-        }])
-        ->orderByDesc('skills_count')
         ->limit($limit)
         ->get();
     }
