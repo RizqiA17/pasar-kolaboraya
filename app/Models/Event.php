@@ -20,6 +20,7 @@ class Event extends Model
         'status',
         'created_by',
         'max_participants',
+        'banner',
     ];
 
     protected $casts = [

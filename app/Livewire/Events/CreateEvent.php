@@ -53,6 +53,11 @@ class CreateEvent extends Component
             $banner_path = $this->banner->store('event-banners', 'public');
         }
 
+        // Set default location if not provided
+        if (empty($this->location)) {
+            $this->location = "Lokasi belum ditentukan";
+        }
+
         $event = Event::create([
             'title' => $this->title,
             'description' => $this->description,
@@ -62,7 +67,8 @@ class CreateEvent extends Component
             'location' => $this->location,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'banner' => $banner_path
+            'banner' => $banner_path,
+            'status' => 'draft'
         ]);
 
         // Add current user as participant
