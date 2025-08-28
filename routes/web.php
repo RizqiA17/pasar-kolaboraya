@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    Route::get('settings/tes', ProfileSettings::class)->name('settings.tes');
+    Route::get('settings/profile-settings', ProfileSettings::class)->name('settings.profile-settings');
 
     Route::get('connections', ConnectionsTab::class)->name('connections');
 
