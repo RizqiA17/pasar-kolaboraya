@@ -32,7 +32,8 @@ class CreateEvent extends Component
         'end_date' => 'required|date|after:start_date',
         'latitude' => 'required|numeric|between:-90,90',
         'longitude' => 'required|numeric|between:-180,180',
-        'banner' => 'nullable|image|max:2048'
+        'banner' => 'nullable|image|max:2048',
+        'location' => 'nullable|string|max:500'
     ];
 
     public function updatedBanner()

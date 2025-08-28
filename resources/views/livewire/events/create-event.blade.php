@@ -39,60 +39,77 @@
                 </div>
             </div>
 
-            <form wire:submit.prevent="save" class="p-6 space-y-8" id="eventForm" x-data="{
-                map: null,
-                marker: null,
-                latitude: @entangle('latitude').defer,
-                longitude: @entangle('longitude').defer,
-            
-                initializeMap() {
-                    if (this.map) {
-                        this.map.remove();
-                    }
-            
-                    const defaultLat = this.latitude || -7.4292;
-                    const defaultLng = this.longitude || 109.2290;
-            
-                    this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
-            
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap contributors'
-                    }).addTo(this.map);
-            
-                    this.marker = L.marker([defaultLat, defaultLng], {
-                        draggable: true
-                    }).addTo(this.map);
-            
-                    this.marker.on('dragend', () => {
-                        const pos = this.marker.getLatLng();
-                        this.latitude = pos.lat;
-                        this.longitude = pos.lng;
-                    });
-            
-                    setTimeout(() => this.map.invalidateSize(), 250);
-                },
-            
-                init() {
-                    this.initializeMap();
-                    this.$watch('latitude', () => this.updateMarker());
-                    this.$watch('longitude', () => this.updateMarker());
-            
-                    Livewire.on('refresh-map', () => {
-                        this.$nextTick(() => {
-                            this.initializeMap();
+            <form wire:submit.prevent="save" class="p-6 space-y-8" id="eventForm" 
+                x-data="{
+                    map: null,
+                    marker: null,
+                    latitude: @entangle('latitude').defer,
+                    longitude: @entangle('longitude').defer,
+                    location: @entangle('location').defer,
+
+                    initializeMap() {
+                        if (this.map) {
+                            this.map.remove();
+                        }
+
+                        const defaultLat = this.latitude || -7.4292;
+                        const defaultLng = this.longitude || 109.2290;
+
+                        this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '© OpenStreetMap contributors'
+                        }).addTo(this.map);
+
+                        this.marker = L.marker([defaultLat, defaultLng], {
+                            draggable: true
+                        }).addTo(this.map);
+
+                        this.marker.on('dragend', () => {
+                            const pos = this.marker.getLatLng();
+                            this.latitude = pos.lat;
+                            this.longitude = pos.lng;
+                            this.updateLocationFromCoordinates(pos.lat, pos.lng);
                         });
-                    });
-                },
+
+                        setTimeout(() => this.map.invalidateSize(), 250);
+                    },
+
+                    updateLocationFromCoordinates(lat, lng) {
+                        // Reverse geocoding to get address from coordinates
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.display_name) {
+                                    this.location = data.display_name;
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Error getting location:', error);
+                            });
+                    },
             
-                updateMarker() {
-                    if (this.map && this.marker) {
-                        const lat = this.latitude || -7.4292;
-                        const lng = this.longitude || 109.2290;
-                        this.marker.setLatLng([lat, lng]);
-                        this.map.setView([lat, lng]);
+                    init() {
+                        this.initializeMap();
+                        this.$watch('latitude', () => this.updateMarker());
+                        this.$watch('longitude', () => this.updateMarker());
+
+                        Livewire.on('refresh-map', () => {
+                            this.$nextTick(() => {
+                                this.initializeMap();
+                            });
+                        });
+                    },
+
+                    updateMarker() {
+                        if (this.map && this.marker) {
+                            const lat = this.latitude || -7.4292;
+                            const lng = this.longitude || 109.2290;
+                            this.marker.setLatLng([lat, lng]);
+                            this.map.setView([lat, lng]);
+                        }
                     }
-                }
-            }">
+                }">
 
                 <!-- Banner Section -->
                 <div class="space-y-4">
@@ -213,47 +230,49 @@
                 <!-- Location Section -->
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <div
-                            class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-900">Lokasi Event</h3>
-                            <p class="text-sm text-gray-500">Pilih lokasi event dengan peta interaktif</p>
+                            <p class="text-sm text-gray-500">Masukkan alamat atau pilih lokasi dengan peta interaktif</p>
                         </div>
                     </div>
-
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <div x-ref="map" class="h-80 rounded-lg overflow-hidden shadow-lg mb-4"></div>
-                        <div class="gap-4 hidden">
-                            <div>
-                                <label for="latitude"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
-                                <input type="text" id="latitude" name="latitude" x-model="latitude" readonly
-                                    class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
+                    
+                    <!-- Location Input Field -->
+                    <div class="space-y-3">
+                        <div>
+                            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Alamat Lokasi</label>
+                            <input type="text" id="location" name="location" wire:model="location" 
+                                   placeholder="Contoh: Jl. Sudirman No. 123, Jakarta Pusat"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400">
+                            @error('location') <span class="text-red-500 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="mb-3">
+                                <p class="text-sm text-gray-600 mb-2">Atau pilih lokasi dengan peta (drag marker untuk mengubah koordinat):</p>
                             </div>
-                            <div>
-                                <label for="longitude"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
-                                <input type="text" id="longitude" name="longitude" x-model="longitude" readonly
-                                    class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
+                            <div x-ref="map" class="h-80 rounded-lg overflow-hidden shadow-lg mb-4"></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="latitude" class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
+                                    <input type="text" id="latitude" name="latitude" x-model="latitude" readonly
+                                           class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
+                                    @error('latitude') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label for="longitude" class="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
+                                    <input type="text" id="longitude" name="longitude" x-model="longitude" readonly
+                                           class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
+                                    @error('longitude') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </div>
-                        <p class="text-sm text-red-500">Seret Penanda Peta untuk mengubah lokasi</p>
                     </div>
-                    @error('latitude')
-                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                    @enderror
-                    @error('longitude')
-                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <!-- Description Section -->
