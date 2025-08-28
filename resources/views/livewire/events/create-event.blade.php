@@ -72,27 +72,48 @@
                             this.updateLocationFromCoordinates(pos.lat, pos.lng);
                         });
 
+                        // Add click event to map for location selection
+                        this.map.on('click', (e) => {
+                            const pos = e.latlng;
+                            this.marker.setLatLng(pos);
+                            this.latitude = pos.lat;
+                            this.longitude = pos.lng;
+                            this.updateLocationFromCoordinates(pos.lat, pos.lng);
+                        });
+
                         setTimeout(() => this.map.invalidateSize(), 250);
                     },
 
                     updateLocationFromCoordinates(lat, lng) {
+                        // Show loading state
+                        this.location = 'Mengambil alamat...';
+                        
                         // Reverse geocoding to get address from coordinates
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&accept-language=id`)
                             .then(response => response.json())
                             .then(data => {
                                 if (data.display_name) {
                                     this.location = data.display_name;
+                                } else {
+                                    this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                                 }
                             })
                             .catch(error => {
                                 console.log('Error getting location:', error);
+                                this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                             });
                     },
             
                     init() {
                         this.initializeMap();
-                        this.$watch('latitude', () => this.updateMarker());
-                        this.$watch('longitude', () => this.updateMarker());
+                        this.$watch('latitude', () => {
+                            this.updateMarker();
+                            this.updateInputFields();
+                        });
+                        this.$watch('longitude', () => {
+                            this.updateMarker();
+                            this.updateInputFields();
+                        });
 
                         Livewire.on('refresh-map', () => {
                             this.$nextTick(() => {
@@ -108,6 +129,43 @@
                             this.marker.setLatLng([lat, lng]);
                             this.map.setView([lat, lng]);
                         }
+                    },
+
+                    updateInputFields() {
+                        // Update latitude and longitude input fields
+                        if (this.map && this.marker) {
+                            const lat = this.marker.getLatLng().lat;
+                            const lng = this.marker.getLatLng().lng;
+                            // Update Livewire properties directly
+                            @this.set('latitude', lat);
+                            @this.set('longitude', lng);
+                        }
+                    },
+
+                    searchLocation(query) {
+                        if (!query || query.length < 3) return;
+                        
+                        // Show loading state
+                        this.location = 'Mencari lokasi...';
+                        
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=id`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length > 0) {
+                                    const lat = parseFloat(data[0].lat);
+                                    const lon = parseFloat(data[0].lon);
+                                    
+                                    this.marker.setLatLng([lat, lon]);
+                                    this.map.setView([lat, lon], 16);
+                                    this.latitude = lat;
+                                    this.longitude = lon;
+                                    this.location = data[0].display_name;
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Error searching location:', error);
+                                this.location = 'Gagal mencari lokasi';
+                            });
                     }
                 }">
 
@@ -246,9 +304,19 @@
                     <div class="space-y-3">
                         <div>
                             <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Alamat Lokasi</label>
-                            <input type="text" id="location" name="location" wire:model="location" 
-                                   placeholder="Contoh: Jl. Sudirman No. 123, Jakarta Pusat"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400">
+                            <div class="relative">
+                                <input type="text" id="location" name="location" wire:model="location" 
+                                       placeholder="Contoh: Jl. Sudirman No. 123, Jakarta Pusat"
+                                       x-model="location"
+                                       @input.debounce.500ms="searchLocation($event.target.value)"
+                                       class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Ketik nama tempat untuk mencari lokasi, atau gunakan peta di bawah</p>
                             @error('location') <span class="text-red-500 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>{{ $message }}</span> @enderror
                         </div>
                         
@@ -260,13 +328,13 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="latitude" class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
-                                    <input type="text" id="latitude" name="latitude" x-model="latitude" readonly
+                                    <input type="text" id="latitude" name="latitude" wire:model="latitude" readonly
                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
                                     @error('latitude') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label for="longitude" class="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
-                                    <input type="text" id="longitude" name="longitude" x-model="longitude" readonly
+                                    <input type="text" id="longitude" name="longitude" wire:model="longitude" readonly
                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600">
                                     @error('longitude') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>

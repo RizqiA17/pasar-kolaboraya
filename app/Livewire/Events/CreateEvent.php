@@ -16,8 +16,8 @@ class CreateEvent extends Component
     public $start_date;
     public $end_date;
     public $location;
-    public $latitude = -7.4292;
-    public $longitude = 109.2290;
+    public $latitude;
+    public $longitude;
     public $banner;
 
     protected $listeners = [
