@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\Connection;
 use App\Models\Collaboration;
+use Illuminate\Support\Facades\Auth;
 
 class ListConnection extends Component
 {
@@ -21,19 +22,31 @@ class ListConnection extends Component
     {
         $connections = Connection::where('status', 'accepted')
             ->where(function($query) {
-                $query->where('requester_id', auth()->id())
-                      ->orWhere('receiver_id', auth()->id());
+                $query->where('requester_id', Auth::id())
+                      ->orWhere('receiver_id', Auth::id());
             })
             ->with(['requester', 'receiver'])
             ->get();
 
         $this->friends = $connections->map(function ($item) {
             // Determine which user is the friend (not the current user)
-            $friend = $item->requester_id == auth()->id() ? $item->receiver : $item->requester;
+            $friend = $item->requester_id == Auth::id() ? $item->receiver : $item->requester;
+            
+            // Load the friend with their relationships
+            $friend = User::with(['connections', 'collaborations', 'events'])
+                ->withCount(['connections' => function($query) {
+                    $query->where('status', 'accepted');
+                }, 'collaborations' => function($query) {
+                    $query->where('status', 'accepted');
+                }, 'events'])
+                ->find($friend->id);
             
             return [
                 'id' => $friend->id,
-                'name' => $friend->name
+                'name' => $friend->name,
+                'connections_count' => $friend->connections_count,
+                'collaborations_count' => $friend->collaborations_count,
+                'events_count' => $friend->events_count
             ];
         });
     }
