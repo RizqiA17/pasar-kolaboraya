@@ -136,7 +136,7 @@
                         </div>
 
                         <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                            <button wire:click="updateInterests"
+                            <button type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                                 <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
