@@ -11,6 +11,7 @@ use App\Livewire\Connections\ConnectionsTab;
 use App\Livewire\Connections\ListConnection;
 use App\Livewire\Collaborations\NewCollaboration;
 use App\Livewire\Collaborations\ListCollaboration;
+use App\Livewire\Settings\ProfileSettings;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+    Route::get('settings/tes', ProfileSettings::class)->name('settings.tes');
 
     Route::get('connections', ConnectionsTab::class)->name('connections');
 
