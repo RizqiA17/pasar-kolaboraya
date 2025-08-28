@@ -25,6 +25,15 @@ class Connection extends Model
         return $this->belongsTo(User::class, 'receiver_id');
     }
 
+    public function searchRequest()
+    {
+        return $this->belongsTo(User::class, 'requester_id');
+    }
+    public function searchRecive()
+    {
+        return $this->belongsTo(User::class, 'receiver_id');
+    }
+
     public function pendingRequests()
     {
         return $this->hasMany(Connection::class, 'receiver_id')

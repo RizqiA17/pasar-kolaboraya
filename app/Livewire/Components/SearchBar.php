@@ -9,7 +9,7 @@ class SearchBar extends Component
 {
     public $query = '';
     public $results = [];
-    public $model;
+    public $model = null;
     public $searchFocus = 'all';
     public $fields = ['name']; // ubah dari $field jadi $fields
     public $placeholder = 'Cari...';
@@ -37,10 +37,6 @@ class SearchBar extends Component
         ]
     ];
 
-    public function tes()
-    {
-    }
-
     public function search()
     {
         if (strlen($this->query) < 2) {
@@ -61,27 +57,66 @@ class SearchBar extends Component
                 $queryBuilder = $this->model::query();
 
                 foreach ($this->fields as $index => $field) {
-                    if ($index === 0) {
-                        $queryBuilder->where($field, 'like', '%' . $this->query . '%');
+                    if (str_contains($field, '.')) {
+                        // Field via relasi, misal "user.name"
+                        [$relation, $relField] = explode('.', $field, 2);
+
+                        if ($index === 0) {
+                            $queryBuilder->whereHas($relation, function ($q) use ($relField) {
+                                $q->where($relField, 'like', '%' . $this->query . '%');
+                            });
+                        } else {
+                            $queryBuilder->orWhereHas($relation, function ($q) use ($relField) {
+                                $q->where($relField, 'like', '%' . $this->query . '%');
+                            });
+                        }
+                        
+                        if ($relation == 'requester') {
+                            $queryBuilder->where('receiver_id', auth()->user()->id)->where('status', 'accepted');
+                        } else if ($relation == 'receiver') {
+                            $queryBuilder->where('requester_id', auth()->user()->id)->where('status', 'accepted');
+                        }
+                        
                     } else {
-                        $queryBuilder->orWhere($field, 'like', '%' . $this->query . '%');
+                        // Field langsung
+                        if ($index === 0) {
+                            $queryBuilder->where($field, 'like', '%' . $this->query . '%');
+                        } else {
+                            $queryBuilder->orWhere($field, 'like', '%' . $this->query . '%');
+                        }
                     }
                 }
 
                 $modelResults = $queryBuilder->limit(10)->get()->map(function ($item) {
+                    $displayField = $this->fields[0]; // field utama untuk ditampilkan
+
+                    if (str_contains($displayField, '.')) {
+                        // Field relasi, misal "user.name"
+                        [$relation, $relField] = explode('.', $displayField, 2);
+                        $displayValue = $item->$relation?->$relField ?? '';
+                    } else {
+                        // Field biasa
+                        $displayValue = $item->$displayField ?? '';
+                    }
+
                     return [
                         'id' => $item->id,
-                        'name' => $item->{$this->fields[0]},
-                        'route' => null,
-                        'display' => $item->{$this->fields[0]},
+                        'name' => $displayValue, // bisa dipakai kalau butuh nama saja
+                        'display' => $displayValue, // ini untuk ditampilkan di list
+                        'route' => null,          // opsional, bisa nanti diisi
+                        // 'raw' => $item->toArray(), // seluruh data model (termasuk relasi yang di-load)
                     ];
                 })->toArray();
-
+                
                 $results = array_merge($results, $modelResults);
+                // dd($queryBuilder->limit(10)->get());
             }
         }
-
+        // Log::info($this->model);
+        // dd($results);
         $this->results = $results;
+        $this->dispatch('search-results-updated', results: $this->results);
+
     }
 
     private function searchModels()

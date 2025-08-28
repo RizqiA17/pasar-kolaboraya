@@ -7,8 +7,15 @@ use Livewire\Component;
 class ConnectionsTab extends Component
 {
     public $tab = 'suggestion';
+    public $results = [];
     protected $queryString = ['tab'];
-    
+    public $searchResults = [];
+
+    #[\Livewire\Attributes\On('search-results-updated')]
+    public function updateSearchResults($results)
+    {
+        $this->searchResults = $results;
+    }
     public function setTab($tab)
     {
         $this->tab = $tab;

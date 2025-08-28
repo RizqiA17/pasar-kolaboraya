@@ -9,7 +9,7 @@
         </flux:input.group>
     </form>
 
-    @if (!empty($results))
+    @if (!empty($results) && $searchFocus == 'all')
         <div class="absolute bg-white border rounded-lg shadow-lg mt-1 w-full z-10 max-h-60 overflow-y-auto">
             @foreach ($results as $group => $items)
                 @if (!empty($items))
@@ -25,7 +25,7 @@
                 @endif
             @endforeach
         </div>
-    @elseif (!empty($query))
+    @elseif (!empty($query) && $searchFocus == 'all')
         <div class="absolute bg-white border rounded-lg shadow-lg mt-1 w-full z-10 max-h-60 overflow-y-auto">
             <div class="px-4 py-2 text-xs font-bold text-gray-500 bg-gray-100">
                 Tidak ada hasil

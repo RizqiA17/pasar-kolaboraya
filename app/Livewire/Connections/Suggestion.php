@@ -9,6 +9,9 @@ use Livewire\Component;
 
 class Suggestion extends Component
 {
+    public $searchResults = [];
+    public $searchData = [];
+
     public function connect($userId)
     {
         Connection::create([
@@ -19,18 +22,38 @@ class Suggestion extends Component
 
         $this->dispatch('refresh-requests');
     }
+    #[\Livewire\Attributes\On('search-results-updated')]
+    public function updateSearchResults($results)
+    {
+        $this->searchData = $results;
+        // dd($this->searchData);
+        $this->loadSearchData();
+    }
+    public function loadSearchData()
+    {
+        $ids = collect($this->searchData)->pluck('id')->all();
+
+        // Ambil semua user yang id-nya ada di searchData
+        $users = User::whereIn('id', $ids)->get();
+
+        // Susun ulang hasil agar urutannya sama dengan urutan $this->searchData
+        $this->searchResults = collect($ids)->map(function ($id) use ($users) {
+            return $users->firstWhere('id', $id);
+        })->filter()->values();
+        // dd($this->searchResults);
+    }
 
     public function render()
     {
         /** @var User $user */
         $user = Auth::user();
-        
+
         // Get all recommendations with their respective counts
         $mutualFriendsRecommendations = $user->getMutualFriendsRecommendations();
         $interestRecommendations = $user->getInterestBasedRecommendations();
         $skillRecommendations = $user->getSkillBasedRecommendations();
         $eventRecommendations = $user->getEventBasedRecommendations();
-        
+
         return view('livewire.connections.suggestion', [
             'mutualFriendsRecommendations' => $mutualFriendsRecommendations,
             'interestRecommendations' => $interestRecommendations,

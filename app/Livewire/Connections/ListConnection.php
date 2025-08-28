@@ -11,10 +11,18 @@ use Illuminate\Support\Facades\Auth;
 class ListConnection extends Component
 {
     public $friends = [];
+    public $searchData = [];
 
     public function mount()
     {
         $this->loadFriends();
+    }
+
+    public function loadSearchData(){
+        foreach($this->searchData as $data){
+            $result = Connection::where('requester_id', $data['id'])->where('receiver_id', Auth::id())->first();
+            $result = Connection::where('requester_id', Auth::id())->where('receiver_id', $data['id'])->first();
+        }
     }
 
 

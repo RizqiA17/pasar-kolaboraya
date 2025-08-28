@@ -1,6 +1,6 @@
 <div wire:poll.3s="loadRequests" wire:poll.stop="!pollingState" class="w-full">
     <div class="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Permintaan Pertemanan</h2>
+        <h2 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Permintaan Koneksi</h2>
         @if(count($requests) > 0)
             <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 rounded-full">
                 {{ count($requests) }}
