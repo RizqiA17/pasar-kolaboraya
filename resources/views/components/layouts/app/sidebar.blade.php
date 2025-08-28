@@ -123,9 +123,9 @@
 
                 <flux:menu.separator class="border-gray-200 dark:border-gray-600" />
 
-                <flux:navlist.item :href="route('settings.profile')" icon="cog" wire:navigate
+                <flux:navlist.item :href="route('settings.profile')" icon="user" wire:navigate
                     class="text-gray-700 hover:text-blue-600 hover:bg-blue-100 dark:text-gray-200 dark:hover:text-blue-300 dark:hover:bg-blue-800">
-                    {{ __('Settings') }}
+                    {{ __('Profile') }}
                 </flux:navlist.item>
 
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
