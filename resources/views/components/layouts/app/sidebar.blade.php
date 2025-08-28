@@ -22,8 +22,7 @@
         <flux:spacer />
 
         {{-- Notification --}}
-        <x-flux::dropdown align="right" width="96" class="relative" 
-            x-on:show="Livewire.dispatch('dropdown-shown')"
+        <x-flux::dropdown align="right" width="96" class="relative" x-on:show="Livewire.dispatch('dropdown-shown')"
             x-on:hide="Livewire.dispatch('dropdown-hidden')">
             <flux:button icon="bell"
                 class="m-auto text-white bg-cream! rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -65,9 +64,9 @@
                 <flux:menu.separator class="border-gray-200 dark:border-gray-600" />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate
+                    <flux:menu.item :href="route('settings.profile')" icon="user" wire:navigate
                         class="text-gray-700 hover:text-blue-600 hover:bg-blue-100 dark:text-gray-200 dark:hover:text-blue-300 dark:hover:bg-blue-800">
-                        {{ __('Settings') }}</flux:menu.item>
+                        {{ __('Profile') }}</flux:menu.item>
                 </flux:menu.radio.group>
 
                 <flux:menu.separator class="border-gray-200 dark:border-gray-600" />
@@ -83,7 +82,7 @@
         </flux:dropdown>
     </flux:header>
 
-    <flux:sidebar sticky stashable class="border-e border-blue-200">
+    <flux:sidebar sticky stashable class="border-e bg-white border-blue-200">
         <flux:sidebar.toggle
             class="lg:hidden text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             icon="x-mark" />
@@ -117,7 +116,7 @@
 
         <flux:spacer />
 
-        <flux:navlist variant="outline" class="space-y-2">
+        <flux:navlist variant="outline" class="space-y-2 lg:block hidden">
 
             <flux:navlist.group :heading="__('Settings')" class="grid">
 
