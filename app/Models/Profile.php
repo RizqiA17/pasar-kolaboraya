@@ -31,21 +31,24 @@ class Profile extends Model
     {
         return $this->belongsToMany(Interest::class, 'user_interests', 'user_id', 'interest_id')
             ->withPivot('level')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->select(['interests.*', 'user_interests.level']);
     }
 
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'user_skills', 'user_id', 'skill_id')
             ->withPivot('level', 'is_primary')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->select(['skills.*', 'user_skills.level', 'user_skills.is_primary']);
     }
 
     public function contributions(): BelongsToMany
     {
         return $this->belongsToMany(Contribution::class, 'user_contributions', 'user_id', 'contribution_id')
             ->withPivot('description', 'date')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->select(['contributions.*', 'user_contributions.description', 'user_contributions.date']);
     }
 }
 

@@ -5,10 +5,23 @@ namespace App\Livewire\Settings;
 use App\Models\Interest;
 use App\Models\Skill;
 use App\Models\Contribution;
+use App\Models\User;
+use App\Services\ProfileService;
 use Livewire\Component;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProfileSettings extends Component
 {
+    // Profile Information Properties
+    public string $name = '';
+    public string $email = '';
+    public ?string $organization = '';
+    public ?string $phone = '';
+    public ?string $vision = '';
+    
+    // Existing Properties
     public $interests = [];
     public $skills = [];
     public $contributions = [];
@@ -20,6 +33,43 @@ class ProfileSettings extends Component
         'date' => '',
     ];
 
+    public $skillLevels = [];
+    public $interestLevels = [];
+    public $primarySkills = [];
+
+    protected $rules = [
+        'name' => ['required', 'string', 'max:255'],
+        'email' => [
+            'required',
+            'string',
+            'lowercase',
+            'email',
+            'max:255',
+        ],
+        'organization' => ['nullable', 'string', 'max:255'],
+        'phone' => ['nullable', 'string', 'max:255'],
+        'vision' => ['nullable', 'string'],
+        'newContribution.contribution_id' => 'required|exists:contributions,id',
+        'newContribution.description' => 'required|string|max:500',
+        'newContribution.date' => 'required|date|before_or_equal:today',
+    ];
+
+    protected $messages = [
+        'name.required' => 'Nama wajib diisi',
+        'name.max' => 'Nama maksimal 255 karakter',
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Format email tidak valid',
+        'email.max' => 'Email maksimal 255 karakter',
+        'organization.max' => 'Organisasi maksimal 255 karakter',
+        'phone.max' => 'Nomor telepon maksimal 255 karakter',
+        'newContribution.contribution_id.required' => 'Pilih jenis kontribusi',
+        'newContribution.contribution_id.exists' => 'Jenis kontribusi tidak valid',
+        'newContribution.description.required' => 'Deskripsi kontribusi wajib diisi',
+        'newContribution.description.max' => 'Deskripsi maksimal 500 karakter',
+        'newContribution.date.required' => 'Tanggal kontribusi wajib diisi',
+        'newContribution.date.before_or_equal' => 'Tanggal tidak boleh lebih dari hari ini',
+    ];
+
     public function mount()
     {
         $this->interests = Interest::all();
@@ -27,97 +77,247 @@ class ProfileSettings extends Component
         $this->contributions = Contribution::all();
         
         // Get or create user profile
-        $profile = auth()->user()->profile;
+        /** @var User $user */
+        $user = auth()->user();
+        $profile = $user->profile;
         if (!$profile) {
-            $profile = auth()->user()->profile()->create();
+            $profile = $user->profile()->create();
         }
+        
+        // Load profile information
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->organization = $profile->organization ?? '';
+        $this->phone = $profile->phone ?? '';
+        $this->vision = $profile->vision ?? '';
         
         // Load user's current selections from profile
         $this->selectedInterests = $profile->interests()
-            ->pluck('interest_id')
+            ->pluck('id')
             ->toArray();
             
         $this->selectedSkills = $profile->skills()
-            ->pluck('skill_id')
+            ->pluck('id')
             ->toArray();
+
+        // Load levels and primary flags
+        $this->loadSkillLevels($profile);
+        $this->loadInterestLevels($profile);
+    }
+
+    public function updateProfileInformation()
+    {
+        $this->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique(User::class)->ignore(auth()->id()),
+            ],
+            'organization' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'vision' => ['nullable', 'string'],
+        ]);
+
+        /** @var User $user */
+        $user = auth()->user();
+        
+        // Update user fields
+        $user->fill([
+            'name' => $this->name,
+            'email' => $this->email,
+        ]);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        // Update or create profile
+        $user->profile()->updateOrCreate([], [
+            'organization' => $this->organization,
+            'phone' => $this->phone,
+            'vision' => $this->vision,
+        ]);
+
+        $this->dispatch('profile-updated');
+        session()->flash('message', 'Profil berhasil diperbarui!');
+    }
+
+    private function loadSkillLevels($profile)
+    {
+        $this->skillLevels = [];
+        $this->primarySkills = [];
+        
+        foreach ($profile->skills as $skill) {
+            $this->skillLevels[$skill->id] = $skill->pivot->level ?? 1;
+            $this->primarySkills[$skill->id] = $skill->pivot->is_primary ?? false;
+        }
+    }
+
+    private function loadInterestLevels($profile)
+    {
+        $this->interestLevels = [];
+        
+        foreach ($profile->interests as $interest) {
+            $this->interestLevels[$interest->id] = $interest->pivot->level ?? 1;
+        }
     }
 
     public function updateInterests()
     {
-        $profile = auth()->user()->profile;
-        if (!$profile) {
-            $profile = auth()->user()->profile()->create();
+        $this->validate([
+            'selectedInterests' => 'array',
+            'selectedInterests.*' => 'exists:interests,id',
+        ]);
+
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->updateInterests($user, $this->selectedInterests);
+
+        if ($success) {
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Minat berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui minat. Silakan coba lagi.');
         }
-
-        $profile->interests()->sync(
-            collect($this->selectedInterests)->mapWithKeys(function ($id) {
-                return [$id => ['level' => 1]];
-            })
-        );
-
-        $this->dispatch('profile-updated');
     }
 
     public function updateSkills()
     {
-        $profile = auth()->user()->profile;
-        if (!$profile) {
-            $profile = auth()->user()->profile()->create();
+        $this->validate([
+            'selectedSkills' => 'array',
+            'selectedSkills.*' => 'exists:skills,id',
+        ]);
+
+        // Add logging for debugging
+        \Log::info('Updating skills for user', [
+            'user_id' => auth()->id(),
+            'selected_skills' => $this->selectedSkills
+        ]);
+
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->updateSkills($user, $this->selectedSkills);
+
+        if ($success) {
+            \Log::info('Skills updated successfully');
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Keahlian berhasil diperbarui!');
+        } else {
+            \Log::error('Failed to update skills');
+            session()->flash('error', 'Gagal memperbarui keahlian. Silakan coba lagi.');
         }
+    }
 
-        $profile->skills()->sync(
-            collect($this->selectedSkills)->mapWithKeys(function ($id) {
-                return [$id => ['level' => 1, 'is_primary' => false]];
-            })
-        );
+    public function updateSkillLevel($skillId, $level)
+    {
+        $this->validate([
+            'skillLevels.' . $skillId => 'required|integer|min:1|max:5',
+        ]);
 
-        $this->dispatch('profile-updated');
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $isPrimary = $this->primarySkills[$skillId] ?? false;
+        $success = $profileService->updateSkillLevel($user, $skillId, $level, $isPrimary);
+
+        if ($success) {
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Level keahlian berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui level keahlian. Silakan coba lagi.');
+        }
+    }
+
+    public function updateInterestLevel($interestId, $level)
+    {
+        $this->validate([
+            'interestLevels.' . $interestId => 'required|integer|min:1|max:5',
+        ]);
+
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->updateInterestLevel($user, $interestId, $level);
+
+        if ($success) {
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Level minat berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui level minat. Silakan coba lagi.');
+        }
+    }
+
+    public function togglePrimarySkill($skillId)
+    {
+        $this->primarySkills[$skillId] = !($this->primarySkills[$skillId] ?? false);
+        
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $level = $this->skillLevels[$skillId] ?? 1;
+        $success = $profileService->updateSkillLevel($user, $skillId, $level, $this->primarySkills[$skillId]);
+
+        if ($success) {
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Status keahlian utama berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui status keahlian. Silakan coba lagi.');
+        }
     }
 
     public function addContribution()
     {
-        $this->validate([
-            'newContribution.contribution_id' => 'required',
-            'newContribution.description' => 'required|string|max:500',
-            'newContribution.date' => 'required|date',
-        ]);
+        $this->validate();
 
-        $profile = auth()->user()->profile;
-        if (!$profile) {
-            $profile = auth()->user()->profile()->create();
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->addContribution($user, $this->newContribution);
+
+        if ($success) {
+            $this->newContribution = [
+                'contribution_id' => '',
+                'description' => '',
+                'date' => '',
+            ];
+
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Kontribusi berhasil ditambahkan!');
+        } else {
+            session()->flash('error', 'Gagal menambahkan kontribusi. Silakan coba lagi.');
         }
-
-        $profile->contributions()->attach(
-            $this->newContribution['contribution_id'],
-            [
-                'description' => $this->newContribution['description'],
-                'date' => $this->newContribution['date'],
-            ]
-        );
-
-        $this->newContribution = [
-            'contribution_id' => '',
-            'description' => '',
-            'date' => '',
-        ];
-
-        $this->dispatch('profile-updated');
     }
 
     public function removeContribution($contributionId)
     {
-        $profile = auth()->user()->profile;
-        if ($profile) {
-            $profile->contributions()->detach($contributionId);
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->removeContribution($user, $contributionId);
+
+        if ($success) {
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Kontribusi berhasil dihapus!');
+        } else {
+            session()->flash('error', 'Gagal menghapus kontribusi. Silakan coba lagi.');
         }
-        $this->dispatch('profile-updated');
     }
 
     public function render()
     {
-        $profile = auth()->user()->profile;
+        /** @var User $user */
+        $user = auth()->user();
+        $profile = $user->profile;
         if (!$profile) {
-            $profile = auth()->user()->profile()->create();
+            $profile = $user->profile()->create();
         }
 
         $userContributions = $profile->contributions()
