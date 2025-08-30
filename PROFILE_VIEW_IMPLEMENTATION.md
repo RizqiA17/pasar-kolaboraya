@@ -12,6 +12,10 @@ Fitur ini memungkinkan user untuk melihat profile lengkap dari user lain dalam s
   - Menerima parameter `userId` untuk menentukan user yang akan ditampilkan
   - Menggunakan layout yang sama dengan profile settings
   - Menampilkan semua informasi profile: skills, interests, contributions, vision
+  - Tombol aksi untuk koneksi dan kolaborasi
+  - Method untuk menangani aksi koneksi (connect, accept, reject, disconnect)
+  - Method untuk memulai kolaborasi
+  - Event listener untuk update status koneksi secara real-time
 
 ### 2. View: view-profile.blade.php
 - **File**: `resources/views/livewire/profile/view-profile.blade.php`
@@ -20,6 +24,8 @@ Fitur ini memungkinkan user untuk melihat profile lengkap dari user lain dalam s
   - Menggunakan desain yang sama dengan profile settings
   - Tombol "Edit Profile" hanya muncul jika user melihat profile sendiri
   - Tombol "Share" tersedia untuk semua user
+  - Tombol aksi koneksi dan kolaborasi seperti di ProfileCard
+  - Flash message untuk feedback aksi user
 
 ## Route yang Ditambahkan
 
@@ -91,23 +97,30 @@ window.location.href = `/profile/${userId}`;
 - Organization (jika ada)
 - Phone (jika ada)
 
-### 2. Social Media Links
+### 2. Tombol Aksi
+- **Tambah Koneksi**: Untuk user yang belum terkoneksi
+- **Menunggu Konfirmasi**: Untuk permintaan koneksi yang sudah dikirim
+- **Terima/Tolak Permintaan**: Untuk permintaan koneksi yang diterima
+- **Mulai Kolaborasi**: Untuk user yang sudah terkoneksi
+- **Putuskan Koneksi**: Untuk user yang sudah terkoneksi
+
+### 3. Social Media Links
 - LinkedIn
 - Twitter
 - GitHub
 - Platform lain yang dikonfigurasi
 
-### 3. Skills & Interests
+### 4. Skills & Interests
 - Daftar keahlian dengan styling yang menarik
 - Daftar minat dengan warna yang berbeda
 - Count total skills dan interests
 
-### 4. Contributions & Achievements
+### 5. Contributions & Achievements
 - Timeline kontribusi
 - Deskripsi dan tanggal
 - Visual timeline dengan icon
 
-### 5. Vision & Mission
+### 6. Vision & Mission
 - Visi dan misi user (jika ada)
 - Styling khusus dengan warna purple
 
