@@ -12,9 +12,9 @@
                         @auth
                             <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Dashboard</a>
                         @else
-                            <a href="{{ route('login') }}" class="px-4 py-2 text-navy hover:text-blue-700 transition">Log in</a>
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-navy hover:text-blue-700 transition">Masuk</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Register</a>
+                                <a href="{{ route('register') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Daftar</a>
                             @endif
                         @endauth
                     </div>
@@ -31,8 +31,8 @@
 
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="text-center">
-                    <h1 class="text-5xl sm:text-7xl font-bold text-navy mb-8 leading-tight">
-                        Kolaborasi untuk<br>Perubahan Sosial
+                    <h1 class="text-4xl sm:text-5xl font-bold text-navy mb-8 leading-tight">
+                        Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial
                     </h1>
                     <p class="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
                         Pasar Kolaboraya adalah ruang <span class="text-sky font-semibold">temu lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span class="text-coral font-semibold">memperluas dampak</span>.

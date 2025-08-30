@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    <x-auth-header :title="'Buat akun baru'" :description="'Masukkan data Anda untuk membuat akun'" />
+    <x-auth-header :title="'Mulai Perubahan Sosial'" :description="'Masukkan data Anda untuk bergabung bersama kami'" />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -23,7 +23,7 @@
             type="email"
             required
             autocomplete="email"
-            placeholder="email@example.com"
+            placeholder="contoh@gmail.com"
         />
 
         <!-- Password -->

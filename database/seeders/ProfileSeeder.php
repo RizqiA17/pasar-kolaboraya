@@ -23,9 +23,6 @@ class ProfileSeeder extends Seeder
                     'linkedin' => fake()->userName(),
                     'github' => fake()->userName(),
                 ]),
-                'skills' => implode(', ', fake()->words(5)),
-                'interests' => implode(', ', fake()->words(4)),
-                'contributions' => fake()->paragraph(),
                 'vision' => fake()->paragraph(),
             ]);
         });
