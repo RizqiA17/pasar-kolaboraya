@@ -5,23 +5,24 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Appearance;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifiedEmail;
 use App\Livewire\Collaborations\Create;
 use App\Livewire\Connections\Suggestion;
+use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Connections\ConnectionsTab;
 use App\Livewire\Connections\ListConnection;
 use App\Livewire\Collaborations\NewCollaboration;
 use App\Livewire\Collaborations\ListCollaboration;
-use App\Livewire\Settings\ProfileSettings;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', VerifiedEmail::class])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', VerifiedEmail::class])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
