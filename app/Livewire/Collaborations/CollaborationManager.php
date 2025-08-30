@@ -69,13 +69,26 @@ class CollaborationManager extends Component
         }
     }
 
-    public function toggleInviteForm($collaborationId)
+    public function toggleInviteForm($collaborationId = null)
     {
-        $this->selectedCollaboration = Collaboration::find($collaborationId);
-        $this->showInviteForm = !$this->showInviteForm;
-        if ($this->showInviteForm) {
+        if ($collaborationId) {
+            // Opening the modal
+            $this->selectedCollaboration = Collaboration::find($collaborationId);
+            $this->showInviteForm = true;
+            $this->selectedUsers = [];
+        } else {
+            // Closing the modal
+            $this->showInviteForm = false;
+            $this->selectedCollaboration = null;
             $this->selectedUsers = [];
         }
+    }
+
+    public function closeInviteForm()
+    {
+        $this->showInviteForm = false;
+        $this->selectedCollaboration = null;
+        $this->selectedUsers = [];
     }
 
     public function resetForm()
