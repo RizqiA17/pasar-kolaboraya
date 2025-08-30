@@ -86,6 +86,19 @@
     </style>
 
     <div class="max-w-6xl mx-auto">
+        <!-- Flash Messages -->
+        @if (session()->has('message'))
+            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                {{ session('message') }}
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Header Section -->
         <div class="text-center mb-8">
             <div
@@ -294,25 +307,53 @@
 
         <!-- Add Task Form -->
         <div
-            class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100 hover:shadow-xl transition-all duration-300">
+            class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100 hover:shadow-xl transition-all duration-300 {{ $collaboration->status === 'pending' ? 'opacity-50' : '' }}">
             <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
                 Add New Task
+                @if($collaboration->status === 'pending')
+                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                        Kolaborasi Pending
+                    </span>
+                @endif
             </h3>
+            
+            @if($collaboration->status === 'pending')
+                <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Kolaborasi masih dalam status pending.</strong> Anda tidak dapat menambah atau mengubah todo list sampai kolaborasi diaktifkan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            
             <div class="space-y-4">
                 <div class="flex gap-3">
                     <div class="flex-1">
                         <input type="text" wire:model="newTitle" placeholder="What needs to be done?"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:border-blue-400">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:border-blue-400 {{ $collaboration->status === 'pending' ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                            {{ $collaboration->status === 'pending' ? 'disabled' : '' }}>
                         @error('newTitle')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <button wire:click="addTodo" wire:loading.attr="disabled"
-                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed {{ $collaboration->status === 'pending' ? 'bg-gray-400 cursor-not-allowed hover:from-gray-400 hover:to-gray-500' : '' }}"
+                        {{ $collaboration->status === 'pending' ? 'disabled' : '' }}>
                         <svg wire:loading.remove class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -324,14 +365,14 @@
                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                             </path>
                         </svg>
-                        <span wire:loading.remove>Add Task</span>
+                        <span wire:loading.remove>{{ $collaboration->status === 'pending' ? 'Todo Disabled' : 'Add Task' }}</span>
                         <span wire:loading>Adding...</span>
                     </button>
                 </div>
                 <div>
                     <textarea wire:model="newDescription" placeholder="Add description (optional)"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 resize-none hover:border-blue-400"
-                        rows="2"></textarea>
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 resize-none hover:border-blue-400 {{ $collaboration->status === 'pending' ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                        rows="2" {{ $collaboration->status === 'pending' ? 'disabled' : '' }}></textarea>
                 </div>
             </div>
         </div>
@@ -348,7 +389,8 @@
                                 <div class="relative">
                                     <button wire:click="toggleCompleted({{ $todo->id }})"
                                         wire:loading.attr="disabled"
-                                        class="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200 cursor-pointer hover:border-blue-400 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center checkbox-animation">
+                                        class="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200 cursor-pointer hover:border-blue-400 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center checkbox-animation {{ $collaboration->status === 'pending' ? 'opacity-50 cursor-not-allowed hover:scale-100' : '' }}"
+                                        {{ $collaboration->status === 'pending' ? 'disabled' : '' }}>
                                         @if ($todo->status === 'completed')
                                             <svg class="w-4 h-4 text-blue-600" fill="currentColor"
                                                 viewBox="0 0 20 20">
@@ -377,29 +419,42 @@
                                                 class="text-lg font-semibold {{ $todo->status === 'completed' ? 'line-through text-gray-400' : 'text-gray-900' }}">
                                                 {{ $todo->title }}
                                             </h3>
-                                            @if ($todo->status === 'completed')
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    <svg class="w-3 h-3 mr-1" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                    Completed
-                                                </span>
-                                            @else
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    <svg class="w-3 h-3 mr-1" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                    Pending
-                                                </span>
-                                            @endif
+                                                                        @if ($todo->status === 'completed')
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Completed
+                                </span>
+                            @else
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Pending
+                                </span>
+                            @endif
+                            
+                            @if($collaboration->status === 'pending')
+                                <span
+                                    class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Todo Disabled
+                                </span>
+                            @endif
                                         </div>
 
                                         @if ($todo->description)

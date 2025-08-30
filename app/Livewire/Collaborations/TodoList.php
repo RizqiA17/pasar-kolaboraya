@@ -6,6 +6,7 @@ use App\Models\Collaboration;
 use App\Models\Todo;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class TodoList extends Component
 {
@@ -89,6 +90,12 @@ class TodoList extends Component
 
     public function addTodo()
     {
+        // Check if collaboration status allows adding todos
+        if ($this->collaboration->status === 'pending') {
+            session()->flash('error', 'Tidak bisa menambah todo list pada kolaborasi dengan status pending!');
+            return;
+        }
+
         $this->validate([
             'newTitle' => 'required|min:3'
         ]);
@@ -96,7 +103,7 @@ class TodoList extends Component
         $this->collaboration->todos()->create([
             'title' => $this->newTitle,
             'description' => $this->newDescription,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
             'status' => 'pending'
         ]);
 
@@ -109,6 +116,12 @@ class TodoList extends Component
 
     public function toggleCompleted($todoId)
     {
+        // Check if collaboration status allows toggling todos
+        if ($this->collaboration->status === 'pending') {
+            session()->flash('error', 'Tidak bisa mengubah status todo pada kolaborasi dengan status pending!');
+            return;
+        }
+
         $todo = Todo::find($todoId);
         if ($todo && $todo->collaboration_id === $this->collaboration->id) {
             $newStatus = $todo->status === 'completed' ? 'pending' : 'completed';
