@@ -15,11 +15,28 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-center text-sm text-gray-500 mb-4">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                        <span>{{ $collaboration->user->name }}</span>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <span>{{ $collaboration->user->name }}</span>
+                        </div>
+                        <div class="text-xs">
+                            @if($collaboration->collaboration->status === 'completed')
+                                <span class="font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                    {{ ucfirst($collaboration->collaboration->status) }}
+                                </span>
+                            @elseif($collaboration->collaboration->status === 'active')
+                                <span class="font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs">
+                                    {{ ucfirst($collaboration->collaboration->status) }}
+                                </span>
+                            @else
+                                <span class="font-semibold text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-xs">
+                                    {{ ucfirst($collaboration->collaboration->status) }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -29,13 +46,32 @@
                             </svg>
                             <span>{{ $collaboration->collaboration->created_at->diffForHumans() }}</span>
                         </div>
-                        <a href="{{ route('collaboration.todos', $collaboration->collaboration_id) }}"
-                            class="inline-flex items-center px-3 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600 transition-colors">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                            Lihat Todo
-                        </a>
+                        <div class="flex gap-2">
+                            <a href="{{ route('collaboration.todos', $collaboration->collaboration_id) }}"
+                                class="inline-flex items-center px-3 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Lihat Todo
+                            </a>
+                            @if($collaboration->collaboration->status !== 'completed')
+                                <button wire:click="markAsCompleted({{ $collaboration->collaboration->id }})"
+                                    class="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Selesai
+                                </button>
+                            @else
+                                <button wire:click="markAsActive({{ $collaboration->collaboration->id }})"
+                                    class="inline-flex items-center px-3 py-2 bg-yellow-600 text-white rounded-lg text-sm font-medium hover:bg-yellow-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Aktifkan
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

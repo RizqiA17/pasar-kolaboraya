@@ -236,6 +236,54 @@ class CollaborationManager extends Component
         }
     }
 
+    /**
+     * Mark collaboration as completed
+     */
+    public function markAsCompleted($collaborationId)
+    {
+        try {
+            $collaboration = Collaboration::findOrFail($collaborationId);
+            
+            // Check if user is the creator or has permission
+            if ($collaboration->created_by !== Auth::id()) {
+                session()->flash('error', 'Hanya pembuat kolaborasi yang dapat menandai kolaborasi selesai!');
+                return;
+            }
+
+            $collaboration->update(['status' => 'completed']);
+            
+            $this->dispatch('collaboration-completed');
+            session()->flash('message', 'Kolaborasi berhasil ditandai selesai!');
+
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal menandai kolaborasi selesai: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Mark collaboration as active (reopen)
+     */
+    public function markAsActive($collaborationId)
+    {
+        try {
+            $collaboration = Collaboration::findOrFail($collaborationId);
+            
+            // Check if user is the creator or has permission
+            if ($collaboration->created_by !== Auth::id()) {
+                session()->flash('error', 'Hanya pembuat kolaborasi yang dapat mengaktifkan kembali kolaborasi!');
+                return;
+            }
+
+            $collaboration->update(['status' => 'active']);
+            
+            $this->dispatch('collaboration-reopened');
+            session()->flash('message', 'Kolaborasi berhasil diaktifkan kembali!');
+
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal mengaktifkan kolaborasi: ' . $e->getMessage());
+        }
+    }
+
     public function getPendingInvitationsProperty()
     {
         $query = CollaborationUser::where('status', 'pending')
@@ -271,6 +319,25 @@ class CollaborationManager extends Component
     public function getCreatedCollaborationsProperty()
     {
         $query = Collaboration::where('created_by', Auth::id())
+            ->with(['collaborationUsers.user']);
+
+        if ($this->collaborationSearchQuery) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->collaborationSearchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $this->collaborationSearchQuery . '%');
+            });
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Get completed collaborations created by the current user
+     */
+    public function getCompletedCollaborationsProperty()
+    {
+        $query = Collaboration::where('created_by', Auth::id())
+            ->where('status', 'completed')
             ->with(['collaborationUsers.user']);
 
         if ($this->collaborationSearchQuery) {

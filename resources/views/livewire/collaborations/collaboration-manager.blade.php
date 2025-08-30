@@ -159,7 +159,7 @@
     @endif
 
     <!-- Overview Tab -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <!-- Pending Invitations Card -->
         <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-600 rounded-lg p-4">
             <div class="flex items-center">
@@ -208,6 +208,23 @@
                     <h3 class="text-lg font-medium text-green-800 dark:text-green-200">Yang Saya Buat</h3>
                     <p class="text-2xl font-bold text-green-900 dark:text-green-100">
                         {{ $this->createdCollaborations->count() }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Collaborations Card -->
+        <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-600 rounded-lg p-4">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-medium text-purple-800 dark:text-purple-200">Selesai</h3>
+                    <p class="text-2xl font-bold text-purple-900 dark:text-purple-100">
+                        {{ $this->completedCollaborations->count() }}</p>
                 </div>
             </div>
         </div>
@@ -299,24 +316,55 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
                                     {{ $collaboration->collaboration->description ?? 'Tidak ada deskripsi' }}
                                 </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-500 mb-3">
-                                    Status: <span
-                                        class="font-semibold text-blue-600">{{ ucfirst($collaboration->collaboration->status) }}</span>
-                                </p>
+                                <div class="flex items-center justify-between mb-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                                        Status: 
+                                        @if($collaboration->collaboration->status === 'completed')
+                                            <span class="font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->collaboration->status) }}
+                                            </span>
+                                        @elseif($collaboration->collaboration->status === 'active')
+                                            <span class="font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->collaboration->status) }}
+                                            </span>
+                                        @else
+                                            <span class="font-semibold text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->collaboration->status) }}
+                                            </span>
+                                        @endif
+                                    </p>
+                                </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs text-gray-500">
                                         {{ $collaboration->collaboration->collaborationUsers->where('status', 'accepted')->count() }}
                                         anggota
                                     </span>
-                                    <div>
+                                    <div class="flex gap-2">
                                         <a href="{{ route('collaboration.todos', $collaboration->collaboration_id) }}"
-                                            class="px-3 py-1 bg-blue-600 mr-1 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                                            class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
                                             Lihat Todo
                                         </a>
                                         <button wire:click="toggleInviteForm({{ $collaboration->collaboration->id }})"
                                             class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
                                             Undang
                                         </button>
+                                        @if($collaboration->collaboration->status !== 'completed')
+                                            <button wire:click="markAsCompleted({{ $collaboration->collaboration->id }})"
+                                                class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Selesai
+                                            </button>
+                                        @else
+                                            <button wire:click="markAsActive({{ $collaboration->collaboration->id }})"
+                                                class="px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors">
+                                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                </svg>
+                                                Aktifkan
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -351,19 +399,52 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
                                     {{ $collaboration->description ?? 'Tidak ada deskripsi' }}
                                 </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-500 mb-3">
-                                    Status: <span
-                                        class="font-semibold text-green-600">{{ ucfirst($collaboration->status) }}</span>
-                                </p>
+                                <div class="flex items-center justify-between mb-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                                        Status: 
+                                        @if($collaboration->status === 'completed')
+                                            <span class="font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->status) }}
+                                            </span>
+                                        @elseif($collaboration->status === 'active')
+                                            <span class="font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->status) }}
+                                            </span>
+                                        @else
+                                            <span class="font-semibold text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-xs">
+                                                {{ ucfirst($collaboration->status) }}
+                                            </span>
+                                        @endif
+                                    </p>
+                                </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs text-gray-500">
                                         {{ $collaboration->collaborationUsers->where('status', 'accepted')->count() }}
                                         anggota
                                     </span>
-                                    <button wire:click="toggleInviteForm({{ $collaboration->id }})"
-                                        class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
-                                        Undang
-                                    </button>
+                                    <div class="flex gap-2">
+                                        <button wire:click="toggleInviteForm({{ $collaboration->id }})"
+                                            class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                            Undang
+                                        </button>
+                                        @if($collaboration->status !== 'completed')
+                                            <button wire:click="markAsCompleted({{ $collaboration->id }})"
+                                                class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Selesai
+                                            </button>
+                                        @else
+                                            <button wire:click="markAsActive({{ $collaboration->id }})"
+                                                class="px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors">
+                                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                </svg>
+                                                Aktifkan
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
