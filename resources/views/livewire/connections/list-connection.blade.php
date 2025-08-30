@@ -176,7 +176,10 @@
             `;
             button.disabled = true;
             
-            // Simulasi delay untuk UX yang lebih baik
+            // Panggil Livewire disconnect method menggunakan Livewire.dispatch
+            Livewire.dispatch('disconnect', { userId: userId });
+            
+            // Tunggu sebentar untuk Livewire memproses
             setTimeout(() => {
                 // Cari card koneksi dan hilangkan dengan animasi
                 const connectionCard = document.querySelector(`[data-user-id="${userId}"]`);

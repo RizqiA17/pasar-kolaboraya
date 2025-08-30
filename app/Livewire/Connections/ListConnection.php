@@ -14,6 +14,10 @@ class ListConnection extends Component
     public $searchData = [];
     public $searchResults = [];
 
+    protected $listeners = [
+        'disconnect' => 'disconnect'
+    ];
+
     public function mount()
     {
         $this->loadFriends();
@@ -82,6 +86,12 @@ class ListConnection extends Component
         if ($connection) {
             $connection->delete();
             $this->dispatch('refresh-requests');
+            
+            // Refresh data koneksi
+            $this->loadFriends();
+            if (!empty($this->searchData)) {
+                $this->loadSearchData();
+            }
         }
     }
 
