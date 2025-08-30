@@ -37,9 +37,27 @@
                 Koneksi
             </button>
 
-            <div class="ms-auto relative">
+            <div class="ms-auto relative flex items-center gap-2">
 
-                {{-- Dropdown --}}
+                {{-- Collaboration Notifications Dropdown --}}
+                <x-flux::dropdown align="right" width="64">
+                    <flux:button icon="users" class="m-auto text-gray-100 bg-blue-600 rounded-full size-10 relative">
+                        @if($this->unreadCount > 0)
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {{ $this->unreadCount > 9 ? '9+' : $this->unreadCount }}
+                            </span>
+                        @endif
+                    </flux:button>
+
+                    <flux:menu>
+                        <div class="p-3 w-64">
+                            {{-- Panggil komponen Livewire untuk notifikasi kolaborasi --}}
+                            <livewire:collaborations.requested-collaboration />
+                        </div>
+                    </flux:menu>
+                </x-flux::dropdown>
+
+                {{-- Connection Notifications Dropdown --}}
                 <x-flux::dropdown align="right" width="64">
                     <flux:button icon="bell" class="m-auto text-gray-100 bg-neutral-600 rounded-full size-10">
                     </flux:button>

@@ -32,11 +32,11 @@ Route::middleware(['auth', VerifiedEmail::class, 'profile.complete'])->group(fun
 
     Route::get('connections', ConnectionsTab::class)->name('connections');
 
-    Route::get('collaborations', ListCollaboration::class)->name('collaborations');
+    Route::get('collaborations/list', ListCollaboration::class)->name('collaborations');
     Route::get('collaborations/create', Create::class)->name('collaborations.create');
     Route::get('collaborations/new', NewCollaboration::class)->name('collaborations.new-collaboration');
     Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
-    Route::get('collaborations/manage', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
+    Route::get('collaborations', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
 
     // Event Routes
     Route::get('events', \App\Livewire\Events\ListEvent::class)->name('events');

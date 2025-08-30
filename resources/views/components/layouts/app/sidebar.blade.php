@@ -101,8 +101,8 @@
                     class="text-gray-700 hover:text-indigo-600 hover:bg-indigo-200 dark:text-gray-200 dark:hover:text-indigo-300 dark:hover:bg-indigo-700 transition-all duration-200"
                     wire:navigate>{{ __('Koneksi') }}</flux:navlist.item>
 
-                <flux:navlist.item icon="users" :href="route('collaborations')"
-                    :current="request()->routeIs('collaborations')"
+                <flux:navlist.item icon="users" :href="route('collaborations.manage')"
+                    :current="request()->routeIs('collaborations.manage')"
                     class="text-gray-700 hover:text-purple-600 hover:bg-purple-200 dark:text-gray-200 dark:hover:text-purple-300 dark:hover:bg-purple-700 transition-all duration-200"
                     wire:navigate>{{ __('Kolaborasi') }}
                 </flux:navlist.item>
