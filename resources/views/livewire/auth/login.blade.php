@@ -36,10 +36,10 @@
         </div>
 
         <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" :label="'Ingat saya'" />
+        <flux:checkbox wire:model="remember" :label="'Ingat saya'" class="cursor-pointer"/>
 
         <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full">{{ 'Masuk' }}</flux:button>
+            <flux:button variant="primary" type="submit" class="w-full cursor-pointer">{{ 'Masuk' }}</flux:button>
         </div>
     </form>
 
