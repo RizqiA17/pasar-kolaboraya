@@ -54,6 +54,23 @@ class Suggestion extends Component
         // Redirect ke halaman kolaborasi atau buat modal kolaborasi
         $this->dispatch('start-collaboration', userId: $userId);
     }
+
+    public function disconnect($userId)
+    {
+        $connection = Connection::where(function($query) use ($userId) {
+            $query->where('requester_id', Auth::id())
+                  ->where('receiver_id', $userId);
+        })->orWhere(function($query) use ($userId) {
+            $query->where('requester_id', $userId)
+                  ->where('receiver_id', Auth::id());
+        })->where('status', 'accepted')
+        ->first();
+
+        if ($connection) {
+            $connection->delete();
+            $this->dispatch('refresh-requests');
+        }
+    }
     #[\Livewire\Attributes\On('search-results-updated')]
     public function updateSearchResults($results)
     {

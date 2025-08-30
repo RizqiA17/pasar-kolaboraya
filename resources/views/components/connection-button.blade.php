@@ -33,8 +33,14 @@
         </button>
     </div>
 @elseif($connectionStatus === 'connected')
-    <button wire:click="startCollaboration({{ $userId }})"
-        class="{{ $buttonClasses }} font-medium text-green-600 hover:bg-green-50 rounded-lg transition-colors">
-        Kolaborasi
-    </button>
+    <div class="flex gap-2">
+        <button wire:click="startCollaboration({{ $userId }})"
+            class="{{ $buttonClasses }} font-medium text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+            Kolaborasi
+        </button>
+        <button wire:click="disconnect({{ $userId }})"
+            class="{{ $buttonClasses }} font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+            Batalkan
+        </button>
+    </div>
 @endif
