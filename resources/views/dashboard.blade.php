@@ -61,14 +61,20 @@
             </a>
 
         </div>
-        <div class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <div
-                class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-800">
-                <div class="border-b border-neutral-200 p-6 dark:border-neutral-700">
-                    <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Aktivitas Terbaru</h3>
-                </div>
-                <div class="p-6">
-                    <livewire:dashboard.activity-timeline />
+        <!-- Profile Section -->
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <livewire:dashboard.profile-progress />
+            <livewire:dashboard.profile-summary />
+            
+            <div class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <div
+                    class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-800">
+                    <div class="border-b border-neutral-200 p-6 dark:border-neutral-700">
+                        <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Aktivitas Terbaru</h3>
+                    </div>
+                    <div class="p-6">
+                        <livewire:dashboard.activity-timeline />
+                    </div>
                 </div>
             </div>
         </div>

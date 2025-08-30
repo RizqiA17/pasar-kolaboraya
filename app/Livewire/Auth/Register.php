@@ -37,8 +37,8 @@ class Register extends Component
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);
-        Auth::user()->sendEmailVerificationNotification();
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        // Redirect to profile setup instead of dashboard
+        $this->redirect(route('profile.setup', absolute: false), navigate: true);
     }
 }
