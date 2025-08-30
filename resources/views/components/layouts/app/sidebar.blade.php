@@ -17,7 +17,7 @@
             <x-app-logo />
         </a>
 
-        <livewire:components.search-bar :placeholder="'Cari...'" align="center" />
+        {{-- <livewire:components.search-bar :placeholder="'Cari...'" align="center" /> --}}
 
         <flux:spacer />
 
