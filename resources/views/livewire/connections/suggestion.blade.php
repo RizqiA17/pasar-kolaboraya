@@ -37,17 +37,9 @@
                                         </h4>
                                     </div>
 
-                                    {{-- Action Buttons --}}
+                                                                        {{-- Action Buttons --}}
                                     <div class="space-y-2">
-                                        <button wire:click="connect({{ $user->id }})"
-                                            class="w-full py-1.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 4v16m8-8H4"></path>
-                                            </svg>
-                                            Tambah Koneksi
-                                        </button>
+                                        <x-connection-card-button :userId="$user->id" />
                                     </div>
                                 </div>
                             </div>
@@ -117,14 +109,7 @@
 
                                 {{-- Action Buttons --}}
                                 <div class="space-y-2">
-                                    <button wire:click="connect({{ $user->id }})"
-                                        class="w-full py-1.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                        Tambah Koneksi
-                                    </button>
+                                    <x-connection-card-button :userId="$user->id" />
                                 </div>
                             </div>
                         </div>
@@ -134,7 +119,7 @@
                                 class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                     </path>
                                 </svg>
@@ -197,15 +182,7 @@
 
                                 {{-- Action Buttons --}}
                                 <div class="space-y-2">
-                                    <button wire:click="connect({{ $user->id }})"
-                                        class="w-full py-1.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                        Tambah Koneksi
-                                    </button>
+                                    <x-connection-card-button :userId="$user->id" />
                                 </div>
                             </div>
                         </div>
@@ -252,10 +229,7 @@
                                     <p class="text-sm text-gray-600">{{ $user->events_count }} event yang sama</p>
                                 </div>
                             </div>
-                            <button wire:click="connect({{ $user->id }})"
-                                class="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                                Hubungkan
-                            </button>
+                            <x-connection-button :userId="$user->id" size="small" />
                         </div>
                     @empty
                         <div class="text-center py-4">
@@ -267,3 +241,5 @@
         </div>
     @endif
 </div>
+
+

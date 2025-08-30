@@ -18,7 +18,7 @@
                 Permintaan
             </button>
         </div>
-        {{-- Search Bar --}}
+        
         {{-- SearchBar hanya muncul di tab "suggestion" --}}
         @if ($tab === 'suggestion')
             <livewire:components.search-bar :placeholder="'Cari Kreator...'" :model="\App\Models\User::class" :fields="['name']" wire:model="results"
@@ -40,11 +40,8 @@
     {{-- Content Sections --}}
     @if ($tab === 'requests')
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-neutral-100 flex items-center justify-between">
-                <h2 class="text-lg font-semibold">Permintaan Koneksi</h2>
-            </div>
             <div class="p-4">
-                <livewire:connections.requested-connection />
+                <livewire:connections.requested-connection :isContent="true" />
             </div>
         </div>
     @endif

@@ -22,6 +22,38 @@ class Suggestion extends Component
 
         $this->dispatch('refresh-requests');
     }
+
+    public function acceptConnection($userId)
+    {
+        $connection = Connection::where('requester_id', $userId)
+            ->where('receiver_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($connection) {
+            $connection->update(['status' => 'accepted']);
+            $this->dispatch('refresh-requests');
+        }
+    }
+
+    public function rejectConnection($userId)
+    {
+        $connection = Connection::where('requester_id', $userId)
+            ->where('receiver_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($connection) {
+            $connection->delete();
+            $this->dispatch('refresh-requests');
+        }
+    }
+
+    public function startCollaboration($userId)
+    {
+        // Redirect ke halaman kolaborasi atau buat modal kolaborasi
+        $this->dispatch('start-collaboration', userId: $userId);
+    }
     #[\Livewire\Attributes\On('search-results-updated')]
     public function updateSearchResults($results)
     {

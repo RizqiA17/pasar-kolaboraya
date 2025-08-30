@@ -182,6 +182,8 @@ class User extends Authenticatable // implements MustVerifyEmail
      */
     public function getMutualFriendsRecommendations($limit = 5)
     {
+        $currentUserId = auth()->id();
+        
         // Get IDs of current user's friends
         $myFriendIds = $this->connections()
             ->where('status', 'accepted')
@@ -193,10 +195,10 @@ class User extends Authenticatable // implements MustVerifyEmail
                 $query->whereIn('receiver_id', $myFriendIds)
                     ->where('status', 'accepted');
             })
-            ->where('id', '!=', $this->id)
+            ->where('id', '!=', $currentUserId)
             ->whereNotIn('id', $myFriendIds)  // Exclude users who are already friends
-            ->whereDoesntHave('receivedConnections', function ($query) {  // Exclude pending requests
-                $query->where('requester_id', $this->id);
+            ->whereDoesntHave('receivedConnections', function ($query) use ($currentUserId) {  // Exclude pending requests
+                $query->where('requester_id', $currentUserId);
             })
             ->withCount(['connections' => function ($query) use ($myFriendIds) {
                 $query->whereIn('receiver_id', $myFriendIds)
@@ -205,5 +207,68 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->orderByDesc('connections_count')  // Order by number of mutual friends
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * Get connection status with another user
+     */
+    public function getConnectionStatus($otherUserId)
+    {
+        $currentUserId = auth()->id();
+        
+        if ($currentUserId === $otherUserId) {
+            return 'self';
+        }
+
+        // Check if already connected
+        $existingConnection = Connection::where(function($query) use ($otherUserId, $currentUserId) {
+            $query->where('requester_id', $currentUserId)
+                  ->where('receiver_id', $otherUserId);
+        })->orWhere(function($query) use ($otherUserId, $currentUserId) {
+            $query->where('requester_id', $otherUserId)
+                  ->where('receiver_id', $currentUserId);
+        })->first();
+
+        if (!$existingConnection) {
+            return 'not_connected';
+        }
+
+        if ($existingConnection->status === 'accepted') {
+            return 'connected';
+        }
+
+        if ($existingConnection->status === 'pending') {
+            if ($existingConnection->requester_id === $currentUserId) {
+                return 'pending_sent';
+            } else {
+                return 'pending_received';
+            }
+        }
+
+        return 'not_connected';
+    }
+
+    /**
+     * Check if user is connected with another user
+     */
+    public function isConnectedWith($otherUserId)
+    {
+        return $this->getConnectionStatus($otherUserId) === 'connected';
+    }
+
+    /**
+     * Check if user has pending connection request to another user
+     */
+    public function hasPendingRequestTo($otherUserId)
+    {
+        return $this->getConnectionStatus($otherUserId) === 'pending_sent';
+    }
+
+    /**
+     * Check if user has pending connection request from another user
+     */
+    public function hasPendingRequestFrom($otherUserId)
+    {
+        return $this->getConnectionStatus($otherUserId) === 'pending_received';
     }
 }
