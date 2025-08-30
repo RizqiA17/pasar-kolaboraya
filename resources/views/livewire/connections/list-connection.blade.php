@@ -29,19 +29,26 @@
                         </div>
 
                         <div class="flex items-center gap-3 w-full">
-
                             <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                 <flux:button variant="primary" size="sm"
-                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                                                d="M12 4v16m8-8H4"></path>
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
                                         <span class="font-medium">Kolaborasi</span>
                                     </div>
                                 </flux:button>
                             </flux:modal.trigger>
+                            
+                            <button wire:click="disconnect({{ $friend['id'] }})" 
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Putuskan
+                            </button>
                         </div>
                     </div>
 
@@ -55,8 +62,7 @@
                         class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-100/50 flex items-center justify-center">
                         <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                            </path>
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak Ada Hasil yang Cocok</h3>
@@ -93,19 +99,26 @@
                         </div>
 
                         <div class="flex items-center gap-3 w-full">
-
                             <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                 <flux:button variant="primary" size="sm"
-                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                                                d="M12 4v16m8-8H4"></path>
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
                                         <span class="font-medium">Kolaborasi</span>
                                     </div>
                                 </flux:button>
                             </flux:modal.trigger>
+                            
+                            <button wire:click="disconnect({{ $friend['id'] }})" 
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Putuskan
+                            </button>
                         </div>
                     </div>
 

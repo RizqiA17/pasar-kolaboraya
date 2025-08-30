@@ -68,7 +68,22 @@ class ListConnection extends Component
         // dd($finalResults);
     }
 
+    public function disconnect($userId)
+    {
+        $connection = Connection::where(function ($query) use ($userId) {
+            $query->where('requester_id', Auth::id())
+                ->where('receiver_id', $userId);
+        })->orWhere(function ($query) use ($userId) {
+            $query->where('requester_id', $userId)
+                ->where('receiver_id', Auth::id());
+        })->where('status', 'accepted')
+            ->first();
 
+        if ($connection) {
+            $connection->delete();
+            $this->dispatch('refresh-requests');
+        }
+    }
 
     public function loadFriends()
     {
