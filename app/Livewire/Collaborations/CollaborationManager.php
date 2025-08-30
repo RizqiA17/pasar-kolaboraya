@@ -22,7 +22,7 @@ class CollaborationManager extends Component
     public $showInviteForm = false;
     public $selectedCollaboration = null;
     public $availableUsers = [];
-    public $activeTab = 'overview'; // New property for tab management
+    public $activeTab = 'my-collaborations'; // New property for tab management
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
