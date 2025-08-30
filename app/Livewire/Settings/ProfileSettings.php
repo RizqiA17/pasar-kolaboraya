@@ -24,6 +24,7 @@ class ProfileSettings extends Component
     public ?string $vision = '';
     
     // Existing Properties
+    public $tab = 'profile';
     public $interests = [];
     public $skills = [];
     public $contributions = [];
@@ -72,11 +73,13 @@ class ProfileSettings extends Component
         'newContribution.date.before_or_equal' => 'Tanggal tidak boleh lebih dari hari ini',
     ];
 
+
     public function mount()
     {
         $this->interests = Interest::all();
         $this->skills = Skill::all();
         $this->contributions = Contribution::all();
+        $this->tab = request()->get('tab', 'profile');
         
         // Get or create user profile
         /** @var User $user */
@@ -311,6 +314,10 @@ class ProfileSettings extends Component
         } else {
             session()->flash('error', 'Gagal menghapus kontribusi. Silakan coba lagi.');
         }
+    }
+    public function setTab($tab)
+    {
+        $this->tab = $tab;
     }
 
     public function render()
