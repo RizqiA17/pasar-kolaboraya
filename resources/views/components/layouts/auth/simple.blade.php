@@ -11,7 +11,7 @@
 
         <div class="relative flex min-h-svh flex-col items-center justify-center gap-8 p-6 md:p-10">
             <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-zinc-800" wire:navigate>
-                <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="Logo Pasar Kolaboraya" class="h-10 w-auto" />
+                <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="Logo Pasar Kolaboraya" class="h-20 w-auto" />
             </a>
 
             <div class="w-full max-w-md">
