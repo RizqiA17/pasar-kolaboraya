@@ -90,7 +90,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function connections()
     {
         return $this->hasMany(Connection::class, 'requester_id')
-            ->where('status', 'accepted')->where('receiver_id', auth()->id())->orWhere('requester_id', auth()->id());
+            ->where('status', 'accepted');
     }
 
     public function collaborations(){
