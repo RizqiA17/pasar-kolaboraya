@@ -38,7 +38,9 @@ class Register extends Component
 
         Auth::login($user);
 
+        Auth::user()->sendEmailVerificationNotification();
+
         // Redirect to profile setup instead of dashboard
-        $this->redirect(route('profile.setup', absolute: false), navigate: true);
+        $this->redirect(route('verification.notice', absolute: false), navigate: true);
     }
 }
