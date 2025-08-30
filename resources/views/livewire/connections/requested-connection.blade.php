@@ -47,22 +47,18 @@
 
                     <!-- Actions -->
                     <div class="flex items-center gap-1.5">
-                        <button wire:click="accept({{ $req['id'] }})"
-                            class="p-1.5 hover:bg-green-50 text-green-600 rounded-full transition-colors duration-150 hover:shadow-sm"
-                            title="Terima">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </button>
-                        <button wire:click="reject({{ $req['id'] }})"
-                            class="p-1.5 hover:bg-red-50 text-red-600 rounded-full transition-colors duration-150 hover:shadow-sm"
-                            title="Tolak">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
+                        <flux:button wire:click="accept({{ $req['id'] }})"
+                            class="p-1.5 hover:bg-green-50 text-green-600! rounded-full transition-colors duration-150 hover:shadow-sm"
+                            title="Terima"
+                            icon:trailing="check">
+                            Terima
+                        </flux:button>
+                        <flux:button wire:click="reject({{ $req['id'] }})"
+                            class="p-1.5 hover:bg-red-50 text-red-600! rounded-full transition-colors duration-150 hover:shadow-sm"
+                            title="Tolak"
+                            icon:trailing="x-mark">
+                            Tolak
+                        </flux:button>
                     </div>
                 </div>
             </div>
