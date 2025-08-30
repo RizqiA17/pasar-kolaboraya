@@ -1,67 +1,67 @@
 <div class="space-y-6">
     {{-- {{ json_encode($searchResults) }} --}}
     @if (!empty($searchResults))
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Hasil Pencarian Anda</h3>
-                            <p class="text-sm text-gray-500">Kreator yang cocok dengan pencarian Anda</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-
-                        @forelse($searchResults as $user)
-                            <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
-                                {{-- Cover Image --}}
-                                <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
-
-                                {{-- Profile Content --}}
-                                <div class="p-4">
-                                    {{-- Avatar --}}
-                                    <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
-                                    </div>
-
-                                    {{-- Info --}}
-                                    <div class="text-center mb-4">
-                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
-                                            {{ $user->name }}
-                                        </h4>
-                                    </div>
-
-                                                                        {{-- Action Buttons --}}
-                                    <div class="space-y-2">
-                                        <x-connection-card-button :userId="$user->id" />
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-span-full text-center py-8">
-                                <div
-                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak Ada Kreator yang Cocok</h3>
-                                <p class="text-gray-500 max-w-sm mx-auto">
-                                    Coba ganti pencarian Anda.
-                                </p>
-                            </div>
-                        @endforelse
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Hasil Pencarian Anda</h3>
+                        <p class="text-sm text-gray-500">Kreator yang cocok dengan pencarian Anda</p>
                     </div>
                 </div>
             </div>
+
+            <div class="p-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+                    @forelse($searchResults as $user)
+                        <div
+                            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                            {{-- Cover Image --}}
+                            <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+
+                            {{-- Profile Content --}}
+                            <div class="p-4">
+                                {{-- Avatar --}}
+                                <div class="relative -mt-12 mb-3">
+                                    <div
+                                        class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
+                                        {{ substr($user->name, 0, 2) }}
+                                    </div>
+                                </div>
+
+                                {{-- Info --}}
+                                <div class="text-center mb-4">
+                                    <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
+                                        {{ $user->name }}
+                                    </h4>
+                                </div>
+
+                                {{-- Action Buttons --}}
+                                <div class="space-y-2">
+                                    <x-connection-card-button :userId="$user->id" />
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-span-full text-center py-8">
+                            <div
+                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak Ada Kreator yang Cocok</h3>
+                            <p class="text-gray-500 max-w-sm mx-auto">
+                                Coba ganti pencarian Anda.
+                            </p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
     @else
         {{-- Mutual Friends Recommendations --}}
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -70,7 +70,7 @@
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Kreator yang Mungkin Anda Kenal</h3>
                         <p class="text-sm text-gray-500">Berdasarkan koneksi yang sama</p>
-                    </div>koneksi
+                    </div>
                 </div>
             </div>
 
@@ -142,7 +142,7 @@
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Rekomendasi Berdasarkan Minat</h3>
                         <p class="text-sm text-gray-500">Kreator dengan minat yang serupa</p>
-                    </div>koneksi
+                    </div>
                 </div>
             </div>
 
@@ -171,8 +171,7 @@
                                         {{ $user->name }}
                                     </h4>
                                     <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -232,7 +231,16 @@
                             <x-connection-button :userId="$user->id" size="small" />
                         </div>
                     @empty
-                        <div class="text-center py-4">
+                        <div class="col-span-full text-center py-8">
+                            <div
+                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
                             <p class="text-gray-500">Belum ada rekomendasi dari event yang sama</p>
                         </div>
                     @endforelse
@@ -241,5 +249,3 @@
         </div>
     @endif
 </div>
-
-
