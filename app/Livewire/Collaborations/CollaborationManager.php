@@ -55,8 +55,15 @@ class CollaborationManager extends Component
         // Get only users who are already connected with the current user
         $connectedUserIds = $this->getConnectedUserIds();
         
+        if (empty($connectedUserIds)) {
+            $this->availableUsers = collect();
+            return;
+        }
+        
         $this->availableUsers = User::whereIn('id', $connectedUserIds)
-            ->where('name', 'like', '%' . $this->searchQuery . '%')
+            ->when($this->searchQuery, function ($query) {
+                $query->where('name', 'like', '%' . trim($this->searchQuery) . '%');
+            })
             ->limit(10)
             ->get();
     }
@@ -88,6 +95,12 @@ class CollaborationManager extends Component
         $this->loadAvailableUsers();
     }
 
+    public function updatedCollaborationSearchQuery()
+    {
+        // Reset pagination when searching
+        $this->resetPage();
+    }
+
     public function toggleCreateForm()
     {
         $this->showCreateForm = !$this->showCreateForm;
@@ -116,6 +129,14 @@ class CollaborationManager extends Component
         $this->showInviteForm = false;
         $this->selectedCollaboration = null;
         $this->selectedUsers = [];
+    }
+
+    /**
+     * Remove a selected user from the collaboration
+     */
+    public function removeSelectedUser($userId)
+    {
+        $this->selectedUsers = array_diff($this->selectedUsers, [$userId]);
     }
 
     public function resetForm()
@@ -217,25 +238,49 @@ class CollaborationManager extends Component
 
     public function getPendingInvitationsProperty()
     {
-        return CollaborationUser::where('status', 'pending')
+        $query = CollaborationUser::where('status', 'pending')
             ->where('user_id', Auth::id())
-            ->with(['collaboration.creator'])
-            ->get();
+            ->with(['collaboration.creator']);
+
+        if ($this->collaborationSearchQuery) {
+            $query->whereHas('collaboration', function ($q) {
+                $q->where('title', 'like', '%' . $this->collaborationSearchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $this->collaborationSearchQuery . '%');
+            });
+        }
+
+        return $query->get();
     }
 
     public function getMyCollaborationsProperty()
     {
-        return CollaborationUser::where('status', 'accepted')
+        $query = CollaborationUser::where('status', 'accepted')
             ->where('user_id', Auth::id())
-            ->with(['collaboration.creator', 'collaboration.collaborationUsers.user'])
-            ->get();
+            ->with(['collaboration.creator', 'collaboration.collaborationUsers.user']);
+
+        if ($this->collaborationSearchQuery) {
+            $query->whereHas('collaboration', function ($q) {
+                $q->where('title', 'like', '%' . $this->collaborationSearchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $this->collaborationSearchQuery . '%');
+            });
+        }
+
+        return $query->get();
     }
 
     public function getCreatedCollaborationsProperty()
     {
-        return Collaboration::where('created_by', Auth::id())
-            ->with(['collaborationUsers.user'])
-            ->get();
+        $query = Collaboration::where('created_by', Auth::id())
+            ->with(['collaborationUsers.user']);
+
+        if ($this->collaborationSearchQuery) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->collaborationSearchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $this->collaborationSearchQuery . '%');
+            });
+        }
+
+        return $query->get();
     }
 
     /**
