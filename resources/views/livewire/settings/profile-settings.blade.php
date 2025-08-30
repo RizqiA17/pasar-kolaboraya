@@ -1,7 +1,7 @@
 <div class="max-w-7xl mx-auto">
     <!-- Flash Messages -->
     @if (session()->has('message'))
-        <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm">
+        <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
@@ -14,12 +14,17 @@
                 <div class="ml-3">
                     <p class="text-sm font-medium text-green-800">{{ session('message') }}</p>
                 </div>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" class="ml-auto flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-600 hover:text-green-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl shadow-sm">
+        <div class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl shadow-sm animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
@@ -33,9 +38,15 @@
                 <div class="ml-3">
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" class="ml-auto flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-600 hover:text-red-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     @endif
+
 
     <!-- Hero Header -->
     <div
@@ -322,15 +333,27 @@
                             @endif
 
                             <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                                <button type="submit"
-                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
-                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Simpan Perubahan
-                                </button>
+                                <div class="flex items-center space-x-3">
+                                    <button type="submit"
+                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
+                                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Simpan Perubahan
+                                    </button>
+                                    
+                                    <!-- Unsaved Changes Indicator -->
+                                    <div id="profile-unsaved-indicator" class="hidden">
+                                        <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            Belum Disimpan
+                                        </span>
+                                    </div>
+                                </div>
 
                                 <x-action-message class="mr-3" on="profile-updated">
                                     <span
@@ -407,14 +430,26 @@
                         </div>
 
                         <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200">
-                            <button wire:click="updateInterests"
-                                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105">
-                                <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Simpan Perubahan
-                            </button>
+                            <div class="flex items-center space-x-3">
+                                <button wire:click="updateInterests"
+                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105">
+                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Simpan Perubahan
+                                </button>
+                                
+                                <!-- Unsaved Changes Indicator -->
+                                <div id="interests-unsaved-indicator" class="hidden">
+                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                        Belum Disimpan
+                                    </span>
+                                </div>
+                            </div>
 
                             <x-action-message class="mr-3" on="interests-updated">
                                 <span
@@ -489,14 +524,26 @@
                         </div>
 
                         <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200">
-                            <button wire:click="updateSkills"
-                                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105">
-                                <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Simpan Perubahan
-                            </button>
+                            <div class="flex items-center space-x-3">
+                                <button wire:click="updateSkills"
+                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105">
+                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Simpan Perubahan
+                                </button>
+                                
+                                <!-- Unsaved Changes Indicator -->
+                                <div id="skills-unsaved-indicator" class="hidden">
+                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                        Belum Disimpan
+                                    </span>
+                                </div>
+                            </div>
 
                             <x-action-message class="mr-3" on="skills-updated">
                                 <span
@@ -588,15 +635,27 @@
                             </div>
 
                             <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                                <button wire:click="addContribution"
-                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 transform hover:scale-105">
-                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    Tambah Kontribusi
-                                </button>
+                                <div class="flex items-center space-x-3">
+                                    <button wire:click="addContribution"
+                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 transform hover:scale-105">
+                                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        Tambah Kontribusi
+                                    </button>
+                                    
+                                    <!-- Unsaved Changes Indicator -->
+                                    <div id="contributions-unsaved-indicator" class="hidden">
+                                        <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            Belum Disimpan
+                                        </span>
+                                    </div>
+                                </div>
 
                                 <x-action-message class="mr-3" on="contribution-added">
                                     <span
@@ -762,3 +821,231 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript for tracking unsaved changes -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let hasUnsavedChanges = false;
+    let originalFormData = {};
+    
+    // Track form changes for profile section
+    function trackProfileChanges() {
+        const form = document.querySelector('form[wire\\:submit="updateProfileInformation"]');
+        if (!form) return;
+        
+        const inputs = form.querySelectorAll('input, textarea');
+        
+        // Store original values
+        inputs.forEach(input => {
+            originalFormData[input.name || input.id] = input.value;
+        });
+        
+        // Listen for changes
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const currentValue = this.value;
+                const originalValue = originalFormData[this.name || this.id];
+                
+                if (currentValue !== originalValue) {
+                    showUnsavedIndicator('profile');
+                    showUnsavedWarning();
+                    hasUnsavedChanges = true;
+                } else {
+                    // Check if all other fields are also unchanged
+                    const allUnchanged = Array.from(inputs).every(input => {
+                        const current = input.value;
+                        const original = originalFormData[input.name || input.id];
+                        return current === original;
+                    });
+                    
+                    if (allUnchanged) {
+                        hideUnsavedIndicator('profile');
+                        hasUnsavedChanges = false;
+                        hideUnsavedWarning();
+                    }
+                }
+            });
+        });
+    }
+    
+    // Track changes for interests section
+    function trackInterestsChanges() {
+        const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedInterests"]');
+        if (checkboxes.length === 0) return;
+        
+        // Store original state
+        const originalInterests = Array.from(checkboxes).map(cb => cb.checked);
+        
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('change', function() {
+                const currentState = Array.from(checkboxes).map(cb => cb.checked);
+                const hasChanges = currentState.some((checked, i) => checked !== originalInterests[i]);
+                
+                if (hasChanges) {
+                    showUnsavedIndicator('interests');
+                    showUnsavedWarning();
+                    hasUnsavedChanges = true;
+                } else {
+                    hideUnsavedIndicator('interests');
+                    hasUnsavedChanges = false;
+                    hideUnsavedWarning();
+                }
+            });
+        });
+    }
+    
+    // Track changes for skills section
+    function trackSkillsChanges() {
+        const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedSkills"]');
+        if (checkboxes.length === 0) return;
+        
+        // Store original state
+        const originalSkills = Array.from(checkboxes).map(cb => cb.checked);
+        
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('change', function() {
+                const currentState = Array.from(checkboxes).map(cb => cb.checked);
+                const hasChanges = currentState.some((checked, i) => checked !== originalSkills[i]);
+                
+                if (hasChanges) {
+                    showUnsavedIndicator('skills');
+                    showUnsavedWarning();
+                    hasUnsavedChanges = true;
+                } else {
+                    hideUnsavedIndicator('skills');
+                    hasUnsavedChanges = false;
+                    hideUnsavedWarning();
+                }
+            });
+        });
+    }
+    
+    // Track changes for contributions section
+    function trackContributionsChanges() {
+        const inputs = document.querySelectorAll('input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]');
+        if (inputs.length === 0) return;
+        
+        // Store original values
+        const originalValues = {};
+        inputs.forEach(input => {
+            originalValues[input.name || input.id] = input.value;
+        });
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const currentValue = this.value;
+                const originalValue = originalValues[input.name || input.id];
+                
+                if (currentValue !== originalValue) {
+                    showUnsavedIndicator('contributions');
+                    showUnsavedWarning();
+                    hasUnsavedChanges = true;
+                } else {
+                    // Check if all other fields are also unchanged
+                    const allUnchanged = Array.from(inputs).every(input => {
+                        const current = input.value;
+                        const original = originalValues[input.name || input.id];
+                        return current === original;
+                    });
+                    
+                    if (allUnchanged) {
+                        hideUnsavedIndicator('contributions');
+                        hasUnsavedChanges = false;
+                        hideUnsavedWarning();
+                    }
+                }
+            });
+        });
+    }
+    
+    // Show unsaved indicator for specific section
+    function showUnsavedIndicator(section) {
+        const indicator = document.getElementById(`${section}-unsaved-indicator`);
+        if (indicator) {
+            indicator.classList.remove('hidden');
+        }
+    }
+    
+    // Hide unsaved indicator for specific section
+    function hideUnsavedIndicator(section) {
+        const indicator = document.getElementById(`${section}-unsaved-indicator`);
+        if (indicator) {
+            indicator.classList.add('hidden');
+        }
+    }
+    
+    // Show unsaved warning
+    function showUnsavedWarning() {
+        const warning = document.getElementById('unsaved-changes-warning');
+        if (warning) {
+            warning.classList.remove('hidden');
+        }
+    }
+    
+    // Hide unsaved warning
+    function hideUnsavedWarning() {
+        const warning = document.getElementById('unsaved-changes-warning');
+        if (warning) {
+            warning.classList.add('hidden');
+        }
+    }
+    
+    // Global function to hide warning (accessible from onclick)
+    window.hideUnsavedWarning = hideUnsavedWarning;
+    
+    // Initialize tracking for all sections
+    trackProfileChanges();
+    trackInterestsChanges();
+    trackSkillsChanges();
+    trackContributionsChanges();
+    
+    // Listen for Livewire events to reset indicators after successful save
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('profile-updated', () => {
+            hideUnsavedIndicator('profile');
+            hasUnsavedChanges = false;
+            hideUnsavedWarning();
+            // Reset original form data
+            const form = document.querySelector('form[wire\\:submit="updateProfileInformation"]');
+            if (form) {
+                const inputs = form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    originalFormData[input.name || input.id] = input.value;
+                });
+            }
+        });
+        
+        Livewire.on('interests-updated', () => {
+            hideUnsavedIndicator('interests');
+            hasUnsavedChanges = false;
+            hideUnsavedWarning();
+        });
+        
+        Livewire.on('skills-updated', () => {
+            hideUnsavedIndicator('skills');
+            hasUnsavedChanges = false;
+            hideUnsavedWarning();
+        });
+        
+        Livewire.on('contribution-added', () => {
+            hideUnsavedIndicator('contributions');
+            hasUnsavedChanges = false;
+            hideUnsavedWarning();
+            // Reset form fields
+            const inputs = document.querySelectorAll('input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]');
+            inputs.forEach(input => {
+                originalFormData[input.name || input.id] = input.value;
+            });
+        });
+    });
+    
+    // Warn before leaving page if there are unsaved changes
+    window.addEventListener('beforeunload', function(e) {
+        if (hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
+            return 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
+        }
+    });
+});
+</script>

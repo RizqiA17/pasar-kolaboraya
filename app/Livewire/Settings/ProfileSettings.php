@@ -45,7 +45,6 @@ class ProfileSettings extends Component
         'email' => [
             'required',
             'string',
-            'lowercase',
             'email',
             'max:255',
         ],
