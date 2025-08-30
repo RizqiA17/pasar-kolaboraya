@@ -12,6 +12,21 @@
         </button>
     </div>
 
+    <!-- Search Bar for Collaborations -->
+    <div class="mb-6">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <input type="text" 
+                wire:model.live="collaborationSearchQuery"
+                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Cari kolaborasi berdasarkan judul atau deskripsi...">
+        </div>
+    </div>
+
     <!-- Flash Messages -->
     @if (session()->has('message'))
         <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
@@ -60,20 +75,70 @@
                         Undang User
                     </label>
                     <div class="flex gap-2 mb-2">
-                        <input type="text" wire:model="searchQuery"
-                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Cari user...">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <input type="text" 
+                                wire:model.live.debounce.300ms="searchQuery"
+                                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                placeholder="Cari user yang terkoneksi...">
+                        </div>
                     </div>
 
-                    <div class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg">
-                        @foreach ($availableUsers as $user)
-                            <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                                <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
-                                    class="mr-2 text-blue-600">
-                                <span class="text-sm text-gray-700">{{ $user->name }}</span>
-                            </label>
-                        @endforeach
-                    </div>
+                    @if($searchQuery && $availableUsers->isEmpty())
+                        <div class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            <svg class="mx-auto h-8 w-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-sm">Tidak ada user yang ditemukan</p>
+                        </div>
+                    @else
+                        <div class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg">
+                            @foreach ($availableUsers as $user)
+                                <label class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                                    <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
+                                        class="mr-2 text-blue-600">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-sm font-medium text-blue-600 dark:text-blue-300">
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ $user->name }}</span>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    @endif
+                    
+                    @if($selectedUsers)
+                        <div class="mt-2">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">User yang dipilih:</p>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($selectedUsers as $selectedUserId)
+                                    @php
+                                        $selectedUser = $availableUsers->firstWhere('id', $selectedUserId);
+                                    @endphp
+                                    @if($selectedUser)
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                            {{ $selectedUser->name }}
+                                            <button type="button" 
+                                                wire:click="removeSelectedUser({{ $selectedUserId }})"
+                                                class="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-500 dark:hover:bg-blue-800">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    
                     @error('selectedUsers')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror

@@ -19,6 +19,7 @@ class CollaborationManager extends Component
     public $description = '';
     public $selectedUsers = [];
     public $searchQuery = '';
+    public $collaborationSearchQuery = '';
     public $showCreateForm = false;
     public $showInviteForm = false;
     public $selectedCollaboration = null;
