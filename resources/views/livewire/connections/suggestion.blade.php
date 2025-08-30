@@ -249,3 +249,157 @@
         </div>
     @endif
 </div>
+
+<script>
+    // Function untuk update button setelah connect
+    function updateButtonAfterConnect(userId) {
+        setTimeout(() => {
+            const buttonContainer = document.getElementById(`connection-button-${userId}`);
+            if (buttonContainer) {
+                buttonContainer.innerHTML = `
+                    <button disabled class="w-full py-1.5 px-4 bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Menunggu Konfirmasi
+                    </button>
+                `;
+                buttonContainer.setAttribute('data-status', 'pending_sent');
+            }
+        }, 100);
+    }
+
+    // Function untuk update button setelah accept connection
+    function updateButtonAfterAccept(userId) {
+        setTimeout(() => {
+            const buttonContainer = document.getElementById(`connection-button-${userId}`);
+            if (buttonContainer) {
+                buttonContainer.innerHTML = `
+                    <div class="space-y-2">
+                        <button wire:click="startCollaboration(${userId})" class="w-full py-1.5 px-4 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Kolaborasi
+                        </button>
+                        <button wire:click="disconnect(${userId})" onclick="updateButtonAfterDisconnect(${userId})" class="w-full py-1.5 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Putuskan
+                        </button>
+                    </div>
+                `;
+                buttonContainer.setAttribute('data-status', 'connected');
+            }
+        }, 100);
+    }
+
+    // Function untuk update button setelah reject connection
+    function updateButtonAfterReject(userId) {
+        setTimeout(() => {
+            const buttonContainer = document.getElementById(`connection-button-${userId}`);
+            if (buttonContainer) {
+                buttonContainer.innerHTML = `
+                    <button wire:click="connect(${userId})" onclick="updateButtonAfterConnect(${userId})" class="w-full py-1.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Tambah Koneksi
+                    </button>
+                `;
+                buttonContainer.setAttribute('data-status', 'not_connected');
+            }
+        }, 100);
+    }
+
+    // Function untuk update button setelah disconnect
+    function updateButtonAfterDisconnect(userId) {
+        setTimeout(() => {
+            const buttonContainer = document.getElementById(`connection-button-${userId}`);
+            if (buttonContainer) {
+                buttonContainer.innerHTML = `
+                    <button wire:click="connect(${userId})" onclick="updateButtonAfterConnect(${userId})" class="w-full py-1.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Tambah Koneksi
+                    </button>
+                `;
+                buttonContainer.setAttribute('data-status', 'not_connected');
+            }
+        }, 100);
+    }
+
+    // Function untuk putuskan koneksi dengan validasi dan animasi hilang (untuk list connection)
+    function handleDisconnectWithValidation(userId) {
+        // Tampilkan konfirmasi
+        if (confirm('Apakah Anda yakin ingin memutuskan koneksi dengan user ini?')) {
+            // Cari card koneksi dan hilangkan dengan animasi
+            const connectionCard = document.querySelector(`[data-user-id="${userId}"]`);
+            if (connectionCard) {
+                // Tambahkan class untuk animasi
+                connectionCard.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                connectionCard.style.transform = 'scale(0.8) translateY(20px)';
+                connectionCard.style.opacity = '0';
+                connectionCard.style.filter = 'blur(2px)';
+                
+                // Hilangkan card setelah animasi selesai
+                setTimeout(() => {
+                    connectionCard.remove();
+                    
+                    // Tampilkan notifikasi sukses
+                    showNotification('Koneksi berhasil diputuskan', 'success');
+                }, 400);
+            }
+        }
+    }
+
+    // Function untuk menampilkan notifikasi
+    function showNotification(message, type = 'info') {
+        // Hapus notifikasi yang sudah ada
+        const existingNotification = document.querySelector('.notification-toast');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Buat notifikasi baru
+        const notification = document.createElement('div');
+        notification.className = `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+        
+        const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+        const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+        
+        notification.innerHTML = `
+            <div class="flex items-center gap-3 text-white">
+                <span class="text-lg font-bold">${icon}</span>
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        notification.classList.add(bgColor);
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Auto remove setelah 3 detik
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 3000);
+    }
+</script>

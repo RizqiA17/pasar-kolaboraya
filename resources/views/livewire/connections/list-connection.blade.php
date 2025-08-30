@@ -157,3 +157,79 @@
         @endif
     </div>
 </section>
+
+<script>
+    // Function untuk putuskan koneksi dengan validasi dan animasi hilang
+    function handleDisconnectWithValidation(userId) {
+        // Tampilkan konfirmasi
+        if (confirm('Apakah Anda yakin ingin memutuskan koneksi dengan user ini?')) {
+            // Cari card koneksi dan hilangkan dengan animasi
+            const connectionCard = document.querySelector(`[data-user-id="${userId}"]`);
+            if (connectionCard) {
+                // Tambahkan class untuk animasi
+                connectionCard.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                connectionCard.style.transform = 'scale(0.8) translateY(20px)';
+                connectionCard.style.opacity = '0';
+                connectionCard.style.filter = 'blur(2px)';
+                
+                // Hilangkan card setelah animasi selesai
+                setTimeout(() => {
+                    connectionCard.remove();
+                    
+                    // Tampilkan notifikasi sukses
+                    showNotification('Koneksi berhasil diputuskan', 'success');
+                }, 400);
+            }
+            return true; // Lanjutkan dengan wire:click
+        }
+        return false; // Batalkan wire:click
+    }
+
+    // Function untuk menampilkan notifikasi
+    function showNotification(message, type = 'info') {
+        // Hapus notifikasi yang sudah ada
+        const existingNotification = document.querySelector('.notification-toast');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Buat notifikasi baru
+        const notification = document.createElement('div');
+        notification.className = `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+        
+        const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+        const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+        
+        notification.innerHTML = `
+            <div class="flex items-center gap-3 text-white">
+                <span class="text-lg font-bold">${icon}</span>
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        notification.classList.add(bgColor);
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Auto remove setelah 3 detik
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 3000);
+    }
+</script>

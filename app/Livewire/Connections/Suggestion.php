@@ -20,7 +20,8 @@ class Suggestion extends Component
             'status' => 'pending'
         ]);
 
-        $this->dispatch('refresh-requests');
+        // Dispatch event untuk update UI tanpa refresh
+        $this->dispatch('connection-status-changed', userId: $userId, status: 'pending_sent');
     }
 
     public function acceptConnection($userId)
@@ -32,7 +33,8 @@ class Suggestion extends Component
 
         if ($connection) {
             $connection->update(['status' => 'accepted']);
-            $this->dispatch('refresh-requests');
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'connected');
         }
     }
 
@@ -45,7 +47,8 @@ class Suggestion extends Component
 
         if ($connection) {
             $connection->delete();
-            $this->dispatch('refresh-requests');
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'not_connected');
         }
     }
 
@@ -68,7 +71,8 @@ class Suggestion extends Component
 
         if ($connection) {
             $connection->delete();
-            $this->dispatch('refresh-requests');
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'not_connected');
         }
     }
     #[\Livewire\Attributes\On('search-results-updated')]
