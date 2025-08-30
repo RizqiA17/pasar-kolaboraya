@@ -65,4 +65,10 @@
             @endif
         </div>
     @endif
+    <script>
+        window.addEventListener('update-page-title', event => {
+            document.title = "Kolaboraya - " + event.detail.title;
+        });
+    </script>
+
 </section>

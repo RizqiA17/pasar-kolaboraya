@@ -5,8 +5,10 @@ namespace App\Livewire\Events;
 use App\Models\Event;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Computed;
 
+#[Layout('components.layouts.app', ['title' => 'Aksi Bersama'])]
 class ListEvent extends Component
 {
     use WithPagination;

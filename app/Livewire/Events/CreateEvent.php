@@ -5,8 +5,10 @@ namespace App\Livewire\Events;
 use App\Models\Event;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Storage;
 
+#[Layout('components.layouts.app', ['title' => 'Buat Aksi'])]
 class CreateEvent extends Component
 {
     use WithFileUploads;

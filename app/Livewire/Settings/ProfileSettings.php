@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Settings;
 
-use App\Models\Interest;
-use App\Models\Skill;
-use App\Models\Contribution;
 use App\Models\User;
-use App\Services\ProfileService;
+use App\Models\Skill;
 use Livewire\Component;
+use App\Models\Interest;
+use App\Models\Contribution;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
+use App\Services\ProfileService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
+#[Layout('components.layouts.app', ['title' => 'Profile Settings'])]
 class ProfileSettings extends Component
 {
     // Profile Information Properties

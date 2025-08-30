@@ -3,6 +3,7 @@
 namespace App\Livewire\Connections;
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
 class ConnectionsTab extends Component
 {
@@ -19,6 +20,16 @@ class ConnectionsTab extends Component
     public function setTab($tab)
     {
         $this->tab = $tab;
+
+        $titles = [
+            'list' => 'Daftar Koneksi',
+            'suggestion' => 'Rekomendasi Koneksi',
+            'requests' => 'Permintaan Koneksi',
+        ];
+
+        $title = $titles[$this->tab] ?? 'Koneksi';
+
+        $this->dispatch('update-page-title', title: $title);
     }
 
     public function mount()
@@ -28,6 +39,6 @@ class ConnectionsTab extends Component
 
     public function render()
     {
-        return view('livewire.connections.connections-tab');
+        return view('livewire.connections.connections-tab')->layout('components.layouts.app', ['title' => $title ?? 'Rekomendasi Koneksi']);
     }
 }

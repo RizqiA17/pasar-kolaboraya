@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Collaborations;
 
-use App\Models\CollaborationUser;
 use Livewire\Component;
 use App\Models\Collaboration;
+use Livewire\Attributes\Layout;
+use App\Models\CollaborationUser;
 
+#[Layout('components.layouts.app', ['title' => 'Daftar Kolaborasi'])]
 class ListCollaboration extends Component
 {
     public $collaborations = [];

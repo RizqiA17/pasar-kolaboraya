@@ -1,7 +1,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-<title>{{ $title ?? config('app.name') }}</title>
+<title>{{ 'Kolaboraya - ' . ($title ?? '') }}</title>
 
 <link rel="icon" href="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}">
 

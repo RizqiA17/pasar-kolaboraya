@@ -129,6 +129,6 @@ class TodoList extends Component
 
     public function render()
     {
-        return view('livewire.collaborations.todo-list');
+        return view('livewire.collaborations.todo-list')->layout('components.layouts.app', ['title' => $this->collaboration->title]);
     }
 }
