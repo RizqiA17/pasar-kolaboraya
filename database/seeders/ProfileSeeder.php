@@ -18,11 +18,11 @@ class ProfileSeeder extends Seeder
                 'user_id' => $user->id,
                 'organization' => fake()->company(),
                 'phone' => fake()->phoneNumber(),
-                'social_media' => json_encode([
+                'social_media' => [
                     'twitter' => fake()->userName(),
                     'linkedin' => fake()->userName(),
                     'github' => fake()->userName(),
-                ]),
+                ],
                 'vision' => fake()->paragraph(),
             ]);
         });
