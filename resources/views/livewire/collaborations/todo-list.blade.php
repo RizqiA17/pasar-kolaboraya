@@ -86,7 +86,7 @@
     </style>
 
     <div class="max-w-6xl mx-auto">
-        <!-- Flash Messages -->
+        <!-- Pesan Flash -->
         @if (session()->has('message'))
             <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
                 {{ session('message') }}
@@ -99,7 +99,7 @@
             </div>
         @endif
 
-        <!-- Header Section -->
+        <!-- Bagian Header -->
         <div class="text-center mb-8">
             <div
                 class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 floating-animation pulse-glow">
@@ -117,7 +117,7 @@
                 {{ $collaboration->description }}</p>
         </div>
 
-        <!-- Stats Cards -->
+        <!-- Kartu Statistik -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div
                 class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
@@ -130,7 +130,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Total Tasks</p>
+                        <p class="text-sm font-medium text-gray-600">Total Tugas</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $todos->count() }}</p>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Completed</p>
+                        <p class="text-sm font-medium text-gray-600">Selesai</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $todos->where('status', 'completed')->count() }}
                         </p>
                     </div>
@@ -163,7 +163,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Pending</p>
+                        <p class="text-sm font-medium text-gray-600">Menunggu</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $todos->where('status', 'pending')->count() }}
                         </p>
                     </div>
@@ -181,7 +181,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Comments</p>
+                        <p class="text-sm font-medium text-gray-600">Komentar</p>
                         <p class="text-2xl font-bold text-gray-900">
                             {{ $todos->sum(function ($todo) {return $todo->comments->count();}) }}</p>
                     </div>
@@ -189,13 +189,13 @@
             </div>
         </div>
 
-        <!-- Progress Bar -->
+        <!-- Bar Progress -->
         @if ($todos->count() > 0)
             <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-gray-900">Progress</h3>
                     <span class="text-sm font-medium text-gray-600">
-                        {{ round(($todos->where('status', 'completed')->count() / $todos->count()) * 100) }}% Complete
+                        {{ round(($todos->where('status', 'completed')->count() / $todos->count()) * 100) }}% Selesai
                     </span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
@@ -209,28 +209,28 @@
             </div>
         @endif
 
-        <!-- Filters and Search -->
+        <!-- Filter dan Pencarian -->
         <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
             <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
                 <div class="flex flex-wrap gap-3">
-                    <!-- Status Filter -->
+                    <!-- Filter Status -->
                     <div class="flex items-center space-x-2">
                         <span class="text-sm font-medium text-gray-700">Status:</span>
                         <select wire:model.live="filter"
                             class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="all">All Tasks</option>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
+                            <option value="all">Semua Tugas</option>
+                            <option value="pending">Menunggu</option>
+                            <option value="completed">Selesai</option>
                         </select>
                     </div>
 
-                    <!-- Sort By -->
+                    <!-- Urutkan Berdasarkan -->
                     <div class="flex items-center space-x-2">
-                        <span class="text-sm font-medium text-gray-700">Sort by:</span>
+                        <span class="text-sm font-medium text-gray-700">Urutkan:</span>
                         <select wire:model.live="sortBy"
                             class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="created_at">Date Created</option>
-                            <option value="title">Title</option>
+                            <option value="created_at">Tanggal Dibuat</option>
+                            <option value="title">Judul</option>
                             <option value="status">Status</option>
                         </select>
                         <button wire:click="toggleSort('{{ $sortBy }}')"
@@ -249,16 +249,16 @@
                         </button>
                     </div>
 
-                    <!-- Clear Filters -->
+                    <!-- Bersihkan Filter -->
                     @if ($filter !== 'all' || $sortBy !== 'created_at' || $sortOrder !== 'desc' || $search)
                         <button wire:click="clearFilters"
                             class="px-3 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors">
-                            Clear Filters
+                            Bersihkan Filter
                         </button>
                     @endif
                 </div>
 
-                <!-- Search -->
+                                    <!-- Pencarian -->
                 <div class="flex-1 lg:max-w-md">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -268,13 +268,13 @@
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search tasks..."
+                        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari tugas..."
                             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                 </div>
             </div>
 
-            <!-- Active Filters Display -->
+                            <!-- Tampilan Filter Aktif -->
             @if ($filter !== 'all' || $search)
                 <div class="mt-4 flex flex-wrap gap-2">
                     @if ($filter !== 'all')
@@ -292,7 +292,7 @@
                     @if ($search)
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
-                            Search: "{{ $search }}"
+                            Pencarian: "{{ $search }}"
                             <button wire:click="$set('search', '')" class="ml-2 text-green-600 hover:text-green-800">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -305,7 +305,7 @@
             @endif
         </div>
 
-        <!-- Add Task Form -->
+        <!-- Form Tambah Tugas -->
         <div
             class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100 hover:shadow-xl transition-all duration-300 {{ $collaboration->status === 'pending' ? 'opacity-50' : '' }}">
             <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -313,13 +313,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Add New Task
+                Tambah Tugas Baru
                 @if($collaboration->status === 'pending')
                     <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                         </svg>
-                        Kolaborasi Pending
+                        Kolaborasi Menunggu
                     </span>
                 @endif
             </h3>
@@ -334,7 +334,7 @@
                         </div>
                         <div class="ml-3">
                             <p class="text-sm text-yellow-700">
-                                <strong>Kolaborasi masih dalam status pending.</strong> Anda tidak dapat menambah atau mengubah todo list sampai kolaborasi diaktifkan.
+                                <strong>Kolaborasi masih dalam status menunggu.</strong> Anda tidak dapat menambah atau mengubah daftar tugas sampai kolaborasi diaktifkan.
                             </p>
                         </div>
                     </div>
@@ -344,7 +344,7 @@
             <div class="space-y-4">
                 <div class="flex gap-3">
                     <div class="flex-1">
-                        <input type="text" wire:model="newTitle" placeholder="What needs to be done?"
+                        <input type="text" wire:model="newTitle" placeholder="Apa yang perlu dilakukan?"
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 hover:border-blue-400 {{ $collaboration->status === 'pending' ? 'bg-gray-100 cursor-not-allowed' : '' }}"
                             {{ $collaboration->status === 'pending' ? 'disabled' : '' }}>
                         @error('newTitle')
@@ -365,26 +365,26 @@
                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                             </path>
                         </svg>
-                        <span wire:loading.remove>{{ $collaboration->status === 'pending' ? 'Todo Disabled' : 'Add Task' }}</span>
-                        <span wire:loading>Adding...</span>
+                        <span wire:loading.remove>{{ $collaboration->status === 'pending' ? 'Todo Dinonaktifkan' : 'Tambah Tugas' }}</span>
+                        <span wire:loading>Menambahkan...</span>
                     </button>
                 </div>
                 <div>
-                    <textarea wire:model="newDescription" placeholder="Add description (optional)"
+                    <textarea wire:model="newDescription" placeholder="Tambahkan deskripsi (opsional)"
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 resize-none hover:border-blue-400 {{ $collaboration->status === 'pending' ? 'bg-gray-100 cursor-not-allowed' : '' }}"
                         rows="2" {{ $collaboration->status === 'pending' ? 'disabled' : '' }}></textarea>
                 </div>
             </div>
         </div>
 
-        <!-- Task List -->
+        <!-- Daftar Tugas -->
         <div class="space-y-4">
             @forelse ($todos as $todo)
                 <div
                     class="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border {{ $todo->status === 'completed' ? 'border-green-200 bg-green-50/30' : 'border-gray-100' }} task-item">
                     <div class="p-6">
                         <div class="flex items-start gap-4">
-                            <!-- Checkbox -->
+                            <!-- Kotak Centang -->
                             <div class="flex-shrink-0 pt-1">
                                 <div class="relative">
                                     <button wire:click="toggleCompleted({{ $todo->id }})"
@@ -410,7 +410,7 @@
                                 </div>
                             </div>
 
-                            <!-- Task Content -->
+                            <!-- Konten Tugas -->
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-x-4">
                                     <div class="flex-1">
@@ -428,7 +428,7 @@
                                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    Completed
+                                    Selesai
                                 </span>
                             @else
                                 <span
@@ -439,7 +439,7 @@
                                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    Pending
+                                    Menunggu
                                 </span>
                             @endif
                             
@@ -452,7 +452,7 @@
                                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    Todo Disabled
+                                    Tugas Dinonaktifkan
                                 </span>
                             @endif
                                         </div>
@@ -461,7 +461,7 @@
                                             <p class="text-gray-600 mb-3">{{ $todo->description }}</p>
                                         @endif
 
-                                        <!-- Task Meta -->
+                                        <!-- Meta Tugas -->
                                         <div class="flex items-center gap-4 text-sm text-gray-500">
                                             <div class="flex items-center gap-2">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -485,21 +485,21 @@
                                         </div>
                                     </div>
 
-                                    <!-- Action Buttons -->
+                                    <!-- Tombol Aksi -->
                                     <div class="flex-shrink-0 flex items-center gap-2">
-                                        <!-- Creator Avatar -->
+                                        <!-- Avatar Pembuat -->
                                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 border-2 border-white shadow-lg flex items-center justify-center"
-                                            title="Created by {{ $todo->creator->name }}">
+                                                                                         title="Dibuat oleh {{ $todo->creator->name }}">
                                             <span
                                                 class="text-sm font-bold text-white">{{ substr($todo->creator->name, 0, 2) }}</span>
                                         </div>
 
-                                        <!-- Delete Button -->
+                                        <!-- Tombol Hapus -->
                                         <button wire:click="deleteTodo({{ $todo->id }})"
                                             wire:loading.attr="disabled"
-                                            wire:confirm="Are you sure you want to delete this task?"
-                                            class="p-2 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            title="Delete task">
+                                                                                         wire:confirm="Apakah Anda yakin ingin menghapus tugas ini?"
+                                             class="p-2 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                             title="Hapus tugas">
                                             <svg wire:loading.remove class="w-4 h-4" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -516,7 +516,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Comments Section -->
+                                <!-- Bagian Komentar -->
                                 @if ($todo->comments->count() > 0)
                                     <div class="mt-6 pl-6 border-l-2 border-blue-200 space-y-3">
                                         <h4 class="text-sm font-medium text-gray-700 flex items-center gap-2">
@@ -527,7 +527,7 @@
                                                 </path>
                                             </svg>
                                             {{ $todo->comments->count() }}
-                                            Comment{{ $todo->comments->count() > 1 ? 's' : '' }}
+                                                                                         Komentar{{ $todo->comments->count() > 1 ? 's' : '' }}
                                         </h4>
                                         <div class="space-y-3">
                                             @foreach ($todo->comments as $comment)
@@ -556,7 +556,7 @@
                     </div>
                 </div>
             @empty
-                <!-- Empty State -->
+                <!-- Keadaan Kosong -->
                 <div class="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100 floating-animation">
                     <div
                         class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center pulse-glow">
@@ -567,18 +567,18 @@
                             </path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">No tasks found!</h3>
-                    <p class="text-gray-600 text-lg mb-6">
-                        @if ($filter !== 'all' || $search)
-                            Try adjusting your filters or search terms.
-                        @else
-                            Start by adding your first task to get things moving.
-                        @endif
-                    </p>
+                                         <h3 class="text-2xl font-bold text-gray-900 mb-2">Tugas tidak ditemukan!</h3>
+                     <p class="text-gray-600 text-lg mb-6">
+                         @if ($filter !== 'all' || $search)
+                             Coba atur filter atau kata kunci pencarian Anda.
+                         @else
+                             Mulailah dengan menambahkan tugas pertama Anda untuk memulai.
+                         @endif
+                     </p>
                     @if ($filter !== 'all' || $search)
                         <button wire:click="clearFilters"
                             class="px-6 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700 transition-colors mr-3 transform hover:scale-105">
-                            Clear Filters
+                                                         Bersihkan Filter
                         </button>
                     @endif
                     <div
@@ -587,7 +587,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        Add Your First Task
+                                                 Tambah Tugas Pertama Anda
                     </div>
                 </div>
             @endforelse
@@ -595,14 +595,14 @@
     </div>
 
     <script>
-        // Enhanced interactions and notifications
+        // Interaksi dan notifikasi yang ditingkatkan
         document.addEventListener('livewire:initialized', () => {
-            // Listen for todo events
+            // Dengarkan event todo
             Livewire.on('todo-added', () => {
-                // Show success notification
-                showNotification('Task added successfully!', 'success');
+                // Tampilkan notifikasi sukses
+                showNotification('Tugas berhasil ditambahkan!', 'success');
 
-                // Scroll to the new task
+                // Scroll ke tugas baru
                 setTimeout(() => {
                     const tasks = document.querySelectorAll('.task-item');
                     if (tasks.length > 0) {
@@ -615,10 +615,10 @@
             });
 
             Livewire.on('todo-deleted', () => {
-                showNotification('Task deleted successfully!', 'info');
+                showNotification('Tugas berhasil dihapus!', 'info');
             });
 
-            // Add smooth scrolling for better UX
+            // Tambahkan smooth scrolling untuk UX yang lebih baik
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -633,9 +633,9 @@
             });
         });
 
-        // Add keyboard shortcuts
+        // Tambahkan shortcut keyboard
         document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + Enter to add task
+                            // Ctrl/Cmd + Enter untuk menambah tugas
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 const addButton = document.querySelector('button[wire\\:click="addTodo"]');
                 if (addButton && !addButton.disabled) {
@@ -643,7 +643,7 @@
                 }
             }
 
-            // Escape to clear search
+            // Escape untuk membersihkan pencarian
             if (e.key === 'Escape') {
                 const searchInput = document.querySelector(
                 'input[wire\\:model\\.live\\.debounce\\.300ms="search"]');
@@ -654,9 +654,9 @@
             }
         });
 
-        // Add hover effects for better interactivity
+        // Tambahkan efek hover untuk interaktivitas yang lebih baik
         document.addEventListener('DOMContentLoaded', () => {
-            // Add ripple effect to buttons
+            // Tambahkan efek ripple pada tombol
             document.querySelectorAll('button').forEach(button => {
                 button.addEventListener('click', function(e) {
                     const ripple = document.createElement('span');

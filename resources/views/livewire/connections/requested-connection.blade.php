@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <!-- Content -->
+                    <!-- Konten -->
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                             {{ $req['sender']['name'] }}
@@ -39,7 +39,7 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
+                    <!-- Aksi -->
                     <div class="flex items-center gap-1.5">
                         <flux:button wire:click="accept({{ $req['id'] }})"
                             class="p-1.5 hover:bg-green-50 text-green-600! rounded-full transition-colors duration-150 hover:shadow-sm"
