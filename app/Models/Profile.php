@@ -16,6 +16,8 @@ class Profile extends Model
         'phone',
         'social_media',
         'vision',
+        'profile_photo',
+        'banner',
     ];
 
     protected $casts = [

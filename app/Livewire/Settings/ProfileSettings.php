@@ -12,16 +12,23 @@ use Livewire\Attributes\Layout;
 use App\Services\ProfileService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.app', ['title' => 'Profile Settings'])]
 class ProfileSettings extends Component
 {
+    use WithFileUploads;
+
     // Profile Information Properties
     public string $name = '';
     public string $email = '';
     public ?string $organization = '';
     public ?string $phone = '';
     public ?string $vision = '';
+    
+    // Image Properties
+    public $profilePhoto;
+    public $banner;
     
     // Existing Properties
     public $tab = 'profile';
@@ -51,6 +58,8 @@ class ProfileSettings extends Component
         'organization' => ['nullable', 'string', 'max:255'],
         'phone' => ['nullable', 'string', 'max:255'],
         'vision' => ['nullable', 'string'],
+        'profilePhoto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        'banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
         'newContribution.contribution_id' => 'required|exists:contributions,id',
         'newContribution.description' => 'required|string|max:500',
         'newContribution.date' => 'required|date|before_or_equal:today',
@@ -64,6 +73,14 @@ class ProfileSettings extends Component
         'email.max' => 'Email maksimal 255 karakter',
         'organization.max' => 'Organisasi maksimal 255 karakter',
         'phone.max' => 'Nomor telepon maksimal 255 karakter',
+        'profilePhoto.required' => 'Foto profil wajib dipilih',
+        'profilePhoto.image' => 'File harus berupa gambar',
+        'profilePhoto.mimes' => 'Format gambar harus JPG, PNG, atau GIF',
+        'profilePhoto.max' => 'Ukuran gambar maksimal 2MB',
+        'banner.required' => 'Banner wajib dipilih',
+        'banner.image' => 'File harus berupa gambar',
+        'banner.mimes' => 'Format gambar harus JPG, PNG, atau GIF',
+        'banner.max' => 'Ukuran gambar maksimal 5MB',
         'newContribution.contribution_id.required' => 'Pilih jenis kontribusi',
         'newContribution.contribution_id.exists' => 'Jenis kontribusi tidak valid',
         'newContribution.description.required' => 'Deskripsi kontribusi wajib diisi',
@@ -317,6 +334,46 @@ class ProfileSettings extends Component
     public function setTab($tab)
     {
         $this->tab = $tab;
+    }
+
+    public function updateProfilePhoto()
+    {
+        $this->validate([
+            'profilePhoto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ]);
+
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->updateProfilePhoto($user, $this->profilePhoto);
+
+        if ($success) {
+            $this->profilePhoto = null;
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Foto profil berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui foto profil. Silakan coba lagi.');
+        }
+    }
+
+    public function updateBanner()
+    {
+        $this->validate([
+            'banner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+        ]);
+
+        $profileService = new ProfileService();
+        /** @var User $user */
+        $user = auth()->user();
+        $success = $profileService->updateBanner($user, $this->banner);
+
+        if ($success) {
+            $this->banner = null;
+            $this->dispatch('profile-updated');
+            session()->flash('message', 'Banner berhasil diperbarui!');
+        } else {
+            session()->flash('error', 'Gagal memperbarui banner. Silakan coba lagi.');
+        }
     }
 
     public function render()
