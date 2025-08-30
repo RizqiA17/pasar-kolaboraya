@@ -148,11 +148,12 @@
                         </div>
                     @else
                         <div class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg">
-                            @foreach ($availableUsers as $user)
-                                <label
-                                    class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
-                                    <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
-                                        class="mr-2 text-blue-600">
+                                                    @foreach ($availableUsers as $user)
+                            <label
+                                class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                                <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
+                                    class="mr-2 text-blue-600">
+                                <div class="flex items-center justify-between w-full">
                                     <div class="flex items-center">
                                         <div
                                             class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-3">
@@ -163,8 +164,13 @@
                                         <span
                                             class="text-sm text-gray-700 dark:text-gray-300">{{ $user->name }}</span>
                                     </div>
-                                </label>
-                            @endforeach
+                                    <a href="{{ route('profile.view', $user->id) }}" 
+                                       class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
+                                        Lihat Profile
+                                    </a>
+                                </div>
+                            </label>
+                        @endforeach
                         </div>
                     @endif
 
@@ -791,7 +797,13 @@
                             <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
                                 <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
                                     class="mr-2 text-blue-600">
-                                <span class="text-sm text-gray-700">{{ $user->name }}</span>
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="text-sm text-gray-700">{{ $user->name }}</span>
+                                    <a href="{{ route('profile.view', $user->id) }}" 
+                                       class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
+                                        Lihat Profile
+                                    </a>
+                                </div>
                             </label>
                         @endforeach
                     </div>

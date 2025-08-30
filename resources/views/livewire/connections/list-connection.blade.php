@@ -14,6 +14,11 @@
 
                         <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors" 
                             wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">{{ $friend['name'] }}</h3>
+                        
+                        <a href="{{ route('profile.view', $friend['id']) }}" 
+                           class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                            Lihat Profile Lengkap
+                        </a>
 
                         <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
                             <div class="text-center">
@@ -82,6 +87,11 @@
 
                         <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors" 
                             wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">{{ $friend['name'] }}</h3>
+                        
+                        <a href="{{ route('profile.view', $friend['id']) }}" 
+                           class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                            Lihat Profile Lengkap
+                        </a>
 
                         <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
                             <div class="text-center">

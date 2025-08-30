@@ -30,6 +30,9 @@ Route::middleware(['auth', VerifiedEmail::class, 'profile.complete'])->group(fun
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
     Route::get('settings/profile-settings', ProfileSettings::class)->name('settings.profile-settings');
 
+    // Route untuk melihat profile user lain
+    Route::get('profile/{userId}', \App\Livewire\Profile\ViewProfile::class)->name('profile.view');
+
     Route::get('connections', ConnectionsTab::class)->name('connections');
 
     Route::get('collaborations', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
