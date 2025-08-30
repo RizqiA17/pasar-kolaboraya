@@ -32,19 +32,10 @@
                 <flux:input wire:model="organization" :label="'Organisasi/Perusahaan'" type="text"
                     :placeholder="'Nama organisasi atau perusahaan Anda'" />
 
-                <flux:field>
-                    <flux:label>Nomor Telepon</flux:label>
+                <flux:input wire:model="phone" :label="'Nomor Telepon'" type="tel" :placeholder="'0812-3456-7890'" />
 
-                    <flux:input.group>
-                        <flux:input.group.prefix>+62</flux:input.group.prefix>
-
-                        <flux:input wire:model="phone" type="tel" placeholder="812-3456-7890" />
-                    </flux:input.group>
-
-                    <flux:error name="phone" />
-                </flux:field>
-
-                <flux:textarea wire:model="vision" rows="2" :label="'Visi/Misi'" :placeholder="'Ceritakan visi dan misi Anda'"  />
+                <flux:textarea wire:model="vision" rows="2" :label="'Visi/Misi'"
+                    :placeholder="'Ceritakan visi dan misi Anda'" />
             </div>
         @elseif($currentStep === 2)
             <!-- Step 2: Social Media -->
@@ -212,7 +203,8 @@
                         Selanjutnya
                     </flux:button>
                 @else
-                    <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto" icon:trailing="chevron-right">
+                    <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto"
+                        icon:trailing="chevron-right">
                         Selesai & Lanjutkan
                     </flux:button>
                 @endif
@@ -239,6 +231,3 @@
         </div>
     </div>
 </div>
-
-
-
