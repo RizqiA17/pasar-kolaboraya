@@ -1,254 +1,266 @@
-<div class="space-y-6">
-    {{-- {{ json_encode($searchResults) }} --}}
-    @if (!empty($searchResults))
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Hasil Pencarian Anda</h3>
-                        <p class="text-sm text-gray-500">Kreator yang cocok dengan pencarian Anda</p>
+<div>
+    <div class="space-y-6">
+        {{-- {{ json_encode($searchResults) }} --}}
+        @if (!empty($searchResults))
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Hasil Pencarian Anda</h3>
+                            <p class="text-sm text-gray-500">Kreator yang cocok dengan pencarian Anda</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+                        @forelse($searchResults as $user)
+                            <div
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                {{-- Cover Image --}}
+                                <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+
+                                {{-- Profile Content --}}
+                                <div class="p-4">
+                                    {{-- Avatar --}}
+                                    <div class="relative -mt-12 mb-3">
+                                        <div
+                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
+                                            {{ substr($user->name, 0, 2) }}
+                                        </div>
+                                    </div>
+
+                                    {{-- Info --}}
+                                    <div class="text-center mb-4">
+                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                            wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
+                                            {{ $user->name }}
+                                        </h4>
+                                    </div>
+
+                                    {{-- Action Buttons --}}
+                                    <div class="space-y-2">
+                                        <x-connection-card-button :userId="$user->id" />
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-span-full text-center py-8">
+                                <div
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak Ada Kreator yang Cocok</h3>
+                                <p class="text-gray-500 max-w-sm mx-auto">
+                                    Coba ganti pencarian Anda.
+                                </p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        @else
+            {{-- Mutual Friends Recommendations --}}
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Kreator yang Mungkin Anda Kenal</h3>
+                            <p class="text-sm text-gray-500">Berdasarkan koneksi yang sama</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        @forelse($mutualFriendsRecommendations as $user)
+                            <div
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                {{-- Cover Image --}}
+                                <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
+
+                                {{-- Profile Content --}}
+                                <div class="p-4">
+                                    {{-- Avatar --}}
+                                    <div class="relative -mt-12 mb-3">
+                                        <div
+                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
+                                            {{ substr($user->name, 0, 2) }}
+                                        </div>
+                                    </div>
+
+                                    {{-- Info --}}
+                                    <div class="text-center mb-4">
+                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                            wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
+                                            {{ $user->name }}
+                                        </h4>
+                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                                </path>
+                                            </svg>
+                                            <span>{{ $user->connections_count }} koneksi yang sama</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Action Buttons --}}
+                                    <div class="space-y-2">
+                                        <x-connection-card-button :userId="$user->id" />
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-span-full text-center py-8">
+                                <div
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500 max-w-sm mx-auto">
+                                    Mulai terhubung dengan lebih banyak kreator untuk mendapatkan rekomendasi yang lebih
+                                    baik.
+                                </p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
 
-            <div class="p-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {{-- Interest-based Recommendations --}}
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Rekomendasi Berdasarkan Minat</h3>
+                            <p class="text-sm text-gray-500">Kreator dengan minat yang serupa</p>
+                        </div>
+                    </div>
+                </div>
 
-                    @forelse($searchResults as $user)
-                        <div
-                            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
-                            {{-- Cover Image --}}
-                            <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                <div class="p-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
-                            {{-- Profile Content --}}
-                            <div class="p-4">
-                                {{-- Avatar --}}
-                                <div class="relative -mt-12 mb-3">
-                                    <div
-                                        class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                        {{ substr($user->name, 0, 2) }}
+                        @forelse($interestRecommendations as $user)
+                            <div
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                {{-- Cover Image --}}
+                                <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+
+                                {{-- Profile Content --}}
+                                <div class="p-4">
+                                    {{-- Avatar --}}
+                                    <div class="relative -mt-12 mb-3">
+                                        <div
+                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
+                                            {{ substr($user->name, 0, 2) }}
+                                        </div>
+                                    </div>
+
+                                    {{-- Info --}}
+                                    <div class="text-center mb-4">
+                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                            wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
+                                            {{ $user->name }}
+                                        </h4>
+                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>{{ $user->interests_count }} minat yang sama</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Action Buttons --}}
+                                    <div class="space-y-2">
+                                        <x-connection-card-button :userId="$user->id" />
                                     </div>
                                 </div>
-
-                                {{-- Info --}}
-                                <div class="text-center mb-4">
-                                    <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
-                                        {{ $user->name }}
-                                    </h4>
-                                </div>
-
-                                {{-- Action Buttons --}}
-                                <div class="space-y-2">
-                                    <x-connection-card-button :userId="$user->id" />
-                                </div>
                             </div>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8">
-                            <div
-                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                        @empty
+                            <div class="col-span-full text-center py-8">
+                                <div
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500 max-w-sm mx-auto">
+                                    Tambahkan minat Anda untuk mendapatkan rekomendasi yang lebih relevan.
+                                </p>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak Ada Kreator yang Cocok</h3>
-                            <p class="text-gray-500 max-w-sm mx-auto">
-                                Coba ganti pencarian Anda.
-                            </p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    @else
-        {{-- Mutual Friends Recommendations --}}
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Kreator yang Mungkin Anda Kenal</h3>
-                        <p class="text-sm text-gray-500">Berdasarkan koneksi yang sama</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
 
-            <div class="p-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    @forelse($mutualFriendsRecommendations as $user)
-                        <div
-                            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
-                            {{-- Cover Image --}}
-                            <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
-
-                            {{-- Profile Content --}}
-                            <div class="p-4">
-                                {{-- Avatar --}}
-                                <div class="relative -mt-12 mb-3">
-                                    <div
-                                        class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                        {{ substr($user->name, 0, 2) }}
-                                    </div>
-                                </div>
-
-                                {{-- Info --}}
-                                <div class="text-center mb-4">
-                                    <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
-                                        {{ $user->name }}
-                                    </h4>
-                                    <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                                            </path>
-                                        </svg>
-                                        <span>{{ $user->connections_count }} koneksi yang sama</span>
-                                    </div>
-                                </div>
-
-                                {{-- Action Buttons --}}
-                                <div class="space-y-2">
-                                    <x-connection-card-button :userId="$user->id" />
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8">
-                            <div
-                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                            <p class="text-gray-500 max-w-sm mx-auto">
-                                Mulai terhubung dengan lebih banyak kreator untuk mendapatkan rekomendasi yang lebih
-                                baik.
-                            </p>
-                        </div>
-                    @endforelse
+            {{-- Event-based Recommendations --}}
+            <div class="bg-white rounded-lg overflow-hidden">
+                <div class="p-4 border-b border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900">Dari Event yang Sama</h3>
+                    <p class="text-sm text-gray-600">Kreator yang pernah mengikuti event yang sama dengan Anda</p>
                 </div>
-            </div>
-        </div>
-
-        {{-- Interest-based Recommendations --}}
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Rekomendasi Berdasarkan Minat</h3>
-                        <p class="text-sm text-gray-500">Kreator dengan minat yang serupa</p>
+                <div class="p-4">
+                    <div class="grid gap-4">
+                        @forelse($eventRecommendations as $user)
+                            <div
+                                class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-medium text-lg">
+                                            {{ substr($user->name, 0, 2) }}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900 cursor-pointer hover:text-blue-600"
+                                            wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
+                                            {{ $user->name }}</h4>
+                                        <p class="text-sm text-gray-600">{{ $user->events_count }} event yang sama</p>
+                                    </div>
+                                </div>
+                                <x-connection-button :userId="$user->id" size="small" />
+                            </div>
+                        @empty
+                            <div class="col-span-full text-center py-8">
+                                <div
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500">Belum ada rekomendasi dari event yang sama</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
-
-            <div class="p-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-
-                    @forelse($interestRecommendations as $user)
-                        <div
-                            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
-                            {{-- Cover Image --}}
-                            <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
-
-                            {{-- Profile Content --}}
-                            <div class="p-4">
-                                {{-- Avatar --}}
-                                <div class="relative -mt-12 mb-3">
-                                    <div
-                                        class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                        {{ substr($user->name, 0, 2) }}
-                                    </div>
-                                </div>
-
-                                {{-- Info --}}
-                                <div class="text-center mb-4">
-                                    <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
-                                        {{ $user->name }}
-                                    </h4>
-                                    <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <span>{{ $user->interests_count }} minat yang sama</span>
-                                    </div>
-                                </div>
-
-                                {{-- Action Buttons --}}
-                                <div class="space-y-2">
-                                    <x-connection-card-button :userId="$user->id" />
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8">
-                            <div
-                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                            <p class="text-gray-500 max-w-sm mx-auto">
-                                Tambahkan minat Anda untuk mendapatkan rekomendasi yang lebih relevan.
-                            </p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-
-        {{-- Event-based Recommendations --}}
-        <div class="bg-white rounded-lg overflow-hidden">
-            <div class="p-4 border-b border-gray-100">
-                <h3 class="text-lg font-semibold text-gray-900">Dari Event yang Sama</h3>
-                <p class="text-sm text-gray-600">Kreator yang pernah mengikuti event yang sama dengan Anda</p>
-            </div>
-            <div class="p-4">
-                <div class="grid gap-4">
-                    @forelse($eventRecommendations as $user)
-                        <div
-                            class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-medium text-lg">
-                                        {{ substr($user->name, 0, 2) }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium text-gray-900">{{ $user->name }}</h4>
-                                    <p class="text-sm text-gray-600">{{ $user->events_count }} event yang sama</p>
-                                </div>
-                            </div>
-                            <x-connection-button :userId="$user->id" size="small" />
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8">
-                            <div
-                                class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                            <p class="text-gray-500">Belum ada rekomendasi dari event yang sama</p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    @endif
+        @endif
+    </div>
+    {{-- Profile Card Popup --}}
+    <livewire:profile.profile-card />
 </div>
+
 
 <script>
     // Function untuk update button setelah connect
@@ -343,11 +355,11 @@
                 connectionCard.style.transform = 'scale(0.8) translateY(20px)';
                 connectionCard.style.opacity = '0';
                 connectionCard.style.filter = 'blur(2px)';
-                
+
                 // Hilangkan card setelah animasi selesai
                 setTimeout(() => {
                     connectionCard.remove();
-                    
+
                     // Tampilkan notifikasi sukses
                     showNotification('Koneksi berhasil diputuskan', 'success');
                 }, 400);
@@ -365,11 +377,12 @@
 
         // Buat notifikasi baru
         const notification = document.createElement('div');
-        notification.className = `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
-        
+        notification.className =
+            `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+
         const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
         const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
-        
+
         notification.innerHTML = `
             <div class="flex items-center gap-3 text-white">
                 <span class="text-lg font-bold">${icon}</span>
@@ -381,15 +394,15 @@
                 </button>
             </div>
         `;
-        
+
         notification.classList.add(bgColor);
         document.body.appendChild(notification);
-        
+
         // Animate in
         setTimeout(() => {
             notification.classList.remove('translate-x-full');
         }, 100);
-        
+
         // Auto remove setelah 3 detik
         setTimeout(() => {
             if (notification.parentElement) {

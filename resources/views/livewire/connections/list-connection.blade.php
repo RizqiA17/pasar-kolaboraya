@@ -12,7 +12,8 @@
                             {{ substr($friend['name'], 0, 2) }}
                         </div>
 
-                        <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $friend['name'] }}</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors" 
+                            wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">{{ $friend['name'] }}</h3>
 
                         <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
                             <div class="text-center">
@@ -79,7 +80,8 @@
                             {{ substr($friend['name'], 0, 2) }}
                         </div>
 
-                        <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $friend['name'] }}</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors" 
+                            wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">{{ $friend['name'] }}</h3>
 
                         <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
                             <div class="text-center">
@@ -150,6 +152,9 @@
             @endforelse
         @endif
     </div>
+
+    {{-- Profile Card Popup --}}
+    <livewire:profile.profile-card />
 </section>
 
 <script>
