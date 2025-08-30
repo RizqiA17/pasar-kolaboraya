@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Collaboration;
 use App\Models\User;
 use App\Models\CollaborationUser;
+use App\Models\Connection;
 use App\Services\CollaborationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
@@ -22,7 +23,7 @@ class CollaborationManager extends Component
     public $showInviteForm = false;
     public $selectedCollaboration = null;
     public $availableUsers = [];
-    public $activeTab = 'my-collaborations'; // New property for tab management
+    public $activeTab = 'my-collaborations';
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
@@ -50,10 +51,35 @@ class CollaborationManager extends Component
 
     public function loadAvailableUsers()
     {
-        $this->availableUsers = User::where('id', '!=', Auth::id())
+        // Get only users who are already connected with the current user
+        $connectedUserIds = $this->getConnectedUserIds();
+        
+        $this->availableUsers = User::whereIn('id', $connectedUserIds)
             ->where('name', 'like', '%' . $this->searchQuery . '%')
             ->limit(10)
             ->get();
+    }
+
+    /**
+     * Get IDs of users who are connected with the current user
+     */
+    private function getConnectedUserIds()
+    {
+        $currentUserId = Auth::id();
+        
+        return Connection::where('status', 'accepted')
+            ->where(function ($query) use ($currentUserId) {
+                $query->where('requester_id', $currentUserId)
+                    ->orWhere('receiver_id', $currentUserId);
+            })
+            ->get()
+            ->map(function ($connection) use ($currentUserId) {
+                // Return the ID of the other user (not the current user)
+                return $connection->requester_id == $currentUserId 
+                    ? $connection->receiver_id 
+                    : $connection->requester_id;
+            })
+            ->toArray();
     }
 
     public function updatedSearchQuery()
@@ -103,6 +129,11 @@ class CollaborationManager extends Component
     {
         $this->validate();
 
+        // Validate that selected users are connected
+        if (!$this->validateSelectedUsersAreConnected()) {
+            return;
+        }
+
         try {
             $collaborationService = app(CollaborationService::class);
             $collaboration = $collaborationService->createCollaboration(
@@ -129,6 +160,11 @@ class CollaborationManager extends Component
         $this->validate([
             'selectedUsers' => 'array|min:1'
         ]);
+
+        // Validate that selected users are connected
+        if (!$this->validateSelectedUsersAreConnected()) {
+            return;
+        }
 
         try {
             $collaborationService = app(CollaborationService::class);
@@ -199,6 +235,22 @@ class CollaborationManager extends Component
         return Collaboration::where('created_by', Auth::id())
             ->with(['collaborationUsers.user'])
             ->get();
+    }
+
+    /**
+     * Validate that selected users are connected with the current user
+     */
+    private function validateSelectedUsersAreConnected()
+    {
+        $connectedUserIds = $this->getConnectedUserIds();
+        $invalidUsers = array_diff($this->selectedUsers, $connectedUserIds);
+        
+        if (!empty($invalidUsers)) {
+            session()->flash('error', 'Hanya bisa mengundang user yang sudah terkoneksi!');
+            return false;
+        }
+        
+        return true;
     }
 
     public function render()
