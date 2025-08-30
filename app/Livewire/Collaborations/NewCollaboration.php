@@ -66,7 +66,7 @@ class NewCollaboration extends Component
 
             session()->flash('success', 'Collaboration created successfully!');
             $this->reset(['title', 'description', 'event_id']);
-            return redirect()->route('collaborations');
+            return redirect()->route('collaborations.manage');
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to create collaboration: ' . $e->getMessage());
         }
