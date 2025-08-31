@@ -100,7 +100,7 @@
         @if ($profile->social_media)
             <div class="mb-6">
                 <h4 class="text-sm font-medium text-gray-900 mb-3">Media Sosial</h4>
-                <div class="flex space-x-3">
+                <div class="flex flex-wrap gap-2">
 
                     @foreach ($profile->social_media as $platform => $url)
                         @if ($url !== '')

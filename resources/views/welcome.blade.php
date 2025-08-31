@@ -5,16 +5,19 @@
         <nav class="absolute top-0 w-full z-50 p-6">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="text-navy text-2xl font-bold">
-                   <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo" class="h-10">
+                    <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo" class="h-10">
                 </div>
                 @if (Route::has('login'))
                     <div class="space-x-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Beranda</a>
+                            <a href="{{ url('/dashboard') }}"
+                                class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Beranda</a>
                         @else
-                            <a href="{{ route('login') }}" class="px-4 py-2 text-navy hover:text-blue-700 transition">Masuk</a>
+                            <a href="{{ route('login') }}"
+                                class="px-4 py-2 text-navy hover:text-blue-700 transition">Masuk</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Daftar</a>
+                                <a href="{{ route('register') }}"
+                                    class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Daftar</a>
                             @endif
                         @endauth
                     </div>
@@ -25,79 +28,109 @@
         <!-- Main Content -->
         <div class="relative pt-32 pb-16 sm:pt-48">
             <!-- Enhanced Decorative SVG Elements for Welcome Page -->
-            <div class="absolute top-0 left-0 w-80 h-80 opacity-70 animate-float">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/1.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute top-1/2 right-0 w-96 h-96 opacity-60 animate-float-delay-2">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 w-72 h-72 opacity-50 animate-float-delay-3">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute -bottom-50 right-1/5 w-80 h-80 opacity-60 animate-float">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/5.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute -bottom-50 left-1/5 w-64 h-64 opacity-50 animate-float-delay-1">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/6.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-72 h-72 opacity-60 animate-float-delay-2">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/3.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            
-            <!-- Floating Elements with Animation -->
-            <div class="absolute top-0 left-1/3 w-32 h-32 opacity-50 animate-float">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/15.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="absolute top-3/4 right-1/3 w-28 h-28 opacity-50 animate-float-delay-1">
-                <img src="{{ Storage::url('web/ASET VISUAL/SVG/16.svg') }}" alt="" class="w-full h-full object-contain">
-            </div>
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="text-center">
-                    <h1 class="text-4xl sm:text-5xl font-bold text-navy mb-8 leading-tight">
-                        Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial
-                    </h1>
-                    <p class="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
-                        Pasar Kolaboraya adalah ruang <span class="text-sky font-semibold">temu lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span class="text-coral font-semibold">memperluas dampak</span>.
-                    </p>
-                    <div class="space-x-4">
-                        <a href="{{ route('register') }}" class="inline-flex items-center px-8 py-4 bg-navy text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition">
-                            Bergabung Sekarang
-                            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
+            <div>
+                <div class="absolute top-0 max-md:-translate-x-1/2 max-md:translate-y-1/2 left-0 w-80 h-80 opacity-70 animate-float">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/1.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div class="absolute top-10 max-md:translate-x-1/2 max-md:translate-y-1/2 right-0 w-96 h-96 opacity-60 animate-float-delay-2">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div
+                    class="absolute top-0  right-0 translate-x-1/4 -translate-y-1/4 w-72 h-72 opacity-50 animate-float-delay-3">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 right-5 w-80 h-80 opacity-60 animate-float">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/5.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 left-5 w-64 h-64 opacity-50 animate-float-delay-1">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/6.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-72 h-72 opacity-60 animate-float-delay-2">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/3.svg') }}" alt=""
+                        class="w-full h-full object-contain">
                 </div>
 
-                <!-- Features -->
-                <div class="mt-32 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                        <div class="bg-sky/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                            <svg class="w-6 h-6 text-sky" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <!-- Floating Elements with Animation -->
+                <div class="absolute top-0 max-md:-translate-x-1/2 max-md:translate-y-1/2 left-7 w-32 h-32 opacity-50 animate-float">
+                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/15.svg') }}" alt=""
+                        class="w-full h-full object-contain">
+                </div>
+                <div class="max-w-7xl relative z-1 mx-auto px-6 lg:px-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl sm:text-5xl font-bold text-navy mb-8 leading-tight">
+                            Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial
+                        </h1>
+                        <p class="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
+                            Pasar Kolaboraya adalah ruang <span class="text-sky font-semibold">temu
+                                lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span
+                                class="text-coral font-semibold">memperluas dampak</span>.
+                        </p>
+                        <div class="space-x-4">
+                            <a href="{{ route('register') }}"
+                                class="inline-flex items-center px-8 py-4 bg-navy text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition">
+                                Bergabung Sekarang
+                                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
                         </div>
-                        <h3 class="text-xl font-semibold text-navy mb-3">Jaringan Luas</h3>
-                        <p class="text-gray-600">Terhubung dengan kreator perubahan sosial dari berbagai latar belakang dan fokus.</p>
                     </div>
 
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                        <div class="bg-coral/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                            <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <!-- Features -->
+                    <div class="mt-32 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div class="bg-sky/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-sky" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-navy mb-3">Jaringan Luas</h3>
+                            <p class="text-gray-600">Terhubung dengan kreator perubahan sosial dari berbagai latar
+                                belakang dan fokus.</p>
                         </div>
-                        <h3 class="text-xl font-semibold text-navy mb-3">Kolaborasi Efektif</h3>
-                        <p class="text-gray-600">Temukan partner yang sesuai dan kolaborasi untuk menciptakan dampak yang lebih besar.</p>
-                    </div>
 
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                        <div class="bg-purple/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                            <svg class="w-6 h-6 text-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div class="bg-coral/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-navy mb-3">Kolaborasi Efektif</h3>
+                            <p class="text-gray-600">Temukan partner yang sesuai dan kolaborasi untuk menciptakan dampak
+                                yang lebih besar.</p>
                         </div>
-                        <h3 class="text-xl font-semibold text-navy mb-3">Dampak Terukur</h3>
-                        <p class="text-gray-600">Pantau dan ukur dampak dari setiap kolaborasi yang Anda lakukan.</p>
+
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div class="bg-purple/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-purple" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-navy mb-3">Dampak Terukur</h3>
+                            <p class="text-gray-600">Pantau dan ukur dampak dari setiap kolaborasi yang Anda lakukan.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="mt-32 pb-8">
+        <footer class="mt-32 pb-8 z-1 relative">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="border-t border-gray-200 pt-8 text-center text-gray-500">
                     <p>&copy; 2025 Pasar Kolaboraya. All rights reserved.</p>
@@ -116,36 +149,48 @@
         .text-sky { color: #4ECDC4; }
         .bg-purple { background-color: #9C6BFF; }
         .text-purple { color: #9C6BFF; } */
-        
+
         /* SVG Animation Styles */
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
-        
+
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
-        
+
         .animate-rotate {
             animation: rotate 20s linear infinite;
         }
-        
+
         .animate-float-delay-1 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 1s;
         }
-        
+
         .animate-float-delay-2 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 2s;
         }
-        
+
         .animate-float-delay-3 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 3s;
