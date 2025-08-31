@@ -212,10 +212,10 @@
             </div>
 
             {{-- Event-based Recommendations --}}
-            <div class="bg-white rounded-lg overflow-hidden">
+            {{-- <div class="bg-white rounded-lg overflow-hidden">
                 <div class="p-4 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">Dari Event yang Sama</h3>
-                    <p class="text-sm text-gray-600">Kreator yang pernah mengikuti event yang sama dengan Anda</p>
+                    <h3 class="text-lg font-semibold text-gray-900">Dari Aski yang Sama</h3>
+                    <p class="text-sm text-gray-600">Kreator yang pernah mengikuti Aski yang sama dengan Anda</p>
                 </div>
                 <div class="p-4">
                     <div class="grid gap-4">
@@ -254,7 +254,7 @@
                         @endforelse
                     </div>
                 </div>
-            </div>
+            </div> --}}
         @endif
     </div>
     {{-- Profile Card Popup --}}
