@@ -491,85 +491,143 @@
                     </div>
                 </div>
             @elseif ($tab === 'interests')
-                <!-- Interests Section -->
+                <!-- Enhanced Interests Section -->
                 <div id="interests" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-purple-100">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900">Minat & Ketertarikan</h3>
-                                <p class="text-sm text-gray-600">Pilih minat dan ketertarikan Anda untuk terhubung
-                                    dengan
-                                    kreator yang memiliki minat serupa.</p>
+                    <!-- Enhanced Header with Stats -->
+                    <div class="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 px-6 py-6 border-b border-purple-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="h-12 min-w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900">Minat & Ketertarikan</h3>
+                                    <p class="text-gray-600">Pilih minat yang sesuai untuk terhubung dengan kreator serupa</p>
+                                </div>
                             </div>
-                            <span
-                                class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                {{ count($selectedInterests) }} selected
-                            </span>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-purple-600">{{ count($selectedInterests) }}</div>
+                                <div class="text-sm text-gray-600">Minat Dipilih</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-3 gap-4 mt-4">
+                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                                <div class="flex items-center space-x-2">
+                                    <div class="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-lg font-semibold text-gray-900">{{ count($selectedInterests) }}</div>
+                                        <div class="text-xs text-gray-600">Dipilih</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                                <div class="flex items-center space-x-2">
+                                    <div class="h-8 w-8 rounded-lg bg-pink-100 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-lg font-semibold text-gray-900">{{ count($interests) }}</div>
+                                        <div class="text-xs text-gray-600">Tersedia</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                                <div class="flex items-center space-x-2">
+                                    <div class="h-8 w-8 rounded-lg bg-rose-100 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-lg font-semibold text-gray-900">{{ count($interests) > 0 ? round((count($selectedInterests) / count($interests)) * 100) : 0 }}%</div>
+                                        <div class="text-xs text-gray-600">Lengkapi</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="p-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Progress Indicator -->
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Progress Pemilihan Minat</span>
+                                <span class="text-sm text-gray-500">
+                                    @php
+                                        $interestProgress = count($interests) > 0 ? round((count($selectedInterests) / count($interests)) * 100) : 0;
+                                    @endphp
+                                    {{ $interestProgress }}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-600 h-2 rounded-full transition-all duration-500 ease-out" style="width: {{ $interestProgress }}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach ($interests as $interest)
-                                <label
-                                    class="group relative flex items-start p-5 cursor-pointer bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl transition-all duration-200 ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-md transform hover:-translate-y-1">
+                                <label class="group relative flex items-start p-5 cursor-pointer bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl transition-all duration-200 ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-md transform hover:-translate-y-1">
                                     <div class="min-w-0 flex flex-col flex-1">
-                                        <div class="flex items-center justify-between">
+                                        <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center">
                                                 <div class="relative flex items-center">
                                                     <input type="checkbox" wire:model.live="selectedInterests"
                                                         value="{{ $interest->id }}"
-                                                        class="peer h-5 w-5 text-purple-600 border-gray-300 rounded-lg focus:ring-purple-500 focus:ring-2">
-                                                    <div
-                                                        class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                                                        <svg class="h-3.5 w-3.5 text-purple-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd"></path>
+                                                        class="peer h-5 w-5 text-purple-600 border-gray-300 rounded-lg focus:ring-purple-500 focus:ring-2 transition-all duration-200">
+                                                    <div class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
+                                                        <svg class="h-3.5 w-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
                                                     </div>
                                                 </div>
-                                                <span
-                                                    class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-purple-700">{{ $interest->name }}</span>
+                                                <span class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-purple-700 transition-colors duration-200">{{ $interest->name }}</span>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
-                                                <span
-                                                    class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <span class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-200 opacity-0 group-hover:opacity-100 transition-all duration-200">
                                                     {{ rand(10, 50) }} kreator
                                                 </span>
                                             </div>
                                         </div>
                                         @if ($interest->description)
-                                            <p class="mt-2 text-xs text-gray-600 ml-8 leading-relaxed">
-                                                {{ $interest->description }}</p>
+                                            <p class="text-xs text-gray-600 ml-8 leading-relaxed group-hover:text-gray-700 transition-colors duration-200">
+                                                {{ $interest->description }}
+                                            </p>
                                         @endif
                                     </div>
                                 </label>
                             @endforeach
                         </div>
 
-                        <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200">
-                            <div class="flex items-center space-x-3">
+                        <div class="mt-8 flex items-center justify-between pt-6 border-t border-gray-200">
+                            <div class="flex items-center space-x-4">
                                 <button wire:click="updateInterests"
-                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105">
-                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
+                                    wire:loading.attr="disabled"
+                                    class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    Simpan Perubahan
+                                    <svg wire:loading class="mr-2 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Simpan Minat
                                 </button>
 
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="interests-unsaved-indicator" class="hidden">
-                                    <span
-                                        class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                            </path>
+                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                         </svg>
                                         Belum Disimpan
                                     </span>
@@ -577,15 +635,12 @@
                             </div>
 
                             <x-action-message class="mr-3" on="interests-updated">
-                                <span
-                                    class="inline-flex items-center rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                    <svg class="mr-2 h-4 w-4 text-green-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
+                                <div class="inline-flex items-center rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20 animate-bounce">
+                                    <svg class="mr-2 h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    {{ __('Saved successfully!') }}
-                                </span>
+                                    Minat berhasil disimpan! 🎉
+                                </div>
                             </x-action-message>
                         </div>
                     </div>
@@ -601,8 +656,8 @@
                                     kolaborasi dengan kreator lain.</p>
                             </div>
                             <span
-                                class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                {{ count($selectedSkills) }} selected
+                                class="inline-flex min-w-fit items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                {{ count($selectedSkills) }} dipilih
                             </span>
                         </div>
                     </div>
@@ -708,32 +763,6 @@
 
                     {{-- Enhanced Add New Contribution Form --}}
                     <div class="p-6">
-                        <!-- Progress Indicator -->
-                        <div class="mb-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-medium text-gray-700">Progress Form</span>
-                                <span class="text-sm text-gray-500">
-                                    @php
-                                        $progress = 0;
-                                        if (!empty($newContribution['contribution_id'])) {
-                                            $progress += 33;
-                                        }
-                                        if (!empty($newContribution['description'])) {
-                                            $progress += 33;
-                                        }
-                                        if (!empty($newContribution['date'])) {
-                                            $progress += 34;
-                                        }
-                                    @endphp
-                                    {{ $progress }}%
-                                </span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500 ease-out"
-                                    style="width: {{ $progress }}%"></div>
-                            </div>
-                        </div>
-
                         <div
                             class="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-8 mb-8 hover:border-blue-300 transition-all duration-300">
                             <div class="text-center mb-6">
@@ -1026,7 +1055,7 @@
 
                     {{-- Existing Contributions List --}}
                     <div class="flow-root">
-                        <ul role="list" class="-mb-8">
+                        <ul role="list" class="m-8">
                             @foreach ($userContributions as $contribution)
                                 <li>
                                     <div class="relative pb-8">
