@@ -1,4 +1,8 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-12 h-12" opacity="opacity-10" />
+    
     <x-auth-header :title="'Masuk ke akun Anda'" :description="'Masukkan email dan kata sandi Anda untuk masuk'" />
 
     <!-- Session Status -->
@@ -13,7 +17,7 @@
             required
             autofocus
             autocomplete="email"
-            placeholder="email@example.com"
+            placeholder="contoh@gmail.com"
         />
 
         <!-- Password -->
@@ -36,10 +40,10 @@
         </div>
 
         <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" :label="'Ingat saya'" />
+        <flux:checkbox wire:model="remember" :label="'Ingat saya'" class="cursor-pointer"/>
 
         <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full">{{ 'Masuk' }}</flux:button>
+            <flux:button variant="primary" type="submit" class="w-full cursor-pointer">{{ 'Masuk' }}</flux:button>
         </div>
     </form>
 

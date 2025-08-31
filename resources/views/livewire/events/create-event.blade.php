@@ -1,4 +1,9 @@
-<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-24 h-24" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-16 h-16" opacity="opacity-10" />
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -13,7 +18,7 @@
                 </svg>
             </div>
             <h1 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Buat Event Baru
+                Buat Aksi Baru
             </h1>
             <p class="mt-2 text-lg text-gray-600">Bagikan ide dan inspirasi Anda dengan komunitas</p>
         </div>
@@ -21,7 +26,10 @@
 
     <!-- Main Form -->
     <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative">
+            <!-- SVG Accent for Form Container -->
+            <x-svg-accent position="top-right" size="w-12 h-12" opacity="opacity-5" />
+            
             <!-- Form Header -->
             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
                 <div class="flex items-center space-x-3">
@@ -33,19 +41,28 @@
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-semibold text-white">Formulir Event</h2>
-                        <p class="text-indigo-100 text-sm">Lengkapi informasi event Anda</p>
+                        <h2 class="text-xl font-semibold text-white">Formulir Aksi</h2>
+                        <p class="text-indigo-100 text-sm">Lengkapi informasi aksi Anda</p>
                     </div>
                 </div>
             </div>
 
             <form wire:submit.prevent="save" class="p-6 space-y-8" id="eventForm" 
+                x-ref="form"
                 x-data="{
                     map: null,
                     marker: null,
+                    syncTimeout: null,
                     latitude: @entangle('latitude').defer,
                     longitude: @entangle('longitude').defer,
                     location: @entangle('location').defer,
+                    
+                    preventEnterSubmit(e) {
+                        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                            e.preventDefault();
+                            return false;
+                        }
+                    },
 
                     initializeMap() {
                         if (this.map) {
@@ -56,6 +73,7 @@
                         const defaultLng = this.longitude || 109.2290;
 
                         this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
+                        this.map._loaded = true;
 
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             attribution: '© OpenStreetMap contributors'
@@ -69,6 +87,9 @@
                             const pos = this.marker.getLatLng();
                             this.latitude = pos.lat;
                             this.longitude = pos.lng;
+                            // Sync coordinates immediately
+                            this.syncToLivewire();
+                            // Then get address
                             this.updateLocationFromCoordinates(pos.lat, pos.lng);
                         });
 
@@ -78,10 +99,25 @@
                             this.marker.setLatLng(pos);
                             this.latitude = pos.lat;
                             this.longitude = pos.lng;
+                            // Sync coordinates immediately
+                            this.syncToLivewire();
+                            // Then get address
                             this.updateLocationFromCoordinates(pos.lat, pos.lng);
                         });
 
-                        setTimeout(() => this.map.invalidateSize(), 250);
+                        // Ensure map is properly sized
+                        setTimeout(() => {
+                            if (this.map) {
+                                this.map.invalidateSize();
+                            }
+                        }, 250);
+                        
+                        // Additional size check after a longer delay
+                        setTimeout(() => {
+                            if (this.map) {
+                                this.map.invalidateSize();
+                            }
+                        }, 500);
                     },
 
                     updateLocationFromCoordinates(lat, lng) {
@@ -90,55 +126,176 @@
                         
                         // Reverse geocoding to get address from coordinates
                         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&accept-language=id`)
-                            .then(response => response.json())
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
                             .then(data => {
-                                if (data.display_name) {
+                                if (data && data.display_name) {
                                     this.location = data.display_name;
+                                } else if (data && data.address) {
+                                    // Try to construct address from address components
+                                    const address = data.address;
+                                    let addressParts = [];
+                                    
+                                    if (address.road) addressParts.push(address.road);
+                                    if (address.house_number) addressParts.push(address.house_number);
+                                    if (address.suburb) addressParts.push(address.suburb);
+                                    if (address.city) addressParts.push(address.city);
+                                    if (address.state) addressParts.push(address.state);
+                                    if (address.country) addressParts.push(address.country);
+                                    
+                                    if (addressParts.length > 0) {
+                                        this.location = addressParts.join(', ');
+                                    } else {
+                                        this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                                    }
                                 } else {
                                     this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                                 }
+                                // Sync location to Livewire after getting address
+                                this.syncToLivewire();
                             })
                             .catch(error => {
                                 console.log('Error getting location:', error);
-                                this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                                // Try alternative geocoding service as fallback
+                                this.tryAlternativeGeocoding(lat, lng);
                             });
+                    },
+
+                    tryAlternativeGeocoding(lat, lng) {
+                        // Try using Google Geocoding API as fallback (if available)
+                        // For now, use a simple coordinate format
+                        this.location = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                        
+                        // You can add alternative geocoding services here
+                        // For example, using a different Nominatim endpoint or other services
+                        
+                        // Sync location to Livewire
+                        this.syncToLivewire();
+                    },
+
+                    syncToLivewire() {
+                        // Sync Alpine.js data to Livewire component with debounce
+                        clearTimeout(this.syncTimeout);
+                        this.syncTimeout = setTimeout(() => {
+                            if (this.latitude && this.longitude) {
+                                @this.set('latitude', this.latitude);
+                                @this.set('longitude', this.longitude);
+                            }
+                            if (this.location && !this.location.includes('Mengambil alamat...') && !this.location.includes('Mencari lokasi...')) {
+                                @this.set('location', this.location);
+                            }
+                        }, 300);
                     },
             
                     init() {
                         this.initializeMap();
-                        this.$watch('latitude', () => {
-                            this.updateMarker();
-                            this.updateInputFields();
+                        
+                        // Prevent form submission on Enter key
+                        this.$refs.form.addEventListener('keydown', this.preventEnterSubmit);
+                        
+                        // Watch for changes in coordinates and update map accordingly
+                        this.$watch('latitude', (newVal, oldVal) => {
+                            if (newVal !== oldVal && this.map && this.marker && newVal && oldVal) {
+                                this.updateMarker();
+                            }
                         });
-                        this.$watch('longitude', () => {
-                            this.updateMarker();
-                            this.updateInputFields();
+                        
+                        this.$watch('longitude', (newVal, oldVal) => {
+                            if (newVal !== oldVal && this.map && this.marker && newVal && oldVal) {
+                                this.updateMarker();
+                            }
+                        });
+                        
+                        // Watch for location changes to sync with Livewire
+                        this.$watch('location', (newVal, oldVal) => {
+                            if (newVal !== oldVal && newVal && oldVal) {
+                                // Only sync if it's not a loading state
+                                if (!newVal.includes('Mengambil alamat...') && !newVal.includes('Mencari lokasi...')) {
+                                    this.syncToLivewire();
+                                }
+                            }
                         });
 
+                        // Listen for Livewire events to refresh map
                         Livewire.on('refresh-map', () => {
                             this.$nextTick(() => {
-                                this.initializeMap();
+                                setTimeout(() => {
+                                    this.initializeMap();
+                                }, 100);
                             });
+                        });
+                        
+                        // Prevent map from disappearing during form interactions
+                        document.addEventListener('livewire:load', () => {
+                            // Ensure map stays visible during Livewire updates
+                            Livewire.hook('message.processed', (message, component) => {
+                                if (this.map && !this.map._loaded) {
+                                    setTimeout(() => {
+                                        this.map.invalidateSize();
+                                    }, 50);
+                                }
+                            });
+                            
+                            // Additional protection against map disappearing
+                            Livewire.hook('message.sent', (message, component) => {
+                                // Store map state before Livewire update
+                                if (this.map) {
+                                    this.map._lastView = this.map.getCenter();
+                                    this.map._lastZoom = this.map.getZoom();
+                                }
+                            });
+                            
+                            Livewire.hook('message.processed', (message, component) => {
+                                // Restore map state after Livewire update
+                                if (this.map && this.map._lastView) {
+                                    setTimeout(() => {
+                                        if (this.map && !this.map._loaded) {
+                                            this.map.setView(this.map._lastView, this.map._lastZoom);
+                                            this.map.invalidateSize();
+                                        }
+                                    }, 100);
+                                }
+                            });
+                        });
+                        
+                        // Additional protection: prevent map from being destroyed
+                        window.addEventListener('beforeunload', () => {
+                            if (this.map) {
+                                this.map._loaded = false;
+                            }
+                        });
+                        
+                        // Re-initialize map if it gets destroyed
+                        this.$watch('map', (newVal, oldVal) => {
+                            if (oldVal && !newVal) {
+                                // Map was destroyed, re-initialize
+                                setTimeout(() => {
+                                    this.initializeMap();
+                                }, 200);
+                            }
                         });
                     },
 
                     updateMarker() {
-                        if (this.map && this.marker) {
-                            const lat = this.latitude || -7.4292;
-                            const lng = this.longitude || 109.2290;
-                            this.marker.setLatLng([lat, lng]);
-                            this.map.setView([lat, lng]);
-                        }
-                    },
-
-                    updateInputFields() {
-                        // Update latitude and longitude input fields
-                        if (this.map && this.marker) {
-                            const lat = this.marker.getLatLng().lat;
-                            const lng = this.marker.getLatLng().lng;
-                            // Update Livewire properties directly
-                            @this.set('latitude', lat);
-                            @this.set('longitude', lng);
+                        if (this.map && this.marker && this.latitude && this.longitude) {
+                            const lat = parseFloat(this.latitude);
+                            const lng = parseFloat(this.longitude);
+                            
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                this.marker.setLatLng([lat, lng]);
+                                this.map.setView([lat, lng]);
+                                
+                                // Ensure map is properly sized after view change
+                                setTimeout(() => {
+                                    if (this.map) {
+                                        this.map.invalidateSize();
+                                    }
+                                }, 100);
+                            }
                         }
                     },
 
@@ -148,18 +305,55 @@
                         // Show loading state
                         this.location = 'Mencari lokasi...';
                         
-                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=id`)
-                            .then(response => response.json())
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=id&addressdetails=1`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
                             .then(data => {
-                                if (data.length > 0) {
-                                    const lat = parseFloat(data[0].lat);
-                                    const lon = parseFloat(data[0].lon);
+                                if (data && data.length > 0) {
+                                    const result = data[0];
+                                    const lat = parseFloat(result.lat);
+                                    const lon = parseFloat(result.lon);
                                     
-                                    this.marker.setLatLng([lat, lon]);
-                                    this.map.setView([lat, lon], 16);
-                                    this.latitude = lat;
-                                    this.longitude = lon;
-                                    this.location = data[0].display_name;
+                                    if (!isNaN(lat) && !isNaN(lon)) {
+                                        this.marker.setLatLng([lat, lon]);
+                                        this.map.setView([lat, lon], 16);
+                                        this.latitude = lat;
+                                        this.longitude = lon;
+                                        
+                                        // Use display_name if available, otherwise construct from address
+                                        if (result.display_name) {
+                                            this.location = result.display_name;
+                                        } else if (result.address) {
+                                            const address = result.address;
+                                            let addressParts = [];
+                                            
+                                            if (address.road) addressParts.push(address.road);
+                                            if (address.house_number) addressParts.push(address.house_number);
+                                            if (address.suburb) addressParts.push(address.suburb);
+                                            if (address.city) addressParts.push(address.city);
+                                            if (address.state) addressParts.push(address.state);
+                                            if (address.country) addressParts.push(address.country);
+                                            
+                                            if (addressParts.length > 0) {
+                                                this.location = addressParts.join(', ');
+                                            } else {
+                                                this.location = `Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                                            }
+                                        } else {
+                                            this.location = `Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                                        }
+                                        
+                                        // Sync to Livewire after search
+                                        this.syncToLivewire();
+                                    } else {
+                                        this.location = 'Koordinat tidak valid';
+                                    }
+                                } else {
+                                    this.location = 'Lokasi tidak ditemukan';
                                 }
                             })
                             .catch(error => {
@@ -181,8 +375,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Event Banner</h3>
-                            <p class="text-sm text-gray-500">Upload gambar menarik untuk event Anda</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Aksi Banner</h3>
+                            <p class="text-sm text-gray-500">Upload gambar menarik untuk aksi Anda</p>
                         </div>
                     </div>
 
@@ -257,7 +451,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Judul Event</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">Judul Aksi</h3>
                             <p class="text-sm text-gray-500">Buat judul yang menarik dan mudah diingat</p>
                         </div>
                     </div>
@@ -295,7 +489,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Lokasi Event</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">Lokasi Aksi</h3>
                             <p class="text-sm text-gray-500">Masukkan alamat atau pilih lokasi dengan peta interaktif</p>
                         </div>
                     </div>
@@ -324,8 +518,8 @@
                             <div class="mb-3">
                                 <p class="text-sm text-gray-600 mb-2">Atau pilih lokasi dengan peta (drag marker untuk mengubah koordinat):</p>
                             </div>
-                            <div x-ref="map" class="h-80 rounded-lg overflow-hidden shadow-lg mb-4"></div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div x-ref="map" class="h-80 rounded-lg overflow-hidden shadow-lg mb-4" wire:ignore></div>
+                            <div class="grid grid-cols-2 hidden gap-4">
                                 <div>
                                     <label for="latitude" class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
                                     <input type="text" id="latitude" name="latitude" wire:model="latitude" readonly
@@ -356,8 +550,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Deskripsi Event</h3>
-                            <p class="text-sm text-gray-500">Jelaskan detail dan tujuan event Anda</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Deskripsi Aksi</h3>
+                            <p class="text-sm text-gray-500">Jelaskan detail dan tujuan aksi Anda</p>
                         </div>
                     </div>
 
@@ -392,8 +586,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Waktu Event</h3>
-                            <p class="text-sm text-gray-500">Tentukan kapan event akan berlangsung</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Waktu Aksi</h3>
+                            <p class="text-sm text-gray-500">Tentukan kapan aksi akan berlangsung</p>
                         </div>
                     </div>
 
@@ -461,14 +655,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            <span class="text-lg">Buat Event Sekarang</span>
+                            <span class="text-lg">Buat Aksi Sekarang</span>
                         </div>
                     </button>
 
                     <div wire:loading wire:target="save" class="mt-4 text-center">
                         <div class="inline-flex items-center space-x-2 text-indigo-600">
                             <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
-                            <span class="font-medium">Menyimpan event...</span>
+                            <span class="font-medium">Menyimpan aksi...</span>
                         </div>
                     </div>
                 </div>

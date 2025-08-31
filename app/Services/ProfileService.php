@@ -207,4 +207,88 @@ class ProfileService
             return false;
         }
     }
+
+    /**
+     * Update profile photo
+     */
+    public function updateProfilePhoto(User $user, $photo): bool
+    {
+        try {
+            $profile = $this->getOrCreateProfile($user);
+            
+            // Delete old photo if exists
+            if ($profile->profile_photo && file_exists(public_path('storage/' . $profile->profile_photo))) {
+                unlink(public_path('storage/' . $profile->profile_photo));
+            }
+            
+            // Store new photo
+            $path = $photo->store('profile-photos', 'public');
+            $profile->update(['profile_photo' => $path]);
+            
+            return true;
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to update profile photo: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Update banner
+     */
+    public function updateBanner(User $user, $banner): bool
+    {
+        try {
+            $profile = $this->getOrCreateProfile($user);
+            
+            // Delete old banner if exists
+            if ($profile->banner && file_exists(public_path('storage/' . $profile->banner))) {
+                unlink(public_path('storage/' . $profile->banner));
+            }
+            
+            // Store new banner
+            $path = $banner->store('banners', 'public');
+            $profile->update(['banner' => $path]);
+            
+            return true;
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to update banner: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Get profile photo URL
+     */
+    public function getProfilePhotoUrl(User $user): ?string
+    {
+        $profile = $this->getOrCreateProfile($user);
+        
+        if ($profile->profile_photo) {
+            return asset('storage/' . $profile->profile_photo);
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get banner URL
+     */
+    public function getBannerUrl(User $user): ?string
+    {
+        $profile = $this->getOrCreateProfile($user);
+        
+        if ($profile->banner) {
+            return asset('storage/' . $profile->banner);
+        }
+        
+        return null;
+    }
 }

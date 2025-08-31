@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.auth')]
+#[Layout('components.layouts.auth' ,['title' => 'Verifikasi Email'])]
 class VerifyEmail extends Component
 {
     /**
@@ -17,8 +17,7 @@ class VerifyEmail extends Component
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-
+                $this->redirectIntended(default: route('profile.setup', absolute: false), navigate: true);
             return;
         }
 

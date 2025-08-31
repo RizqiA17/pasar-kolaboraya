@@ -10,10 +10,13 @@
     @endif
 
     <div class="flex flex-col items-center justify-between space-y-3">
-        <flux:button wire:click="sendVerification" variant="primary" class="w-full">
-            {{ 'Kirim ulang email verifikasi' }}
-        </flux:button>
-
+        <flux:button wire:click="sendVerification" variant="primary" class="w-full cursor-pointer">
+                @if (Auth::user()->hasVerifiedEmail())
+                {{ 'Email sudah terverifikasi, masuk ke akun Anda' }}
+                @else
+                {{ 'Kirim ulang email verifikasi' }}
+            </flux:button>
+            @endif
         <flux:link class="text-sm cursor-pointer" wire:click="logout">
             {{ 'Keluar' }}
         </flux:link>

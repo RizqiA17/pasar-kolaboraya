@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CollaborationUser extends Model
 {
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      *
@@ -48,5 +51,29 @@ class CollaborationUser extends Model
     public function collaboration(): BelongsTo
     {
         return $this->belongsTo(Collaboration::class);
+    }
+
+    /**
+     * Scope for pending invitations
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    /**
+     * Scope for accepted invitations
+     */
+    public function scopeAccepted($query)
+    {
+        return $query->where('status', 'accepted');
+    }
+
+    /**
+     * Scope for declined invitations
+     */
+    public function scopeDeclined($query)
+    {
+        return $query->where('status', 'declined');
     }
 }

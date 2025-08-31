@@ -4,6 +4,7 @@ namespace App\Livewire\Events;
 
 use App\Models\Event;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
 class ShowEvent extends Component
 {
@@ -34,6 +35,6 @@ class ShowEvent extends Component
     {
         return view('livewire.events.show-event', [
             'isParticipant' => $this->event->participants->contains(auth()->id())
-        ]);
+        ])->layout('components.layouts.app', ['title' => $this->event->title]);
     }
 }

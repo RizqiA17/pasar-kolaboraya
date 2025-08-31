@@ -16,6 +16,8 @@ class Profile extends Model
         'phone',
         'social_media',
         'vision',
+        'profile_photo',
+        'banner',
     ];
 
     protected $casts = [
@@ -29,7 +31,7 @@ class Profile extends Model
 
     public function interests(): BelongsToMany
     {
-        return $this->belongsToMany(Interest::class, 'user_interests', 'user_id', 'interest_id')
+        return $this->belongsToMany(Interest::class, 'user_interests', 'profile_id', 'interest_id')
             ->withPivot('level')
             ->withTimestamps()
             ->select(['interests.*', 'user_interests.level']);
@@ -37,7 +39,7 @@ class Profile extends Model
 
     public function skills(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class, 'user_skills', 'user_id', 'skill_id')
+        return $this->belongsToMany(Skill::class, 'user_skills', 'profile_id', 'skill_id')
             ->withPivot('level', 'is_primary')
             ->withTimestamps()
             ->select(['skills.*', 'user_skills.level', 'user_skills.is_primary']);
@@ -45,7 +47,7 @@ class Profile extends Model
 
     public function contributions(): BelongsToMany
     {
-        return $this->belongsToMany(Contribution::class, 'user_contributions', 'user_id', 'contribution_id')
+        return $this->belongsToMany(Contribution::class, 'user_contributions', 'profile_id', 'contribution_id')
             ->withPivot('description', 'date')
             ->withTimestamps()
             ->select(['contributions.*', 'user_contributions.description', 'user_contributions.date']);

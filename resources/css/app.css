@@ -83,3 +83,38 @@ select:focus[data-flux-control]
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Custom opacity utilities for SVG elements */
+/* .opacity-5 {
+    opacity: 0.05;
+}
+
+.opacity-10 {
+    opacity: 0.10;
+}
+
+.opacity-15 {
+    opacity: 0.15;
+}
+
+.opacity-20 {
+    opacity: 0.20;
+} */
+
+/* Profile and Notification Enhancements */
+.profile-status-indicator {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-badge {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

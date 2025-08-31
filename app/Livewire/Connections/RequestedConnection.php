@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class RequestedConnection extends Component
 {
     public $requests = [];
+    public $isContent = false;
     public $isOpen = false;
 
     protected $listeners = [

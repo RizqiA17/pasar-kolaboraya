@@ -1,7 +1,7 @@
 <section>
     {{-- Form tambah task --}}
     <div class="mb-4">
-        <input type="text" wire:model="newTitle" placeholder="Judul task" class="border p-2 rounded">
+        <input type="text" wire:model="newTitle" placeholder="Judul tugas" class="border p-2 rounded">
         <input type="text" wire:model="newDescription" placeholder="Deskripsi (opsional)" class="border p-2 rounded">
         <button wire:click="addTodo" class="bg-blue-500 text-white p-2 rounded">Tambah</button>
     </div>

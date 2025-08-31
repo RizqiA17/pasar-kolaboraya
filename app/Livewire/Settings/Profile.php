@@ -7,8 +7,10 @@ use App\Models\Profile as ProfileModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.app', ['title' => 'Profile'])]
 class Profile extends Component
 {
     public string $name = '';

@@ -1,5 +1,9 @@
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="'Buat akun baru'" :description="'Masukkan data Anda untuk membuat akun'" />
+<div class="flex flex-col gap-6 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-12 h-12" opacity="opacity-10" />
+    
+    <x-auth-header :title="'Mulai Perubahan Sosial'" :description="'Masukkan data Anda untuk bergabung bersama kami'" />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -23,7 +27,7 @@
             type="email"
             required
             autocomplete="email"
-            placeholder="email@example.com"
+            placeholder="contoh@gmail.com"
         />
 
         <!-- Password -->
@@ -49,7 +53,7 @@
         />
 
         <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
+            <flux:button type="submit" variant="primary" class="w-full cursor-pointer">
                 {{ 'Buat akun' }}
             </flux:button>
         </div>

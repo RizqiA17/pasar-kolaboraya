@@ -14,6 +14,10 @@ class ListConnection extends Component
     public $searchData = [];
     public $searchResults = [];
 
+    protected $listeners = [
+        'disconnect' => 'disconnect'
+    ];
+
     public function mount()
     {
         $this->loadFriends();
@@ -68,7 +72,28 @@ class ListConnection extends Component
         // dd($finalResults);
     }
 
+    public function disconnect($userId)
+    {
+        $connection = Connection::where(function ($query) use ($userId) {
+            $query->where('requester_id', Auth::id())
+                ->where('receiver_id', $userId);
+        })->orWhere(function ($query) use ($userId) {
+            $query->where('requester_id', $userId)
+                ->where('receiver_id', Auth::id());
+        })->where('status', 'accepted')
+            ->first();
 
+        if ($connection) {
+            $connection->delete();
+            $this->dispatch('refresh-requests');
+            
+            // Refresh data koneksi
+            $this->loadFriends();
+            if (!empty($this->searchData)) {
+                $this->loadSearchData();
+            }
+        }
+    }
 
     public function loadFriends()
     {

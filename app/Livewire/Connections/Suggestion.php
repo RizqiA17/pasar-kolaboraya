@@ -20,7 +20,60 @@ class Suggestion extends Component
             'status' => 'pending'
         ]);
 
-        $this->dispatch('refresh-requests');
+        // Dispatch event untuk update UI tanpa refresh
+        $this->dispatch('connection-status-changed', userId: $userId, status: 'pending_sent');
+    }
+
+    public function acceptConnection($userId)
+    {
+        $connection = Connection::where('requester_id', $userId)
+            ->where('receiver_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($connection) {
+            $connection->update(['status' => 'accepted']);
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'connected');
+        }
+    }
+
+    public function rejectConnection($userId)
+    {
+        $connection = Connection::where('requester_id', $userId)
+            ->where('receiver_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($connection) {
+            $connection->delete();
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'not_connected');
+        }
+    }
+
+    public function startCollaboration($userId)
+    {
+        // Redirect ke halaman kolaborasi atau buat modal kolaborasi
+        $this->dispatch('start-collaboration', userId: $userId);
+    }
+
+    public function disconnect($userId)
+    {
+        $connection = Connection::where(function($query) use ($userId) {
+            $query->where('requester_id', Auth::id())
+                  ->where('receiver_id', $userId);
+        })->orWhere(function($query) use ($userId) {
+            $query->where('requester_id', $userId)
+                  ->where('receiver_id', Auth::id());
+        })->where('status', 'accepted')
+        ->first();
+
+        if ($connection) {
+            $connection->delete();
+            // Dispatch event untuk update UI tanpa refresh
+            $this->dispatch('connection-status-changed', userId: $userId, status: 'not_connected');
+        }
     }
     #[\Livewire\Attributes\On('search-results-updated')]
     public function updateSearchResults($results)
