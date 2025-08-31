@@ -32,7 +32,8 @@
                 <flux:input wire:model="organization" :label="'Organisasi/Perusahaan'" type="text"
                     :placeholder="'Nama organisasi atau perusahaan Anda'" />
 
-                <flux:input wire:model="phone" :label="'Nomor Telepon'" type="tel" :placeholder="'0812-3456-7890'" />
+                <flux:input wire:model="phone" :label="'Nomor Telepon'" type="tel"
+                    :placeholder="'0812-3456-7890'" />
 
                 <flux:textarea wire:model="vision" rows="2" :label="'Visi/Misi'"
                     :placeholder="'Ceritakan visi dan misi Anda'" />
@@ -184,29 +185,31 @@
         @endif
 
         <!-- Navigation Buttons -->
-        <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
-            <div>
+        <div class="grid grid-cols-3 items-center justify-between mt-8 pt-6 border-t border-gray-200">
+            <div class="col-span-1">
                 @if ($currentStep > 1)
                     <flux:button wire:click="previousStep" variant="subtle" icon="chevron-left">
-                        Sebelumnya
+                        <p class="max-md:hidden">Sebelumnya</p>
                     </flux:button>
                 @endif
             </div>
 
-            <div class="flex items-center space-x-3">
+            <div class="grid grid-cols-2 col-span-2 items-center space-x-3">
                 @if ($currentStep < $totalSteps)
-                    <flux:button wire:click="skipStep" variant="subtle">
+                    <flux:button wire:click="skipStep" variant="subtle" class="col-span-1">
                         Skip
                     </flux:button>
 
-                    <flux:button wire:click="nextStep" variant="primary" icon:trailing="chevron-right">
-                        Selanjutnya
+                    <flux:button wire:click="nextStep" variant="primary" icon:trailing="chevron-right"
+                        class="col-span-1">
+                        <p class="max-md:hidden">Selanjutnya</p>
                     </flux:button>
                 @else
-                    <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto"
-                        icon:trailing="chevron-right">
-                        Selesai & Lanjutkan
-                    </flux:button>
+                    <div class="col-span-1"></div>
+                        <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto col-span-1"
+                            icon:trailing="chevron-right">
+                            <p class="max-md:hidden">Selesai & Lanjutkan</p>
+                        </flux:button>
                 @endif
             </div>
         </div>
