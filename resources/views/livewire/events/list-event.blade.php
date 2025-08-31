@@ -150,21 +150,32 @@
                 </a>
             </div>
         @empty
-            <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
-                <div class="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-20 h-20 mb-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <p class="text-gray-500 text-lg">Belum ada Aksi yang dibuat</p>
-                <p class="text-gray-400 text-sm mt-1">Mulai buat aksi untuk berkolaborasi dengan teman Anda</p>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Belum ada Aksi yang dibuat</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-4">Mulai buat aksi untuk berkolaborasi dengan teman Anda</p>
+                <a href="{{ route('events.create') }}" 
+                    class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-all duration-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Buat Aksi Pertama
+                </a>
             </div>
         @endforelse
     </div>
 
-    {{-- Pagination --}}
-    <div class="mt-6">
-        {{ $events->links() }}
-    </div>
+    <!-- Pagination -->
+    @if($events->hasPages())
+        <div class="mt-8 flex justify-center">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-2">
+                {{ $events->links() }}
+            </div>
+        </div>
+    @endif
 </div>
