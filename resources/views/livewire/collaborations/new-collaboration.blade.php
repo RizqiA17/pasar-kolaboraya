@@ -1,4 +1,9 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    
     <div class="max-w-2xl mx-auto">
         <!-- Header Section -->
         <div class="text-center mb-8">
@@ -13,7 +18,10 @@
 
         <!-- Friend Info Card -->
         @if ($friend_id)
-            <div class="mb-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg text-white">
+            <div class="mb-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg text-white relative">
+                <!-- SVG Accent for Friend Info Card -->
+                <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-20" />
+                
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold backdrop-blur-sm">
                         {{ substr($this->friendName, 0, 2) }}
@@ -57,7 +65,10 @@
         @endif
 
         <!-- Main Form -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 relative">
+            <!-- SVG Accent for Form -->
+            <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
+            
             <form wire:submit.prevent="create" class="space-y-6">
                 <!-- Title Field -->
                 <div class="space-y-2">

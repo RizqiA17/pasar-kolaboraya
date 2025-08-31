@@ -1,4 +1,9 @@
-<div class="w-full bg-white">
+<div class="w-full bg-white relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    
     <!-- Hero Section -->
     <div class="relative">
         <!-- Cover Image -->

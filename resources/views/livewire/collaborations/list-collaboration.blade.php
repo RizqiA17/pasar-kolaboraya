@@ -1,7 +1,15 @@
-<section class="space-y-4">
+<section class="space-y-4 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-12 h-12" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-14 h-14" opacity="opacity-10" />
+    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse ($collaborations as $collaboration)
-            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden relative">
+                <!-- SVG Accent for Collaboration Card -->
+                <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                
                 <div class="p-5">
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex-1">

@@ -1,4 +1,8 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-12 h-12" opacity="opacity-10" />
+    
     <x-auth-header :title="'Mulai Perubahan Sosial'" :description="'Masukkan data Anda untuk bergabung bersama kami'" />
 
     <!-- Session Status -->

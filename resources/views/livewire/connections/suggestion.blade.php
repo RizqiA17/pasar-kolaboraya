@@ -1,8 +1,16 @@
-<div>
+<div class="relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    
     <div class="space-y-6">
         {{-- {{ json_encode($searchResults) }} --}}
         @if (!empty($searchResults))
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                <!-- SVG Accent for Search Results -->
+                <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
+                
                 <div class="p-4 border-b border-gray-100">
                     <div class="flex items-center justify-between">
                         <div>
@@ -17,7 +25,10 @@
 
                         @forelse($searchResults as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                <!-- SVG Accent for User Card -->
+                                <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                                
                                 {{-- Cover Image --}}
                                 <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
 
@@ -66,7 +77,10 @@
             </div>
         @else
             {{-- Mutual Friends Recommendations --}}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                <!-- SVG Accent for Mutual Friends -->
+                <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
+                
                 <div class="p-4 border-b border-gray-100">
                     <div class="flex items-center justify-between">
                         <div>
@@ -80,7 +94,10 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         @forelse($mutualFriendsRecommendations as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                <!-- SVG Accent for User Card -->
+                                <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                                
                                 {{-- Cover Image --}}
                                 <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
 

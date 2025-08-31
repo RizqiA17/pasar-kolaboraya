@@ -5,8 +5,11 @@
              wire:click="closeModal">
             
             <!-- Modal Content -->
-            <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto" 
+            <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto relative" 
                  wire:click.stop>
+                
+                <!-- SVG Accent for Modal -->
+                <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-10" />
                 
                 <!-- Header -->
                 <div class="p-6 border-b border-gray-100">

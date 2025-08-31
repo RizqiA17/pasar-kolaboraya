@@ -1,4 +1,9 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-12 h-12" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-14 h-14" opacity="opacity-10" />
+    
     <x-auth-header :title="'Lengkapi Profil Anda'" :description="'Bantu kami mengenal Anda lebih baik untuk pengalaman yang lebih personal'" />
 
     <!-- Progress Bar -->
@@ -14,7 +19,10 @@
     </div>
 
     <!-- Step Content -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative">
+        <!-- SVG Accent for Step Content -->
+        <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
+        
         @if ($currentStep === 1)
             <!-- Step 1: Basic Information -->
             <div class="space-y-6">

@@ -1,4 +1,9 @@
-<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    
     {{-- Event Banner with Overlay --}}
     <div class="relative mb-8 rounded-2xl overflow-hidden shadow-lg">
         @if($event->banner)
@@ -51,7 +56,10 @@
     </div>
 
     {{-- Event Header --}}
-    <div class="mb-8">
+    <div class="mb-8 relative">
+        <!-- SVG Accent for Event Header -->
+        <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
+        
         <div class="flex flex-col md:flex-row justify-between items-start gap-4">
             <div class="flex-1">
                 <h1 class="text-3xl font-bold mb-3 text-gray-900">{{ $event->title }}</h1>

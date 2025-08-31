@@ -12,7 +12,10 @@
     $buttonClasses = $sizeClasses[$size] ?? $sizeClasses['default'];
 @endphp
 
-<div id="connection-button-{{ $userId }}" data-user-id="{{ $userId }}" data-status="{{ $connectionStatus }}">
+<div id="connection-button-{{ $userId }}" data-user-id="{{ $userId }}" data-status="{{ $connectionStatus }}" class="relative">
+    {{-- Decorative SVG Elements --}}
+    <x-decorative-svgs-subtle />
+    
     @if($connectionStatus === 'not_connected')
         <button wire:click="connect({{ $userId }})" onclick="updateButtonAfterConnect({{ $userId }})"
             class="{{ $buttonClasses }} font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">

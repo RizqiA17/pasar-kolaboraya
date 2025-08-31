@@ -1,4 +1,9 @@
-<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-24 h-24" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-16 h-16" opacity="opacity-10" />
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -21,7 +26,10 @@
 
     <!-- Main Form -->
     <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative">
+            <!-- SVG Accent for Form Container -->
+            <x-svg-accent position="top-right" size="w-12 h-12" opacity="opacity-5" />
+            
             <!-- Form Header -->
             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
                 <div class="flex items-center space-x-3">

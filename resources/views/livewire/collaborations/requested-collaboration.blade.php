@@ -1,4 +1,8 @@
-<div class="p-4">
+<div class="p-4 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-12 h-12" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-8 h-8" opacity="opacity-10" />
+    
     <div class="flex justify-between items-center mb-3">
         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Undangan Kolaborasi</h3>
         @if(count($requests) > 0)
@@ -11,7 +15,10 @@
     @if(count($requests) > 0)
         <div class="space-y-3 max-h-64 overflow-y-auto">
             @foreach($requests as $request)
-                <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-600 rounded-lg">
+                <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-600 rounded-lg relative">
+                    <!-- SVG Accent for Request Item -->
+                    <x-svg-accent position="top-right" size="w-4 h-4" opacity="opacity-5" />
+                    
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex-1">
                             <h4 class="text-sm font-semibold text-gray-900 dark:text-white">

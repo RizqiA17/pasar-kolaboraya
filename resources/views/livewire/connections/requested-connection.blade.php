@@ -1,4 +1,8 @@
-<div wire:poll.3s="loadRequests" wire:poll.stop="!pollingState" class="w-full">
+<div wire:poll.3s="loadRequests" wire:poll.stop="!pollingState" class="w-full relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-12 h-12" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-8 h-8" opacity="opacity-10" />
+    
     @if ($isContent)
         <div class="p-4 border-b border-neutral-100 flex items-center justify-between">
             <h2 class="text-lg font-semibold">Permintaan Koneksi</h2>
@@ -18,7 +22,10 @@
     <div
         class="overflow-y-auto max-h-[280px] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
         @forelse ($requests as $req)
-            <div class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
+            <div class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150 relative">
+                <!-- SVG Accent for Request Item -->
+                <x-svg-accent position="top-right" size="w-4 h-4" opacity="opacity-5" />
+                
                 <div class="p-3 flex items-center gap-3">
                     <!-- Avatar -->
                     <div class="flex-shrink-0">

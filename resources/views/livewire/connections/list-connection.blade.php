@@ -1,11 +1,19 @@
-<section>
+<section class="relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    
     {{-- Connection List --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-cream">
         @if (!empty($searchResults))
             @forelse ($searchResults as $friend)
                 <div
-                    class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200"
+                    class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
+                    <!-- SVG Accent for Connection Card -->
+                    <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
+                    
                     <div class="flex flex-col items-center text-center">
                         <div
                             class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium text-2xl shadow-inner mb-4">
@@ -77,8 +85,11 @@
         @else
             @forelse ($friends as $friend)
                 <div
-                    class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200"
+                    class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
+                    <!-- SVG Accent for Connection Card -->
+                    <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
+                    
                     <div class="flex flex-col items-center text-center">
                         <div
                             class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium text-2xl shadow-inner mb-4">

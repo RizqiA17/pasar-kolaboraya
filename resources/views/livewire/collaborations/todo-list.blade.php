@@ -1,4 +1,9 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4 relative">
+    <!-- SVG Accent Elements -->
+    <x-svg-accent position="top-left" size="w-24 h-24" opacity="opacity-10" />
+    <x-svg-accent position="center-right" size="w-20 h-20" opacity="opacity-10" />
+    <x-svg-accent position="bottom-left" size="w-16 h-16" opacity="opacity-10" />
+    
     <style>
         @keyframes fade-in-up {
             from {
