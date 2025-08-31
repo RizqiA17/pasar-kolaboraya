@@ -13,7 +13,7 @@
                 </svg>
             </div>
             <h1 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Buat Event Baru
+                Buat Aksi Baru
             </h1>
             <p class="mt-2 text-lg text-gray-600">Bagikan ide dan inspirasi Anda dengan komunitas</p>
         </div>
@@ -33,8 +33,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-semibold text-white">Formulir Event</h2>
-                        <p class="text-indigo-100 text-sm">Lengkapi informasi event Anda</p>
+                        <h2 class="text-xl font-semibold text-white">Formulir Aksi</h2>
+                        <p class="text-indigo-100 text-sm">Lengkapi informasi aksi Anda</p>
                     </div>
                 </div>
             </div>
@@ -181,8 +181,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Event Banner</h3>
-                            <p class="text-sm text-gray-500">Upload gambar menarik untuk event Anda</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Aksi Banner</h3>
+                            <p class="text-sm text-gray-500">Upload gambar menarik untuk aksi Anda</p>
                         </div>
                     </div>
 
@@ -257,7 +257,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Judul Event</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">Judul Aksi</h3>
                             <p class="text-sm text-gray-500">Buat judul yang menarik dan mudah diingat</p>
                         </div>
                     </div>
@@ -295,7 +295,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Lokasi Event</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">Lokasi Aksi</h3>
                             <p class="text-sm text-gray-500">Masukkan alamat atau pilih lokasi dengan peta interaktif</p>
                         </div>
                     </div>
@@ -356,8 +356,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Deskripsi Event</h3>
-                            <p class="text-sm text-gray-500">Jelaskan detail dan tujuan event Anda</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Deskripsi Aksi</h3>
+                            <p class="text-sm text-gray-500">Jelaskan detail dan tujuan aksi Anda</p>
                         </div>
                     </div>
 
@@ -392,8 +392,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Waktu Event</h3>
-                            <p class="text-sm text-gray-500">Tentukan kapan event akan berlangsung</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Waktu Aksi</h3>
+                            <p class="text-sm text-gray-500">Tentukan kapan aksi akan berlangsung</p>
                         </div>
                     </div>
 
@@ -461,14 +461,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            <span class="text-lg">Buat Event Sekarang</span>
+                            <span class="text-lg">Buat Aksi Sekarang</span>
                         </div>
                     </button>
 
                     <div wire:loading wire:target="save" class="mt-4 text-center">
                         <div class="inline-flex items-center space-x-2 text-indigo-600">
                             <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
-                            <span class="font-medium">Menyimpan event...</span>
+                            <span class="font-medium">Menyimpan aksi...</span>
                         </div>
                     </div>
                 </div>

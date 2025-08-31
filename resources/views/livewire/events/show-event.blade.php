@@ -87,7 +87,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                         </svg>
-                        Ikuti Event
+                        Ikuti Aksi
                     </button>
                 @else
                     <button wire:click="leaveEvent" 
@@ -149,7 +149,7 @@
         <div class="space-y-6">
             {{-- Event Timeline --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Timeline Event</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Timeline Aksi</h3>
                 <div class="relative pl-8 space-y-6">
                     <div class="relative">
                         <div class="absolute -left-8 mt-1.5">
@@ -157,7 +157,7 @@
                             <div class="absolute top-4 bottom-0 left-2 -ml-px w-0.5 bg-gray-200"></div>
                         </div>
                         <div>
-                            <h4 class="font-medium text-gray-900">Mulai Event</h4>
+                            <h4 class="font-medium text-gray-900">Mulai Aksi</h4>
                             <p class="text-sm text-gray-500">{{ $event->start_date->format('d M Y H:i') }}</p>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                             <div class="w-4 h-4 rounded-full {{ $event->end_date->isFuture() ? 'bg-gray-200' : 'bg-green-500' }}"></div>
                         </div>
                         <div>
-                            <h4 class="font-medium text-gray-900">Selesai Event</h4>
+                            <h4 class="font-medium text-gray-900">Selesai Aksi</h4>
                             <p class="text-sm text-gray-500">{{ $event->end_date->format('d M Y H:i') }}</p>
                         </div>
                     </div>
