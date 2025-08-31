@@ -23,7 +23,7 @@
 
         <!-- Logo with modern styling -->
         <a href="{{ route('dashboard') }}"
-            class="relative col-span-1 z-10 ms-2 me-8 flex items-center space-x-3 rtl:space-x-reverse lg:ms-0 group" wire:navigate>
+            class="relative lg:col-span-1 col-span-2 z-10 ms-2 me-8 flex items-center space-x-3 rtl:space-x-reverse lg:ms-0 group" wire:navigate>
             <x-app-logo />
             <div class="hidden lg:block">
                 <div class="h-6 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600">
@@ -73,7 +73,7 @@
 
         {{-- <flux:spacer /> --}}
 
-        <div class="flex lg:col-span-1 col-span-2 items-center gap-2 justify-end">
+        <div class="flex col-span-1 items-center gap-2 justify-end">
             <!-- Modern Notification System -->
             <x-flux::dropdown align="right" width="128" class="relative z-10"
                 x-on:show="Livewire.dispatch('dropdown-shown')" x-on:hide="Livewire.dispatch('dropdown-hidden')">
@@ -85,7 +85,7 @@
                 </div>
                 <flux:menu
                     class="mt-2 -translate-x-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
-                    <div class="p-4 w-128">
+                    <div class="p-4 lg:w-128 w-full">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Notifikasi</h3>
                             <span
@@ -105,7 +105,13 @@
                     class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" /> --}}
                     <flux:button 
                     class="group size-10! bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full! shadow-lg hover:shadow-xl transition-all duration-300 outline-2 outline-white/20 dark:outline-slate-700/50 p-0!">
-                    <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-10! rounded-full object-cover" alt="">
+                    @if(auth()->user()->profile?->profile_photo)
+                        <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-10! rounded-full object-cover" alt="">
+                    @else
+                        <span class="flex size-10! rounded-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
+                            {{ Str::upper(auth()->user()->initials()) }}
+                        </span>
+                    @endif
                 </flux:button>
                     {{-- <flux:profile circle :chevron="false" avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-12!" /> --}}
                 <div

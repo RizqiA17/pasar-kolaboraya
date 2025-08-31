@@ -34,7 +34,7 @@
                             {{ $req['sender']['name'] }}
                         </p>
                         <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                            <span>Ingin terhubung dengan Anda Pada {{ Carbon\Carbon::parse($req['sender']['created_at'])->diffForHumans() }}
+                            <span class="flex">Ingin terhubung dengan Anda <p class="max-md:hidden">&nbsp; Pada {{ Carbon\Carbon::parse($req['sender']['created_at'])->diffForHumans() }}</p>
                             </span>
                         </div>
                     </div>

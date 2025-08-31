@@ -19,10 +19,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', VerifiedEmail::class, 'profile.complete'])
+    ->middleware(['auth', VerifiedEmail::class])
     ->name('dashboard');
 
-Route::middleware(['auth', VerifiedEmail::class, 'profile.complete'])->group(function () {
+Route::middleware(['auth', VerifiedEmail::class])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
