@@ -202,19 +202,7 @@
                                 <label class="block text-sm font-medium text-gray-900">Foto Profil</label>
                                 <div class="flex items-center space-x-6">
                                     <div class="flex-shrink-0">
-                                        <div class="h-24 w-24 rounded-full bg-gray-100 overflow-hidden">
-                                            @if (auth()->user()->profile?->profile_photo)
-                                                <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}"
-                                                    alt="Profile Photo" class="h-full w-full object-cover">
-                                            @else
-                                                <div
-                                                    class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
-                                                    <span class="text-white text-2xl font-bold">
-                                                        {{ auth()->user()->initials() }}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                        </div>
+                                        <x-ui.avatar :user="auth()->user()" size="xl" />
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-center space-x-3">
@@ -254,26 +242,7 @@
                             <div class="space-y-4">
                                 <label class="block text-sm font-medium text-gray-900">Banner</label>
                                 <div class="space-y-4">
-                                    <div class="h-32 w-full rounded-xl bg-gray-100 overflow-hidden">
-                                        @if (auth()->user()->profile?->banner)
-                                            <img src="{{ asset('storage/' . auth()->user()->profile->banner) }}"
-                                                alt="Banner" class="h-full w-full object-cover">
-                                        @else
-                                            <div
-                                                class="h-full w-full bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 flex items-center justify-center">
-                                                <div class="text-center text-white">
-                                                    <svg class="mx-auto h-12 w-12 mb-2" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                        </path>
-                                                    </svg>
-                                                    <p class="text-sm font-medium">Belum ada banner</p>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
+                                    <x-ui.banner :user="auth()->user()" height="h-32" />
                                     <div class="flex items-center space-x-3">
                                         <input type="file" wire:model="banner" id="banner" accept="image/*"
                                             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">

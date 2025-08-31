@@ -17,9 +17,7 @@
                             <p class="text-sm text-gray-600 line-clamp-2">{{ $collaboration->collaboration->description }}</p>
                         </div>
                         <div class="flex-shrink-0 ml-4">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-50 to-sky-50 border border-sky-100 flex items-center justify-center">
-                                <span class="text-sky-700 font-medium">{{ substr($collaboration->user->name, 0, 2) }}</span>
-                            </div>
+                            <x-ui.avatar :user="$collaboration->user" size="md" />
                         </div>
                     </div>
                     

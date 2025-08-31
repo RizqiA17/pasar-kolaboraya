@@ -105,14 +105,8 @@
                     class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" /> --}}
                     <flux:button 
                     class="group size-10! bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full! shadow-lg hover:shadow-xl transition-all duration-300 outline-2 outline-white/20 dark:outline-slate-700/50 p-0!">
-                    @if(auth()->user()->profile?->profile_photo)
-                        <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-10! rounded-full object-cover" alt="">
-                    @else
-                        <span class="flex size-10! rounded-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
-                            {{ Str::upper(auth()->user()->initials()) }}
-                        </span>
-                    @endif
-                </flux:button>
+                        <x-ui.avatar :user="auth()->user()" size="md" class="size-10!" />
+                    </flux:button>
                     {{-- <flux:profile circle :chevron="false" avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-12!" /> --}}
                 <div
                     class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900">
@@ -175,10 +169,7 @@
                     <div class="p-4">
                         <div class="flex items-center gap-3">
                             <span class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-xl">
-                                <span
-                                    class="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
-                                    {{ auth()->user()->initials() }}
-                                </span>
+                                <x-ui.avatar :user="auth()->user()" size="lg" />
                             </span>
 
                             <div class="grid flex-1 text-start">

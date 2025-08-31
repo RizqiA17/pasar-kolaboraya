@@ -36,10 +36,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
                                     </div>
 
                                     {{-- Info --}}
@@ -105,10 +102,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
                                     </div>
 
                                     {{-- Info --}}

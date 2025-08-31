@@ -119,11 +119,7 @@
         <div class="mt-6 p-4 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl border border-white/20 dark:border-slate-700/50">
             <div class="flex items-center gap-3">
                 <span class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-xl">
-                    <span
-                        class="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
-                        {{ auth()->user()->initials() }}
-                    </span>
-                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900"></div>
+                    <x-ui.avatar :user="auth()->user()" size="lg" :showStatus="true" />
                 </span>
 
                 <div class="grid flex-1 text-start">

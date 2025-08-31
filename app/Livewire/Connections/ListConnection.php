@@ -13,6 +13,7 @@ class ListConnection extends Component
     public $friends = [];
     public $searchData = [];
     public $searchResults = [];
+    public  $searchQuery;
 
     protected $listeners = [
         'disconnect' => 'disconnect'

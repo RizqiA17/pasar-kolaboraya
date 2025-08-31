@@ -25,11 +25,8 @@
     <!-- Hero Section -->
     <div class="relative">
         <!-- Cover Image -->
-        <div class="h-40 w-full overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1620207418302-439b387441b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
-                alt="Cover" class="w-full h-full object-cover">
-        </div>
-
+        <x-ui.banner :user="$user" height="h-40" />
+        
         <!-- Profile Info -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
             <div class="relative -mt-32 pb-8">
@@ -37,8 +34,16 @@
                     <!-- Profile Image -->
                     <div class="relative flex-shrink-0 ">
                         <div class="h-48 w-48 rounded-xl bg-white shadow-xl overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                                alt="Profile" class="h-full w-full object-cover">
+                            @if($user->profile?->profile_photo)
+                                <img src="{{ asset('storage/' . $user->profile->profile_photo) }}"
+                                    alt="{{ $user->name }}'s profile photo" class="h-full w-full object-cover">
+                            @else
+                                <div class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+                                    <span class="text-white text-6xl font-bold">
+                                        {{ $user->initials() }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                         <div class="absolute -bottom-2 -right-2">
                             <span class="relative flex h-5 w-5">
