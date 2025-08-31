@@ -36,10 +36,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
                                     </div>
 
                                     {{-- Info --}}
@@ -105,10 +102,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
                                     </div>
 
                                     {{-- Info --}}
@@ -228,11 +222,11 @@
                 </div>
             </div>
 
-            {{-- Event-based Recommendations --}}
+            {{-- Rekomendasi Berdasarkan Aksi --}}
             {{-- <div class="bg-white rounded-lg overflow-hidden">
                 <div class="p-4 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">Dari Aski yang Sama</h3>
-                    <p class="text-sm text-gray-600">Kreator yang pernah mengikuti Aski yang sama dengan Anda</p>
+                    <h3 class="text-lg font-semibold text-gray-900">Dari Aksi yang Sama</h3>
+                    <p class="text-sm text-gray-600">Kreator yang pernah mengikuti aksi yang sama dengan Anda</p>
                 </div>
                 <div class="p-4">
                     <div class="grid gap-4">
@@ -250,7 +244,7 @@
                                         <h4 class="font-medium text-gray-900 cursor-pointer hover:text-blue-600"
                                             wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
                                             {{ $user->name }}</h4>
-                                        <p class="text-sm text-gray-600">{{ $user->events_count }} event yang sama</p>
+                                        <p class="text-sm text-gray-600">{{ $user->events_count }} aksi yang sama</p>
                                     </div>
                                 </div>
                                 <x-connection-button :userId="$user->id" size="small" />
@@ -266,7 +260,7 @@
                                     </svg>
                                 </div>
                                 <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                                <p class="text-gray-500">Belum ada rekomendasi dari event yang sama</p>
+                                <p class="text-gray-500">Belum ada rekomendasi dari aksi yang sama</p>
                             </div>
                         @endforelse
                     </div>

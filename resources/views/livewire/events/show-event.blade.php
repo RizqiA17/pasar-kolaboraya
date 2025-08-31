@@ -4,7 +4,7 @@
     <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
     <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
     
-    {{-- Event Banner with Overlay --}}
+    {{-- Banner Aksi dengan Overlay --}}
     <div class="relative mb-8 rounded-2xl overflow-hidden shadow-lg">
         @if($event->banner)
             <div class="relative h-80">
@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        {{-- Event Status Badge --}}
+        {{-- Badge Status Aksi --}}
         <div class="absolute top-4 right-4">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium shadow-sm
                 {{ $event->start_date->isPast()
@@ -55,9 +55,9 @@
         </div>
     </div>
 
-    {{-- Event Header --}}
+    {{-- Header Aksi --}}
     <div class="mb-8 relative">
-        <!-- SVG Accent for Event Header -->
+        <!-- SVG Accent untuk Header Aksi -->
         <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
         
         <div class="flex flex-col md:flex-row justify-between items-start gap-4">
@@ -113,7 +113,7 @@
     {{-- Map Section --}}
     <x-event-map :event="$event" />
 
-    {{-- Event Details --}}
+    {{-- Detail Aksi --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {{-- Participants Section --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -155,7 +155,7 @@
 
         {{-- Additional Info Section --}}
         <div class="space-y-6">
-            {{-- Event Timeline --}}
+            {{-- Timeline Aksi --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Timeline Aksi</h3>
                 <div class="relative pl-8 space-y-6">

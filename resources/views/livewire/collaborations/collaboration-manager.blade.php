@@ -1,6 +1,6 @@
 <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
     <!-- Header -->
-    <div class="grid xl:grid-cols-3 grid-cols-2 items-center mb-8">
+    <div class="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center mb-8">
         <div class="col-span-1">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Manajemen Kolaborasi</h2>
             <p class="text-gray-600 dark:text-gray-400">Kelola semua kolaborasi Anda dalam satu tempat</p>
@@ -19,9 +19,9 @@
                     placeholder="Cari kolaborasi berdasarkan judul atau deskripsi...">
             </div>
         </div>
-        <div class="col-span-1 flex justify-end">
+        <div class="col-span-1 max-sm:mt-4 flex justify-end">
             <button wire:click="toggleCreateForm"
-                class=" px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                class="max-sm:w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
                 <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6">
@@ -161,29 +161,26 @@
                         </div>
                     @else
                         <div class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg">
-                                                    @foreach ($availableUsers as $user)
-                            <label
-                                class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
-                                <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
-                                    class="mr-2 text-blue-600">
-                                <div class="flex items-center justify-between w-full">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-3">
-                                            <span class="text-sm font-medium text-blue-600 dark:text-blue-300">
-                                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                                            </span>
+                            @foreach ($availableUsers as $user)
+                                <label
+                                    class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                                    <input type="checkbox" wire:model="selectedUsers" value="{{ $user->id }}"
+                                        class="mr-2 text-blue-600">
+                                    <div class="flex items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="mr-3">
+                                                <x-ui.avatar :user="$user" size="sm" />
+                                            </div>
+                                            <span
+                                                class="text-sm text-gray-700 dark:text-gray-300">{{ $user->name }}</span>
                                         </div>
-                                        <span
-                                            class="text-sm text-gray-700 dark:text-gray-300">{{ $user->name }}</span>
+                                        <a href="{{ route('profile.view', $user->id) }}"
+                                            class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
+                                            Lihat Profile
+                                        </a>
                                     </div>
-                                    <a href="{{ route('profile.view', $user->id) }}" 
-                                       class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
-                                        Lihat Profile
-                                    </a>
-                                </div>
-                            </label>
-                        @endforeach
+                                </label>
+                            @endforeach
                         </div>
                     @endif
 
@@ -437,7 +434,7 @@
 
                                 <div class="flex gap-3">
                                     <button wire:click="acceptInvitation({{ $invitation->collaboration->id }})"
-                                        class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
+                                        class="flex-1 px-4 py-3 bg-gradient-to-r flex items-center justify-center from-green-500 to-green-600 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -446,7 +443,7 @@
                                         Terima
                                     </button>
                                     <button wire:click="declineInvitation({{ $invitation->collaboration->id }})"
-                                        class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
+                                        class="flex-1 px-4 py-3 bg-gradient-to-r flex items-center justify-center from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -812,8 +809,8 @@
                                     class="mr-2 text-blue-600">
                                 <div class="flex items-center justify-between w-full">
                                     <span class="text-sm text-gray-700">{{ $user->name }}</span>
-                                    <a href="{{ route('profile.view', $user->id) }}" 
-                                       class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
+                                    <a href="{{ route('profile.view', $user->id) }}"
+                                        class="text-xs text-blue-600 hover:text-blue-800 transition-colors ml-2">
                                         Lihat Profile
                                     </a>
                                 </div>

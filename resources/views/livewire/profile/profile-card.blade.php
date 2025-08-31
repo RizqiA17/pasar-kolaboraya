@@ -27,13 +27,11 @@
                 <!-- Profile Content -->
                 <div class="p-6">
                     <!-- Cover Image -->
-                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100 rounded-lg mb-4"></div>
-
+                    <x-ui.banner :user="$selectedUser" height="h-24" />
+                    
                     <!-- Avatar -->
                     <div class="relative -mt-16 mb-4">
-                        <div class="w-24 h-24 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-2xl font-semibold shadow-lg">
-                            {{ substr($selectedUser->name, 0, 2) }}
-                        </div>
+                        <x-ui.avatar :user="$selectedUser" size="2xl" class="ring-4 ring-white" />
                     </div>
 
                     <!-- User Info -->
