@@ -437,7 +437,7 @@
 
                                 <div class="flex gap-3">
                                     <button wire:click="acceptInvitation({{ $invitation->collaboration->id }})"
-                                        class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
+                                        class="flex-1 px-4 py-3 bg-gradient-to-r flex items-center justify-center from-green-500 to-green-600 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -446,7 +446,7 @@
                                         Terima
                                     </button>
                                     <button wire:click="declineInvitation({{ $invitation->collaboration->id }})"
-                                        class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
+                                        class="flex-1 px-4 py-3 bg-gradient-to-r flex items-center justify-center from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-sm">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

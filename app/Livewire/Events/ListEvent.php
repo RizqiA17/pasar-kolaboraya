@@ -15,10 +15,35 @@ class ListEvent extends Component
 
     public $search = '';
     public $filter = 'all'; // all, upcoming, past
+    public $activeTab = 'all'; // all, my-events, participating
 
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->resetPage();
+    }
+
+    #[Computed]
+    public function getMyEventsCount()
+    {
+        return Event::where('created_by', auth()->id())
+            ->where('end_date', '>=', now())
+            ->count();
+    }
+
+    #[Computed]
+    public function getParticipatingCount()
+    {
+        return Event::whereHas('participants', function($q) {
+            $q->where('user_id', auth()->id());
+        })
+        ->where('end_date', '>=', now())
+        ->count();
     }
 
     public function getEvents()
@@ -29,6 +54,19 @@ class ListEvent extends Component
                 return $q->where('title', 'like', '%' . $this->search . '%');
             });
 
+        // Apply tab-specific filtering
+        switch ($this->activeTab) {
+            case 'my-events':
+                $query->where('created_by', auth()->id());
+                break;
+            case 'participating':
+                $query->whereHas('participants', function($q) {
+                    $q->where('user_id', auth()->id());
+                });
+                break;
+        }
+
+        // Apply additional filters
         switch ($this->filter) {
             case 'upcoming':
                 $query->where('start_date', '>=', now());
