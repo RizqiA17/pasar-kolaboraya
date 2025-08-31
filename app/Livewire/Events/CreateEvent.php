@@ -32,8 +32,8 @@ class CreateEvent extends Component
         'description' => 'required',
         'start_date' => 'required|date|after:today',
         'end_date' => 'required|date|after:start_date',
-        'latitude' => 'required|numeric|between:-90,90',
-        'longitude' => 'required|numeric|between:-180,180',
+        'latitude' => 'required',
+        'longitude' => 'required',
         'banner' => 'nullable|image|max:2048',
         'location' => 'nullable|string|max:500'
     ];
@@ -43,13 +43,18 @@ class CreateEvent extends Component
         $this->validate([
             'banner' => 'image|max:2048'
         ]);
-        
+
         $this->dispatch('refresh-map');
     }
 
     public function save()
     {
         $this->validate();
+        // dd([
+        //     $this->location,
+        //     $this->latitude,
+        //     $this->longitude
+        // ]);
 
         $banner_path = null;
         if ($this->banner) {
