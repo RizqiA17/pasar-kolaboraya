@@ -1,7 +1,8 @@
 <div class="max-w-7xl mx-auto">
     <!-- Flash Messages -->
     @if (session()->has('message'))
-        <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm animate-pulse">
+        <div
+            class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
@@ -14,9 +15,12 @@
                 <div class="ml-3">
                     <p class="text-sm font-medium text-green-800">{{ session('message') }}</p>
                 </div>
-                <button type="button" onclick="this.parentElement.parentElement.remove()" class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-600 hover:text-green-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                <button type="button" onclick="this.parentElement.parentElement.remove()"
+                    class="ml-auto flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-600 hover:text-green-800" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
@@ -24,7 +28,8 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl shadow-sm animate-pulse">
+        <div
+            class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl shadow-sm animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
@@ -38,9 +43,12 @@
                 <div class="ml-3">
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
-                <button type="button" onclick="this.parentElement.parentElement.remove()" class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-600 hover:text-red-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                <button type="button" onclick="this.parentElement.parentElement.remove()"
+                    class="ml-auto flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-600 hover:text-red-800" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
@@ -92,7 +100,8 @@
                             class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl 
                             @if ($tab === 'profile') bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 shadow-sm 
                             @else text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:border hover:border-blue-200 transition-all duration-200 @endif">
-                            <div class="h-8 w-8 rounded-lg @if($tab === 'profile') bg-blue-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
+                            <div
+                                class="h-8 w-8 rounded-lg @if ($tab === 'profile') bg-blue-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
                                 <svg class="h-4 w-4  @if ($tab === 'profile') text-blue-600 @else text-gray-600 @endif group-hover:text-blue-600"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -106,9 +115,9 @@
                             @if ($tab === 'interests') bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border border-purple-200 shadow-sm 
                             @else text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 hover:border hover:border-purple-200 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if($tab === 'interests') bg-purple-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-purple-100">
-                                <svg class="h-4 w-4 @if($tab === 'interests') text-purple-600 @else text-gray-600 @endif group-hover:text-purple-600" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
+                                class="h-8 w-8 rounded-lg @if ($tab === 'interests') bg-purple-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-purple-100">
+                                <svg class="h-4 w-4 @if ($tab === 'interests') text-purple-600 @else text-gray-600 @endif group-hover:text-purple-600"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                     </path>
@@ -117,11 +126,11 @@
                             Minat & Ketertarikan
                         </button>
                         <button wire:click="setTab('skills')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if($tab === 'skills') bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border border-green-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 hover:border hover:border-green-200 transition-all duration-200 @endif">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'skills') bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border border-green-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 hover:border hover:border-green-200 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if($tab === 'skills') bg-green-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-green-100">
-                                <svg class="h-4 w-4 @if($tab === 'skills') text-green-600 @else text-gray-600 @endif group-hover:text-green-600" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
+                                class="h-8 w-8 rounded-lg @if ($tab === 'skills') bg-green-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-green-100">
+                                <svg class="h-4 w-4 @if ($tab === 'skills') text-green-600 @else text-gray-600 @endif group-hover:text-green-600"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
                                     </path>
@@ -130,11 +139,11 @@
                             Keahlian
                         </button>
                         <button wire:click="setTab('contributions')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if($tab === 'contributions') bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border border-amber-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-700 hover:border hover:border-amber-200 transition-all duration-200 @endif">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'contributions') bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border border-amber-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-700 hover:border hover:border-amber-200 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if($tab === 'contributions') bg-amber-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-amber-100">
-                                <svg class="h-4 w-4 @if($tab === 'contributions') text-amber-600 @else text-gray-600 @endif group-hover:text-amber-600" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
+                                class="h-8 w-8 rounded-lg @if ($tab === 'contributions') bg-amber-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-amber-100">
+                                <svg class="h-4 w-4 @if ($tab === 'contributions') text-amber-600 @else text-gray-600 @endif group-hover:text-amber-600"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
                                     </path>
@@ -143,8 +152,9 @@
                             Kontribusi
                         </button>
                         <button wire:click="setTab('danger')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if($tab === 'danger') bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border border-red-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 hover:text-red-700 hover:border hover:border-red-200 transition-all duration-200 @endif">
-                            <div class="h-8 w-8 rounded-lg @if($tab === 'danger') bg-red-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'danger') bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border border-red-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 hover:text-red-700 hover:border hover:border-red-200 transition-all duration-200 @endif">
+                            <div
+                                class="h-8 w-8 rounded-lg @if ($tab === 'danger') bg-red-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
                                 <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -187,6 +197,112 @@
 
                     <div class="p-6">
                         <form wire:submit="updateProfileInformation" class="space-y-6">
+                            <!-- Profile Photo Upload Section -->
+                            <div class="space-y-4">
+                                <label class="block text-sm font-medium text-gray-900">Foto Profil</label>
+                                <div class="flex items-center space-x-6">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-24 w-24 rounded-full bg-gray-100 overflow-hidden">
+                                            @if (auth()->user()->profile?->profile_photo)
+                                                <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}"
+                                                    alt="Profile Photo" class="h-full w-full object-cover">
+                                            @else
+                                                <div
+                                                    class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+                                                    <span class="text-white text-2xl font-bold">
+                                                        {{ auth()->user()->initials() }}
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3">
+                                            <input type="file" wire:model="profilePhoto" id="profilePhoto"
+                                                accept="image/*"
+                                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                            <button type="button" wire:click="updateProfilePhoto"
+                                                wire:loading.attr="disabled"
+                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
+                                                    </path>
+                                                </svg>
+                                                <svg wire:loading class="mr-2 h-4 w-4 animate-spin" fill="none"
+                                                    viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                                Upload
+                                            </button>
+                                        </div>
+                                        <p class="mt-2 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
+                                        @error('profilePhoto')
+                                            <span class="text-sm text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Banner Upload Section -->
+                            <div class="space-y-4">
+                                <label class="block text-sm font-medium text-gray-900">Banner</label>
+                                <div class="space-y-4">
+                                    <div class="h-32 w-full rounded-xl bg-gray-100 overflow-hidden">
+                                        @if (auth()->user()->profile?->banner)
+                                            <img src="{{ asset('storage/' . auth()->user()->profile->banner) }}"
+                                                alt="Banner" class="h-full w-full object-cover">
+                                        @else
+                                            <div
+                                                class="h-full w-full bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 flex items-center justify-center">
+                                                <div class="text-center text-white">
+                                                    <svg class="mx-auto h-12 w-12 mb-2" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-sm font-medium">Belum ada banner</p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="file" wire:model="banner" id="banner" accept="image/*"
+                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                        <button type="button" wire:click="updateBanner" wire:loading.attr="disabled"
+                                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
+                                                </path>
+                                            </svg>
+                                            <svg wire:loading class="mr-2 h-4 w-4 animate-spin" fill="none"
+                                                viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                    stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                            Upload
+                                        </button>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 5MB.</p>
+                                    @error('banner')
+                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label for="name" class="block text-sm font-medium text-gray-900">Nama
@@ -301,101 +417,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Profile Photo Upload Section -->
-                            <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900">Foto Profil</label>
-                                <div class="flex items-center space-x-6">
-                                    <div class="flex-shrink-0">
-                                        <div class="h-24 w-24 rounded-full bg-gray-100 overflow-hidden">
-                                            @if (auth()->user()->profile?->profile_photo)
-                                                <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" 
-                                                     alt="Profile Photo" 
-                                                     class="h-full w-full object-cover">
-                                            @else
-                                                <div class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
-                                                    <span class="text-white text-2xl font-bold">
-                                                        {{ auth()->user()->initials() }}
-                                                    </span>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center space-x-3">
-                                            <input type="file" 
-                                                   wire:model="profilePhoto" 
-                                                   id="profilePhoto" 
-                                                   accept="image/*"
-                                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                            <button type="button" 
-                                                    wire:click="updateProfilePhoto"
-                                                    wire:loading.attr="disabled"
-                                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                                                <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                                                </svg>
-                                                <svg wire:loading class="mr-2 h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                </svg>
-                                                Upload
-                                            </button>
-                                        </div>
-                                        <p class="mt-2 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
-                                        @error('profilePhoto')
-                                            <span class="text-sm text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Banner Upload Section -->
-                            <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900">Banner</label>
-                                <div class="space-y-4">
-                                    <div class="h-32 w-full rounded-xl bg-gray-100 overflow-hidden">
-                                        @if (auth()->user()->profile?->banner)
-                                            <img src="{{ asset('storage/' . auth()->user()->profile->banner) }}" 
-                                                 alt="Banner" 
-                                                 class="h-full w-full object-cover">
-                                        @else
-                                            <div class="h-full w-full bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 flex items-center justify-center">
-                                                <div class="text-center text-white">
-                                                    <svg class="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                    </svg>
-                                                    <p class="text-sm font-medium">Belum ada banner</p>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <input type="file" 
-                                               wire:model="banner" 
-                                               id="banner" 
-                                               accept="image/*"
-                                               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                        <button type="button" 
-                                                wire:click="updateBanner"
-                                                wire:loading.attr="disabled"
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                                            <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                                            </svg>
-                                            <svg wire:loading class="mr-2 h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Upload
-                                        </button>
-                                    </div>
-                                    <p class="text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 5MB.</p>
-                                    @error('banner')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
                             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                                 <div class="rounded-xl bg-amber-50 border border-amber-200 p-4">
                                     <div class="flex items-start space-x-3">
@@ -438,12 +459,16 @@
                                         </svg>
                                         Simpan Perubahan
                                     </button>
-                                    
+
                                     <!-- Unsaved Changes Indicator -->
                                     <div id="profile-unsaved-indicator" class="hidden">
-                                        <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                                </path>
                                             </svg>
                                             Belum Disimpan
                                         </span>
@@ -528,18 +553,23 @@
                             <div class="flex items-center space-x-3">
                                 <button wire:click="updateInterests"
                                     class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105">
-                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Simpan Perubahan
                                 </button>
-                                
+
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="interests-unsaved-indicator" class="hidden">
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                            </path>
                                         </svg>
                                         Belum Disimpan
                                     </span>
@@ -622,18 +652,23 @@
                             <div class="flex items-center space-x-3">
                                 <button wire:click="updateSkills"
                                     class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105">
-                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Simpan Perubahan
                                 </button>
-                                
+
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="skills-unsaved-indicator" class="hidden">
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                            </path>
                                         </svg>
                                         Belum Disimpan
                                     </span>
@@ -740,12 +775,16 @@
                                         </svg>
                                         Tambah Kontribusi
                                     </button>
-                                    
+
                                     <!-- Unsaved Changes Indicator -->
                                     <div id="contributions-unsaved-indicator" class="hidden">
-                                        <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                                </path>
                                             </svg>
                                             Belum Disimpan
                                         </span>
@@ -919,228 +958,235 @@
 
 <!-- JavaScript for tracking unsaved changes -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let hasUnsavedChanges = false;
-    let originalFormData = {};
-    
-    // Track form changes for profile section
-    function trackProfileChanges() {
-        const form = document.querySelector('form[wire\\:submit="updateProfileInformation"]');
-        if (!form) return;
-        
-        const inputs = form.querySelectorAll('input, textarea');
-        
-        // Store original values
-        inputs.forEach(input => {
-            originalFormData[input.name || input.id] = input.value;
-        });
-        
-        // Listen for changes
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const currentValue = this.value;
-                const originalValue = originalFormData[this.name || input.id];
-                
-                if (currentValue !== originalValue) {
-                    showUnsavedIndicator('profile');
-                    showUnsavedWarning();
-                    hasUnsavedChanges = true;
-                } else {
-                    // Check if all other fields are also unchanged
-                    const allUnchanged = Array.from(inputs).every(input => {
-                        const current = input.value;
-                        const original = originalFormData[input.name || input.id];
-                        return current === original;
-                    });
-                    
-                    if (allUnchanged) {
-                        hideUnsavedIndicator('profile');
-                        hasUnsavedChanges = false;
-                        hideUnsavedWarning();
-                    }
-                }
-            });
-        });
-    }
-    
-    // Track changes for interests section
-    function trackInterestsChanges() {
-        const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedInterests"]');
-        if (checkboxes.length === 0) return;
-        
-        // Store original state
-        const originalInterests = Array.from(checkboxes).map(cb => cb.checked);
-        
-        checkboxes.forEach((checkbox, index) => {
-            checkbox.addEventListener('change', function() {
-                const currentState = Array.from(checkboxes).map(cb => cb.checked);
-                const hasChanges = currentState.some((checked, i) => checked !== originalInterests[i]);
-                
-                if (hasChanges) {
-                    showUnsavedIndicator('interests');
-                    showUnsavedWarning();
-                    hasUnsavedChanges = true;
-                } else {
-                    hideUnsavedIndicator('interests');
-                    hasUnsavedChanges = false;
-                    hideUnsavedWarning();
-                }
-            });
-        });
-    }
-    
-    // Track changes for skills section
-    function trackSkillsChanges() {
-        const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedSkills"]');
-        if (checkboxes.length === 0) return;
-        
-        // Store original state
-        const originalSkills = Array.from(checkboxes).map(cb => cb.checked);
-        
-        checkboxes.forEach((checkbox, index) => {
-            checkbox.addEventListener('change', function() {
-                const currentState = Array.from(checkboxes).map(cb => cb.checked);
-                const hasChanges = currentState.some((checked, i) => checked !== originalSkills[i]);
-                
-                if (hasChanges) {
-                    showUnsavedIndicator('skills');
-                    showUnsavedWarning();
-                    hasUnsavedChanges = true;
-                } else {
-                    hideUnsavedIndicator('skills');
-                    hasUnsavedChanges = false;
-                    hideUnsavedWarning();
-                }
-            });
-        });
-    }
-    
-    // Track changes for contributions section
-    function trackContributionsChanges() {
-        const inputs = document.querySelectorAll('input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]');
-        if (inputs.length === 0) return;
-        
-        // Store original values
-        const originalValues = {};
-        inputs.forEach(input => {
-            originalValues[input.name || input.id] = input.value;
-        });
-        
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const currentValue = this.value;
-                const originalValue = originalValues[input.name || input.id];
-                
-                if (currentValue !== originalValue) {
-                    showUnsavedIndicator('contributions');
-                    showUnsavedWarning();
-                    hasUnsavedChanges = true;
-                } else {
-                    // Check if all other fields are also unchanged
-                    const allUnchanged = Array.from(inputs).every(input => {
-                        const current = input.value;
-                        const original = originalValues[input.name || input.id];
-                        return current === original;
-                    });
-                    
-                    if (allUnchanged) {
-                        hideUnsavedIndicator('contributions');
-                        hasUnsavedChanges = false;
-                        hideUnsavedWarning();
-                    }
-                }
-            });
-        });
-    }
-    
-    // Show unsaved indicator for specific section
-    function showUnsavedIndicator(section) {
-        const indicator = document.getElementById(`${section}-unsaved-indicator`);
-        if (indicator) {
-            indicator.classList.remove('hidden');
-        }
-    }
-    
-    // Hide unsaved indicator for specific section
-    function hideUnsavedIndicator(section) {
-        const indicator = document.getElementById(`${section}-unsaved-indicator`);
-        if (indicator) {
-            indicator.classList.add('hidden');
-        }
-    }
-    
-    // Show unsaved warning
-    function showUnsavedWarning() {
-        const warning = document.getElementById('unsaved-changes-warning');
-        if (warning) {
-            warning.classList.remove('hidden');
-        }
-    }
-    
-    // Hide unsaved warning
-    function hideUnsavedWarning() {
-        const warning = document.getElementById('unsaved-changes-warning');
-        if (warning) {
-            warning.classList.add('hidden');
-        }
-    }
-    
-    // Global function to hide warning (accessible from onclick)
-    window.hideUnsavedWarning = hideUnsavedWarning;
-    
-    // Initialize tracking for all sections
-    trackProfileChanges();
-    trackInterestsChanges();
-    trackSkillsChanges();
-    trackContributionsChanges();
-    
-    // Listen for Livewire events to reset indicators after successful save
-    document.addEventListener('livewire:initialized', () => {
-        Livewire.on('profile-updated', () => {
-            hideUnsavedIndicator('profile');
-            hasUnsavedChanges = false;
-            hideUnsavedWarning();
-            // Reset original form data
+    document.addEventListener('DOMContentLoaded', function() {
+        let hasUnsavedChanges = false;
+        let originalFormData = {};
+
+        // Track form changes for profile section
+        function trackProfileChanges() {
             const form = document.querySelector('form[wire\\:submit="updateProfileInformation"]');
-            if (form) {
-                const inputs = form.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    originalFormData[input.name || input.id] = input.value;
-                });
-            }
-        });
-        
-        Livewire.on('interests-updated', () => {
-            hideUnsavedIndicator('interests');
-            hasUnsavedChanges = false;
-            hideUnsavedWarning();
-        });
-        
-        Livewire.on('skills-updated', () => {
-            hideUnsavedIndicator('skills');
-            hasUnsavedChanges = false;
-            hideUnsavedWarning();
-        });
-        
-        Livewire.on('contribution-added', () => {
-            hideUnsavedIndicator('contributions');
-            hasUnsavedChanges = false;
-            hideUnsavedWarning();
-            // Reset form fields
-            const inputs = document.querySelectorAll('input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]');
+            if (!form) return;
+
+            const inputs = form.querySelectorAll('input, textarea');
+
+            // Store original values
             inputs.forEach(input => {
                 originalFormData[input.name || input.id] = input.value;
             });
+
+            // Listen for changes
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const currentValue = this.value;
+                    const originalValue = originalFormData[this.name || input.id];
+
+                    if (currentValue !== originalValue) {
+                        showUnsavedIndicator('profile');
+                        showUnsavedWarning();
+                        hasUnsavedChanges = true;
+                    } else {
+                        // Check if all other fields are also unchanged
+                        const allUnchanged = Array.from(inputs).every(input => {
+                            const current = input.value;
+                            const original = originalFormData[input.name || input.id];
+                            return current === original;
+                        });
+
+                        if (allUnchanged) {
+                            hideUnsavedIndicator('profile');
+                            hasUnsavedChanges = false;
+                            hideUnsavedWarning();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Track changes for interests section
+        function trackInterestsChanges() {
+            const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedInterests"]');
+            if (checkboxes.length === 0) return;
+
+            // Store original state
+            const originalInterests = Array.from(checkboxes).map(cb => cb.checked);
+
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function() {
+                    const currentState = Array.from(checkboxes).map(cb => cb.checked);
+                    const hasChanges = currentState.some((checked, i) => checked !==
+                        originalInterests[i]);
+
+                    if (hasChanges) {
+                        showUnsavedIndicator('interests');
+                        showUnsavedWarning();
+                        hasUnsavedChanges = true;
+                    } else {
+                        hideUnsavedIndicator('interests');
+                        hasUnsavedChanges = false;
+                        hideUnsavedWarning();
+                    }
+                });
+            });
+        }
+
+        // Track changes for skills section
+        function trackSkillsChanges() {
+            const checkboxes = document.querySelectorAll('input[wire\\:model\\.live="selectedSkills"]');
+            if (checkboxes.length === 0) return;
+
+            // Store original state
+            const originalSkills = Array.from(checkboxes).map(cb => cb.checked);
+
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function() {
+                    const currentState = Array.from(checkboxes).map(cb => cb.checked);
+                    const hasChanges = currentState.some((checked, i) => checked !==
+                        originalSkills[i]);
+
+                    if (hasChanges) {
+                        showUnsavedIndicator('skills');
+                        showUnsavedWarning();
+                        hasUnsavedChanges = true;
+                    } else {
+                        hideUnsavedIndicator('skills');
+                        hasUnsavedChanges = false;
+                        hideUnsavedWarning();
+                    }
+                });
+            });
+        }
+
+        // Track changes for contributions section
+        function trackContributionsChanges() {
+            const inputs = document.querySelectorAll(
+                'input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]');
+            if (inputs.length === 0) return;
+
+            // Store original values
+            const originalValues = {};
+            inputs.forEach(input => {
+                originalValues[input.name || input.id] = input.value;
+            });
+
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const currentValue = this.value;
+                    const originalValue = originalValues[input.name || input.id];
+
+                    if (currentValue !== originalValue) {
+                        showUnsavedIndicator('contributions');
+                        showUnsavedWarning();
+                        hasUnsavedChanges = true;
+                    } else {
+                        // Check if all other fields are also unchanged
+                        const allUnchanged = Array.from(inputs).every(input => {
+                            const current = input.value;
+                            const original = originalValues[input.name || input.id];
+                            return current === original;
+                        });
+
+                        if (allUnchanged) {
+                            hideUnsavedIndicator('contributions');
+                            hasUnsavedChanges = false;
+                            hideUnsavedWarning();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Show unsaved indicator for specific section
+        function showUnsavedIndicator(section) {
+            const indicator = document.getElementById(`${section}-unsaved-indicator`);
+            if (indicator) {
+                indicator.classList.remove('hidden');
+            }
+        }
+
+        // Hide unsaved indicator for specific section
+        function hideUnsavedIndicator(section) {
+            const indicator = document.getElementById(`${section}-unsaved-indicator`);
+            if (indicator) {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        // Show unsaved warning
+        function showUnsavedWarning() {
+            const warning = document.getElementById('unsaved-changes-warning');
+            if (warning) {
+                warning.classList.remove('hidden');
+            }
+        }
+
+        // Hide unsaved warning
+        function hideUnsavedWarning() {
+            const warning = document.getElementById('unsaved-changes-warning');
+            if (warning) {
+                warning.classList.add('hidden');
+            }
+        }
+
+        // Global function to hide warning (accessible from onclick)
+        window.hideUnsavedWarning = hideUnsavedWarning;
+
+        // Initialize tracking for all sections
+        trackProfileChanges();
+        trackInterestsChanges();
+        trackSkillsChanges();
+        trackContributionsChanges();
+
+        // Listen for Livewire events to reset indicators after successful save
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('profile-updated', () => {
+                hideUnsavedIndicator('profile');
+                hasUnsavedChanges = false;
+                hideUnsavedWarning();
+                // Reset original form data
+                const form = document.querySelector(
+                    'form[wire\\:submit="updateProfileInformation"]');
+                if (form) {
+                    const inputs = form.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        originalFormData[input.name || input.id] = input.value;
+                    });
+                }
+            });
+
+            Livewire.on('interests-updated', () => {
+                hideUnsavedIndicator('interests');
+                hasUnsavedChanges = false;
+                hideUnsavedWarning();
+            });
+
+            Livewire.on('skills-updated', () => {
+                hideUnsavedIndicator('skills');
+                hasUnsavedChanges = false;
+                hideUnsavedWarning();
+            });
+
+            Livewire.on('contribution-added', () => {
+                hideUnsavedIndicator('contributions');
+                hasUnsavedChanges = false;
+                hideUnsavedWarning();
+                // Reset form fields
+                const inputs = document.querySelectorAll(
+                    'input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]'
+                    );
+                inputs.forEach(input => {
+                    originalFormData[input.name || input.id] = input.value;
+                });
+            });
+        });
+
+        // Warn before leaving page if there are unsaved changes
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue =
+                    'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
+                return 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
+            }
         });
     });
-    
-    // Warn before leaving page if there are unsaved changes
-    window.addEventListener('beforeunload', function(e) {
-        if (hasUnsavedChanges) {
-            e.preventDefault();
-            e.returnValue = 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
-            return 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
-        }
-    });
-});
 </script>

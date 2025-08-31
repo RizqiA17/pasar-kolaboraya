@@ -13,18 +13,6 @@
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Kualitas Koneksi</h3>
                 <p class="text-gray-600 dark:text-gray-400">Analisis jaringan profesional Anda</p>
             </div>
-            <div class="flex items-center gap-3">
-                <button wire:click="refresh" class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-emerald-100 to-teal-100 hover:from-emerald-200 hover:to-teal-200 dark:from-emerald-900/30 dark:to-teal-900/30 dark:hover:from-emerald-900/50 dark:hover:to-teal-900/50 transition-all duration-300 hover:scale-105" title="Refresh data">
-                    @if($isLoading)
-                        <flux:icon.arrow-path class="size-5 text-emerald-600 dark:text-emerald-400 animate-spin" />
-                    @else
-                        <flux:icon.arrow-path class="size-5 text-emerald-600 dark:text-emerald-400" />
-                    @endif
-                </button>
-                <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30">
-                    <flux:icon.star class="size-5 text-blue-600 dark:text-blue-400" />
-                </div>
-            </div>
         </div>
         
         <!-- Main Quality Score -->
