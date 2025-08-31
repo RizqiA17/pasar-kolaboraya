@@ -33,7 +33,7 @@
             <flux:navbar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                 class="group relative px-4 py-2 text-slate-700 hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl mx-1"
                 wire:navigate>
-                <span class="relative z-10">{{ __('Dashboard') }}</span>
+                <span class="relative z-10">{{ __('Beranda') }}</span>
                 <div
                     class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 </div>

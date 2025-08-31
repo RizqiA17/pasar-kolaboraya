@@ -10,7 +10,7 @@
                 @if (Route::has('login'))
                     <div class="space-x-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Dashboard</a>
+                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Beranda</a>
                         @else
                             <a href="{{ route('login') }}" class="px-4 py-2 text-navy hover:text-blue-700 transition">Masuk</a>
                             @if (Route::has('register'))
