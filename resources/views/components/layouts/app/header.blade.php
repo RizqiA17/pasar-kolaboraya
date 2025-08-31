@@ -73,7 +73,7 @@
 
         {{-- <flux:spacer /> --}}
 
-        <div class="flex col-span-1 items-center gap-2 justify-end">
+        <div class="flex lg:col-span-1 col-span-2 items-center gap-2 justify-end">
             <!-- Modern Notification System -->
             <x-flux::dropdown align="right" width="128" class="relative z-10"
                 x-on:show="Livewire.dispatch('dropdown-shown')" x-on:hide="Livewire.dispatch('dropdown-hidden')">
@@ -99,7 +99,7 @@
             </x-flux::dropdown>
 
             <!-- Modern Desktop User Menu -->
-            <flux:dropdown position="top" align="center" class="relative z-10 max-lg:hidden">
+            <flux:dropdown position="top" align="center" class="relative z-10">
                 {{-- <flux:profile circle :chevron="false"
                     @if (auth()->user()->profile?->profile_photo) avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" @else :initials="auth()->user()->initials()" @endif
                     class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" /> --}}
