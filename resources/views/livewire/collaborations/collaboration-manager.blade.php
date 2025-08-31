@@ -1,12 +1,12 @@
 <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
     <!-- Header -->
-    <div class="grid grid-cols-3 items-center mb-8">
+    <div class="grid xl:grid-cols-3 grid-cols-2 items-center mb-8">
         <div class="col-span-1">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Manajemen Kolaborasi</h2>
             <p class="text-gray-600 dark:text-gray-400">Kelola semua kolaborasi Anda dalam satu tempat</p>
         </div>
         <!-- Search Bar for Collaborations -->
-        <div class="col-span-1">
+        <div class="col-span-1 max-xl:hidden">
             <div class="relative max-w-2xl mx-auto">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,6 +32,19 @@
         </div>
     </div>
 
+    <div class="xl:hidden w-full mb-8">
+        <div class="relative max-w-2xl mx-auto">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <input type="text" wire:model.live="collaborationSearchQuery"
+                class="block w-full pl-12 pr-4 py-4 border border-gray-300 rounded-2xl leading-5 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-lg"
+                placeholder="Cari kolaborasi berdasarkan judul atau deskripsi...">
+        </div>
+    </div>
 
     <!-- Flash Messages -->
     @if (session()->has('message'))
@@ -230,7 +243,7 @@
     @endif
 
     <!-- Overview Tab -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6">
         <!-- Pending Invitations Card -->
         <div
             class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-600 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
