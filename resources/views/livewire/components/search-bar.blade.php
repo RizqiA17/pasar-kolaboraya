@@ -1,7 +1,7 @@
-<div class="relative w-full max-w-md">
+<div class="relative w-full md:max-w-md">
     <form wire:submit.prevent="search">
-        <flux:input.group>
-            <flux:input wire:model="query" type="text" class="w-full" autofocus autocomplete="off"
+        <flux:input.group class="">
+            <flux:input wire:model="query" type="text" class="w-full" autocomplete="off"
                 placeholder="{{ $placeholder }}" />
 
             <flux:button type="submit" icon="magnifying-glass">
