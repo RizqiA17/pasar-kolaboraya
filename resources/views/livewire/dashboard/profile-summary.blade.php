@@ -2,7 +2,7 @@
     {{-- SVG Accent Elements --}}
     <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
     <x-svg-accent position="bottom-right" size="w-12 h-12" opacity="opacity-10" />
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center justify-between mb-4 flex-wrap">
         <h3 class="text-lg font-medium text-gray-900">Ringkasan Profil</h3>
         <flux:button href="{{ route(name: 'settings.profile-settings') }}" variant="subtle" size="sm">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

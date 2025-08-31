@@ -15,7 +15,7 @@
 
     <!-- Modern Header with Glassmorphism -->
     <flux:header
-        class="relative border-b bg-cream/80 border-white/20 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl shadow-blue-500/10 grid! grid-cols-3!">
+        class="sticky top-0 z-50 border-b bg-cream/80 border-white/20 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl shadow-blue-500/10 grid! grid-cols-3!">
         <!-- Background gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-pink-600/5"></div>
 
