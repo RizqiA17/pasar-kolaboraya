@@ -24,11 +24,33 @@
 
         <!-- Main Content -->
         <div class="relative pt-32 pb-16 sm:pt-48">
-            <!-- Decorative Elements -->
-            <div class="absolute top-0 left-0 w-64 h-64 bg-coral rounded-full filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
-            <div class="absolute top-1/2 right-0 w-96 h-96 bg-sky rounded-full filter blur-3xl opacity-20 translate-x-1/2 -translate-y-1/2"></div>
-            <div class="absolute bottom-0 left-1/3 w-72 h-72 bg-purple rounded-full filter blur-3xl opacity-20"></div>
-
+            <!-- Enhanced Decorative SVG Elements for Welcome Page -->
+            <div class="absolute top-0 left-0 w-80 h-80 opacity-70 animate-float">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/1.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute top-1/2 right-0 w-96 h-96 opacity-60 animate-float-delay-2">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 w-72 h-72 opacity-50 animate-float-delay-3">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute -bottom-50 right-1/5 w-80 h-80 opacity-60 animate-float">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/5.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute -bottom-50 left-1/5 w-64 h-64 opacity-50 animate-float-delay-1">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/6.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-72 h-72 opacity-60 animate-float-delay-2">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/3.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            
+            <!-- Floating Elements with Animation -->
+            <div class="absolute top-0 left-1/3 w-32 h-32 opacity-50 animate-float">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/15.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
+            <div class="absolute top-3/4 right-1/3 w-28 h-28 opacity-50 animate-float-delay-1">
+                <img src="{{ Storage::url('web/ASET VISUAL/SVG/16.svg') }}" alt="" class="w-full h-full object-contain">
+            </div>
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="text-center">
                     <h1 class="text-4xl sm:text-5xl font-bold text-navy mb-8 leading-tight">
@@ -94,5 +116,39 @@
         .text-sky { color: #4ECDC4; }
         .bg-purple { background-color: #9C6BFF; }
         .text-purple { color: #9C6BFF; } */
+        
+        /* SVG Animation Styles */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-rotate {
+            animation: rotate 20s linear infinite;
+        }
+        
+        .animate-float-delay-1 {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+        
+        .animate-float-delay-2 {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+        
+        .animate-float-delay-3 {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 3s;
+        }
     </style>
 </x-layouts.guest>

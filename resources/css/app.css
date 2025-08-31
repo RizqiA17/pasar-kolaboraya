@@ -83,3 +83,20 @@ select:focus[data-flux-control]
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Custom opacity utilities for SVG elements */
+/* .opacity-5 {
+    opacity: 0.05;
+}
+
+.opacity-10 {
+    opacity: 0.10;
+}
+
+.opacity-15 {
+    opacity: 0.15;
+}
+
+.opacity-20 {
+    opacity: 0.20;
+} */

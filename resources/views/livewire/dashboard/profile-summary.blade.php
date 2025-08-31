@@ -1,4 +1,7 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative overflow-hidden">
+    {{-- SVG Accent Elements --}}
+    <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
+    <x-svg-accent position="bottom-right" size="w-12 h-12" opacity="opacity-10" />
     <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-medium text-gray-900">Ringkasan Profil</h3>
         <flux:button href="{{ route(name: 'settings.profile-settings') }}" variant="subtle" size="sm">

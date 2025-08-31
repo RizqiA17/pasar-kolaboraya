@@ -10,6 +10,9 @@
 
 <body
     class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    {{-- Decorative SVG Elements --}}
+    <x-decorative-svgs-subtle />
+    
     <!-- Modern Header with Glassmorphism -->
     <flux:header
         class="relative border-b border-white/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl shadow-blue-500/10 flex! justify-between!">

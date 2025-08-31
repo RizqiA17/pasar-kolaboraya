@@ -3,7 +3,9 @@
 
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <a href="{{ route('connections') . '?tab=list' }}"
-                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800">
+                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800 relative">
+                {{-- SVG Accent for Connections --}}
+                <x-svg-accent position="top-right" size="w-16 h-16" opacity="opacity-5" />
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between">
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Koneksi</h3>
@@ -22,7 +24,9 @@
             </a>
 
             <a href="{{ route('collaborations') }}"
-                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800">
+                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800 relative">
+                {{-- SVG Accent for Collaborations --}}
+                <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-5" />
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between">
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Kolaborasi</h3>
@@ -41,7 +45,9 @@
             </a>
 
             <a href="{{ route('events') }}"
-                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800">
+                class="hover:scale-105 hover:shadow-lg transition-all ease-in-out duration-300 overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-zinc-800 relative">
+                {{-- SVG Accent for Events --}}
+                <x-svg-accent position="bottom-right" size="w-16 h-16" opacity="opacity-5" />
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between">
                         <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Aksi</h3>
@@ -68,7 +74,11 @@
             
             <div class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <div
-                    class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-800">
+                    class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-800 relative">
+                    {{-- SVG Accent for Activity Timeline --}}
+                    <x-svg-accent position="center-left" size="w-20 h-20" opacity="opacity-5" />
+                    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-5" />
+                    
                     <div class="border-b border-neutral-200 p-6 dark:border-neutral-700">
                         <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Aktivitas Terbaru</h3>
                     </div>

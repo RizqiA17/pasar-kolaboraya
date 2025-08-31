@@ -19,6 +19,9 @@
 </head>
 
 <body class="font-sans antialiased">
+    {{-- Decorative SVG Elements --}}
+    <x-decorative-svgs />
+    
     {{ $slot }}
 </body>
 
