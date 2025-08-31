@@ -177,7 +177,7 @@
                     Kolaborasi
                 </button>
                 
-                <!-- Events Tab -->
+                <!-- Aksi Tab -->
                 <button onclick="showTab('events')" 
                    class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                    data-tab="events">
@@ -186,7 +186,7 @@
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    Acara
+                    Aksi
                 </button>
                 
                 <!-- Connections Tab -->
@@ -488,11 +488,11 @@
             </div>
         </div>
 
-        <!-- Events Tab Content -->
+        <!-- Aksi Tab Content -->
         <div id="events-content" class="tab-content hidden">
             <div class="py-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Upcoming Events -->
+                    <!-- Aksi Mendatang -->
                     <div class="col-span-1 md:col-span-2 lg:col-span-2">
                         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                             <div class="p-6">
@@ -504,13 +504,13 @@
                                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                             </path>
                                         </svg>
-                                        <h3 class="text-lg font-semibold text-gray-900">Acara Mendatang</h3>
+                                        <h3 class="text-lg font-semibold text-gray-900">Aksi Mendatang</h3>
                                     </div>
                                 </div>
-                                <!-- Event List -->
+                                <!-- Daftar Aksi -->
                                 <div class="space-y-4">
                                     @if (auth()->user()->upcomingEvents()->count() == 0)
-                                        <p class="text-gray-500 text-center py-4">Belum ada acara yang akan datang</p>
+                                        <p class="text-gray-500 text-center py-4">Belum ada aksi yang akan datang</p>
                                     @else
                                         @foreach (auth()->user()->upcomingEvents()->get() as $event)
                                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -566,22 +566,22 @@
                         </div>
                     </div>
 
-                    <!-- Event Stats -->
+                    <!-- Statistik Aksi -->
                     <div class="col-span-1">
                         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                             <div class="p-6">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik Acara</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik Aksi</h3>
                                 <div class="space-y-4">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">Total Acara</span>
+                                        <span class="text-sm text-gray-500">Total Aksi</span>
                                         <span class="text-sm font-medium text-gray-900">{{ auth()->user()->events()->count() }}</span>
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">Acara Mendatang</span>
+                                        <span class="text-sm text-gray-500">Aksi Mendatang</span>
                                         <span class="text-sm font-medium text-gray-900">{{ auth()->user()->upcomingEvents()->count() }}</span>
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">Acara Selesai</span>
+                                        <span class="text-sm text-gray-500">Aksi Selesai</span>
                                         <span class="text-sm font-medium text-gray-900">{{ auth()->user()->pastEvents()->count() }}</span>
                                     </div>
                                 </div>

@@ -27,7 +27,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-900">Lokasi Event</p>
+                                <p class="text-sm font-medium text-gray-900">Lokasi Aksi</p>
                                 <p class="text-xs text-gray-600">{{ $event->location ?? 'Koordinat: ' . $event->latitude . ', ' . $event->longitude }}</p>
                             </div>
                         </div>

@@ -26,7 +26,7 @@
                 </p>
                 <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
                     @if($activity->type === 'event')
-                        Event baru ditambahkan
+                        Aksi baru ditambahkan
                     @else
                         Kolaborasi baru dibuat
                     @endif

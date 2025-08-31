@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <!-- Event List -->
+    <!-- Daftar Aksi -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($events as $event)
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 dark:border-gray-700 group">
@@ -148,7 +148,7 @@
                             {{ $event->description }}
                         </p>
 
-                        <!-- Event Details -->
+                        <!-- Detail Aksi -->
                         <div class="space-y-3 mb-6">
                             <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                                 <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
