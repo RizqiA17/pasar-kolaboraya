@@ -47,7 +47,7 @@
                     </div>
 
                     <!-- Profile Details -->
-                    <div class="flex-1 min-w-0 mt-18">
+                    <div class="flex-1 min-w-0 mt-18 w-full">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900">{{ auth()->user()->name }}</h1>
