@@ -91,7 +91,7 @@
                                 {{ $skill->name }}
                             </label>
 
-                            @if (in_array($skill->id, $selectedSkills))
+                            {{-- @if (in_array($skill->id, $selectedSkills))
                                 <div class="flex items-center space-x-2">
                                     <select wire:model="skillLevels.{{ $skill->id }}"
                                         class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
@@ -107,7 +107,7 @@
                                         <span class="text-xs text-gray-600">Utama</span>
                                     </label>
                                 </div>
-                            @endif
+                            @endif --}}
                         </div>
                     @endforeach
                 </div>
@@ -139,7 +139,7 @@
                                     class="flex-1 text-sm font-medium text-gray-700">
                                     {{ $interest->name }}
                                 </label>
-
+{{-- 
                                 @if (in_array($interest->id, $selectedInterests))
                                     <select wire:model="interestLevels.{{ $interest->id }}"
                                         class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
@@ -147,7 +147,7 @@
                                         <option value="medium">Sedang</option>
                                         <option value="high">Tinggi</option>
                                     </select>
-                                @endif
+                                @endif --}}
                             </div>
                         @endforeach
                     </div>
@@ -167,7 +167,7 @@
                                     {{ $contribution->name }}
                                 </label>
 
-                                @if (in_array($contribution->id, $selectedContributions))
+                                {{-- @if (in_array($contribution->id, $selectedContributions))
                                     <div class="flex flex-col space-y-2">
                                         <input type="text"
                                             wire:model="contributionDescriptions.{{ $contribution->id }}"
@@ -176,7 +176,7 @@
                                         <input type="date" wire:model="contributionDates.{{ $contribution->id }}"
                                             class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                                     </div>
-                                @endif
+                                @endif --}}
                             </div>
                         @endforeach
                     </div>
