@@ -40,7 +40,7 @@ class NewCollaboration extends Component
     {
         $this->validate([
             'title' => 'required|min:3|max:255',
-            'description' => 'required|min:10',
+            'description' => '',
             'friend_id' => 'required|exists:users,id',
         ]);
 

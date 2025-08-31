@@ -17,6 +17,11 @@ class CollaborationManager extends Component
 
     public $title = '';
     public $description = '';
+    public $category = '';
+    public $priority = 'medium';
+    public $deadline = '';
+    public $maxMembers = 5;
+    public $selectedTags = [];
     public $selectedUsers = [];
     public $searchQuery = '';
     public $collaborationSearchQuery = '';
@@ -36,7 +41,12 @@ class CollaborationManager extends Component
         'title.required' => 'Judul kolaborasi harus diisi',
         'title.min' => 'Judul kolaborasi minimal 3 karakter',
         'title.max' => 'Judul kolaborasi maksimal 255 karakter',
+        'description.required' => 'Deskripsi kolaborasi harus diisi',
+        'description.min' => 'Deskripsi minimal 10 karakter',
         'description.max' => 'Deskripsi maksimal 1000 karakter',
+        'deadline.after' => 'Deadline harus setelah hari ini',
+        'maxMembers.min' => 'Minimal anggota adalah 2',
+        'maxMembers.max' => 'Maksimal anggota adalah 20',
         'selectedUsers.min' => 'Pilih minimal 1 user untuk diundang'
     ];
 
@@ -143,8 +153,46 @@ class CollaborationManager extends Component
     {
         $this->title = '';
         $this->description = '';
+        $this->category = '';
+        $this->priority = 'medium';
+        $this->deadline = '';
+        $this->maxMembers = 5;
+        $this->selectedTags = [];
         $this->selectedUsers = [];
         $this->resetValidation();
+    }
+
+    /**
+     * Toggle a tag selection
+     */
+    public function toggleTag($tag)
+    {
+        if (in_array($tag, $this->selectedTags)) {
+            $this->selectedTags = array_diff($this->selectedTags, [$tag]);
+        } else {
+            $this->selectedTags[] = $tag;
+        }
+    }
+
+    /**
+     * Calculate form progress percentage
+     */
+    public function getFormProgress()
+    {
+        $fields = [
+            'title' => !empty($this->title),
+            'description' => !empty($this->description) && strlen($this->description) >= 10,
+            'category' => !empty($this->category),
+            'priority' => !empty($this->priority),
+            'deadline' => !empty($this->deadline),
+            'maxMembers' => !empty($this->maxMembers),
+            'selectedUsers' => count($this->selectedUsers) > 0
+        ];
+
+        $filledFields = count(array_filter($fields));
+        $totalFields = count($fields);
+        
+        return round(($filledFields / $totalFields) * 100);
     }
 
     public function createCollaboration()
@@ -161,7 +209,12 @@ class CollaborationManager extends Component
             $collaboration = $collaborationService->createCollaboration(
                 [
                     'title' => $this->title,
-                    'description' => $this->description
+                    'description' => $this->description,
+                    'category' => $this->category,
+                    'priority' => $this->priority,
+                    'deadline' => $this->deadline,
+                    'max_members' => $this->maxMembers,
+                    'tags' => $this->selectedTags
                 ],
                 Auth::user(),
                 $this->selectedUsers

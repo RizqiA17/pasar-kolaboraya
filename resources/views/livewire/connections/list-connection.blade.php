@@ -111,7 +111,7 @@
                         <div class="flex items-center gap-3 w-full">
                             <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                 <flux:button variant="primary" size="sm" icon="plus"
-                                    class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
+                                    class="cursor-pointer w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <span class="font-medium">Buat Kolaborasi</span>
                                     </div>

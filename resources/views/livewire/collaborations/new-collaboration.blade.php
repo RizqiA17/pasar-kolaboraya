@@ -1,47 +1,151 @@
-<div>
-    <h2 class="text-xl font-bold mb-3">Collaboration Manager</h2>
-
-    @if ($friend_id)
-        <div class="mb-3 p-2 bg-blue-100 rounded">
-            <p class="text-sm text-blue-800">Creating collaboration with: <strong>{{ $this->friendName }}</strong></p>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Buat Kolaborasi Baru</h2>
+            <p class="text-gray-600 text-lg">Mari ciptakan sesuatu yang luar biasa bersama-sama</p>
         </div>
-    @endif
 
-    {{-- Flash Messages --}}
-    @if (session()->has('success'))
-        <div class="mb-3 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-            {{ session('success') }}
+        <!-- Friend Info Card -->
+        @if ($friend_id)
+            <div class="mb-8 p-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg text-white">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold backdrop-blur-sm">
+                        {{ substr($this->friendName, 0, 2) }}
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold">Kolaborasi dengan</h3>
+                        <p class="text-blue-100 text-lg">{{ $this->friendName }}</p>
+                    </div>
+                    <div class="ml-auto">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- Flash Messages -->
+        @if (session()->has('success'))
+            <div class="mb-6 p-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg text-white">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-medium">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mb-6 p-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl shadow-lg text-white">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-medium">{{ session('error') }}</span>
+                </div>
+            </div>
+        @endif
+
+        <!-- Main Form -->
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+            <form wire:submit.prevent="create" class="space-y-6">
+                <!-- Title Field -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        Judul Kolaborasi
+                    </label>
+                    <input 
+                        type="text" 
+                        wire:model="title" 
+                        placeholder="Masukkan judul kolaborasi yang menarik dan inspiratif..."
+                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 text-lg @error('title') border-red-300 focus:ring-red-100 focus:border-red-500 @enderror"
+                    >
+                    @error('title')
+                        <div class="flex items-center gap-2 text-red-500 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Description Field -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        Deskripsi Kolaborasi
+                    </label>
+                    <textarea 
+                        wire:model="description" 
+                        placeholder="Jelaskan detail kolaborasi, tujuan, dan hasil yang ingin dicapai..."
+                        rows="5"
+                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all duration-200 text-lg resize-none @error('description') border-red-300 focus:ring-red-100 focus:border-red-500 @enderror"
+                    ></textarea>
+                    @error('description')
+                        <div class="flex items-center gap-2 text-red-500 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Form Actions -->
+                <div class="pt-6 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button 
+                            type="submit" 
+                            class="cursor-pointer flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Buat Kolaborasi
+                        </button>
+{{--                         
+                        <button 
+                            type="button" x-on:click="$flux.modal('confirm').close()"
+                            class="px-8 py-4 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-3"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Batal
+                        </button> --}}
+                    </div>
+                </div>
+            </form>
         </div>
-    @endif
 
-    @if (session()->has('error'))
-        <div class="mb-3 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {{ session('error') }}
+        <!-- Inspiration Section -->
+        <div class="mt-8 text-center">
+            <div class="inline-flex items-center gap-2 text-gray-500 text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Kolaborasi adalah kunci untuk menciptakan dampak yang lebih besar</span>
+            </div>
         </div>
-    @endif
-
-    {{-- Form Create / Update --}}
-
-    <div class="mb-3">
-        <label class="block text-sm font-medium mb-1">Title</label>
-        <input type="text" wire:model="title" placeholder="Judul"
-            class="border p-2 w-full @error('title') border-red-500 @enderror">
-        @error('title')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-        @enderror
     </div>
-
-    <div class="mb-3">
-        <label class="block text-sm font-medium mb-1">Description</label>
-        <textarea wire:model="description" placeholder="Deskripsi"
-            class="border p-2 w-full @error('description') border-red-500 @enderror" rows="3"></textarea>
-        @error('description')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <button wire:click="create" class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition-colors">
-        Create Collaboration
-    </button>
-
 </div>
