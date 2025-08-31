@@ -4,6 +4,9 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen antialiased">
+        {{-- Decorative SVG Elements --}}
+        <x-decorative-svgs />
+        
         <div class="relative grid min-h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
             <div class="relative hidden h-full flex-col p-10 text-white lg:flex">
                 <div class="absolute inset-0 bg-gradient-to-br from-[#1E365C] via-[#4ECDC4] to-[#FF6B6B]"></div>
@@ -26,16 +29,7 @@
                 </div>
             </div>
             <div class="w-full lg:p-8">
-                <div class="relative mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px]">
-                    <a href="{{ route('home') }}" class="z-20 flex items-center gap-3 font-semibold text-zinc-800 lg:hidden" wire:navigate>
-                        <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="Logo Pasar Kolaboraya" class="h-10 w-auto" />
-                    </a>
-                    <div class="rounded-2xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-xl">
-                        <div class="px-8 py-7">
-                            {{ $slot }}
-                        </div>
-                    </div>
-                </div>
+                {{ $slot }}
             </div>
         </div>
         @fluxScripts
