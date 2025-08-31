@@ -323,6 +323,10 @@
     </div>
 
     @fluxScripts
+    
+    {{-- Stack for additional styles and scripts --}}
+    @stack('styles')
+    @stack('scripts')
 </body>
 
 </html>

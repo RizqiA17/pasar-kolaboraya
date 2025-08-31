@@ -102,32 +102,8 @@
         </div>
     </div>
 
-    {{-- Map --}}
-    @if($event->latitude && $event->longitude)
-        <div class="mb-8 rounded-xl overflow-hidden shadow-md">
-            <div id="map" class="h-64"></div>
-        </div>
-        @push('scripts')
-            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-            <script>
-                document.addEventListener('livewire:initialized', () => {
-                    const map = L.map('map').setView([{{ $event->latitude }}, {{ $event->longitude }}], 15);
-                    
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '© OpenStreetMap contributors'
-                    }).addTo(map);
-
-                    L.marker([{{ $event->latitude }}, {{ $event->longitude }}])
-                        .addTo(map)
-                        .bindPopup("{{ $event->title }}");
-                });
-            </script>
-        @endpush
-        @push('styles')
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        @endpush
-    @endif
+    {{-- Map Section --}}
+    <x-event-map :event="$event" />
 
     {{-- Event Details --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
