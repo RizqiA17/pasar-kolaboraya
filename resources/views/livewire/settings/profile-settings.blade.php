@@ -701,106 +701,324 @@
                             </div>
                             <button type="button"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-amber-700 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 border border-amber-200 hover:border-amber-300">
-                                <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
                                 Tambah Baru
                             </button>
                         </div>
                     </div>
 
-                    {{-- Add New Contribution Form --}}
-                    <div class="bg-gray-50 border border-gray-200 p-6 rounded-xl mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-base font-medium text-gray-900">Tambah Kontribusi Baru</h4>
-                            <span
-                                class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">Optional</span>
+                    {{-- Enhanced Add New Contribution Form --}}
+                    <div class="p-6">
+                        <!-- Progress Indicator -->
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Progress Form</span>
+                                <span class="text-sm text-gray-500">
+                                    @php
+                                        $progress = 0;
+                                        if (!empty($newContribution['contribution_id'])) {
+                                            $progress += 33;
+                                        }
+                                        if (!empty($newContribution['description'])) {
+                                            $progress += 33;
+                                        }
+                                        if (!empty($newContribution['date'])) {
+                                            $progress += 34;
+                                        }
+                                    @endphp
+                                    {{ $progress }}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500 ease-out"
+                                    style="width: {{ $progress }}%"></div>
+                            </div>
                         </div>
-                        <div class="grid gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-900 mb-1">Jenis Kontribusi</label>
-                                <div class="relative">
-                                    <select wire:model="newContribution.contribution_id"
-                                        class="block w-full rounded-lg border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6">
-                                        <option value="">Pilih jenis kontribusi</option>
-                                        @foreach ($contributions as $contribution)
-                                            <option value="{{ $contribution->id }}">{{ $contribution->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
-                                        </svg>
+
+                        <div
+                            class="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-8 mb-8 hover:border-blue-300 transition-all duration-300">
+                            <div class="text-center mb-6">
+                                <div
+                                    class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg animate-pulse">
+                                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Tambah Kontribusi Baru</h4>
+                                <p class="text-gray-600">Pilih jenis kontribusi dan ceritakan pengalaman Anda</p>
+                            </div>
+
+                            <!-- Interactive Contribution Type Selection -->
+                            <div class="mb-8">
+                                <label class="block text-sm font-semibold text-gray-900 mb-4 text-center">Pilih Jenis
+                                    Kontribusi</label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    @foreach ($contributions as $contribution)
+                                        <div class="relative group">
+                                            <input type="radio" id="contribution_{{ $contribution->id }}"
+                                                wire:model="newContribution.contribution_id"
+                                                value="{{ $contribution->id }}" class="sr-only peer">
+                                            <label for="contribution_{{ $contribution->id }}"
+                                                class="flex flex-col items-center p-4 bg-white border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:border-gray-300 transition-all duration-200 transform hover:scale-105 peer-checked:scale-105 peer-checked:shadow-lg">
+                                                <div
+                                                    class="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center mb-3 peer-checked:bg-blue-100 transition-colors duration-200 group-hover:bg-gray-50">
+                                                    @switch($contribution->icon)
+                                                        @case('academic-cap')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('globe')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('users')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('user-group')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('presentation')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 12l2 2 4-4">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('chat')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('puzzle')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('handshake')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 12l2 2 4-4">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('network')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('light-bulb')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('star')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @case('document-text')
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                                                </path>
+                                                            </svg>
+                                                        @break
+
+                                                        @default
+                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                                                </path>
+                                                            </svg>
+                                                    @endswitch
+                                                </div>
+                                                <div class="text-center">
+                                                    <div
+                                                        class="text-sm font-medium text-gray-900 peer-checked:text-blue-900">
+                                                        {{ $contribution->name }}</div>
+                                                    <div class="text-xs text-gray-500 peer-checked:text-blue-600">
+                                                        {{ $contribution->category }}</div>
+                                                </div>
+                                                <!-- Checkmark for selected -->
+                                                <div
+                                                    class="absolute top-2 right-2 h-5 w-5 rounded-full bg-blue-500 flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
+                                                    <svg class="h-3 w-3 text-white" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Form Fields -->
+                            <div class="grid gap-6 max-w-2xl mx-auto">
+                                <!-- Description Field -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-900">
+                                        <span class="flex items-center">
+                                            <svg class="h-5 w-5 text-blue-500 mr-2" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                </path>
+                                            </svg>
+                                            Ceritakan Kontribusi Anda
+                                        </span>
+                                    </label>
+                                    <div class="relative">
+                                        <textarea wire:model="newContribution.description" rows="4"
+                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 resize-none"
+                                            placeholder="Jelaskan detail kontribusi Anda, dampak yang dihasilkan, dan pelajaran yang didapat..."></textarea>
+                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                                            {{ strlen($newContribution['description'] ?? '') }}/500
+                                        </div>
                                     </div>
+                                    @error('newContribution.description')
+                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                            </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-900 mb-1">Deskripsi</label>
-                                <div class="relative rounded-lg shadow-sm">
-                                    <textarea wire:model="newContribution.description" rows="3"
-                                        class="block w-full rounded-lg border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                        placeholder="Jelaskan kontribusi Anda..."></textarea>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-900 mb-1">Tanggal</label>
-                                <div class="relative rounded-lg shadow-sm">
-                                    <input type="date" wire:model="newContribution.date"
-                                        class="block w-full rounded-lg border-0 py-2.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                            </path>
-                                        </svg>
+                                <!-- Date Field -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-900">
+                                        <span class="flex items-center">
+                                            <svg class="h-5 w-5 text-blue-500 mr-2" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                            Kapan Kontribusi Dilakukan?
+                                        </span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="date" wire:model="newContribution.date"
+                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 focus:border-blue-600 transition-all duration-200">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        </div>
                                     </div>
+                                    @error('newContribution.date')
+                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                            </div>
 
-                            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                                <div class="flex items-center space-x-3">
-                                    <button wire:click="addContribution"
-                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 transform hover:scale-105">
-                                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                <!-- Action Buttons -->
+                                <div class="flex items-center justify-center space-x-4 pt-6">
+                                    <button wire:click="addContribution" wire:loading.attr="disabled"
+                                        class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                        <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <svg wire:loading class="mr-2 h-5 w-5 animate-spin" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
                                         </svg>
                                         Tambah Kontribusi
                                     </button>
 
-                                    <!-- Unsaved Changes Indicator -->
-                                    <div id="contributions-unsaved-indicator" class="hidden">
-                                        <span
-                                            class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                            <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
-                                                stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                                </path>
-                                            </svg>
-                                            Belum Disimpan
-                                        </span>
-                                    </div>
+                                    <button type="button"
+                                        wire:click="$set('newContribution', {contribution_id: '', description: '', date: ''})"
+                                        class="inline-flex items-center px-6 py-4 border border-gray-300 text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        Reset
+                                    </button>
                                 </div>
 
-                                <x-action-message class="mr-3" on="contribution-added">
-                                    <span
-                                        class="inline-flex items-center rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                        <svg class="mr-2 h-4 w-4 text-green-600" fill="none" stroke="currentColor"
+                                <!-- Success Message -->
+                                <x-action-message class="text-center" on="contribution-added">
+                                    <div
+                                        class="inline-flex items-center rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20 animate-bounce">
+                                        <svg class="mr-2 h-5 w-5 text-green-600" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7"></path>
                                         </svg>
-                                        {{ __('Added successfully!') }}
-                                    </span>
+                                        Kontribusi berhasil ditambahkan! 🎉
+                                    </div>
                                 </x-action-message>
                             </div>
                         </div>
@@ -1172,7 +1390,7 @@
                 // Reset form fields
                 const inputs = document.querySelectorAll(
                     'input[wire\\:model^="newContribution"], textarea[wire\\:model^="newContribution"]'
-                    );
+                );
                 inputs.forEach(input => {
                     originalFormData[input.name || input.id] = input.value;
                 });
