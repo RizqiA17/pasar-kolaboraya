@@ -19,6 +19,9 @@
 </head>
 
 <body class="font-sans antialiased">
+    {{-- Flash Messages --}}
+    <x-flash-message />
+    
     {{-- Decorative SVG Elements --}}
     <x-decorative-svgs />
     

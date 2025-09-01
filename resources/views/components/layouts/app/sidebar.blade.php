@@ -7,6 +7,9 @@
 
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
 
+    {{-- Flash Messages --}}
+    <x-flash-message />
+
     <flux:header sticky class="relative border-b border-white/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl shadow-blue-500/10">
         <!-- Background gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-pink-600/5"></div>

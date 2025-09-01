@@ -18,6 +18,21 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Test routes for error pages (remove in production)
+if (app()->environment('local', 'development')) {
+    Route::get('/test/404', function () {
+        abort(404, 'Test 404 page');
+    })->name('test.404');
+    
+    Route::get('/test/500', function () {
+        abort(500, 'Test 500 page');
+    })->name('test.500');
+    
+    Route::get('/test/csrf', function () {
+        abort(419, 'Test CSRF token mismatch');
+    })->name('test.csrf');
+}
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', VerifiedEmail::class])
     ->name('dashboard');
