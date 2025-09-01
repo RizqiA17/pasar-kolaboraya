@@ -553,11 +553,11 @@
                                                     <input type="checkbox" wire:model.live="selectedInterests"
                                                         value="{{ $interest->id }}"
                                                         class="peer h-5 w-5 text-purple-600 border-gray-300 rounded-lg focus:ring-purple-500 focus:ring-2 transition-all duration-200">
-                                                    <div class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
+                                                    {{-- <div class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
                                                         <svg class="h-3.5 w-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <span class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-purple-700 transition-colors duration-200">{{ $interest->name }}</span>
                                             </div>
@@ -643,7 +643,7 @@
                                                     <input type="checkbox" wire:model.live="selectedSkills"
                                                         value="{{ $skill->id }}"
                                                         class="peer h-5 w-5 text-green-600 border-gray-300 rounded-lg focus:ring-green-500 focus:ring-2">
-                                                    <div
+                                                    {{-- <div
                                                         class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
                                                         <svg class="h-3.5 w-3.5 text-green-600" fill="currentColor"
                                                             viewBox="0 0 20 20">
@@ -651,7 +651,7 @@
                                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                                                 clip-rule="evenodd"></path>
                                                         </svg>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <span
                                                     class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-green-700">{{ $skill->name }}</span>
@@ -960,14 +960,6 @@
                                     <div class="relative">
                                         <input type="date" wire:model="newContribution.date"
                                             class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 focus:border-blue-600 transition-all duration-200">
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-4">
-                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                </path>
-                                            </svg>
-                                        </div>
                                     </div>
                                     @error('newContribution.date')
                                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>

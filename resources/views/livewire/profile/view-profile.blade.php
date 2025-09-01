@@ -317,14 +317,16 @@
                                     @endif
                                 </div>
                                 <div class="flex flex-wrap gap-2">
-                                    @foreach ($profile?->skills as $skill)
+                                    @forelse ($profile?->skills ?? [] as $skill)
                                         @if ($skill && $skill->name)
                                             <span
                                                 class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 transition-all duration-200 hover:bg-[#379eff]/10">
                                                 {{ $skill->name }}
                                             </span>
                                         @endif
-                                    @endforeach
+                                    @empty
+                                        <span class="text-sm text-gray-500">Belum menambahkan keahlian</span>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
@@ -355,14 +357,16 @@
                                     @endif
                                 </div>
                                 <div class="flex flex-wrap gap-2">
-                                    @foreach ($profile?->interests as $interest)
+                                    @forelse ($profile?->interests ?? [] as $interest)
                                         @if ($interest && $interest->name)
                                             <span
                                                 class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 transition-all duration-200 hover:bg-emerald-100">
                                                 {{ $interest->name }}
                                             </span>
                                         @endif
-                                    @endforeach
+                                    @empty
+                                        <span class="text-sm text-gray-500">Belum menambahkan minat</span>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
@@ -397,45 +401,47 @@
                                 </div>
                                 <div class="flow-root">
                                     <ul role="list" class="-mb-8">
-                                        @if ($profile?->contributions)
-                                            @foreach ($profile->contributions as $contribution)
-                                                @if ($contribution && $contribution->name && $contribution->description && $contribution->date)
-                                                    <li>
-                                                        <div class="relative pb-8">
-                                                            @if (!$loop->last)
+                                        @forelse (($profile?->contributions ?? []) as $contribution)
+                                            @if ($contribution && $contribution->name && $contribution->description && $contribution->date)
+                                                <li>
+                                                    <div class="relative pb-8">
+                                                        @if (!$loop->last)
+                                                            <span
+                                                                class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-[#379eff]/20"
+                                                                aria-hidden="true"></span>
+                                                        @endif
+                                                        <div class="relative flex space-x-3">
+                                                            <div>
                                                                 <span
-                                                                    class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-[#379eff]/20"
-                                                                    aria-hidden="true"></span>
-                                                            @endif
-                                                            <div class="relative flex space-x-3">
-                                                                <div>
-                                                                    <span
-                                                                        class="h-8 w-8 rounded-full bg-[#379eff]/10 flex items-center justify-center ring-8 ring-white">
-                                                                        <svg class="h-4 w-4 text-[#379eff]" fill="none"
-                                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round" stroke-width="2"
-                                                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                                                                            </path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="min-w-0 flex-1">
-                                                                    <div class="text-sm text-gray-600">
-                                                                        {{ $contribution->name }}</div>
-                                                                    <div class="text-sm text-gray-600">
-                                                                        {{ $contribution->description }}
-                                                                    </div>
-                                                                </div>
+                                                                    class="h-8 w-8 rounded-full bg-[#379eff]/10 flex items-center justify-center ring-8 ring-white">
+                                                                    <svg class="h-4 w-4 text-[#379eff]" fill="none"
+                                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                            <div class="min-w-0 flex-1">
                                                                 <div class="text-sm text-gray-600">
-                                                                    {{ \Carbon\Carbon::parse($contribution->date)->format('d M Y') }}
+                                                                    {{ $contribution->name }}</div>
+                                                                <div class="text-sm text-gray-600">
+                                                                    {{ $contribution->description }}
                                                                 </div>
                                                             </div>
+                                                            <div class="text-sm text-gray-600">
+                                                                {{ \Carbon\Carbon::parse($contribution->date)->format('d M Y') }}
+                                                            </div>
                                                         </div>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        @endif
+                                                    </div>
+                                                </li>
+                                            @endif
+                                        @empty
+                                            <li>
+                                                <div class="text-sm text-gray-500">Belum ada kontribusi yang ditambahkan</div>
+                                            </li>
+                                        @endforelse
 
                                         @if ($profile?->vision)
                                             <li>
@@ -493,34 +499,35 @@
                                 </div>
                                 <!-- Collaboration List -->
                                 <div class="space-y-4">
-                                    @if ($user->collaborations->isEmpty())
+                                    @php
+                                        $acceptedCollabUsers = $user->collaborations; // returns CollaborationUser rows
+                                    @endphp
+                                    @if ($acceptedCollabUsers->isEmpty())
                                         <p class="text-gray-500 text-center py-4">Belum ada kolaborasi aktif</p>
                                     @else
-                                        @foreach ($user->collaborations as $collaboration)
-                                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                                <div class="flex items-center space-x-4">
-                                                    <div class="flex-shrink-0">
-                                                        <span
-                                                            class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                                                            <svg class="h-full w-full text-gray-300" fill="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path
-                                                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                            </svg>
+                                        @foreach ($acceptedCollabUsers as $collabUser)
+                                            @if($collabUser->collaboration)
+                                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                    <div class="flex items-center space-x-4">
+                                                        <div class="flex-shrink-0">
+                                                            <span class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                                                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900">{{ $collabUser->collaboration->title }}</p>
+                                                            <p class="text-sm text-gray-500">{{ $collabUser->collaboration->description }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                                            Aktif
                                                         </span>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">{{ $collaboration->title }}</p>
-                                                        <p class="text-sm text-gray-500">{{ $collaboration->description }}</p>
-                                                    </div>
                                                 </div>
-                                                <div class="flex items-center space-x-2">
-                                                    <span
-                                                        class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                                        Aktif
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            @endif
                                         @endforeach
                                     @endif
                                 </div>
@@ -578,55 +585,50 @@
                                 </div>
                                 <!-- Daftar Aksi -->
                                 <div class="space-y-4">
-                                    @if ($user->upcomingEvents()->count() == 0)
+                                    @php
+                                        $upcoming = $user->upcomingEvents()->get(); // returns EventUser records
+                                    @endphp
+                                    @if ($upcoming->isEmpty())
                                         <p class="text-gray-500 text-center py-4">Belum ada aksi yang akan datang</p>
                                     @else
-                                        @foreach ($user->upcomingEvents()->get() as $event)
-                                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                                <div class="flex items-center space-x-4">
-                                                    <div class="flex-shrink-0">
-                                                        @if($event->banner)
-                                                            <img src="{{ asset('storage/' . $event->banner) }}" 
-                                                                alt="{{ $event->title }}"
-                                                                class="h-12 w-12 object-cover rounded-lg">
-                                                        @else
-                                                            <span class="inline-block h-12 w-12 overflow-hidden rounded-lg bg-gray-100">
-                                                                <svg class="h-full w-full text-gray-300"
-                                                                    fill="currentColor" viewBox="0 0 24 24">
-                                                                    <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                </svg>
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">{{ $event->title }}</p>
-                                                        <p class="text-sm text-gray-500">{{ $event->description }}</p>
-                                                        <div class="flex items-center gap-2 mt-1">
-                                                            <p class="text-xs text-gray-400">
-                                                                {{ \Carbon\Carbon::parse($event->start_date)->format('d M Y H:i') }}
-                                                            </p>
-                                                            @if($event->location)
-                                                                <span class="text-xs text-gray-400">•</span>
-                                                                <p class="text-xs text-gray-400">
-                                                                    {{ $event->location }}
-                                                                </p>
+                                        @foreach ($upcoming as $eventUser)
+                                            @if($eventUser->event)
+                                                @php $event = $eventUser->event; @endphp
+                                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                    <div class="flex items-center space-x-4">
+                                                        <div class="flex-shrink-0">
+                                                            @if($event->banner)
+                                                                <img src="{{ asset('storage/' . $event->banner) }}" alt="{{ $event->title }}" class="h-12 w-12 object-cover rounded-lg">
+                                                            @else
+                                                                <span class="inline-block h-12 w-12 overflow-hidden rounded-lg bg-gray-100">
+                                                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                    </svg>
+                                                                </span>
                                                             @endif
                                                         </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900">{{ $event->title }}</p>
+                                                            <p class="text-sm text-gray-500">{{ $event->description }}</p>
+                                                            <div class="flex items-center gap-2 mt-1">
+                                                                <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($event->start_date)->format('d M Y H:i') }}</p>
+                                                                @if($event->location)
+                                                                    <span class="text-xs text-gray-400">•</span>
+                                                                    <p class="text-xs text-gray-400">{{ $event->location }}</p>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex flex-col items-end gap-2">
+                                                        @foreach($event->categories as $category)
+                                                            <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">{{ $category->name }}</span>
+                                                        @endforeach
+                                                        @if($event->max_participants)
+                                                            <span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">{{ $event->participants()->count() }}/{{ $event->max_participants }} Peserta</span>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                                <div class="flex flex-col items-end gap-2">
-                                                    @foreach($event->categories as $category)
-                                                        <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                                                            {{ $category->name }}
-                                                        </span>
-                                                    @endforeach
-                                                    @if($event->max_participants)
-                                                        <span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">
-                                                            {{ $event->participants()->count() }}/{{ $event->max_participants }} Peserta
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
+                                            @endif
                                         @endforeach
                                     @endif
                                 </div>
@@ -681,34 +683,36 @@
                                 </div>
                                 <!-- Connection List -->
                                 <div class="space-y-4">
-                                    @if ($user->connections->isEmpty())
+                                    @php
+                                        $accepted = $user->connections; // Connection rows where current user is requester and accepted
+                                    @endphp
+                                    @if ($accepted->isEmpty())
                                         <p class="text-gray-500 text-center py-4">Belum ada koneksi</p>
                                     @else
-                                        @foreach ($user->connections as $connection)
-                                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                                <div class="flex items-center space-x-4">
-                                                    <div class="flex-shrink-0">
-                                                        <span
-                                                            class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                                                            <svg class="h-full w-full text-gray-300" fill="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path
-                                                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                            </svg>
-                                                        </span>
+                                        @foreach ($accepted as $conn)
+                                            @php
+                                                $otherUser = $conn->receiver; 
+                                            @endphp
+                                            @if($otherUser)
+                                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                    <div class="flex items-center space-x-4">
+                                                        <div class="flex-shrink-0">
+                                                            <span class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                                                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900">{{ $otherUser->name }}</p>
+                                                            <p class="text-sm text-gray-500">{{ $otherUser->email }}</p>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">{{ $connection->name }}</p>
-                                                        <p class="text-sm text-gray-500">{{ $connection->email }}</p>
+                                                    <div class="flex items-center space-x-2">
+                                                        <a href="{{ route('profile.view', $otherUser->id) }}" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Lihat Profil</a>
                                                     </div>
                                                 </div>
-                                                <div class="flex items-center space-x-2">
-                                                    <a href="{{ route('profile.view', $connection->id) }}"
-                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                        Lihat Profil
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            @endif
                                         @endforeach
                                     @endif
                                 </div>
