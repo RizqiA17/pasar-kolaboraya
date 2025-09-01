@@ -455,10 +455,10 @@
                                                                     {{ $collabUser->collaboration->description }}</p>
                                                             </div>
                                                         </div>
-                                                        <div class="flex items-center space-x-2">
+                                                        {{-- <div class="flex items-center space-x-2">
                                                             <span
                                                                 class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Aktif</span>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -576,11 +576,11 @@
                                                                 <span
                                                                     class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">{{ $category->name }}</span>
                                                             @endforeach
-                                                            @if ($event->max_participants)
+                                                            {{-- @if ($event->max_participants)
                                                                 <span
                                                                     class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">{{ $event->participants()->count() }}/{{ $event->max_participants }}
                                                                     Peserta</span>
-                                                            @endif
+                                                            @endif --}}
                                                         </div>
                                                     </div>
                                                 @endif

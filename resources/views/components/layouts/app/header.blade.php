@@ -6,6 +6,7 @@
     @if ($title)
         <title>{{ $title }} - {{ config('app.name') }}</title>
     @endif
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body

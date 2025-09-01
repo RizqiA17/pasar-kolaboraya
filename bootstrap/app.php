@@ -14,11 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register custom middleware
         $middleware->alias([
             'refresh.csrf' => \App\Http\Middleware\RefreshCsrfToken::class,
+            'session.refresh' => \App\Http\Middleware\SessionRefresh::class,
+            'csrf.manager' => \App\Http\Middleware\CsrfTokenManager::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes
         $middleware->web(append: [
             \App\Http\Middleware\RefreshCsrfToken::class,
+            \App\Http\Middleware\SessionRefresh::class,
+            \App\Http\Middleware\CsrfTokenManager::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

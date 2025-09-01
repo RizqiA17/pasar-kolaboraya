@@ -18,22 +18,37 @@ class RefreshCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Only refresh token for authenticated users and non-GET requests
-        if (Auth::check() && !$request->isMethod('GET')) {
-            // Check if token is about to expire (older than 1 hour)
+        // Only refresh token for authenticated users
+        if (Auth::check()) {
+            // Check if token is about to expire (older than 30 minutes instead of 1 hour)
             $tokenAge = time() - Session::get('_token_created_at', 0);
             
-            if ($tokenAge > 3600) { // 1 hour in seconds
-                // Regenerate CSRF token
-                Session::regenerateToken();
+            if ($tokenAge > 1800) { // 30 minutes in seconds
+                try {
+                    // Regenerate CSRF token
+                    Session::regenerateToken();
+                    Session::put('_token_created_at', time());
+                    
+                    // Log token refresh for debugging
+                    Log::info('CSRF token refreshed', [
+                        'url' => $request->url(),
+                        'method' => $request->method(),
+                        'user_id' => Auth::id(),
+                        'old_token_age' => $tokenAge,
+                        'session_id' => Session::getId()
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to refresh CSRF token', [
+                        'error' => $e->getMessage(),
+                        'user_id' => Auth::id(),
+                        'session_id' => Session::getId()
+                    ]);
+                }
+            }
+            
+            // Ensure token creation time is set
+            if (!Session::has('_token_created_at')) {
                 Session::put('_token_created_at', time());
-                
-                // Log token refresh for debugging
-                Log::info('CSRF token refreshed', [
-                    'user_id' => Auth::id(),
-                    'old_token_age' => $tokenAge,
-                    'session_id' => Session::getId()
-                ]);
             }
         }
 

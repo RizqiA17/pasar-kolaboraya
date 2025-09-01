@@ -13,6 +13,7 @@ use App\Livewire\Connections\ConnectionsTab;
 use App\Livewire\Connections\ListConnection;
 use App\Livewire\Collaborations\NewCollaboration;
 use App\Livewire\Collaborations\ListCollaboration;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,6 +33,22 @@ if (app()->environment('local', 'development')) {
         abort(419, 'Test CSRF token mismatch');
     })->name('test.csrf');
 }
+
+// CSRF token refresh route
+Route::post('/csrf-token-refresh', function () {
+    if (Auth::check()) {
+        // Regenerate CSRF token
+        session()->regenerateToken();
+        session()->put('_token_created_at', time());
+        
+        return response()->json([
+            'token' => csrf_token(),
+            'timestamp' => time()
+        ]);
+    }
+    
+    return response()->json(['error' => 'Unauthenticated'], 401);
+})->middleware('auth')->name('csrf.token.refresh');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', VerifiedEmail::class])

@@ -45,8 +45,13 @@ class Handler extends ExceptionHandler
                 return redirect('/')->with('error', 'Session expired. You have been logged out.');
             }
 
+            // For dashboard and other authenticated pages, redirect to login
+            if ($request->is('dashboard*') || $request->is('profile*') || $request->is('settings*') || $request->is('connections*') || $request->is('collaborations*') || $request->is('events*')) {
+                return redirect()->route('login')->with('error', 'Session Anda telah berakhir. Silakan login kembali.');
+            }
+
             // For other requests, redirect back with error
-            return redirect()->back()->withInput()->with('error', 'Page expired. Please refresh and try again.');
+            return redirect()->back()->withInput()->with('error', 'Halaman telah expired. Silakan refresh dan coba lagi.');
         });
 
         // Handle authentication exceptions
