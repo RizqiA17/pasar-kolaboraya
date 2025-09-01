@@ -80,9 +80,9 @@
                 <flux:button icon="bell"
                     class="group relative m-auto text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 dark:border-slate-700/50">
                 </flux:button>
-                <div
+                {{-- <div
                     class="absolute top-0 right-0 w-3 h-3 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full animate-pulse">
-                </div>
+                </div> --}}
                 <flux:menu
                     class="mt-2 -translate-x-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
                     <div class="p-4 lg:w-128 w-full">
