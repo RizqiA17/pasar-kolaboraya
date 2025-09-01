@@ -80,6 +80,8 @@ class ResetPassword extends Component
             return;
         }
 
+        $status = 'Kata sandi berhasil diubah';
+
         Session::flash('status', __($status));
 
         $this->redirectRoute('login', navigate: true);
