@@ -7,11 +7,11 @@ use App\Models\User;
 use App\Models\Collaboration;
 use App\Models\Event;
 use App\Models\Connection;
-use App\Notifications\WelcomeEmail;
-use App\Notifications\EventNotification;
-use App\Notifications\NewConnectionNotification;
-use App\Notifications\CollaborationInvitation;
-use App\Notifications\CollaborationStatusUpdate;
+use App\Notifications\WelcomeEmailNotification;
+use App\Notifications\EventNotificationCustom;
+use App\Notifications\NewConnectionNotificationCustom;
+use App\Notifications\CollaborationInvitationCustom;
+use App\Notifications\CollaborationStatusUpdateCustom;
 
 class ExampleEmailController extends Controller
 {
@@ -27,7 +27,7 @@ class ExampleEmailController extends Controller
         }
         
         // Kirim welcome email
-        $user->notify(new WelcomeEmail($user));
+        $user->notify(new WelcomeEmailNotification($user));
         
         return response()->json([
             'message' => 'Welcome email berhasil dikirim ke ' . $user->email,
@@ -48,7 +48,7 @@ class ExampleEmailController extends Controller
         }
         
         // Kirim notifikasi event
-        $user->notify(new EventNotification($event, $user));
+        $user->notify(new EventNotificationCustom($event, $user));
         
         return response()->json([
             'message' => 'Event notification berhasil dikirim',
@@ -70,7 +70,7 @@ class ExampleEmailController extends Controller
         }
         
         // Kirim notifikasi koneksi baru
-        $user->notify(new NewConnectionNotification($connection, $user));
+        $user->notify(new NewConnectionNotificationCustom($connection, $user));
         
         return response()->json([
             'message' => 'Connection notification berhasil dikirim',
@@ -93,7 +93,7 @@ class ExampleEmailController extends Controller
         }
         
         // Kirim undangan kolaborasi
-        $invitee->notify(new CollaborationInvitation($collaboration, $inviter));
+        $invitee->notify(new CollaborationInvitationCustom($collaboration, $inviter));
         
         return response()->json([
             'message' => 'Collaboration invitation berhasil dikirim',
@@ -118,7 +118,7 @@ class ExampleEmailController extends Controller
         }
         
         // Kirim update status kolaborasi
-        $user->notify(new CollaborationStatusUpdate($collaboration, $user, $status, $action));
+        $user->notify(new CollaborationStatusUpdateCustom($collaboration, $user, $status, $action));
         
         return response()->json([
             'message' => 'Status update notification berhasil dikirim',

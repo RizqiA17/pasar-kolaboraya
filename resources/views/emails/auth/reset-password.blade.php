@@ -11,7 +11,7 @@
     
     <div class="highlight-box">
         <p style="margin: 0; font-weight: 600; color: #2d3748;">
-            🔒 Reset Password Akun
+            🔑 Klik tombol di bawah untuk membuat password baru yang aman!
         </p>
     </div>
     
@@ -21,7 +21,7 @@
     
     <div class="button-container">
         <a href="{{ $resetUrl }}" class="primary-button">
-            🔑 Reset Password Sekarang
+            🔒 Reset Password Sekarang
         </a>
     </div>
     
@@ -40,30 +40,7 @@
     </div>
     
     <div class="message">
-        <strong>Langkah setelah reset password:</strong>
-    </div>
-    
-    <div style="margin: 20px 0;">
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-            <span style="margin-right: 10px;">1️⃣</span>
-            <span>Klik link reset password di atas</span>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-            <span style="margin-right: 10px;">2️⃣</span>
-            <span>Masukkan password baru yang kuat</span>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-            <span style="margin-right: 10px;">3️⃣</span>
-            <span>Konfirmasi password baru</span>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-            <span style="margin-right: 10px;">4️⃣</span>
-            <span>Login dengan password baru</span>
-        </div>
-    </div>
-    
-    <div class="message">
-        <strong>Tips Password yang Aman:</strong>
+        <strong>Tips Keamanan Password:</strong>
     </div>
     
     <div class="info-grid">
@@ -77,7 +54,7 @@
         </div>
         <div class="info-item">
             <div class="info-label">Unik</div>
-            <div class="info-value">Tidak sama dengan akun lain</div>
+            <div class="info-value">Jangan gunakan di tempat lain</div>
         </div>
         <div class="info-item">
             <div class="info-label">Update</div>
@@ -85,15 +62,11 @@
         </div>
     </div>
     
-    <div class="warning">
-        ⚠️ <strong>Keamanan:</strong> Jika Anda tidak meminta reset password ini, segera ubah password akun Anda dan hubungi tim support kami.
-    </div>
-    
     <div class="message">
-        Setelah berhasil reset password, Anda dapat kembali mengakses semua fitur Pasar Kolaboraya dengan aman.
+        Jika Anda tidak meminta reset password, Anda dapat mengabaikan email ini dengan aman. Password Anda tidak akan berubah.
     </div>
     
     <div class="success">
-        🔐 <strong>Jaga selalu keamanan akun Anda untuk pengalaman kolaborasi yang aman dan nyaman!</strong>
+        🛡️ <strong>Jaga selalu keamanan akun Anda!</strong>
     </div>
 @endsection
