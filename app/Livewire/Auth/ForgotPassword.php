@@ -15,6 +15,7 @@ class ForgotPassword extends Component
         'email.required' => 'Email wajib diisi',
         'email.string' => 'Email harus berupa teks',
         'email.email' => 'Format email tidak valid',
+        'email.exists' => 'Email tidak ditemukan',
     ];
 
     /**
@@ -23,11 +24,11 @@ class ForgotPassword extends Component
     public function sendPasswordResetLink(): void
     {
         $this->validate([
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email', 'exists:users,email'],
         ]);
 
         Password::sendResetLink($this->only('email'));
 
-        session()->flash('status', __('A reset link will be sent if the account exists.'));
+        session()->flash('status', __('Tautan reset kata sandi telah dikirim ke email Anda'));
     }
 }

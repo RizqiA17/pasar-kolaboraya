@@ -135,7 +135,7 @@ class ProfileSetup extends Component
 
     public function skipStep()
     {
-        $this->nextStep();
+        $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
 
     public function saveProfile()

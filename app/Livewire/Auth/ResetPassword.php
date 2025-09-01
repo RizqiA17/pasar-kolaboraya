@@ -29,6 +29,7 @@ class ResetPassword extends Component
         'email.required' => 'Email wajib diisi',
         'email.string' => 'Email harus berupa teks',
         'email.email' => 'Format email tidak valid',
+        'email.exists' => 'Email tidak ditemukan',
         'password.required' => 'Kata sandi baru wajib diisi',
         'password.string' => 'Kata sandi harus berupa teks',
         'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
@@ -51,7 +52,7 @@ class ResetPassword extends Component
     {
         $this->validate([
             'token' => ['required'],
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email', 'exists:users,email'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 

@@ -216,7 +216,7 @@
                     <div class="col-span-1"></div>
                         <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto col-span-1"
                             icon:trailing="chevron-right">
-                            <p class="max-md:hidden">Selesai & Lanjutkan</p>
+                            <p class="max-md:hidden">Selesai</p>
                         </flux:button>
                 @endif
             </div>
