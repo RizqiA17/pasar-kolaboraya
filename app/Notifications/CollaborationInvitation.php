@@ -42,19 +42,15 @@ class CollaborationInvitation extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Undangan Kolaborasi: ' . $this->collaboration->title)
-            ->greeting('Halo ' . $notifiable->name . '!')
-            ->line($this->inviter->name . ' mengundang Anda untuk bergabung dalam kolaborasi.')
-            ->line('Judul: ' . $this->collaboration->title)
-            ->line('Deskripsi: ' . ($this->collaboration->description ?? 'Tidak ada deskripsi'))
-            ->action('Lihat Detail', url('/collaborations/' . $this->collaboration->id))
-            ->line('Silakan terima atau tolak undangan ini sesuai dengan keinginan Anda.')
-            ->salutation('Salam, ' . config('app.name'));
+            ->view('emails.collaboration.invitation', [
+                'notifiable' => $notifiable,
+                'collaboration' => $this->collaboration,
+                'inviter' => $this->inviter,
+            ]);
     }
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {

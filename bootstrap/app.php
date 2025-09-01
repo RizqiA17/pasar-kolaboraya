@@ -11,10 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
-        ]);
+        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+// Include email testing routes in development
+if (app()->environment('local', 'development')) {
+    require_once __DIR__.'/../routes/email-testing.php';
+}

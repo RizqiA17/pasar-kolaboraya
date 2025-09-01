@@ -18,7 +18,7 @@
         <!-- Main Quality Score -->
         <div class="mb-8">
             <div class="flex items-center gap-4 mb-4">
-                <div class="text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                <div class="text-5xl font-bold bg-gradient-to-r @if($connectionQuality >= 75) from-emerald-600 to-teal-600 @elseif($connectionQuality >= 50) from-yellow-600 to-orange-600 @else from-orange-600 to-red-600 @endif bg-clip-text text-transparent">
                     {{ $connectionQuality }}%
                 </div>
                 <div class="flex items-center">

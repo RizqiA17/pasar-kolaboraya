@@ -1,6 +1,5 @@
 <x-layouts.app :title="__('Dashboard')">
-    <div
-        class="">
+    <div class="">
         <!-- Hero Section with Floating SVGs -->
         <div class="relative overflow-hidden px-4 py-6">
             <div class="mx-auto max-w-7xl">
@@ -173,13 +172,9 @@
                     <!-- Right Sidebar - Single column, consistent spacing -->
                     <div class="space-y-6">
                         <!-- Connection Quality - Only show if connections exist -->
-                        @if (auth()->user()->connections()->count() > 0)
-                            <livewire:dashboard.connection-quality />
-                        @endif
+                        <livewire:dashboard.connection-quality />
                         <!-- Profile Summary - Only show if profile exists and has data -->
-                        @if (auth()->user()->profile && auth()->user()->profile->organization)
-                            <livewire:dashboard.profile-summary />
-                        @endif
+                        <livewire:dashboard.profile-summary />
                     </div>
                 </div>
 

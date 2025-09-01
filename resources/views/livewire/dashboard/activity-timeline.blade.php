@@ -103,14 +103,4 @@
             </div>
         </div>
     @endforelse
-    
-    <!-- Loading State -->
-    @if($activities->isEmpty() && !$isLoading)
-        <div class="text-center py-8">
-            <div class="inline-flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                <flux:icon.arrow-path class="w-4 h-4 mr-2 animate-spin" />
-                Memuat aktivitas...
-            </div>
-        </div>
-    @endif
 </div>

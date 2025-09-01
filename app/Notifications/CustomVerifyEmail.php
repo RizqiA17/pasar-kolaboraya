@@ -32,13 +32,10 @@ class CustomVerifyEmail extends VerifyEmail
     {
         return (new MailMessage)
             ->subject('Verifikasi Alamat Email - ' . config('app.name'))
-            ->greeting('Halo!')
-            ->line('Terima kasih telah mendaftar di ' . config('app.name') . '!')
-            ->line('Sebelum mulai, Anda perlu memverifikasi alamat email Anda dengan mengklik tombol di bawah ini.')
-            ->action('Verifikasi Alamat Email', $url)
-            ->line('Link verifikasi ini akan kadaluarsa dalam 60 menit.')
-            ->line('Jika Anda tidak membuat akun di ' . config('app.name') . ', Anda dapat mengabaikan email ini.')
-            ->salutation('Salam, ' . config('app.name'));
+            ->view('emails.verification.verify-email-new', [
+                'user' => auth()->user(),
+                'verificationUrl' => $url,
+            ]);
     }
 
     /**

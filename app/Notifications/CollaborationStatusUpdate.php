@@ -49,19 +49,17 @@ class CollaborationStatusUpdate extends Notification implements ShouldQueue
         
         return (new MailMessage)
             ->subject('Update Status Kolaborasi: ' . $this->collaboration->title)
-            ->greeting('Halo ' . $notifiable->name . '!')
-            ->line($this->user->name . ' telah ' . $actionText . ' undangan kolaborasi Anda.')
-            ->line('Judul: ' . $this->collaboration->title)
-            ->line('Status: ' . $statusText)
-            ->action('Lihat Kolaborasi', url('/collaborations/' . $this->collaboration->id))
-            ->line('Terima kasih telah menggunakan platform kami.')
-            ->salutation('Salam, ' . config('app.name'));
+            ->view('emails.collaboration.status-update', [
+                'notifiable' => $notifiable,
+                'collaboration' => $this->collaboration,
+                'user' => $this->user,
+                'status' => $this->status,
+                'action' => $this->action,
+            ]);
     }
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
