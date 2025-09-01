@@ -24,6 +24,16 @@ class ResetPassword extends Component
 
     public string $password_confirmation = '';
 
+    protected $messages = [
+        'token.required' => 'Token reset password wajib ada',
+        'email.required' => 'Email wajib diisi',
+        'email.string' => 'Email harus berupa teks',
+        'email.email' => 'Format email tidak valid',
+        'password.required' => 'Kata sandi baru wajib diisi',
+        'password.string' => 'Kata sandi harus berupa teks',
+        'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
+    ];
+
     /**
      * Mount the component.
      */

@@ -38,6 +38,24 @@ class CreateEvent extends Component
         'location' => 'nullable|string|max:500'
     ];
 
+    protected $messages = [
+        'title.required' => 'Judul event wajib diisi',
+        'title.min' => 'Judul event minimal 3 karakter',
+        'description.required' => 'Deskripsi event wajib diisi',
+        'start_date.required' => 'Tanggal mulai wajib diisi',
+        'start_date.date' => 'Format tanggal mulai tidak valid',
+        'start_date.after' => 'Tanggal mulai harus setelah hari ini',
+        'end_date.required' => 'Tanggal selesai wajib diisi',
+        'end_date.date' => 'Format tanggal selesai tidak valid',
+        'end_date.after' => 'Tanggal selesai harus setelah tanggal mulai',
+        'latitude.required' => 'Latitude wajib diisi',
+        'longitude.required' => 'Longitude wajib diisi',
+        'banner.image' => 'File harus berupa gambar',
+        'banner.max' => 'Ukuran gambar maksimal 2MB',
+        'location.string' => 'Lokasi harus berupa teks',
+        'location.max' => 'Lokasi maksimal 500 karakter',
+    ];
+
     public function updatedBanner()
     {
         $this->validate([

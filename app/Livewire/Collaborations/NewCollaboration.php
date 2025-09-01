@@ -22,6 +22,15 @@ class NewCollaboration extends Component
         $this->loadEvents();
     }
 
+    protected $messages = [
+        'title.required' => 'Judul kolaborasi wajib diisi',
+        'title.min' => 'Judul kolaborasi minimal 3 karakter',
+        'title.max' => 'Judul kolaborasi maksimal 255 karakter',
+        'description.string' => 'Deskripsi harus berupa teks',
+        'friend_id.required' => 'Teman kolaborasi wajib dipilih',
+        'friend_id.exists' => 'Teman kolaborasi tidak valid',
+    ];
+
     public function loadEvents()
     {
         $this->events = Event::all();

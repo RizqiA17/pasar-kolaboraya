@@ -21,6 +21,21 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
+    protected $messages = [
+        'name.required' => 'Nama wajib diisi',
+        'name.string' => 'Nama harus berupa teks',
+        'name.max' => 'Nama maksimal 255 karakter',
+        'email.required' => 'Email wajib diisi',
+        'email.string' => 'Email harus berupa teks',
+        'email.lowercase' => 'Email harus menggunakan huruf kecil',
+        'email.email' => 'Format email tidak valid',
+        'email.max' => 'Email maksimal 255 karakter',
+        'email.unique' => 'Email sudah terdaftar',
+        'password.required' => 'Kata sandi wajib diisi',
+        'password.string' => 'Kata sandi harus berupa teks',
+        'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
+    ];
+
     /**
      * Handle an incoming registration request.
      */

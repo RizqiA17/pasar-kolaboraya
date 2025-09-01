@@ -23,6 +23,11 @@ class TodoList extends Component
     public $sortBy = 'created_at';
     public $sortOrder = 'desc';
     
+    protected $messages = [
+        'newTitle.required' => 'Judul todo wajib diisi',
+        'newTitle.min' => 'Judul todo minimal 3 karakter',
+    ];
+
     public function mount(Collaboration $collaboration)
     {
         $this->collaboration = $collaboration;

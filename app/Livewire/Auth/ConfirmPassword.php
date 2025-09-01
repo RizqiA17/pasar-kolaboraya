@@ -12,6 +12,11 @@ class ConfirmPassword extends Component
 {
     public string $password = '';
 
+    protected $messages = [
+        'password.required' => 'Kata sandi wajib diisi',
+        'password.string' => 'Kata sandi harus berupa teks',
+    ];
+
     /**
      * Confirm the current user's password.
      */

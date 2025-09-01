@@ -23,6 +23,15 @@ class Login extends Component
 
     public bool $remember = false;
 
+    protected $messages = [
+        'email.required' => 'Email wajib diisi',
+        'auth.failed' => 'Email atau kata sandi tidak cocok',
+        'email.string' => 'Email harus berupa teks',
+        'email.email' => 'Format email tidak valid',
+        'password.required' => 'Kata sandi wajib diisi',
+        'password.string' => 'Kata sandi harus berupa teks',
+    ];
+
     /**
      * Handle an incoming authentication request.
      */

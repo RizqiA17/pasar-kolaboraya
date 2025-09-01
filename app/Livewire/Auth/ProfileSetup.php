@@ -48,6 +48,25 @@ class ProfileSetup extends Component
     public $contributionDescriptions = [];
     public $contributionDates = [];
 
+    protected $messages = [
+        'organization.max' => 'Nama organisasi maksimal 255 karakter',
+        'phone.max' => 'Nomor telepon maksimal 255 karakter',
+        'vision.max' => 'Visi maksimal 1000 karakter',
+        'socialMedia.linkedin.url' => 'URL LinkedIn tidak valid',
+        'socialMedia.twitter.url' => 'URL Twitter tidak valid',
+        'socialMedia.instagram.url' => 'URL Instagram tidak valid',
+        'socialMedia.facebook.url' => 'URL Facebook tidak valid',
+        'socialMedia.website.url' => 'URL website tidak valid',
+        'selectedSkills.array' => 'Skill harus dipilih',
+        'selectedInterests.array' => 'Minat harus dipilih',
+        'selectedContributions.array' => 'Kontribusi harus dipilih',
+        'contributionDescriptions.*.required' => 'Deskripsi kontribusi wajib diisi',
+        'contributionDescriptions.*.max' => 'Deskripsi kontribusi maksimal 500 karakter',
+        'contributionDates.*.required' => 'Tanggal kontribusi wajib diisi',
+        'contributionDates.*.date' => 'Format tanggal tidak valid',
+        'contributionDates.*.before_or_equal' => 'Tanggal tidak boleh lebih dari hari ini',
+    ];
+
     public function mount()
     {
         $this->loadExistingProfile();

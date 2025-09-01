@@ -11,6 +11,12 @@ class ForgotPassword extends Component
 {
     public string $email = '';
 
+    protected $messages = [
+        'email.required' => 'Email wajib diisi',
+        'email.string' => 'Email harus berupa teks',
+        'email.email' => 'Format email tidak valid',
+    ];
+
     /**
      * Send a password reset link to the provided email address.
      */

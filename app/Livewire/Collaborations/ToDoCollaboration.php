@@ -16,6 +16,14 @@ class ToDoCollaboration extends Component
 
     protected $listeners = ['refreshTodos' => 'loadTodos'];
 
+    protected $messages = [
+        'newTitle.required' => 'Judul todo wajib diisi',
+        'newTitle.string' => 'Judul todo harus berupa teks',
+        'newTitle.max' => 'Judul todo maksimal 255 karakter',
+        'comment.required' => 'Komentar wajib diisi',
+        'comment.string' => 'Komentar harus berupa teks',
+    ];
+
     public function mount()
     {
         $this->loadTodos();
