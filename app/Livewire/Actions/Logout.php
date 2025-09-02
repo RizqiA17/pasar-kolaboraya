@@ -27,8 +27,8 @@ class Logout
             Auth::guard('web')->logout();
             
             // Invalidate and regenerate session to prevent CSRF issues
-            Session::invalidate();
-            Session::regenerateToken();
+            // Session::invalidate();
+            // Session::regenerateToken();
             
             // Clear any cached user data
             if (function_exists('cache')) {
