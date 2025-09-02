@@ -28,11 +28,20 @@ class RequestedConnection extends Component
     {
         $request = Connection::where('status', 'pending')
             ->where('receiver_id', Auth::id())
+            ->with(['requester.profile'])
             ->get();
         $this->requests = $request->map(function ($item) {
             return [
                 'id' => $item->id,
-                'sender' => $item->requester,
+                'sender' => [
+                    'id' => $item->requester->id,
+                    'name' => $item->requester->name,
+                    'email' => $item->requester->email,
+                    'created_at' => $item->requester->created_at,
+                    'profile_photo' => $item->requester->profile?->profile_photo,
+                    'organization' => $item->requester->profile?->organization,
+                    'initials' => $item->requester->initials(),
+                ],
                 'receiver' => $item->receiver->id,
             ];
         });

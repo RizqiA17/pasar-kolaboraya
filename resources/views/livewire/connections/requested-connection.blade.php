@@ -29,10 +29,15 @@
                 <div class="p-3 flex items-center gap-3">
                     <!-- Avatar -->
                     <div class="flex-shrink-0">
-                        <div
-                            class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium shadow-inner">
-                            {{ substr($req['sender']['name'], 0, 2) }}
-                        </div>
+                        @if ($req['sender']['profile_photo'])
+                            <img src="{{ asset('storage/' . $req['sender']['profile_photo']) }}" 
+                                 alt="{{ $req['sender']['name'] }}"
+                                 class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700 shadow-sm">
+                        @else
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium shadow-inner border-2 border-gray-200 dark:border-gray-700">
+                                {{ $req['sender']['initials'] }}
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Konten -->
@@ -40,6 +45,11 @@
                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                             {{ $req['sender']['name'] }}
                         </p>
+                        @if ($req['sender']['organization'])
+                            <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                {{ $req['sender']['organization'] }}
+                            </p>
+                        @endif
                         <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                             <span class="flex">Ingin terhubung dengan Anda <p class="max-md:hidden">&nbsp; Pada {{ Carbon\Carbon::parse($req['sender']['created_at'])->diffForHumans() }}</p>
                             </span>
@@ -64,15 +74,16 @@
                 </div>
             </div>
         @empty
-            <div class="flex flex-col items-center justify-center py-6 px-4 text-center">
-                <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3">
-                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col items-center justify-center py-8 px-4 text-center">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
                         </path>
                     </svg>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Tidak ada permintaan pertemanan</p>
+                <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">Tidak ada permintaan pertemanan</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Semua permintaan koneksi akan muncul di sini</p>
             </div>
         @endforelse
     </div>
