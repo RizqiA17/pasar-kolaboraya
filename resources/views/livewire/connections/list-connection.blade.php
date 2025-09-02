@@ -42,7 +42,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3 w-full">
+                        <div class="flex items-center flex-wrap gap-3 w-full">
                             <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                 <flux:button variant="primary" size="sm" icon="plus"
                                     class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
@@ -53,7 +53,7 @@
                             </flux:modal.trigger>
 
                             <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
@@ -118,7 +118,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3 w-full">
+                        <div class="flex items-center flex-wrap gap-3 w-full">
                             <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                 <flux:button variant="primary" size="sm" icon="plus"
                                     class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
@@ -129,7 +129,7 @@
                             </flux:modal.trigger>
 
                             <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
