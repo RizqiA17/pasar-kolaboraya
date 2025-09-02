@@ -20,7 +20,7 @@
     @endif
 
     <div
-        class="overflow-y-auto max-h-[280px] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+        class="overflow-y-auto @if($isContent) h-full @else max-h-[280px] @endif scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
         @forelse ($requests as $req)
             <div class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150 relative">
                 <!-- SVG Accent for Request Item -->

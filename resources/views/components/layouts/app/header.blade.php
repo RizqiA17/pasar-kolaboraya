@@ -89,9 +89,6 @@
                     <div class="p-4 lg:w-128 w-full">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Notifikasi</h3>
-                            <span
-                                class="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-full">3
-                                baru</span>
                         </div>
                         {{-- Panggil komponen Livewire di dalam dropdown --}}
                         <livewire:connections.requested-connection wire:key="requested-connection" />
