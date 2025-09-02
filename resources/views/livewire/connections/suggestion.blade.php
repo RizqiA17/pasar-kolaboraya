@@ -28,9 +28,13 @@
                                 class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
                                 <!-- SVG Accent for User Card -->
                                 <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
-                                
+                                {{-- {{dd($user->profile)}} --}}
                                 {{-- Cover Image --}}
-                                <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                                @if($user->profile?->banner)
+                                    <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
+                                @else
+                                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                                @endif
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
@@ -96,7 +100,11 @@
                                 <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
                                 
                                 {{-- Cover Image --}}
-                                <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
+                                @if($user->profile?->banner)
+                                    <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
+                                @else
+                                    <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
+                                @endif
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
@@ -168,7 +176,11 @@
                             <div
                                 class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
                                 {{-- Cover Image --}}
-                                <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                                @if($user->profile?->banner)
+                                    <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
+                                @else
+                                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                                @endif
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
