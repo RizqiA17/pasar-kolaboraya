@@ -40,7 +40,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
                                     </div>
 
                                     {{-- Info --}}
@@ -110,7 +110,7 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 ring-white" />
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
                                     </div>
 
                                     {{-- Info --}}
