@@ -7,60 +7,67 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         @if (!empty($searchResults))
             @forelse ($searchResults as $friend)
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200 relative"
+                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
                     <!-- SVG Accent for Connection Card -->
-                    <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
+                    <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                    
+                    {{-- Cover Image --}}
+                    <x-ui.banner :user="App\Models\User::find($friend['id'])" height="h-24" class="rounded-t-xl" />
 
-                    <div class="flex flex-col items-center text-center">
-                        <div class="mb-4">
-                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="2xl" />
+                    {{-- Profile Content --}}
+                    <div class="p-4">
+                        {{-- Avatar --}}
+                        <div class="relative -mt-12 mb-3">
+                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white" />
                         </div>
 
-                        <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
-                            wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
-                            {{ $friend['name'] }}
-                        </h3>
+                        <div class="flex flex-col items-center text-center">
 
-                        <a href="{{ route('profile.view', $friend['id']) }}"
-                            class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
-                            Lihat Profile Lengkap
-                        </a>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
+                                wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
+                                {{ $friend['name'] }}
+                            </h3>
 
-                        <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['connections_count'] }}</div>
-                                <div>Koneksi</div>
+                            <a href="{{ route('profile.view', $friend['id']) }}"
+                                class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                                Lihat Profile Lengkap
+                            </a>
+
+                            <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['connections_count'] }}</div>
+                                    <div>Koneksi</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['collaborations_count'] }}</div>
+                                    <div>Kolaborasi</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['events_count'] }}</div>
+                                    <div>Organisasi</div>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['collaborations_count'] }}</div>
-                                <div>Kolaborasi</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['events_count'] }}</div>
-                                <div>Organisasi</div>
-                            </div>
-                        </div>
 
-                        <div class="flex items-center flex-wrap gap-3 w-full">
-                            <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
-                                <flux:button variant="primary" size="sm" icon="plus"
-                                    class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
-                                    <div class="flex items-center justify-center gap-1.5">
-                                        <span class="font-medium">Buat Kolaborasi</span>
-                                    </div>
-                                </flux:button>
-                            </flux:modal.trigger>
+                            <div class="flex items-center flex-wrap gap-3 w-full">
+                                <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
+                                    <flux:button variant="primary" size="sm" icon="plus"
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
+                                        <div class="flex items-center justify-center gap-1.5">
+                                            <span class="font-medium">Buat Kolaborasi</span>
+                                        </div>
+                                    </flux:button>
+                                </flux:modal.trigger>
 
-                            <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Putuskan
-                            </button>
-                        </div>
+                                <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
+                                    class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Putuskan
+                                </button>
+                            </div>
                     </div>
 
                     <flux:modal name="create-collaboration-{{ $friend['id'] }}" variant="flyout">
@@ -84,58 +91,66 @@
             @endforelse
         @else
             @forelse ($friends as $friend)
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:border-blue-100 hover:shadow-sm transition-all duration-200 relative"
+                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
                     <!-- SVG Accent for Connection Card -->
-                    <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
+                    <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                    
+                    {{-- Cover Image --}}
+                    <x-ui.banner :user="App\Models\User::find($friend['id'])" height="h-24" class="rounded-t-xl" />
 
-                    <div class="flex flex-col items-center text-center">
-                        <div class="mb-4">
-                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="2xl" />
+                    {{-- Profile Content --}}
+                    <div class="p-4">
+                        {{-- Avatar --}}
+                        <div class="relative -mt-12 mb-3">
+                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white" />
                         </div>
 
-                        <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
-                            wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
-                            {{ $friend['name'] }}</h3>
+                        <div class="flex flex-col items-center text-center">
 
-                        <a href="{{ route('profile.view', $friend['id']) }}"
-                            class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
-                            Lihat Profile Lengkap
-                        </a>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
+                                wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
+                                {{ $friend['name'] }}</h3>
 
-                        <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['connections_count'] }}</div>
-                                <div>Koneksi</div>
+                            <a href="{{ route('profile.view', $friend['id']) }}"
+                                class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                                Lihat Profile Lengkap
+                            </a>
+
+                            <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['connections_count'] }}</div>
+                                    <div>Koneksi</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['collaborations_count'] }}</div>
+                                    <div>Kolaborasi</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-semibold">{{ $friend['events_count'] }}</div>
+                                    <div>Organisasi</div>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['collaborations_count'] }}</div>
-                                <div>Kolaborasi</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="font-semibold">{{ $friend['events_count'] }}</div>
-                                <div>Organisasi</div>
-                            </div>
-                        </div>
 
-                        <div class="flex items-center flex-wrap gap-3 w-full">
-                            <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
-                                <flux:button variant="primary" size="sm" icon="plus"
-                                    class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
-                                    <div class="flex items-center justify-center gap-1.5">
-                                        <span class="font-medium">Buat Kolaborasi</span>
-                                    </div>
-                                </flux:button>
-                            </flux:modal.trigger>
+                            <div class="flex items-center flex-wrap gap-3 w-full">
+                                <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
+                                    <flux:button variant="primary" size="sm" icon="plus"
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
+                                        <div class="flex items-center justify-center gap-1.5">
+                                            <span class="font-medium">Buat Kolaborasi</span>
+                                        </div>
+                                    </flux:button>
+                                </flux:modal.trigger>
 
-                            <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Putuskan
-                            </button>
+                                <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
+                                    class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Putuskan
+                                </button>
+                            </div>
                         </div>
                     </div>
 

@@ -174,22 +174,18 @@
 
                         @forelse($interestRecommendations as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                <!-- SVG Accent for User Card -->
+                                <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
+                                
                                 {{-- Cover Image --}}
-                                @if($user->profile?->banner)
-                                    <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
-                                @else
-                                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
-                                @endif
+                                <x-ui.banner :user="$user" height="h-24" class="rounded-t-xl" />
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <div
-                                            class="w-20 h-20 mx-auto rounded-full ring-4 ring-white bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xl font-semibold shadow-md">
-                                            {{ substr($user->name, 0, 2) }}
-                                        </div>
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
                                     </div>
 
                                     {{-- Info --}}

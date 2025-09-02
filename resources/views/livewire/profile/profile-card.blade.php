@@ -31,7 +31,7 @@
                     
                     <!-- Avatar -->
                     <div class="relative -mt-16 mb-4">
-                        <x-ui.avatar :user="$selectedUser" size="2xl" class="ring-4 ring-white" />
+                        <x-ui.avatar :user="$selectedUser" size="2xl" class="ring-4 rounded-full ring-white" />
                     </div>
 
                     <!-- User Info -->
