@@ -164,7 +164,7 @@
                 </div>
 
                 <!-- Page content -->
-                <main class="flex-1 p-4 sm:p-6">
+                <main class="flex-1 p-4 sm:p-6 max-lg:mb-24">
                     {{ $slot }}
                 </main>
             </div>
