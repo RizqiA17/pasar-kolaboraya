@@ -12,6 +12,7 @@ use App\Models\Skill;
 use App\Models\Contribution;
 use App\Models\EventCategory;
 use App\Models\SystemSetting;
+use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -130,7 +131,7 @@ class AdminController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'email', new UniqueEmailForActiveUsers($user->id)],
             'role' => 'required|in:user,admin,super_admin',
         ]);
 
