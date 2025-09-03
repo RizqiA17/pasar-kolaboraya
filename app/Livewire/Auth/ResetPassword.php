@@ -11,6 +11,7 @@ use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use App\Models\SystemSetting;
 
 #[Layout('components.layouts.auth', ['title' => 'Reset Kata Sandi'])]
 class ResetPassword extends Component
@@ -50,6 +51,12 @@ class ResetPassword extends Component
      */
     public function resetPassword(): void
     {
+        // Check if login is enabled
+        if (!SystemSetting::isLoginEnabled()) {
+            $this->addError('email', 'Sistem sedang dalam mode maintenance. Reset password tidak tersedia.');
+            return;
+        }
+
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email', 'exists:users,email'],

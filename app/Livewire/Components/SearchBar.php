@@ -4,6 +4,7 @@ namespace App\Livewire\Components;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use App\Models\SystemSetting;
 
 class SearchBar extends Component
 {
@@ -123,9 +124,16 @@ class SearchBar extends Component
     {
         $models = [
             'User' => [\App\Models\User::class, ['name', 'email']],
-            'Event' => [\App\Models\Event::class, ['title']],
-            'Collaboration' => [\App\Models\Collaboration::class, ['title']],
         ];
+
+        // Only add models if their features are enabled
+        if (SystemSetting::isUserActionsEnabled() || auth()->user()->isSuperAdmin()) {
+            $models['Event'] = [\App\Models\Event::class, ['title']];
+        }
+
+        if (SystemSetting::isCollaborationsEnabled() || auth()->user()->isSuperAdmin()) {
+            $models['Collaboration'] = [\App\Models\Collaboration::class, ['title']];
+        }
 
         $results = [];
 

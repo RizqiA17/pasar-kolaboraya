@@ -102,16 +102,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // Collaborations management
     Route::get('/collaborations', [App\Http\Controllers\AdminController::class, 'collaborations'])->name('collaborations');
     Route::get('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'showCollaboration'])->name('collaborations.show');
-    Route::delete('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'deleteCollaboration'])->name('collaborations.delete');
+    Route::delete('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'deleteCollaboration'])->middleware('check.form.feature.access:collaborations')->name('collaborations.delete');
     
     // Events management
     Route::get('/events', [App\Http\Controllers\AdminController::class, 'events'])->name('events');
     Route::get('/events/{event}', [App\Http\Controllers\AdminController::class, 'showEvent'])->name('events.show');
-    Route::delete('/events/{event}', [App\Http\Controllers\AdminController::class, 'deleteEvent'])->name('events.delete');
+    Route::delete('/events/{event}', [App\Http\Controllers\AdminController::class, 'deleteEvent'])->middleware('check.form.feature.access:user_actions')->name('events.delete');
     
     // Connections management
     Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
-    Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->name('connections.delete');
+    Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->middleware('check.form.feature.access:connections')->name('connections.delete');
     
     // Master data management
     Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');

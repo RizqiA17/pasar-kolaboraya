@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
+use App\Models\SystemSetting;
 
 class Password extends Component
 {
@@ -21,6 +22,12 @@ class Password extends Component
      */
     public function updatePassword(): void
     {
+        // Check if login is enabled
+        if (!SystemSetting::isLoginEnabled()) {
+            $this->addError('current_password', 'Sistem sedang dalam mode maintenance. Perubahan password tidak tersedia.');
+            return;
+        }
+
         try {
             $validated = $this->validate([
                 'current_password' => ['required', 'string', 'current_password'],

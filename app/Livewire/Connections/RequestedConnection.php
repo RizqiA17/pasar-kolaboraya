@@ -4,6 +4,7 @@ namespace App\Livewire\Connections;
 
 use Livewire\Component;
 use App\Models\Connection;
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,6 +50,12 @@ class RequestedConnection extends Component
 
     public function accept($id)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         Connection::where('id', $id)->update(['status' => 'accepted']);
 
         $this->loadRequests();
@@ -59,6 +66,12 @@ class RequestedConnection extends Component
 
     public function reject($id)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         Connection::where('id', $id)->delete();
         $this->loadRequests();
     }
