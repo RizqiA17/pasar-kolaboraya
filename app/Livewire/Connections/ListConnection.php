@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\Connection;
 use App\Models\Collaboration;
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Auth;
 
 class ListConnection extends Component
@@ -75,6 +76,12 @@ class ListConnection extends Component
 
     public function disconnect($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where(function ($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                 ->where('receiver_id', $userId);

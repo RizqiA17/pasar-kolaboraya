@@ -4,6 +4,7 @@ namespace App\Livewire\Profile;
 
 use App\Models\User;
 use App\Models\Connection;
+use App\Models\SystemSetting;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,12 @@ class ViewProfile extends Component
 
     public function connect($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         Connection::create([
             'requester_id' => Auth::id(),
             'receiver_id' => $userId,
@@ -38,6 +45,12 @@ class ViewProfile extends Component
 
     public function acceptConnection($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
@@ -52,6 +65,12 @@ class ViewProfile extends Component
 
     public function rejectConnection($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
@@ -66,6 +85,12 @@ class ViewProfile extends Component
 
     public function disconnect($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where(function ($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                 ->where('receiver_id', $userId);
@@ -84,6 +109,12 @@ class ViewProfile extends Component
 
     public function startCollaboration($userId)
     {
+        // Check if collaborations are enabled
+        if (!SystemSetting::isCollaborationsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         return redirect()->route('collaborations.new-collaboration', ['id' => $userId]);
     }
 

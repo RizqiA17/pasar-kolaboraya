@@ -1,3 +1,8 @@
+@php
+    $connectionsEnabled = \App\Models\SystemSetting::isConnectionsEnabled();
+    $isSuperAdmin = auth()->user()->isSuperAdmin();
+@endphp
+
 <div wire:poll.3s="loadRequests" wire:poll.stop="!pollingState" class="w-full relative">
     <!-- SVG Accent Elements -->
     <x-svg-accent position="top-left" size="w-12 h-12" opacity="opacity-10" />
@@ -58,18 +63,26 @@
 
                     <!-- Aksi -->
                     <div class="flex items-center gap-1.5">
-                        <flux:button wire:click="accept({{ $req['id'] }})"
-                            class="p-1.5 hover:bg-green-50 text-green-600! rounded-full transition-colors duration-150 hover:shadow-sm"
-                            title="Terima"
-                            icon:trailing="check">
-                            Terima
-                        </flux:button>
-                        <flux:button wire:click="reject({{ $req['id'] }})"
-                            class="p-1.5 hover:bg-red-50 text-red-600! rounded-full transition-colors duration-150 hover:shadow-sm"
-                            title="Tolak"
-                            icon:trailing="x-mark">
-                            Tolak
-                        </flux:button>
+                        @if($connectionsEnabled || $isSuperAdmin)
+                            <flux:button wire:click="accept({{ $req['id'] }})"
+                                class="p-1.5 hover:bg-green-50 text-green-600! rounded-full transition-colors duration-150 hover:shadow-sm"
+                                title="Terima"
+                                icon:trailing="check">
+                                Terima
+                            </flux:button>
+                            <flux:button wire:click="reject({{ $req['id'] }})"
+                                class="p-1.5 hover:bg-red-50 text-red-600! rounded-full transition-colors duration-150 hover:shadow-sm"
+                                title="Tolak"
+                                icon:trailing="x-mark">
+                                Tolak
+                            </flux:button>
+                        @else
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs text-gray-400 px-2 py-1 bg-gray-100 rounded-full">
+                                    Fitur Dinonaktifkan
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

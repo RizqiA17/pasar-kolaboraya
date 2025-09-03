@@ -1,6 +1,9 @@
 @props(['userId', 'size' => 'default'])
 
 @php
+    $connectionsEnabled = \App\Models\SystemSetting::isConnectionsEnabled();
+    $collaborationsEnabled = \App\Models\SystemSetting::isCollaborationsEnabled();
+    $isSuperAdmin = auth()->user()->isSuperAdmin();
     $connectionStatus = auth()->user()->getConnectionStatus($userId);
     
     $sizeClasses = [
@@ -16,7 +19,11 @@
     {{-- Decorative SVG Elements --}}
     <x-decorative-svgs-subtle />
     
-    @if($connectionStatus === 'not_connected')
+    @if(!$connectionsEnabled && !$isSuperAdmin)
+        <span class="{{ $buttonClasses }} font-medium text-gray-400 cursor-not-allowed">
+            Fitur Dinonaktifkan
+        </span>
+    @elseif($connectionStatus === 'not_connected')
         <button wire:click="connect({{ $userId }})" onclick="updateButtonAfterConnect({{ $userId }})"
             class="{{ $buttonClasses }} font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
             {{ $size === 'small' ? 'Hubungkan' : 'Tambah Koneksi' }}
@@ -38,10 +45,16 @@
         </div>
     @elseif($connectionStatus === 'connected')
         <div class="flex gap-2">
-            <button wire:click="startCollaboration({{ $userId }})"
-                class="{{ $buttonClasses }} font-medium text-green-600 hover:bg-green-50 rounded-lg transition-colors">
-                Kolaborasi
-            </button>
+            @if($collaborationsEnabled || $isSuperAdmin)
+                <button wire:click="startCollaboration({{ $userId }})"
+                    class="{{ $buttonClasses }} font-medium text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+                    Kolaborasi
+                </button>
+            @else
+                <span class="{{ $buttonClasses }} font-medium text-gray-400 cursor-not-allowed">
+                    Kolaborasi Dinonaktifkan
+                </span>
+            @endif
             <button wire:click="disconnect({{ $userId }})" onclick="updateButtonAfterDisconnect({{ $userId }})"
                 class="{{ $buttonClasses }} font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                 Putuskan

@@ -76,6 +76,12 @@ class ProfileCard extends Component
 
     public function rejectConnection($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
@@ -90,12 +96,24 @@ class ProfileCard extends Component
 
     public function startCollaboration($userId)
     {
+        // Check if collaborations are enabled
+        if (!SystemSetting::isCollaborationsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $this->dispatch('start-collaboration', userId: $userId);
         $this->closeModal();
     }
 
     public function disconnect($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where(function ($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                   ->where('receiver_id', $userId);
