@@ -96,6 +96,11 @@ class AdminController extends Controller
      */
     public function showUser(User $user)
     {
+        // Check if user is soft deleted (if User model uses SoftDeletes)
+        if (method_exists($user, 'trashed') && $user->trashed()) {
+            return redirect()->route('admin.users')->with('error', 'User not found.');
+        }
+        
         $user->load(['profile', 'sentConnections', 'receivedConnections', 'collaborations', 'events']);
         return view('admin.users.show', compact('user'));
     }
@@ -105,6 +110,11 @@ class AdminController extends Controller
      */
     public function editUser(User $user)
     {
+        // Check if user is soft deleted (if User model uses SoftDeletes)
+        if (method_exists($user, 'trashed') && $user->trashed()) {
+            return redirect()->route('admin.users')->with('error', 'User not found.');
+        }
+        
         return view('admin.users.edit', compact('user'));
     }
 
@@ -113,6 +123,11 @@ class AdminController extends Controller
      */
     public function updateUser(Request $request, User $user)
     {
+        // Check if user is soft deleted (if User model uses SoftDeletes)
+        if (method_exists($user, 'trashed') && $user->trashed()) {
+            return redirect()->route('admin.users')->with('error', 'User not found.');
+        }
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
@@ -130,6 +145,11 @@ class AdminController extends Controller
      */
     public function deleteUser(User $user)
     {
+        // Check if user is soft deleted (if User model uses SoftDeletes)
+        if (method_exists($user, 'trashed') && $user->trashed()) {
+            return redirect()->route('admin.users')->with('error', 'User not found.');
+        }
+        
         if ($user->isSuperAdmin() && User::where('role', 'super_admin')->count() <= 1) {
             return redirect()->back()->with('error', 'Cannot delete the last super admin.');
         }
@@ -170,11 +190,16 @@ class AdminController extends Controller
         return view('admin.collaborations.index', compact('collaborations'));
     }
 
-    /**
+        /**
      * Show collaboration details
      */
     public function showCollaboration(Collaboration $collaboration)
     {
+        // Check if collaboration is soft deleted
+        if ($collaboration->trashed()) {
+            return redirect()->route('admin.collaborations')->with('error', 'Collaboration not found.');
+        }
+        
         $collaboration->load(['creator', 'collaborationUsers.user', 'todos', 'comments']);
         return view('admin.collaborations.show', compact('collaboration'));
     }
@@ -184,6 +209,11 @@ class AdminController extends Controller
      */
     public function deleteCollaboration(Collaboration $collaboration)
     {
+        // Check if collaboration is soft deleted
+        if ($collaboration->trashed()) {
+            return redirect()->route('admin.collaborations')->with('error', 'Collaboration not found.');
+        }
+        
         $collaboration->delete();
         return redirect()->route('admin.collaborations')->with('success', 'Collaboration deleted successfully.');
     }
@@ -225,6 +255,11 @@ class AdminController extends Controller
      */
     public function showEvent(Event $event)
     {
+        // Check if event is soft deleted
+        if ($event->trashed()) {
+            return redirect()->route('admin.events')->with('error', 'Event not found.');
+        }
+        
         $event->load(['creator', 'participants', 'categories']);
         return view('admin.events.show', compact('event'));
     }
@@ -234,6 +269,11 @@ class AdminController extends Controller
      */
     public function deleteEvent(Event $event)
     {
+        // Check if event is soft deleted
+        if ($event->trashed()) {
+            return redirect()->route('admin.events')->with('error', 'Event not found.');
+        }
+        
         $event->delete();
         return redirect()->route('admin.events')->with('success', 'Event deleted successfully.');
     }
@@ -271,6 +311,11 @@ class AdminController extends Controller
      */
     public function deleteConnection(Connection $connection)
     {
+        // Check if connection is soft deleted (if Connection model uses SoftDeletes)
+        if (method_exists($connection, 'trashed') && $connection->trashed()) {
+            return redirect()->route('admin.connections')->with('error', 'Connection not found.');
+        }
+        
         $connection->delete();
         return redirect()->route('admin.connections')->with('success', 'Connection deleted successfully.');
     }
@@ -331,6 +376,11 @@ class AdminController extends Controller
      */
     public function updateInterest(Request $request, Interest $interest)
     {
+        // Check if interest is soft deleted (if Interest model uses SoftDeletes)
+        if (method_exists($interest, 'trashed') && $interest->trashed()) {
+            return redirect()->route('admin.interests')->with('error', 'Interest not found.');
+        }
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('interests')->ignore($interest->id)],
         ]);
@@ -345,6 +395,11 @@ class AdminController extends Controller
      */
     public function deleteInterest(Interest $interest)
     {
+        // Check if interest is soft deleted (if Interest model uses SoftDeletes)
+        if (method_exists($interest, 'trashed') && $interest->trashed()) {
+            return redirect()->route('admin.interests')->with('error', 'Interest not found.');
+        }
+        
         $interest->delete();
         return redirect()->route('admin.interests')->with('success', 'Interest deleted successfully.');
     }
@@ -405,6 +460,11 @@ class AdminController extends Controller
      */
     public function updateSkill(Request $request, Skill $skill)
     {
+        // Check if skill is soft deleted (if Skill model uses SoftDeletes)
+        if (method_exists($skill, 'trashed') && $skill->trashed()) {
+            return redirect()->route('admin.skills')->with('error', 'Skill not found.');
+        }
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('skills')->ignore($skill->id)],
         ]);
@@ -419,6 +479,11 @@ class AdminController extends Controller
      */
     public function deleteSkill(Skill $skill)
     {
+        // Check if skill is soft deleted (if Skill model uses SoftDeletes)
+        if (method_exists($skill, 'trashed') && $skill->trashed()) {
+            return redirect()->route('admin.skills')->with('error', 'Skill not found.');
+        }
+        
         $skill->delete();
         return redirect()->route('admin.skills')->with('success', 'Skill deleted successfully.');
     }
@@ -480,6 +545,11 @@ class AdminController extends Controller
      */
     public function updateContribution(Request $request, Contribution $contribution)
     {
+        // Check if contribution is soft deleted (if Contribution model uses SoftDeletes)
+        if (method_exists($contribution, 'trashed') && $contribution->trashed()) {
+            return redirect()->route('admin.contributions')->with('error', 'Contribution not found.');
+        }
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('contributions')->ignore($contribution->id)],
         ]);
@@ -494,6 +564,11 @@ class AdminController extends Controller
      */
     public function deleteContribution(Contribution $contribution)
     {
+        // Check if contribution is soft deleted (if Contribution model uses SoftDeletes)
+        if (method_exists($contribution, 'trashed') && $contribution->trashed()) {
+            return redirect()->route('admin.contributions')->with('error', 'Contribution not found.');
+        }
+        
         $contribution->delete();
         return redirect()->route('admin.contributions')->with('success', 'Contribution deleted successfully.');
     }
@@ -554,6 +629,11 @@ class AdminController extends Controller
      */
     public function updateEventCategory(Request $request, EventCategory $eventCategory)
     {
+        // Check if event category is soft deleted (if EventCategory model uses SoftDeletes)
+        if (method_exists($eventCategory, 'trashed') && $eventCategory->trashed()) {
+            return redirect()->route('admin.event-categories')->with('error', 'Event category not found.');
+        }
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('event_categories')->ignore($eventCategory->id)],
         ]);
@@ -568,6 +648,11 @@ class AdminController extends Controller
      */
     public function deleteEventCategory(EventCategory $eventCategory)
     {
+        // Check if event category is soft deleted (if EventCategory model uses SoftDeletes)
+        if (method_exists($eventCategory, 'trashed') && $eventCategory->trashed()) {
+            return redirect()->route('admin.event-categories')->with('error', 'Event category not found.');
+        }
+        
         $eventCategory->delete();
         return redirect()->route('admin.event-categories')->with('success', 'Event category deleted successfully.');
     }
