@@ -64,6 +64,14 @@ class AdminController extends Controller
             $query->where('role', $request->role);
         }
 
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'verified') {
+                $query->whereNotNull('email_verified_at');
+            } elseif ($request->status === 'unverified') {
+                $query->whereNull('email_verified_at');
+            }
+        }
+
         // Time-based filters
         if ($request->has('date_from') && $request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);
@@ -278,6 +286,15 @@ class AdminController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
+        // Status filter based on usage
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'used') {
+                $query->having('profiles_count', '>', 0);
+            } elseif ($request->status === 'unused') {
+                $query->having('profiles_count', '=', 0);
+            }
+        }
+
         // Time-based filters
         if ($request->has('date_from') && $request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);
@@ -341,6 +358,15 @@ class AdminController extends Controller
         // Search filter
         if ($request->has('search') && $request->search) {
             $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Status filter based on usage
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'used') {
+                $query->having('profiles_count', '>', 0);
+            } elseif ($request->status === 'unused') {
+                $query->having('profiles_count', '=', 0);
+            }
         }
 
         // Time-based filters
@@ -408,6 +434,15 @@ class AdminController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
+        // Status filter based on usage
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'used') {
+                $query->having('profiles_count', '>', 0);
+            } elseif ($request->status === 'unused') {
+                $query->having('profiles_count', '=', 0);
+            }
+        }
+
         // Time-based filters
         if ($request->has('date_from') && $request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);
@@ -472,6 +507,15 @@ class AdminController extends Controller
         // Search filter
         if ($request->has('search') && $request->search) {
             $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Status filter based on usage
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'used') {
+                $query->having('events_count', '>', 0);
+            } elseif ($request->status === 'unused') {
+                $query->having('events_count', '=', 0);
+            }
         }
 
         // Time-based filters

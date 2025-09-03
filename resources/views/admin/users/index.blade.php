@@ -32,6 +32,15 @@
                         </flux:select>
                     </div>
                     
+                    <!-- Status Filter -->
+                    <div class="lg:w-48">
+                        <flux:select name="status" placeholder="Filter berdasarkan status">
+                            <option value="">Semua Status</option>
+                            <option value="verified" {{ request('status') === 'verified' ? 'selected' : '' }}>Terverifikasi</option>
+                            <option value="unverified" {{ request('status') === 'unverified' ? 'selected' : '' }}>Belum Terverifikasi</option>
+                        </flux:select>
+                    </div>
+                    
                     <!-- Date From -->
                     <div class="lg:w-48">
                         <flux:input 
@@ -58,13 +67,13 @@
                     <flux:button type="submit" variant="primary">Cari</flux:button>
                     
                     <!-- Clear Filters -->
-                    @if(request('search') || request('role') || request('date_from') || request('date_to'))
+                    @if(request('search') || request('role') || request('status') || request('date_from') || request('date_to'))
                         <a href="{{ route('admin.users') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
                     @endif
                 </div>
                 
                 <!-- Active Filters Display -->
-                @if(request('search') || request('role') || request('date_from') || request('date_to'))
+                @if(request('search') || request('role') || request('status') || request('date_from') || request('date_to'))
                     <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
                         <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
                         @if(request('search'))
@@ -75,6 +84,11 @@
                         @if(request('role'))
                             <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
                                 Peran: {{ ucfirst(str_replace('_', ' ', request('role'))) }}
+                            </span>
+                        @endif
+                        @if(request('status'))
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 rounded-full">
+                                Status: {{ request('status') === 'verified' ? 'Terverifikasi' : 'Belum Terverifikasi' }}
                             </span>
                         @endif
                         @if(request('date_from'))

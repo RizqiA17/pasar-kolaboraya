@@ -483,7 +483,7 @@
                         </div>
                         
                         <!-- Quick Stats -->
-                        <div class="grid grid-cols-3 gap-4 mt-4">
+                        <div class="grid grid-cols-2 gap-4 mt-4">
                             <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
                                 <div class="flex items-center space-x-2">
                                     <div class="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
@@ -510,7 +510,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                            {{-- <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
                                 <div class="flex items-center space-x-2">
                                     <div class="h-8 w-8 rounded-lg bg-rose-100 flex items-center justify-center">
                                         <svg class="h-5 w-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -522,7 +522,7 @@
                                         <div class="text-xs text-gray-600">Lengkapi</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 

@@ -130,8 +130,8 @@
                                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Minat & Kontribusi</h3>
-                    <p class="text-sm text-gray-600">Pilih minat dan kontribusi Anda</p>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Minat</h3>
+                    <p class="text-sm text-gray-600">Pilih minat Anda</p>
                 </div>
 
                 <!-- Interests -->
@@ -162,7 +162,7 @@
                 </div>
 
                 <!-- Contributions -->
-                <div>
+                {{-- <div>
                     <h4 class="text-md font-medium text-gray-900 mb-3">Kontribusi</h4>
                     <div class="space-y-3">
                         @foreach ($contributions as $contribution)
@@ -173,7 +173,7 @@
                                 <label for="contribution_{{ $contribution->id }}"
                                     class="flex-1 text-sm font-medium text-gray-700">
                                     {{ $contribution->name }}
-                                </label>
+                                </label> --}}
 
                                 {{-- @if (in_array($contribution->id, $selectedContributions))
                                     <div class="flex flex-col space-y-2">
@@ -185,10 +185,10 @@
                                             class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                 @endif --}}
-                            </div>
+                            {{-- </div>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
             </div>
         @endif
 
