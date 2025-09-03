@@ -54,4 +54,64 @@ class SystemSetting extends Model
             'Controls whether users can login to the system'
         );
     }
+
+    /**
+     * Check if connections are enabled
+     */
+    public static function isConnectionsEnabled()
+    {
+        return static::getValue('connections_enabled', '1') === '1';
+    }
+
+    /**
+     * Enable or disable connections
+     */
+    public static function setConnectionsStatus($enabled)
+    {
+        return static::setValue(
+            'connections_enabled',
+            $enabled ? '1' : '0',
+            'Controls whether users can create and manage connections'
+        );
+    }
+
+    /**
+     * Check if collaborations are enabled
+     */
+    public static function isCollaborationsEnabled()
+    {
+        return static::getValue('collaborations_enabled', '1') === '1';
+    }
+
+    /**
+     * Enable or disable collaborations
+     */
+    public static function setCollaborationsStatus($enabled)
+    {
+        return static::setValue(
+            'collaborations_enabled',
+            $enabled ? '1' : '0',
+            'Controls whether users can create and manage collaborations'
+        );
+    }
+
+    /**
+     * Check if user actions are enabled
+     */
+    public static function isUserActionsEnabled()
+    {
+        return static::getValue('user_actions_enabled', '1') === '1';
+    }
+
+    /**
+     * Enable or disable user actions
+     */
+    public static function setUserActionsStatus($enabled)
+    {
+        return static::setValue(
+            'user_actions_enabled',
+            $enabled ? '1' : '0',
+            'Controls whether users can perform actions like joining events, etc.'
+        );
+    }
 }

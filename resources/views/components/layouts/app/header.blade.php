@@ -43,33 +43,115 @@
                 </div>
             </flux:navbar.item>
 
-            <flux:navbar.item icon="link" :href="route('connections')" :current="request()->routeIs('connections')"
-                class="group relative px-4 py-2 text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl mx-1"
-                wire:navigate>
-                <span class="relative z-10">{{ __('Koneksi') }}</span>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </flux:navbar.item>
+            @php
+                $connectionsEnabled = \App\Models\SystemSetting::isConnectionsEnabled();
+                $collaborationsEnabled = \App\Models\SystemSetting::isCollaborationsEnabled();
+                $userActionsEnabled = \App\Models\SystemSetting::isUserActionsEnabled();
+                $isSuperAdmin = auth()->user()->isSuperAdmin();
+            @endphp
 
-            <flux:navbar.item icon="users" :href="route('collaborations.manage')"
-                :current="request()->routeIs('collaborations.manage')"
-                class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
-                wire:navigate>
-                <span class="relative z-10">{{ __('Kolaborasi') }}</span>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </flux:navbar.item>
+            <!-- Koneksi -->
+            @if($connectionsEnabled || $isSuperAdmin)
+                <flux:navbar.item icon="link" :href="route('connections')" :current="request()->routeIs('connections')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl mx-1"
+                    wire:navigate>
+                    <span class="relative z-10">{{ __('Koneksi') }}</span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </flux:navbar.item>
+            @else
+                <flux:navbar.item icon="link" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                     x-data="{ tooltip: false }"
+                     @mouseenter="tooltip = true"
+                     @mouseleave="tooltip = false">
+                    {{-- <flux:icon name="link" class="w-5 h-5" /> --}}
+                    <span class="relative z-10 ml-2">{{ __('Koneksi') }}</span>
+                    <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
+                    
+                    <!-- Tooltip -->
+                    <div x-show="tooltip" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <span>Fitur koneksi sedang dinonaktifkan oleh administrator</span>
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                    </div>
+                </flux:navbar.item>
+            @endif
 
-            <flux:navbar.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')"
-                class="group relative px-4 py-2 text-slate-700 hover:text-pink-600 dark:text-slate-200 dark:hover:text-pink-400 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl mx-1"
-                wire:navigate>
-                <span class="relative z-10">{{ __('Aksi Bersama') }}</span>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-rose-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </flux:navbar.item>
+            <!-- Kolaborasi -->
+            @if($collaborationsEnabled || $isSuperAdmin)
+                <flux:navbar.item icon="users" :href="route('collaborations.manage')"
+                    :current="request()->routeIs('collaborations.manage')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
+                    wire:navigate>
+                    <span class="relative z-10">{{ __('Kolaborasi') }}</span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </flux:navbar.item>
+            @else
+                <flux:navbar.item icon="users" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                     x-data="{ tooltip: false }"
+                     @mouseenter="tooltip = true"
+                     @mouseleave="tooltip = false">
+                    {{-- <flux:icon name="users" class="w-5 h-5" /> --}}
+                    <span class="relative z-10 ml-2">{{ __('Kolaborasi') }}</span>
+                    <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
+                    
+                    <!-- Tooltip -->
+                    <div x-show="tooltip" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <span>Fitur kolaborasi sedang dinonaktifkan oleh administrator</span>
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                    </div>
+                </flux:navbar.item>
+            @endif
+
+            <!-- Aksi Bersama -->
+            @if($userActionsEnabled || $isSuperAdmin)
+                <flux:navbar.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-pink-600 dark:text-slate-200 dark:hover:text-pink-400 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl mx-1"
+                    wire:navigate>
+                    <span class="relative z-10">{{ __('Aksi Bersama') }}</span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-rose-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </flux:navbar.item>
+            @else
+                <flux:navbar.item icon="user-group" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                     x-data="{ tooltip: false }"
+                     @mouseenter="tooltip = true"
+                     @mouseleave="tooltip = false">
+                    {{-- <flux:icon name="user-group" class="w-5 h-5" /> --}}
+                    <span class="relative z-10 ml-2">{{ __('Aksi Bersama') }}</span>
+                    <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
+                    
+                    <!-- Tooltip -->
+                    <div x-show="tooltip" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <span>Aksi pengguna sedang dinonaktifkan oleh administrator</span>
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                    </div>
+                </flux:navbar.item>
+            @endif
         </flux:navbar>
 
         {{-- <flux:spacer /> --}}
@@ -231,46 +313,133 @@
                 </a>
 
                 <!-- Connections -->
-                <a href="{{ route('connections') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
-                    wire:navigate>
-                    <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
-                            </path>
-                        </svg>
+                @if($connectionsEnabled || $isSuperAdmin)
+                    <a href="{{ route('connections') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
+                        wire:navigate>
+                        <div class="w-6 h-6 mb-1">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium">{{ __('Koneksi') }}</span>
+                    </a>
+                @else
+                    <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
+                         x-data="{ tooltip: false }"
+                         @mouseenter="tooltip = true"
+                         @mouseleave="tooltip = false">
+                        <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Koneksi') }}</span>
+                        
+                        <!-- Tooltip -->
+                        <div x-show="tooltip" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                            <span>Fitur koneksi sedang dinonaktifkan</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        </div>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Koneksi') }}</span>
-                </a>
+                @endif
 
                 <!-- Collaborations -->
-                <a href="{{ route('collaborations.manage') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collaborations.manage') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
-                    wire:navigate>
-                    <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
-                            </path>
-                        </svg>
+                @if($collaborationsEnabled || $isSuperAdmin)
+                    <a href="{{ route('collaborations.manage') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collaborations.manage') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
+                        wire:navigate>
+                        <div class="w-6 h-6 mb-1">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium">{{ __('Kolaborasi') }}</span>
+                    </a>
+                @else
+                    <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
+                         x-data="{ tooltip: false }"
+                         @mouseenter="tooltip = true"
+                         @mouseleave="tooltip = false">
+                        <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Kolaborasi') }}</span>
+                        
+                        <!-- Tooltip -->
+                        <div x-show="tooltip" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                            <span>Fitur kolaborasi sedang dinonaktifkan</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        </div>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Kolaborasi') }}</span>
-                </a>
+                @endif
 
                 <!-- Aksi -->
-                <a href="{{ route('events') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('events') ? 'bg-pink-500/20 text-pink-600 dark:text-pink-400' : 'text-slate-600 hover:text-pink-600 dark:text-slate-300 dark:hover:text-pink-400 hover:bg-pink-500/10' }}"
-                    wire:navigate>
-                    <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                            </path>
-                        </svg>
+                @if($userActionsEnabled || $isSuperAdmin)
+                    <a href="{{ route('events') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('events') ? 'bg-pink-500/20 text-pink-600 dark:text-pink-400' : 'text-slate-600 hover:text-pink-600 dark:text-slate-300 dark:hover:text-pink-400 hover:bg-pink-500/10' }}"
+                        wire:navigate>
+                        <div class="w-6 h-6 mb-1">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium">{{ __('Aksi Bersama') }}</span>
+                    </a>
+                @else
+                    <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
+                         x-data="{ tooltip: false }"
+                         @mouseenter="tooltip = true"
+                         @mouseleave="tooltip = false">
+                        <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Aksi Bersama') }}</span>
+                        
+                        <!-- Tooltip -->
+                        <div x-show="tooltip" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                            <span>Aksi pengguna sedang dinonaktifkan</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        </div>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Aksi Bersama') }}</span>
-                </a>
+                @endif
 
                 <!-- Profile -->
                 <a href="{{ route('settings.profile') }}"

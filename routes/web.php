@@ -65,18 +65,26 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
     // Route untuk melihat profile user lain
     Route::get('profile/{userId}', \App\Livewire\Profile\ViewProfile::class)->name('profile.view');
 
-    Route::get('connections', ConnectionsTab::class)->name('connections');
+    // Connection routes - protected by feature access middleware
+    Route::middleware('check.feature.access:connections')->group(function () {
+        Route::get('connections', ConnectionsTab::class)->name('connections');
+    });
 
-    Route::get('collaborations', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
-    Route::get('collaborations/list', ListCollaboration::class)->name('collaborations');
-    Route::get('collaborations/create', Create::class)->name('collaborations.create');
-    Route::get('collaborations/new', NewCollaboration::class)->name('collaborations.new-collaboration');
-    Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
+    // Collaboration routes - protected by feature access middleware
+    Route::middleware('check.feature.access:collaborations')->group(function () {
+        Route::get('collaborations', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
+        Route::get('collaborations/list', ListCollaboration::class)->name('collaborations');
+        Route::get('collaborations/create', Create::class)->name('collaborations.create');
+        Route::get('collaborations/new', NewCollaboration::class)->name('collaborations.new-collaboration');
+        Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
+    });
 
-    // Event Routes
-    Route::get('events', \App\Livewire\Events\ListEvent::class)->name('events');
-    Route::get('events/create', \App\Livewire\Events\CreateEvent::class)->name('events.create');
-    Route::get('events/{event}', \App\Livewire\Events\ShowEvent::class)->name('events.show');
+    // Event Routes - protected by user actions middleware
+    Route::middleware('check.feature.access:user_actions')->group(function () {
+        Route::get('events', \App\Livewire\Events\ListEvent::class)->name('events');
+        Route::get('events/create', \App\Livewire\Events\CreateEvent::class)->name('events.create');
+        Route::get('events/{event}', \App\Livewire\Events\ShowEvent::class)->name('events.show');
+    });
 
 });
 

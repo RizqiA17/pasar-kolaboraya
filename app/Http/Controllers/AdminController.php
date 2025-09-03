@@ -591,10 +591,16 @@ class AdminController extends Controller
         $loginEnabled = $request->has('login_enabled') ? '1' : '0';
         $maintenanceMode = $request->has('maintenance_mode') ? '1' : '0';
         $registrationEnabled = $request->has('registration_enabled') ? '1' : '0';
+        $connectionsEnabled = $request->has('connections_enabled') ? '1' : '0';
+        $collaborationsEnabled = $request->has('collaborations_enabled') ? '1' : '0';
+        $userActionsEnabled = $request->has('user_actions_enabled') ? '1' : '0';
 
         SystemSetting::setValue('login_enabled', $loginEnabled);
         SystemSetting::setValue('maintenance_mode', $maintenanceMode);
         SystemSetting::setValue('registration_enabled', $registrationEnabled);
+        SystemSetting::setValue('connections_enabled', $connectionsEnabled);
+        SystemSetting::setValue('collaborations_enabled', $collaborationsEnabled);
+        SystemSetting::setValue('user_actions_enabled', $userActionsEnabled);
 
         return redirect()->route('admin.system-settings')->with('success', 'Pengaturan sistem berhasil diperbarui.');
     }

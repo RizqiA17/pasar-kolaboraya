@@ -71,6 +71,60 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- Connections Status -->
+                    <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Koneksi Antar Pengguna</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                                Kontrol apakah pengguna dapat membuat dan mengelola koneksi dengan pengguna lain.
+                            </p>
+                        </div>
+                        <div class="ml-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="connections_enabled" value="1" 
+                                       {{ (isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1') ? 'checked' : '' }}
+                                       class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Collaborations Status -->
+                    <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kolaborasi</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                                Kontrol apakah pengguna dapat membuat dan mengelola kolaborasi.
+                            </p>
+                        </div>
+                        <div class="ml-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="collaborations_enabled" value="1" 
+                                       {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'checked' : '' }}
+                                       class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- User Actions Status -->
+                    <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Aksi Pengguna</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                                Kontrol apakah pengguna dapat melakukan aksi seperti bergabung dengan event, dll.
+                            </p>
+                        </div>
+                        <div class="ml-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="user_actions_enabled" value="1" 
+                                       {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'checked' : '' }}
+                                       class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600"></div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Warning Message -->
@@ -90,6 +144,9 @@
                                     <li>Menonaktifkan login akan memblokir semua pengguna kecuali super admin</li>
                                     <li>Mode maintenance akan menampilkan halaman maintenance kepada semua pengguna</li>
                                     <li>Menonaktifkan registrasi akan mencegah pengguna baru mendaftar</li>
+                                    <li>Menonaktifkan koneksi akan mencegah pengguna membuat koneksi dengan pengguna lain</li>
+                                    <li>Menonaktifkan kolaborasi akan mencegah pengguna membuat dan mengelola kolaborasi</li>
+                                    <li>Menonaktifkan aksi pengguna akan mencegah pengguna melakukan aksi seperti bergabung event</li>
                                     <li>Perubahan akan berlaku segera setelah disimpan</li>
                                 </ul>
                             </div>
@@ -114,7 +171,7 @@
         <!-- Current Status -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Status Saat Ini</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="text-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
                     <div class="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center {{ (isset($settings['login_enabled']) && $settings['login_enabled']->value === '1') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
                         @if(isset($settings['login_enabled']) && $settings['login_enabled']->value === '1')
@@ -166,6 +223,60 @@
                     <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Registrasi</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
                         {{ (isset($settings['registration_enabled']) && $settings['registration_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
+                    </p>
+                </div>
+
+                <div class="text-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <div class="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center {{ (isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                        @if(isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1')
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @else
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @endif
+                    </div>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Koneksi</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        {{ (isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
+                    </p>
+                </div>
+
+                <div class="text-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <div class="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                        @if(isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1')
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @else
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @endif
+                    </div>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Kolaborasi</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
+                    </p>
+                </div>
+
+                <div class="text-center p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <div class="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                        @if(isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1')
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @else
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        @endif
+                    </div>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Aksi Pengguna</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>
             </div>

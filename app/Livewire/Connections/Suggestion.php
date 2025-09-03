@@ -4,6 +4,7 @@ namespace App\Livewire\Connections;
 
 use App\Models\Connection;
 use App\Models\User;
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -14,6 +15,12 @@ class Suggestion extends Component
 
     public function connect($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         Connection::create([
             'requester_id' => Auth::id(),
             'receiver_id' => $userId,
@@ -26,6 +33,12 @@ class Suggestion extends Component
 
     public function acceptConnection($userId)
     {
+        // Check if connections are enabled
+        if (!SystemSetting::isConnectionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            $this->dispatch('show-error', message: 'Fitur koneksi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
