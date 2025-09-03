@@ -10,18 +10,69 @@
 
         <!-- Filters -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-            <form method="GET" class="flex flex-col md:flex-row gap-4">
-                <div class="md:w-48">
-                    <flux:select name="status" placeholder="Filter berdasarkan status">
-                        <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
-                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Diterima</option>
-                        <option value="declined" {{ request('status') === 'declined' ? 'selected' : '' }}>Ditolak</option>
-                    </flux:select>
+            <form method="GET" class="space-y-4">
+                <div class="flex flex-col lg:flex-row gap-4">
+                    <!-- Status Filter -->
+                    <div class="lg:w-48">
+                        <flux:select name="status" placeholder="Filter berdasarkan status">
+                            <option value="">Semua Status</option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
+                            <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Diterima</option>
+                            <option value="declined" {{ request('status') === 'declined' ? 'selected' : '' }}>Ditolak</option>
+                        </flux:select>
+                    </div>
+                    
+                    <!-- Date From -->
+                    <div class="lg:w-48">
+                        <flux:input 
+                            name="date_from" 
+                            type="date"
+                            placeholder="Dari tanggal"
+                            value="{{ request('date_from') }}"
+                            class="w-full"
+                        />
+                    </div>
+                    
+                    <!-- Date To -->
+                    <div class="lg:w-48">
+                        <flux:input 
+                            name="date_to" 
+                            type="date"
+                            placeholder="Sampai tanggal"
+                            value="{{ request('date_to') }}"
+                            class="w-full"
+                        />
+                    </div>
+                    
+                    <!-- Filter Button -->
+                    <flux:button type="submit" variant="primary">Filter</flux:button>
+                    
+                    <!-- Clear Filters -->
+                    @if(request('status') || request('date_from') || request('date_to'))
+                        <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                    @endif
                 </div>
-                <flux:button type="submit" variant="primary">Filter</flux:button>
-                @if(request('status'))
-                    <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                
+                <!-- Active Filters Display -->
+                @if(request('status') || request('date_from') || request('date_to'))
+                    <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
+                        @if(request('status'))
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
+                                Status: {{ ucfirst(request('status')) }}
+                            </span>
+                        @endif
+                        @if(request('date_from'))
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                                Dari: {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
+                            </span>
+                        @endif
+                        @if(request('date_to'))
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                                Sampai: {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
+                            </span>
+                        @endif
+                    </div>
                 @endif
             </form>
         </div>

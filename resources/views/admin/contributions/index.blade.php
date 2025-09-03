@@ -11,6 +11,73 @@
             </button>
         </div>
 
+        <!-- Filters and Search -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+            <form method="GET" class="flex flex-col md:flex-row gap-4">
+                <!-- Search Input -->
+                <div class="flex-1">
+                    <flux:input 
+                        name="search" 
+                        placeholder="Cari kontribusi berdasarkan nama..." 
+                        value="{{ request('search') }}"
+                        class="w-full"
+                    />
+                </div>
+                
+                <!-- Date From -->
+                <div class="md:w-48">
+                    <flux:input 
+                        name="date_from" 
+                        type="date"
+                        placeholder="Dari tanggal"
+                        value="{{ request('date_from') }}"
+                        class="w-full"
+                    />
+                </div>
+                
+                <!-- Date To -->
+                <div class="md:w-48">
+                    <flux:input 
+                        name="date_to" 
+                        type="date"
+                        placeholder="Sampai tanggal"
+                        value="{{ request('date_to') }}"
+                        class="w-full"
+                    />
+                </div>
+                
+                <!-- Filter Button -->
+                <flux:button type="submit" variant="primary">Cari</flux:button>
+                
+                <!-- Clear Filters -->
+                @if(request('search') || request('date_from') || request('date_to'))
+                    <a href="{{ route('admin.contributions') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                @endif
+            </form>
+            
+            <!-- Active Filters Display -->
+            @if(request('search') || request('date_from') || request('date_to'))
+                <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+                    <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
+                    @if(request('search'))
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
+                            Pencarian: "{{ request('search') }}"
+                        </span>
+                    @endif
+                    @if(request('date_from'))
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            Dari: {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
+                        </span>
+                    @endif
+                    @if(request('date_to'))
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            Sampai: {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
+                        </span>
+                    @endif
+                </div>
+            @endif
+        </div>
+
         <!-- Kontribusis Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
@@ -69,8 +136,13 @@
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                                         </svg>
-                                        <p class="text-lg font-medium">Tidak ada kontribusi ditemukan</p>
-                                        <p class="text-sm">Tambah kontribusi pertama Anda untuk memulai</p>
+                                        @if(request('search') || request('date_from') || request('date_to'))
+                                            <p class="text-lg font-medium">Tidak ada kontribusi ditemukan</p>
+                                            <p class="text-sm">Coba sesuaikan kriteria filter Anda atau hapus filter untuk melihat semua kontribusi</p>
+                                        @else
+                                            <p class="text-lg font-medium">Tidak ada kontribusi ditemukan</p>
+                                            <p class="text-sm">Tambah kontribusi pertama Anda untuk memulai</p>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

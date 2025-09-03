@@ -64,7 +64,19 @@ class AdminController extends Controller
             $query->where('role', $request->role);
         }
 
-        $users = $query->paginate(15);
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $users = $query->paginate(15)->appends($request->query());
         $superAdminCount = User::where('role', 'super_admin')->count();
 
         return view('admin.users.index', compact('users', 'superAdminCount'));
@@ -132,7 +144,19 @@ class AdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        $collaborations = $query->paginate(15);
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $collaborations = $query->paginate(15)->appends($request->query());
 
         return view('admin.collaborations.index', compact('collaborations'));
     }
@@ -170,7 +194,19 @@ class AdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        $events = $query->paginate(15);
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $events = $query->paginate(15)->appends($request->query());
 
         return view('admin.events.index', compact('events'));
     }
@@ -204,7 +240,19 @@ class AdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        $connections = $query->paginate(15);
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $connections = $query->paginate(15)->appends($request->query());
 
         return view('admin.connections.index', compact('connections'));
     }
@@ -221,9 +269,28 @@ class AdminController extends Controller
     /**
      * Display interests management page
      */
-    public function interests()
+    public function interests(Request $request)
     {
-        $interests = Interest::withCount('profiles')->paginate(15);
+        $query = Interest::withCount('profiles');
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $interests = $query->paginate(15)->appends($request->query());
         return view('admin.interests.index', compact('interests'));
     }
 
@@ -267,9 +334,28 @@ class AdminController extends Controller
     /**
      * Display skills management page
      */
-    public function skills()
+    public function skills(Request $request)
     {
-        $skills = Skill::withCount('profiles')->paginate(15);
+        $query = Skill::withCount('profiles');
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $skills = $query->paginate(15)->appends($request->query());
         return view('admin.skills.index', compact('skills'));
     }
 
@@ -313,9 +399,29 @@ class AdminController extends Controller
     /**
      * Display contributions management page
      */
-    public function contributions()
+    public function contributions(Request $request)
     {
-        $contributions = Contribution::withCount('profiles')->paginate(15);
+        $query = Contribution::withCount('profiles');
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $contributions = $query->paginate(15)->appends($request->query());
+
         return view('admin.contributions.index', compact('contributions'));
     }
 
@@ -359,9 +465,28 @@ class AdminController extends Controller
     /**
      * Display event categories management page
      */
-    public function eventCategories()
+    public function eventCategories(Request $request)
     {
-        $categories = EventCategory::withCount('events')->paginate(15);
+        $query = EventCategory::withCount('events');
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $categories = $query->paginate(15)->appends($request->query());
         return view('admin.event-categories.index', compact('categories'));
     }
 
