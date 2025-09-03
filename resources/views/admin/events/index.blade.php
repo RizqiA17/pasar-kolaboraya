@@ -1,10 +1,10 @@
 <x-admin.layout title="Manajemen Acara">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Acara</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua acara dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Acara</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua acara dalam sistem</p>
             </div>
         </div>
 
@@ -94,7 +94,65 @@
 
         <!-- Acaras Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Mobile Card View (hidden on larger screens) -->
+            <div class="block lg:hidden">
+                @forelse($events as $event)
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
+                        <div class="space-y-3">
+                            <div>
+                                <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $event->title }}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ Str::limit($event->description, 80) }}</div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <x-ui.avatar :user="$event->creator" size="sm" />
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $event->creator->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $event->creator->email }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs text-slate-800 dark:text-slate-200">
+                                    {{ $event->start_date ? $event->start_date->format('M d, Y') : 'TBD' }}
+                                </div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ $event->location ?: 'TBD' }}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 pt-2">
+                                <a href="{{ route('admin.events.show', $event) }}" 
+                                   class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
+                                    Lihat
+                                </a>
+                                <form method="POST" action="{{ route('admin.events.delete', $event) }}" class="inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this event? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="text-slate-500 dark:text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Tidak ada acara ditemukan</p>
+                            <p class="text-sm">Coba sesuaikan kriteria pencarian Anda</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>

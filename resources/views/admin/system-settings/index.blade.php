@@ -1,12 +1,12 @@
 <x-admin.layout title="System Settings">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Pengaturan Sistem</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola pengaturan global sistem untuk mengontrol akses dan fitur.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Pengaturan Sistem</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola pengaturan global sistem untuk mengontrol akses dan fitur.</p>
             </div>
-            <div class="text-sm text-slate-500 dark:text-slate-400">
+            <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 Terakhir diperbarui: {{ now()->format('d M Y H:i') }}
             </div>
         </div>

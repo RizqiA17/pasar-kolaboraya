@@ -1,12 +1,12 @@
 <x-admin.layout title="Manajemen Keahlian">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Keahlian</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua keahlian dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Keahlian</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua keahlian dalam sistem</p>
             </div>
-            <button onclick="openCreateModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button onclick="openCreateModal()" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Tambah Keahlian Baru
             </button>
         </div>
@@ -172,7 +172,7 @@
     </div>
 
     <!-- Create Modal -->
-    <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Keahlian Baru</h3>
@@ -202,7 +202,7 @@
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Keahlian</h3>

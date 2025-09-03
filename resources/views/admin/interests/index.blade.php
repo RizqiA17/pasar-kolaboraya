@@ -1,12 +1,12 @@
 <x-admin.layout title="Manajemen Minat">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Minat</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua minat dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Minat</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua minat dalam sistem</p>
             </div>
-            <button onclick="openCreateModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button onclick="openCreateModal()" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Tambah Minat Baru
             </button>
         </div>
@@ -96,7 +96,63 @@
 
         <!-- Minats Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Mobile Card View (hidden on larger screens) -->
+            <div class="block lg:hidden">
+                @forelse($interests as $interest)
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-pink-100 dark:bg-pink-900/20 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $interest->name }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                    {{ $interest->profiles_count }} pengguna
+                                </span>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ $interest->created_at->format('M d, Y') }}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 pt-2">
+                                <button onclick="openEditModal({{ $interest->id }}, '{{ $interest->name }}')" 
+                                        class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 text-xs font-medium">
+                                    Edit
+                                </button>
+                                <form method="POST" action="{{ route('admin.interests.delete', $interest) }}" class="inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this interest? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="text-slate-500 dark:text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Tidak ada minat ditemukan</p>
+                            <p class="text-sm">Tambah minat pertama Anda untuk memulai</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
@@ -172,9 +228,9 @@
     </div>
 
     <!-- Create Modal -->
-    <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Minat Baru</h3>
                 <form method="POST" action="{{ route('admin.interests.create') }}">
                     @csrf
@@ -202,9 +258,9 @@
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Minat</h3>
                 <form id="editForm" method="POST">
                     @csrf

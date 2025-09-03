@@ -1,10 +1,10 @@
 <x-admin.layout title="Manajemen Kolaborasi">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Kolaborasi</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua kolaborasi dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Kolaborasi</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua kolaborasi dalam sistem</p>
             </div>
         </div>
 
@@ -94,7 +94,74 @@
 
         <!-- Kolaborasis Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Mobile Card View (hidden on larger screens) -->
+            <div class="block lg:hidden">
+                @forelse($collaborations as $collaboration)
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
+                        <div class="space-y-3">
+                            <div>
+                                <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $collaboration->title }}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ Str::limit($collaboration->description, 80) }}</div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <x-ui.avatar :user="$collaboration->creator" size="sm" />
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $collaboration->creator->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $collaboration->creator->email }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    @php
+                                        $statusColors = [
+                                            'active' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+                                            'completed' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+                                            'paused' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                                        ];
+                                    @endphp
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$collaboration->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                        {{ ucfirst($collaboration->status) }}
+                                    </span>
+                                </div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ $collaboration->created_at->format('M d, Y') }}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 pt-2">
+                                <a href="{{ route('admin.collaborations.show', $collaboration) }}" 
+                                   class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
+                                    Lihat
+                                </a>
+                                <form method="POST" action="{{ route('admin.collaborations.delete', $collaboration) }}" class="inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this collaboration? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="text-slate-500 dark:text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Tidak ada kolaborasi ditemukan</p>
+                            <p class="text-sm">Coba sesuaikan kriteria pencarian Anda</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>

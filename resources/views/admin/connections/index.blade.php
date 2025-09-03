@@ -1,10 +1,10 @@
 <x-admin.layout title="Manajemen Koneksi">
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Koneksi</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua koneksi pengguna dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Koneksi</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua koneksi pengguna dalam sistem</p>
             </div>
         </div>
 
@@ -79,7 +79,73 @@
 
         <!-- Connections Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Mobile Card View (hidden on larger screens) -->
+            <div class="block lg:hidden">
+                @forelse($connections as $connection)
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <x-ui.avatar :user="$connection->requester" size="sm" />
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $connection->requester->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $connection->requester->email }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <x-ui.avatar :user="$connection->receiver" size="sm" />
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $connection->receiver->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $connection->receiver->email }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    @php
+                                        $statusColors = [
+                                            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+                                            'accepted' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+                                            'declined' => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                                        ];
+                                    @endphp
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$connection->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                        {{ ucfirst($connection->status) }}
+                                    </span>
+                                </div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ $connection->created_at->format('M d, Y H:i') }}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 pt-2">
+                                <form method="POST" action="{{ route('admin.connections.delete', $connection) }}" class="inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this connection? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="text-slate-500 dark:text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Tidak ada koneksi ditemukan</p>
+                            <p class="text-sm">Coba sesuaikan kriteria filter Anda</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
