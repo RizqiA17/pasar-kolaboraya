@@ -11,7 +11,7 @@ class Interest extends Model
 
     public function profiles(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'user_interests', 'interest_id', 'user_id')
+        return $this->belongsToMany(Profile::class, 'user_interests', 'interest_id', 'profile_id')
             ->withPivot('level')
             ->withTimestamps();
     }

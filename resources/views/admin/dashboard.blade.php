@@ -3,11 +3,11 @@
         <!-- Page Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Admin Dashboard</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Welcome back, {{ auth()->user()->name }}! Here's what's happening in your system.</p>
+                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Dashboard Admin</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">Selamat datang kembali, {{ auth()->user()->name }}! Berikut adalah aktivitas terbaru di sistem Anda.</p>
             </div>
             <div class="text-sm text-slate-500 dark:text-slate-400">
-                Last updated: {{ now()->format('M d, Y H:i') }}
+                Terakhir diperbarui: {{ now()->format('d M Y H:i') }}
             </div>
         </div>
 
@@ -17,7 +17,7 @@
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Users</p>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Pengguna</p>
                         <p class="text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['users']) }}</p>
                     </div>
                     <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="mt-4">
                     <a href="{{ route('admin.users') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
-                        View all users →
+                        Lihat semua pengguna →
                     </a>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Collaborations</p>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Kolaborasi</p>
                         <p class="text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['collaborations']) }}</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="mt-4">
                     <a href="{{ route('admin.collaborations') }}" class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
-                        View all collaborations →
+                        Lihat semua kolaborasi →
                     </a>
                 </div>
             </div>
@@ -57,7 +57,7 @@
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Events</p>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Acara</p>
                         <p class="text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['events']) }}</p>
                     </div>
                     <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/20 rounded-xl flex items-center justify-center">
@@ -68,7 +68,7 @@
                 </div>
                 <div class="mt-4">
                     <a href="{{ route('admin.events') }}" class="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium">
-                        View all events →
+                        Lihat semua acara →
                     </a>
                 </div>
             </div>
@@ -77,7 +77,7 @@
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Connections</p>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Koneksi</p>
                         <p class="text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['connections']) }}</p>
                     </div>
                     <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl flex items-center justify-center">
@@ -88,7 +88,7 @@
                 </div>
                 <div class="mt-4">
                     <a href="{{ route('admin.connections') }}" class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
-                        View all connections →
+                        Lihat semua koneksi →
                     </a>
                 </div>
             </div>
@@ -98,25 +98,25 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="text-center">
-                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Interests</p>
+                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Minat</p>
                     <p class="text-2xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['interests']) }}</p>
                 </div>
             </div>
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="text-center">
-                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Skills</p>
+                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Keahlian</p>
                     <p class="text-2xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['skills']) }}</p>
                 </div>
             </div>
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="text-center">
-                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Contributions</p>
+                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Kontribusi</p>
                     <p class="text-2xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['contributions']) }}</p>
                 </div>
             </div>
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="text-center">
-                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Event Categories</p>
+                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Kategori Acara</p>
                     <p class="text-2xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['event_categories']) }}</p>
                 </div>
             </div>
@@ -127,8 +127,8 @@
             <!-- Recent Users -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Recent Users</h3>
-                    <a href="{{ route('admin.users') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">View all</a>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Pengguna Terbaru</h3>
+                    <a href="{{ route('admin.users') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentUsers as $user)
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">No users found.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada pengguna ditemukan.</p>
                     @endforelse
                 </div>
             </div>
@@ -151,8 +151,8 @@
             <!-- Recent Collaborations -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Recent Collaborations</h3>
-                    <a href="{{ route('admin.collaborations') }}" class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">View all</a>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kolaborasi Terbaru</h3>
+                    <a href="{{ route('admin.collaborations') }}" class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentCollaborations as $collaboration)
@@ -171,7 +171,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">No collaborations found.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada kolaborasi ditemukan.</p>
                     @endforelse
                 </div>
             </div>
@@ -179,8 +179,8 @@
             <!-- Recent Events -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Recent Events</h3>
-                    <a href="{{ route('admin.events') }}" class="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300">View all</a>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Acara Terbaru</h3>
+                    <a href="{{ route('admin.events') }}" class="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentEvents as $event)
@@ -199,7 +199,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">No events found.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada acara ditemukan.</p>
                     @endforelse
                 </div>
             </div>

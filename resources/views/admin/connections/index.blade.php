@@ -1,10 +1,10 @@
-<x-admin.layout title="Connections Management">
+<x-admin.layout title="Manajemen Koneksi">
     <div class="space-y-6">
         <!-- Page Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Connections Management</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Manage all user connections in the system</p>
+                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Koneksi</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua koneksi pengguna dalam sistem</p>
             </div>
         </div>
 
@@ -12,16 +12,16 @@
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <form method="GET" class="flex flex-col md:flex-row gap-4">
                 <div class="md:w-48">
-                    <flux:select name="status" placeholder="Filter by status">
-                        <option value="">All Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
-                        <option value="declined" {{ request('status') === 'declined' ? 'selected' : '' }}>Declined</option>
+                    <flux:select name="status" placeholder="Filter berdasarkan status">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Diterima</option>
+                        <option value="declined" {{ request('status') === 'declined' ? 'selected' : '' }}>Ditolak</option>
                     </flux:select>
                 </div>
                 <flux:button type="submit" variant="primary">Filter</flux:button>
                 @if(request('status'))
-                    <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Clear</a>
+                    <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
                 @endif
             </form>
         </div>
@@ -32,11 +32,11 @@
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Requester</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Receiver</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peminta</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Penerima</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Requested</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Diminta</th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -83,7 +83,7 @@
                                             @method('DELETE')
                                             <button type="submit" 
                                                     class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
-                                                Delete
+                                                Hapus
                                             </button>
                                         </form>
                                     </div>
@@ -96,8 +96,8 @@
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                         </svg>
-                                        <p class="text-lg font-medium">No connections found</p>
-                                        <p class="text-sm">Try adjusting your filter criteria</p>
+                                        <p class="text-lg font-medium">Tidak ada koneksi ditemukan</p>
+                                        <p class="text-sm">Coba sesuaikan kriteria filter Anda</p>
                                     </div>
                                 </td>
                             </tr>

@@ -11,8 +11,7 @@ class Contribution extends Model
 
     public function profiles(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'user_contributions', 'contribution_id', 'user_id')
-            ->withPivot('description', 'date')
+        return $this->belongsToMany(Profile::class, 'user_contributions', 'contribution_id', 'profile_id')
             ->withTimestamps();
     }
 }

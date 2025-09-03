@@ -11,7 +11,7 @@ class Skill extends Model
 
     public function profiles(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'user_skills', 'skill_id', 'user_id')
+        return $this->belongsToMany(Profile::class, 'user_skills', 'skill_id', 'profile_id')
             ->withPivot('level', 'is_primary')
             ->withTimestamps();
     }

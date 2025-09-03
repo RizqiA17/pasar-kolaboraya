@@ -1,15 +1,15 @@
-<x-admin.layout title="Edit User - {{ $user->name }}">
+<x-admin.layout title="Edit Pengguna - {{ $user->name }}">
     <div class="space-y-6">
         <!-- Page Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Edit User</h1>
+                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Edit Pengguna</h1>
                 <p class="text-slate-600 dark:text-slate-400 mt-1">{{ $user->name }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <a href="{{ route('admin.users.show', $user) }}" 
                    class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
-                    Cancel
+                    Batal
                 </a>
             </div>
         </div>
@@ -21,10 +21,10 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Name -->
+                    <!-- Nama -->
                     <div>
                         <flux:field>
-                            <flux:label>Name</flux:label>
+                            <flux:label>Nama</flux:label>
                             <flux:input name="name" value="{{ old('name', $user->name) }}" required />
                             @error('name')
                                 <flux:error>{{ $message }}</flux:error>
@@ -43,12 +43,12 @@
                         </flux:field>
                     </div>
 
-                    <!-- Role -->
+                    <!-- Peran -->
                     <div>
                         <flux:field>
-                            <flux:label>Role</flux:label>
+                            <flux:label>Peran</flux:label>
                             <flux:select name="role" required>
-                                <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>User</option>
+                                <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>Pengguna</option>
                                 <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                             </flux:select>
@@ -61,15 +61,15 @@
                     <!-- Email Verified Status -->
                     <div>
                         <flux:field>
-                            <flux:label>Email Verification Status</flux:label>
+                            <flux:label>Status Verifikasi Email</flux:label>
                             <div class="mt-2">
                                 @if($user->email_verified_at)
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                                        Verified on {{ $user->email_verified_at->format('M d, Y H:i') }}
+                                        Terverifikasi pada {{ $user->email_verified_at->format('M d, Y H:i') }}
                                     </span>
                                 @else
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400">
-                                        Not Verified
+                                        Belum Terverifikasi
                                     </span>
                                 @endif
                             </div>
@@ -77,19 +77,19 @@
                     </div>
                 </div>
 
-                <!-- Additional Information -->
+                <!-- Informasi Tambahan -->
                 <div class="border-t border-slate-200 dark:border-slate-700 pt-6">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Additional Information</h3>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Informasi Tambahan</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <flux:field>
-                                <flux:label>Created At</flux:label>
+                                <flux:label>Dibuat Pada</flux:label>
                                 <flux:input value="{{ $user->created_at->format('M d, Y H:i:s') }}" readonly />
                             </flux:field>
                         </div>
                         <div>
                             <flux:field>
-                                <flux:label>Last Updated</flux:label>
+                                <flux:label>Terakhir Diperbarui</flux:label>
                                 <flux:input value="{{ $user->updated_at->format('M d, Y H:i:s') }}" readonly />
                             </flux:field>
                         </div>
@@ -100,28 +100,28 @@
                 <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-200 dark:border-slate-700">
                     <a href="{{ route('admin.users.show', $user) }}" 
                        class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
-                        Cancel
+                        Batal
                     </a>
                     <flux:button type="submit" variant="primary">
-                        Update User
+                        Update Pengguna
                     </flux:button>
                 </div>
             </form>
         </div>
 
-        <!-- Danger Zone -->
-        @if(!$user->isSuperAdmin() || User::where('role', 'super_admin')->count() > 1)
+        <!-- Zona Bahaya -->
+        @if(!$user->isSuperAdmin() || Pengguna::where('role', 'super_admin')->count() > 1)
             <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6">
-                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-4">Danger Zone</h3>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-4">Zona Bahaya</h3>
                 <p class="text-red-700 dark:text-red-300 mb-4">
-                    Once you delete a user, there is no going back. Please be certain.
+                    Setelah Anda menghapus pengguna, tidak ada cara untuk mengembalikannya. Harap pastikan.
                 </p>
                 <form method="POST" action="{{ route('admin.users.delete', $user) }}" 
                       onsubmit="return confirm('Are you absolutely sure you want to delete this user? This action cannot be undone and will permanently remove all user data.')">
                     @csrf
                     @method('DELETE')
                     <flux:button type="submit" variant="danger">
-                        Delete User
+                        Delete Pengguna
                     </flux:button>
                 </form>
             </div>

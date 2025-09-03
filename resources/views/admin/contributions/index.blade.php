@@ -1,26 +1,26 @@
-<x-admin.layout title="Contributions Management">
+<x-admin.layout title="Manajemen Kontribusi">
     <div class="space-y-6">
         <!-- Page Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Contributions Management</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">Manage all contributions in the system</p>
+                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Kontribusi</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">Kelola semua kontribusi dalam sistem</p>
             </div>
             <button onclick="openCreateModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Add New Contribution
+                Tambah Kontribusi Baru
             </button>
         </div>
 
-        <!-- Contributions Table -->
+        <!-- Kontribusis Table -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Contribution</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Users Count</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Created</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kontribusi</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Jumlah Pengguna</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dibuat</th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -38,7 +38,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                                        {{ $contribution->profiles_count }} users
+                                        {{ $contribution->profiles_count }} pengguna
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
@@ -56,7 +56,7 @@
                                             @method('DELETE')
                                             <button type="submit" 
                                                     class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
-                                                Delete
+                                                Hapus
                                             </button>
                                         </form>
                                     </div>
@@ -69,8 +69,8 @@
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                                         </svg>
-                                        <p class="text-lg font-medium">No contributions found</p>
-                                        <p class="text-sm">Add your first contribution to get started</p>
+                                        <p class="text-lg font-medium">Tidak ada kontribusi ditemukan</p>
+                                        <p class="text-sm">Tambah kontribusi pertama Anda untuk memulai</p>
                                     </div>
                                 </td>
                             </tr>
@@ -92,13 +92,13 @@
     <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Add New Contribution</h3>
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Kontribusi Baru</h3>
                 <form method="POST" action="{{ route('admin.contributions.create') }}">
                     @csrf
                     <div class="mb-4">
                         <flux:field>
-                            <flux:label>Contribution Name</flux:label>
-                            <flux:input name="name" placeholder="Enter contribution name..." required />
+                            <flux:label>Kontribusi Name</flux:label>
+                            <flux:input name="name" placeholder="Masukkan nama kontribusi..." required />
                             @error('name')
                                 <flux:error>{{ $message }}</flux:error>
                             @enderror
@@ -107,10 +107,10 @@
                     <div class="flex items-center justify-end space-x-3">
                         <button type="button" onclick="closeCreateModal()" 
                                 class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
-                            Cancel
+                            Batal
                         </button>
                         <flux:button type="submit" variant="primary">
-                            Create Contribution
+                            Create Kontribusi
                         </flux:button>
                     </div>
                 </form>
@@ -122,14 +122,14 @@
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Contribution</h3>
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Kontribusi</h3>
                 <form id="editForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
                         <flux:field>
-                            <flux:label>Contribution Name</flux:label>
-                            <flux:input id="editName" name="name" placeholder="Enter contribution name..." required />
+                            <flux:label>Kontribusi Name</flux:label>
+                            <flux:input id="editName" name="name" placeholder="Masukkan nama kontribusi..." required />
                             @error('name')
                                 <flux:error>{{ $message }}</flux:error>
                             @enderror
@@ -138,10 +138,10 @@
                     <div class="flex items-center justify-end space-x-3">
                         <button type="button" onclick="closeEditModal()" 
                                 class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
-                            Cancel
+                            Batal
                         </button>
                         <flux:button type="submit" variant="primary">
-                            Update Contribution
+                            Update Kontribusi
                         </flux:button>
                     </div>
                 </form>
