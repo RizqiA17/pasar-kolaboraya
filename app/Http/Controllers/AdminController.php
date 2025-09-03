@@ -65,8 +65,9 @@ class AdminController extends Controller
         }
 
         $users = $query->paginate(15);
+        $superAdminCount = User::where('role', 'super_admin')->count();
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'superAdminCount'));
     }
 
     /**

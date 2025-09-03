@@ -95,7 +95,7 @@
                                            class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 text-sm font-medium">
                                             Edit
                                         </a>
-                                        @if(!$user->isSuperAdmin() || User::where('role', 'super_admin')->count() > 1)
+                                        @if(!$user->isSuperAdmin() || $superAdminCount > 1)
                                             <form method="POST" action="{{ route('admin.users.delete', $user) }}" class="inline" 
                                                   onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
                                                 @csrf
