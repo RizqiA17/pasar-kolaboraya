@@ -99,15 +99,15 @@
                     <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Koneksi</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->sentKoneksi->where('status', 'accepted')->count() }}</div>
+                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->sentConnections->where('status', 'accepted')->count() }}</div>
                             <div class="text-sm text-slate-600 dark:text-slate-400">Accepted Koneksi</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $user->sentKoneksi->where('status', 'pending')->count() }}</div>
+                            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $user->sentConnections->where('status', 'pending')->count() }}</div>
                             <div class="text-sm text-slate-600 dark:text-slate-400">Menunggu Dikirim</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $user->receivedKoneksi->where('status', 'pending')->count() }}</div>
+                            <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $user->receivedConnections->where('status', 'pending')->count() }}</div>
                             <div class="text-sm text-slate-600 dark:text-slate-400">Menunggu Diterima</div>
                         </div>
                     </div>
