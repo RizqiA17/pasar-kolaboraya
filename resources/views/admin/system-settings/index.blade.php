@@ -37,7 +37,7 @@
                     </div>
 
                     <!-- Maintenance Mode -->
-                    <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    {{-- <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Mode Maintenance</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
@@ -52,7 +52,7 @@
                                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-600"></div>
                             </label>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Registration Status -->
                     <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
