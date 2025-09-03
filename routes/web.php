@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+
+
 // Test routes for error pages (remove in production)
 if (app()->environment('local', 'development')) {
     Route::get('/test/404', function () {
