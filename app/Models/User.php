@@ -27,6 +27,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -323,5 +324,29 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function hasPendingRequestFrom($otherUserId)
     {
         return $this->getConnectionStatus($otherUserId) === 'pending_received';
+    }
+
+    /**
+     * Check if user is super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    /**
+     * Check if user has admin privileges
+     */
+    public function hasAdminPrivileges(): bool
+    {
+        return $this->isAdmin();
     }
 }

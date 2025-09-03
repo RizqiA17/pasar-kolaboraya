@@ -80,4 +80,51 @@ Route::middleware(['auth', VerifiedEmail::class])->group(function () {
 
 });
 
+// Admin routes - only accessible by super admin
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'super.admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Users management
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('users.show');
+    Route::get('/users/{user}/edit', [App\Http\Controllers\AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
+    
+    // Collaborations management
+    Route::get('/collaborations', [App\Http\Controllers\AdminController::class, 'collaborations'])->name('collaborations');
+    Route::get('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'showCollaboration'])->name('collaborations.show');
+    Route::delete('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'deleteCollaboration'])->name('collaborations.delete');
+    
+    // Events management
+    Route::get('/events', [App\Http\Controllers\AdminController::class, 'events'])->name('events');
+    Route::get('/events/{event}', [App\Http\Controllers\AdminController::class, 'showEvent'])->name('events.show');
+    Route::delete('/events/{event}', [App\Http\Controllers\AdminController::class, 'deleteEvent'])->name('events.delete');
+    
+    // Connections management
+    Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
+    Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->name('connections.delete');
+    
+    // Master data management
+    Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');
+    Route::post('/interests', [App\Http\Controllers\AdminController::class, 'createInterest'])->name('interests.create');
+    Route::put('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'updateInterest'])->name('interests.update');
+    Route::delete('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'deleteInterest'])->name('interests.delete');
+    
+    Route::get('/skills', [App\Http\Controllers\AdminController::class, 'skills'])->name('skills');
+    Route::post('/skills', [App\Http\Controllers\AdminController::class, 'createSkill'])->name('skills.create');
+    Route::put('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'updateSkill'])->name('skills.update');
+    Route::delete('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'deleteSkill'])->name('skills.delete');
+    
+    Route::get('/contributions', [App\Http\Controllers\AdminController::class, 'contributions'])->name('contributions');
+    Route::post('/contributions', [App\Http\Controllers\AdminController::class, 'createContribution'])->name('contributions.create');
+    Route::put('/contributions/{contribution}', [App\Http\Controllers\AdminController::class, 'updateContribution'])->name('contributions.update');
+    Route::delete('/contributions/{contribution}', [App\Http\Controllers\AdminController::class, 'deleteContribution'])->name('contributions.delete');
+    
+    Route::get('/event-categories', [App\Http\Controllers\AdminController::class, 'eventCategories'])->name('event-categories');
+    Route::post('/event-categories', [App\Http\Controllers\AdminController::class, 'createEventCategory'])->name('event-categories.create');
+    Route::put('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'updateEventCategory'])->name('event-categories.update');
+    Route::delete('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'deleteEventCategory'])->name('event-categories.delete');
+});
+
 require __DIR__ . '/auth.php';

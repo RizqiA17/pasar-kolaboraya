@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'refresh.csrf' => \App\Http\Middleware\RefreshCsrfToken::class,
             'session.refresh' => \App\Http\Middleware\SessionRefresh::class,
             'csrf.manager' => \App\Http\Middleware\CsrfTokenManager::class,
+            'super.admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes
