@@ -3,12 +3,14 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Models\SystemSetting;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Illuminate\Validation\ValidationException;
 
 #[Layout('components.layouts.auth', ['title' => 'Daftar'])]
 class Register extends Component
@@ -41,6 +43,13 @@ class Register extends Component
      */
     public function register(): void
     {
+        // Check if registration is enabled
+        if (SystemSetting::getValue('registration_enabled', '1') !== '1') {
+            throw ValidationException::withMessages([
+                'email' => 'Registrasi pengguna baru sedang dinonaktifkan. Silakan hubungi administrator.',
+            ]);
+        }
+
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],

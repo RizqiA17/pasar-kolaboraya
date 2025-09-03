@@ -48,13 +48,13 @@ Route::post('/csrf-token-refresh', function () {
     }
     
     return response()->json(['error' => 'Unauthenticated'], 401);
-})->middleware('auth')->name('csrf.token.refresh');
+})->middleware(['auth', 'check.login.status'])->name('csrf.token.refresh');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', VerifiedEmail::class])
+    ->middleware(['auth', 'check.login.status', VerifiedEmail::class])
     ->name('dashboard');
 
-Route::middleware(['auth', VerifiedEmail::class])->group(function () {
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
@@ -81,7 +81,7 @@ Route::middleware(['auth', VerifiedEmail::class])->group(function () {
 });
 
 // Admin routes - only accessible by super admin
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'super.admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status', 'super.admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
     
     // Users management
@@ -125,6 +125,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'super.admin'])->gro
     Route::post('/event-categories', [App\Http\Controllers\AdminController::class, 'createEventCategory'])->name('event-categories.create');
     Route::put('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'updateEventCategory'])->name('event-categories.update');
     Route::delete('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'deleteEventCategory'])->name('event-categories.delete');
+    
+    // System settings management
+    Route::get('/system-settings', [App\Http\Controllers\AdminController::class, 'systemSettings'])->name('system-settings');
+    Route::put('/system-settings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('system-settings.update');
 });
 
 require __DIR__ . '/auth.php';

@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use App\Models\SystemSetting;
+use App\Models\User;
 
 #[Layout('components.layouts.auth', ['title' => 'Masuk'])]
 class Login extends Component
@@ -40,6 +42,17 @@ class Login extends Component
         $this->validate();
 
         $this->ensureIsNotRateLimited();
+
+        // Check if login is enabled
+        if (!SystemSetting::isLoginEnabled()) {
+            // If login is disabled, only allow super admins
+            $user = User::where('email', $this->email)->first();
+            if (!$user || $user->role !== 'super_admin') {
+                throw ValidationException::withMessages([
+                    'email' => 'Sistem sedang dalam mode maintenance. Hanya super admin yang dapat masuk.',
+                ]);
+            }
+        }
 
         if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());

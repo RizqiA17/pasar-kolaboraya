@@ -11,6 +11,7 @@ use App\Models\Interest;
 use App\Models\Skill;
 use App\Models\Contribution;
 use App\Models\EventCategory;
+use App\Models\SystemSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -569,5 +570,32 @@ class AdminController extends Controller
     {
         $eventCategory->delete();
         return redirect()->route('admin.event-categories')->with('success', 'Event category deleted successfully.');
+    }
+
+    /**
+     * Display system settings management page
+     */
+    public function systemSettings()
+    {
+        $settings = SystemSetting::all()->keyBy('key');
+        return view('admin.system-settings.index', compact('settings'));
+    }
+
+    /**
+     * Update system settings
+     */
+    public function updateSystemSettings(Request $request)
+    {
+        // Checkbox yang tidak dicentang tidak akan dikirim dalam request
+        // Jadi kita perlu menangani ini dengan benar
+        $loginEnabled = $request->has('login_enabled') ? '1' : '0';
+        $maintenanceMode = $request->has('maintenance_mode') ? '1' : '0';
+        $registrationEnabled = $request->has('registration_enabled') ? '1' : '0';
+
+        SystemSetting::setValue('login_enabled', $loginEnabled);
+        SystemSetting::setValue('maintenance_mode', $maintenanceMode);
+        SystemSetting::setValue('registration_enabled', $registrationEnabled);
+
+        return redirect()->route('admin.system-settings')->with('success', 'Pengaturan sistem berhasil diperbarui.');
     }
 }
