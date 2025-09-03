@@ -1,3 +1,9 @@
+@php
+    $collaborationsEnabled = \App\Models\SystemSetting::isCollaborationsEnabled();
+    $isSuperAdmin = auth()->user()->isSuperAdmin();
+    $isFormDisabled = !$collaborationsEnabled && !$isSuperAdmin;
+@endphp
+
 <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
     <!-- Header -->
     <div class="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center mb-8">
@@ -20,15 +26,34 @@
             </div>
         </div>
         <div class="col-span-1 max-sm:mt-4 flex justify-end">
-            <button wire:click="toggleCreateForm"
-                class="max-sm:w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                    </path>
-                </svg>
-                Buat Kolaborasi Baru
-            </button>
+            @if($isFormDisabled)
+                <div class="group relative" x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                    <button disabled
+                        class="max-sm:w-full px-6 py-3 bg-gray-400 text-gray-200 rounded-xl cursor-not-allowed opacity-60">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728">
+                            </path>
+                        </svg>
+                        Fitur Dinonaktifkan
+                    </button>
+                    <!-- Tooltip -->
+                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                        Fitur kolaborasi sedang dinonaktifkan oleh administrator
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                </div>
+            @else
+                <button wire:click="toggleCreateForm"
+                    class="max-sm:w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                        </path>
+                    </svg>
+                    Buat Kolaborasi Baru
+                </button>
+            @endif
         </div>
     </div>
 
@@ -74,8 +99,29 @@
         </div>
     @endif
 
+    <!-- Feature Disabled Message -->
+    @if($isFormDisabled)
+        <div class="mb-8 p-6 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl shadow-lg">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-red-800 mb-2">
+                        Fitur Kolaborasi Dinonaktifkan
+                    </h3>
+                    <p class="text-red-700 mb-4">
+                        Fitur kolaborasi sedang dinonaktifkan oleh administrator. Anda masih dapat melihat kolaborasi yang sudah ada, tetapi tidak dapat membuat yang baru.
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Create Collaboration Form -->
-    @if ($showCreateForm)
+    @if ($showCreateForm && !$isFormDisabled)
         <div
             class="mb-8 p-8 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-lg">
             <div class="text-center mb-6">
@@ -775,14 +821,32 @@
                             lebih besar.
                         </p>
                         <div class="mt-8">
-                            <button wire:click="$set('showCreateForm', true)"
-                                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Buat Kolaborasi Pertama
-                            </button>
+                            @if($isFormDisabled)
+                                <div class="group relative inline-block" x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                    <button disabled
+                                        class="inline-flex items-center gap-2 px-6 py-3 bg-gray-400 text-gray-200 font-medium rounded-xl cursor-not-allowed opacity-60">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                                        </svg>
+                                        Fitur Dinonaktifkan
+                                    </button>
+                                    <!-- Tooltip -->
+                                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                                        Fitur kolaborasi sedang dinonaktifkan oleh administrator
+                                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                    </div>
+                                </div>
+                            @else
+                                <button wire:click="$set('showCreateForm', true)"
+                                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Buat Kolaborasi Pertama
+                                </button>
+                            @endif
                         </div>
                     </div>
                 @endif

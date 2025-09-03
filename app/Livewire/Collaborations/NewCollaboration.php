@@ -7,6 +7,7 @@ use App\Models\Collaboration;
 use App\Models\CollaborationUser;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\SystemSetting;
 
 class NewCollaboration extends Component
 {
@@ -47,6 +48,12 @@ class NewCollaboration extends Component
 
     public function create()
     {
+        // Check if collaborations feature is enabled
+        if (!SystemSetting::isCollaborationsEnabled() && !auth()->user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $this->validate([
             'title' => 'required|min:3|max:255',
             'description' => '',

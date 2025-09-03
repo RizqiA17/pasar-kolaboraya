@@ -1,3 +1,9 @@
+@php
+    $collaborationsEnabled = \App\Models\SystemSetting::isCollaborationsEnabled();
+    $isSuperAdmin = auth()->user()->isSuperAdmin();
+    $isFormDisabled = !$collaborationsEnabled && !$isSuperAdmin;
+@endphp
+
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 relative">
     <!-- SVG Accent Elements -->
     <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
@@ -41,6 +47,34 @@
             </div>
         @endif
 
+        <!-- Feature Disabled Message -->
+        @if($isFormDisabled)
+            <div class="mb-6 p-6 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl shadow-lg">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">
+                            Fitur Kolaborasi Dinonaktifkan
+                        </h3>
+                        <p class="text-red-700 mb-4">
+                            Fitur kolaborasi sedang dinonaktifkan oleh administrator. Silakan hubungi administrator untuk informasi lebih lanjut.
+                        </p>
+                        <a href="{{ route('dashboard') }}" 
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Kembali ke Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Flash Messages -->
         @if (session()->has('success'))
             <div class="mb-6 p-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg text-white">
@@ -65,9 +99,24 @@
         @endif
 
         <!-- Main Form -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 relative">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 relative {{ $isFormDisabled ? 'opacity-60 pointer-events-none' : '' }}">
             <!-- SVG Accent for Form -->
             <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
+            
+            @if($isFormDisabled)
+                <!-- Disabled Overlay -->
+                <div class="absolute inset-0 bg-gray-100/80 rounded-2xl flex items-center justify-center z-10">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Form Dinonaktifkan</h3>
+                        <p class="text-gray-500 text-sm">Fitur kolaborasi sedang dinonaktifkan</p>
+                    </div>
+                </div>
+            @endif
             
             <form wire:submit.prevent="create" class="space-y-6">
                 <!-- Title Field -->
@@ -127,12 +176,13 @@
                     <div class="flex flex-col sm:flex-row gap-4">
                         <button 
                             type="submit" 
-                            class="cursor-pointer flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3"
+                            @if($isFormDisabled) disabled @endif
+                            class="flex-1 font-semibold py-4 px-8 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-3 {{ $isFormDisabled ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:shadow-xl transform hover:-translate-y-0.5' }}"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Buat Kolaborasi
+                            {{ $isFormDisabled ? 'Fitur Dinonaktifkan' : 'Buat Kolaborasi' }}
                         </button>
 {{--                         
                         <button 

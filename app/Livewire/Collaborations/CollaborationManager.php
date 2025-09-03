@@ -7,6 +7,7 @@ use App\Models\Collaboration;
 use App\Models\User;
 use App\Models\CollaborationUser;
 use App\Models\Connection;
+use App\Models\SystemSetting;
 use App\Services\CollaborationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
@@ -197,6 +198,12 @@ class CollaborationManager extends Component
 
     public function createCollaboration()
     {
+        // Check if collaborations feature is enabled
+        if (!SystemSetting::isCollaborationsEnabled() && !auth()->user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $this->validate();
 
         // Validate that selected users are connected
@@ -232,6 +239,12 @@ class CollaborationManager extends Component
 
     public function inviteUsers()
     {
+        // Check if collaborations feature is enabled
+        if (!SystemSetting::isCollaborationsEnabled() && !auth()->user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $this->validate([
             'selectedUsers' => 'array|min:1'
         ]);

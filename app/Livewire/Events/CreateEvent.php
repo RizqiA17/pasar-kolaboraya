@@ -3,6 +3,7 @@
 namespace App\Livewire\Events;
 
 use App\Models\Event;
+use App\Models\SystemSetting;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
@@ -67,6 +68,12 @@ class CreateEvent extends Component
 
     public function save()
     {
+        // Check if user actions feature is enabled
+        if (!SystemSetting::isUserActionsEnabled() && !auth()->user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur aksi pengguna sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
         $this->validate();
         // dd([
         //     $this->location,

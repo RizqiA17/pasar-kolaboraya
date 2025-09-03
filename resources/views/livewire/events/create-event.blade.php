@@ -1,3 +1,9 @@
+@php
+    $userActionsEnabled = \App\Models\SystemSetting::isUserActionsEnabled();
+    $isSuperAdmin = auth()->user()->isSuperAdmin();
+    $isFormDisabled = !$userActionsEnabled && !$isSuperAdmin;
+@endphp
+
 <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 relative">
     <!-- SVG Accent Elements -->
     <x-svg-accent position="top-left" size="w-24 h-24" opacity="opacity-10" />
@@ -24,11 +30,56 @@
         </div>
     </div>
 
+    <!-- Feature Disabled Message -->
+    @if($isFormDisabled)
+        <div class="max-w-4xl mx-auto mb-8">
+            <div class="p-6 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl shadow-lg">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">
+                            Fitur Aksi Pengguna Dinonaktifkan
+                        </h3>
+                        <p class="text-red-700 mb-4">
+                            Fitur aksi pengguna (event) sedang dinonaktifkan oleh administrator. Silakan hubungi administrator untuk informasi lebih lanjut.
+                        </p>
+                        <a href="{{ route('dashboard') }}" 
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Kembali ke Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Main Form -->
     <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative {{ $isFormDisabled ? 'opacity-60 pointer-events-none' : '' }}">
             <!-- SVG Accent for Form Container -->
             <x-svg-accent position="top-right" size="w-12 h-12" opacity="opacity-5" />
+            
+            @if($isFormDisabled)
+                <!-- Disabled Overlay -->
+                <div class="absolute inset-0 bg-gray-100/80 rounded-2xl flex items-center justify-center z-10">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Form Dinonaktifkan</h3>
+                        <p class="text-gray-500 text-sm">Fitur aksi pengguna sedang dinonaktifkan</p>
+                    </div>
+                </div>
+            @endif
             
             <!-- Form Header -->
             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
@@ -630,16 +681,17 @@
                 <!-- Submit Button -->
                 <div class="pt-6">
                     <button type="submit"
-                        class="w-full group relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-[1.02] transition-all duration-200">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
-                        </div>
+                        @if($isFormDisabled) disabled @endif
+                        class="w-full group relative overflow-hidden font-semibold py-4 px-6 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 {{ $isFormDisabled ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500 transform hover:scale-[1.02]' }}">
+                        @if(!$isFormDisabled)
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        @endif
                         <div class="relative flex items-center justify-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            <span class="text-lg">Buat Aksi Sekarang</span>
+                            <span class="text-lg">{{ $isFormDisabled ? 'Fitur Dinonaktifkan' : 'Buat Aksi Sekarang' }}</span>
                         </div>
                     </button>
 
