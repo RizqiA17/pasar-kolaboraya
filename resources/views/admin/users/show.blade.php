@@ -149,7 +149,7 @@
                            class="block w-full px-4 py-2 text-center bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                             Edit Pengguna
                         </a>
-                        @if(!$user->isSuperAdmin() || User::where('role', 'super_admin')->count() > 1)
+                        @if(!$user->isSuperAdmin() || \App\Models\User::where('role', 'super_admin')->count() > 1)
                             <form method="POST" action="{{ route('admin.users.delete', $user) }}" 
                                   onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
                                 @csrf

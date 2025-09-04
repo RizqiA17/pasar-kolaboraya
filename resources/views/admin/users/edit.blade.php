@@ -110,7 +110,7 @@
         </div>
 
         <!-- Zona Bahaya -->
-        @if(!$user->isSuperAdmin() || Pengguna::where('role', 'super_admin')->count() > 1)
+        @if(!$user->isSuperAdmin() || \App\Models\User::where('role', 'super_admin')->count() > 1)
             <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6">
                 <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-4">Zona Bahaya</h3>
                 <p class="text-red-700 dark:text-red-300 mb-4">
