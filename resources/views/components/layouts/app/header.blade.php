@@ -24,7 +24,8 @@
 
         <!-- Logo with modern styling -->
         <a href="{{ route('dashboard') }}"
-            class="relative lg:col-span-1 col-span-2 z-10 ms-2 me-8 flex items-center space-x-3 rtl:space-x-reverse lg:ms-0 group" wire:navigate>
+            class="relative lg:col-span-1 col-span-2 z-10 ms-2 me-8 flex items-center space-x-3 rtl:space-x-reverse lg:ms-0 group"
+            wire:navigate>
             <x-app-logo />
             <div class="hidden lg:block">
                 <div class="h-6 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600">
@@ -51,8 +52,9 @@
             @endphp
 
             <!-- Koneksi -->
-            @if($connectionsEnabled || $isSuperAdmin)
-                <flux:navbar.item icon="link" :href="route('connections')" :current="request()->routeIs('connections')"
+            @if ($connectionsEnabled || $isSuperAdmin)
+                <flux:navbar.item icon="link" :href="route('connections')"
+                    :current="request()->routeIs('connections')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl mx-1"
                     wire:navigate>
                     <span class="relative z-10">{{ __('Koneksi') }}</span>
@@ -61,31 +63,29 @@
                     </div>
                 </flux:navbar.item>
             @else
-                <flux:navbar.item icon="link" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
-                     x-data="{ tooltip: false }"
-                     @mouseenter="tooltip = true"
-                     @mouseleave="tooltip = false">
+                <flux:navbar.item icon="link"
+                    class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                    x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                     {{-- <flux:icon name="link" class="w-5 h-5" /> --}}
                     <span class="relative z-10 ml-2">{{ __('Koneksi') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
-                    
+
                     <!-- Tooltip -->
-                    <div x-show="tooltip" 
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
                         <span>Fitur koneksi sedang dinonaktifkan oleh administrator</span>
-                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        <div
+                            class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                        </div>
                     </div>
                 </flux:navbar.item>
             @endif
 
             <!-- Kolaborasi -->
-            @if($collaborationsEnabled || $isSuperAdmin)
+            @if ($collaborationsEnabled || $isSuperAdmin)
                 <flux:navbar.item icon="users" :href="route('collaborations.manage')"
                     :current="request()->routeIs('collaborations.manage')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
@@ -96,59 +96,55 @@
                     </div>
                 </flux:navbar.item>
             @else
-                <flux:navbar.item icon="users" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
-                     x-data="{ tooltip: false }"
-                     @mouseenter="tooltip = true"
-                     @mouseleave="tooltip = false">
+                <flux:navbar.item icon="users"
+                    class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                    x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                     {{-- <flux:icon name="users" class="w-5 h-5" /> --}}
                     <span class="relative z-10 ml-2">{{ __('Kolaborasi') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
-                    
+
                     <!-- Tooltip -->
-                    <div x-show="tooltip" 
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
                         <span>Fitur kolaborasi sedang dinonaktifkan oleh administrator</span>
-                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        <div
+                            class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                        </div>
                     </div>
                 </flux:navbar.item>
             @endif
 
             <!-- Aksi Bersama -->
-            @if($userActionsEnabled || $isSuperAdmin)
+            @if ($userActionsEnabled || $isSuperAdmin)
                 <flux:navbar.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-pink-600 dark:text-slate-200 dark:hover:text-pink-400 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl mx-1"
                     wire:navigate>
-                    <span class="relative z-10">{{ __('Aksi Bersama') }}</span>
+                    <span class="relative text-center z-10">{{ __('Aksi Bersama') }}</span>
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-rose-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </flux:navbar.item>
             @else
-                <flux:navbar.item icon="user-group" class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
-                     x-data="{ tooltip: false }"
-                     @mouseenter="tooltip = true"
-                     @mouseleave="tooltip = false">
+                <flux:navbar.item icon="user-group"
+                    class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                    x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                     {{-- <flux:icon name="user-group" class="w-5 h-5" /> --}}
-                    <span class="relative z-10 ml-2">{{ __('Aksi Bersama') }}</span>
+                    <span class="relative text-center z-10 ml-2">{{ __('Aksi Bersama') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
-                    
+
                     <!-- Tooltip -->
-                    <div x-show="tooltip" 
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
                         <span>Aksi pengguna sedang dinonaktifkan oleh administrator</span>
-                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                        <div
+                            class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                        </div>
                     </div>
                 </flux:navbar.item>
             @endif
@@ -183,11 +179,11 @@
                 {{-- <flux:profile circle :chevron="false"
                     @if (auth()->user()->profile?->profile_photo) avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" @else :initials="auth()->user()->initials()" @endif
                     class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" /> --}}
-                    <flux:button 
+                <flux:button
                     class="group size-10! bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full! shadow-lg hover:shadow-xl transition-all duration-300 outline-2 outline-white/20 dark:outline-slate-700/50 p-0!">
-                        <x-ui.avatar :user="auth()->user()" size="md" class="size-10!" />
-                    </flux:button>
-                    {{-- <flux:profile circle :chevron="false" avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-12!" /> --}}
+                    <x-ui.avatar :user="auth()->user()" size="md" class="size-10!" />
+                </flux:button>
+                {{-- <flux:profile circle :chevron="false" avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-12!" /> --}}
                 <div
                     class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900">
                 </div>
@@ -214,16 +210,21 @@
                         </div>
                     </flux:menu.radio.group>
 
-                    <div class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
+                    <div
+                        class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                     </div>
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="user" wire:navigate
                             class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
                             {{ __('Profile') }}</flux:menu.item>
+                        <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate
+                            class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
+                            {{ __('Admin') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
-                    <div class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
+                    <div
+                        class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                     </div>
 
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
@@ -240,9 +241,9 @@
         <!-- Modern Mobile User Menu -->
         <flux:dropdown position="top" align="end" class="relative z-10 lg:hidden ms-4">
             <flux:profile circle :chevron="false"
-                @if (auth()->user()->profile?->profile_photo) avatar="{{  asset('storage/' . auth()->user()->profile->profile_photo) }}" @else :initials="auth()->user()->initials()" @endif
+                @if (auth()->user()->profile?->profile_photo) avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" @else :initials="auth()->user()->initials()" @endif
                 class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" />
-                
+
             <flux:menu
                 class="mt-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
                 <flux:menu.radio.group>
@@ -264,12 +265,6 @@
 
                 <div class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                 </div>
-
-                <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="user" wire:navigate
-                        class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
-                        {{ __('Profile') }}</flux:menu.item>
-                </flux:menu.radio.group>
 
                 <div class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                 </div>
@@ -313,7 +308,7 @@
                 </a>
 
                 <!-- Connections -->
-                @if($connectionsEnabled || $isSuperAdmin)
+                @if ($connectionsEnabled || $isSuperAdmin)
                     <a href="{{ route('connections') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
                         wire:navigate>
@@ -328,9 +323,7 @@
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
-                         x-data="{ tooltip: false }"
-                         @mouseenter="tooltip = true"
-                         @mouseleave="tooltip = false">
+                        x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                         <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
                             <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -338,25 +331,27 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Koneksi') }}</span>
-                        
+                        <span
+                            class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Koneksi') }}</span>
+
                         <!-- Tooltip -->
-                        <div x-show="tooltip" 
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
                             <span>Fitur koneksi sedang dinonaktifkan</span>
-                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                            <div
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                            </div>
                         </div>
                     </div>
                 @endif
 
                 <!-- Collaborations -->
-                @if($collaborationsEnabled || $isSuperAdmin)
+                @if ($collaborationsEnabled || $isSuperAdmin)
                     <a href="{{ route('collaborations.manage') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collaborations.manage') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
                         wire:navigate>
@@ -371,9 +366,7 @@
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
-                         x-data="{ tooltip: false }"
-                         @mouseenter="tooltip = true"
-                         @mouseleave="tooltip = false">
+                        x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                         <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
                             <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -381,25 +374,27 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Kolaborasi') }}</span>
-                        
+                        <span
+                            class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Kolaborasi') }}</span>
+
                         <!-- Tooltip -->
-                        <div x-show="tooltip" 
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
                             <span>Fitur kolaborasi sedang dinonaktifkan</span>
-                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                            <div
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                            </div>
                         </div>
                     </div>
                 @endif
 
                 <!-- Aksi -->
-                @if($userActionsEnabled || $isSuperAdmin)
+                @if ($userActionsEnabled || $isSuperAdmin)
                     <a href="{{ route('events') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('events') ? 'bg-pink-500/20 text-pink-600 dark:text-pink-400' : 'text-slate-600 hover:text-pink-600 dark:text-slate-300 dark:hover:text-pink-400 hover:bg-pink-500/10' }}"
                         wire:navigate>
@@ -410,13 +405,11 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{ __('Aksi Bersama') }}</span>
+                        <span class="text-xs text-center font-medium">{{ __('Aksi Bersama') }}</span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
-                         x-data="{ tooltip: false }"
-                         @mouseenter="tooltip = true"
-                         @mouseleave="tooltip = false">
+                        x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                         <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
                             <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -424,19 +417,21 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Aksi Bersama') }}</span>
-                        
+                        <span
+                            class="text-xs font-medium text-center text-slate-400 dark:text-slate-500">{{ __('Aksi Bersama') }}</span>
+
                         <!-- Tooltip -->
-                        <div x-show="tooltip" 
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
                             <span>Aksi pengguna sedang dinonaktifkan</span>
-                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700"></div>
+                            <div
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -481,7 +476,7 @@
     </div>
 
     @fluxScripts
-    
+
     {{-- Stack for additional styles and scripts --}}
     @stack('styles')
     @stack('scripts')

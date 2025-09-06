@@ -6,9 +6,9 @@
             <div class="mx-auto max-w-7xl space-y-6">
                 <!-- Stats Cards Row - Consistent 3-column grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="col-span-2 grid grid-cols-3 gap-4">
+                    <div class="col-span-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <!-- Hero Section with Floating SVGs -->
-                        <div class="relative overflow-hidden px-4 col-span-3">
+                        <div class="relative overflow-hidden px-4 col-span-1 lg:col-span-3">
                             <div class="mx-auto max-w-7xl">
                                 <div class="text-left mb-6">
                                     <h1
