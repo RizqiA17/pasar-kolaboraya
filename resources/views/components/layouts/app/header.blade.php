@@ -218,9 +218,11 @@
                         <flux:menu.item :href="route('settings.profile')" icon="user" wire:navigate
                             class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
                             {{ __('Profile') }}</flux:menu.item>
-                        <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate
-                            class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
-                            {{ __('Admin') }}</flux:menu.item>
+                        @if (auth()->user()->isSuperAdmin())
+                            <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate
+                                class="px-4 py-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200">
+                                {{ __('Admin') }}</flux:menu.item>
+                        @endif
                     </flux:menu.radio.group>
 
                     <div
