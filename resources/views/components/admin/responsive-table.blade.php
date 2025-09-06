@@ -1,34 +1,66 @@
 @props([
-    'items' => [],
-    'mobileCardView' => null,
-    'desktopTableView' => null,
-    'emptyMessage' => 'Tidak ada data ditemukan',
-    'emptyIcon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z'
+    'headers' => [],
+    'data' => [],
+    'mobileCardView' => true,
+    'emptyMessage' => 'Tidak ada data ditemukan.',
+    'emptyIcon' => 'clipboard-document-list'
 ])
 
 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg overflow-hidden">
-    @if($items->count() > 0)
-        <!-- Mobile Card View (hidden on larger screens) -->
-        <div class="block lg:hidden">
-            @foreach($items as $item)
-                {{ $mobileCardView($item) }}
-            @endforeach
+    @if(count($data) > 0)
+        <!-- Desktop Table View -->
+        <div class="hidden lg:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-slate-50 dark:bg-slate-700/50">
+                    <tr>
+                        @foreach($headers as $header)
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+                                {{ $header['label'] }}
+                            </th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                    @foreach($data as $row)
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                            @foreach($headers as $header)
+                                <td class="px-6 py-4">
+                                    {!! $row[$header['key']] ?? '' !!}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
 
-        <!-- Desktop Table View (hidden on mobile) -->
-        <div class="hidden lg:block overflow-x-auto">
-            {{ $desktopTableView }}
-        </div>
-    @else
-        <!-- Empty State -->
-        <div class="p-8 text-center">
-            <div class="text-slate-500 dark:text-slate-400">
-                <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $emptyIcon }}"></path>
-                </svg>
-                <p class="text-lg font-medium">{{ $emptyMessage }}</p>
-                <p class="text-sm">Coba sesuaikan kriteria pencarian Anda</p>
+        @if($mobileCardView)
+            <!-- Mobile Card View -->
+            <div class="lg:hidden">
+                <div class="p-4 space-y-4">
+                    @foreach($data as $row)
+                        <div class="bg-white dark:bg-slate-700/50 rounded-xl p-4 border border-slate-200 dark:border-slate-600 shadow-sm">
+                            @foreach($headers as $header)
+                                @if(isset($row[$header['key']]))
+                                    <div class="mb-3 last:mb-0">
+                                        <div class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                                            {{ $header['label'] }}
+                                        </div>
+                                        <div class="text-sm text-slate-900 dark:text-slate-100">
+                                            {!! $row[$header['key']] !!}
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
             </div>
+        @endif
+    @else
+        <div class="p-8 text-center">
+            <flux:icon.{{ $emptyIcon }} class="size-16 text-gray-400 mx-auto mb-4" />
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">{{ $emptyMessage }}</h3>
         </div>
     @endif
 </div>

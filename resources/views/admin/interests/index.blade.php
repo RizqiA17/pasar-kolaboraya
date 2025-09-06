@@ -230,7 +230,7 @@
     <!-- Create Modal -->
     <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Minat Baru</h3>
                 <form method="POST" action="{{ route('admin.interests.create') }}">
                     @csrf
@@ -260,7 +260,7 @@
     <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Minat</h3>
                 <form id="editForm" method="POST">
                     @csrf

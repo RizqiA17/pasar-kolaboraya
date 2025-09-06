@@ -113,12 +113,28 @@
                             </div>
                             
                             <div class="flex items-center justify-between">
-                                <div class="text-xs text-slate-800 dark:text-slate-200">
-                                    {{ $event->start_date ? $event->start_date->format('M d, Y') : 'TBD' }}
+                                <div class="flex items-center space-x-2">
+                                    @php
+                                        $statusColors = [
+                                            'upcoming' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+                                            'ongoing' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+                                            'completed' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                                        ];
+                                        $status = $event->start_date ? 
+                                            ($event->start_date->isFuture() ? 'upcoming' : 
+                                             ($event->end_date && $event->end_date->isPast() ? 'completed' : 'ongoing')) : 'upcoming';
+                                    @endphp
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                        {{ ucfirst($status) }}
+                                    </span>
                                 </div>
                                 <div class="text-xs text-slate-500 dark:text-slate-400">
-                                    {{ $event->location ?: 'TBD' }}
+                                    {{ $event->start_date ? $event->start_date->format('M d, Y') : 'TBD' }}
                                 </div>
+                            </div>
+                            
+                            <div class="text-xs text-slate-500 dark:text-slate-400">
+                                {{ $event->location ?: 'TBD' }}
                             </div>
                             
                             <div class="flex items-center space-x-3 pt-2">
@@ -158,6 +174,7 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Acara</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pembuat</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tanggal</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lokasi</th>
                             <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
@@ -180,6 +197,21 @@
                                             <div class="text-sm text-slate-500 dark:text-slate-400">{{ $event->creator->email }}</div>
                                         </div>
                                     </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @php
+                                        $statusColors = [
+                                            'upcoming' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+                                            'ongoing' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+                                            'completed' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                                        ];
+                                        $status = $event->start_date ? 
+                                            ($event->start_date->isFuture() ? 'upcoming' : 
+                                             ($event->end_date && $event->end_date->isPast() ? 'completed' : 'ongoing')) : 'upcoming';
+                                    @endphp
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                        {{ ucfirst($status) }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-slate-800 dark:text-slate-200">
@@ -214,7 +246,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
+                                <td colspan="6" class="px-6 py-12 text-center">
                                     <div class="text-slate-500 dark:text-slate-400">
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
