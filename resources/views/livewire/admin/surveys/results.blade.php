@@ -52,7 +52,7 @@
         <!-- Tab Navigation -->
         <div
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-lg">
-            <div class="border-b border-slate-200 dark:border-slate-700">
+            {{-- <div class="border-b border-slate-200 dark:border-slate-700">
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <button wire:click="setActiveTab('overview')"
                         class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'overview' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}">
@@ -67,10 +67,10 @@
                         Alasan Anonim
                     </button>
                 </nav>
-            </div>
+            </div> --}}
 
             <div class="p-6">
-                @if ($activeTab === 'overview')
+                {{-- @if ($activeTab === 'overview') --}}
                     <!-- Overview Tab -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <!-- Kategori Koneksi -->
@@ -160,9 +160,9 @@
                             </div>
                         </div>
                     </div>
-                @elseif($activeTab === 'chart')
+                {{-- @elseif($activeTab === 'chart') --}}
                     <!-- Chart Tab -->
-                    <div class="max-w-4xl mx-auto">
+                    <div class="max-w-4xl mt-4 mx-auto">
                         <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6 text-center">Radar
                             Chart Hasil Survey</h3>
                         <div class="bg-white dark:bg-slate-700 rounded-lg p-6">
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                     </div>
-                @elseif($activeTab === 'reasons')
+                {{-- @elseif($activeTab === 'reasons') --}}
                     <!-- Reasons Tab -->
                     <div class="space-y-6">
                         <!-- Kategori Koneksi -->
@@ -352,7 +352,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                {{-- @endif --}}
             </div>
         </div>
     @else
@@ -366,10 +366,12 @@
     @endif
 </div>
 
-@if ($totalResponses > 0 && $activeTab === 'chart')
+{{-- @if ($totalResponses > 0 && $activeTab === 'chart') --}}
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            initializeRadarChart();
+
             function initializeRadarChart() {
                 const canvasKoneksi = document.getElementById('radarChartKoneksi');
                 const canvasKolaborasi = document.getElementById('radarChartKolaborasi');
@@ -390,12 +392,12 @@
                 const radarData = @json($radarData);
 
                 function customRound(value) {
-    if (value > 10) {
-        return Math.ceil(value / 10) * 10;
-    } else {
-        return Math.ceil(value);
-    }
-}
+                    if (value > 10) {
+                        return Math.ceil(value / 10) * 10;
+                    } else {
+                        return Math.ceil(value);
+                    }
+                }
 
                 const jumlahKoneksi = radarData.koneksi.jumlah_koneksi;
                 const kualitasKoneksi = radarData.koneksi.kualitas_koneksi;
@@ -441,7 +443,11 @@
                                 max: customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)),
                                 min: 0,
                                 ticks: {
-                                    stepSize: customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) > 10 ? customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) / customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) * 10 : customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring))/customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)),
+                                    stepSize: customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) >
+                                        10 ? customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) /
+                                        customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) * 10 :
+                                        customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) /
+                                        customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)),
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
@@ -506,15 +512,21 @@
                         scales: {
                             r: {
                                 beginAtZero: true,
-                                max: customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
+                                max: customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek,
+                                    tingkatKolaborasi,
                                     sumberDayaDisumbangkan)),
                                 min: 0,
                                 ticks: {
-                                    stepSize: customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
-                                        sumberDayaDisumbangkan)) > 10 ? customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
-                                        sumberDayaDisumbangkan)) / customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
-                                        sumberDayaDisumbangkan)) * 10 : customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
-                                        sumberDayaDisumbangkan))/customRound(Math.max(kualitasKolaborasi, keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
+                                    stepSize: customRound(Math.max(kualitasKolaborasi, keragamanKolaborator,
+                                        jumlahProyek, tingkatKolaborasi,
+                                        sumberDayaDisumbangkan)) > 10 ? customRound(Math.max(kualitasKolaborasi,
+                                        keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
+                                        sumberDayaDisumbangkan)) / customRound(Math.max(kualitasKolaborasi,
+                                        keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
+                                        sumberDayaDisumbangkan)) * 10 : customRound(Math.max(kualitasKolaborasi,
+                                        keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
+                                        sumberDayaDisumbangkan)) / customRound(Math.max(kualitasKolaborasi,
+                                        keragamanKolaborator, jumlahProyek, tingkatKolaborasi,
                                         sumberDayaDisumbangkan)),
                                     backdropColor: 'transparent'
                                 },
@@ -529,7 +541,7 @@
                         },
                         elements: {
                             line: {
-                                tension: 0.1
+                                tension: 0.0
                             }
                         },
                         plugins: {
@@ -610,7 +622,7 @@
                         },
                         elements: {
                             line: {
-                                tension: 0.1
+                                tension: 0.0
                             }
                         },
                         plugins: {
@@ -648,5 +660,5 @@
             });
         </script>
     @endpush
-@endif
+{{-- @endif --}}
 {{-- </x-admin.layout> --}}

@@ -1,4 +1,4 @@
-<x-layouts.app :title="'Ikuti Survey'">
+{{-- <x-layouts.app :title="'Ikuti Survey'"> --}}
     <div class="min-h-screen bg-gray-50 dark:bg-zinc-900 py-8">
         <div class="max-w-4xl mx-auto px-4">
             @if($survey)
@@ -390,4 +390,4 @@
             @endif
         </div>
     </div>
-</x-layouts.app>
+{{-- </x-layouts.app> --}}
