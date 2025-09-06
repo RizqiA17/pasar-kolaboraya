@@ -5,7 +5,9 @@ namespace App\Livewire\Admin\Surveys;
 use App\Models\Survey;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 
+#[Layout('components.admin.layout', ['title' => 'Manajemen Survey'])]
 class Index extends Component
 {
     use WithPagination;

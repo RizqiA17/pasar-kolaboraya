@@ -5,7 +5,9 @@ namespace App\Livewire\Admin\Surveys;
 use App\Models\Survey;
 use App\Models\SurveyResponse;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
+#[Layout('components.admin.layout', ['title' => 'Hasil Survey'])]
 class Results extends Component
 {
     public $surveyId;

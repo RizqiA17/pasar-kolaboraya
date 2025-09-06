@@ -4,7 +4,9 @@ namespace App\Livewire\Admin\Surveys;
 
 use App\Models\Survey;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
+#[Layout('components.admin.layout', ['title' => 'Buat Survey'])]
 class Create extends Component
 {
     public $name = '';
