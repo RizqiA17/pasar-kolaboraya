@@ -71,6 +71,11 @@ class Survey extends Model
                 'keragaman_kolaborator' => round($responses->avg('keragaman_kolaborator'), 2),
                 'jumlah_proyek_kolaborasi' => round($responses->avg('jumlah_proyek_kolaborasi'), 2),
                 'tingkat_kolaborasi' => round($responses->avg('tingkat_kolaborasi'), 2),
+                'sumber_daya_disumbangkan' => count($responses
+                ->flatMap(fn($r) => $r['sumber_daya_disumbangkan'] ?? [])
+                ->unique()
+                ->values()
+                ->all(),)
             ],
             'aksi' => [
                 'jumlah_aksi_besar' => round($responses->avg('jumlah_aksi_besar'), 2),

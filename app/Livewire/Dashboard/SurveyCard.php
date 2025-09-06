@@ -21,7 +21,6 @@ class SurveyCard extends Component
 
     public function participateInSurvey()
     {
-        dd("tes");
         if (!$this->activeSurvey) {
             session()->flash('error', 'Tidak ada survey yang aktif saat ini');
             return;
