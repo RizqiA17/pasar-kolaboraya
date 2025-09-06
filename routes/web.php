@@ -88,6 +88,9 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
         Route::get('events/{event}', \App\Livewire\Events\ShowEvent::class)->name('events.show');
     });
 
+    // Survey Routes
+    Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
+
 });
 
 // Admin routes - only accessible by super admin
@@ -139,6 +142,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // System settings management
     Route::get('/system-settings', [App\Http\Controllers\AdminController::class, 'systemSettings'])->name('system-settings');
     Route::put('/system-settings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('system-settings.update');
+    
+    // Survey management routes
+    Route::get('/surveys', \App\Livewire\Admin\Surveys\Index::class)->name('surveys');
+    Route::get('/surveys/{surveyId}/results', \App\Livewire\Admin\Surveys\Results::class)->name('surveys.results');
 });
 
 require __DIR__ . '/auth.php';

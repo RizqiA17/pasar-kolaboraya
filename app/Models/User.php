@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable // implements MustVerifyEmail
 {
@@ -109,12 +110,12 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public function collaborations()
     {
-        return $this->hasMany(CollaborationUser::class)->where('status', 'accepted')->where('user_id', auth()->id());
+        return $this->hasMany(CollaborationUser::class)->where('status', 'accepted')->where('user_id', $this->id);
     }
 
     public function events()
     {
-        return $this->hasMany(EventUser::class)->where('user_id', auth()->id());
+        return $this->hasMany(EventUser::class)->where('user_id', $this->id);
     }
 
     public function mutualConnections(){
@@ -125,7 +126,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function upcomingEvents()
     {
         return $this->hasMany(EventUser::class)
-            ->where('user_id', auth()->id())
+            ->where('user_id', $this->id)
             ->where('status', 'accepted')
             ->withWhereHas('event', function ($q) {
                 $q->where('start_date', '>=', now());
@@ -136,7 +137,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function pastEvents()
     {
         return $this->hasMany(EventUser::class)
-            ->where('user_id', auth()->id())
+            ->where('user_id', $this->id)
             ->where('status', 'accepted')
             ->withWhereHas('event', function ($q) {
                 $q->where('end_date', '<', now());
@@ -145,13 +146,13 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public function pendingReceivedConnections(){
         return $this->hasMany(Connection::class, 'receiver_id')
-            ->where('receiver_id', auth()->id())
+            ->where('receiver_id', $this->id)
             ->where('status', 'pending');
     }
 
     public function pendingSentConnections(){
         return $this->hasMany(Connection::class, 'requester_id')
-            ->where('requester_id', auth()->id())
+            ->where('requester_id', $this->id)
             ->where('status', 'pending');
     }
 
@@ -235,7 +236,7 @@ class User extends Authenticatable // implements MustVerifyEmail
      */
     public function getMutualFriendsRecommendations($limit = 5)
     {
-        $currentUserId = auth()->id();
+        $currentUserId = $this->id;
 
         // Get IDs of current user's friends
         $myFriendIds = $this->connections()
@@ -269,7 +270,7 @@ class User extends Authenticatable // implements MustVerifyEmail
      */
     public function getConnectionStatus($otherUserId)
     {
-        $currentUserId = auth()->id();
+        $currentUserId = $this->id;
 
         if ($currentUserId === $otherUserId) {
             return 'self';
@@ -349,5 +350,29 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function hasAdminPrivileges(): bool
     {
         return $this->isAdmin();
+    }
+
+    /**
+     * Get surveys created by this user
+     */
+    public function createdSurveys()
+    {
+        return $this->hasMany(Survey::class, 'created_by');
+    }
+
+    /**
+     * Get survey responses by this user
+     */
+    public function surveyResponses()
+    {
+        return $this->hasMany(SurveyResponse::class);
+    }
+
+    /**
+     * Check if user has responded to a specific survey
+     */
+    public function hasRespondedToSurvey($surveyId)
+    {
+        return $this->surveyResponses()->where('survey_id', $surveyId)->exists();
     }
 }

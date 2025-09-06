@@ -192,6 +192,8 @@
 
                     <!-- Right Sidebar - Single column, consistent spacing -->
                     <div class="space-y-6">
+                        <!-- Survey Card - Show active survey -->
+                        <livewire:dashboard.survey-card />
                         <!-- Connection Quality - Only show if connections exist -->
                         <livewire:dashboard.connection-quality />
                         <!-- Profile Summary - Only show if profile exists and has data -->
