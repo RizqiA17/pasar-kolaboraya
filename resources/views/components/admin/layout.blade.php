@@ -214,10 +214,7 @@
                             </div>
                             <h1 class="text-lg font-bold text-slate-800 dark:text-slate-200">Panel Admin</h1>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <!-- Dark Mode Toggle -->
-                            <x-dark-mode-toggle />
-                            
+                        <div class="flex items-center space-x-2">                            
                             <button type="button" id="mobile-menu-button"
                                 class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

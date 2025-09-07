@@ -20,10 +20,8 @@
 </div>
 
 <script>
-function initDarkMode() {
-    const toggle = document.getElementById('dark-mode-toggle');
+function applyTheme() {
     const html = document.documentElement;
-    
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -34,31 +32,29 @@ function initDarkMode() {
         html.classList.remove('dark');
         localStorage.setItem('flux.appearance', 'light');
     }
-    
-    toggle.addEventListener('click', function() {
-        if (html.classList.contains('dark')) {
-            html.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-            localStorage.setItem('flux.appearance', 'light');
-        } else {
-            html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            localStorage.setItem('flux.appearance', 'dark');
-        }
-    });
-    
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!localStorage.getItem('theme')) {
-            if (e.matches) {
-                html.classList.add('dark');
-                localStorage.setItem('flux.appearance', 'dark');
-            } else {
-                html.classList.remove('dark');
-                localStorage.setItem('flux.appearance', 'light');
-            }
-        }
-    });
 }
+
+function bindToggle() {
+    const toggle = document.getElementById('dark-mode-toggle');
+    if (!toggle) return;
+
+    toggle.removeEventListener('click', toggle._listener); // prevent duplicate
+    toggle._listener = () => {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+        html.classList.toggle('dark', !isDark);
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+    };
+    toggle.addEventListener('click', toggle._listener);
+}
+
+function initDarkMode() {
+    applyTheme();
+    bindToggle();
+}
+
+document.addEventListener('livewire:navigated', applyTheme);
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDarkMode);
