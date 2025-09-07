@@ -29,7 +29,7 @@
         <flux:input
             wire:model="password_confirmation"
             :label="__('Konfirmasi Kata Sandi')"
-            type="Kata Sandi"
+            type="password"
             required
             autocomplete="new-password"
             :placeholder="__('Konfirmasi Kata Sandi')"

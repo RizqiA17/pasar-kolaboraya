@@ -7,15 +7,15 @@
     <div class="space-y-6">
         {{-- {{ json_encode($searchResults) }} --}}
         @if (!empty($searchResults))
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden relative">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden relative">
                 <!-- SVG Accent for Search Results -->
                 <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
                 
-                <div class="p-4 border-b border-gray-100">
+                <div class="p-4 border-b border-gray-100 dark:border-slate-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Hasil Pencarian Anda</h3>
-                            <p class="text-sm text-gray-500">Kreator yang cocok dengan pencarian Anda</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Hasil Pencarian Anda</h3>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Kreator yang cocok dengan pencarian Anda</p>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
 
                         @forelse($searchResults as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md dark:hover:shadow-slate-900/50 transition-shadow duration-200 relative">
                                 <!-- SVG Accent for User Card -->
                                 <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
                                 {{-- {{dd($user->profile)}} --}}
@@ -33,19 +33,19 @@
                                 @if($user->profile?->banner)
                                     <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
                                 @else
-                                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100"></div>
+                                    <div class="h-24 bg-gradient-to-r from-green-100 to-teal-100 dark:from-green-900/30 dark:to-teal-900/30"></div>
                                 @endif
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white dark:ring-slate-800" />
                                     </div>
 
                                     {{-- Info --}}
                                     <div class="text-center mb-4">
-                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                        <h4 class="font-medium text-gray-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-sky-400 cursor-pointer"
                                             wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
                                             {{ $user->name }}
                                         </h4>
@@ -60,15 +60,15 @@
                         @empty
                             <div class="col-span-full text-center py-8">
                                 <div
-                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400 dark:text-slate-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak Ada Kreator yang Cocok</h3>
-                                <p class="text-gray-500 max-w-sm mx-auto">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-slate-100 mb-1">Tidak Ada Kreator yang Cocok</h3>
+                                <p class="text-gray-500 dark:text-slate-400 max-w-sm mx-auto">
                                     Coba ganti pencarian Anda.
                                 </p>
                             </div>
@@ -78,15 +78,15 @@
             </div>
         @else
             {{-- Mutual Friends Recommendations --}}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden relative">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden relative">
                 <!-- SVG Accent for Mutual Friends -->
                 <x-svg-accent position="top-right" size="w-10 h-10" opacity="opacity-5" />
                 
-                <div class="p-4 border-b border-gray-100">
+                <div class="p-4 border-b border-gray-100 dark:border-slate-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Kreator yang Mungkin Anda Kenal</h3>
-                            <p class="text-sm text-gray-500">Berdasarkan koneksi yang sama</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kreator yang Mungkin Anda Kenal</h3>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Berdasarkan koneksi yang sama</p>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         @forelse($mutualFriendsRecommendations as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md dark:hover:shadow-slate-900/50 transition-shadow duration-200 relative">
                                 <!-- SVG Accent for User Card -->
                                 <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
                                 
@@ -103,23 +103,23 @@
                                 @if($user->profile?->banner)
                                     <img src="{{ asset('storage/' . $user->profile->banner) }}" alt="{{ $user->name }}'s cover photo" class="w-full h-24 object-cover">
                                 @else
-                                    <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100"></div>
+                                    <div class="h-24 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30"></div>
                                 @endif
 
                                 {{-- Profile Content --}}
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white dark:ring-slate-800" />
                                     </div>
 
                                     {{-- Info --}}
                                     <div class="text-center mb-4">
-                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                        <h4 class="font-medium text-gray-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-sky-400 cursor-pointer"
                                             wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
                                             {{ $user->name }}
                                         </h4>
-                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500 dark:text-slate-400">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -159,12 +159,12 @@
             </div>
 
             {{-- Interest-based Recommendations --}}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-gray-100">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                <div class="p-4 border-b border-gray-100 dark:border-slate-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Rekomendasi Berdasarkan Minat</h3>
-                            <p class="text-sm text-gray-500">Kreator dengan minat yang serupa</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Rekomendasi Berdasarkan Minat</h3>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Kreator dengan minat yang serupa</p>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
 
                         @forelse($interestRecommendations as $user)
                             <div
-                                class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200 relative">
+                                class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md dark:hover:shadow-slate-900/50 transition-shadow duration-200 relative">
                                 <!-- SVG Accent for User Card -->
                                 <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
                                 
@@ -185,16 +185,16 @@
                                 <div class="p-4">
                                     {{-- Avatar --}}
                                     <div class="relative -mt-12 mb-3">
-                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white" />
+                                        <x-ui.avatar :user="$user" size="xl" class="ring-4 rounded-full ring-white dark:ring-slate-800" />
                                     </div>
 
                                     {{-- Info --}}
                                     <div class="text-center mb-4">
-                                        <h4 class="font-medium text-gray-900 hover:text-blue-600 cursor-pointer"
+                                        <h4 class="font-medium text-gray-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-sky-400 cursor-pointer"
                                             wire:click="$dispatch('showProfileCard', { userId: {{ $user->id }} })">
                                             {{ $user->name }}
                                         </h4>
-                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500">
+                                        <div class="mt-1 flex items-center justify-center gap-1 text-sm text-gray-500 dark:text-slate-400">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -213,15 +213,15 @@
                         @empty
                             <div class="col-span-full text-center py-8">
                                 <div
-                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                    class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400 dark:text-slate-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                                <p class="text-gray-500 max-w-sm mx-auto">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-slate-100 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500 dark:text-slate-400 max-w-sm mx-auto">
                                     Tambahkan minat Anda untuk mendapatkan rekomendasi yang lebih relevan.
                                 </p>
                             </div>
@@ -397,16 +397,16 @@
         // Buat notifikasi baru
         const notification = document.createElement('div');
         notification.className =
-            `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            `notification-toast fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg dark:shadow-slate-900/50 transition-all duration-300 transform translate-x-full`;
 
-        const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+        const bgColor = type === 'success' ? 'bg-green-500 dark:bg-green-600' : type === 'error' ? 'bg-red-500 dark:bg-red-600' : 'bg-blue-500 dark:bg-blue-600';
         const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
 
         notification.innerHTML = `
             <div class="flex items-center gap-3 text-white">
                 <span class="text-lg font-bold">${icon}</span>
                 <span>${message}</span>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-white hover:text-gray-200 dark:hover:text-slate-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>

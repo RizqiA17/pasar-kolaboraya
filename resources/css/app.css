@@ -43,16 +43,16 @@
 {
     .dark
     {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
+        --color-accent: var(--color-sky);
+        --color-accent-content: var(--color-sky);
         --color-accent-foreground: var(--color-navy);
         
         /* Dark mode color overrides */
-        --color-cream: #1a1a1a;
-        --color-navy: #e2e8f0;
+        --color-cream: #0f172a;
+        --color-navy: #f1f5f9;
         --color-coral: #ff8a8a;
-        --color-sky: #7dd3fc;
-        --color-purple: #c084fc;
+        --color-sky: #38bdf8;
+        --color-purple: #a855f7;
         
         /* Dark mode background colors */
         --color-background: #0f172a;
@@ -62,6 +62,27 @@
         --color-text-primary: #f1f5f9;
         --color-text-secondary: #cbd5e1;
         --color-text-muted: #94a3b8;
+        
+        /* Flux compatibility colors */
+        --flux-background: var(--color-background);
+        --flux-surface: var(--color-surface);
+        --flux-surface-elevated: var(--color-surface-elevated);
+        --flux-border: var(--color-border);
+        --flux-text-primary: var(--color-text-primary);
+        --flux-text-secondary: var(--color-text-secondary);
+        --flux-text-muted: var(--color-text-muted);
+
+        --color-zinc-50: var(--color-slate-50);
+        --color-zinc-100: var(--color-slate-100);
+        --color-zinc-200: var(--color-slate-200);
+        --color-zinc-300: var(--color-slate-300);
+        --color-zinc-400: var(--color-slate-400);
+        --color-zinc-500: var(--color-slate-500);
+        --color-zinc-600: var(--color-slate-600);
+        --color-zinc-700: var(--color-slate-800);
+        --color-zinc-800: var(--color-slate-800);
+        --color-zinc-900: var(--color-slate-900);
+        --color-zinc-950: var(--color-slate-950);
     }
 }
 

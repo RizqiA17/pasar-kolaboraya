@@ -25,11 +25,11 @@ class ProfileSettings extends Component
     public ?string $organization = '';
     public ?string $phone = '';
     public ?string $vision = '';
-    
+
     // Image Properties
     public $profilePhoto;
     public $banner;
-    
+
     // Existing Properties
     public $tab = 'profile';
     public $interests = [];
@@ -96,7 +96,7 @@ class ProfileSettings extends Component
         $this->skills = Skill::all();
         $this->contributions = Contribution::all();
         $this->tab = request()->get('tab', 'profile');
-        
+
         // Get or create user profile
         /** @var User $user */
         $user = auth()->user();
@@ -104,19 +104,19 @@ class ProfileSettings extends Component
         if (!$profile) {
             $profile = $user->profile()->create();
         }
-        
+
         // Load profile information
         $this->name = $user->name;
         $this->email = $user->email;
         $this->organization = $profile->organization ?? '';
         $this->phone = $profile->phone ?? '';
         $this->vision = $profile->vision ?? '';
-        
+
         // Load user's current selections from profile
         $this->selectedInterests = $profile->interests()
             ->pluck('id')
             ->toArray();
-            
+
         $this->selectedSkills = $profile->skills()
             ->pluck('id')
             ->toArray();
@@ -144,7 +144,7 @@ class ProfileSettings extends Component
 
         /** @var User $user */
         $user = auth()->user();
-        
+
         // Update user fields
         $user->fill([
             'name' => $this->name,
@@ -164,6 +164,11 @@ class ProfileSettings extends Component
             'vision' => $this->vision,
         ]);
 
+        if ($user->email_verified_at == null) {
+            Auth::user()->sendEmailVerificationNotification();
+            return redirect()->route('verification.notice');
+        }
+
         $this->dispatch('profile-updated');
         session()->flash('message', 'Profil berhasil diperbarui!');
     }
@@ -172,7 +177,7 @@ class ProfileSettings extends Component
     {
         $this->skillLevels = [];
         $this->primarySkills = [];
-        
+
         foreach ($profile->skills as $skill) {
             $this->skillLevels[$skill->id] = $skill->pivot->level ?? 1;
             $this->primarySkills[$skill->id] = $skill->pivot->is_primary ?? false;
@@ -182,7 +187,7 @@ class ProfileSettings extends Component
     private function loadInterestLevels($profile)
     {
         $this->interestLevels = [];
-        
+
         foreach ($profile->interests as $interest) {
             $this->interestLevels[$interest->id] = $interest->pivot->level ?? 1;
         }
@@ -278,7 +283,7 @@ class ProfileSettings extends Component
     public function togglePrimarySkill($skillId)
     {
         $this->primarySkills[$skillId] = !($this->primarySkills[$skillId] ?? false);
-        
+
         $profileService = new ProfileService();
         /** @var User $user */
         $user = auth()->user();

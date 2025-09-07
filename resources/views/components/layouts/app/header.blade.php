@@ -183,7 +183,7 @@
                     @if (auth()->user()->profile?->profile_photo) avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" @else :initials="auth()->user()->initials()" @endif
                     class="group transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" /> --}}
                 <flux:button
-                    class="group size-10! bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full! shadow-lg hover:shadow-xl transition-all duration-300 outline-2 outline-white/20 dark:outline-slate-700/50 p-0!">
+                    class="group size-10! bg-white/60! hover:bg-white/80! dark:bg-slate-800/60! dark:hover:bg-slate-800/80! backdrop-blur-sm rounded-full! shadow-lg hover:shadow-xl transition-all duration-300 outline-2 outline-white/20 dark:outline-slate-700/50 p-0!">
                     <x-ui.avatar :user="auth()->user()" size="md" class="size-10!" />
                 </flux:button>
                 {{-- <flux:profile circle :chevron="false" avatar="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}" class="size-12!" /> --}}
@@ -192,7 +192,7 @@
                 </div>
 
                 <flux:menu
-                    class="mt-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
+                    class="mt-2 bg-white/90! dark:bg-slate-800/90! backdrop-blur-xl border border-white/20! dark:border-slate-700/50! shadow-2xl shadow-blue-500/20! rounded-2xl overflow-hidden">
                     <flux:menu.radio.group>
                         <div class="p-4">
                             <div class="flex items-center gap-3">

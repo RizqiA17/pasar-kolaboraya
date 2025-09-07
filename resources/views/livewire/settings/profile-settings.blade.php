@@ -1,23 +1,23 @@
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto min-h-screen">
     <!-- Flash Messages -->
     @if (session()->has('message'))
         <div
-            class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm animate-pulse">
+            class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-600 rounded-xl shadow-sm dark:shadow-slate-900/50 animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
                             </path>
                         </svg>
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">{{ session('message') }}</p>
+                    <p class="text-sm font-medium text-green-800 dark:text-green-300">{{ session('message') }}</p>
                 </div>
                 <button type="button" onclick="this.parentElement.parentElement.remove()"
                     class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-600 hover:text-green-800" fill="none" stroke="currentColor"
+                    <svg class="h-5 w-5 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
@@ -29,11 +29,11 @@
 
     @if (session()->has('error'))
         <div
-            class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl shadow-sm animate-pulse">
+            class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 border border-red-200 dark:border-red-600 rounded-xl shadow-sm dark:shadow-slate-900/50 animate-pulse">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
-                        <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                             </path>
@@ -41,11 +41,11 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                    <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ session('error') }}</p>
                 </div>
                 <button type="button" onclick="this.parentElement.parentElement.remove()"
                     class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-600 hover:text-red-800" fill="none" stroke="currentColor"
+                    <svg class="h-5 w-5 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
@@ -58,12 +58,12 @@
 
     <!-- Hero Header -->
     <div
-        class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl shadow-2xl mb-8">
+        class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-blue-800 dark:via-blue-900 dark:to-indigo-900 rounded-2xl shadow-2xl dark:shadow-slate-900/50 mb-8">
         <div class="absolute inset-0 bg-black/10"></div>
         <div class="relative p-8 sm:p-12 text-white">
             <div class="max-w-3xl">
                 <h1 class="text-3xl sm:text-4xl font-bold mb-4">Pengaturan Profil</h1>
-                <p class="text-lg text-blue-100 leading-relaxed">Kelola informasi profil, minat, keahlian, dan
+                <p class="text-lg text-blue-100 dark:text-blue-200 leading-relaxed">Kelola informasi profil, minat, keahlian, dan
                     kontribusi Anda untuk terhubung dengan kreator yang memiliki passion serupa.</p>
                 <div class="mt-6 flex items-center space-x-4">
                     <div class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
@@ -93,16 +93,16 @@
         <!-- Sidebar Navigation -->
         <div class="lg:col-span-1">
             <div class="sticky top-16">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Menu Pengaturan</h3>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Menu Pengaturan</h3>
                     <nav class="space-y-2">
                         <button wire:click="setTab('profile')"
                             class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl 
-                            @if ($tab === 'profile') bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 shadow-sm 
-                            @else text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:border hover:border-blue-200 transition-all duration-200 @endif">
+                            @if ($tab === 'profile') bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-600 shadow-sm 
+                            @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/30 dark:hover:to-indigo-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:border hover:border-blue-200 dark:hover:border-blue-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'profile') bg-blue-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
-                                <svg class="h-4 w-4  @if ($tab === 'profile') text-blue-600 @else text-gray-600 @endif group-hover:text-blue-600"
+                                class="h-8 w-8 rounded-lg @if ($tab === 'profile') bg-blue-100 dark:bg-blue-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3">
+                                <svg class="h-4 w-4  @if ($tab === 'profile') text-blue-600 dark:text-blue-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-blue-600 dark:group-hover:text-blue-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -112,11 +112,11 @@
                         </button>
                         <button wire:click="setTab('interests')"
                             class="flex items-center px-4 w-full py-3 text-sm text-left font-medium rounded-xl 
-                            @if ($tab === 'interests') bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border border-purple-200 shadow-sm 
-                            @else text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 hover:border hover:border-purple-200 transition-all duration-200 @endif">
+                            @if ($tab === 'interests') bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-600 shadow-sm 
+                            @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 hover:text-purple-700 dark:hover:text-purple-300 hover:border hover:border-purple-200 dark:hover:border-purple-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'interests') bg-purple-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-purple-100">
-                                <svg class="h-4 w-4 @if ($tab === 'interests') text-purple-600 @else text-gray-600 @endif group-hover:text-purple-600"
+                                class="h-8 w-8 rounded-lg @if ($tab === 'interests') bg-purple-100 dark:bg-purple-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50">
+                                <svg class="h-4 w-4 @if ($tab === 'interests') text-purple-600 dark:text-purple-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-purple-600 dark:group-hover:text-purple-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
@@ -126,10 +126,10 @@
                             Minat & Ketertarikan
                         </button>
                         <button wire:click="setTab('skills')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'skills') bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border border-green-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 hover:border hover:border-green-200 transition-all duration-200 @endif">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'skills') bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 hover:text-green-700 dark:hover:text-green-300 hover:border hover:border-green-200 dark:hover:border-green-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'skills') bg-green-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-green-100">
-                                <svg class="h-4 w-4 @if ($tab === 'skills') text-green-600 @else text-gray-600 @endif group-hover:text-green-600"
+                                class="h-8 w-8 rounded-lg @if ($tab === 'skills') bg-green-100 dark:bg-green-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-green-100 dark:group-hover:bg-green-900/50">
+                                <svg class="h-4 w-4 @if ($tab === 'skills') text-green-600 dark:text-green-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-green-600 dark:group-hover:text-green-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
@@ -139,10 +139,10 @@
                             Keahlian
                         </button>
                         <button wire:click="setTab('contributions')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'contributions') bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border border-amber-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-700 hover:border hover:border-amber-200 transition-all duration-200 @endif">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'contributions') bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 dark:hover:from-amber-900/30 dark:hover:to-orange-900/30 hover:text-amber-700 dark:hover:text-amber-300 hover:border hover:border-amber-200 dark:hover:border-amber-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'contributions') bg-amber-100 @else bg-gray-100 @endif flex items-center justify-center mr-3 group-hover:bg-amber-100">
-                                <svg class="h-4 w-4 @if ($tab === 'contributions') text-amber-600 @else text-gray-600 @endif group-hover:text-amber-600"
+                                class="h-8 w-8 rounded-lg @if ($tab === 'contributions') bg-amber-100 dark:bg-amber-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/50">
+                                <svg class="h-4 w-4 @if ($tab === 'contributions') text-amber-600 dark:text-amber-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-amber-600 dark:group-hover:text-amber-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
@@ -152,10 +152,10 @@
                             Kontribusi
                         </button>
                         <button wire:click="setTab('danger')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'danger') bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border border-red-200 shadow-sm @else text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 hover:text-red-700 hover:border hover:border-red-200 transition-all duration-200 @endif">
+                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'danger') bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 dark:hover:from-red-900/30 dark:hover:to-pink-900/30 hover:text-red-700 dark:hover:text-red-300 hover:border hover:border-red-200 dark:hover:border-red-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'danger') bg-red-100 @else bg-gray-100 @endif flex items-center justify-center mr-3">
-                                <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor"
+                                class="h-8 w-8 rounded-lg @if ($tab === 'danger') bg-red-100 dark:bg-red-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-red-100 dark:group-hover:bg-red-900/50">
+                                <svg class="h-4 w-4 @if ($tab === 'danger') text-red-600 dark:text-red-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-red-600 dark:group-hover:text-red-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -173,12 +173,12 @@
         <div class="lg:col-span-3 space-y-8">
             @if ($tab === 'profile')
                 <!-- Profile Information Section -->
-                <div id="profile-info" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-blue-100">
+                <div id="profile-info" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 px-6 py-4 border-b border-blue-100 dark:border-blue-800">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
-                                <div class="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor"
+                                <div class="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
@@ -186,12 +186,12 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold text-gray-900">Informasi Profil</h3>
-                                    <p class="text-sm text-gray-600">Update informasi profil dan alamat email Anda.</p>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Informasi Profil</h3>
+                                    <p class="text-sm text-gray-600 dark:text-slate-400">Update informasi profil dan alamat email Anda.</p>
                                 </div>
                             </div>
                             <span
-                                class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-inset ring-blue-200">Required</span>
+                                class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-xs font-medium text-blue-800 dark:text-blue-300 ring-1 ring-inset ring-blue-200 dark:ring-blue-600">Required</span>
                         </div>
                     </div>
 
@@ -199,7 +199,7 @@
                         <form wire:submit="updateProfileInformation" class="space-y-6">
                             <!-- Profile Photo Upload Section -->
                             <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900">Foto Profil</label>
+                                <label class="block text-sm font-medium text-gray-900 dark:text-slate-100">Foto Profil</label>
                                 <div class="flex items-center space-x-6">
                                     <div class="flex-shrink-0">
                                         <x-ui.avatar :user="auth()->user()" size="xl" />
@@ -208,10 +208,10 @@
                                         <div class="flex items-center space-x-3">
                                             <input type="file" wire:model="profilePhoto" id="profilePhoto"
                                                 accept="image/*"
-                                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                                class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                             <button type="button" wire:click="updateProfilePhoto"
                                                 wire:loading.attr="disabled"
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed">
                                                 <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -230,9 +230,9 @@
                                                 Upload
                                             </button>
                                         </div>
-                                        <p class="mt-2 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
                                         @error('profilePhoto')
-                                            <span class="text-sm text-red-600">{{ $message }}</span>
+                                            <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
 
                             <!-- Banner Upload Section -->
                             <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900">Banner</label>
+                                <label class="block text-sm font-medium text-gray-900 dark:text-slate-100">Banner</label>
                                 <div class="space-y-4">
                                     <x-ui.banner :user="auth()->user()" height="h-32" />
                                     <div class="flex items-center space-x-3">
@@ -265,16 +265,16 @@
                                             Upload
                                         </button>
                                     </div>
-                                    <p class="text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 5MB.</p>
+                                    <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF. Maksimal 5MB.</p>
                                     @error('banner')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
-                                    <label for="name" class="block text-sm font-medium text-gray-900">Nama
+                                    <label for="name" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nama
                                         Lengkap</label>
                                     <div class="relative">
                                         <div
@@ -288,17 +288,17 @@
                                         </div>
                                         <input type="text" wire:model="name" id="name" required autofocus
                                             autocomplete="name"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan nama lengkap Anda">
                                     </div>
                                     @error('name')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="space-y-2">
                                     <label for="email"
-                                        class="block text-sm font-medium text-gray-900">Email</label>
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Email</label>
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -311,17 +311,17 @@
                                         </div>
                                         <input type="email" wire:model="email" id="email" required
                                             autocomplete="email"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan email Anda">
                                     </div>
                                     @error('email')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="space-y-2">
                                     <label for="organization"
-                                        class="block text-sm font-medium text-gray-900">Organisasi</label>
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Organisasi</label>
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -334,16 +334,16 @@
                                         </div>
                                         <input type="text" wire:model="organization" id="organization"
                                             autocomplete="organization"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Nama organisasi atau perusahaan">
                                     </div>
                                     @error('organization')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label for="phone" class="block text-sm font-medium text-gray-900">Nomor
+                                    <label for="phone" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nomor
                                         Telepon</label>
                                     <div class="relative">
                                         <div
@@ -356,17 +356,17 @@
                                             </svg>
                                         </div>
                                         <input type="tel" wire:model="phone" id="phone" autocomplete="tel"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Nomor telepon (opsional)">
                                     </div>
                                     @error('phone')
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="space-y-2">
-                                <label for="vision" class="block text-sm font-medium text-gray-900">Visi &
+                                <label for="vision" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Visi &
                                     Misi</label>
                                 <div class="relative">
                                     <div class="absolute top-3 left-3 flex items-start pointer-events-none">
@@ -378,11 +378,11 @@
                                         </svg>
                                     </div>
                                     <textarea wire:model="vision" id="vision" rows="4"
-                                        class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                        class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
                                         placeholder="Ceritakan visi dan misi Anda dalam berkarya..."></textarea>
                                 </div>
                                 @error('vision')
-                                    <span class="text-sm text-red-600">{{ $message }}</span>
+                                    <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -390,7 +390,7 @@
                                 <div class="rounded-xl bg-amber-50 border border-amber-200 p-4">
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0">
-                                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor"
+                                            <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
@@ -398,17 +398,17 @@
                                             </svg>
                                         </div>
                                         <div class="flex-1">
-                                            <p class="text-sm text-amber-800">
+                                            <p class="text-sm text-amber-800 dark:text-amber-400">
                                                 {{ __('Your email address is unverified.') }}
                                                 <button type="button"
                                                     wire:click.prevent="resendVerificationNotification"
-                                                    class="text-amber-700 hover:text-amber-600 text-sm font-medium underline">
+                                                    class="text-amber-700 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 text-sm font-medium underline">
                                                     {{ __('Click here to re-send the verification email.') }}
                                                 </button>
                                             </p>
 
                                             @if (session('status') === 'verification-link-sent')
-                                                <p class="mt-2 text-sm font-medium text-emerald-600">
+                                                <p class="mt-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
                                                     {{ __('A new verification link has been sent to your email address.') }}
                                                 </p>
                                             @endif
@@ -461,52 +461,52 @@
                 </div>
             @elseif ($tab === 'interests')
                 <!-- Enhanced Interests Section -->
-                <div id="interests" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div id="interests" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
                     <!-- Enhanced Header with Stats -->
-                    <div class="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 px-6 py-6 border-b border-purple-100">
+                    <div class="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-900/30 dark:via-pink-900/30 dark:to-rose-900/30 px-6 py-6 border-b border-purple-100 dark:border-purple-800">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-4">
-                                <div class="h-12 min-w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                <div class="h-12 min-w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 flex items-center justify-center shadow-lg dark:shadow-slate-900/50">
                                     <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-bold text-gray-900">Minat & Ketertarikan</h3>
-                                    <p class="text-gray-600">Pilih minat yang sesuai untuk terhubung dengan kreator serupa</p>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-slate-100">Minat & Ketertarikan</h3>
+                                    <p class="text-gray-600 dark:text-slate-400">Pilih minat yang sesuai untuk terhubung dengan kreator serupa</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-purple-600">{{ count($selectedInterests) }}</div>
-                                <div class="text-sm text-gray-600">Minat Dipilih</div>
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ count($selectedInterests) }}</div>
+                                <div class="text-sm text-gray-600 dark:text-slate-400">Minat Dipilih</div>
                             </div>
                         </div>
                         
                         <!-- Quick Stats -->
                         <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                            <div class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
                                 <div class="flex items-center space-x-2">
-                                    <div class="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                                        <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="h-8 w-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-lg font-semibold text-gray-900">{{ count($selectedInterests) }}</div>
-                                        <div class="text-xs text-gray-600">Dipilih</div>
+                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">{{ count($selectedInterests) }}</div>
+                                        <div class="text-xs text-gray-600 dark:text-slate-400">Dipilih</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200">
+                            <div class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
                                 <div class="flex items-center space-x-2">
-                                    <div class="h-8 w-8 rounded-lg bg-pink-100 flex items-center justify-center">
-                                        <svg class="h-5 w-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="h-8 w-8 rounded-lg bg-pink-100 dark:bg-pink-900/50 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-lg font-semibold text-gray-900">{{ count($interests) }}</div>
-                                        <div class="text-xs text-gray-600">Tersedia</div>
+                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">{{ count($interests) }}</div>
+                                        <div class="text-xs text-gray-600 dark:text-slate-400">Tersedia</div>
                                     </div>
                                 </div>
                             </div>
@@ -530,45 +530,45 @@
                         <!-- Progress Indicator -->
                         <div class="mb-6">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-medium text-gray-700">Progress Pemilihan Minat</span>
-                                <span class="text-sm text-gray-500">
+                                <span class="text-sm font-medium text-gray-700 dark:text-slate-300">Progress Pemilihan Minat</span>
+                                <span class="text-sm text-gray-500 dark:text-slate-400">
                                     @php
                                         $interestProgress = count($interests) > 0 ? round((count($selectedInterests) / count($interests)) * 100) : 0;
                                     @endphp
                                     {{ $interestProgress }}%
                                 </span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-purple-500 to-pink-600 h-2 rounded-full transition-all duration-500 ease-out" style="width: {{ $interestProgress }}%"></div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-600 dark:from-purple-400 dark:to-pink-500 h-2 rounded-full transition-all duration-500 ease-out" style="width: {{ $interestProgress }}%"></div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach ($interests as $interest)
-                                <label class="group relative flex items-start p-5 cursor-pointer bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl transition-all duration-200 ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-md transform hover:-translate-y-1">
+                                <label class="group relative flex items-start p-5 cursor-pointer bg-white dark:bg-slate-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 rounded-xl transition-all duration-200 ring-1 ring-gray-200 dark:ring-slate-600 hover:ring-purple-300 dark:hover:ring-purple-600 hover:shadow-md dark:hover:shadow-slate-900/50 transform hover:-translate-y-1">
                                     <div class="min-w-0 flex flex-col flex-1">
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center">
                                                 <div class="relative flex items-center">
                                                     <input type="checkbox" wire:model.live="selectedInterests"
                                                         value="{{ $interest->id }}"
-                                                        class="peer h-5 w-5 text-purple-600 border-gray-300 rounded-lg focus:ring-purple-500 focus:ring-2 transition-all duration-200">
+                                                        class="peer h-5 w-5 text-purple-600 dark:text-purple-400 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg focus:ring-purple-500 dark:focus:ring-purple-400 focus:ring-2 transition-all duration-200">
                                                     {{-- <div class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
                                                         <svg class="h-3.5 w-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
                                                     </div> --}}
                                                 </div>
-                                                <span class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-purple-700 transition-colors duration-200">{{ $interest->name }}</span>
+                                                <span class="ml-3 text-sm font-semibold text-gray-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors duration-200">{{ $interest->name }}</span>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
-                                                <span class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-200 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                                <span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-200 dark:ring-purple-600 opacity-0 group-hover:opacity-100 transition-all duration-200">
                                                     {{ rand(10, 50) }} kreator
                                                 </span>
                                             </div>
                                         </div>
                                         @if ($interest->description)
-                                            <p class="text-xs text-gray-600 ml-8 leading-relaxed group-hover:text-gray-700 transition-colors duration-200">
+                                            <p class="text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-slate-300 transition-colors duration-200">
                                                 {{ $interest->description }}
                                             </p>
                                         @endif
@@ -577,11 +577,11 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-8 flex items-center justify-between pt-6 border-t border-gray-200">
+                        <div class="mt-8 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
                             <div class="flex items-center space-x-4">
                                 <button wire:click="updateInterests"
                                     wire:loading.attr="disabled"
-                                    class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg dark:shadow-slate-900/50 text-white bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                                     <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -594,8 +594,8 @@
 
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="interests-unsaved-indicator" class="hidden">
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-600">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                         </svg>
                                         Belum Disimpan
@@ -604,8 +604,8 @@
                             </div>
 
                             <x-action-message class="mr-3" on="interests-updated">
-                                <div class="inline-flex items-center rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20 animate-bounce">
-                                    <svg class="mr-2 h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30 animate-bounce">
+                                    <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Minat berhasil disimpan! 🎉
@@ -616,16 +616,16 @@
                 </div>
             @elseif ($tab === 'skills')
                 <!-- Skills Section -->
-                <div id="skills" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4 border-b border-green-100">
+                <div id="skills" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 px-6 py-4 border-b border-green-100 dark:border-green-800">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900">Keahlian</h3>
-                                <p class="text-sm text-gray-600">Pilih keahlian yang Anda miliki untuk memudahkan
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian</h3>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Pilih keahlian yang Anda miliki untuk memudahkan
                                     kolaborasi dengan kreator lain.</p>
                             </div>
                             <span
-                                class="inline-flex min-w-fit items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                class="inline-flex min-w-fit items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-600/30">
                                 {{ count($selectedSkills) }} dipilih
                             </span>
                         </div>
@@ -635,14 +635,14 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach ($skills as $skill)
                                 <label
-                                    class="group relative flex items-start p-5 cursor-pointer bg-white hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 ring-1 ring-gray-200 hover:ring-green-300 hover:shadow-md transform hover:-translate-y-1">
+                                    class="group relative flex items-start p-5 cursor-pointer bg-white dark:bg-slate-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 rounded-xl transition-all duration-200 ring-1 ring-gray-200 dark:ring-slate-600 hover:ring-green-300 dark:hover:ring-green-600 hover:shadow-md dark:hover:shadow-slate-900/50 transform hover:-translate-y-1">
                                     <div class="min-w-0 flex flex-col flex-1">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
                                                 <div class="relative flex items-center">
                                                     <input type="checkbox" wire:model.live="selectedSkills"
                                                         value="{{ $skill->id }}"
-                                                        class="peer h-5 w-5 text-green-600 border-gray-300 rounded-lg focus:ring-green-500 focus:ring-2">
+                                                        class="peer h-5 w-5 text-green-600 dark:text-green-400 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg focus:ring-green-500 dark:focus:ring-green-400 focus:ring-2">
                                                     {{-- <div
                                                         class="pointer-events-none absolute top-5 left-5 transform -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
                                                         <svg class="h-3.5 w-3.5 text-green-600" fill="currentColor"
@@ -654,17 +654,17 @@
                                                     </div> --}}
                                                 </div>
                                                 <span
-                                                    class="ml-3 text-sm font-semibold text-gray-900 group-hover:text-green-700">{{ $skill->name }}</span>
+                                                    class="ml-3 text-sm font-semibold text-gray-900 dark:text-slate-100 group-hover:text-green-700 dark:group-hover:text-green-300">{{ $skill->name }}</span>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
                                                 <span
-                                                    class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-3 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-200 dark:ring-green-600 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     {{ rand(5, 30) }} kreator
                                                 </span>
                                             </div>
                                         </div>
                                         @if ($skill->description)
-                                            <p class="mt-2 text-xs text-gray-600 ml-8 leading-relaxed">
+                                            <p class="mt-2 text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed">
                                                 {{ $skill->description }}</p>
                                         @endif
                                     </div>
@@ -672,10 +672,10 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200">
+                        <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
                             <div class="flex items-center space-x-3">
                                 <button wire:click="updateSkills"
-                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105">
+                                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm dark:shadow-slate-900/50 text-white bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-green-400 transition-all duration-200 transform hover:scale-105">
                                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -687,8 +687,8 @@
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="skills-unsaved-indicator" class="hidden">
                                     <span
-                                        class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600" fill="none"
+                                        class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-600">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
@@ -701,8 +701,8 @@
 
                             <x-action-message class="mr-3" on="skills-updated">
                                 <span
-                                    class="inline-flex items-center rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                    <svg class="mr-2 h-4 w-4 text-green-600" fill="none" stroke="currentColor"
+                                    class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-3 py-2 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30">
+                                    <svg class="mr-2 h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -715,16 +715,16 @@
                 </div>
             @elseif ($tab === 'contributions')
                 <!-- Contributions Section -->
-                <div id="contributions" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-4 border-b border-amber-100">
+                <div id="contributions" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 px-6 py-4 border-b border-amber-100 dark:border-amber-800">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900">Kontribusi</h3>
-                                <p class="text-sm text-gray-600">Tambahkan kontribusi yang telah Anda berikan untuk
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi</h3>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Tambahkan kontribusi yang telah Anda berikan untuk
                                     menginspirasi kreator lain.</p>
                             </div>
                             <button type="button"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-amber-700 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 border border-amber-200 hover:border-amber-300">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-amber-700 dark:text-amber-300 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 hover:from-amber-100 hover:to-orange-100 dark:hover:from-amber-900/50 dark:hover:to-orange-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:focus:ring-amber-400 transition-all duration-200 border border-amber-200 dark:border-amber-700 hover:border-amber-300 dark:hover:border-amber-600">
                                 Tambah Baru
                             </button>
                         </div>
@@ -733,23 +733,23 @@
                     {{-- Enhanced Add New Contribution Form --}}
                     <div class="p-6">
                         <div
-                            class="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-8 mb-8 hover:border-blue-300 transition-all duration-300">
+                            class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-700 dark:to-blue-900/30 border-2 border-dashed border-blue-200 dark:border-blue-700 rounded-2xl p-8 mb-8 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300">
                             <div class="text-center mb-6">
                                 <div
-                                    class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg animate-pulse">
+                                    class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 flex items-center justify-center mx-auto mb-4 shadow-lg dark:shadow-slate-900/50 animate-pulse">
                                     <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
                                 </div>
-                                <h4 class="text-xl font-bold text-gray-900 mb-2">Tambah Kontribusi Baru</h4>
-                                <p class="text-gray-600">Pilih jenis kontribusi dan ceritakan pengalaman Anda</p>
+                                <h4 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">Tambah Kontribusi Baru</h4>
+                                <p class="text-gray-600 dark:text-slate-400">Pilih jenis kontribusi dan ceritakan pengalaman Anda</p>
                             </div>
 
                             <!-- Interactive Contribution Type Selection -->
                             <div class="mb-8">
-                                <label class="block text-sm font-semibold text-gray-900 mb-4 text-center">Pilih Jenis
+                                <label class="block text-sm font-semibold text-gray-900 dark:text-slate-100 mb-4 text-center">Pilih Jenis
                                     Kontribusi</label>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     @foreach ($contributions as $contribution)
@@ -758,12 +758,12 @@
                                                 wire:model="newContribution.contribution_id"
                                                 value="{{ $contribution->id }}" class="sr-only peer">
                                             <label for="contribution_{{ $contribution->id }}"
-                                                class="flex flex-col items-center p-4 bg-white border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:border-gray-300 transition-all duration-200 transform hover:scale-105 peer-checked:scale-105 peer-checked:shadow-lg">
+                                                class="flex flex-col items-center p-4 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 rounded-xl cursor-pointer peer-checked:border-blue-500 dark:peer-checked:border-blue-400 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 hover:border-gray-300 dark:hover:border-slate-500 transition-all duration-200 transform hover:scale-105 peer-checked:scale-105 peer-checked:shadow-lg dark:peer-checked:shadow-slate-900/50">
                                                 <div
-                                                    class="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center mb-3 peer-checked:bg-blue-100 transition-colors duration-200 group-hover:bg-gray-50">
+                                                    class="h-12 w-12 rounded-lg bg-gray-100 dark:bg-slate-600 flex items-center justify-center mb-3 peer-checked:bg-blue-100 dark:peer-checked:bg-blue-900/50 transition-colors duration-200 group-hover:bg-gray-50 dark:group-hover:bg-slate-500">
                                                     @switch($contribution->icon)
                                                         @case('academic-cap')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
@@ -775,7 +775,7 @@
                                                         @break
 
                                                         @case('globe')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -785,7 +785,7 @@
                                                         @break
 
                                                         @case('users')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -795,7 +795,7 @@
                                                         @break
 
                                                         @case('user-group')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -805,7 +805,7 @@
                                                         @break
 
                                                         @case('presentation')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -815,7 +815,7 @@
                                                         @break
 
                                                         @case('chat')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -825,7 +825,7 @@
                                                         @break
 
                                                         @case('puzzle')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -835,7 +835,7 @@
                                                         @break
 
                                                         @case('handshake')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -845,7 +845,7 @@
                                                         @break
 
                                                         @case('network')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -855,7 +855,7 @@
                                                         @break
 
                                                         @case('light-bulb')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -865,7 +865,7 @@
                                                         @break
 
                                                         @case('star')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -875,7 +875,7 @@
                                                         @break
 
                                                         @case('document-text')
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -885,7 +885,7 @@
                                                         @break
 
                                                         @default
-                                                            <svg class="h-6 w-6 text-gray-600 peer-checked:text-blue-600"
+                                                            <svg class="h-6 w-6 text-gray-600 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
@@ -896,14 +896,14 @@
                                                 </div>
                                                 <div class="text-center">
                                                     <div
-                                                        class="text-sm font-medium text-gray-900 peer-checked:text-blue-900">
+                                                        class="text-sm font-medium text-gray-900 dark:text-slate-100 peer-checked:text-blue-900 dark:peer-checked:text-blue-300">
                                                         {{ $contribution->name }}</div>
-                                                    <div class="text-xs text-gray-500 peer-checked:text-blue-600">
+                                                    <div class="text-xs text-gray-500 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400">
                                                         {{ $contribution->category }}</div>
                                                 </div>
                                                 <!-- Checkmark for selected -->
                                                 <div
-                                                    class="absolute top-2 right-2 h-5 w-5 rounded-full bg-blue-500 flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
+                                                    class="absolute top-2 right-2 h-5 w-5 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-all duration-200 scale-75 peer-checked:scale-100">
                                                     <svg class="h-3 w-3 text-white" fill="none"
                                                         stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -920,9 +920,9 @@
                             <div class="grid gap-6 max-w-2xl mx-auto">
                                 <!-- Description Field -->
                                 <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-900">
+                                    <label class="block text-sm font-semibold text-gray-900 dark:text-slate-100">
                                         <span class="flex items-center">
-                                            <svg class="h-5 w-5 text-blue-500 mr-2" fill="none"
+                                            <svg class="h-5 w-5 text-blue-500 dark:text-blue-400 mr-2" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -933,22 +933,22 @@
                                     </label>
                                     <div class="relative">
                                         <textarea wire:model="newContribution.description" rows="4"
-                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 resize-none"
+                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 dark:text-slate-100 dark:bg-slate-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-blue-600 dark:focus:border-blue-400 transition-all duration-200 resize-none"
                                             placeholder="Jelaskan detail kontribusi Anda, dampak yang dihasilkan, dan pelajaran yang didapat..."></textarea>
-                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-slate-500">
                                             {{ strlen($newContribution['description'] ?? '') }}/500
                                         </div>
                                     </div>
                                     @error('newContribution.description')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                        <p class="text-sm text-red-600 dark:text-red-400 mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <!-- Date Field -->
                                 <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-900">
+                                    <label class="block text-sm font-semibold text-gray-900 dark:text-slate-100">
                                         <span class="flex items-center">
-                                            <svg class="h-5 w-5 text-blue-500 mr-2" fill="none"
+                                            <svg class="h-5 w-5 text-blue-500 dark:text-blue-400 mr-2" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -959,17 +959,17 @@
                                     </label>
                                     <div class="relative">
                                         <input type="date" wire:model="newContribution.date"
-                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 focus:border-blue-600 transition-all duration-200">
+                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 dark:text-slate-100 dark:bg-slate-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-blue-600 dark:focus:border-blue-400 transition-all duration-200">
                                     </div>
                                     @error('newContribution.date')
-                                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                        <p class="text-sm text-red-600 dark:text-red-400 mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <!-- Action Buttons -->
                                 <div class="flex items-center justify-center space-x-4 pt-6">
                                     <button wire:click="addContribution" wire:loading.attr="disabled"
-                                        class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                        class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg dark:shadow-slate-900/50 text-white bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-600 dark:hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                                         <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -988,7 +988,7 @@
 
                                     <button type="button"
                                         wire:click="$set('newContribution', {contribution_id: '', description: '', date: ''})"
-                                        class="inline-flex items-center px-6 py-4 border border-gray-300 text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                                        class="inline-flex items-center px-6 py-4 border border-gray-300 dark:border-slate-600 text-base font-medium rounded-xl text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200">
                                         <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1001,8 +1001,8 @@
                                 <!-- Success Message -->
                                 <x-action-message class="text-center" on="contribution-added">
                                     <div
-                                        class="inline-flex items-center rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20 animate-bounce">
-                                        <svg class="mr-2 h-5 w-5 text-green-600" fill="none" stroke="currentColor"
+                                        class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30 animate-bounce">
+                                        <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7"></path>
@@ -1021,14 +1021,14 @@
                                 <li>
                                     <div class="relative pb-8">
                                         @if (!$loop->last)
-                                            <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200"
+                                            <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200 dark:bg-slate-600"
                                                 aria-hidden="true"></span>
                                         @endif
                                         <div class="relative flex items-start space-x-3">
                                             <div class="relative">
                                                 <span
-                                                    class="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center ring-8 ring-white">
-                                                    <svg class="h-5 w-5 text-blue-600" fill="none"
+                                                    class="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center ring-8 ring-white dark:ring-slate-800">
+                                                    <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none"
                                                         stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
@@ -1038,13 +1038,13 @@
                                                 </span>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <div class="text-sm font-medium text-gray-900">
+                                                <div class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                     {{ $contribution->name }}</div>
-                                                <p class="mt-1 text-sm text-gray-600">
+                                                <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
                                                     {{ $contribution->pivot->description }}</p>
                                                 <div class="mt-2 flex items-center space-x-4">
-                                                    <div class="flex items-center text-sm text-gray-500">
-                                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                                                    <div class="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 dark:text-slate-500"
                                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2"
@@ -1054,7 +1054,7 @@
                                                         {{ \Carbon\Carbon::parse($contribution->pivot->date)->format('d M Y') }}
                                                     </div>
                                                     <button wire:click="removeContribution({{ $contribution->id }})"
-                                                        class="inline-flex items-center text-sm text-red-600 hover:text-red-900">
+                                                        class="inline-flex items-center text-sm text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
                                                         <svg class="mr-1.5 h-5 w-5" fill="none"
                                                             stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1075,12 +1075,12 @@
                 </div>
             @elseif ($tab === 'danger')
                 <!-- Delete Account Section -->
-                <div id="danger" class="bg-white rounded-2xl shadow-sm border border-red-200 overflow-hidden">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 px-6 py-4 border-b border-red-100">
+                <div id="danger" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-red-200 dark:border-red-800 overflow-hidden">
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 px-6 py-4 border-b border-red-100 dark:border-red-800">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
-                                <div class="h-10 w-10 rounded-xl bg-red-100 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor"
+                                <div class="h-10 w-10 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -1088,22 +1088,22 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold text-red-600">Danger Zone</h3>
-                                    <p class="text-sm text-gray-600">Tindakan ini tidak dapat dibatalkan. Harap
+                                    <h3 class="text-lg font-semibold text-red-600 dark:text-red-400">Danger Zone</h3>
+                                    <p class="text-sm text-gray-600 dark:text-slate-400">Tindakan ini tidak dapat dibatalkan. Harap
                                         berhati-hati.</p>
                                 </div>
                             </div>
                             <span
-                                class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-200">Danger</span>
+                                class="inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/30 px-3 py-1 text-xs font-medium text-red-800 dark:text-red-300 ring-1 ring-inset ring-red-200 dark:ring-red-600">Danger</span>
                         </div>
                     </div>
 
                     <div class="p-6">
-                        <div class="rounded-xl bg-gradient-to-r from-red-50 to-pink-50 p-6 border border-red-200">
+                        <div class="rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 p-6 border border-red-200 dark:border-red-700">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
-                                    <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
-                                        <svg class="h-7 w-7 text-red-600" fill="none" stroke="currentColor"
+                                    <div class="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                                        <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
@@ -1112,41 +1112,41 @@
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-lg font-medium text-red-800 mb-3">Hapus Akun Permanen</h3>
-                                    <div class="text-sm text-red-700 space-y-3">
+                                    <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-3">Hapus Akun Permanen</h3>
+                                    <div class="text-sm text-red-700 dark:text-red-400 space-y-3">
                                         <p class="font-medium">Setelah akun Anda dihapus:</p>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                             <div class="flex items-center space-x-2">
-                                                <svg class="h-4 w-4 text-red-500" fill="none"
+                                                <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span>Semua data profil Anda akan dihapus</span>
+                                                <span class="dark:text-slate-300">Semua data profil Anda akan dihapus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <svg class="h-4 w-4 text-red-500" fill="none"
+                                                <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span>Kontribusi dan kolaborasi Anda akan dihapus</span>
+                                                <span class="dark:text-slate-300">Kontribusi dan kolaborasi Anda akan dihapus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <svg class="h-4 w-4 text-red-500" fill="none"
+                                                <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span>Koneksi dengan kreator lain akan terputus</span>
+                                                <span class="dark:text-slate-300">Koneksi dengan kreator lain akan terputus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <svg class="h-4 w-4 text-red-500" fill="none"
+                                                <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span>Tindakan ini tidak dapat dibatalkan</span>
+                                                <span class="dark:text-slate-300">Tindakan ini tidak dapat dibatalkan</span>
                                             </div>
                                         </div>
                                     </div>

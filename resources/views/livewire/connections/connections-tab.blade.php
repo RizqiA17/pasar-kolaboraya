@@ -40,7 +40,7 @@
 
     {{-- Content Sections --}}
     @if ($tab === 'requests')
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
             <div class="p-4">
                 <livewire:connections.requested-connection :isContent="true" />
             </div>
@@ -52,8 +52,8 @@
     @endif
 
     @if ($tab === 'list')
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-neutral-100">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-neutral-100 dark:border-slate-700">
                 <h2 class="text-lg font-semibold">Semua Koneksi</h2>
             </div>
             @if ($searchResults)

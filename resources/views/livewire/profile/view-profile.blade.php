@@ -1,4 +1,4 @@
-<div class="w-full bg-white relative">
+<div class="w-full bg-white dark:bg-slate-900 relative min-h-screen">
     <!-- SVG Accent Elements -->
     <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
     <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
@@ -7,7 +7,7 @@
     <!-- Flash Messages -->
     @if (session()->has('message'))
         <div class="fixed top-4 right-4 z-50">
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-300 px-4 py-3 rounded relative" role="alert">
                 <span class="block sm:inline">{{ session('message') }}</span>
                 <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3"
                     onclick="this.parentElement.remove()">
@@ -24,7 +24,7 @@
 
     @if (session()->has('error'))
         <div class="fixed top-4 right-4 z-50">
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded relative" role="alert">
                 <span class="block sm:inline">{{ session('error') }}</span>
                 <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3"
                     onclick="this.parentElement.remove()">
@@ -50,13 +50,13 @@
                 <div class="flex flex-col md:flex-row items-start gap-6">
                     <!-- Profile Image -->
                     <div class="relative flex-shrink-0 ">
-                        <div class="h-48 w-48 rounded-xl bg-white shadow-xl overflow-hidden">
+                        <div class="h-48 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 overflow-hidden">
                             @if ($user->profile?->profile_photo)
                                 <img src="{{ asset('storage/' . $user->profile->profile_photo) }}"
                                     alt="{{ $user->name }}'s profile photo" class="h-full w-full object-cover">
                             @else
                                 <div
-                                    class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+                                    class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 dark:from-blue-500 dark:to-indigo-600 flex items-center justify-center">
                                     <span class="text-white text-6xl font-bold">
                                         {{ $user->initials() }}
                                     </span>
@@ -66,9 +66,9 @@
                         <div class="absolute -bottom-2 -right-2">
                             <span class="relative flex h-5 w-5">
                                 <span
-                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 dark:bg-emerald-500 opacity-75"></span>
                                 <span
-                                    class="relative inline-flex rounded-full h-5 w-5 bg-emerald-500 ring-2 ring-white"></span>
+                                    class="relative inline-flex rounded-full h-5 w-5 bg-emerald-500 dark:bg-emerald-600 ring-2 ring-white dark:ring-slate-800"></span>
                             </span>
                         </div>
                     </div>
@@ -77,10 +77,10 @@
                     <div class="flex-1 min-w-0 mt-18">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900">{{ $user->name }}</h1>
-                                <p class="text-gray-500">{{ $user->email }}</p>
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ $user->name }}</h1>
+                                <p class="text-gray-500 dark:text-slate-400">{{ $user->email }}</p>
                                 @if ($profile?->organization)
-                                    <div class="flex items-center mt-2 text-gray-600">
+                                    <div class="flex items-center mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -91,7 +91,7 @@
                                     </div>
                                 @endif
                                 @if ($profile?->phone)
-                                    <div class="flex items-center mt-2 text-gray-600">
+                                    <div class="flex items-center mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -105,8 +105,8 @@
                             <div class="flex gap-4">
                                 @if (auth()->id() === $user->id)
                                     <a href="{{ route('settings.profile-settings') }}"
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none"
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400 dark:text-slate-500" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -126,7 +126,7 @@
 
                                         @if (!$connectionsEnabled && !$isSuperAdmin)
                                             <!-- Feature Disabled Message -->
-                                            <div class="flex-1 py-3 px-4 bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                            <div class="flex-1 py-3 px-4 bg-gray-400 dark:bg-slate-600 text-white dark:text-slate-300 text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                                 </svg>
@@ -136,7 +136,7 @@
                                             <!-- Connection Status & Actions -->
                                             @if ($connectionStatus === 'not_connected')
                                                 <button wire:click="connect({{ $user->id }})"
-                                                    class="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                    class="flex-1 py-3 px-4 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -146,7 +146,7 @@
                                                 </button>
                                             @elseif($connectionStatus === 'pending_sent')
                                                 <button disabled
-                                                    class="flex-1 py-3 px-4 bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                                    class="flex-1 py-3 px-4 bg-gray-400 dark:bg-slate-600 text-white dark:text-slate-300 text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -158,7 +158,7 @@
                                             @elseif($connectionStatus === 'pending_received')
                                                 <div class="flex flex-col sm:flex-row gap-2 w-full">
                                                     <button wire:click="acceptConnection({{ $user->id }})"
-                                                        class="flex-1 py-3 px-4 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                        class="flex-1 py-3 px-4 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -167,7 +167,7 @@
                                                         Terima Permintaan
                                                     </button>
                                                     <button wire:click="rejectConnection({{ $user->id }})"
-                                                        class="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                        class="flex-1 py-3 px-4 bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -180,7 +180,7 @@
                                                 <div class="flex flex-col sm:flex-row gap-2 w-full">
                                                     @if ($collaborationsEnabled || $isSuperAdmin)
                                                         <button wire:click="startCollaboration({{ $user->id }})"
-                                                            class="flex-1 py-3 px-4 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                            class="flex-1 py-3 px-4 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -192,7 +192,7 @@
                                                         </button>
                                                     @else
                                                         <button disabled
-                                                            class="flex-1 py-3 px-4 bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                                            class="flex-1 py-3 px-4 bg-gray-400 dark:bg-slate-600 text-white dark:text-slate-300 text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                                             </svg>
@@ -200,7 +200,7 @@
                                                         </button>
                                                     @endif
                                                     <button wire:click="disconnect({{ $user->id }})"
-                                                        class="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                        class="flex-1 py-3 px-4 bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -236,7 +236,7 @@
                                 @forelse ($profile->social_media as $platform => $url)
                                     @if (!empty($url))
                                         <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
-                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors">
+                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors">
                                             @switch(strtolower($platform))
                                                 @case('linkedin')
                                                     <svg class="h-5 w-5 mr-1.5 text-blue-600" fill="currentColor"
@@ -273,12 +273,12 @@
                                         </a>
                                     @endif
                                     @empty
-                                        <span class="text-sm text-gray-500">Belum menambahkan tautan sosial</span>
+                                        <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan sosial</span>
                                     @endforelse
                                 </div>
                             @else
                                 <div class="mt-4">
-                                    <span class="text-sm text-gray-500">Belum menambahkan tautan sosial</span>
+                                    <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan sosial</span>
                                 </div>
                             @endif
 
@@ -292,11 +292,11 @@
 
         <!-- Tab Navigation -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="border-b border-gray-200">
+            <div class="border-b border-gray-200 dark:border-slate-700">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <!-- Profile Tab -->
                     <button onclick="showTab('profile')"
-                        class="tab-button border-purple-500 text-purple-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-purple-500 text-purple-600 dark:text-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                         data-tab="profile">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -307,7 +307,7 @@
 
                     <!-- Collaborations Tab -->
                     <button onclick="showTab('collaborations')"
-                        class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                         data-tab="collaborations">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -319,7 +319,7 @@
 
                     <!-- Aksi Tab -->
                     <button onclick="showTab('events')"
-                        class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                         data-tab="events">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -331,7 +331,7 @@
 
                     <!-- Connections Tab -->
                     <button onclick="showTab('connections')"
-                        class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                         data-tab="connections">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -356,7 +356,7 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-[#379eff]/50 to-blue-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center gap-2">
@@ -366,11 +366,11 @@
                                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Keahlian</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian</h3>
                                         </div>
                                         @if ($profile?->skills)
                                             <span
-                                                class="inline-flex items-center rounded-full bg-[#379eff]/10 px-2.5 py-1 text-xs font-medium text-[#379eff]">
+                                                class="inline-flex items-center rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 px-2.5 py-1 text-xs font-medium text-[#379eff] dark:text-[#379eff]">
                                                 {{ $profile->skills->count() }} skills
                                             </span>
                                         @endif
@@ -379,12 +379,12 @@
                                         @forelse ($profile?->skills ?? [] as $skill)
                                             @if ($skill && $skill->name)
                                                 <span
-                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 transition-all duration-200 hover:bg-[#379eff]/10">
+                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">
                                                     {{ $skill->name }}
                                                 </span>
                                             @endif
                                         @empty
-                                            <span class="text-sm text-gray-500">Belum menambahkan keahlian</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan keahlian</span>
                                         @endforelse
                                     </div>
                                 </div>
@@ -396,7 +396,7 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/50 to-green-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center gap-2">
@@ -406,11 +406,11 @@
                                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Minat & Ketertarikan</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Minat & Ketertarikan</h3>
                                         </div>
                                         @if ($profile?->interests)
                                             <span
-                                                class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                                                class="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
                                                 {{ $profile->interests->count() }} interests
                                             </span>
                                         @endif
@@ -419,12 +419,12 @@
                                         @forelse ($profile?->interests ?? [] as $interest)
                                             @if ($interest && $interest->name)
                                                 <span
-                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 transition-all duration-200 hover:bg-emerald-100">
+                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
                                                     {{ $interest->name }}
                                                 </span>
                                             @endif
                                         @empty
-                                            <span class="text-sm text-gray-500">Belum menambahkan minat</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan minat</span>
                                         @endforelse
                                     </div>
                                 </div>
@@ -438,7 +438,7 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-[#379eff]/50 to-blue-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -448,11 +448,11 @@
                                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Kontribusi & Pencapaian</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi & Pencapaian</h3>
                                         </div>
                                         @if ($profile?->contributions)
                                             <span
-                                                class="inline-flex items-center rounded-full bg-[#379eff]/10 px-2.5 py-1 text-xs font-medium text-[#379eff]">
+                                                class="inline-flex items-center rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 px-2.5 py-1 text-xs font-medium text-[#379eff] dark:text-[#379eff]">
                                                 {{ $profile->contributions->count() }}
                                                 contributions
                                             </span>
@@ -483,13 +483,13 @@
                                                                     </span>
                                                                 </div>
                                                                 <div class="min-w-0 flex-1">
-                                                                    <div class="text-sm text-gray-600">
+                                                                    <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                         {{ $contribution->name }}</div>
-                                                                    <div class="text-sm text-gray-600">
+                                                                    <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                         {{ $contribution->description }}
                                                                     </div>
                                                                 </div>
-                                                                <div class="text-sm text-gray-600">
+                                                                <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                     {{ \Carbon\Carbon::parse($contribution->date)->format('d M Y') }}
                                                                 </div>
                                                             </div>
@@ -498,7 +498,7 @@
                                                 @endif
                                             @empty
                                                 <li>
-                                                    <div class="text-sm text-gray-500">Belum ada kontribusi yang
+                                                    <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada kontribusi yang
                                                         ditambahkan</div>
                                                 </li>
                                             @endforelse
@@ -519,13 +519,13 @@
                                                             </span>
                                                         </div>
                                                         <div class="min-w-0 flex-1">
-                                                            <div class="text-sm font-medium text-purple-600 mb-1">Visi &
+                                                            <div class="text-sm font-medium text-purple-600 dark:text-purple-400 mb-1">Visi &
                                                                 Misi</div>
                                                             @if ($profile?->vision)
-                                                                <div class="text-sm text-gray-600">
+                                                                <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                     {{ $profile->vision }}</div>
                                                             @else
-                                                                <div class="text-sm text-gray-500">Belum ada visi & misi
+                                                                <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada visi & misi
                                                                     yang ditambahkan</div>
                                                             @endif
                                                         </div>
@@ -557,7 +557,7 @@
                                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Kolaborasi Aktif</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kolaborasi Aktif</h3>
                                         </div>
                                     </div>
                                     <!-- Collaboration List -->
@@ -566,12 +566,12 @@
                                             $acceptedCollabUsers = $user->collaborations; // returns CollaborationUser rows
                                         @endphp
                                         @if ($acceptedCollabUsers->isEmpty())
-                                            <p class="text-gray-500 text-center py-4">Belum ada kolaborasi aktif</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada kolaborasi aktif</p>
                                         @else
                                             @foreach ($acceptedCollabUsers as $collabUser)
                                                 @if ($collabUser->collaboration)
                                                     <div
-                                                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                                         <div class="flex items-center space-x-4">
                                                             <div class="flex-shrink-0">
                                                                 <span
@@ -584,15 +584,15 @@
                                                                 </span>
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900">
+                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $collabUser->collaboration->title }}</p>
-                                                                <p class="text-sm text-gray-500">
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
                                                                     {{ $collabUser->collaboration->description }}</p>
                                                             </div>
                                                         </div>
                                                         <div class="flex items-center space-x-2">
                                                             <span
-                                                                class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                                                class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">
                                                                 Aktif
                                                             </span>
                                                         </div>
@@ -609,22 +609,22 @@
                         <div class="col-span-1">
                             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik Kolaborasi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Kolaborasi</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Total Kolaborasi</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Kolaborasi</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->collaborations->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->collaborations->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Kolaborasi Aktif</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi Aktif</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->collaborations->where('status', 'active')->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->collaborations->where('status', 'active')->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Kolaborasi Selesai</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi Selesai</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->collaborations->where('status', 'completed')->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->collaborations->where('status', 'completed')->count() }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -650,7 +650,7 @@
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Aksi Mendatang</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aksi Mendatang</h3>
                                         </div>
                                     </div>
                                     <!-- Daftar Aksi -->
@@ -667,13 +667,13 @@
                                                 ->get();
                                         @endphp
                                         @if ($upcoming->isEmpty())
-                                            <p class="text-gray-500 text-center py-4">Belum ada aksi yang akan datang</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada aksi yang akan datang</p>
                                         @else
                                             @foreach ($upcoming as $eventUser)
                                                 @if ($eventUser->event)
                                                     @php $event = $eventUser->event; @endphp
                                                     <div
-                                                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                                         <div class="flex items-center space-x-4">
                                                             <div class="flex-shrink-0">
                                                                 @if ($event->banner)
@@ -692,17 +692,17 @@
                                                                 @endif
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900">
+                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $event->title }}</p>
-                                                                <p class="text-sm text-gray-500">{{ $event->description }}
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $event->description }}
                                                                 </p>
                                                                 <div class="flex items-center gap-2 mt-1">
-                                                                    <p class="text-xs text-gray-400">
+                                                                    <p class="text-xs text-gray-400 dark:text-slate-500">
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('d M Y H:i') }}
                                                                     </p>
                                                                     @if ($event->location)
-                                                                        <span class="text-xs text-gray-400">•</span>
-                                                                        <p class="text-xs text-gray-400">
+                                                                        <span class="text-xs text-gray-400 dark:text-slate-500">•</span>
+                                                                        <p class="text-xs text-gray-400 dark:text-slate-500">
                                                                             {{ $event->location }}</p>
                                                                     @endif
                                                                 </div>
@@ -711,7 +711,7 @@
                                                         <div class="flex flex-col items-end gap-2">
                                                             @foreach ($event->categories as $category)
                                                                 <span
-                                                                    class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">{{ $category->name }}</span>
+                                                                    class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300">{{ $category->name }}</span>
                                                             @endforeach
                                                             {{-- @if ($event->max_participants)
                                                             <span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">{{ $event->participants()->count() }}/{{ $event->max_participants }} Peserta</span>
@@ -730,7 +730,7 @@
                         <div class="col-span-1">
                             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik Aksi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Aksi</h3>
                                     @php
                                         $totalEvents = \App\Models\EventUser::where('user_id', $user->id)->count();
                                         $upcomingCount = \App\Models\EventUser::where('user_id', $user->id)
@@ -746,16 +746,16 @@
                                     @endphp
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Total Aksi</span>
-                                            <span class="text-sm font-medium text-gray-900">{{ $totalEvents }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Aksi</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $totalEvents }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Aksi Mendatang</span>
-                                            <span class="text-sm font-medium text-gray-900">{{ $upcomingCount }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Mendatang</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $upcomingCount }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Aksi Selesai</span>
-                                            <span class="text-sm font-medium text-gray-900">{{ $pastCount }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Selesai</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $pastCount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -781,7 +781,7 @@
                                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900">Koneksi</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Koneksi</h3>
                                         </div>
                                     </div>
                                     <!-- Connection List -->
@@ -790,7 +790,7 @@
                                             $accepted = $user->connections; // Connection rows where current user is requester and accepted
                                         @endphp
                                         @if ($accepted->isEmpty())
-                                            <p class="text-gray-500 text-center py-4">Belum ada koneksi</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi</p>
                                         @else
                                             @foreach ($accepted as $conn)
                                                 @php
@@ -798,7 +798,7 @@
                                                 @endphp
                                                 @if ($otherUser)
                                                     <div
-                                                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                                         <div class="flex items-center space-x-4">
                                                             <div class="flex-shrink-0">
                                                                 <span
@@ -811,15 +811,15 @@
                                                                 </span>
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900">
+                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $otherUser->name }}</p>
-                                                                <p class="text-sm text-gray-500">{{ $otherUser->email }}
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $otherUser->email }}
                                                                 </p>
                                                             </div>
                                                         </div>
                                                         <div class="flex items-center space-x-2">
                                                             <a href="{{ route('profile.view', $otherUser->id) }}"
-                                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Lihat
+                                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">Lihat
                                                                 Profil</a>
                                                         </div>
                                                     </div>
@@ -835,22 +835,22 @@
                         <div class="col-span-1">
                             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik Koneksi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Koneksi</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Total Koneksi</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Koneksi</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->connections->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->connections->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Permintaan Masuk</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Masuk</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->pendingReceivedConnections()->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->pendingReceivedConnections()->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">Permintaan Terkirim</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Terkirim</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900">{{ $user->pendingSentConnections()->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->pendingSentConnections()->count() }}</span>
                                         </div>
                                     </div>
                                 </div>

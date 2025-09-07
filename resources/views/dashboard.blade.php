@@ -171,14 +171,14 @@
                             <div class="relative z-10 p-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Aktivitas
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">Aktivitas
                                             Terbaru</h3>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Lihat apa yang terjadi di
+                                        <p class="text-gray-600 dark:text-slate-400 text-sm">Lihat apa yang terjadi di
                                             komunitas Anda</p>
                                     </div>
                                     <div
-                                        class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <flux:icon.clock class="size-6 text-white" />
+                                        class="w-12 h-12 bg-gradient-to-br from-sky-500 to-purple-500 dark:from-sky-400 dark:to-purple-400 rounded-lg flex items-center justify-center shadow-lg">
+                                        <flux:icon.clock class="size-6 text-white dark:text-slate-900" />
                                     </div>
                                 </div>
 

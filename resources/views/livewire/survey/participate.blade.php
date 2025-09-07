@@ -1,5 +1,5 @@
 {{-- <x-layouts.app :title="'Ikuti Survey'"> --}}
-    <div class="min-h-screen bg-gray-50 dark:bg-zinc-900 py-8">
+    <div class="min-h-screen py-8">
         <div class="max-w-4xl mx-auto px-4">
             @if($survey)
                 <!-- Header -->

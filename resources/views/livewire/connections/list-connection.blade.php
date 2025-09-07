@@ -13,7 +13,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         @if (!empty($searchResults))
             @forelse ($searchResults as $friend)
-                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 relative"
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden hover:shadow-md dark:hover:shadow-slate-900/50 transition-shadow duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
                     <!-- SVG Accent for Connection Card -->
                     <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
@@ -25,22 +25,22 @@
                     <div class="p-4">
                         {{-- Avatar --}}
                         <div class="relative -mt-12 mb-3">
-                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white" />
+                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white dark:ring-slate-800" />
                         </div>
 
                         <div class="flex flex-col items-center text-center">
 
-                            <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1 cursor-pointer hover:text-blue-600 dark:hover:text-sky-400 transition-colors"
                                 wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
                                 {{ $friend['name'] }}
                             </h3>
 
                             <a href="{{ route('profile.view', $friend['id']) }}"
-                                class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                                class="text-sm text-blue-600 dark:text-sky-400 hover:text-blue-800 dark:hover:text-sky-300 transition-colors mb-4">
                                 Lihat Profile Lengkap
                             </a>
 
-                            <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
+                            <div class="flex items-center justify-center gap-4 text-gray-600 dark:text-slate-400 text-sm mb-6">
                                 <div class="text-center">
                                     <div class="font-semibold">{{ $friend['connections_count'] }}</div>
                                     <div>Koneksi</div>
@@ -67,14 +67,14 @@
                                     </flux:modal.trigger>
                                 @else
                                     <button disabled
-                                        class="flex-1 px-3 py-2 w-full bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5">
+                                        class="flex-1 px-3 py-2 w-full bg-gray-400 dark:bg-slate-600 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5">
                                         <span class="font-medium">Kolaborasi Dinonaktifkan</span>
                                     </button>
                                 @endif
 
                                 @if($connectionsEnabled || $isSuperAdmin)
                                     <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                        class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                        class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -83,7 +83,7 @@
                                     </button>
                                 @else
                                     <button disabled
-                                        class="px-4 py-2 w-full bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                        class="px-4 py-2 w-full bg-gray-400 dark:bg-slate-600 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                         </svg>
@@ -100,21 +100,21 @@
             @empty
                 <div class="col-span-full text-center py-12 px-4">
                     <div
-                        class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-100/50 flex items-center justify-center">
-                        <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border-2 border-blue-100/50 dark:border-blue-800/50 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-blue-400 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak Ada Hasil yang Cocok</h3>
-                    <p class="text-gray-600 max-w-sm mx-auto leading-relaxed">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-2">Tidak Ada Hasil yang Cocok</h3>
+                    <p class="text-gray-600 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
                         Coba ganti pencarian Anda.
                     </p>
                 </div>
             @endforelse
         @else
             @forelse ($friends as $friend)
-                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 relative"
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden hover:shadow-md dark:hover:shadow-slate-900/50 transition-shadow duration-200 relative"
                     data-user-id="{{ $friend['id'] }}">
                     <!-- SVG Accent for Connection Card -->
                     <x-svg-accent position="top-right" size="w-6 h-6" opacity="opacity-5" />
@@ -126,21 +126,21 @@
                     <div class="p-4">
                         {{-- Avatar --}}
                         <div class="relative -mt-12 mb-3">
-                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white" />
+                            <x-ui.avatar :user="App\Models\User::find($friend['id'])" size="xl" class="ring-4 rounded-full ring-white dark:ring-slate-800" />
                         </div>
 
                         <div class="flex flex-col items-center text-center">
 
-                            <h3 class="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1 cursor-pointer hover:text-blue-600 dark:hover:text-sky-400 transition-colors"
                                 wire:click="$dispatch('showProfileCard', { userId: {{ $friend['id'] }} })">
                                 {{ $friend['name'] }}</h3>
 
                             <a href="{{ route('profile.view', $friend['id']) }}"
-                                class="text-sm text-blue-600 hover:text-blue-800 transition-colors mb-4">
+                                class="text-sm text-blue-600 dark:text-sky-400 hover:text-blue-800 dark:hover:text-sky-300 transition-colors mb-4">
                                 Lihat Profile Lengkap
                             </a>
 
-                            <div class="flex items-center justify-center gap-4 text-gray-600 text-sm mb-6">
+                            <div class="flex items-center justify-center gap-4 text-gray-600 dark:text-slate-400 text-sm mb-6">
                                 <div class="text-center">
                                     <div class="font-semibold">{{ $friend['connections_count'] }}</div>
                                     <div>Koneksi</div>
@@ -167,14 +167,14 @@
                                     </flux:modal.trigger>
                                 @else
                                     <button disabled
-                                        class="flex-1 px-3 py-2 w-full bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5">
+                                        class="flex-1 px-3 py-2 w-full bg-gray-400 dark:bg-slate-600 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5">
                                         <span class="font-medium">Kolaborasi Dinonaktifkan</span>
                                     </button>
                                 @endif
 
                                 @if($connectionsEnabled || $isSuperAdmin)
                                     <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
-                                        class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                        class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -183,7 +183,7 @@
                                     </button>
                                 @else
                                     <button disabled
-                                        class="px-4 py-2 w-full bg-gray-400 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                        class="px-4 py-2 w-full bg-gray-400 dark:bg-slate-600 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                         </svg>
@@ -201,15 +201,15 @@
             @empty
                 <div class="col-span-full text-center py-12 px-4">
                     <div
-                        class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-100/50 flex items-center justify-center">
-                        <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor"
+                        class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border-2 border-blue-100/50 dark:border-blue-800/50 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-blue-400 dark:text-blue-300" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Belum Ada Koneksi</h3>
-                    <p class="text-gray-600 max-w-sm mx-auto leading-relaxed">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-2">Belum Ada Koneksi</h3>
+                    <p class="text-gray-600 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
                         Mulai terhubung dengan pengguna lain untuk membangun jaringan kolaborasi Anda.
                     </p>
                 </div>
