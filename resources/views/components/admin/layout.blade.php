@@ -72,7 +72,7 @@
                                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
                                         </path>
                                     </svg>
-                                    <span class="truncate">Pengguna</span>
+                                    <span class="truncate">Peserta</span>
                                 </a>
 
                                 <a href="{{ route('admin.collaborations') }}"
@@ -214,13 +214,18 @@
                             </div>
                             <h1 class="text-lg font-bold text-slate-800 dark:text-slate-200">Panel Admin</h1>
                         </div>
-                        <button type="button" id="mobile-menu-button"
-                            class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <!-- Dark Mode Toggle -->
+                            <x-dark-mode-toggle />
+                            
+                            <button type="button" id="mobile-menu-button"
+                                class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

@@ -46,6 +46,22 @@
         --color-accent: var(--color-white);
         --color-accent-content: var(--color-white);
         --color-accent-foreground: var(--color-navy);
+        
+        /* Dark mode color overrides */
+        --color-cream: #1a1a1a;
+        --color-navy: #e2e8f0;
+        --color-coral: #ff8a8a;
+        --color-sky: #7dd3fc;
+        --color-purple: #c084fc;
+        
+        /* Dark mode background colors */
+        --color-background: #0f172a;
+        --color-surface: #1e293b;
+        --color-surface-elevated: #334155;
+        --color-border: #475569;
+        --color-text-primary: #f1f5f9;
+        --color-text-secondary: #cbd5e1;
+        --color-text-muted: #94a3b8;
     }
 }
 

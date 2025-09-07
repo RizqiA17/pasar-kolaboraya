@@ -55,7 +55,7 @@
                     </div>
                     
                     <!-- Filter Button -->
-                    <flux:button type="submit" variant="primary">Cari</flux:button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Cari</button>
                     
                     <!-- Clear Filters -->
                     @if(request('search') || request('status') || request('date_from') || request('date_to'))

@@ -165,7 +165,7 @@
                     <div class="max-w-4xl mt-4 mx-auto">
                         <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6 text-center">Radar
                             Chart Hasil Survey</h3>
-                        <div class="bg-white dark:bg-slate-700 rounded-lg p-6">
+                        <div class="rounded-lg p-6">
                             <div class="relative" style="height: 500px;">
                                 <canvas id="radarChartKoneksi"></canvas>
                             </div>
@@ -451,11 +451,11 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                                     circular: true
                                 },
                                 angleLines: {
-                                    color: 'rgba(0, 0, 0, 0.1)'
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
                                 }
                             }
                         },
@@ -469,7 +469,8 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true
+                                    usePointStyle: true,
+                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
                                 }
                             }
                         }
@@ -531,11 +532,11 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                                     circular: true
                                 },
                                 angleLines: {
-                                    color: 'rgba(0, 0, 0, 0.1)'
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
                                 }
                             }
                         },
@@ -549,7 +550,8 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true
+                                    usePointStyle: true,
+                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
                                 }
                             }
                         }
@@ -612,11 +614,11 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                                     circular: true
                                 },
                                 angleLines: {
-                                    color: 'rgba(0, 0, 0, 0.1)'
+                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
                                 }
                             }
                         },
@@ -630,7 +632,8 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true
+                                    usePointStyle: true,
+                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
                                 }
                             }
                         }

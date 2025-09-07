@@ -102,9 +102,9 @@
                        class="w-full sm:w-auto px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors text-center">
                         Batal
                     </a>
-                    <flux:button type="submit" variant="primary" class="w-full sm:w-auto">
-                        Update Pengguna
-                    </flux:button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Perbarui Pengguna
+                    </button>
                 </div>
             </form>
         </div>
@@ -120,9 +120,9 @@
                       onsubmit="return confirm('Are you absolutely sure you want to delete this user? This action cannot be undone and will permanently remove all user data.')">
                     @csrf
                     @method('DELETE')
-                    <flux:button type="submit" variant="danger">
-                        Delete Pengguna
-                    </flux:button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        Hapus Pengguna
+                    </button>
                 </form>
             </div>
         @endif

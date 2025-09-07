@@ -17,7 +17,7 @@
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Pengguna</p>
+                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Peserta</p>
                         <p class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['users']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="mt-3 sm:mt-4">
                     <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
-                        Lihat semua pengguna →
+                        Lihat semua Peserta →
                     </a>
                 </div>
             </div>
@@ -127,7 +127,7 @@
             <!-- Recent Users -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Pengguna Terbaru</h3>
+                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Peserta Terbaru</h3>
                     <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada pengguna ditemukan.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada Peserta ditemukan.</p>
                     @endforelse
                 </div>
             </div>

@@ -1,27 +1,32 @@
 <x-layouts.guest>
     <!-- Hero Section -->
-    <div class="relative min-h-screen bg-cream overflow-hidden">
+    <div class="relative min-h-screen bg-cream dark:bg-slate-900 overflow-hidden">
         <!-- Navigation -->
         <nav class="absolute top-0 w-full z-50 p-6">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <div class="text-navy text-2xl font-bold">
+                <div class="text-navy dark:text-slate-200 text-2xl font-bold">
                     <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo" class="h-10">
                 </div>
-                @if (Route::has('login'))
-                    <div class="space-x-4">
-                        @auth
-                            <a href="{{ url('/dashboard') }}"
-                                class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Beranda</a>
-                        @else
-                            <a href="{{ route('login') }}"
-                                class="px-4 py-2 text-navy hover:text-blue-700 transition">Masuk</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}"
-                                    class="px-4 py-2 bg-navy text-white rounded-full hover:bg-blue-700 transition">Daftar</a>
-                            @endif
-                        @endauth
-                    </div>
-                @endif
+                <div class="flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <x-dark-mode-toggle />
+                    
+                    @if (Route::has('login'))
+                        <div class="space-x-4">
+                            @auth
+                                <a href="{{ url('/dashboard') }}"
+                                    class="px-4 py-2 bg-navy dark:bg-slate-700 text-white rounded-full hover:bg-blue-700 dark:hover:bg-slate-600 transition">Beranda</a>
+                            @else
+                                <a href="{{ route('login') }}"
+                                    class="px-4 py-2 text-navy dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-400 transition">Masuk</a>
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}"
+                                        class="px-4 py-2 bg-navy dark:bg-slate-700 text-white rounded-full hover:bg-blue-700 dark:hover:bg-slate-600 transition">Daftar</a>
+                                @endif
+                            @endauth
+                        </div>
+                    @endif
+                </div>
             </div>
         </nav>
 
@@ -63,17 +68,17 @@
                 </div>
                 <div class="max-w-7xl relative z-1 mx-auto px-6 lg:px-8">
                     <div class="text-center">
-                        <h1 class="text-4xl sm:text-5xl font-bold text-navy mb-8 leading-tight">
+                        <h1 class="text-4xl sm:text-5xl font-bold text-navy dark:text-slate-100 mb-8 leading-tight">
                             Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial
                         </h1>
-                        <p class="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
-                            Pasar Kolaboraya adalah ruang <span class="text-sky font-semibold">temu
+                        <p class="text-xl sm:text-2xl text-gray-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto">
+                            Pasar Kolaboraya adalah ruang <span class="text-sky dark:text-sky-400 font-semibold">temu
                                 lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span
-                                class="text-coral font-semibold">memperluas dampak</span>.
+                                class="text-coral dark:text-coral-400 font-semibold">memperluas dampak</span>.
                         </p>
                         <div class="space-x-4">
                             <a href="{{ route('register') }}"
-                                class="inline-flex items-center px-8 py-4 bg-navy text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition">
+                                class="inline-flex items-center px-8 py-4 bg-navy dark:bg-slate-700 text-white rounded-full text-lg font-semibold hover:bg-blue-700 dark:hover:bg-slate-600 transition">
                                 Bergabung Sekarang
                                 <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -85,43 +90,43 @@
 
                     <!-- Features -->
                     <div class="mt-32 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div class="bg-sky/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                                <svg class="w-6 h-6 text-sky" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
+                            <div class="bg-sky/10 dark:bg-sky-400/20 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-sky dark:text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                     </path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-semibold text-navy mb-3">Jaringan Luas</h3>
-                            <p class="text-gray-600">Terhubung dengan kreator perubahan sosial dari berbagai latar
+                            <h3 class="text-xl font-semibold text-navy dark:text-slate-100 mb-3">Jaringan Luas</h3>
+                            <p class="text-gray-600 dark:text-slate-300">Terhubung dengan kreator perubahan sosial dari berbagai latar
                                 belakang dan fokus.</p>
                         </div>
 
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div class="bg-coral/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                                <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor"
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
+                            <div class="bg-coral/10 dark:bg-coral-400/20 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-coral dark:text-coral-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                     </path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-semibold text-navy mb-3">Kolaborasi Efektif</h3>
-                            <p class="text-gray-600">Temukan partner yang sesuai dan kolaborasi untuk menciptakan dampak
+                            <h3 class="text-xl font-semibold text-navy dark:text-slate-100 mb-3">Kolaborasi Efektif</h3>
+                            <p class="text-gray-600 dark:text-slate-300">Temukan partner yang sesuai dan kolaborasi untuk menciptakan dampak
                                 yang lebih besar.</p>
                         </div>
 
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div class="bg-purple/10 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
-                                <svg class="w-6 h-6 text-purple" fill="none" stroke="currentColor"
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
+                            <div class="bg-purple/10 dark:bg-purple-400/20 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+                                <svg class="w-6 h-6 text-purple dark:text-purple-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-semibold text-navy mb-3">Dampak Terukur</h3>
-                            <p class="text-gray-600">Pantau dan ukur dampak dari setiap kolaborasi yang Anda lakukan.
+                            <h3 class="text-xl font-semibold text-navy dark:text-slate-100 mb-3">Dampak Terukur</h3>
+                            <p class="text-gray-600 dark:text-slate-300">Pantau dan ukur dampak dari setiap kolaborasi yang Anda lakukan.
                             </p>
                         </div>
                     </div>
@@ -132,7 +137,7 @@
         <!-- Footer -->
         <footer class="mt-32 pb-8 z-1 relative">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="border-t border-gray-200 pt-8 text-center text-gray-500">
+                <div class="border-t border-gray-200 dark:border-slate-700 pt-8 text-center text-gray-500 dark:text-slate-400">
                     <p>&copy; 2025 Pasar Kolaboraya. All rights reserved.</p>
                 </div>
             </div>

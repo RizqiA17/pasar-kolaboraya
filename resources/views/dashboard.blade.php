@@ -31,8 +31,8 @@
                         </div>
                         <!-- Connections Card -->
                         <div
-                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
                             <div class="absolute top-0 right-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -40,20 +40,20 @@
                             <div class="relative z-10">
                                 <div class="flex items-center justify-between mb-3">
                                     <div
-                                        class="w-10 h-10 bg-blue-200/80 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                        <flux:icon.link class="size-5 text-gray-900" />
+                                        class="w-10 h-10 bg-blue-200/80 dark:bg-blue-400/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                                        <flux:icon.link class="size-5 text-gray-900 dark:text-blue-400" />
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-xl font-bold">
+                                        <div class="text-xl font-bold text-gray-900 dark:text-slate-100">
                                             <livewire:dashboard.stats type="connections" />
                                         </div>
-                                        <div class="text-gray-900 text-xs">Total</div>
+                                        <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                     </div>
                                 </div>
-                                <h3 class="text-sm font-bold mb-2">Koneksi</h3>
-                                <p class="text-gray-900 mb-3 text-xs">Jaringan profesional yang terhubung</p>
+                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Koneksi</h3>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Jaringan profesional yang terhubung</p>
                                 <a href="{{ route('connections') . '?tab=list' }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 hover:text-gray-900 transition-colors">
+                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,8 +65,8 @@
     
                         <!-- Collaborations Card -->
                         <div
-                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
                             <div class="absolute top-0 left-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/2.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -74,20 +74,20 @@
                             <div class="relative z-10">
                                 <div class="flex items-center justify-between mb-3">
                                     <div
-                                        class="w-10 h-10 bg-purple-200/80 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                        <flux:icon.users class="size-5 text-gray-900" />
+                                        class="w-10 h-10 bg-purple-200/80 dark:bg-purple-400/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                                        <flux:icon.users class="size-5 text-gray-900 dark:text-purple-400" />
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-xl font-bold">
+                                        <div class="text-xl font-bold text-gray-900 dark:text-slate-100">
                                             <livewire:dashboard.stats type="collaborations" />
                                         </div>
-                                        <div class="text-gray-900 text-xs">Total</div>
+                                        <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                     </div>
                                 </div>
-                                <h3 class="text-sm font-bold mb-2">Kolaborasi</h3>
-                                <p class="text-gray-900 mb-3 text-xs">Proyek kolaborasi yang aktif</p>
+                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Kolaborasi</h3>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Proyek kolaborasi yang aktif</p>
                                 <a href="{{ route('collaborations') }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 hover:text-gray-900 transition-colors">
+                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -99,8 +99,8 @@
     
                         <!-- Events Card -->
                         <div
-                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+                            class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
                             <div class="absolute bottom-0 right-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/11.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -108,20 +108,20 @@
                             <div class="relative z-10">
                                 <div class="flex items-center justify-between mb-3">
                                     <div
-                                        class="w-10 h-10 bg-emerald-200/80 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                        <flux:icon.user-group class="size-5 text-gray-900" />
+                                        class="w-10 h-10 bg-emerald-200/80 dark:bg-emerald-400/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                                        <flux:icon.user-group class="size-5 text-gray-900 dark:text-emerald-400" />
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-xl font-bold">
+                                        <div class="text-xl font-bold text-gray-900 dark:text-slate-100">
                                             <livewire:dashboard.stats type="events" />
                                         </div>
-                                        <div class="text-gray-900 text-xs">Total</div>
+                                        <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                     </div>
                                 </div>
-                                <h3 class="text-sm font-bold mb-2">Aksi</h3>
-                                <p class="text-gray-900 mb-3 text-xs">Event dan aksi yang diikuti</p>
+                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Aksi</h3>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Event dan aksi yang diikuti</p>
                                 <a href="{{ route('events') }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 hover:text-gray-900 transition-colors">
+                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

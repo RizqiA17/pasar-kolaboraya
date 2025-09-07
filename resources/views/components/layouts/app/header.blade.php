@@ -153,6 +153,9 @@
         {{-- <flux:spacer /> --}}
 
         <div class="flex col-span-1 items-center gap-2 justify-end">
+            <!-- Dark Mode Toggle -->
+            <x-dark-mode-toggle class="relative z-10" />
+            
             <!-- Modern Notification System -->
             <x-flux::dropdown align="right" width="128" class="relative z-10"
                 x-on:show="Livewire.dispatch('dropdown-shown')" x-on:hide="Livewire.dispatch('dropdown-hidden')">

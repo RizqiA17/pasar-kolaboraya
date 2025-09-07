@@ -56,7 +56,7 @@
                 </div>
                 
                 <!-- Filter Button -->
-                <flux:button type="submit" variant="primary">Cari</flux:button>
+                <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Cari</button>
                 
                 <!-- Clear Filters -->
                 @if(request('search') || request('status') || request('date_from') || request('date_to'))
@@ -256,9 +256,9 @@
                                 class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
                             Batal
                         </button>
-                        <flux:button type="submit" variant="primary">
-                            Create Kontribusi
-                        </flux:button>
+                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Tambah Kontribusi
+                        </button>
                     </div>
                 </form>
             </div>
@@ -287,9 +287,9 @@
                                 class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
                             Batal
                         </button>
-                        <flux:button type="submit" variant="primary">
-                            Update Kontribusi
-                        </flux:button>
+                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Perbarui Kontribusi
+                        </button>
                     </div>
                 </form>
             </div>

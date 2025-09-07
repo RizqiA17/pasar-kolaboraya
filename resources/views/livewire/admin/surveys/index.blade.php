@@ -26,7 +26,7 @@
                             placeholder="Cari survey berdasarkan nama atau deskripsi..."
                             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
                         >
-                        <flux:icon.magnifying-glass class="absolute left-3 top-2.5 size-4 text-gray-400" />
+                        <flux:icon.magnifying-glass class="absolute left-3 top-3 size-4 text-gray-400" />
                     </div>
                 </div>
             </div>
