@@ -65,11 +65,19 @@ class Ecosystem extends Model
     }
 
     /**
-     * Get collective actions created by this ecosystem
+     * Get collective actions that include this ecosystem
      */
-    public function collectiveActions(): HasMany
+    public function collectiveActions()
     {
-        return $this->hasMany(CollectiveAction::class);
+        return CollectiveAction::whereJsonContains('ecosystem_ids', $this->id);
+    }
+
+    /**
+     * Get collective actions as a collection
+     */
+    public function getCollectiveActionsAttribute()
+    {
+        return $this->collectiveActions()->get();
     }
 
     /**
@@ -96,5 +104,127 @@ class Ecosystem extends Model
     {
         $pivotData = $this->users()->where('users.id', $user->id)->first();
         return $pivotData ? $pivotData->pivot->status : null;
+    }
+
+    /**
+     * Calculate ecosystem quality based on skills coverage
+     * Formula: (existing skills + member skills) / total available skills
+     */
+    public function calculateQuality(): array
+    {
+        // Get all available skills
+        $allSkills = \App\Models\Skill::pluck('id')->toArray();
+        $totalSkills = count($allSkills);
+
+        if ($totalSkills === 0) {
+            return [
+                'percentage' => 0,
+                'covered_skills' => 0,
+                'total_skills' => 0,
+                'missing_skills' => []
+            ];
+        }
+
+        // Get existing skills from ecosystem
+        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
+
+        // Get skills from accepted members
+        $memberSkillIds = [];
+        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        
+        foreach ($acceptedMembers as $member) {
+            if ($member->profile) {
+                $memberSkills = $member->profile->skills->pluck('id')->toArray();
+                $memberSkillIds = array_merge($memberSkillIds, $memberSkills);
+            }
+        }
+
+        // Combine and get unique skills
+        $coveredSkillIds = array_unique(array_merge($existingSkillIds, $memberSkillIds));
+        $coveredSkillsCount = count($coveredSkillIds);
+
+        // Calculate percentage
+        $percentage = ($coveredSkillsCount / $totalSkills) * 100;
+
+        // Get missing skills
+        $missingSkillIds = array_diff($allSkills, $coveredSkillIds);
+        $missingSkills = \App\Models\Skill::whereIn('id', $missingSkillIds)->pluck('name')->toArray();
+
+        return [
+            'percentage' => round($percentage, 1),
+            'covered_skills' => $coveredSkillsCount,
+            'total_skills' => $totalSkills,
+            'missing_skills' => $missingSkills,
+            'existing_skills_count' => count($existingSkillIds),
+            'member_skills_count' => count(array_unique($memberSkillIds)),
+        ];
+    }
+
+    /**
+     * Get skills breakdown for the ecosystem
+     */
+    public function getSkillsBreakdown(): array
+    {
+        // Get existing skills
+        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
+        $existingSkills = \App\Models\Skill::whereIn('id', $existingSkillIds)->get();
+
+        // Get member skills
+        $memberSkills = collect();
+        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        
+        foreach ($acceptedMembers as $member) {
+            if ($member->profile) {
+                $memberSkills = $memberSkills->merge($member->profile->skills);
+            }
+        }
+
+        // Group member skills by skill and count users
+        $memberSkillsCounted = $memberSkills->groupBy('id')->map(function ($skills, $skillId) {
+            return [
+                'skill' => $skills->first(),
+                'user_count' => $skills->count()
+            ];
+        });
+
+        return [
+            'existing_skills' => $existingSkills,
+            'member_skills' => $memberSkillsCounted,
+        ];
+    }
+
+    /**
+     * Get needed skills that are not yet covered
+     */
+    public function getNeededSkillsGap(): array
+    {
+        $neededSkillIds = collect($this->needed_roles ?? [])->toArray();
+        $neededSkills = \App\Models\Skill::whereIn('id', $neededSkillIds)->get();
+
+        // Get covered skills
+        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
+        $memberSkillIds = [];
+        
+        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        foreach ($acceptedMembers as $member) {
+            if ($member->profile) {
+                $memberSkills = $member->profile->skills->pluck('id')->toArray();
+                $memberSkillIds = array_merge($memberSkillIds, $memberSkills);
+            }
+        }
+
+        $coveredSkillIds = array_unique(array_merge($existingSkillIds, $memberSkillIds));
+
+        // Find gaps
+        $gapSkillIds = array_diff($neededSkillIds, $coveredSkillIds);
+        $gapSkills = \App\Models\Skill::whereIn('id', $gapSkillIds)->get();
+
+        return [
+            'needed_skills' => $neededSkills,
+            'gap_skills' => $gapSkills,
+            'coverage_percentage' => $neededSkills->count() > 0 
+                ? round(((count($neededSkillIds) - count($gapSkillIds)) / count($neededSkillIds)) * 100, 1)
+                : 100
+        ];
     }
 }

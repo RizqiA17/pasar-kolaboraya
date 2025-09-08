@@ -109,6 +109,34 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Check if this collective action includes a specific ecosystem
+     */
+    public function includesEcosystem(int $ecosystemId): bool
+    {
+        return in_array($ecosystemId, $this->ecosystem_ids ?? []);
+    }
+
+    /**
+     * Scope to filter collective actions by ecosystem ID
+     */
+    public function scopeForEcosystem($query, int $ecosystemId)
+    {
+        return $query->whereJsonContains('ecosystem_ids', $ecosystemId);
+    }
+
+    /**
+     * Scope to filter collective actions by multiple ecosystem IDs
+     */
+    public function scopeForEcosystems($query, array $ecosystemIds)
+    {
+        return $query->where(function ($q) use ($ecosystemIds) {
+            foreach ($ecosystemIds as $ecosystemId) {
+                $q->orWhereJsonContains('ecosystem_ids', $ecosystemId);
+            }
+        });
+    }
+
+    /**
      * Get scale label
      */
     public function getScaleLabelAttribute(): string
