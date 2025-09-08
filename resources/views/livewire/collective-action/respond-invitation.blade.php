@@ -189,7 +189,7 @@
                 type="submit" 
                 variant="primary" 
                 class="flex-1"
-                :loading="$wire.loading"
+                {{-- :loading="$wire.loading" --}}
             >
                 @if($response_action === 'accept')
                     Terima Undangan

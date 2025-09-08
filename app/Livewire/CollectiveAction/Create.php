@@ -3,6 +3,7 @@
 namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
+use App\Models\CollectiveActionEcosystemInvitation;
 use App\Models\Ecosystem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -70,7 +71,9 @@ class Create extends Component
     public function mount()
     {
         // Check if user is ecosystem builder
-        if (!Auth::user()->isEcosystemBuilder()) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user || !$user->isEcosystemBuilder()) {
             session()->flash('error', 'Hanya Ecosystem Builder yang dapat membuat aksi kolektif.');
             return redirect()->route('collective-action.browse');
         }
