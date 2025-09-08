@@ -73,20 +73,28 @@ Analisis gap keahlian yang dibutuhkan:
 - Persentase kecukupan kebutuhan
 
 ## Akses dan Keamanan
-- **Authorization**: Hanya creator ekosistem yang dapat mengakses dashboard
+- **Authorization**: Semua user yang login dapat melihat dashboard, tetapi hanya creator yang dapat berinteraksi
 - **Route Protection**: Middleware auth dan verification email
 - **CSRF Protection**: Built-in CSRF protection untuk form actions
+- **Role-based Access**: 
+  - **Pemilik**: Dapat mengelola anggota, menerima/menolak permintaan, melihat semua tab
+  - **User Biasa**: Dapat melihat dashboard dalam mode read-only, tab "Anggota" disembunyikan
 
 ## Navigation
-- **Dashboard Link**: Muncul di ecosystem browse page untuk creator
+- **Dashboard Link**: Muncul di ecosystem browse page untuk semua user yang login
+  - **Pemilik**: Tombol biru dengan label "Dashboard"
+  - **User Biasa**: Tombol abu-abu dengan label "Lihat Dashboard"
 - **Breadcrumb**: Clear navigation path
 - **Tab System**: Easy switching between different views
+- **Role Indicators**: Badge "Pemilik" atau "Pengunjung" di header dashboard
 
 ## User Experience
 - **Flash Messages**: Feedback untuk setiap action
 - **Confirmation Dialogs**: Konfirmasi untuk actions destruktif
 - **Loading States**: Proper loading handling dengan Livewire
 - **Responsive Design**: Works on all device sizes
+- **Status Information**: User biasa melihat status mereka (anggota aktif, pending, atau dapat bergabung)
+- **Read-only Mode**: User biasa dapat melihat semua informasi tanpa dapat mengubah data
 
 ## Performance Considerations
 - **Eager Loading**: Relationships di-load dengan eager loading

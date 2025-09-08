@@ -16,6 +16,7 @@ class Dashboard extends Component
 
     public Ecosystem $ecosystem;
     public $activeTab = 'overview';
+    public $isOwner = false;
     public $showMembershipRequests = false;
 
     protected $queryString = [
@@ -26,9 +27,9 @@ class Dashboard extends Component
     {
         $this->ecosystem = $ecosystem;
 
-        // Check if user is the ecosystem creator
-        if (!Auth::check() || Auth::id() !== $ecosystem->creator_id) {
-            abort(403, 'Akses ditolak. Hanya pemilik ekosistem yang dapat mengakses dashboard ini.');
+        // Check if user is authenticated
+        if (!Auth::check()) {
+            abort(403, 'Akses ditolak. Anda harus login untuk melihat dashboard ekosistem.');
         }
     }
 
@@ -45,6 +46,12 @@ class Dashboard extends Component
 
     public function acceptMember($userId)
     {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat menerima anggota.');
+            return;
+        }
+
         $user = User::findOrFail($userId);
         
         // Check if user has pending request
@@ -69,6 +76,12 @@ class Dashboard extends Component
 
     public function rejectMember($userId)
     {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat menolak anggota.');
+            return;
+        }
+
         $user = User::findOrFail($userId);
         
         // Check if user has pending request
@@ -90,6 +103,12 @@ class Dashboard extends Component
 
     public function removeMember($userId)
     {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat mengeluarkan anggota.');
+            return;
+        }
+
         $user = User::findOrFail($userId);
         
         // Check if user is accepted member
@@ -114,6 +133,11 @@ class Dashboard extends Component
         return $this->ecosystem->calculateQuality();
     }
 
+    public function getIsOwnerProperty()
+    {
+        return Auth::id() === $this->ecosystem->creator_id;
+    }
+
     public function getPendingRequestsProperty()
     {
         return $this->ecosystem->pendingUsers()
@@ -130,6 +154,7 @@ class Dashboard extends Component
 
     public function render()
     {
+        $this->isOwner = $this->getIsOwnerProperty();
         return view('livewire.ecosystem.dashboard', [
             'pendingRequests' => $this->pendingRequests,
             'acceptedMembers' => $this->acceptedMembers,

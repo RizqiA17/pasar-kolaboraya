@@ -16,7 +16,25 @@
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
         <div class="flex items-start justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ $ecosystem->ecosystem_title }}</h1>
+                <div class="flex items-center gap-3 mb-2">
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ $ecosystem->ecosystem_title }}</h1>
+                    @if($isOwner)
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Pemilik
+                        </span>
+                    @else
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            Pengunjung
+                        </span>
+                    @endif
+                </div>
                 <p class="text-gray-600 dark:text-slate-300 mt-1">{{ $ecosystem->organization_name }}</p>
                 <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
                     <span>📍 {{ $ecosystem->work_region }}</span>
@@ -41,13 +59,15 @@
                         class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'overview' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
                     Ringkasan
                 </button>
-                <button wire:click="setActiveTab('members')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'members' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                    Anggota
-                    @if($pendingRequests->count() > 0)
-                        <span class="ml-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-1 px-2 rounded-full text-xs">{{ $pendingRequests->count() }}</span>
-                    @endif
-                </button>
+                @if($isOwner)
+                    <button wire:click="setActiveTab('members')" 
+                            class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'members' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        Anggota
+                        @if($pendingRequests->count() > 0)
+                            <span class="ml-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-1 px-2 rounded-full text-xs">{{ $pendingRequests->count() }}</span>
+                        @endif
+                    </button>
+                @endif
                 <button wire:click="setActiveTab('quality')" 
                         class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'quality' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
                     Kualitas & Keahlian
@@ -102,28 +122,104 @@
                         <p class="text-gray-700 dark:text-slate-300">{{ $ecosystem->description ?: 'Belum ada deskripsi.' }}</p>
                     </div>
 
+                    <!-- User Status Info (for non-owners) -->
+                    @if(!$isOwner)
+                        @php
+                            $userStatus = $ecosystem->getUserStatus(Auth::user());
+                            $canJoin = $ecosystem->canUserJoin(Auth::user());
+                        @endphp
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status Anda</h3>
+                            
+                            @if($userStatus === 'accepted')
+                                <div class="flex items-center text-green-700 dark:text-green-300">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span class="font-medium">Anda adalah anggota aktif dari ekosistem ini</span>
+                                </div>
+                            @elseif($userStatus === 'pending')
+                                <div class="flex items-center text-amber-700 dark:text-amber-300">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="font-medium">Permintaan bergabung Anda sedang menunggu persetujuan</span>
+                                </div>
+                            @elseif($canJoin)
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-blue-700 dark:text-blue-300">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                        </svg>
+                                        <span class="font-medium">Anda dapat bergabung dengan ekosistem ini</span>
+                                    </div>
+                                    <a href="{{ route('ecosystem.join', $ecosystem) }}" 
+                                       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Bergabung Sekarang
+                                    </a>
+                                </div>
+                            @else
+                                <div class="flex items-center text-gray-700 dark:text-gray-300">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="font-medium">Anda tidak dapat bergabung dengan ekosistem ini</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
                     <!-- Recent Activities -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                         <div class="p-6 border-b border-gray-200 dark:border-slate-700">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aktivitas Terbaru</h3>
                         </div>
                         <div class="p-6">
-                            @if($pendingRequests->count() > 0)
-                                <div class="flex items-center text-amber-600 dark:text-amber-400 mb-4">
-                                    <div class="w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full mr-3"></div>
-                                    <span>{{ $pendingRequests->count() }} permintaan bergabung menunggu persetujuan</span>
-                                </div>
-                            @endif
-                            
-                            @if($ecosystem->acceptedUsers()->count() === 0)
+                            @if($isOwner)
+                                @if($pendingRequests->count() > 0)
+                                    <div class="flex items-center text-amber-600 dark:text-amber-400 mb-4">
+                                        <div class="w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full mr-3"></div>
+                                        <span>{{ $pendingRequests->count() }} permintaan bergabung menunggu persetujuan</span>
+                                    </div>
+                                @endif
+                                
+                                @if($ecosystem->acceptedUsers()->count() === 0)
+                                    <div class="flex items-center text-gray-500 dark:text-slate-400">
+                                        <div class="w-3 h-3 bg-gray-400 dark:bg-slate-500 rounded-full mr-3"></div>
+                                        <span>Belum ada anggota yang bergabung</span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center text-green-600 dark:text-green-400">
+                                        <div class="w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full mr-3"></div>
+                                        <span>{{ $ecosystem->acceptedUsers()->count() }} anggota telah bergabung</span>
+                                    </div>
+                                @endif
+                            @else
+                                @php
+                                    $userStatus = $ecosystem->getUserStatus(Auth::user());
+                                @endphp
+                                
+                                @if($userStatus === 'accepted')
+                                    <div class="flex items-center text-green-600 dark:text-green-400 mb-4">
+                                        <div class="w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full mr-3"></div>
+                                        <span>Anda adalah anggota aktif dari ekosistem ini</span>
+                                    </div>
+                                @elseif($userStatus === 'pending')
+                                    <div class="flex items-center text-amber-600 dark:text-amber-400 mb-4">
+                                        <div class="w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full mr-3"></div>
+                                        <span>Permintaan bergabung Anda sedang menunggu persetujuan</span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center text-blue-600 dark:text-blue-400 mb-4">
+                                        <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
+                                        <span>Anda dapat bergabung dengan ekosistem ini</span>
+                                    </div>
+                                @endif
+                                
                                 <div class="flex items-center text-gray-500 dark:text-slate-400">
                                     <div class="w-3 h-3 bg-gray-400 dark:bg-slate-500 rounded-full mr-3"></div>
-                                    <span>Belum ada anggota yang bergabung</span>
-                                </div>
-                            @else
-                                <div class="flex items-center text-green-600 dark:text-green-400">
-                                    <div class="w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full mr-3"></div>
-                                    <span>{{ $ecosystem->acceptedUsers()->count() }} anggota telah bergabung</span>
+                                    <span>{{ $ecosystem->acceptedUsers()->count() }} anggota aktif</span>
                                 </div>
                             @endif
                         </div>
@@ -176,16 +272,22 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2">
-                                            <button wire:click="acceptMember({{ $request->id }})" 
-                                                    class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                Terima
-                                            </button>
-                                            <button wire:click="rejectMember({{ $request->id }})" 
-                                                    class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                Tolak
-                                            </button>
-                                        </div>
+                                        @if($isOwner)
+                                            <div class="flex space-x-2">
+                                                <button wire:click="acceptMember({{ $request->id }})" 
+                                                        class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                    Terima
+                                                </button>
+                                                <button wire:click="rejectMember({{ $request->id }})" 
+                                                        class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                    Tolak
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="text-sm text-gray-500 dark:text-slate-400">
+                                                Menunggu persetujuan pemilik
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -232,13 +334,19 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2">
-                                            <button wire:click="removeMember({{ $member->id }})" 
-                                                    onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
-                                                    class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                Keluarkan
-                                            </button>
-                                        </div>
+                                        @if($isOwner)
+                                            <div class="flex space-x-2">
+                                                <button wire:click="removeMember({{ $member->id }})" 
+                                                        onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
+                                                        class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                    Keluarkan
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="text-sm text-gray-500 dark:text-slate-400">
+                                                Anggota aktif
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
