@@ -25,10 +25,22 @@ class Contribute extends Component
         'other' => 'Lainnya',
     ];
 
+    public $resourceTypes = [
+        'dana' => 'Dana/Pendanaan',
+        'keahlian' => 'Keahlian/Expertise',
+        'relawan' => 'Relawan',
+        'infrastruktur' => 'Infrastruktur',
+        'promosi' => 'Promosi/Marketing',
+        'teknologi' => 'Teknologi',
+        'akses_pasar' => 'Akses Pasar',
+        'relasi' => 'Relasi/Networking',
+    ];
+
     protected $rules = [
         'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
         'contribution_description' => 'required|string|min:10|max:1000',
         'contribution_amount' => 'nullable|numeric|min:0',
+        'contribution_details' => 'nullable|array',
     ];
 
     protected $messages = [
@@ -61,18 +73,21 @@ class Contribute extends Component
             return redirect()->route('collective-action.browse');
         }
 
-        // Create contribution
-        $this->collectiveAction->contributors()->attach(Auth::id(), [
+        // Prepare contribution details
+        $contributionData = [
             'contribution_type' => $this->contribution_type,
             'contribution_description' => $this->contribution_description,
             'contribution_amount' => $this->contribution_type === 'funding' ? $this->contribution_amount : null,
-            'contribution_details' => json_encode($this->contribution_details),
+            'contribution_details' => !empty($this->contribution_details) ? json_encode($this->contribution_details) : null,
             'status' => 'offered',
-        ]);
+        ];
+
+        // Create contribution
+        $this->collectiveAction->contributors()->attach(Auth::id(), $contributionData);
 
         session()->flash('message', 'Kontribusi berhasil dikirim! Menunggu persetujuan dari penyelenggara aksi.');
 
-        return redirect()->route('collective-action.show', $this->collectiveAction);
+        return redirect()->route('collective-action.browse');
     }
 
     public function render()
