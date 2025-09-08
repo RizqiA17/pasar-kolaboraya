@@ -1,14 +1,14 @@
 <form wire:submit.prevent="save" class="space-y-4">
     <div>
         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Nama Survey
+            Nama Pasar Kecil
         </label>
         <input 
             type="text" 
             id="name"
             wire:model="name"
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
-            placeholder="Masukkan nama survey..."
+            placeholder="Masukkan nama Pasar Kecil..."
         >
         @error('name') 
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -17,14 +17,14 @@
 
     <div>
         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Deskripsi Survey
+            Deskripsi Pasar Kecil
         </label>
         <textarea 
             id="description"
             wire:model="description"
             rows="4"
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
-            placeholder="Masukkan deskripsi survey..."
+            placeholder="Masukkan deskripsi Pasar Kecil..."
         ></textarea>
         @error('description') 
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -32,9 +32,9 @@
     </div>
 
     <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-        <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Informasi Survey</h4>
+        <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Informasi Pasar Kecil</h4>
         <p class="text-xs text-blue-700 dark:text-blue-300">
-            Survey akan memiliki 3 kategori pertanyaan:
+            Pasar Kecil akan memiliki 3 kategori pertanyaan:
         </p>
         <ul class="text-xs text-blue-700 dark:text-blue-300 mt-2 space-y-1">
             <li>• <strong>Koneksi:</strong> Jumlah koneksi, kualitas koneksi, keluasan jejaring</li>
@@ -57,7 +57,7 @@
             wire:loading.attr="disabled"
             wire:loading.class="opacity-50"
         >
-            <span wire:loading.remove>Buat Survey</span>
+            <span wire:loading.remove>Buat Pasar Kecil</span>
             <span wire:loading>Membuat...</span>
         </button>
     </div>

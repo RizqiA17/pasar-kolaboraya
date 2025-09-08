@@ -7,7 +7,7 @@
                 <a href="{{ route('admin.surveys') }}" class="text-blue-600 hover:text-blue-800">
                     <flux:icon.arrow-left class="size-5" />
                 </a>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Hasil Survey</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Hasil Pasar Kecil</h1>
             </div>
             <h2 class="text-lg font-semibold text-slate-700 dark:text-slate-300">{{ $survey->name }}</h2>
             <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm">{{ $survey->description }}</p>
@@ -30,7 +30,7 @@
                         <span class="text-gray-600">Tidak Aktif</span>
                     @endif
                 </div>
-                <div class="text-sm text-slate-500 dark:text-slate-400">Status Survey</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Status Pasar Kecil</div>
             </div>
             <div class="text-center">
                 <div class="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -164,7 +164,7 @@
                     <!-- Chart Tab -->
                     <div class="max-w-4xl mt-4 mx-auto">
                         <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6 text-center">Radar
-                            Chart Hasil Survey</h3>
+                            Chart Hasil Pasar Kecil</h3>
                         <div class="rounded-lg p-6">
                             <div class="relative" style="height: 500px;">
                                 <canvas id="radarChartKoneksi"></canvas>
@@ -361,7 +361,7 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-white/20 dark:border-slate-700/50 shadow-lg text-center">
             <flux:icon.chart-bar class="size-16 text-gray-400 mx-auto mb-4" />
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Belum Ada Respon</h3>
-            <p class="text-gray-500 dark:text-gray-400">Survey ini belum memiliki respon dari peserta.</p>
+            <p class="text-gray-500 dark:text-gray-400">Pasar Kecil ini belum memiliki respon dari peserta.</p>
         </div>
     @endif
 </div>
