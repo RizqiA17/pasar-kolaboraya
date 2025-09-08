@@ -16,23 +16,27 @@
 
     <!-- Collective Action Info -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ $adminMembers->count() }}</div>
+                <div class="text-2xl font-bold text-blue-600">{{ $adminUsers->count() }}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Admin</div>
             </div>
             <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ $regularMembers->count() }}</div>
+                <div class="text-2xl font-bold text-green-600">{{ $memberUsers->count() }}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Anggota</div>
             </div>
             <div class="text-center">
-                <div class="text-2xl font-bold text-purple-600">{{ $adminMembers->count() + $regularMembers->count() }}</div>
+                <div class="text-2xl font-bold text-purple-600">{{ $contributorUsers->count() }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Kontributor</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-gray-600">{{ $adminUsers->count() + $memberUsers->count() + $contributorUsers->count() }}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Total</div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Members -->
+    <!-- Admin Users -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
             <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,24 +45,27 @@
             Admin Aksi Kolektif
         </h2>
         
-        @if($adminMembers->count() > 0)
+        @if($adminUsers->count() > 0)
             <div class="space-y-4">
-                @foreach($adminMembers as $member)
+                @foreach($adminUsers as $user)
                     <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-4">
                                 <span class="text-blue-600 dark:text-blue-400 font-semibold">
-                                    {{ $member->initials() }}
+                                    {{ $user->initials() }}
                                 </span>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                                    {{ $member->name }}
+                                    {{ $user->name }}
                                 </h3>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $member->email }}
+                                    {{ $user->email }}
                                 </p>
-                                @if($member->id === $collectiveAction->created_by)
+                                <p class="text-xs text-gray-500 dark:text-gray-500">
+                                    {{ $user->pivot->join_type_label }}
+                                </p>
+                                @if($user->id === $collectiveAction->created_by)
                                     <span class="inline-block px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded-full mt-1">
                                         Pembuat Aksi
                                     </span>
@@ -69,14 +76,24 @@
                             <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
                                 Admin
                             </span>
-                            @if($member->id !== $collectiveAction->created_by)
-                                <button 
-                                    wire:click="removeMember({{ $member->id }})"
-                                    wire:confirm="Apakah Anda yakin ingin menghapus admin ini?"
-                                    class="text-red-600 hover:text-red-800 text-sm"
-                                >
-                                    Hapus
-                                </button>
+                            @if($user->id !== $collectiveAction->created_by)
+                                <div class="flex items-center space-x-1">
+                                    <select 
+                                        wire:change="updateUserRole({{ $user->id }}, $event.target.value)"
+                                        class="text-xs border border-gray-300 rounded px-2 py-1"
+                                    >
+                                        <option value="admin" selected>Admin</option>
+                                        <option value="member">Anggota</option>
+                                        <option value="contributor">Kontributor</option>
+                                    </select>
+                                    <button 
+                                        wire:click="removeMember({{ $user->id }})"
+                                        wire:confirm="Apakah Anda yakin ingin menghapus user ini?"
+                                        class="text-red-600 hover:text-red-800 text-sm"
+                                    >
+                                        Hapus
+                                    </button>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -92,7 +109,7 @@
         @endif
     </div>
 
-    <!-- Regular Members -->
+    <!-- Member Users -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
             <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,45 +118,55 @@
             Anggota Aksi Kolektif
         </h2>
         
-        @if($regularMembers->count() > 0)
+        @if($memberUsers->count() > 0)
             <div class="space-y-4">
-                @foreach($regularMembers as $member)
+                @foreach($memberUsers as $user)
                     <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4">
                                 <span class="text-green-600 dark:text-green-400 font-semibold">
-                                    {{ $member->initials() }}
+                                    {{ $user->initials() }}
                                 </span>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                                    {{ $member->name }}
+                                    {{ $user->name }}
                                 </h3>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $member->email }}
+                                    {{ $user->email }}
                                 </p>
                                 <p class="text-xs text-gray-500 dark:text-gray-500">
-                                    Bergabung: {{ $member->pivot->joined_at ? $member->pivot->joined_at->format('d M Y') : 'Tidak diketahui' }}
+                                    {{ $user->pivot->join_type_label }}
                                 </p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
-                                {{ $member->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                                {{ $user->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
                             </span>
-                            <button 
-                                wire:click="toggleMemberStatus({{ $member->id }})"
-                                class="text-blue-600 hover:text-blue-800 text-sm"
-                            >
-                                {{ $member->pivot->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
-                            </button>
-                            <button 
-                                wire:click="removeMember({{ $member->id }})"
-                                wire:confirm="Apakah Anda yakin ingin menghapus anggota ini?"
-                                class="text-red-600 hover:text-red-800 text-sm"
-                            >
-                                Hapus
-                            </button>
+                            <div class="flex items-center space-x-1">
+                                <select 
+                                    wire:change="updateUserRole({{ $user->id }}, $event.target.value)"
+                                    class="text-xs border border-gray-300 rounded px-2 py-1"
+                                >
+                                    <option value="admin">Admin</option>
+                                    <option value="member" selected>Anggota</option>
+                                    <option value="contributor">Kontributor</option>
+                                </select>
+                                <button 
+                                    wire:click="toggleMemberStatus({{ $user->id }})"
+                                    class="text-blue-600 hover:text-blue-800 text-sm"
+                                >
+                                    {{ $user->pivot->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                </button>
+                                <button 
+                                    wire:click="removeMember({{ $user->id }})"
+                                    wire:confirm="Apakah Anda yakin ingin menghapus user ini?"
+                                    class="text-red-600 hover:text-red-800 text-sm"
+                                >
+                                    Hapus
+                                </button>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -154,6 +181,78 @@
         @endif
     </div>
 
+    <!-- Contributor Users -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+            <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+            </svg>
+            Kontributor Aksi Kolektif
+        </h2>
+        
+        @if($contributorUsers->count() > 0)
+            <div class="space-y-4">
+                @foreach($contributorUsers as $user)
+                    <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-purple-600 dark:text-purple-400 font-semibold">
+                                    {{ $user->initials() }}
+                                </span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                    {{ $user->name }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ $user->email }}
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">
+                                    {{ $user->pivot->join_type_label }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                                {{ $user->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                            </span>
+                            <div class="flex items-center space-x-1">
+                                <select 
+                                    wire:change="updateUserRole({{ $user->id }}, $event.target.value)"
+                                    class="text-xs border border-gray-300 rounded px-2 py-1"
+                                >
+                                    <option value="admin">Admin</option>
+                                    <option value="member">Anggota</option>
+                                    <option value="contributor" selected>Kontributor</option>
+                                </select>
+                                <button 
+                                    wire:click="toggleMemberStatus({{ $user->id }})"
+                                    class="text-blue-600 hover:text-blue-800 text-sm"
+                                >
+                                    {{ $user->pivot->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                </button>
+                                <button 
+                                    wire:click="removeMember({{ $user->id }})"
+                                    wire:confirm="Apakah Anda yakin ingin menghapus user ini?"
+                                    class="text-red-600 hover:text-red-800 text-sm"
+                                >
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+                <p class="text-gray-600 dark:text-gray-400">Belum ada kontributor</p>
+            </div>
+        @endif
+    </div>
+
     <!-- Info Box -->
     <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
         <div class="flex items-start">
@@ -161,12 +260,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <div>
-                <h3 class="font-semibold text-blue-900 dark:text-blue-200">Informasi Manajemen Anggota</h3>
+                <h3 class="font-semibold text-blue-900 dark:text-blue-200">Informasi Manajemen User</h3>
                 <ul class="text-sm text-blue-700 dark:text-blue-300 mt-2 space-y-1">
-                    <li>• <strong>Admin:</strong> Ecosystem builders yang diundang menjadi admin aksi kolektif</li>
-                    <li>• <strong>Anggota:</strong> Semua anggota dari ekosistem yang bergabung secara otomatis</li>
-                    <li>• <strong>Pembuat Aksi:</strong> Tidak dapat dihapus atau dinonaktifkan</li>
-                    <li>• <strong>Status Aktif:</strong> Anggota aktif dapat berpartisipasi dalam aksi kolektif</li>
+                    <li>• <strong>Admin:</strong> Dapat mengelola aksi kolektif dan semua user</li>
+                    <li>• <strong>Anggota:</strong> Dapat berpartisipasi penuh dalam aksi kolektif</li>
+                    <li>• <strong>Kontributor:</strong> Fokus pada kontribusi spesifik</li>
+                    <li>• <strong>Pembuat Aksi:</strong> Tidak dapat dihapus atau diubah role</li>
+                    <li>• <strong>Role Management:</strong> Admin dapat mengubah role user sesuai kebutuhan</li>
                 </ul>
             </div>
         </div>

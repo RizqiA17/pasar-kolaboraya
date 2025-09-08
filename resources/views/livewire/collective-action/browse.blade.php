@@ -149,7 +149,7 @@
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
-                            {{ $action->acceptedInvitations()->count() + 1 }} ekosistem terlibat
+                            {{ $action->acceptedInvitations()->count() }} ekosistem terlibat
                             <span class="text-xs text-gray-500 ml-1">(termasuk penyelenggara)</span>
                         </div>
                     </div>
@@ -210,31 +210,27 @@
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
                     @php
-                        $userContribution = Auth::user() ? $action->contributors()->where('users.id', Auth::user()->id)->first() : null;
+                        $userContribution = Auth::user() ? $action->contributorUsers()->where('users.id', Auth::user()->id)->first() : null;
                         $canContribute = Auth::user() ? $action->canUserContribute(Auth::user()) : false;
                     @endphp
 
                     @if($userContribution)
                         @php $status = $userContribution->pivot->status; @endphp
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                            @if($status === 'accepted') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                            @elseif($status === 'offered') bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200
-                            @elseif($status === 'completed') bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200
+                            @if($status === 'active') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
+                            @elseif($status === 'pending') bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200
                             @else bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 @endif">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                @if($status === 'accepted')
+                                @if($status === 'active')
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                @elseif($status === 'offered')
+                                @elseif($status === 'pending')
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                @elseif($status === 'completed')
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 @else
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 @endif
                             </svg>
-                            @if($status === 'accepted') Kontribusi Diterima
-                            @elseif($status === 'offered') Menunggu Persetujuan
-                            @elseif($status === 'completed') Kontribusi Selesai
+                            @if($status === 'active') Kontribusi Diterima
+                            @elseif($status === 'pending') Menunggu Persetujuan
                             @else Kontribusi Ditolak @endif
                         </span>
                     @elseif($canContribute)
@@ -244,7 +240,7 @@
                             size="sm" 
                             class="w-full"
                         >
-                            Berkontribusi
+                            Lihat Detail
                         </flux:button>
                     @else
                         <span class="text-sm text-gray-500 dark:text-gray-400">

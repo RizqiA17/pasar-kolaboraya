@@ -111,6 +111,32 @@ class Create extends Component
             'collaboration_terms' => $this->collaboration_terms,
         ]);
 
+        // Add creator as admin of the collective action
+        // Get creator's ecosystem to associate with the collective action
+        $creatorEcosystem = Auth::user()->acceptedEcosystems->first();
+        $creatorEcosystemId = $creatorEcosystem ? $creatorEcosystem->id : null;
+        $action->addUser(Auth::user(), 'admin', 'Creator of collective action', $creatorEcosystemId);
+
+        // Create invitation record for creator's ecosystem (auto-accepted)
+        if ($creatorEcosystemId) {
+            CollectiveActionEcosystemInvitation::create([
+                'collective_action_id' => $action->id,
+                'ecosystem_id' => $creatorEcosystemId,
+                'invited_by' => Auth::id(),
+                'status' => 'accepted', // Auto-accepted for creator
+                'role' => 'admin',
+                'invitation_message' => 'Creator of collective action',
+                'response_message' => 'Auto-accepted as creator',
+                'responded_at' => now(),
+            ]);
+        }
+
+        $ecosystemsMembers = $creatorEcosystem->acceptedUsers()->get();
+
+        foreach ($ecosystemsMembers as $member) {
+            $action->addUser($member, 'member', 'Member of collective action', $creatorEcosystemId);
+        }
+
         // Send invitations to selected ecosystems
         foreach ($this->invited_ecosystems as $ecosystemId) {
             $invitationMessage = $this->invitation_messages[$ecosystemId] ?? 

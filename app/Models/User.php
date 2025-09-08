@@ -451,8 +451,8 @@ class User extends Authenticatable // implements MustVerifyEmail
      */
     public function collectiveActionMemberships(): BelongsToMany
     {
-        return $this->belongsToMany(CollectiveAction::class, 'collective_action_members')
-            ->withPivot(['ecosystem_id', 'role', 'status', 'joined_at'])
+        return $this->belongsToMany(CollectiveAction::class, 'collective_action_users')
+            ->withPivot(['ecosystem_id', 'role', 'status', 'join_type', 'join_reason', 'joined_at'])
             ->withTimestamps();
     }
 
@@ -465,11 +465,43 @@ class User extends Authenticatable // implements MustVerifyEmail
     }
 
     /**
-     * Get collective actions where user is a regular member
+     * Get collective actions where user is a member
      */
     public function memberCollectiveActions(): BelongsToMany
     {
         return $this->collectiveActionMemberships()->wherePivot('role', 'member');
+    }
+
+    /**
+     * Get collective actions where user is a contributor
+     */
+    public function contributorCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('role', 'contributor');
+    }
+
+    /**
+     * Get active collective action memberships
+     */
+    public function activeCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('status', 'active');
+    }
+
+    /**
+     * Get collective actions joined through ecosystem
+     */
+    public function ecosystemCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('join_type', 'ecosystem');
+    }
+
+    /**
+     * Get collective actions joined directly
+     */
+    public function directCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('join_type', 'direct');
     }
 
     /**
@@ -486,5 +518,13 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function isMemberOfCollectiveAction(CollectiveAction $collectiveAction): bool
     {
         return $collectiveAction->isUserMember($this);
+    }
+
+    /**
+     * Check if user is contributor of a collective action
+     */
+    public function isContributorOfCollectiveAction(CollectiveAction $collectiveAction): bool
+    {
+        return $collectiveAction->isUserContributor($this);
     }
 }

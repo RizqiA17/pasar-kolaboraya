@@ -63,15 +63,22 @@ class RespondInvitation extends Component
             $ecosystem = $this->invitation->ecosystem;
             
             // Add ecosystem builder as admin
-            $collectiveAction->members()->attach($ecosystem->creator_id, [
+            $collectiveAction->users()->attach($ecosystem->creator_id, [
                 'ecosystem_id' => $ecosystem->id,
                 'role' => 'admin',
                 'status' => 'active',
+                'join_type' => 'ecosystem',
+                'join_reason' => 'Ecosystem builder - accepted invitation',
                 'joined_at' => now(),
             ]);
             
             // Add all ecosystem members as regular members
             $collectiveAction->addEcosystemMembers($ecosystem, 'member');
+        }
+
+        $ecosystemMembers = $ecosystem->acceptedUsers()->get();
+        foreach ($ecosystemMembers as $member) {
+            $collectiveAction->addUser($member, 'member', 'Member of collective action', $ecosystem->id);
         }
 
         $status = $isAccepted ? 'diterima' : 'ditolak';

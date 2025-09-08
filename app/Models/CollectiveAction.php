@@ -109,7 +109,8 @@ class CollectiveAction extends Model
     public function contributors(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'collective_action_users')
-            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status'])
+            ->wherePivot('role', 'contributor')
+            ->withPivot(['ecosystem_id', 'role', 'status', 'join_type', 'join_reason', 'joined_at'])
             ->withTimestamps();
     }
 
@@ -118,7 +119,7 @@ class CollectiveAction extends Model
      */
     public function acceptedContributors(): BelongsToMany
     {
-        return $this->contributors()->wherePivot('status', 'accepted');
+        return $this->contributors()->wherePivot('status', 'active');
     }
 
     /**
@@ -126,7 +127,7 @@ class CollectiveAction extends Model
      */
     public function pendingContributions(): BelongsToMany
     {
-        return $this->contributors()->wherePivot('status', 'offered');
+        return $this->contributors()->wherePivot('status', 'pending');
     }
 
     /**
@@ -138,14 +139,14 @@ class CollectiveAction extends Model
             return false;
         }
 
-        // Check if user is already a contributor
-        if ($this->contributors()->where('users.id', $user->id)->exists()) {
+        // Only joined users (members, contributors, admins) can contribute
+        if (!$this->isUserMember($user) && !$this->isUserAdmin($user) && !$this->isUserContributor($user)) {
             return false;
         }
 
-        // Check if user is already a member (they can contribute as members)
-        if ($this->isUserMember($user)) {
-            return false; // Members don't need to contribute separately
+        // Check if user is already a contributor
+        if ($this->contributors()->where('users.id', $user->id)->exists()) {
+            return false;
         }
 
         return true;
@@ -164,14 +165,20 @@ class CollectiveAction extends Model
      */
     public function includesEcosystem(int $ecosystemId): bool
     {
-        // Check if ecosystem is the creator or has accepted invitation
-        if ($this->created_by === $ecosystemId) {
+        // Check if ecosystem has accepted invitation
+        if ($this->acceptedInvitations()
+            ->where('ecosystem_id', $ecosystemId)
+            ->exists()) {
             return true;
         }
         
-        return $this->acceptedInvitations()
-            ->where('ecosystem_id', $ecosystemId)
-            ->exists();
+        // Check if ecosystem creator is a member of this collective action
+        $ecosystem = Ecosystem::find($ecosystemId);
+        if ($ecosystem && $this->users()->where('users.id', $ecosystem->creator_id)->exists()) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -180,9 +187,14 @@ class CollectiveAction extends Model
     public function scopeForEcosystem($query, int $ecosystemId)
     {
         return $query->where(function ($q) use ($ecosystemId) {
-            $q->where('created_by', $ecosystemId)
-              ->orWhereHas('acceptedInvitations', function ($subQuery) use ($ecosystemId) {
+            $q->whereHas('acceptedInvitations', function ($subQuery) use ($ecosystemId) {
                   $subQuery->where('ecosystem_id', $ecosystemId);
+              })
+              ->orWhereHas('users', function ($subQuery) use ($ecosystemId) {
+                  $ecosystem = Ecosystem::find($ecosystemId);
+                  if ($ecosystem) {
+                      $subQuery->where('users.id', $ecosystem->creator_id);
+                  }
               });
         });
     }
@@ -193,9 +205,13 @@ class CollectiveAction extends Model
     public function scopeForEcosystems($query, array $ecosystemIds)
     {
         return $query->where(function ($q) use ($ecosystemIds) {
-            $q->whereIn('created_by', $ecosystemIds)
-              ->orWhereHas('acceptedInvitations', function ($subQuery) use ($ecosystemIds) {
+            $q->whereHas('acceptedInvitations', function ($subQuery) use ($ecosystemIds) {
                   $subQuery->whereIn('ecosystem_id', $ecosystemIds);
+              })
+              ->orWhereHas('users', function ($subQuery) use ($ecosystemIds) {
+                  $ecosystems = Ecosystem::whereIn('id', $ecosystemIds)->get();
+                  $creatorIds = $ecosystems->pluck('creator_id')->toArray();
+                  $subQuery->whereIn('users.id', $creatorIds);
               });
         });
     }
@@ -242,37 +258,69 @@ class CollectiveAction extends Model
     }
 
     /**
-     * Get all members of this collective action
+     * Get all users of this collective action
      */
-    public function members(): BelongsToMany
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'collective_action_members')
-            ->withPivot(['ecosystem_id', 'role', 'status', 'joined_at'])
+        return $this->belongsToMany(User::class, 'collective_action_users')
+            ->withPivot(['ecosystem_id', 'role', 'status', 'join_type', 'join_reason', 'joined_at'])
             ->withTimestamps();
     }
 
     /**
-     * Get admin members
+     * Get admin users
      */
-    public function adminMembers(): BelongsToMany
+    public function adminUsers(): BelongsToMany
     {
-        return $this->members()->wherePivot('role', 'admin');
+        return $this->users()->wherePivot('role', 'admin');
     }
 
     /**
-     * Get regular members
+     * Get member users
      */
-    public function regularMembers(): BelongsToMany
+    public function memberUsers(): BelongsToMany
     {
-        return $this->members()->wherePivot('role', 'member');
+        return $this->users()->wherePivot('role', 'member');
     }
 
     /**
-     * Get active members
+     * Get contributor users
      */
-    public function activeMembers(): BelongsToMany
+    public function contributorUsers(): BelongsToMany
     {
-        return $this->members()->wherePivot('status', 'active');
+        return $this->users()->wherePivot('role', 'contributor');
+    }
+
+    /**
+     * Get active users
+     */
+    public function activeUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('status', 'active');
+    }
+
+    /**
+     * Get pending users
+     */
+    public function pendingUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('status', 'pending');
+    }
+
+    /**
+     * Get users who joined through ecosystem
+     */
+    public function ecosystemUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('join_type', 'ecosystem');
+    }
+
+    /**
+     * Get users who joined directly
+     */
+    public function directUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('join_type', 'direct');
     }
 
     /**
@@ -280,7 +328,7 @@ class CollectiveAction extends Model
      */
     public function isUserAdmin(User $user): bool
     {
-        return $this->adminMembers()->where('users.id', $user->id)->exists();
+        return $this->adminUsers()->where('users.id', $user->id)->wherePivot('status', 'active')->exists();
     }
 
     /**
@@ -288,7 +336,15 @@ class CollectiveAction extends Model
      */
     public function isUserMember(User $user): bool
     {
-        return $this->activeMembers()->where('users.id', $user->id)->exists();
+        return $this->memberUsers()->where('users.id', $user->id)->wherePivot('status', 'active')->exists();
+    }
+
+    /**
+     * Check if user is a contributor of this collective action
+     */
+    public function isUserContributor(User $user): bool
+    {
+        return $this->contributorUsers()->where('users.id', $user->id)->wherePivot('status', 'active')->exists();
     }
 
     /**
@@ -301,24 +357,47 @@ class CollectiveAction extends Model
             return true;
         }
 
-        // Check if user is admin member
+        // Check if user is admin
         return $this->isUserAdmin($user);
     }
 
     /**
-     * Add ecosystem members as collective action members
+     * Check if user can join this collective action
+     */
+    public function canUserJoin(User $user): bool
+    {
+        // Check if user is already a member
+        if ($this->isUserMember($user) || $this->isUserAdmin($user) || $this->isUserContributor($user)) {
+            return false;
+        }
+
+        // Check if action is open for joining
+        return in_array($this->status, ['planning', 'active']);
+    }
+
+    /**
+     * Add ecosystem members as collective action users
      */
     public function addEcosystemMembers(Ecosystem $ecosystem, string $role = 'member'): void
     {
+        // Get all ecosystem members including the creator
         $ecosystemMembers = $ecosystem->acceptedUsers()->get();
+        
+        // Also include the ecosystem creator if not already in the list
+        $creator = $ecosystem->creator;
+        if ($creator && !$ecosystemMembers->contains('id', $creator->id)) {
+            $ecosystemMembers->push($creator);
+        }
         
         foreach ($ecosystemMembers as $member) {
             // Check if user is already a member
-            if (!$this->isUserMember($member)) {
-                $this->members()->attach($member->id, [
+            if (!$this->isUserMember($member) && !$this->isUserAdmin($member) && !$this->isUserContributor($member)) {
+                $this->users()->attach($member->id, [
                     'ecosystem_id' => $ecosystem->id,
                     'role' => $role,
                     'status' => 'active',
+                    'join_type' => 'ecosystem',
+                    'join_reason' => 'Joined through ecosystem invitation',
                     'joined_at' => now(),
                 ]);
             }
@@ -326,10 +405,55 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Add user directly to collective action
+     */
+    public function addUser(User $user, string $role = 'member', string $joinReason = null, int $ecosystemId = null): void
+    {
+        if (!$this->isUserMember($user) && !$this->isUserAdmin($user) && !$this->isUserContributor($user)) {
+            $this->users()->attach($user->id, [
+                'ecosystem_id' => $ecosystemId,
+                'role' => $role,
+                'status' => 'active',
+                'join_type' => $ecosystemId ? 'ecosystem' : 'direct',
+                'join_reason' => $joinReason,
+                'joined_at' => now(),
+            ]);
+        }
+    }
+
+    /**
+     * Remove user from collective action
+     */
+    public function removeUser(User $user): void
+    {
+        $this->users()->detach($user->id);
+    }
+
+    /**
+     * Update user role in collective action
+     */
+    public function updateUserRole(User $user, string $role): void
+    {
+        $this->users()->updateExistingPivot($user->id, [
+            'role' => $role
+        ]);
+    }
+
+    /**
+     * Update user status in collective action
+     */
+    public function updateUserStatus(User $user, string $status): void
+    {
+        $this->users()->updateExistingPivot($user->id, [
+            'status' => $status
+        ]);
+    }
+
+    /**
      * Remove ecosystem members from collective action
      */
     public function removeEcosystemMembers(Ecosystem $ecosystem): void
     {
-        $this->members()->wherePivot('ecosystem_id', $ecosystem->id)->detach();
+        $this->users()->wherePivot('ecosystem_id', $ecosystem->id)->detach();
     }
 }

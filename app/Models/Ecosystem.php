@@ -69,11 +69,8 @@ class Ecosystem extends Model
      */
     public function collectiveActions()
     {
-        return CollectiveAction::where(function ($query) {
-            $query->where('created_by', $this->creator_id)
-                  ->orWhereHas('acceptedInvitations', function ($subQuery) {
-                      $subQuery->where('ecosystem_id', $this->id);
-                  });
+        return CollectiveAction::whereHas('acceptedInvitations', function ($subQuery) {
+            $subQuery->where('ecosystem_id', $this->id);
         });
     }
 

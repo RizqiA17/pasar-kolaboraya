@@ -89,13 +89,7 @@ class Browse extends Component
     public function contributeToAction($actionId)
     {
         $action = CollectiveAction::findOrFail($actionId);
-        
-        if (!$action->canUserContribute(Auth::user())) {
-            session()->flash('error', 'Anda tidak dapat berkontribusi pada aksi ini.');
-            return;
-        }
-
-        return redirect()->route('collective-action.contribute', $action);
+        return redirect()->route('collective-action.show', $action);
     }
 
     public function render()

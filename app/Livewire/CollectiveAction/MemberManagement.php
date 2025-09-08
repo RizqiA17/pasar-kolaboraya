@@ -39,7 +39,7 @@ class MemberManagement extends Component
         }
 
         // Remove user from collective action
-        $this->collectiveAction->members()->detach($userId);
+        $this->collectiveAction->users()->detach($userId);
 
         session()->flash('message', "Anggota {$user->name} berhasil dihapus dari aksi kolektif.");
     }
@@ -59,7 +59,7 @@ class MemberManagement extends Component
             return;
         }
 
-        $member = $this->collectiveAction->members()->where('users.id', $userId)->first();
+        $member = $this->collectiveAction->users()->where('users.id', $userId)->first();
         
         if (!$member) {
             session()->flash('error', 'Anggota tidak ditemukan.');
@@ -68,7 +68,7 @@ class MemberManagement extends Component
 
         $newStatus = $member->pivot->status === 'active' ? 'inactive' : 'active';
         
-        $this->collectiveAction->members()->updateExistingPivot($userId, [
+        $this->collectiveAction->users()->updateExistingPivot($userId, [
             'status' => $newStatus
         ]);
 
@@ -76,14 +76,42 @@ class MemberManagement extends Component
         session()->flash('message', "Anggota {$user->name} berhasil {$statusLabel}.");
     }
 
+    public function updateUserRole($userId, $newRole)
+    {
+        $user = \App\Models\User::find($userId);
+        
+        if (!$user) {
+            session()->flash('error', 'User tidak ditemukan.');
+            return;
+        }
+
+        // Don't allow changing role of the creator
+        if ($user->id === $this->collectiveAction->created_by) {
+            session()->flash('error', 'Tidak dapat mengubah role pembuat aksi kolektif.');
+            return;
+        }
+
+        $this->collectiveAction->updateUserRole($user, $newRole);
+
+        $roleLabels = [
+            'admin' => 'Admin',
+            'member' => 'Anggota',
+            'contributor' => 'Kontributor'
+        ];
+
+        session()->flash('message', "Role {$user->name} berhasil diubah menjadi: {$roleLabels[$newRole]}");
+    }
+
     public function render()
     {
-        $adminMembers = $this->collectiveAction->adminMembers()->with('profile')->get();
-        $regularMembers = $this->collectiveAction->regularMembers()->with('profile')->get();
+        $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
+        $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->get();
+        $contributorUsers = $this->collectiveAction->contributorUsers()->with('profile')->get();
         
         return view('livewire.collective-action.member-management', [
-            'adminMembers' => $adminMembers,
-            'regularMembers' => $regularMembers,
+            'adminUsers' => $adminUsers,
+            'memberUsers' => $memberUsers,
+            'contributorUsers' => $contributorUsers,
         ]);
     }
 }

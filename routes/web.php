@@ -99,6 +99,8 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
     // Collective Action Routes
     Route::get('collective-actions', \App\Livewire\CollectiveAction\Browse::class)->name('collective-action.browse');
     Route::get('collective-actions/create', \App\Livewire\CollectiveAction\Create::class)->name('collective-action.create')->middleware('ecosystem.builder.only');
+    Route::get('collective-actions/{collectiveAction}', \App\Livewire\CollectiveAction\Dashboard::class)->name('collective-action.show');
+    Route::get('collective-actions/{collectiveAction}/join', \App\Livewire\CollectiveAction\Join::class)->name('collective-action.join');
     Route::get('collective-actions/{collectiveAction}/contribute', \App\Livewire\CollectiveAction\Contribute::class)->name('collective-action.contribute');
     Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\MemberManagement::class)->name('collective-action.members');
     Route::get('collective-actions/invitations/{invitation}/respond', \App\Livewire\CollectiveAction\RespondInvitation::class)->name('collective-action.respond-invitation')->middleware('ecosystem.builder.only');

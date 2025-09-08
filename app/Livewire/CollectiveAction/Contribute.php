@@ -75,15 +75,16 @@ class Contribute extends Component
 
         // Prepare contribution details
         $contributionData = [
-            'contribution_type' => $this->contribution_type,
-            'contribution_description' => $this->contribution_description,
-            'contribution_amount' => $this->contribution_type === 'funding' ? $this->contribution_amount : null,
-            'contribution_details' => !empty($this->contribution_details) ? json_encode($this->contribution_details) : null,
-            'status' => 'offered',
+            'ecosystem_id' => null,
+            'role' => 'contributor',
+            'status' => 'pending',
+            'join_type' => 'direct',
+            'join_reason' => $this->contribution_description,
+            'joined_at' => now(),
         ];
 
         // Create contribution
-        $this->collectiveAction->contributors()->attach(Auth::id(), $contributionData);
+        $this->collectiveAction->users()->attach(Auth::id(), $contributionData);
 
         session()->flash('message', 'Kontribusi berhasil dikirim! Menunggu persetujuan dari penyelenggara aksi.');
 
