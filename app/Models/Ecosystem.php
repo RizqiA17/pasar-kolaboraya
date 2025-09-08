@@ -69,7 +69,12 @@ class Ecosystem extends Model
      */
     public function collectiveActions()
     {
-        return CollectiveAction::whereJsonContains('ecosystem_ids', $this->id);
+        return CollectiveAction::where(function ($query) {
+            $query->where('created_by', $this->creator_id)
+                  ->orWhereHas('acceptedInvitations', function ($subQuery) {
+                      $subQuery->where('ecosystem_id', $this->id);
+                  });
+        });
     }
 
     /**
@@ -226,5 +231,29 @@ class Ecosystem extends Model
                 ? round(((count($neededSkillIds) - count($gapSkillIds)) / count($neededSkillIds)) * 100, 1)
                 : 100
         ];
+    }
+
+    /**
+     * Get collective actions where this ecosystem has been invited
+     */
+    public function collectiveActionInvitations(): HasMany
+    {
+        return $this->hasMany(CollectiveActionEcosystemInvitation::class);
+    }
+
+    /**
+     * Get accepted collective action invitations
+     */
+    public function acceptedCollectiveActions(): HasMany
+    {
+        return $this->collectiveActionInvitations()->where('status', 'accepted');
+    }
+
+    /**
+     * Get pending collective action invitations
+     */
+    public function pendingCollectiveActionInvitations(): HasMany
+    {
+        return $this->collectiveActionInvitations()->where('status', 'pending');
     }
 }

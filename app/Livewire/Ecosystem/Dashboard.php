@@ -17,6 +17,9 @@ class Dashboard extends Component
     public Ecosystem $ecosystem;
     public $activeTab = 'overview';
     public $isOwner = false;
+    public $isEcosystemBuilder = false;
+    public $isReadOnly = false;
+    public $pendingInvitations;
     public $showMembershipRequests = false;
 
     protected $queryString = [
@@ -37,6 +40,14 @@ class Dashboard extends Component
     {
         $this->activeTab = $tab;
         $this->resetPage();
+    }
+
+    public function getPendingInvitationsProperty()
+    {
+        return $this->ecosystem->pendingCollectiveActionInvitations()
+            ->with(['collectiveAction', 'invitedBy'])
+            ->latest()
+            ->get();
     }
 
     public function toggleMembershipRequests()
@@ -138,6 +149,48 @@ class Dashboard extends Component
         return Auth::id() === $this->ecosystem->creator_id;
     }
 
+    public function getIsEcosystemBuilderProperty()
+    {
+        return Auth::user()->isEcosystemBuilder();
+    }
+
+    public function getIsReadOnlyProperty()
+    {
+        // User is in read-only mode if they are not the owner and not an ecosystem builder
+        return !$this->getIsOwnerProperty() && !$this->getIsEcosystemBuilderProperty();
+    }
+
+    // public function acceptMember($userId)
+    // {
+    //     if ($this->isReadOnly) {
+    //         session()->flash('error', 'Akses ditolak. User biasa hanya dapat melihat data, tidak dapat melakukan perubahan.');
+    //         return;
+    //     }
+        
+    //     // Existing logic for accepting members
+    //     $this->ecosystem->users()->updateExistingPivot($userId, [
+    //         'status' => 'accepted',
+    //         'joined_at' => now(),
+    //     ]);
+
+    //     session()->flash('message', 'Anggota berhasil diterima.');
+    // }
+
+    // public function rejectMember($userId)
+    // {
+    //     if ($this->isReadOnly) {
+    //         session()->flash('error', 'Akses ditolak. User biasa hanya dapat melihat data, tidak dapat melakukan perubahan.');
+    //         return;
+    //     }
+        
+    //     // Existing logic for rejecting members
+    //     $this->ecosystem->users()->updateExistingPivot($userId, [
+    //         'status' => 'rejected',
+    //     ]);
+
+    //     session()->flash('message', 'Permintaan bergabung ditolak.');
+    // }
+
     public function getPendingRequestsProperty()
     {
         return $this->ecosystem->pendingUsers()
@@ -154,7 +207,10 @@ class Dashboard extends Component
 
     public function render()
     {
+        $this->pendingInvitations = $this->getPendingInvitationsProperty();
         $this->isOwner = $this->getIsOwnerProperty();
+        $this->isEcosystemBuilder = $this->getIsEcosystemBuilderProperty();
+        $this->isReadOnly = $this->getIsReadOnlyProperty();
         return view('livewire.ecosystem.dashboard', [
             'pendingRequests' => $this->pendingRequests,
             'acceptedMembers' => $this->acceptedMembers,

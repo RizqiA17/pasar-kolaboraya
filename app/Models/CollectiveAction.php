@@ -16,7 +16,6 @@ class CollectiveAction extends Model
         'scope',
         'goals',
         'required_resources',
-        'ecosystem_ids',
         'created_by',
         'start_date',
         'end_date',
@@ -28,7 +27,6 @@ class CollectiveAction extends Model
 
     protected $casts = [
         'required_resources' => 'array',
-        'ecosystem_ids' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',
     ];
@@ -42,23 +40,67 @@ class CollectiveAction extends Model
     }
 
     /**
-     * Get the ecosystems participating in this action
+     * Get invitations sent for this collective action
      */
-    public function ecosystems()
+    public function invitations(): HasMany
     {
-        return Ecosystem::whereIn('id', $this->ecosystem_ids ?? []);
+        return $this->hasMany(CollectiveActionEcosystemInvitation::class);
+    }
+
+    /**
+     * Get accepted invitations
+     */
+    public function acceptedInvitations(): HasMany
+    {
+        return $this->invitations()->where('status', 'accepted');
+    }
+
+    /**
+     * Get pending invitations
+     */
+    public function pendingInvitations(): HasMany
+    {
+        return $this->invitations()->where('status', 'pending');
+    }
+
+    /**
+     * Get the ecosystems participating in this action (via accepted invitations)
+     */
+    public function participatingEcosystems()
+    {
+        return $this->hasManyThrough(
+            Ecosystem::class,
+            CollectiveActionEcosystemInvitation::class,
+            'collective_action_id',
+            'id',
+            'id',
+            'ecosystem_id'
+        )->where('collective_action_ecosystem_invitations.status', 'accepted');
     }
 
     /**
      * Get participating ecosystems as a collection
      */
-    public function getEcosystemsAttribute()
+    public function getParticipatingEcosystemsAttribute()
     {
-        if (empty($this->ecosystem_ids)) {
-            return collect();
-        }
-        
-        return Ecosystem::whereIn('id', $this->ecosystem_ids)->get();
+        return $this->participatingEcosystems()->get();
+    }
+
+    /**
+     * Check if ecosystem is invited to this action
+     */
+    public function hasInvitedEcosystem($ecosystemId): bool
+    {
+        return $this->invitations()->where('ecosystem_id', $ecosystemId)->exists();
+    }
+
+    /**
+     * Get invitation status for ecosystem
+     */
+    public function getEcosystemInvitationStatus($ecosystemId): ?string
+    {
+        $invitation = $this->invitations()->where('ecosystem_id', $ecosystemId)->first();
+        return $invitation ? $invitation->status : null;
     }
 
     /**
@@ -105,7 +147,7 @@ class CollectiveAction extends Model
      */
     public function hasMinimumEcosystems(): bool
     {
-        return count($this->ecosystem_ids ?? []) >= $this->min_ecosystems;
+        return $this->acceptedInvitations()->count() >= $this->min_ecosystems;
     }
 
     /**
@@ -113,7 +155,14 @@ class CollectiveAction extends Model
      */
     public function includesEcosystem(int $ecosystemId): bool
     {
-        return in_array($ecosystemId, $this->ecosystem_ids ?? []);
+        // Check if ecosystem is the creator or has accepted invitation
+        if ($this->created_by === $ecosystemId) {
+            return true;
+        }
+        
+        return $this->acceptedInvitations()
+            ->where('ecosystem_id', $ecosystemId)
+            ->exists();
     }
 
     /**
@@ -121,7 +170,12 @@ class CollectiveAction extends Model
      */
     public function scopeForEcosystem($query, int $ecosystemId)
     {
-        return $query->whereJsonContains('ecosystem_ids', $ecosystemId);
+        return $query->where(function ($q) use ($ecosystemId) {
+            $q->where('created_by', $ecosystemId)
+              ->orWhereHas('acceptedInvitations', function ($subQuery) use ($ecosystemId) {
+                  $subQuery->where('ecosystem_id', $ecosystemId);
+              });
+        });
     }
 
     /**
@@ -130,9 +184,10 @@ class CollectiveAction extends Model
     public function scopeForEcosystems($query, array $ecosystemIds)
     {
         return $query->where(function ($q) use ($ecosystemIds) {
-            foreach ($ecosystemIds as $ecosystemId) {
-                $q->orWhereJsonContains('ecosystem_ids', $ecosystemId);
-            }
+            $q->whereIn('created_by', $ecosystemIds)
+              ->orWhereHas('acceptedInvitations', function ($subQuery) use ($ecosystemIds) {
+                  $subQuery->whereIn('ecosystem_id', $ecosystemIds);
+              });
         });
     }
 

@@ -17,7 +17,8 @@ class Create extends Component
     public $scope = 'local';
     public $goals = '';
     public $required_resources = [];
-    public $selected_ecosystems = [];
+    public $invited_ecosystems = [];
+    public $invitation_messages = [];
     public $start_date = '';
     public $end_date = '';
     public $location = '';
@@ -42,7 +43,7 @@ class Create extends Component
         'scale' => 'required|in:kecil,sedang,besar',
         'scope' => 'required|in:local,national,international',
         'goals' => 'required|string',
-        'selected_ecosystems' => 'required|array|min:3',
+        'invited_ecosystems' => 'required|array|min:2',
         'start_date' => 'required|date|after:today',
         'end_date' => 'required|date|after:start_date',
         'location' => 'nullable|string|max:255',
@@ -55,8 +56,8 @@ class Create extends Component
         'title.required' => 'Judul aksi kolektif wajib diisi',
         'description.required' => 'Deskripsi wajib diisi',
         'goals.required' => 'Tujuan aksi wajib diisi',
-        'selected_ecosystems.required' => 'Minimal pilih 3 ekosistem',
-        'selected_ecosystems.min' => 'Minimal pilih 3 ekosistem untuk aksi kolektif',
+        'invited_ecosystems.required' => 'Minimal undang 2 ekosistem lain',
+        'invited_ecosystems.min' => 'Minimal undang 2 ekosistem lain untuk berkolaborasi',
         'start_date.required' => 'Tanggal mulai wajib diisi',
         'start_date.after' => 'Tanggal mulai harus setelah hari ini',
         'end_date.required' => 'Tanggal selesai wajib diisi',
@@ -74,13 +75,12 @@ class Create extends Component
             return redirect()->route('collective-action.browse');
         }
 
-        // Get ecosystems where user is accepted member
-        $this->availableEcosystems = Auth::user()->acceptedEcosystems;
-
-        if ($this->availableEcosystems->count() < 3) {
-            session()->flash('error', 'Anda harus bergabung minimal dengan 3 ekosistem untuk membuat aksi kolektif.');
-            return redirect()->route('ecosystem.browse');
-        }
+        // Get all active ecosystems except user's own ecosystems  
+        $userEcosystemIds = Auth::user()->acceptedEcosystems->pluck('id')->toArray();
+        $this->availableEcosystems = Ecosystem::where('is_active', true)
+            ->whereNotIn('id', $userEcosystemIds)
+            ->where('creator_id', '!=', Auth::id())
+            ->get();
 
         // Set default date (tomorrow)
         $this->start_date = now()->addDay()->format('Y-m-d');
@@ -91,15 +91,6 @@ class Create extends Component
     {
         $this->validate();
 
-        // Check if user can access selected ecosystems
-        $userEcosystemIds = Auth::user()->acceptedEcosystems->pluck('id')->toArray();
-        $invalidEcosystems = array_diff($this->selected_ecosystems, $userEcosystemIds);
-        
-        if (!empty($invalidEcosystems)) {
-            $this->addError('selected_ecosystems', 'Anda hanya dapat memilih ekosistem yang telah Anda ikuti.');
-            return;
-        }
-
         // Create the collective action
         $action = CollectiveAction::create([
             'title' => $this->title,
@@ -108,7 +99,6 @@ class Create extends Component
             'scope' => $this->scope,
             'goals' => $this->goals,
             'required_resources' => $this->required_resources,
-            'ecosystem_ids' => $this->selected_ecosystems,
             'created_by' => Auth::id(),
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
@@ -118,9 +108,23 @@ class Create extends Component
             'collaboration_terms' => $this->collaboration_terms,
         ]);
 
-        session()->flash('message', 'Aksi kolektif berhasil dibuat! Status: Perencanaan');
+        // Send invitations to selected ecosystems
+        foreach ($this->invited_ecosystems as $ecosystemId) {
+            $invitationMessage = $this->invitation_messages[$ecosystemId] ?? 
+                "Kami mengundang ekosistem Anda untuk berkolaborasi dalam aksi kolektif: {$this->title}";
+            
+            CollectiveActionEcosystemInvitation::create([
+                'collective_action_id' => $action->id,
+                'ecosystem_id' => $ecosystemId,
+                'invited_by' => Auth::id(),
+                'status' => 'pending',
+                'invitation_message' => $invitationMessage,
+            ]);
+        }
 
-        return redirect()->route('collective-action.show', $action);
+        session()->flash('message', 'Aksi kolektif berhasil dibuat dan undangan telah dikirim! Status: Perencanaan');
+
+        return redirect()->route('collective-action.browse');
     }
 
     public function render()

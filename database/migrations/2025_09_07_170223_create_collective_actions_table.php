@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('scope', ['local', 'national', 'international']);
             $table->text('goals'); // Goals/objectives of the action
             $table->json('required_resources')->nullable(); // Required resources (funding, skills, etc.)
-            $table->json('ecosystem_ids'); // Array of participating ecosystem IDs
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');

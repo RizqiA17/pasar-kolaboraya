@@ -20,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.login.status' => \App\Http\Middleware\CheckLoginStatus::class,
             'check.feature.access' => \App\Http\Middleware\CheckFeatureAccess::class,
             'check.form.feature.access' => \App\Http\Middleware\CheckFormFeatureAccess::class,
+            'ecosystem.builder.only' => \App\Http\Middleware\EcosystemBuilderOnly::class,
+            'read.only.access' => \App\Http\Middleware\ReadOnlyAccess::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes
