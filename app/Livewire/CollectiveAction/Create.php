@@ -121,6 +121,7 @@ class Create extends Component
                 'ecosystem_id' => $ecosystemId,
                 'invited_by' => Auth::id(),
                 'status' => 'pending',
+                'role' => 'admin', // Ecosystem builders become admins
                 'invitation_message' => $invitationMessage,
             ]);
         }

@@ -32,7 +32,9 @@ class RespondInvitation extends Component
         // Check if user has access to respond to this invitation
         $ecosystem = $invitation->ecosystem;
         
-        if (!Auth::user()->isEcosystemBuilder() || $ecosystem->creator_id !== Auth::id()) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user || !$user->isEcosystemBuilder() || $ecosystem->creator_id !== $user->id) {
             session()->flash('error', 'Anda tidak memiliki akses untuk merespons undangan ini.');
             return redirect()->route('ecosystem.dashboard', $ecosystem);
         }
@@ -47,14 +49,37 @@ class RespondInvitation extends Component
     {
         $this->validate();
 
+        $isAccepted = $this->response_action === 'accept';
+        
         $this->invitation->update([
-            'status' => $this->response_action === 'accept' ? 'accepted' : 'declined',
+            'status' => $isAccepted ? 'accepted' : 'declined',
             'response_message' => $this->response_message,
             'responded_at' => now(),
         ]);
 
-        $status = $this->response_action === 'accept' ? 'diterima' : 'ditolak';
-        session()->flash('message', "Undangan aksi kolektif berhasil {$status}!");
+        // If accepted, add ecosystem members to collective action
+        if ($isAccepted) {
+            $collectiveAction = $this->invitation->collectiveAction;
+            $ecosystem = $this->invitation->ecosystem;
+            
+            // Add ecosystem builder as admin
+            $collectiveAction->members()->attach($ecosystem->creator_id, [
+                'ecosystem_id' => $ecosystem->id,
+                'role' => 'admin',
+                'status' => 'active',
+                'joined_at' => now(),
+            ]);
+            
+            // Add all ecosystem members as regular members
+            $collectiveAction->addEcosystemMembers($ecosystem, 'member');
+        }
+
+        $status = $isAccepted ? 'diterima' : 'ditolak';
+        $message = $isAccepted 
+            ? "Undangan aksi kolektif berhasil diterima! Semua anggota ekosistem telah ditambahkan sebagai anggota aksi kolektif."
+            : "Undangan aksi kolektif berhasil ditolak.";
+            
+        session()->flash('message', $message);
 
         return redirect()->route('ecosystem.dashboard', $this->invitation->ecosystem);
     }

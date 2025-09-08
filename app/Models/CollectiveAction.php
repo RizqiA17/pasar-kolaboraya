@@ -139,7 +139,16 @@ class CollectiveAction extends Model
         }
 
         // Check if user is already a contributor
-        return !$this->contributors()->where('users.id', $user->id)->exists();
+        if ($this->contributors()->where('users.id', $user->id)->exists()) {
+            return false;
+        }
+
+        // Check if user is already a member (they can contribute as members)
+        if ($this->isUserMember($user)) {
+            return false; // Members don't need to contribute separately
+        }
+
+        return true;
     }
 
     /**
@@ -230,5 +239,97 @@ class CollectiveAction extends Model
             'cancelled' => 'Dibatalkan',
             default => ucfirst($this->status),
         };
+    }
+
+    /**
+     * Get all members of this collective action
+     */
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'collective_action_members')
+            ->withPivot(['ecosystem_id', 'role', 'status', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get admin members
+     */
+    public function adminMembers(): BelongsToMany
+    {
+        return $this->members()->wherePivot('role', 'admin');
+    }
+
+    /**
+     * Get regular members
+     */
+    public function regularMembers(): BelongsToMany
+    {
+        return $this->members()->wherePivot('role', 'member');
+    }
+
+    /**
+     * Get active members
+     */
+    public function activeMembers(): BelongsToMany
+    {
+        return $this->members()->wherePivot('status', 'active');
+    }
+
+    /**
+     * Check if user is an admin of this collective action
+     */
+    public function isUserAdmin(User $user): bool
+    {
+        return $this->adminMembers()->where('users.id', $user->id)->exists();
+    }
+
+    /**
+     * Check if user is a member of this collective action
+     */
+    public function isUserMember(User $user): bool
+    {
+        return $this->activeMembers()->where('users.id', $user->id)->exists();
+    }
+
+    /**
+     * Check if user can manage this collective action
+     */
+    public function canUserManage(User $user): bool
+    {
+        // Creator is always admin
+        if ($this->created_by === $user->id) {
+            return true;
+        }
+
+        // Check if user is admin member
+        return $this->isUserAdmin($user);
+    }
+
+    /**
+     * Add ecosystem members as collective action members
+     */
+    public function addEcosystemMembers(Ecosystem $ecosystem, string $role = 'member'): void
+    {
+        $ecosystemMembers = $ecosystem->acceptedUsers()->get();
+        
+        foreach ($ecosystemMembers as $member) {
+            // Check if user is already a member
+            if (!$this->isUserMember($member)) {
+                $this->members()->attach($member->id, [
+                    'ecosystem_id' => $ecosystem->id,
+                    'role' => $role,
+                    'status' => 'active',
+                    'joined_at' => now(),
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Remove ecosystem members from collective action
+     */
+    public function removeEcosystemMembers(Ecosystem $ecosystem): void
+    {
+        $this->members()->wherePivot('ecosystem_id', $ecosystem->id)->detach();
     }
 }

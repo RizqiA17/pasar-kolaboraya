@@ -445,4 +445,46 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return $this->collectiveActions()->wherePivot('status', 'accepted');
     }
+
+    /**
+     * Get collective actions where user is a member
+     */
+    public function collectiveActionMemberships(): BelongsToMany
+    {
+        return $this->belongsToMany(CollectiveAction::class, 'collective_action_members')
+            ->withPivot(['ecosystem_id', 'role', 'status', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get collective actions where user is an admin
+     */
+    public function adminCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('role', 'admin');
+    }
+
+    /**
+     * Get collective actions where user is a regular member
+     */
+    public function memberCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActionMemberships()->wherePivot('role', 'member');
+    }
+
+    /**
+     * Check if user is admin of a collective action
+     */
+    public function isAdminOfCollectiveAction(CollectiveAction $collectiveAction): bool
+    {
+        return $collectiveAction->isUserAdmin($this);
+    }
+
+    /**
+     * Check if user is member of a collective action
+     */
+    public function isMemberOfCollectiveAction(CollectiveAction $collectiveAction): bool
+    {
+        return $collectiveAction->isUserMember($this);
+    }
 }

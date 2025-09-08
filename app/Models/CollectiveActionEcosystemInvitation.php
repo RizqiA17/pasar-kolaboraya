@@ -12,6 +12,7 @@ class CollectiveActionEcosystemInvitation extends Model
         'ecosystem_id',
         'invited_by',
         'status',
+        'role',
         'invitation_message',
         'response_message',
         'responded_at',
@@ -80,5 +81,33 @@ class CollectiveActionEcosystemInvitation extends Model
     public function isDeclined(): bool
     {
         return $this->status === 'declined';
+    }
+
+    /**
+     * Check if invitation is for admin role
+     */
+    public function isAdminInvitation(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if invitation is for member role
+     */
+    public function isMemberInvitation(): bool
+    {
+        return $this->role === 'member';
+    }
+
+    /**
+     * Get role label
+     */
+    public function getRoleLabelAttribute(): string
+    {
+        return match($this->role) {
+            'admin' => 'Admin',
+            'member' => 'Anggota',
+            default => ucfirst($this->role),
+        };
     }
 }
