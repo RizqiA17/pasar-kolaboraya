@@ -80,6 +80,18 @@
             viewable
         />
 
+        <!-- Ecosystem Builder Option -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+            <flux:checkbox 
+                wire:model="is_ecosystem_builder"
+                :label="'Saya adalah Ecosystem Builder'"
+                class="mb-2"
+            />
+            <p class="text-sm text-blue-700 dark:text-blue-300">
+                Centang opsi ini jika Anda ingin membuat dan mengelola ekosistem kolaborasi untuk mengundang orang lain bergabung dalam gerakan perubahan sosial.
+            </p>
+        </div>
+
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full cursor-pointer">
                 {{ 'Buat akun' }}

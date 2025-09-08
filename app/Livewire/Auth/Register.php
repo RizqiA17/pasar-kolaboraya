@@ -24,6 +24,8 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
+    public bool $is_ecosystem_builder = false;
+
     protected $messages = [
         'name.required' => 'Nama wajib diisi',
         'name.string' => 'Nama harus berupa teks',
@@ -55,6 +57,7 @@ class Register extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'is_ecosystem_builder' => ['boolean'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -65,7 +68,11 @@ class Register extends Component
 
         Auth::user()->sendEmailVerificationNotification();
 
-        // Redirect to profile setup instead of dashboard
-        $this->redirect(route('verification.notice', absolute: false), navigate: true);
+        // Redirect based on user type
+        if ($user->is_ecosystem_builder) {
+            $this->redirect(route('ecosystem.setup', absolute: false), navigate: true);
+        } else {
+            $this->redirect(route('verification.notice', absolute: false), navigate: true);
+        }
     }
 }

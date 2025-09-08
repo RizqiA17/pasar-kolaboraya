@@ -85,7 +85,7 @@
             @endif
 
             <!-- Kolaborasi -->
-            @if ($collaborationsEnabled || $isSuperAdmin)
+            {{-- @if ($collaborationsEnabled || $isSuperAdmin)
                 <flux:navbar.item icon="users" :href="route('collaborations.manage')"
                     :current="request()->routeIs('collaborations.manage')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
@@ -99,7 +99,6 @@
                 <flux:navbar.item icon="users"
                     class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
                     x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                    {{-- <flux:icon name="users" class="w-5 h-5" /> --}}
                     <span class="relative z-10 ml-2">{{ __('Kolaborasi') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
 
@@ -115,10 +114,30 @@
                         </div>
                     </div>
                 </flux:navbar.item>
-            @endif
+            @endif --}}
+
+            <!-- Ekosistem -->
+            <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')" :current="request()->routeIs('ecosystem.*')"
+                class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
+                wire:navigate>
+                <span class="relative z-10">{{ __('Ekosistem') }}</span>
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </div>
+            </flux:navbar.item>
+
+            <!-- Aksi Kolektif -->
+            <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')" :current="request()->routeIs('collective-action.*')"
+                class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
+                wire:navigate>
+                <span class="relative z-10">{{ __('Aksi Kolektif') }}</span>
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-violet-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </div>
+            </flux:navbar.item>
 
             <!-- Aksi Bersama -->
-            @if ($userActionsEnabled || $isSuperAdmin)
+            {{-- @if ($userActionsEnabled || $isSuperAdmin)
                 <flux:navbar.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-pink-600 dark:text-slate-200 dark:hover:text-pink-400 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl mx-1"
                     wire:navigate>
@@ -131,7 +150,6 @@
                 <flux:navbar.item icon="user-group"
                     class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
                     x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                    {{-- <flux:icon name="user-group" class="w-5 h-5" /> --}}
                     <span class="relative text-center z-10 ml-2">{{ __('Aksi Bersama') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
 
@@ -147,7 +165,7 @@
                         </div>
                     </div>
                 </flux:navbar.item>
-            @endif
+            @endif --}}
         </flux:navbar>
 
         {{-- <flux:spacer /> --}}
@@ -356,7 +374,7 @@
                 @endif
 
                 <!-- Collaborations -->
-                @if ($collaborationsEnabled || $isSuperAdmin)
+                {{-- @if ($collaborationsEnabled || $isSuperAdmin)
                     <a href="{{ route('collaborations.manage') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collaborations.manage') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
                         wire:navigate>
@@ -396,10 +414,38 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                @endif --}}
+
+                <!-- Ekosistem -->
+                <a href="{{ route('ecosystem.browse') }}"
+                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
+                    wire:navigate>
+                    <div class="w-6 h-6 mb-1">
+                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium">{{ __('Ekosistem') }}</span>
+                </a>
+
+                <!-- Aksi Kolektif -->
+                <a href="{{ route('collective-action.browse') }}"
+                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
+                    wire:navigate>
+                    <div class="w-6 h-6 mb-1">
+                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium">{{ __('Aksi Kolektif') }}</span>
+                </a>
 
                 <!-- Aksi -->
-                @if ($userActionsEnabled || $isSuperAdmin)
+                {{-- @if ($userActionsEnabled || $isSuperAdmin)
                     <a href="{{ route('events') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('events') ? 'bg-pink-500/20 text-pink-600 dark:text-pink-400' : 'text-slate-600 hover:text-pink-600 dark:text-slate-300 dark:hover:text-pink-400 hover:bg-pink-500/10' }}"
                         wire:navigate>
@@ -439,7 +485,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                @endif --}}
 
                 <!-- Profile -->
                 <a href="{{ route('settings.profile') }}"
@@ -468,13 +514,21 @@
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-t-full">
                 </div>
+            @elseif(request()->routeIs('ecosystem.*'))
+                <div
+                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-full">
+                </div>
+            @elseif(request()->routeIs('collective-action.*'))
+                <div
+                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-purple-500 to-violet-500 rounded-t-full">
+                </div>
             @elseif(request()->routeIs('events'))
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-pink-500 to-rose-500 rounded-t-full">
                 </div>
             @elseif(request()->routeIs('settings.profile'))
                 <div
-                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-full">
+                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-t-full">
                 </div>
             @endif
         </div>

@@ -91,6 +91,15 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
     // Survey Routes
     Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
 
+    // Ecosystem Routes
+    Route::get('ecosystem', \App\Livewire\Ecosystem\Browse::class)->name('ecosystem.browse');
+    Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
+
+    // Collective Action Routes
+    Route::get('collective-actions', \App\Livewire\CollectiveAction\Browse::class)->name('collective-action.browse');
+    Route::get('collective-actions/create', \App\Livewire\CollectiveAction\Create::class)->name('collective-action.create');
+    Route::get('collective-actions/{collectiveAction}/contribute', \App\Livewire\CollectiveAction\Contribute::class)->name('collective-action.contribute');
+
 });
 
 // Admin routes - only accessible by super admin

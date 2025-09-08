@@ -30,6 +30,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email',
         'password',
         'role',
+        'is_ecosystem_builder',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_ecosystem_builder' => 'boolean',
         ];
     }
 
@@ -374,5 +376,73 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function hasRespondedToSurvey($surveyId)
     {
         return $this->surveyResponses()->where('survey_id', $surveyId)->exists();
+    }
+
+    /**
+     * Get ecosystems created by this user
+     */
+    public function createdEcosystems(): HasMany
+    {
+        return $this->hasMany(Ecosystem::class, 'creator_id');
+    }
+
+    /**
+     * Get ecosystems this user belongs to
+     */
+    public function ecosystems(): BelongsToMany
+    {
+        return $this->belongsToMany(Ecosystem::class, 'ecosystem_users')
+            ->withPivot(['status', 'join_reason', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get ecosystems where user is accepted
+     */
+    public function acceptedEcosystems(): BelongsToMany
+    {
+        return $this->ecosystems()->wherePivot('status', 'accepted');
+    }
+
+    /**
+     * Get pending ecosystem join requests
+     */
+    public function pendingEcosystems(): BelongsToMany
+    {
+        return $this->ecosystems()->wherePivot('status', 'pending');
+    }
+
+    /**
+     * Check if user is an ecosystem builder
+     */
+    public function isEcosystemBuilder(): bool
+    {
+        return $this->is_ecosystem_builder;
+    }
+
+    /**
+     * Get collective actions created by this user
+     */
+    public function createdCollectiveActions(): HasMany
+    {
+        return $this->hasMany(CollectiveAction::class, 'created_by');
+    }
+
+    /**
+     * Get collective actions this user has contributed to
+     */
+    public function collectiveActions(): BelongsToMany
+    {
+        return $this->belongsToMany(CollectiveAction::class, 'collective_action_users')
+            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get accepted collective action contributions
+     */
+    public function acceptedCollectiveActions(): BelongsToMany
+    {
+        return $this->collectiveActions()->wherePivot('status', 'accepted');
     }
 }

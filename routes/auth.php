@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('confirm-password', ConfirmPassword::class)
         ->name('password.confirm');
 
+    Route::get('ecosystem-setup', \App\Livewire\Auth\EcosystemSetup::class)->name('ecosystem.setup');
     Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)->name('profile.setup');
 });
 
