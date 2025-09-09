@@ -44,7 +44,7 @@ class Register extends Component
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
+    public function register()
     {
         // Check if registration is enabled
         if (SystemSetting::getValue('registration_enabled', '1') !== '1') {
@@ -73,11 +73,6 @@ class Register extends Component
 
         Auth::user()->sendEmailVerificationNotification();
 
-        // Redirect based on user type
-        if ($user->is_ecosystem_builder) {
-            $this->redirect(route('ecosystem.setup', absolute: false), navigate: true);
-        } else {
-            $this->redirect(route('verification.notice', absolute: false), navigate: true);
-        }
+        return redirect()->route('auth.verification.notice');
     }
 }
