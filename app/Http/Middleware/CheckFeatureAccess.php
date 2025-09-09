@@ -23,7 +23,7 @@ class CheckFeatureAccess
             return $next($request);
         }
 
-        // Check feature access based on system settings
+        // Check feature access based on system settings with cascading rules
         switch ($feature) {
             case 'connections':
                 if (!SystemSetting::isConnectionsEnabled()) {
@@ -37,9 +37,26 @@ class CheckFeatureAccess
                 }
                 break;
                 
+            case 'ecosystems':
+                if (!SystemSetting::isEcosystemsEnabled(Auth::user())) {
+                    $user = Auth::user();
+                    if ($user && $user->isEcosystemBuilder()) {
+                        // Ecosystem builder should always have access - this shouldn't happen
+                        break;
+                    }
+                    return redirect()->back()->with('error', 'Fitur ekosistem sedang dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat mengakses fitur ini.');
+                }
+                break;
+                
             case 'user_actions':
                 if (!SystemSetting::isUserActionsEnabled()) {
                     return redirect()->back()->with('error', 'Aksi pengguna sedang dinonaktifkan oleh administrator.');
+                }
+                break;
+                
+            case 'collective_actions':
+                if (!SystemSetting::isCollectiveActionsEnabled()) {
+                    return redirect()->back()->with('error', 'Fitur aksi kolektif sedang dinonaktifkan oleh administrator. Aktifkan fitur aksi pengguna untuk menggunakan aksi kolektif.');
                 }
                 break;
                 

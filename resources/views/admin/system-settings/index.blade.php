@@ -90,37 +90,37 @@
                         </div>
                     </div>
 
-                    <!-- Collaborations Status -->
+                    <!-- Unified Collaborations + Ecosystem Status -->
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl space-y-3 sm:space-y-0">
                         <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kolaborasi</h3>
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kolaborasi & Ekosistem</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                                Kontrol apakah pengguna dapat membuat dan mengelola kolaborasi.
+                                Kontrol apakah pengguna dapat membuat dan mengelola kolaborasi serta ekosistem. Ketika dinonaktifkan, hanya ecosystem builder yang dapat mengakses fitur ekosistem.
                             </p>
                         </div>
                         <div class="sm:ml-4 flex-shrink-0">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="collaborations_enabled" value="1" 
                                        {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'checked' : '' }}
-                                       class="sr-only peer">
+                                       class="sr-only peer" id="collaborations-toggle">
                                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- User Actions Status -->
+                    <!-- Unified Collective Actions + User Actions Status -->
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl space-y-3 sm:space-y-0">
                         <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Aksi Pengguna</h3>
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Aksi Kolektif & Aksi Bersama</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                                Kontrol apakah pengguna dapat melakukan aksi seperti bergabung dengan event, dll.
+                                Kontrol apakah pengguna dapat membuat aksi kolektif dan melakukan aksi bersama. Ketika dinonaktifkan, semua fitur aksi kolektif akan ikut nonaktif.
                             </p>
                         </div>
                         <div class="sm:ml-4 flex-shrink-0">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="user_actions_enabled" value="1" 
                                        {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'checked' : '' }}
-                                       class="sr-only peer">
+                                       class="sr-only peer" id="collective-actions-toggle">
                                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600"></div>
                             </label>
                         </div>
@@ -145,8 +145,8 @@
                                     <li>Mode maintenance akan menampilkan halaman maintenance kepada semua pengguna</li>
                                     <li>Menonaktifkan registrasi akan mencegah pengguna baru mendaftar</li>
                                     <li>Menonaktifkan koneksi akan mencegah pengguna membuat koneksi dengan pengguna lain</li>
-                                    <li>Menonaktifkan kolaborasi akan mencegah pengguna membuat dan mengelola kolaborasi</li>
-                                    <li>Menonaktifkan aksi pengguna akan mencegah pengguna melakukan aksi seperti bergabung event</li>
+                                    <li>Menonaktifkan kolaborasi akan mencegah user biasa mengakses ekosistem (ecosystem builder tetap bisa akses)</li>
+                                    <li>Menonaktifkan aksi kolektif akan mencegah pengguna membuat dan bergabung dengan aksi kolektif</li>
                                     <li>Perubahan akan berlaku segera setelah disimpan</li>
                                 </ul>
                             </div>
@@ -256,7 +256,7 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Kolaborasi</p>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Kolaborasi & Ekosistem</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
                         {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
@@ -274,7 +274,7 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Aksi Pengguna</p>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Aksi Kolektif & Bersama</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
                         {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>

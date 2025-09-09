@@ -45,10 +45,14 @@
             </flux:navbar.item>
 
             @php
+                $user = auth()->user();
                 $connectionsEnabled = \App\Models\SystemSetting::isConnectionsEnabled();
                 $collaborationsEnabled = \App\Models\SystemSetting::isCollaborationsEnabled();
+                $ecosystemsEnabled = \App\Models\SystemSetting::isEcosystemsEnabled($user);
                 $userActionsEnabled = \App\Models\SystemSetting::isUserActionsEnabled();
-                $isSuperAdmin = auth()->user()->isSuperAdmin();
+                $collectiveActionsEnabled = \App\Models\SystemSetting::isCollectiveActionsEnabled();
+                $isSuperAdmin = $user->isSuperAdmin();
+                $isEcosystemBuilder = $user->isEcosystemBuilder();
             @endphp
 
             <!-- Koneksi -->
@@ -116,41 +120,21 @@
                 </flux:navbar.item>
             @endif --}}
 
-            <!-- Ekosistem -->
-            <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')" :current="request()->routeIs('ecosystem.*')"
-                class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
-                wire:navigate>
-                <span class="relative z-10">{{ __('Ekosistem') }}</span>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </flux:navbar.item>
-
-            <!-- Aksi Kolektif -->
-            <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')" :current="request()->routeIs('collective-action.*')"
-                class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
-                wire:navigate>
-                <span class="relative z-10">{{ __('Aksi Kolektif') }}</span>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-violet-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </flux:navbar.item>
-
-            <!-- Aksi Bersama -->
-            {{-- @if ($userActionsEnabled || $isSuperAdmin)
-                <flux:navbar.item icon="user-group" :href="route('events')" :current="request()->routeIs('events')"
-                    class="group relative px-4 py-2 text-slate-700 hover:text-pink-600 dark:text-slate-200 dark:hover:text-pink-400 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl mx-1"
+            <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
+            @if ($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder)
+                <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')" :current="request()->routeIs('ecosystem.*')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
                     wire:navigate>
-                    <span class="relative text-center z-10">{{ __('Aksi Bersama') }}</span>
+                    <span class="relative z-10">{{ __('Ekosistem') }}</span>
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-rose-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </flux:navbar.item>
             @else
-                <flux:navbar.item icon="user-group"
+                <flux:navbar.item icon="building-library"
                     class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
                     x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                    <span class="relative text-center z-10 ml-2">{{ __('Aksi Bersama') }}</span>
+                    <span class="relative z-10 ml-2">{{ __('Ekosistem') }}</span>
                     <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
 
                     <!-- Tooltip -->
@@ -159,13 +143,46 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
-                        <span>Aksi pengguna sedang dinonaktifkan oleh administrator</span>
+                        <span>Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat mengakses.</span>
                         <div
                             class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
                         </div>
                     </div>
                 </flux:navbar.item>
-            @endif --}}
+            @endif
+
+            <!-- Aksi Kolektif (follows user actions setting) -->
+            @if ($collectiveActionsEnabled || $isSuperAdmin)
+                <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')" :current="request()->routeIs('collective-action.*')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
+                    wire:navigate>
+                    <span class="relative z-10">{{ __('Aksi Kolektif') }}</span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-violet-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </flux:navbar.item>
+            @else
+                <flux:navbar.item icon="sparkles"
+                    class="group relative px-4 py-2 text-slate-400 dark:text-slate-500 cursor-not-allowed rounded-xl mx-1 opacity-60"
+                    x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                    <span class="relative z-10 ml-2">{{ __('Aksi Kolektif') }}</span>
+                    <div class="absolute inset-0 bg-slate-200/20 dark:bg-slate-700/20 rounded-xl"></div>
+
+                    <!-- Tooltip -->
+                    <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
+                        <span>Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.</span>
+                        <div
+                            class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                        </div>
+                    </div>
+                </flux:navbar.item>
+            @endif
+
+            <!-- Note: "Aksi Bersama" functionality is now unified with "Aksi Kolektif" -->
         </flux:navbar>
 
         {{-- <flux:spacer /> --}}

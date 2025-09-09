@@ -114,4 +114,55 @@ class SystemSetting extends Model
             'Controls whether users can perform actions like joining events, etc.'
         );
     }
+
+    /**
+     * Check if ecosystems are enabled (follows collaboration setting)
+     * Ecosystem builders always have access regardless of collaboration setting
+     */
+    public static function isEcosystemsEnabled($user = null)
+    {
+        // If no user provided, use authenticated user
+        if (!$user && \Illuminate\Support\Facades\Auth::check()) {
+            $user = \Illuminate\Support\Facades\Auth::user();
+        }
+        
+        // Ecosystem builders always have access
+        if ($user && $user->isEcosystemBuilder()) {
+            return true;
+        }
+        
+        // Otherwise follow collaboration setting
+        return static::isCollaborationsEnabled();
+    }
+
+    /**
+     * Check if collective actions are enabled (follows user actions setting)
+     */
+    public static function isCollectiveActionsEnabled()
+    {
+        return static::isUserActionsEnabled();
+    }
+
+    /**
+     * Check if a feature is enabled by cascading rules
+     * Ecosystem follows collaboration, Collective Action follows user actions
+     * Supports user-specific access (e.g., ecosystem builders)
+     */
+    public static function isFeatureEnabled($feature, $user = null)
+    {
+        switch ($feature) {
+            case 'ecosystems':
+                return static::isEcosystemsEnabled($user);
+            case 'collective_actions':
+                return static::isCollectiveActionsEnabled();
+            case 'collaborations':
+                return static::isCollaborationsEnabled();
+            case 'connections':
+                return static::isConnectionsEnabled();
+            case 'user_actions':
+                return static::isUserActionsEnabled();
+            default:
+                return false;
+        }
+    }
 }
