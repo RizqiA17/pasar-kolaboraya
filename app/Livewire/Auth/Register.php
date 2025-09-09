@@ -62,6 +62,11 @@ class Register extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
+        // Set ecosystem builder status to pending if user wants to be ecosystem builder
+        if ($validated['is_ecosystem_builder']) {
+            $validated['ecosystem_builder_status'] = 'pending';
+        }
+
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);

@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             CollaborationSeeder::class,
             TodoSeeder::class,
             CommentSeeder::class,
+            
+            // Ecosystem Builders
+            EcosystemBuilderSeeder::class,
         ]);
     }
 }

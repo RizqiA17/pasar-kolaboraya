@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire\Ecosystem;
 
 use App\Models\Ecosystem;
 use App\Models\Interest;
@@ -9,24 +9,20 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.auth', ['title' => 'Setup Ekosistem'])]
-class EcosystemSetup extends Component
+#[Layout('components.layouts.app', ['title' => 'Buat Ekosistem Baru'])]
+class Create extends Component
 {
-    // Basic ecosystem info
     public $organization_name = '';
     public $ecosystem_title = '';
+    public $selectedIssues = [];
     public $work_region = '';
+    public $selectedExistingRoles = [];
+    public $selectedNeededRoles = [];
     public $max_users = '';
     public $terms_conditions = '';
     public $description = '';
 
-    // Issues/Interests
-    public $selectedIssues = [];
     public $interests = [];
-
-    // Roles/Skills
-    public $selectedExistingRoles = [];
-    public $selectedNeededRoles = [];
     public $skills = [];
 
     protected $rules = [
@@ -53,11 +49,6 @@ class EcosystemSetup extends Component
 
     public function mount()
     {
-        // Check if user is ecosystem builder
-        if (!Auth::user()->is_ecosystem_builder) {
-            return redirect()->route('profile.setup');
-        }
-
         // Check if user is approved ecosystem builder
         if (!Auth::user()->isApprovedEcosystemBuilder()) {
             if (Auth::user()->hasPendingEcosystemBuilderApproval()) {
@@ -65,15 +56,16 @@ class EcosystemSetup extends Component
             } else {
                 session()->flash('error', 'Anda belum disetujui sebagai Ecosystem Builder. Silakan hubungi admin untuk informasi lebih lanjut.');
             }
-            return redirect()->route('profile.setup');
+            return redirect()->route('ecosystem.browse');
         }
 
         $this->interests = Interest::all();
         $this->skills = Skill::all();
     }
 
-    public function setupEcosystem()
+    public function createEcosystem()
     {
+        
         $this->validate();
         // Create the ecosystem
         $ecosystem = Ecosystem::create([
@@ -97,20 +89,14 @@ class EcosystemSetup extends Component
             'joined_at' => now(),
         ]);
 
-        session()->flash('message', 'Ekosistem berhasil dibuat! Sekarang lanjutkan untuk melengkapi profil Anda.');
+        session()->flash('message', 'Ekosistem berhasil dibuat!');
 
-        // Redirect to profile setup
-        return redirect()->route('profile.setup');
-    }
-
-    public function skip()
-    {
-        // Redirect to profile setup if user wants to skip ecosystem creation
-        return redirect()->route('profile.setup');
+        // Redirect to the new ecosystem dashboard
+        return redirect()->route('ecosystem.dashboard', $ecosystem);
     }
 
     public function render()
     {
-        return view('livewire.auth.ecosystem-setup');
+        return view('livewire.ecosystem.create');
     }
 }

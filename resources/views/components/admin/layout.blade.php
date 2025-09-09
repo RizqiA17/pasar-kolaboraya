@@ -58,7 +58,19 @@
                             </svg>
                             <span class="truncate">Survey</span>
                         </a>
-
+                        
+                        <a href="{{ route('admin.ecosystem-builders') }}"
+                            class="group flex items-center px-2 sm:px-3 py-2 sm:py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.ecosystem-builders*') ? 'bg-teal-100 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l-1.414-1.414M6.05 6.05L4.636 4.636">
+                                </path>
+                            </svg>
+                            <span class="truncate">Ecosystem Builder</span>
+                        </a>
+                        
                         <div class="pt-4">
                             <h3
                                 class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">

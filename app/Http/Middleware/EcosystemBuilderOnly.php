@@ -28,9 +28,13 @@ class EcosystemBuilderOnly
             return $next($request);
         }
 
-        // Check if user is ecosystem builder
-        if (!$user->isEcosystemBuilder()) {
-            return redirect()->back()->with('error', 'Akses ditolak. Hanya ecosystem builders yang dapat mengakses fitur ini.');
+        // Check if user is approved ecosystem builder
+        if (!$user->isApprovedEcosystemBuilder()) {
+            if ($user->hasPendingEcosystemBuilderApproval()) {
+                return redirect()->back()->with('error', 'Akses ditolak. Permintaan Anda untuk menjadi Ecosystem Builder sedang menunggu persetujuan admin.');
+            } else {
+                return redirect()->back()->with('error', 'Akses ditolak. Hanya ecosystem builders yang disetujui yang dapat mengakses fitur ini.');
+            }
         }
 
         return $next($request);

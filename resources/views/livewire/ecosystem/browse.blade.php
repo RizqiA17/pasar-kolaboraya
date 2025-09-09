@@ -1,8 +1,27 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-xl p-6">
-        <h1 class="text-2xl font-bold mb-2">Jelajahi Ekosistem Kolaborasi</h1>
-        <p class="text-blue-100">Temukan dan bergabung dengan ekosistem yang sesuai dengan minat dan keahlian Anda</p>
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold mb-2">Jelajahi Ekosistem Kolaborasi</h1>
+                <p class="text-blue-100">Temukan dan bergabung dengan ekosistem yang sesuai dengan minat dan keahlian Anda</p>
+            </div>
+            @if(auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
+                <div class="flex-shrink-0">
+                    <flux:button 
+                        :href="route('ecosystem.create')" 
+                        {{-- variant="white"  --}}
+                        size="sm"
+                        wire:navigate
+                    >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Buat Ekosistem
+                    </flux:button>
+                </div>
+            @endif
+        </div>
     </div>
 
     <!-- Filters -->

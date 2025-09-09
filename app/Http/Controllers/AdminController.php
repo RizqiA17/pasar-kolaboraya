@@ -39,6 +39,9 @@ class AdminController extends Controller
             'skills' => Skill::count(),
             'contributions' => Contribution::count(),
             'event_categories' => EventCategory::count(),
+            'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
+            'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
+            'ecosystem_builders_rejected' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'rejected')->count(),
         ];
 
         $recentUsers = User::with('profile')->latest()->take(5)->get();

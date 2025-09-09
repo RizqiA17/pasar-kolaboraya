@@ -518,7 +518,6 @@
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         @foreach ($skillsBreakdown['existing_skills'] as $skill)
                                             <div class="flex items-center space-x-2">
-                                                <span class="text-2xl">{{ $skill->icon ?? '🔧' }}</span>
                                                 <span
                                                     class="text-sm text-gray-700 dark:text-slate-300">{{ $skill->name }}</span>
                                             </div>
@@ -544,8 +543,6 @@
                                         @foreach ($skillsBreakdown['member_skills'] as $skillData)
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center space-x-2">
-                                                    <span
-                                                        class="text-lg">{{ $skillData['skill']->icon ?? '🔧' }}</span>
                                                     <span
                                                         class="text-sm text-gray-700 dark:text-slate-300">{{ $skillData['skill']->name }}</span>
                                                 </div>
@@ -580,7 +577,6 @@
                                         @foreach ($neededSkillsGap['gap_skills'] as $skill)
                                             <div
                                                 class="flex items-center space-x-2 bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-200 dark:border-red-800">
-                                                <span class="text-lg">{{ $skill->icon ?? '❗' }}</span>
                                                 <span
                                                     class="text-sm text-red-700 dark:text-red-300">{{ $skill->name }}</span>
                                             </div>
@@ -608,7 +604,6 @@
                                             @endphp
                                             <div
                                                 class="flex items-center space-x-2 p-2 rounded {{ $isCovered ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600' }}">
-                                                <span class="text-lg">{{ $skill->icon ?? '🔧' }}</span>
                                                 <span
                                                     class="text-sm {{ $isCovered ? 'text-green-700 dark:text-green-300' : 'text-gray-700 dark:text-slate-300' }}">{{ $skill->name }}</span>
                                                 @if ($isCovered)

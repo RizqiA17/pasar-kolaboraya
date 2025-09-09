@@ -31,6 +31,10 @@ class User extends Authenticatable // implements MustVerifyEmail
         'password',
         'role',
         'is_ecosystem_builder',
+        'ecosystem_builder_status',
+        'ecosystem_builder_reason',
+        'ecosystem_builder_approved_at',
+        'ecosystem_builder_approved_by',
     ];
 
     /**
@@ -54,6 +58,7 @@ class User extends Authenticatable // implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_ecosystem_builder' => 'boolean',
+            'ecosystem_builder_approved_at' => 'datetime',
         ];
     }
 
@@ -418,6 +423,30 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function isEcosystemBuilder(): bool
     {
         return $this->is_ecosystem_builder;
+    }
+
+    /**
+     * Check if user is an approved ecosystem builder
+     */
+    public function isApprovedEcosystemBuilder(): bool
+    {
+        return $this->is_ecosystem_builder && $this->ecosystem_builder_status === 'approved';
+    }
+
+    /**
+     * Check if user has pending ecosystem builder approval
+     */
+    public function hasPendingEcosystemBuilderApproval(): bool
+    {
+        return $this->is_ecosystem_builder && $this->ecosystem_builder_status === 'pending';
+    }
+
+    /**
+     * Get the admin who approved this user as ecosystem builder
+     */
+    public function ecosystemBuilderApprovedBy()
+    {
+        return $this->belongsTo(User::class, 'ecosystem_builder_approved_by');
     }
 
     /**

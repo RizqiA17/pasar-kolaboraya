@@ -93,6 +93,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
 
     // Ecosystem Routes
     Route::get('ecosystem', \App\Livewire\Ecosystem\Browse::class)->name('ecosystem.browse');
+    Route::get('ecosystem/create', \App\Livewire\Ecosystem\Create::class)->name('ecosystem.create');
     Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
     Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
 
@@ -131,6 +132,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // Connections management
     Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
     Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->middleware('check.form.feature.access:connections')->name('connections.delete');
+    
+    // Ecosystem Builder management
+    Route::get('/ecosystem-builders', App\Livewire\Admin\EcosystemBuilderApproval::class)->name('ecosystem-builders');
     
     // Master data management
     Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');

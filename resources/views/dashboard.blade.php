@@ -9,7 +9,7 @@
                     <div class="col-span-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <!-- Hero Section with Floating SVGs -->
                         <div class="relative overflow-hidden px-4 col-span-1 lg:col-span-3">
-                            <div class="mx-auto max-w-7xl">
+                            <div class="mx-auto max-w-7xl flex justify-between">
                                 <div class="text-left mb-6">
                                     <h1
                                         class="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
@@ -19,7 +19,21 @@
                                         Mari jelajahi dunia kolaborasi dan koneksi yang menakjubkan
                                     </p>
                                 </div>
-                
+
+                                @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
+                                    <div class="flex-shrink-0">
+                                        <flux:button :href="route('ecosystem.create')" {{-- variant="white"  --}}
+                                            size="sm" wire:navigate>
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                            Buat Ekosistem
+                                        </flux:button>
+                                    </div>
+                                @endif
+
                                 <!-- Floating SVG Backgrounds -->
                                 <div class="absolute inset-0 pointer-events-none">
                                     <img src="{{ Storage::url('web/ASET VISUAL/SVG/1.svg') }}" alt=""
@@ -32,7 +46,9 @@
                         <!-- Connections Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
+                            </div>
                             <div class="absolute top-0 right-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -51,7 +67,8 @@
                                     </div>
                                 </div>
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Koneksi</h3>
-                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Jaringan profesional yang terhubung</p>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Jaringan profesional yang
+                                    terhubung</p>
                                 <a href="{{ route('connections') . '?tab=list' }}"
                                     class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
@@ -62,11 +79,13 @@
                                 </a>
                             </div>
                         </div>
-    
+
                         <!-- Collaborations Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
+                            </div>
                             <div class="absolute top-0 left-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/2.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -85,7 +104,8 @@
                                     </div>
                                 </div>
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Kolaborasi</h3>
-                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Proyek kolaborasi yang aktif</p>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Proyek kolaborasi yang aktif
+                                </p>
                                 <a href="{{ route('collaborations') }}"
                                     class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
@@ -96,11 +116,13 @@
                                 </a>
                             </div>
                         </div>
-    
+
                         <!-- Events Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent"></div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
+                            </div>
                             <div class="absolute bottom-0 right-0 w-16 h-16 opacity-20">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/11.svg') }}" alt=""
                                     class="w-full h-full object-contain">
@@ -119,7 +141,8 @@
                                     </div>
                                 </div>
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Aksi</h3>
-                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Event dan aksi yang diikuti</p>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Event dan aksi yang diikuti
+                                </p>
                                 <a href="{{ route('events') }}"
                                     class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
@@ -131,22 +154,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-1 w-full h-full relative shadow-lg border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-zinc-900 dark:via-blue-950/30 dark:to-purple-900/30">
+                    <div
+                        class="col-span-1 w-full h-full relative shadow-lg border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-zinc-900 dark:via-blue-950/30 dark:to-purple-900/30">
                         <div class="absolute inset-0 pointer-events-none">
                             <div class="absolute top-0 right-0 w-20 h-20 opacity-20 rotate-12">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="" class="w-full h-full object-contain">
+                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
+                                    class="w-full h-full object-contain">
                             </div>
                         </div>
                         <div class="flex flex-col md:flex-row items-center h-full relative z-10">
                             <div class="flex-1 flex flex-col justify-center items-start p-8">
                                 <div class="flex items-center mb-3">
-                                    <h3 class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">Kolaboraya <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-pink-500 to-yellow-400">AI</span></h3>
+                                    <h3 class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                                        Kolaboraya <span
+                                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-pink-500 to-yellow-400">AI</span>
+                                    </h3>
                                 </div>
-                                <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Fitur AI-powered untuk kolaborasi cerdas, akan hadir untuk Anda!</p>
-                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm animate-pulse">Akan datang...</span>
+                                <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Fitur AI-powered untuk
+                                    kolaborasi cerdas, akan hadir untuk Anda!</p>
+                                <span
+                                    class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm animate-pulse">Akan
+                                    datang...</span>
                             </div>
                             <div class="flex-1 flex items-center justify-center p-6">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="Kolaboraya AI" class="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
+                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="Kolaboraya AI"
+                                    class="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
                             </div>
                         </div>
                     </div>

@@ -122,6 +122,28 @@
             </div>
         </div>
 
+        <!-- Ecosystem Builder Approvals -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+            <div class="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Ecosystem Builder</h3>
+                <a href="{{ route('admin.ecosystem-builders') }}" class="text-xs sm:text-sm text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">Kelola persetujuan</a>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Menunggu</p>
+                    <p class="text-lg sm:text-xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['ecosystem_builders_pending'] ?? 0 }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Disetujui</p>
+                    <p class="text-lg sm:text-xl font-bold text-green-600 dark:text-green-400">{{ $stats['ecosystem_builders_approved'] ?? 0 }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Ditolak</p>
+                    <p class="text-lg sm:text-xl font-bold text-red-600 dark:text-red-400">{{ $stats['ecosystem_builders_rejected'] ?? 0 }}</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Recent Activity -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             <!-- Recent Users -->
