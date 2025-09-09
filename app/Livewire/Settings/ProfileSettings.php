@@ -164,12 +164,12 @@ class ProfileSettings extends Component
             'vision' => $this->vision,
         ]);
 
+        $this->dispatch('profile-updated');
         if ($user->email_verified_at == null) {
             Auth::user()->sendEmailVerificationNotification();
             return redirect()->route('verification.notice');
         }
 
-        $this->dispatch('profile-updated');
         session()->flash('message', 'Profil berhasil diperbarui!');
     }
 
