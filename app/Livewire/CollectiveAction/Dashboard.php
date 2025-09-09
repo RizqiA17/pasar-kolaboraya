@@ -4,6 +4,7 @@ namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
 use App\Models\CollectiveActionEcosystemInvitation;
+use App\Models\Ecosystem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -19,6 +20,15 @@ class Dashboard extends Component
     public $contribution_amount = '';
     public $contribution_details = [];
     public $show_contribution_form = false;
+
+    // Invitation form properties
+    public $show_invitation_form = false;
+    public $selected_ecosystem_id = '';
+    public $invitation_message = '';
+    public $available_ecosystems = [];
+    public $ecosystem_search = '';
+    public $show_ecosystem_dropdown = false;
+    public $selected_ecosystem = null;
 
     public $contributionTypes = [
         'volunteer' => 'Relawan/Tenaga',
@@ -45,6 +55,9 @@ class Dashboard extends Component
         'contribution_description' => 'required|string|min:10|max:1000',
         'contribution_amount' => 'nullable|numeric|min:0',
         'contribution_details' => 'nullable|array',
+        // Invitation rules
+        'selected_ecosystem_id' => 'required|exists:ecosystems,id',
+        'invitation_message' => 'required|string|min:20|max:500',
     ];
 
     protected function rules()
@@ -77,6 +90,25 @@ class Dashboard extends Component
     public function mount(CollectiveAction $collectiveAction)
     {
         $this->collectiveAction = $collectiveAction;
+        $this->loadAvailableEcosystems();
+    }
+
+    public function loadAvailableEcosystems()
+    {
+        // Get already invited ecosystem IDs
+        $invitedEcosystemIds = $this->collectiveAction->invitations()->pluck('ecosystem_id')->toArray();
+        
+        // Get user's own ecosystem IDs (user shouldn't invite their own ecosystems)
+        $userEcosystemIds = [];
+        if (Auth::user()) {
+            $userEcosystemIds = Auth::user()->acceptedEcosystems->pluck('id')->toArray();
+        }
+        
+        // Get ecosystems that are not yet invited and not user's own
+        $this->available_ecosystems = Ecosystem::where('is_active', true)
+            ->whereNotIn('id', array_merge($invitedEcosystemIds, $userEcosystemIds))
+            ->where('creator_id', '!=', Auth::id())
+            ->get();
     }
 
     public function toggleContributionForm()
@@ -206,6 +238,99 @@ class Dashboard extends Component
         return redirect()->route('collective-action.join', $this->collectiveAction);
     }
 
+    public function toggleInvitationForm()
+    {
+        $this->show_invitation_form = !$this->show_invitation_form;
+        
+        if ($this->show_invitation_form) {
+            // Reset form when opening
+            $this->reset(['selected_ecosystem_id', 'invitation_message', 'ecosystem_search', 'selected_ecosystem']);
+            $this->show_ecosystem_dropdown = false;
+            $this->loadAvailableEcosystems(); // Refresh available ecosystems
+        }
+    }
+
+    public function sendInvitation()
+    {
+        // Validate invitation form
+        $this->validate([
+            'selected_ecosystem_id' => 'required|exists:ecosystems,id',
+            'invitation_message' => 'required|string|min:20|max:500',
+        ], [
+            'selected_ecosystem_id.required' => 'Pilih ekosistem yang akan diundang',
+            'selected_ecosystem_id.exists' => 'Ekosistem yang dipilih tidak valid',
+            'invitation_message.required' => 'Pesan undangan wajib diisi',
+            'invitation_message.min' => 'Pesan undangan minimal 20 karakter',
+            'invitation_message.max' => 'Pesan undangan maksimal 500 karakter',
+        ]);
+
+        // Check if user can manage this collective action
+        if (!$this->collectiveAction->canUserManage(Auth::user())) {
+            session()->flash('error', 'Anda tidak memiliki akses untuk mengundang ekosistem.');
+            return;
+        }
+
+        // Check if ecosystem is already invited
+        if ($this->collectiveAction->hasInvitedEcosystem($this->selected_ecosystem_id)) {
+            session()->flash('error', 'Ekosistem ini sudah pernah diundang.');
+            return;
+        }
+
+        // Create invitation
+        CollectiveActionEcosystemInvitation::create([
+            'collective_action_id' => $this->collectiveAction->id,
+            'ecosystem_id' => $this->selected_ecosystem_id,
+            'invited_by' => Auth::id(),
+            'status' => 'pending',
+            'role' => 'admin', // Ecosystem builders become admins
+            'invitation_message' => $this->invitation_message,
+        ]);
+
+        $ecosystem = Ecosystem::find($this->selected_ecosystem_id);
+        session()->flash('message', "Undangan berhasil dikirim ke ekosistem: {$ecosystem->ecosystem_title}");
+
+        // Reset form and hide it
+        $this->reset(['selected_ecosystem_id', 'invitation_message', 'show_invitation_form', 'ecosystem_search', 'selected_ecosystem']);
+        $this->show_ecosystem_dropdown = false;
+        $this->loadAvailableEcosystems(); // Refresh available ecosystems
+    }
+
+    public function updatedEcosystemSearch()
+    {
+        $this->show_ecosystem_dropdown = !empty($this->ecosystem_search);
+        $this->selected_ecosystem_id = '';
+        $this->selected_ecosystem = null;
+    }
+
+    public function selectEcosystem($ecosystemId)
+    {
+        $this->selected_ecosystem_id = $ecosystemId;
+        $this->selected_ecosystem = $this->available_ecosystems->find($ecosystemId);
+        $this->ecosystem_search = $this->selected_ecosystem ? 
+            $this->selected_ecosystem->ecosystem_title . ' - ' . $this->selected_ecosystem->organization_name : '';
+        $this->show_ecosystem_dropdown = false;
+    }
+
+    public function clearEcosystemSelection()
+    {
+        $this->reset(['selected_ecosystem_id', 'ecosystem_search', 'selected_ecosystem']);
+        $this->show_ecosystem_dropdown = false;
+    }
+
+    public function getFilteredEcosystemsProperty()
+    {
+        if (empty($this->ecosystem_search)) {
+            return $this->available_ecosystems;
+        }
+
+        return $this->available_ecosystems->filter(function($ecosystem) {
+            $searchTerm = strtolower($this->ecosystem_search);
+            return str_contains(strtolower($ecosystem->ecosystem_title), $searchTerm) ||
+                   str_contains(strtolower($ecosystem->organization_name), $searchTerm) ||
+                   str_contains(strtolower($ecosystem->work_region), $searchTerm);
+        });
+    }
+
     public function render()
     {
         $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
@@ -226,6 +351,8 @@ class Dashboard extends Component
         $declinedContributions = $this->collectiveAction->declinedContributions()->with('user.profile')->get();
         
         $participatingEcosystems = $this->collectiveAction->participatingEcosystems;
+        $pendingInvitations = $this->collectiveAction->pendingInvitations()->with('ecosystem')->get();
+        $allInvitations = $this->collectiveAction->invitations()->with('ecosystem', 'invitedBy')->get();
 
         return view('livewire.collective-action.dashboard', [
             'adminUsers' => $adminUsers,
@@ -236,6 +363,8 @@ class Dashboard extends Component
             'completedContributions' => $completedContributions,
             'declinedContributions' => $declinedContributions,
             'participatingEcosystems' => $participatingEcosystems,
+            'pendingInvitations' => $pendingInvitations,
+            'allInvitations' => $allInvitations,
         ]);
     }
 }

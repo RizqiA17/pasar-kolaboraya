@@ -46,6 +46,420 @@
         </div>
     @endif
 
+    <!-- Invitation Management (Admin Only) -->
+    @if($collectiveAction->canUserManage(Auth::user()))
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Undang Ekosistem Lain</h2>
+                @if(count($available_ecosystems) > 0)
+                    <button 
+                        wire:click="toggleInvitationForm"
+                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors"
+                    >
+                        @if($show_invitation_form)
+                            Batal
+                        @else
+                            + Undang Ekosistem
+                        @endif
+                    </button>
+                @endif
+            </div>
+
+            @if($show_invitation_form)
+                <form wire:submit="sendInvitation" class="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="relative">
+                        <label for="ecosystem_search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Pilih Ekosistem
+                        </label>
+                        
+                        <!-- Search Input -->
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                wire:model.live="ecosystem_search"
+                                wire:click="$set('show_ecosystem_dropdown', true)"
+                                id="ecosystem_search"
+                                placeholder="🔍 Cari ekosistem berdasarkan nama, organisasi, atau wilayah..."
+                                class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 pr-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                                autocomplete="off"
+                            >
+                            
+                            <!-- Search Icon -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                @if($selected_ecosystem)
+                                    <button 
+                                        type="button"
+                                        wire:click="clearEcosystemSelection"
+                                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                @else
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Dropdown Results -->
+                        @if($show_ecosystem_dropdown && count($this->filtered_ecosystems) > 0)
+                            <div class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto" data-dropdown-items>
+                                @foreach($this->filtered_ecosystems as $ecosystem)
+                                    <button 
+                                        type="button"
+                                        wire:click="selectEcosystem({{ $ecosystem->id }})"
+                                        data-ecosystem-item
+                                        class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-600 focus:bg-gray-50 dark:focus:bg-gray-600 focus:outline-none border-b border-gray-100 dark:border-gray-600 last:border-b-0 transition-colors"
+                                    >
+                                        <div class="flex items-start space-x-3">
+                                            <!-- Ecosystem Avatar -->
+                                            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+                                                <span class="text-white font-semibold text-sm">
+                                                    {{ strtoupper(substr($ecosystem->ecosystem_title, 0, 2)) }}
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Ecosystem Info -->
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                                    {{ $ecosystem->ecosystem_title }}
+                                                </h4>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                                    {{ $ecosystem->organization_name }}
+                                                </p>
+                                                <div class="flex items-center mt-1 space-x-2">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                                        {{ $ecosystem->work_region }}
+                                                    </span>
+                                                    @if($ecosystem->description)
+                                                        <span class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                            {{ Str::limit($ecosystem->description, 50) }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Arrow Icon -->
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </button>
+                                @endforeach
+                            </div>
+                        @elseif($show_ecosystem_dropdown && empty($ecosystem_search))
+                            <div class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-6">
+                                <div class="text-center text-gray-500 dark:text-gray-400">
+                                    <div class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 rounded-full flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-medium">Ketik untuk mencari ekosistem...</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Cari berdasarkan nama, organisasi, atau wilayah</p>
+                                </div>
+                            </div>
+                        @elseif($show_ecosystem_dropdown && count($this->filtered_ecosystems) == 0)
+                            <div class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-6">
+                                <div class="text-center text-gray-500 dark:text-gray-400">
+                                    <div class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 rounded-full flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-medium">Tidak ada hasil ditemukan</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                        Tidak ada ekosistem yang cocok dengan "<span class="font-medium">{{ $ecosystem_search }}</span>"
+                                    </p>
+                                    <button 
+                                        type="button"
+                                        wire:click="clearEcosystemSelection"
+                                        class="mt-2 text-xs text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 font-medium"
+                                    >
+                                        Hapus pencarian
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Selected Ecosystem Preview -->
+                        @if($selected_ecosystem)
+                            <div class="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+                                        <span class="text-white font-semibold text-xs">
+                                            {{ strtoupper(substr($selected_ecosystem->ecosystem_title, 0, 2)) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-semibold text-blue-900 dark:text-blue-200 text-sm">
+                                            {{ $selected_ecosystem->ecosystem_title }}
+                                        </h4>
+                                        <p class="text-xs text-blue-700 dark:text-blue-300">
+                                            {{ $selected_ecosystem->organization_name }} • {{ $selected_ecosystem->work_region }}
+                                        </p>
+                                        @if($selected_ecosystem->description)
+                                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 line-clamp-2">
+                                                {{ $selected_ecosystem->description }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                    <button 
+                                        type="button"
+                                        wire:click="clearEcosystemSelection"
+                                        class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Hidden input for validation -->
+                        <input type="hidden" wire:model="selected_ecosystem_id" required>
+                        
+                        @error('selected_ecosystem_id')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="invitation_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Pesan Undangan
+                        </label>
+                        <textarea 
+                            wire:model="invitation_message"
+                            id="invitation_message"
+                            rows="4"
+                            placeholder="Tuliskan pesan personal untuk mengundang ekosistem ini berkolaborasi..."
+                            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                            required
+                        ></textarea>
+                        @error('invitation_message')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button 
+                            type="submit" 
+                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors"
+                        >
+                            Kirim Undangan
+                        </button>
+                        <button 
+                            type="button" 
+                            wire:click="toggleInvitationForm"
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors"
+                        >
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            @elseif(count($available_ecosystems) == 0)
+                <div class="text-center py-4">
+                    <div class="text-gray-400 mb-2">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        Semua ekosistem yang tersedia sudah diundang atau tidak ada ekosistem lain yang dapat diundang.
+                    </p>
+                </div>
+            @endif
+
+            <!-- Show Current Invitations -->
+            @if($allInvitations->count() > 0)
+                <div class="mt-6">
+                    <h3 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Status Undangan</h3>
+                    <div class="space-y-3">
+                        @foreach($allInvitations as $invitation)
+                            <div class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900 dark:text-white text-sm">
+                                        {{ $invitation->ecosystem->ecosystem_title }}
+                                    </h4>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">
+                                        {{ $invitation->ecosystem->organization_name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                        Diundang oleh: {{ $invitation->invitedBy->name }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="px-2 py-1 rounded-full text-xs font-medium
+                                        {{ $invitation->status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' : '' }}
+                                        {{ $invitation->status === 'accepted' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : '' }}
+                                        {{ $invitation->status === 'declined' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : '' }}
+                                    ">
+                                        {{ $invitation->status_label }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                        @endif
+        </div>
+
+        <!-- Enhanced Styling -->
+        <style>
+            .ecosystem-dropdown-enter {
+                animation: dropdownFadeIn 0.2s ease-out forwards;
+            }
+            
+            .ecosystem-dropdown-exit {
+                animation: dropdownFadeOut 0.15s ease-in forwards;
+            }
+            
+            @keyframes dropdownFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-4px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes dropdownFadeOut {
+                from {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateY(-4px);
+                }
+            }
+            
+            .ecosystem-item-hover {
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+                border-left: 3px solid rgba(139, 92, 246, 0.5);
+                transform: translateX(2px);
+            }
+            
+            .search-input-focus {
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+                border-color: rgba(139, 92, 246, 0.5);
+            }
+            
+            .pulse-animation {
+                animation: pulse 2s infinite;
+            }
+            
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+        </style>
+
+        <!-- Interactive Dropdown Script -->
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+                // Enhanced close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.querySelector('.ecosystem-dropdown-wrapper');
+                    const searchInput = document.getElementById('ecosystem_search');
+                    
+                    if (dropdown && !dropdown.contains(event.target) && event.target !== searchInput) {
+                        const dropdownElement = dropdown.querySelector('[data-dropdown-items]');
+                        if (dropdownElement) {
+                            dropdownElement.classList.add('ecosystem-dropdown-exit');
+                            setTimeout(() => {
+                                @this.set('show_ecosystem_dropdown', false);
+                            }, 150);
+                        } else {
+                            @this.set('show_ecosystem_dropdown', false);
+                        }
+                    }
+                });
+
+                // Enhanced input focus effects
+                const searchInput = document.getElementById('ecosystem_search');
+                if (searchInput) {
+                    searchInput.addEventListener('focus', function() {
+                        this.classList.add('search-input-focus');
+                    });
+                    
+                    searchInput.addEventListener('blur', function() {
+                        this.classList.remove('search-input-focus');
+                    });
+                }
+
+                // Enhanced keyboard navigation
+                document.addEventListener('keydown', function(event) {
+                    const searchInput = document.getElementById('ecosystem_search');
+                    const dropdown = document.querySelector('[data-dropdown-items]');
+                    
+                    if (!dropdown || document.activeElement !== searchInput) return;
+                    
+                    const items = dropdown.querySelectorAll('[data-ecosystem-item]');
+                    let currentIndex = Array.from(items).findIndex(item => 
+                        item.classList.contains('bg-gray-100') || item.classList.contains('ecosystem-item-hover')
+                    );
+                    
+                    if (event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        items.forEach(item => {
+                            item.classList.remove('bg-gray-100', 'dark:bg-gray-600', 'ecosystem-item-hover');
+                        });
+                        currentIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+                        items[currentIndex]?.classList.add('ecosystem-item-hover');
+                        items[currentIndex]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    } else if (event.key === 'ArrowUp') {
+                        event.preventDefault();
+                        items.forEach(item => {
+                            item.classList.remove('bg-gray-100', 'dark:bg-gray-600', 'ecosystem-item-hover');
+                        });
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+                        items[currentIndex]?.classList.add('ecosystem-item-hover');
+                        items[currentIndex]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    } else if (event.key === 'Enter' && currentIndex >= 0) {
+                        event.preventDefault();
+                        items[currentIndex]?.click();
+                    } else if (event.key === 'Escape') {
+                        const dropdownElement = dropdown;
+                        dropdownElement.classList.add('ecosystem-dropdown-exit');
+                        setTimeout(() => {
+                            @this.set('show_ecosystem_dropdown', false);
+                            searchInput.blur();
+                        }, 150);
+                    }
+                });
+
+                // Add entrance animation to dropdown
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1 && node.hasAttribute('data-dropdown-items')) {
+                                node.classList.add('ecosystem-dropdown-enter');
+                            }
+                        });
+                    });
+                });
+                
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        </script>
+    @endif
+
     <!-- Action Overview -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Admin Count -->
