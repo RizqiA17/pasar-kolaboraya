@@ -19,6 +19,7 @@ class EcosystemSetup extends Component
     public $max_users = '';
     public $terms_conditions = '';
     public $description = '';
+    public $auto_join_collective_actions = false;
 
     // Issues/Interests
     public $selectedIssues = [];
@@ -39,6 +40,7 @@ class EcosystemSetup extends Component
         'selectedIssues' => 'required|array|min:1',
         'selectedExistingRoles' => 'required|array|min:1',
         'selectedNeededRoles' => 'required|array|min:1',
+        'auto_join_collective_actions' => 'boolean',
     ];
 
     protected $messages = [
@@ -59,8 +61,10 @@ class EcosystemSetup extends Component
         }
 
         // Check if user is approved ecosystem builder
-        if (!Auth::user()->isApprovedEcosystemBuilder()) {
-            if (Auth::user()->hasPendingEcosystemBuilderApproval()) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->isApprovedEcosystemBuilder()) {
+            if ($user->hasPendingEcosystemBuilderApproval()) {
                 session()->flash('message', 'Permintaan Anda untuk menjadi Ecosystem Builder sedang menunggu persetujuan admin. Anda akan diberitahu melalui email setelah disetujui.');
             } else {
                 session()->flash('error', 'Anda belum disetujui sebagai Ecosystem Builder. Silakan hubungi admin untuk informasi lebih lanjut.');
@@ -87,6 +91,7 @@ class EcosystemSetup extends Component
             'max_users' => $this->max_users ?: null,
             'terms_conditions' => $this->terms_conditions,
             'description' => $this->description,
+            'auto_join_collective_actions' => $this->auto_join_collective_actions,
         ]);
         // dd($ecosystem);
 

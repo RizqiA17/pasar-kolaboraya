@@ -123,6 +123,22 @@
             @enderror
         </div>
 
+        <!-- Auto Join Collective Actions Setting -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div class="flex items-start space-x-3">
+                <flux:checkbox wire:model="auto_join_collective_actions" id="auto_join_collective_actions" />
+                <div class="flex-1">
+                    <label for="auto_join_collective_actions" class="text-sm font-medium text-gray-900 dark:text-white">
+                        Anggota Otomatis Bergabung ke Aksi Kolektif
+                    </label>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                        Jika diaktifkan, semua anggota ekosistem akan otomatis bergabung ke aksi kolektif yang mengundang ekosistem ini. 
+                        Jika tidak diaktifkan, anggota perlu persetujuan admin aksi kolektif untuk bergabung.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Action Buttons -->
         <div class="flex flex-col gap-3">
             <flux:button type="submit" variant="primary" class="w-full cursor-pointer">

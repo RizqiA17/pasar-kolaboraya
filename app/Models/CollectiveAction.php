@@ -399,6 +399,22 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Get users pending approval (non-ecosystem users)
+     */
+    public function pendingApprovalUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('status', 'pending_approval');
+    }
+
+    /**
+     * Get rejected users
+     */
+    public function rejectedUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('status', 'rejected');
+    }
+
+    /**
      * Get users who joined through ecosystem
      */
     public function ecosystemUsers(): BelongsToMany
@@ -453,12 +469,29 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Check if user is registered in this collective action (any status)
+     */
+    public function isUserRegistered(User $user): bool
+    {
+        return $this->users()->where('users.id', $user->id)->exists();
+    }
+
+    /**
+     * Get user status in this collective action
+     */
+    public function getUserStatus(User $user): ?string
+    {
+        $pivotData = $this->users()->where('users.id', $user->id)->first();
+        return $pivotData ? $pivotData->pivot->status : null;
+    }
+
+    /**
      * Check if user can join this collective action
      */
     public function canUserJoin(User $user): bool
     {
-        // Check if user is already a member
-        if ($this->isUserMember($user) || $this->isUserAdmin($user) || $this->isUserContributor($user)) {
+        // Check if user is already registered (any status)
+        if ($this->isUserRegistered($user)) {
             return false;
         }
 
@@ -483,13 +516,17 @@ class CollectiveAction extends Model
         foreach ($ecosystemMembers as $member) {
             // Check if user is already a member
             if (!$this->isUserMember($member) && !$this->isUserAdmin($member) && !$this->isUserContributor($member)) {
+                // Determine status based on ecosystem auto-join setting
+                $status = $ecosystem->auto_join_collective_actions ? 'active' : 'pending_approval';
+                
                 $this->users()->attach($member->id, [
                     'ecosystem_id' => $ecosystem->id,
                     'role' => $role,
-                    'status' => 'active',
+                    'status' => $status,
                     'join_type' => 'ecosystem',
                     'join_reason' => 'Joined through ecosystem invitation',
-                    'joined_at' => now(),
+                    'joined_at' => $ecosystem->auto_join_collective_actions ? now() : null,
+                    'approval_requested_at' => $ecosystem->auto_join_collective_actions ? null : now(),
                 ]);
             }
         }
@@ -501,13 +538,24 @@ class CollectiveAction extends Model
     public function addUser(User $user, string $role = 'member', string $joinReason = null, int $ecosystemId = null): void
     {
         if (!$this->isUserMember($user) && !$this->isUserAdmin($user) && !$this->isUserContributor($user)) {
+            // Check if user is part of any participating ecosystem
+            $isEcosystemMember = false;
+            if ($ecosystemId) {
+                $ecosystem = Ecosystem::find($ecosystemId);
+                $isEcosystemMember = $ecosystem && $ecosystem->acceptedUsers()->where('users.id', $user->id)->exists();
+            }
+            
+            // If user is not in an ecosystem, they need approval for direct join
+            $status = $isEcosystemMember ? 'active' : 'pending_approval';
+            
             $this->users()->attach($user->id, [
                 'ecosystem_id' => $ecosystemId,
                 'role' => $role,
-                'status' => 'active',
+                'status' => $status,
                 'join_type' => $ecosystemId ? 'ecosystem' : 'direct',
                 'join_reason' => $joinReason,
-                'joined_at' => now(),
+                'joined_at' => $status === 'active' ? now() : null,
+                'approval_requested_at' => $status === 'pending_approval' ? now() : null,
             ]);
         }
     }
@@ -538,6 +586,47 @@ class CollectiveAction extends Model
         $this->users()->updateExistingPivot($user->id, [
             'status' => $status
         ]);
+    }
+
+    /**
+     * Approve user join request
+     */
+    public function approveUser(User $user, User $approver, string $adminNotes = null): bool
+    {
+        $pivotData = $this->users()->where('users.id', $user->id)->first();
+        if (!$pivotData || $pivotData->pivot->status !== 'pending_approval') {
+            return false;
+        }
+
+        $this->users()->updateExistingPivot($user->id, [
+            'status' => 'active',
+            'joined_at' => now(),
+            'approved_at' => now(),
+            'approved_by' => $approver->id,
+            'admin_notes' => $adminNotes,
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Reject user join request
+     */
+    public function rejectUser(User $user, User $approver, string $adminNotes = null): bool
+    {
+        $pivotData = $this->users()->where('users.id', $user->id)->first();
+        if (!$pivotData || $pivotData->pivot->status !== 'pending_approval') {
+            return false;
+        }
+
+        $this->users()->updateExistingPivot($user->id, [
+            'status' => 'rejected',
+            'approved_at' => now(),
+            'approved_by' => $approver->id,
+            'admin_notes' => $adminNotes,
+        ]);
+
+        return true;
     }
 
     /**

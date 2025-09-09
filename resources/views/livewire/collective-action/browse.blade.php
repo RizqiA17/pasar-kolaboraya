@@ -210,11 +210,67 @@
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
                     @php
-                        $userContribution = Auth::user() ? $action->contributions()->where('user_id', Auth::user()->id)->first() : null;
-                        $canContribute = Auth::user() ? $action->canUserContribute(Auth::user()) : false;
+                        $user = Auth::user();
+                        $userContribution = $user ? $action->contributions()->where('user_id', $user->id)->first() : null;
+                        $canContribute = $user ? $action->canUserContribute($user) : false;
+                        $canJoin = $user ? $action->canUserJoin($user) : false;
+                        $isUserRegistered = $user ? $action->isUserRegistered($user) : false;
+                        $userStatus = $user && $isUserRegistered ? $action->getUserStatus($user) : null;
                     @endphp
 
-                    @if($userContribution)
+                    @if($isUserRegistered)
+                        @if($userStatus === 'active')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Sudah Bergabung
+                            </span>
+                        @elseif($userStatus === 'pending_approval')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Menunggu Persetujuan
+                            </span>
+                        @elseif($userStatus === 'rejected')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Ditolak
+                            </span>
+                        @elseif($userStatus === 'inactive')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
+                                </svg>
+                                Tidak Aktif
+                            </span>
+                        @endif
+                    @elseif($canJoin)
+                        <div class="flex space-x-2">
+                            <flux:button 
+                                href="{{ route('collective-action.join', $action) }}" 
+                                variant="primary" 
+                                size="sm" 
+                                class="flex-1"
+                            >
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                </svg>
+                                Bergabung
+                            </flux:button>
+                            <flux:button 
+                                href="{{ route('collective-action.show', $action) }}" 
+                                variant="outline" 
+                                size="sm" 
+                                class="flex-1"
+                            >
+                                Lihat Detail
+                            </flux:button>
+                        </div>
+                    @elseif($userContribution)
                         @php $status = $userContribution->status; @endphp
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm
                             @if($status === 'accepted') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
@@ -237,25 +293,15 @@
                             @elseif($status === 'completed') Kontribusi Selesai
                             @else Kontribusi Ditolak @endif
                         </span>
-                    @elseif($canContribute)
+                    @else
                         <flux:button 
-                            wire:click="contributeToAction({{ $action->id }})" 
-                            variant="primary" 
+                            href="{{ route('collective-action.show', $action) }}" 
+                            variant="outline" 
                             size="sm" 
                             class="w-full"
                         >
                             Lihat Detail
                         </flux:button>
-                    @else
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            @if($action->status === 'completed')
-                                Aksi Telah Selesai
-                            @elseif($action->status === 'cancelled')
-                                Aksi Dibatalkan
-                            @else
-                                Tidak Dapat Berkontribusi
-                            @endif
-                        </span>
                     @endif
                 </div>
             </div>

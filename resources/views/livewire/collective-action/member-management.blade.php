@@ -16,22 +16,45 @@
 
     <!-- Collective Action Info -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ $adminUsers->count() }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Admin</div>
+        <div class="flex justify-between items-start mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600">{{ $adminUsers->count() }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Admin</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">{{ $memberUsers->count() }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Anggota</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-600">{{ $contributorUsers->count() }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Kontributor</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-gray-600">{{ $adminUsers->count() + $memberUsers->count() + $contributorUsers->count() }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total</div>
+                </div>
             </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ $memberUsers->count() }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Anggota</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-purple-600">{{ $contributorUsers->count() }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Kontributor</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-gray-600">{{ $adminUsers->count() + $memberUsers->count() + $contributorUsers->count() }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Total</div>
+            <div class="flex flex-col space-y-2">
+                <a href="{{ route('collective-action.user-approvals', $collectiveAction) }}" 
+                   class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Persetujuan Anggota
+                    @if($collectiveAction->pendingApprovalUsers()->count() > 0)
+                        <span class="ml-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                            {{ $collectiveAction->pendingApprovalUsers()->count() }}
+                        </span>
+                    @endif
+                </a>
+                <a href="{{ route('collective-action.show', $collectiveAction) }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Kembali ke Dashboard
+                </a>
             </div>
         </div>
     </div>

@@ -55,10 +55,27 @@ class Join extends Component
             return redirect()->route('collective-action.show', $this->collectiveAction);
         }
 
-        // Add user to collective action
-        $this->collectiveAction->addUser(Auth::user(), $this->requested_role, $this->join_reason);
+        // Check if user is part of any participating ecosystem
+        $user = Auth::user();
+        $participatingEcosystems = $this->collectiveAction->participatingEcosystems;
+        $isEcosystemMember = false;
+        
+        foreach ($participatingEcosystems as $ecosystem) {
+            if ($ecosystem->acceptedUsers()->where('users.id', $user->id)->exists() || 
+                $ecosystem->creator_id === $user->id) {
+                $isEcosystemMember = true;
+                break;
+            }
+        }
 
-        session()->flash('message', 'Permintaan bergabung berhasil dikirim! Anda sekarang menjadi bagian dari aksi kolektif ini.');
+        // Add user to collective action
+        $this->collectiveAction->addUser($user, $this->requested_role, $this->join_reason);
+
+        if ($isEcosystemMember) {
+            session()->flash('message', 'Permintaan bergabung berhasil dikirim! Anda sekarang menjadi bagian dari aksi kolektif ini.');
+        } else {
+            session()->flash('message', 'Permintaan bergabung berhasil dikirim! Permintaan Anda akan ditinjau oleh admin aksi kolektif.');
+        }
 
         return redirect()->route('collective-action.show', $this->collectiveAction);
     }

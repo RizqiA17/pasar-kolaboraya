@@ -21,6 +21,7 @@ class Ecosystem extends Model
         'terms_conditions',
         'description',
         'is_active',
+        'auto_join_collective_actions',
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class Ecosystem extends Model
         'existing_roles' => 'array',
         'needed_roles' => 'array',
         'is_active' => 'boolean',
+        'auto_join_collective_actions' => 'boolean',
     ];
 
     /**
