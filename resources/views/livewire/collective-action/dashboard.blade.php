@@ -170,6 +170,83 @@
                     <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
                         <div id="actionMap" style="height: 200px; width: 100%;"></div>
                     </div>
+                    
+                    <!-- Google Maps Integration -->
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <a href="https://www.google.com/maps?q={{ $collectiveAction->latitude }},{{ $collectiveAction->longitude }}" 
+                           target="_blank" 
+                           class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Lihat di Google Maps
+                        </a>
+                        
+                        <a href="https://www.google.com/maps/dir/?api=1&destination={{ $collectiveAction->latitude }},{{ $collectiveAction->longitude }}" 
+                           target="_blank" 
+                           class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"/>
+                            </svg>
+                            Petunjuk Arah
+                        </a>
+
+                        <button onclick="openInMapsApp()" 
+                                class="inline-flex items-center px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/>
+                            </svg>
+                            Buka di Aplikasi
+                        </button>
+
+                        <button onclick="shareLocation()" 
+                                class="inline-flex items-center px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                            </svg>
+                            Bagikan Lokasi
+                        </button>
+                    </div>
+
+                    <!-- Alternative Maps Apps -->
+                    <div class="mt-3 border-t border-gray-200 dark:border-gray-600 pt-3">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Buka dengan aplikasi lain:</p>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <a href="https://waze.com/ul?ll={{ $collectiveAction->latitude }},{{ $collectiveAction->longitude }}&navigate=yes" 
+                               target="_blank" 
+                               class="inline-flex items-center px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md transition-colors">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Waze
+                            </a>
+                            
+                            <a href="https://maps.apple.com/?q={{ $collectiveAction->latitude }},{{ $collectiveAction->longitude }}" 
+                               target="_blank" 
+                               class="inline-flex items-center px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md transition-colors">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Apple Maps
+                            </a>
+                            
+                            <button onclick="copyCoordinates()" 
+                                    class="inline-flex items-center px-2 py-1 bg-green-100 hover:bg-green-200 text-green-800 rounded-md transition-colors">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                </svg>
+                                Salin Koordinat
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Location Info -->
+                    <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                        <p>Koordinat: {{ number_format($collectiveAction->latitude, 6) }}, {{ number_format($collectiveAction->longitude, 6) }}</p>
+                        <p class="mt-1">• <strong>Google Maps</strong>: Lihat lokasi dan petunjuk arah</p>
+                        <p>• <strong>Buka di Aplikasi</strong>: Otomatis membuka aplikasi maps default perangkat</p>
+                        <p>• <strong>Bagikan Lokasi</strong>: Bagikan koordinat ke aplikasi lain</p>
+                    </div>
                 </div>
                 @endif
 
@@ -665,11 +742,159 @@
                 attribution: '© OpenStreetMap contributors'
             }).addTo(actionMap);
 
-            // Add marker
-            L.marker([lat, lng]).addTo(actionMap)
-                .bindPopup('{{ addslashes($collectiveAction->location) }}')
+            // Add marker with click event to open in Google Maps
+            const marker = L.marker([lat, lng]).addTo(actionMap)
+                .bindPopup(`
+                    <div class="text-center">
+                        <p class="font-medium mb-2">{{ addslashes($collectiveAction->location) }}</p>
+                        <a href="https://www.google.com/maps?q=${lat},${lng}" 
+                           target="_blank" 
+                           class="inline-flex items-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Buka di Google Maps
+                        </a>
+                    </div>
+                `)
                 .openPopup();
         });
+
+        // Share location function
+        function shareLocation() {
+            const lat = {{ $collectiveAction->latitude }};
+            const lng = {{ $collectiveAction->longitude }};
+            const locationName = `{{ addslashes($collectiveAction->location) }}`;
+            const actionTitle = `{{ addslashes($collectiveAction->title) }}`;
+            
+            const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+            const shareText = `📍 Lokasi: ${actionTitle}\n${locationName}\n${googleMapsUrl}`;
+
+            // Check if Web Share API is supported
+            if (navigator.share) {
+                navigator.share({
+                    title: `Lokasi: ${actionTitle}`,
+                    text: shareText,
+                    url: googleMapsUrl
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                    fallbackShare(shareText);
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        // Fallback share function
+        function fallbackShare(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Link lokasi berhasil disalin!', 'success');
+                }).catch(err => {
+                    console.log('Error copying to clipboard:', err);
+                    showShareModal(text);
+                });
+            } else {
+                showShareModal(text);
+            }
+        }
+
+        // Show share modal
+        function showShareModal(text) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bagikan Lokasi</h3>
+                    <textarea readonly class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" rows="4">${text}</textarea>
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="copyShareText('${text}'); this.closest('.fixed').remove();" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm">
+                            Salin Teks
+                        </button>
+                        <button onclick="this.closest('.fixed').remove();" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg text-sm">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Copy share text
+        function copyShareText(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Text berhasil disalin!', 'success');
+                });
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Add additional maps apps detection and options
+        function openInMapsApp() {
+            const lat = {{ $collectiveAction->latitude }};
+            const lng = {{ $collectiveAction->longitude }};
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Check for mobile devices
+            if (/android/i.test(userAgent)) {
+                // Android - try Google Maps app first, then fallback to browser
+                window.open(`geo:${lat},${lng}?q=${lat},${lng}`, '_system');
+                setTimeout(() => {
+                    window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+                }, 1000);
+            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // iOS - try Apple Maps first, then Google Maps
+                window.open(`maps://maps.apple.com/?q=${lat},${lng}`, '_system');
+                setTimeout(() => {
+                    window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+                }, 1000);
+            } else {
+                // Desktop - open Google Maps in browser
+                window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+            }
+        }
+
+        // Copy coordinates function
+        function copyCoordinates() {
+            const lat = {{ $collectiveAction->latitude }};
+            const lng = {{ $collectiveAction->longitude }};
+            const coordinates = `${lat}, ${lng}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(coordinates).then(() => {
+                    showNotification('Koordinat berhasil disalin!', 'success');
+                }).catch(err => {
+                    console.log('Error copying coordinates:', err);
+                    showNotification('Gagal menyalin koordinat', 'error');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = coordinates;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Koordinat berhasil disalin!', 'success');
+            }
+        }
     </script>
 @endpush
 @endif
