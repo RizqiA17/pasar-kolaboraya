@@ -73,6 +73,6 @@ class Register extends Component
 
         Auth::user()->sendEmailVerificationNotification();
 
-        return redirect()->route('auth.verification.notice');
+        return redirect()->route('verification.notice');
     }
 }

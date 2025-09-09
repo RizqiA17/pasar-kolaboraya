@@ -14,10 +14,15 @@ class VerifyEmailController extends Controller
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
         $route = 'profile.setup';
-
         if ($request->user()->created_at != $request->user()->updated_at) {
             $route = 'dashboard';
         }
+        // dd([
+        //     '$route' => $route,
+        //     'kondisi' =>$request->user()->created_at != $request->user()->updated_at,
+        //     'created_at' => $request->user()->created_at,
+        //     'updated_at' => $request->user()->updated_at,
+        // ]);
 
         if ($request->user()->hasVerifiedEmail()) {
             return $this->redirect($route);
