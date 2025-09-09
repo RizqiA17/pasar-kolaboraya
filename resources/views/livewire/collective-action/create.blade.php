@@ -1,3 +1,11 @@
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+@endpush
+
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+@endpush
+
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Header -->
     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-6">
@@ -90,7 +98,135 @@
         </div>
 
         <!-- Timeline & Location -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm"
+            x-data="{
+                map: null,
+                marker: null,
+                syncTimeout: null,
+                latitude: @entangle('latitude').defer,
+                longitude: @entangle('longitude').defer,
+                location: @entangle('location').defer,
+                
+                initializeMap() {
+                    if (this.map) {
+                        this.map.remove();
+                    }
+
+                    const defaultLat = this.latitude || -7.4292;
+                    const defaultLng = this.longitude || 109.2290;
+
+                    this.map = L.map(this.$refs.map).setView([defaultLat, defaultLng], 13);
+                    this.map._loaded = true;
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(this.map);
+
+                    this.marker = L.marker([defaultLat, defaultLng], {
+                        draggable: true
+                    }).addTo(this.map);
+
+                    this.marker.on('dragend', () => {
+                        const pos = this.marker.getLatLng();
+                        this.latitude = pos.lat;
+                        this.longitude = pos.lng;
+                        this.syncToLivewire();
+                        this.updateLocationFromCoordinates(pos.lat, pos.lng);
+                    });
+
+                    this.map.on('click', (e) => {
+                        const pos = e.latlng;
+                        this.marker.setLatLng(pos);
+                        this.latitude = pos.lat;
+                        this.longitude = pos.lng;
+                        this.syncToLivewire();
+                        this.updateLocationFromCoordinates(pos.lat, pos.lng);
+                    });
+
+                    setTimeout(() => {
+                        if (this.map) {
+                            this.map.invalidateSize();
+                        }
+                    }, 250);
+                    
+                    setTimeout(() => {
+                        if (this.map) {
+                            this.map.invalidateSize();
+                        }
+                    }, 500);
+                },
+
+                updateLocationFromCoordinates(lat, lng) {
+                    this.location = 'Mengambil alamat...';
+                    this.syncToLivewire();
+                    
+                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.display_name) {
+                                this.location = data.display_name;
+                            } else {
+                                this.location = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                            }
+                            this.syncToLivewire();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            this.location = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                            this.syncToLivewire();
+                        });
+                },
+
+                updateMarker() {
+                    if (this.map && this.marker && this.latitude && this.longitude) {
+                        const newLatLng = L.latLng(this.latitude, this.longitude);
+                        this.marker.setLatLng(newLatLng);
+                        this.map.setView(newLatLng, this.map.getZoom());
+                    }
+                },
+
+                syncToLivewire() {
+                    clearTimeout(this.syncTimeout);
+                    this.syncTimeout = setTimeout(() => {
+                        if (this.latitude && this.longitude) {
+                            @this.call('setCoordinates', {
+                                latitude: this.latitude,
+                                longitude: this.longitude
+                            });
+                        }
+                        if (this.location) {
+                            @this.call('setLocation', {
+                                location: this.location
+                            });
+                        }
+                    }, 300);
+                },
+
+                init() {
+                    this.initializeMap();
+                    
+                    this.$watch('latitude', (newVal, oldVal) => {
+                        if (newVal !== oldVal && this.map && this.marker && newVal && oldVal) {
+                            this.updateMarker();
+                        }
+                    });
+                    
+                    this.$watch('longitude', (newVal, oldVal) => {
+                        if (newVal !== oldVal && this.map && this.marker && newVal && oldVal) {
+                            this.updateMarker();
+                        }
+                    });
+                    
+                    this.$watch('location', (newVal, oldVal) => {
+                        if (newVal !== oldVal && newVal && oldVal) {
+                            if (!newVal.includes('Mengambil alamat...') && !newVal.includes('Mencari lokasi...')) {
+                                this.syncToLivewire();
+                            }
+                        }
+                    });
+                }
+            }"
+        >
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Waktu dan Tempat
             </h2>
@@ -117,6 +253,22 @@
                         type="text"
                         :placeholder="'Contoh: Jakarta, Bandung, atau Online'"
                     />
+                    <p class="text-xs text-gray-500 mt-1">
+                        Gunakan map di bawah untuk memilih lokasi yang tepat (opsional)
+                    </p>
+                </div>
+
+                <!-- Map Section -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Pilih Lokasi di Map (Opsional)
+                    </label>
+                    <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden" wire:ignore>
+                        <div x-ref="map" style="height: 300px; width: 100%;"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Klik atau drag marker pada map untuk menentukan lokasi yang lebih spesifik
+                    </p>
                 </div>
             </div>
         </div>

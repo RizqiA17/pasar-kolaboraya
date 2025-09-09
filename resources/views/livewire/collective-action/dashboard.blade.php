@@ -164,6 +164,15 @@
                 </div>
                 @endif
 
+                @if($collectiveAction->latitude && $collectiveAction->longitude)
+                <!-- Map Display -->
+                <div class="mt-4">
+                    <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+                        <div id="actionMap" style="height: 200px; width: 100%;"></div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="flex items-center text-sm">
                     <svg class="w-4 h-4 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
@@ -636,6 +645,34 @@
         </div>
     </div>
 </div>
+
+@if($collectiveAction->latitude && $collectiveAction->longitude)
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+@endpush
+
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map for collective action location
+            const lat = {{ $collectiveAction->latitude }};
+            const lng = {{ $collectiveAction->longitude }};
+            
+            const actionMap = L.map('actionMap').setView([lat, lng], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(actionMap);
+
+            // Add marker
+            L.marker([lat, lng]).addTo(actionMap)
+                .bindPopup('{{ addslashes($collectiveAction->location) }}')
+                .openPopup();
+        });
+    </script>
+@endpush
+@endif
 
 <!-- Success/Error Messages -->
 @if (session()->has('message'))

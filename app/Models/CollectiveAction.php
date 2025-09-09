@@ -20,6 +20,8 @@ class CollectiveAction extends Model
         'start_date',
         'end_date',
         'location',
+        'latitude',
+        'longitude',
         'status',
         'min_ecosystems',
         'collaboration_terms',

@@ -23,6 +23,8 @@ class Create extends Component
     public $start_date = '';
     public $end_date = '';
     public $location = '';
+    public $latitude = null;
+    public $longitude = null;
     public $min_ecosystems = 3;
     public $collaboration_terms = '';
 
@@ -94,6 +96,11 @@ class Create extends Component
     {
         $this->validate();
 
+        // Set default location if not provided
+        if (empty($this->location)) {
+            $this->location = "Lokasi belum ditentukan";
+        }
+
         // Create the collective action
         $action = CollectiveAction::create([
             'title' => $this->title,
@@ -106,6 +113,8 @@ class Create extends Component
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'status' => 'planning',
             'min_ecosystems' => $this->min_ecosystems,
             'collaboration_terms' => $this->collaboration_terms,
@@ -155,6 +164,17 @@ class Create extends Component
         session()->flash('message', 'Aksi kolektif berhasil dibuat dan undangan telah dikirim! Status: Perencanaan');
 
         return redirect()->route('collective-action.browse');
+    }
+
+    public function setCoordinates($data)
+    {
+        $this->latitude = $data['latitude'];
+        $this->longitude = $data['longitude'];
+    }
+
+    public function setLocation($data)
+    {
+        $this->location = $data['location'];
     }
 
     public function render()
