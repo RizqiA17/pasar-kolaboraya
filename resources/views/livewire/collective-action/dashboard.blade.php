@@ -333,20 +333,32 @@
                                     <div class="flex items-center mb-2">
                                         <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mr-3">
                                             <span class="text-yellow-600 dark:text-yellow-400 font-semibold text-xs">
-                                                {{ $contribution->initials() }}
+                                                {{ $contribution->user->initials() }}
                                             </span>
                                         </div>
                                         <div>
-                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $contribution->name }}</h4>
-                                            <p class="text-xs text-gray-600 dark:text-gray-400">{{ $contribution->email }}</p>
+                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $contribution->user->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">{{ $contribution->user->email }}</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
-                                        <strong>Alasan Bergabung:</strong> 
-                                        {{ $contribution->pivot->join_reason }}
-                                    </p>
+                                    <div class="mb-2">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jenis Kontribusi:</strong> 
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">
+                                                {{ $contribution->contribution_type_label }}
+                                            </span>
+                                        </p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                                            <strong>Deskripsi:</strong> {{ $contribution->contribution_description }}
+                                        </p>
+                                        @if($contribution->contribution_amount)
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                        </p>
+                                        @endif
+                                    </div>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        Bergabung: {{ $contribution->pivot->joined_at ? $contribution->pivot->joined_at->format('d M Y') : 'N/A' }}
+                                        Ditawarkan: {{ $contribution->offered_at ? $contribution->offered_at->format('d M Y H:i') : 'N/A' }}
                                     </p>
                                 </div>
                                 <div class="flex gap-2 ml-4">
@@ -372,30 +384,99 @@
 
         <!-- Accepted Contributions -->
         @if($acceptedContributions->count() > 0)
-<div>
+            <div class="mb-6">
                 <h3 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Kontribusi yang Diterima</h3>
                 <div class="space-y-3">
                     @foreach($acceptedContributions as $contribution)
                         <div class="p-4 border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-green-600 dark:text-green-400 font-semibold text-xs">
+                                                {{ $contribution->user->initials() }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $contribution->user->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">{{ $contribution->user->email }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jenis Kontribusi:</strong> 
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">
+                                                {{ $contribution->contribution_type_label }}
+                                            </span>
+                                        </p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                                            <strong>Deskripsi:</strong> {{ $contribution->contribution_description }}
+                                        </p>
+                                        @if($contribution->contribution_amount)
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                        </p>
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        Diterima: {{ $contribution->accepted_at ? $contribution->accepted_at->format('d M Y H:i') : 'N/A' }}
+                                    </p>
+                                </div>
+                                @if($collectiveAction->canUserManage(Auth::user()))
+                                <div class="flex gap-2 ml-4">
+                                    <button 
+                                        wire:click="completeContribution({{ $contribution->id }})"
+                                        class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors"
+                                    >
+                                        Selesai
+                                    </button>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <!-- Completed Contributions -->
+        @if($completedContributions->count() > 0)
+            <div class="mb-6">
+                <h3 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Kontribusi yang Selesai</h3>
+                <div class="space-y-3">
+                    @foreach($completedContributions as $contribution)
+                        <div class="p-4 border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                             <div class="flex items-start">
-                                <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3">
-                                    <span class="text-green-600 dark:text-green-400 font-semibold text-xs">
-                                        {{ $contribution->initials() }}
+                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-3">
+                                    <span class="text-blue-600 dark:text-blue-400 font-semibold text-xs">
+                                        {{ $contribution->user->initials() }}
                                     </span>
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex items-center mb-2">
-                                        <h4 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $contribution->name }}</h4>
-                                        <span class="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
-                                            Diterima
+                                        <h4 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $contribution->user->name }}</h4>
+                                        <span class="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">
+                                            Selesai
                                         </span>
                                     </div>
-                                    <p class="text-sm text-gray-700 dark:text-gray-300">
-                                        <strong>Kontributor:</strong> 
-                                        {{ $contribution->pivot->join_reason }}
-                                    </p>
+                                    <div class="mb-2">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jenis Kontribusi:</strong> 
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">
+                                                {{ $contribution->contribution_type_label }}
+                                            </span>
+                                        </p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                                            <strong>Deskripsi:</strong> {{ $contribution->contribution_description }}
+                                        </p>
+                                        @if($contribution->contribution_amount)
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            <strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                        </p>
+                                        @endif
+                                    </div>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        Bergabung: {{ $contribution->pivot->joined_at ? $contribution->pivot->joined_at->format('d M Y') : 'N/A' }}
+                                        Selesai: {{ $contribution->completed_at ? $contribution->completed_at->format('d M Y H:i') : 'N/A' }}
                                     </p>
                                 </div>
                             </div>
@@ -405,7 +486,7 @@
             </div>
         @endif
 
-        @if($pendingContributions->count() === 0 && $acceptedContributions->count() === 0)
+        @if($pendingContributions->count() === 0 && $acceptedContributions->count() === 0 && $completedContributions->count() === 0)
             <div class="text-center py-8">
                 <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
@@ -497,6 +578,12 @@
             @if($contributorUsers->count() > 0)
                 <div class="space-y-3 max-h-64 overflow-y-auto">
                     @foreach($contributorUsers as $user)
+                        @php
+                            $userContributions = $collectiveAction->contributions()->where('user_id', $user->id)->get();
+                            $acceptedCount = $userContributions->where('status', 'accepted')->count();
+                            $completedCount = $userContributions->where('status', 'completed')->count();
+                            $totalAmount = $userContributions->where('status', 'accepted')->sum('contribution_amount');
+                        @endphp
                         <div class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                             <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-3">
                                 <span class="text-purple-600 dark:text-purple-400 font-semibold text-sm">
@@ -506,13 +593,38 @@
                             <div class="flex-1">
                                 <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $user->name }}</h3>
                                 <p class="text-xs text-gray-600 dark:text-gray-400">{{ $user->email }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-500">
-                                    {{ $user->pivot->join_type_label }}
-                                </p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-xs text-gray-500 dark:text-gray-500">
+                                        {{ $userContributions->count() }} kontribusi
+                                    </span>
+                                    @if($acceptedCount > 0)
+                                        <span class="text-xs text-green-600 dark:text-green-400">
+                                            {{ $acceptedCount }} diterima
+                                        </span>
+                                    @endif
+                                    @if($completedCount > 0)
+                                        <span class="text-xs text-blue-600 dark:text-blue-400">
+                                            {{ $completedCount }} selesai
+                                        </span>
+                                    @endif
+                                </div>
+                                @if($totalAmount > 0)
+                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                        Total: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+                                    </p>
+                                @endif
                             </div>
-                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs">
-                                {{ $user->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
-                            </span>
+                            <div class="text-right">
+                                @if($acceptedCount > 0)
+                                    <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
+                                        Aktif
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-xs">
+                                        Menunggu
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>

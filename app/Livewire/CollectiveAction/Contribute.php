@@ -43,6 +43,24 @@ class Contribute extends Component
         'contribution_details' => 'nullable|array',
     ];
 
+    protected function rules()
+    {
+        $rules = [
+            'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
+            'contribution_description' => 'required|string|min:10|max:1000',
+            'contribution_details' => 'nullable|array',
+        ];
+
+        // Only require amount for funding contributions
+        if ($this->contribution_type === 'funding') {
+            $rules['contribution_amount'] = 'required|numeric|min:0';
+        } else {
+            $rules['contribution_amount'] = 'nullable|numeric|min:0';
+        }
+
+        return $rules;
+    }
+
     protected $messages = [
         'contribution_type.required' => 'Jenis kontribusi wajib dipilih',
         'contribution_description.required' => 'Deskripsi kontribusi wajib diisi',
@@ -73,18 +91,23 @@ class Contribute extends Component
             return redirect()->route('collective-action.browse');
         }
 
-        // Prepare contribution details
+        // Clean up contribution amount - convert empty string to null
+        $contributionAmount = $this->contribution_amount;
+        if ($contributionAmount === '' || $contributionAmount === null) {
+            $contributionAmount = null;
+        }
+
+        // Prepare contribution data
         $contributionData = [
-            'ecosystem_id' => null,
-            'role' => 'contributor',
-            'status' => 'pending',
-            'join_type' => 'direct',
-            'join_reason' => $this->contribution_description,
-            'joined_at' => now(),
+            'contribution_type' => $this->contribution_type,
+            'contribution_description' => $this->contribution_description,
+            'contribution_amount' => $contributionAmount,
+            'contribution_details' => $this->contribution_details,
+            'status' => 'offered',
         ];
 
-        // Create contribution
-        $this->collectiveAction->users()->attach(Auth::id(), $contributionData);
+        // Create contribution using the new method
+        $this->collectiveAction->createContribution(Auth::user(), $contributionData);
 
         session()->flash('message', 'Kontribusi berhasil dikirim! Menunggu persetujuan dari penyelenggara aksi.');
 

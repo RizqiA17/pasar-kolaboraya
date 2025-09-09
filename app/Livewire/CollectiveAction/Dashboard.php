@@ -47,6 +47,24 @@ class Dashboard extends Component
         'contribution_details' => 'nullable|array',
     ];
 
+    protected function rules()
+    {
+        $rules = [
+            'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
+            'contribution_description' => 'required|string|min:10|max:1000',
+            'contribution_details' => 'nullable|array',
+        ];
+
+        // Only require amount for funding contributions
+        if ($this->contribution_type === 'funding') {
+            $rules['contribution_amount'] = 'required|numeric|min:0';
+        } else {
+            $rules['contribution_amount'] = 'nullable|numeric|min:0';
+        }
+
+        return $rules;
+    }
+
     protected $messages = [
         'contribution_type.required' => 'Jenis kontribusi wajib dipilih',
         'contribution_description.required' => 'Deskripsi kontribusi wajib diisi',
@@ -81,18 +99,23 @@ class Dashboard extends Component
             return;
         }
 
+        // Clean up contribution amount - convert empty string to null
+        $contributionAmount = $this->contribution_amount;
+        if ($contributionAmount === '' || $contributionAmount === null) {
+            $contributionAmount = null;
+        }
+
         // Prepare contribution data
         $contributionData = [
-            'ecosystem_id' => null,
-            'role' => 'contributor',
-            'status' => 'pending',
-            'join_type' => 'direct',
-            'join_reason' => $this->contribution_description,
-            'joined_at' => now(),
+            'contribution_type' => $this->contribution_type,
+            'contribution_description' => $this->contribution_description,
+            'contribution_amount' => $contributionAmount,
+            'contribution_details' => $this->contribution_details,
+            'status' => 'offered',
         ];
 
-        // Create contribution
-        $this->collectiveAction->users()->attach(Auth::id(), $contributionData);
+        // Create contribution using the new method
+        $this->collectiveAction->createContribution(Auth::user(), $contributionData);
 
         session()->flash('message', 'Kontribusi berhasil dikirim! Menunggu persetujuan dari penyelenggara aksi.');
 
@@ -100,34 +123,58 @@ class Dashboard extends Component
         $this->reset(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'show_contribution_form']);
     }
 
-    public function acceptContribution($userId)
+    public function acceptContribution($contributionId)
     {
         if (!$this->collectiveAction->canUserManage(Auth::user())) {
             session()->flash('error', 'Anda tidak memiliki akses untuk mengelola kontribusi.');
             return;
         }
 
-        $this->collectiveAction->users()->updateExistingPivot($userId, [
-            'status' => 'active'
-        ]);
-
-        $user = \App\Models\User::find($userId);
-        session()->flash('message', "Kontribusi dari {$user->name} berhasil diterima.");
+        $success = $this->collectiveAction->acceptContribution($contributionId);
+        
+        if ($success) {
+            $contribution = \App\Models\CollectiveActionContribution::find($contributionId);
+            $user = $contribution->user;
+            session()->flash('message', "Kontribusi dari {$user->name} berhasil diterima.");
+        } else {
+            session()->flash('error', 'Gagal menerima kontribusi. Kontribusi mungkin sudah diproses atau tidak ditemukan.');
+        }
     }
 
-    public function declineContribution($userId)
+    public function declineContribution($contributionId)
     {
         if (!$this->collectiveAction->canUserManage(Auth::user())) {
             session()->flash('error', 'Anda tidak memiliki akses untuk mengelola kontribusi.');
             return;
         }
 
-        $this->collectiveAction->users()->updateExistingPivot($userId, [
-            'status' => 'inactive'
-        ]);
+        $success = $this->collectiveAction->declineContribution($contributionId);
+        
+        if ($success) {
+            $contribution = \App\Models\CollectiveActionContribution::find($contributionId);
+            $user = $contribution->user;
+            session()->flash('message', "Kontribusi dari {$user->name} berhasil ditolak.");
+        } else {
+            session()->flash('error', 'Gagal menolak kontribusi. Kontribusi mungkin sudah diproses atau tidak ditemukan.');
+        }
+    }
 
-        $user = \App\Models\User::find($userId);
-        session()->flash('message', "Kontribusi dari {$user->name} berhasil ditolak.");
+    public function completeContribution($contributionId)
+    {
+        if (!$this->collectiveAction->canUserManage(Auth::user())) {
+            session()->flash('error', 'Anda tidak memiliki akses untuk mengelola kontribusi.');
+            return;
+        }
+
+        $success = $this->collectiveAction->completeContribution($contributionId);
+        
+        if ($success) {
+            $contribution = \App\Models\CollectiveActionContribution::find($contributionId);
+            $user = $contribution->user;
+            session()->flash('message', "Kontribusi dari {$user->name} berhasil ditandai sebagai selesai.");
+        } else {
+            session()->flash('error', 'Gagal menandai kontribusi sebagai selesai. Kontribusi mungkin belum diterima atau tidak ditemukan.');
+        }
     }
 
     public function updateActionStatus($status)
@@ -163,9 +210,21 @@ class Dashboard extends Component
     {
         $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
         $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->get();
-        $contributorUsers = $this->collectiveAction->contributorUsers()->with('profile')->get();
-        $pendingContributions = $this->collectiveAction->contributorUsers()->wherePivot('status', 'pending')->with('profile')->get();
-        $acceptedContributions = $this->collectiveAction->contributorUsers()->wherePivot('status', 'active')->with('profile')->get();
+        
+        // Get contributors from contributions table (users who have made contributions)
+        $contributorUsers = $this->collectiveAction->contributions()
+            ->with('user.profile')
+            ->get()
+            ->pluck('user')
+            ->unique('id')
+            ->values();
+        
+        // Use new contributions relationships
+        $pendingContributions = $this->collectiveAction->offeredContributions()->with('user.profile')->get();
+        $acceptedContributions = $this->collectiveAction->acceptedContributions()->with('user.profile')->get();
+        $completedContributions = $this->collectiveAction->completedContributions()->with('user.profile')->get();
+        $declinedContributions = $this->collectiveAction->declinedContributions()->with('user.profile')->get();
+        
         $participatingEcosystems = $this->collectiveAction->participatingEcosystems;
 
         return view('livewire.collective-action.dashboard', [
@@ -174,6 +233,8 @@ class Dashboard extends Component
             'contributorUsers' => $contributorUsers,
             'pendingContributions' => $pendingContributions,
             'acceptedContributions' => $acceptedContributions,
+            'completedContributions' => $completedContributions,
+            'declinedContributions' => $declinedContributions,
             'participatingEcosystems' => $participatingEcosystems,
         ]);
     }

@@ -104,13 +104,100 @@ class CollectiveAction extends Model
     }
 
     /**
-     * Get users who have contributed to this action
+     * Get contributions for this collective action
+     */
+    public function contributions(): HasMany
+    {
+        return $this->hasMany(CollectiveActionContribution::class);
+    }
+
+    /**
+     * Get offered contributions
+     */
+    public function offeredContributions(): HasMany
+    {
+        return $this->contributions()->where('status', 'offered');
+    }
+
+    /**
+     * Get accepted contributions
+     */
+    public function acceptedContributions(): HasMany
+    {
+        return $this->contributions()->where('status', 'accepted');
+    }
+
+    /**
+     * Get completed contributions
+     */
+    public function completedContributions(): HasMany
+    {
+        return $this->contributions()->where('status', 'completed');
+    }
+
+    /**
+     * Get declined contributions
+     */
+    public function declinedContributions(): HasMany
+    {
+        return $this->contributions()->where('status', 'declined');
+    }
+
+    /**
+     * Get funding contributions
+     */
+    public function fundingContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'funding');
+    }
+
+    /**
+     * Get volunteer contributions
+     */
+    public function volunteerContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'volunteer');
+    }
+
+    /**
+     * Get expertise contributions
+     */
+    public function expertiseContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'expertise');
+    }
+
+    /**
+     * Get resource contributions
+     */
+    public function resourceContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'resources');
+    }
+
+    /**
+     * Get promotion contributions
+     */
+    public function promotionContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'promotion');
+    }
+
+    /**
+     * Get other contributions
+     */
+    public function otherContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'other');
+    }
+
+    /**
+     * Get users who have contributed to this action (via contributions table)
      */
     public function contributors(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'collective_action_users')
-            ->wherePivot('role', 'contributor')
-            ->withPivot(['ecosystem_id', 'role', 'status', 'join_type', 'join_reason', 'joined_at'])
+        return $this->belongsToMany(User::class, 'collective_action_contributions')
+            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
             ->withTimestamps();
     }
 
@@ -119,7 +206,7 @@ class CollectiveAction extends Model
      */
     public function acceptedContributors(): BelongsToMany
     {
-        return $this->contributors()->wherePivot('status', 'active');
+        return $this->contributors()->wherePivot('status', 'accepted');
     }
 
     /**
@@ -127,7 +214,7 @@ class CollectiveAction extends Model
      */
     public function pendingContributions(): BelongsToMany
     {
-        return $this->contributors()->wherePivot('status', 'pending');
+        return $this->contributors()->wherePivot('status', 'offered');
     }
 
     /**
@@ -144,8 +231,10 @@ class CollectiveAction extends Model
             return false;
         }
 
-        // Check if user is already a contributor
-        if ($this->contributors()->where('users.id', $user->id)->exists()) {
+        // Check if user has any pending or accepted contributions
+        if ($this->contributions()->where('user_id', $user->id)
+            ->whereIn('status', ['offered', 'accepted'])
+            ->exists()) {
             return false;
         }
 
@@ -455,5 +544,107 @@ class CollectiveAction extends Model
     public function removeEcosystemMembers(Ecosystem $ecosystem): void
     {
         $this->users()->wherePivot('ecosystem_id', $ecosystem->id)->detach();
+    }
+
+    /**
+     * Create a new contribution
+     */
+    public function createContribution(User $user, array $contributionData): CollectiveActionContribution
+    {
+        $contributionData['user_id'] = $user->id;
+        $contributionData['offered_at'] = now();
+        
+        return $this->contributions()->create($contributionData);
+    }
+
+    /**
+     * Accept a contribution
+     */
+    public function acceptContribution(int $contributionId, string $adminNotes = null): bool
+    {
+        $contribution = $this->contributions()->find($contributionId);
+        
+        if (!$contribution || $contribution->status !== 'offered') {
+            return false;
+        }
+
+        $contribution->update([
+            'status' => 'accepted',
+            'accepted_at' => now(),
+            'admin_notes' => $adminNotes,
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Decline a contribution
+     */
+    public function declineContribution(int $contributionId, string $adminNotes = null): bool
+    {
+        $contribution = $this->contributions()->find($contributionId);
+        
+        if (!$contribution || $contribution->status !== 'offered') {
+            return false;
+        }
+
+        $contribution->update([
+            'status' => 'declined',
+            'admin_notes' => $adminNotes,
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Mark a contribution as completed
+     */
+    public function completeContribution(int $contributionId, string $adminNotes = null): bool
+    {
+        $contribution = $this->contributions()->find($contributionId);
+        
+        if (!$contribution || $contribution->status !== 'accepted') {
+            return false;
+        }
+
+        $contribution->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+            'admin_notes' => $adminNotes,
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Get total funding amount from accepted contributions
+     */
+    public function getTotalFundingAttribute(): float
+    {
+        return $this->fundingContributions()
+            ->where('status', 'accepted')
+            ->sum('contribution_amount') ?? 0;
+    }
+
+    /**
+     * Get contribution statistics
+     */
+    public function getContributionStatsAttribute(): array
+    {
+        return [
+            'total_offered' => $this->contributions()->offered()->count(),
+            'total_accepted' => $this->contributions()->accepted()->count(),
+            'total_completed' => $this->contributions()->completed()->count(),
+            'total_declined' => $this->contributions()->declined()->count(),
+            'total_funding' => $this->getTotalFundingAttribute(),
+            'by_type' => [
+                'volunteer' => $this->volunteerContributions()->accepted()->count(),
+                'funding' => $this->fundingContributions()->accepted()->count(),
+                'expertise' => $this->expertiseContributions()->accepted()->count(),
+                'resources' => $this->resourceContributions()->accepted()->count(),
+                'promotion' => $this->promotionContributions()->accepted()->count(),
+                'other' => $this->otherContributions()->accepted()->count(),
+            ],
+        ];
     }
 }

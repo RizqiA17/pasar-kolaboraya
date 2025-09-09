@@ -429,12 +429,52 @@ class User extends Authenticatable // implements MustVerifyEmail
     }
 
     /**
-     * Get collective actions this user has contributed to
+     * Get collective action contributions made by this user
      */
-    public function collectiveActions(): BelongsToMany
+    public function collectiveActionContributions(): HasMany
     {
-        return $this->belongsToMany(CollectiveAction::class, 'collective_action_users')
-            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status'])
+        return $this->hasMany(CollectiveActionContribution::class);
+    }
+
+    /**
+     * Get offered contributions
+     */
+    public function offeredContributions(): HasMany
+    {
+        return $this->collectiveActionContributions()->where('status', 'offered');
+    }
+
+    /**
+     * Get accepted contributions
+     */
+    public function acceptedContributions(): HasMany
+    {
+        return $this->collectiveActionContributions()->where('status', 'accepted');
+    }
+
+    /**
+     * Get completed contributions
+     */
+    public function completedContributions(): HasMany
+    {
+        return $this->collectiveActionContributions()->where('status', 'completed');
+    }
+
+    /**
+     * Get declined contributions
+     */
+    public function declinedContributions(): HasMany
+    {
+        return $this->collectiveActionContributions()->where('status', 'declined');
+    }
+
+    /**
+     * Get collective actions this user has contributed to (via contributions table)
+     */
+    public function contributedCollectiveActions(): BelongsToMany
+    {
+        return $this->belongsToMany(CollectiveAction::class, 'collective_action_contributions')
+            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
             ->withTimestamps();
     }
 
@@ -443,7 +483,7 @@ class User extends Authenticatable // implements MustVerifyEmail
      */
     public function acceptedCollectiveActions(): BelongsToMany
     {
-        return $this->collectiveActions()->wherePivot('status', 'accepted');
+        return $this->contributedCollectiveActions()->wherePivot('status', 'accepted');
     }
 
     /**
