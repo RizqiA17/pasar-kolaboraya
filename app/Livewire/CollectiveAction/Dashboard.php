@@ -23,12 +23,12 @@ class Dashboard extends Component
 
     // Invitation form properties
     public $show_invitation_form = false;
-    public $selected_ecosystem_id = '';
+    public $selected_ecosystem_ids = []; // Changed to array for multiple selection
     public $invitation_message = '';
     public $available_ecosystems = [];
     public $ecosystem_search = '';
     public $show_ecosystem_dropdown = false;
-    public $selected_ecosystem = null;
+    public $selected_ecosystems = []; // Array of selected ecosystem objects
 
     public $contributionTypes = [
         'volunteer' => 'Relawan/Tenaga',
@@ -56,8 +56,9 @@ class Dashboard extends Component
         'contribution_amount' => 'nullable|numeric|min:0',
         'contribution_details' => 'nullable|array',
         // Invitation rules
-        'selected_ecosystem_id' => 'required|exists:ecosystems,id',
-        'invitation_message' => 'required|string|min:20|max:500',
+        'selected_ecosystem_ids' => 'required|array|min:1',
+        'selected_ecosystem_ids.*' => 'exists:ecosystems,id',
+        'invitation_message' => 'nullable|string|min:20|max:500',
     ];
 
     protected function rules()
@@ -244,22 +245,23 @@ class Dashboard extends Component
         
         if ($this->show_invitation_form) {
             // Reset form when opening
-            $this->reset(['selected_ecosystem_id', 'invitation_message', 'ecosystem_search', 'selected_ecosystem']);
+            $this->reset(['selected_ecosystem_ids', 'invitation_message', 'ecosystem_search', 'selected_ecosystems']);
             $this->show_ecosystem_dropdown = false;
             $this->loadAvailableEcosystems(); // Refresh available ecosystems
         }
     }
 
-    public function sendInvitation()
+    public function sendInvitations()
     {
         // Validate invitation form
         $this->validate([
-            'selected_ecosystem_id' => 'required|exists:ecosystems,id',
-            'invitation_message' => 'required|string|min:20|max:500',
+            'selected_ecosystem_ids' => 'required|array|min:1',
+            'selected_ecosystem_ids.*' => 'exists:ecosystems,id',
+            'invitation_message' => 'nullable|string|min:20|max:500',
         ], [
-            'selected_ecosystem_id.required' => 'Pilih ekosistem yang akan diundang',
-            'selected_ecosystem_id.exists' => 'Ekosistem yang dipilih tidak valid',
-            'invitation_message.required' => 'Pesan undangan wajib diisi',
+            'selected_ecosystem_ids.required' => 'Pilih minimal satu ekosistem yang akan diundang',
+            'selected_ecosystem_ids.min' => 'Pilih minimal satu ekosistem yang akan diundang',
+            'selected_ecosystem_ids.*.exists' => 'Salah satu ekosistem yang dipilih tidak valid',
             'invitation_message.min' => 'Pesan undangan minimal 20 karakter',
             'invitation_message.max' => 'Pesan undangan maksimal 500 karakter',
         ]);
@@ -270,27 +272,46 @@ class Dashboard extends Component
             return;
         }
 
-        // Check if ecosystem is already invited
-        if ($this->collectiveAction->hasInvitedEcosystem($this->selected_ecosystem_id)) {
-            session()->flash('error', 'Ekosistem ini sudah pernah diundang.');
-            return;
+        $successCount = 0;
+        $alreadyInvitedCount = 0;
+        $ecosystemNames = [];
+
+        // Send invitations to each selected ecosystem
+        foreach ($this->selected_ecosystem_ids as $ecosystemId) {
+            // Check if ecosystem is already invited
+            if ($this->collectiveAction->hasInvitedEcosystem($ecosystemId)) {
+                $alreadyInvitedCount++;
+                continue;
+            }
+
+            // Create invitation
+            CollectiveActionEcosystemInvitation::create([
+                'collective_action_id' => $this->collectiveAction->id,
+                'ecosystem_id' => $ecosystemId,
+                'invited_by' => Auth::id(),
+                'status' => 'pending',
+                'role' => 'admin', // Ecosystem builders become admins
+                'invitation_message' => $this->invitation_message ?? 'Anda diundang untuk bergabung dalam aksi kolektif: ' . $this->collectiveAction->title,
+            ]);
+
+            $ecosystem = Ecosystem::find($ecosystemId);
+            $ecosystemNames[] = $ecosystem->ecosystem_title;
+            $successCount++;
         }
 
-        // Create invitation
-        CollectiveActionEcosystemInvitation::create([
-            'collective_action_id' => $this->collectiveAction->id,
-            'ecosystem_id' => $this->selected_ecosystem_id,
-            'invited_by' => Auth::id(),
-            'status' => 'pending',
-            'role' => 'admin', // Ecosystem builders become admins
-            'invitation_message' => $this->invitation_message,
-        ]);
-
-        $ecosystem = Ecosystem::find($this->selected_ecosystem_id);
-        session()->flash('message', "Undangan berhasil dikirim ke ekosistem: {$ecosystem->ecosystem_title}");
+        // Generate success message
+        if ($successCount > 0) {
+            $message = "Undangan berhasil dikirim ke {$successCount} ekosistem: " . implode(', ', $ecosystemNames);
+            if ($alreadyInvitedCount > 0) {
+                $message .= ". {$alreadyInvitedCount} ekosistem sudah pernah diundang sebelumnya.";
+            }
+            session()->flash('message', $message);
+        } else {
+            session()->flash('error', 'Semua ekosistem yang dipilih sudah pernah diundang sebelumnya.');
+        }
 
         // Reset form and hide it
-        $this->reset(['selected_ecosystem_id', 'invitation_message', 'show_invitation_form', 'ecosystem_search', 'selected_ecosystem']);
+        $this->reset(['selected_ecosystem_ids', 'invitation_message', 'show_invitation_form', 'ecosystem_search', 'selected_ecosystems']);
         $this->show_ecosystem_dropdown = false;
         $this->loadAvailableEcosystems(); // Refresh available ecosystems
     }
@@ -298,22 +319,50 @@ class Dashboard extends Component
     public function updatedEcosystemSearch()
     {
         $this->show_ecosystem_dropdown = !empty($this->ecosystem_search);
-        $this->selected_ecosystem_id = '';
-        $this->selected_ecosystem = null;
     }
 
     public function selectEcosystem($ecosystemId)
     {
-        $this->selected_ecosystem_id = $ecosystemId;
-        $this->selected_ecosystem = $this->available_ecosystems->find($ecosystemId);
-        $this->ecosystem_search = $this->selected_ecosystem ? 
-            $this->selected_ecosystem->ecosystem_title . ' - ' . $this->selected_ecosystem->organization_name : '';
+        // Toggle selection for multi-select
+        if (in_array($ecosystemId, $this->selected_ecosystem_ids)) {
+            // Remove if already selected
+            $this->selected_ecosystem_ids = array_filter($this->selected_ecosystem_ids, function($id) use ($ecosystemId) {
+                return $id != $ecosystemId;
+            });
+            $this->selected_ecosystems = array_filter($this->selected_ecosystems, function($ecosystem) use ($ecosystemId) {
+                return $ecosystem->id != $ecosystemId;
+            });
+        } else {
+            // Add if not selected
+            $this->selected_ecosystem_ids[] = $ecosystemId;
+            $ecosystem = $this->available_ecosystems->find($ecosystemId);
+            if ($ecosystem) {
+                $this->selected_ecosystems[] = $ecosystem;
+            }
+        }
+        
+        // Clear search after selection
+        $this->ecosystem_search = '';
         $this->show_ecosystem_dropdown = false;
     }
 
-    public function clearEcosystemSelection()
+    public function removeSelectedEcosystem($ecosystemId)
     {
-        $this->reset(['selected_ecosystem_id', 'ecosystem_search', 'selected_ecosystem']);
+        $this->selected_ecosystem_ids = array_filter($this->selected_ecosystem_ids, function($id) use ($ecosystemId) {
+            return $id != $ecosystemId;
+        });
+        $this->selected_ecosystems = array_filter($this->selected_ecosystems, function($ecosystem) use ($ecosystemId) {
+            return $ecosystem->id != $ecosystemId;
+        });
+        
+        // Reindex arrays
+        $this->selected_ecosystem_ids = array_values($this->selected_ecosystem_ids);
+        $this->selected_ecosystems = array_values($this->selected_ecosystems);
+    }
+
+    public function clearAllSelections()
+    {
+        $this->reset(['selected_ecosystem_ids', 'ecosystem_search', 'selected_ecosystems']);
         $this->show_ecosystem_dropdown = false;
     }
 

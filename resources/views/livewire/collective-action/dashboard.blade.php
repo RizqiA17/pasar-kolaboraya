@@ -66,10 +66,11 @@
             </div>
 
             @if($show_invitation_form)
-                <form wire:submit="sendInvitation" class="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <form wire:submit="sendInvitations" class="space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="relative">
                         <label for="ecosystem_search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Pilih Ekosistem
+                            Pilih Ekosistem 
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">(Dapat memilih lebih dari satu)</span>
                         </label>
                         
                         <!-- Search Input -->
@@ -79,14 +80,14 @@
                                 wire:model.live="ecosystem_search"
                                 wire:click="$set('show_ecosystem_dropdown', true)"
                                 id="ecosystem_search"
-                                placeholder="🔍 Cari ekosistem berdasarkan nama, organisasi, atau wilayah..."
+                                placeholder="Cari dan pilih ekosistem (dapat memilih beberapa sekaligus)..."
                                 class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 pr-10 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                                 autocomplete="off"
                             >
                             
                             <!-- Search Icon -->
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                @if($selected_ecosystem)
+                                @if($selected_ecosystems)
                                     <button 
                                         type="button"
                                         wire:click="clearEcosystemSelection"
@@ -112,7 +113,8 @@
                                         type="button"
                                         wire:click="selectEcosystem({{ $ecosystem->id }})"
                                         data-ecosystem-item
-                                        class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-600 focus:bg-gray-50 dark:focus:bg-gray-600 focus:outline-none border-b border-gray-100 dark:border-gray-600 last:border-b-0 transition-colors"
+                                        class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-600 focus:bg-gray-50 dark:focus:bg-gray-600 focus:outline-none border-b border-gray-100 dark:border-gray-600 last:border-b-0 transition-colors
+                                            {{ in_array($ecosystem->id, $selected_ecosystem_ids) ? 'bg-purple-50 dark:bg-purple-900/20 border-l-4 border-l-purple-500' : '' }}"
                                     >
                                         <div class="flex items-start space-x-3">
                                             <!-- Ecosystem Avatar -->
@@ -142,11 +144,17 @@
                                                 </div>
                                             </div>
                                             
-                                            <!-- Arrow Icon -->
+                                            <!-- Selection Status Icon -->
                                             <div class="flex-shrink-0">
-                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                                </svg>
+                                                @if(in_array($ecosystem->id, $selected_ecosystem_ids))
+                                                    <div class="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center">
+                                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </div>
+                                                @else
+                                                    <div class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full"></div>
+                                                @endif
                                             </div>
                                         </div>
                                     </button>
@@ -187,45 +195,61 @@
                             </div>
                         @endif
 
-                        <!-- Selected Ecosystem Preview -->
-                        @if($selected_ecosystem)
-                            <div class="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
-                                <div class="flex items-start space-x-3">
-                                    <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
-                                        <span class="text-white font-semibold text-xs">
-                                            {{ strtoupper(substr($selected_ecosystem->ecosystem_title, 0, 2)) }}
-                                        </span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="font-semibold text-blue-900 dark:text-blue-200 text-sm">
-                                            {{ $selected_ecosystem->ecosystem_title }}
-                                        </h4>
-                                        <p class="text-xs text-blue-700 dark:text-blue-300">
-                                            {{ $selected_ecosystem->organization_name }} • {{ $selected_ecosystem->work_region }}
-                                        </p>
-                                        @if($selected_ecosystem->description)
-                                            <p class="text-xs text-blue-600 dark:text-blue-400 mt-1 line-clamp-2">
-                                                {{ $selected_ecosystem->description }}
-                                            </p>
-                                        @endif
-                                    </div>
+                        <!-- Selected Ecosystems Preview -->
+                        @if(count($selected_ecosystems) > 0)
+                            <div class="mt-3 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Ekosistem Terpilih ({{ count($selected_ecosystems) }})
+                                    </h4>
                                     <button 
                                         type="button"
-                                        wire:click="clearEcosystemSelection"
-                                        class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
+                                        wire:click="clearAllSelections"
+                                        class="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 font-medium"
                                     >
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
+                                        Hapus Semua
                                     </button>
+                                </div>
+                                
+                                <div class="max-h-32 overflow-y-auto space-y-2">
+                                    @foreach($selected_ecosystems as $ecosystem)
+                                        <div class="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg">
+                                            <div class="flex items-center space-x-2 flex-1 min-w-0">
+                                                <div class="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
+                                                    <span class="text-white font-semibold text-xs">
+                                                        {{ strtoupper(substr($ecosystem->ecosystem_title, 0, 2)) }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <h5 class="font-semibold text-purple-900 dark:text-purple-200 text-xs truncate">
+                                                        {{ $ecosystem->ecosystem_title }}
+                                                    </h5>
+                                                    <p class="text-xs text-purple-700 dark:text-purple-300 truncate">
+                                                        {{ $ecosystem->organization_name }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <button 
+                                                type="button"
+                                                wire:click="removeSelectedEcosystem({{ $ecosystem->id }})"
+                                                class="flex-shrink-0 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 ml-2"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Hidden input for validation -->
-                        <input type="hidden" wire:model="selected_ecosystem_id" required>
+                        <!-- Hidden inputs for validation -->
+                        @foreach($selected_ecosystem_ids as $index => $ecosystemId)
+                            <input type="hidden" wire:model="selected_ecosystem_ids.{{ $index }}" value="{{ $ecosystemId }}">
+                        @endforeach
                         
-                        @error('selected_ecosystem_id')
+                        @error('selected_ecosystem_ids')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -240,7 +264,6 @@
                             rows="4"
                             placeholder="Tuliskan pesan personal untuk mengundang ekosistem ini berkolaborasi..."
                             class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                            required
                         ></textarea>
                         @error('invitation_message')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -250,9 +273,10 @@
                     <div class="flex gap-3">
                         <button 
                             type="submit" 
-                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors"
+                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            {{ count($selected_ecosystem_ids) == 0 ? 'disabled' : '' }}
                         >
-                            Kirim Undangan
+                            Kirim Undangan ({{ count($selected_ecosystem_ids) }})
                         </button>
                         <button 
                             type="button" 
@@ -263,15 +287,18 @@
                         </button>
                     </div>
                 </form>
-            @elseif(count($available_ecosystems) == 0)
-                <div class="text-center py-4">
+                            @elseif(count($available_ecosystems) == 0)
+                <div class="text-center py-6">
                     <div class="text-gray-400 mb-2">
                         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                     </div>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm">
-                        Semua ekosistem yang tersedia sudah diundang atau tidak ada ekosistem lain yang dapat diundang.
+                    <p class="text-gray-600 dark:text-gray-400 text-sm font-medium">
+                        Tidak ada ekosistem tersedia untuk diundang
+                    </p>
+                    <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
+                        Semua ekosistem sudah diundang atau tidak ada ekosistem lain yang dapat diundang
                     </p>
                 </div>
             @endif
