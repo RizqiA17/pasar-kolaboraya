@@ -40,6 +40,7 @@ class Dashboard extends Component
     {
         $this->activeTab = $tab;
         $this->resetPage();
+        $this->dispatch('tabChanged', $tab);
     }
 
     public function getPendingInvitationsProperty()
@@ -144,6 +145,11 @@ class Dashboard extends Component
         return $this->ecosystem->calculateQuality();
     }
 
+    public function getConnectionQualityDataProperty()
+    {
+        return $this->ecosystem->getConnectionQualityMetrics();
+    }
+
     public function getIsOwnerProperty()
     {
         return Auth::id() === $this->ecosystem->creator_id;
@@ -151,7 +157,8 @@ class Dashboard extends Component
 
     public function getIsEcosystemBuilderProperty()
     {
-        return Auth::user()->isEcosystemBuilder();
+        $user = Auth::user();
+        return $user ? $user->is_ecosystem_builder : false;
     }
 
     public function getIsReadOnlyProperty()
@@ -215,6 +222,7 @@ class Dashboard extends Component
             'pendingRequests' => $this->pendingRequests,
             'acceptedMembers' => $this->acceptedMembers,
             'ecosystemQuality' => $this->ecosystemQuality,
+            'connectionQualityData' => $this->connectionQualityData,
         ]);
     }
 }

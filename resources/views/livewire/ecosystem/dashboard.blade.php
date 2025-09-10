@@ -484,7 +484,7 @@
                     $neededSkillsGap = $ecosystem->getNeededSkillsGap();
                 @endphp
 
-                <div class="space-y-6">
+                <div class="space-y-6" wire:key="quality-tab-{{ $activeTab }}">
                     <!-- Quality Metrics -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div
@@ -568,6 +568,29 @@
                                     <p class="text-gray-500 dark:text-slate-400 text-center">Belum ada anggota dengan
                                         keahlian.</p>
                                 @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connection Quality Analysis -->
+                    <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg" 
+                         x-data="{ chart: null }"
+                         x-init="
+                            $nextTick(() => {
+                                setTimeout(() => {
+                                    if (document.getElementById('connectionQualityRadarChart')) {
+                                        initializeConnectionQualityChart();
+                                    }
+                                }, 100);
+                            });
+                         ">
+                        <div class="p-6 border-b border-gray-200 dark:border-slate-700">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Analisis Kualitas Koneksi</h3>
+                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi kualitas jejaring ekosistem</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="relative" style="height: 500px;">
+                                <canvas id="connectionQualityRadarChart" wire:key="chart-{{ $activeTab }}" wire:ignore></canvas>
                             </div>
                         </div>
                     </div>
@@ -772,3 +795,246 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let connectionQualityRadarChart = null;
+
+        function initializeConnectionQualityChart() {
+            console.log('Initializing connection quality chart...');
+            const canvas = document.getElementById('connectionQualityRadarChart');
+            
+            if (!canvas) {
+                console.log('Canvas not found');
+                return;
+            }
+
+            // Check if chart already exists and destroy it
+            if (connectionQualityRadarChart) {
+                console.log('Destroying existing chart...');
+                connectionQualityRadarChart.destroy();
+                connectionQualityRadarChart = null;
+            }
+
+            const ctx = canvas.getContext('2d');
+            const connectionData = @json($connectionQualityData);
+            console.log('Connection data:', connectionData);
+
+            // Validate data
+            if (!connectionData || typeof connectionData !== 'object') {
+                console.error('Invalid connection data:', connectionData);
+                return;
+            }
+
+            // Check if all required data properties exist
+            const requiredProps = ['jumlah_koneksi', 'kualitas_koneksi', 'keluasan_jejaring', 'keragaman_keahlian', 'tingkat_interaksi', 'kekuatan_jejaring'];
+            const hasAllProps = requiredProps.every(prop => connectionData.hasOwnProperty(prop));
+            
+            if (!hasAllProps) {
+                console.error('Missing required data properties:', requiredProps.filter(prop => !connectionData.hasOwnProperty(prop)));
+                return;
+            }
+
+            // Get theme-aware colors
+            function getThemeColors() {
+                const isDark = localStorage.getItem('theme') === 'dark' || 
+                              (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                
+                return {
+                    isDark: isDark,
+                    gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    angleLinesColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    textColor: isDark ? '#ffffff' : '#000000',
+                    connection: {
+                        bg: 'rgba(59, 130, 246, 0.1)',
+                        border: 'rgba(59, 130, 246, 0.8)',
+                        point: 'rgba(59, 130, 246, 1)'
+                    }
+                };
+            }
+
+            function customRound(value) {
+                if (value > 10) {
+                    return Math.ceil(value / 10) * 10;
+                } else {
+                    return Math.ceil(value);
+                }
+            }
+
+            const themeColors = getThemeColors();
+
+            try {
+                connectionQualityRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Jumlah Koneksi',
+                        'Kualitas Koneksi',
+                        'Keluasan Jejaring',
+                        'Keragaman Keahlian',
+                        'Tingkat Interaksi',
+                        'Kekuatan Jejaring'
+                    ],
+                    datasets: [{
+                        label: 'Kualitas Koneksi Ekosistem',
+                        data: [
+                            connectionData.jumlah_koneksi,
+                            connectionData.kualitas_koneksi,
+                            connectionData.keluasan_jejaring,
+                            connectionData.keragaman_keahlian,
+                            connectionData.tingkat_interaksi,
+                            connectionData.kekuatan_jejaring
+                        ],
+                        backgroundColor: themeColors.connection.bg,
+                        borderColor: themeColors.connection.border,
+                        borderWidth: 2,
+                        pointBackgroundColor: themeColors.connection.point,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            min: 0,
+                            ticks: {
+                                stepSize: 1,
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: themeColors.gridColor,
+                                circular: true
+                            },
+                            angleLines: {
+                                color: themeColors.angleLinesColor
+                            }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                color: themeColors.textColor,
+                            }
+                        }
+                    }
+                }
+            });
+            } catch (error) {
+                console.error('Error creating chart:', error);
+                connectionQualityRadarChart = null;
+            }
+        }
+
+        // Function to update chart colors when theme changes
+        function updateConnectionChartColors() {
+            if (connectionQualityRadarChart) {
+                initializeConnectionQualityChart();
+            }
+        }
+
+        // Listen for theme changes
+        function setupThemeListener() {
+            // Listen for storage changes (when theme is changed in another tab)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'theme') {
+                    updateConnectionChartColors();
+                }
+            });
+
+            // Listen for custom theme change events
+            document.addEventListener('themeChanged', function() {
+                updateConnectionChartColors();
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+                if (!localStorage.getItem('theme')) {
+                    updateConnectionChartColors();
+                }
+            });
+        }
+
+        // Initialize chart when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking for quality tab...');
+            // Check if quality tab is already active
+            const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+            if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                console.log('Quality tab is active, initializing chart...');
+                setTimeout(initializeConnectionQualityChart, 200);
+            }
+            setupThemeListener();
+        });
+
+        // Re-initialize chart when Livewire updates
+        document.addEventListener('livewire:navigated', function() {
+            setTimeout(function() {
+                if (document.getElementById('connectionQualityRadarChart')) {
+                    initializeConnectionQualityChart();
+                }
+            }, 200);
+            setupThemeListener();
+        });
+
+        // Simple approach - just check periodically if chart needs to be initialized
+        function checkForChartInitialization() {
+            const canvas = document.getElementById('connectionQualityRadarChart');
+            const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+            
+            if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500') && !connectionQualityRadarChart) {
+                console.log('Initializing chart...');
+                initializeConnectionQualityChart();
+            }
+        }
+
+        // Check every 500ms
+        setInterval(checkForChartInitialization, 500);
+
+        // Listen for Livewire updates
+        document.addEventListener('livewire:updated', function() {
+            console.log('Livewire updated, checking for chart...');
+            setTimeout(function() {
+                const canvas = document.getElementById('connectionQualityRadarChart');
+                const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+                
+                if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                    console.log('Quality tab is active, initializing chart...');
+                    initializeConnectionQualityChart();
+                }
+            }, 200);
+        });
+
+        // Also listen for tab changes
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('quality')") {
+                setTimeout(function() {
+                    if (document.getElementById('connectionQualityRadarChart') && !connectionQualityRadarChart) {
+                        console.log('Quality tab clicked, initializing chart...');
+                        initializeConnectionQualityChart();
+                    }
+                }, 300);
+            }
+        });
+
+        // Also try to initialize when the page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(initializeConnectionQualityChart, 200);
+            setupThemeListener();
+        });
+    </script>
+@endpush

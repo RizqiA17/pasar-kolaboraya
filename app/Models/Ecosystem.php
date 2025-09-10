@@ -255,4 +255,76 @@ class Ecosystem extends Model
     {
         return $this->collectiveActionInvitations()->where('status', 'pending');
     }
+
+    /**
+     * Calculate connection quality metrics for radar chart
+     * Based on ecosystem member connections and interactions
+     */
+    public function getConnectionQualityMetrics(): array
+    {
+        $acceptedMembers = $this->acceptedUsers()->with(['profile.skills', 'connections'])->get();
+        
+        if ($acceptedMembers->isEmpty()) {
+            return [
+                'jumlah_koneksi' => 0,
+                'kualitas_koneksi' => 0,
+                'keluasan_jejaring' => 0,
+                'keragaman_keahlian' => 0,
+                'tingkat_interaksi' => 0,
+                'kekuatan_jejaring' => 0
+            ];
+        }
+
+        // Calculate total connections across all members
+        $totalConnections = 0;
+        $totalInteractions = 0;
+        $allSkills = collect();
+        $connectionQualityScores = [];
+        $networkBreadth = 0;
+
+        foreach ($acceptedMembers as $member) {
+            // Count connections for this member
+            $memberConnections = $member->connections()->count();
+            $totalConnections += $memberConnections;
+            
+            // Collect skills
+            if ($member->profile && $member->profile->skills) {
+                $allSkills = $allSkills->merge($member->profile->skills->pluck('name'));
+            }
+            
+            // Calculate connection quality for this member (simplified)
+            $memberQuality = min(5, max(1, $memberConnections / 2)); // Scale 1-5
+            $connectionQualityScores[] = $memberQuality;
+            
+            // Network breadth (unique organizations/regions)
+            if ($member->profile) {
+                $networkBreadth += 1; // Each member adds to breadth
+            }
+        }
+
+        // Calculate averages and metrics
+        $avgConnections = $totalConnections / $acceptedMembers->count();
+        $avgConnectionQuality = count($connectionQualityScores) > 0 
+            ? array_sum($connectionQualityScores) / count($connectionQualityScores) 
+            : 0;
+        
+        // Network breadth (unique skills diversity)
+        $uniqueSkills = $allSkills->unique()->count();
+        $skillDiversity = min(5, $uniqueSkills / 5); // Scale to 1-5
+        
+        // Interaction level (based on member count and connections)
+        $interactionLevel = min(5, ($acceptedMembers->count() + $avgConnections) / 3);
+        
+        // Network strength (combination of connections and quality)
+        $networkStrength = min(5, ($avgConnections + $avgConnectionQuality) / 2);
+
+        return [
+            'jumlah_koneksi' => round($avgConnections, 1),
+            'kualitas_koneksi' => round($avgConnectionQuality, 1),
+            'keluasan_jejaring' => round($networkBreadth, 1),
+            'keragaman_keahlian' => round($skillDiversity, 1),
+            'tingkat_interaksi' => round($interactionLevel, 1),
+            'kekuatan_jejaring' => round($networkStrength, 1)
+        ];
+    }
 }
