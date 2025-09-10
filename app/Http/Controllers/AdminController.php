@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Collaboration;
+use App\Models\Ecosystem;
 use App\Models\Event;
+use App\Models\CollectiveAction;
 use App\Models\Connection;
 use App\Models\Interest;
 use App\Models\Skill;
@@ -32,8 +34,8 @@ class AdminController extends Controller
         $stats = [
             'users' => User::count(),
             'profiles' => Profile::count(),
-            'collaborations' => Collaboration::count(),
-            'events' => Event::count(),
+            'ecosystems' => Ecosystem::count(),
+            'collective_actions' => CollectiveAction::count(),
             'connections' => Connection::count(),
             'interests' => Interest::count(),
             'skills' => Skill::count(),
@@ -45,10 +47,10 @@ class AdminController extends Controller
         ];
 
         $recentUsers = User::with('profile')->latest()->take(5)->get();
-        $recentCollaborations = Collaboration::with('creator')->latest()->take(5)->get();
-        $recentEvents = Event::with('creator')->latest()->take(5)->get();
+        $recentEcosystems = Ecosystem::with('creator')->latest()->take(5)->get();
+        $recentCollectiveActions = CollectiveAction::with('creator')->latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentCollaborations', 'recentEvents'));
+        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentEcosystems', 'recentCollectiveActions'));
     }
 
     /**
@@ -163,11 +165,65 @@ class AdminController extends Controller
     }
 
     /**
-     * Display collaborations management page
+     * Display ecosystems management page
      */
-    public function collaborations(Request $request)
+    public function ecosystems(Request $request)
     {
-        $query = Collaboration::with('creator');
+        $query = Ecosystem::with('creator');
+
+        if ($request->has('search') && $request->search) {
+            $query->where('ecosystem_title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $ecosystems = $query->paginate(15)->appends($request->query());
+
+        return view('admin.ecosystems.index', compact('ecosystems'));
+    }
+
+    /**
+     * Show ecosystem details
+     */
+    public function showEcosystem(Ecosystem $ecosystem)
+    {
+        $ecosystem->load(['creator', 'users']);
+        return view('admin.ecosystems.show', compact('ecosystem'));
+    }
+
+    /**
+     * Delete ecosystem
+     */
+    public function deleteEcosystem(Ecosystem $ecosystem)
+    {
+        $ecosystem->delete();
+        return redirect()->route('admin.ecosystems')->with('success', 'Ecosystem deleted successfully.');
+    }
+
+    /**
+     * Display collective actions management page
+     */
+    public function collectiveActions(Request $request)
+    {
+        $query = CollectiveAction::with('creator');
 
         if ($request->has('search') && $request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
@@ -189,97 +245,27 @@ class AdminController extends Controller
         // Sort by creation date (newest first by default)
         $query->orderBy('created_at', 'desc');
 
-        $collaborations = $query->paginate(15)->appends($request->query());
+        $collectiveActions = $query->paginate(15)->appends($request->query());
 
-        return view('admin.collaborations.index', compact('collaborations'));
-    }
-
-        /**
-     * Show collaboration details
-     */
-    public function showCollaboration(Collaboration $collaboration)
-    {
-        // Check if collaboration is soft deleted
-        if ($collaboration->trashed()) {
-            return redirect()->route('admin.collaborations')->with('error', 'Collaboration not found.');
-        }
-        
-        $collaboration->load(['creator', 'collaborationUsers.user', 'todos', 'comments']);
-        return view('admin.collaborations.show', compact('collaboration'));
+        return view('admin.collective-actions.index', compact('collectiveActions'));
     }
 
     /**
-     * Delete collaboration
+     * Show collective action details
      */
-    public function deleteCollaboration(Collaboration $collaboration)
+    public function showCollectiveAction(CollectiveAction $collectiveAction)
     {
-        // Check if collaboration is soft deleted
-        if ($collaboration->trashed()) {
-            return redirect()->route('admin.collaborations')->with('error', 'Collaboration not found.');
-        }
-        
-        $collaboration->delete();
-        return redirect()->route('admin.collaborations')->with('success', 'Collaboration deleted successfully.');
+        $collectiveAction->load(['creator', 'contributors', 'participatingEcosystems']);
+        return view('admin.collective-actions.show', compact('collectiveAction'));
     }
 
     /**
-     * Display events management page
+     * Delete collective action
      */
-    public function events(Request $request)
+    public function deleteCollectiveAction(CollectiveAction $collectiveAction)
     {
-        $query = Event::with('creator');
-
-        if ($request->has('search') && $request->search) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
-
-        if ($request->has('status') && $request->status) {
-            $query->where('status', $request->status);
-        }
-
-        // Time-based filters
-        if ($request->has('date_from') && $request->date_from) {
-            $query->whereDate('created_at', '>=', $request->date_from);
-        }
-
-        if ($request->has('date_to') && $request->date_to) {
-            $query->whereDate('created_at', '<=', $request->date_to);
-        }
-
-        // Sort by creation date (newest first by default)
-        $query->orderBy('created_at', 'desc');
-
-        $events = $query->paginate(15)->appends($request->query());
-
-        return view('admin.events.index', compact('events'));
-    }
-
-    /**
-     * Show event details
-     */
-    public function showEvent(Event $event)
-    {
-        // Check if event is soft deleted
-        if ($event->trashed()) {
-            return redirect()->route('admin.events')->with('error', 'Event not found.');
-        }
-        
-        $event->load(['creator', 'participants', 'categories']);
-        return view('admin.events.show', compact('event'));
-    }
-
-    /**
-     * Delete event
-     */
-    public function deleteEvent(Event $event)
-    {
-        // Check if event is soft deleted
-        if ($event->trashed()) {
-            return redirect()->route('admin.events')->with('error', 'Event not found.');
-        }
-        
-        $event->delete();
-        return redirect()->route('admin.events')->with('success', 'Event deleted successfully.');
+        $collectiveAction->delete();
+        return redirect()->route('admin.collective-actions')->with('success', 'Collective action deleted successfully.');
     }
 
     /**

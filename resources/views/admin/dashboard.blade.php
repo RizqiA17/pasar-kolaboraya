@@ -33,12 +33,12 @@
                 </div>
             </div>
 
-            <!-- Collaborations Stat -->
+            <!-- Ecosystems Stat -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Kolaborasi</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['collaborations']) }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Ekosistem</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['ecosystems']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,18 +47,18 @@
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.collaborations') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
-                        Lihat semua kolaborasi →
+                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
+                        Lihat semua ekosistem →
                     </a>
                 </div>
             </div>
 
-            <!-- Events Stat -->
+            <!-- Collective Actions Stat -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Acara</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['events']) }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Aksi Kolektif</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">{{ number_format($stats['collective_actions']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 dark:bg-pink-900/20 rounded-xl flex items-center justify-center">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,8 +67,8 @@
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.events') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium">
-                        Lihat semua acara →
+                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium">
+                        Lihat semua aksi kolektif →
                     </a>
                 </div>
             </div>
@@ -170,14 +170,14 @@
                 </div>
             </div>
 
-            <!-- Recent Collaborations -->
+            <!-- Recent Ecosystems -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Kolaborasi Terbaru</h3>
-                    <a href="{{ route('admin.collaborations') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">Lihat semua</a>
+                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Ekosistem Terbaru</h3>
+                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
-                    @forelse($recentCollaborations as $collaboration)
+                    @forelse($recentEcosystems as $ecosystem)
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,27 +185,27 @@
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ $collaboration->title }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">by {{ $collaboration->creator->name }}</p>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ $ecosystem->ecosystem_title }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">by {{ $ecosystem->creator->name }}</p>
                             </div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">
-                                {{ $collaboration->created_at->diffForHumans() }}
+                                {{ $ecosystem->created_at->diffForHumans() }}
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada kolaborasi ditemukan.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada ekosistem ditemukan.</p>
                     @endforelse
                 </div>
             </div>
 
-            <!-- Recent Events -->
+            <!-- Recent Collective Actions -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Acara Terbaru</h3>
-                    <a href="{{ route('admin.events') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300">Lihat semua</a>
+                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Aksi Kolektif Terbaru</h3>
+                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
-                    @forelse($recentEvents as $event)
+                    @forelse($recentCollectiveActions as $collectiveAction)
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-pink-100 dark:bg-pink-900/20 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,15 +213,15 @@
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ $event->title }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">by {{ $event->creator->name }}</p>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ $collectiveAction->title }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">by {{ $collectiveAction->creator->name }}</p>
                             </div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">
-                                {{ $event->created_at->diffForHumans() }}
+                                {{ $collectiveAction->created_at->diffForHumans() }}
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada acara ditemukan.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Tidak ada aksi kolektif ditemukan.</p>
                     @endforelse
                 </div>
             </div>

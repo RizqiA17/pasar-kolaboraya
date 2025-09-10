@@ -125,15 +125,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
     
-    // Collaborations management
-    Route::get('/collaborations', [App\Http\Controllers\AdminController::class, 'collaborations'])->name('collaborations');
-    Route::get('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'showCollaboration'])->name('collaborations.show');
-    Route::delete('/collaborations/{collaboration}', [App\Http\Controllers\AdminController::class, 'deleteCollaboration'])->middleware('check.form.feature.access:collaborations')->name('collaborations.delete');
+    // Ecosystems management
+    Route::get('/ecosystems', [App\Http\Controllers\AdminController::class, 'ecosystems'])->name('ecosystems');
+    Route::get('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'showEcosystem'])->name('ecosystems.show');
+    Route::delete('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'deleteEcosystem'])->name('ecosystems.delete');
     
-    // Events management
-    Route::get('/events', [App\Http\Controllers\AdminController::class, 'events'])->name('events');
-    Route::get('/events/{event}', [App\Http\Controllers\AdminController::class, 'showEvent'])->name('events.show');
-    Route::delete('/events/{event}', [App\Http\Controllers\AdminController::class, 'deleteEvent'])->middleware('check.form.feature.access:user_actions')->name('events.delete');
+    // Collective Actions management
+    Route::get('/collective-actions', [App\Http\Controllers\AdminController::class, 'collectiveActions'])->name('collective-actions');
+    Route::get('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'showCollectiveAction'])->name('collective-actions.show');
+    Route::delete('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'deleteCollectiveAction'])->name('collective-actions.delete');
     
     // Connections management
     Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
