@@ -130,6 +130,93 @@
                         <div class="text-sm text-slate-600 dark:text-slate-400">Participating Acara</div>
                     </div>
                 </div>
+
+                <!-- Quality Metrics & Analytics -->
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-6">Analisis Kualitas & Kesehatan Partisipasi</h3>
+                    
+                    <!-- Engagement Score -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-md font-medium text-slate-700 dark:text-slate-300">Skor Keterlibatan</h4>
+                            <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                                {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->collaborations->count() * 15 + $user->events->count() * 5 + $user->activeCollectiveActions->count() * 20) / 2))) }}
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full" 
+                                 style="width: {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->collaborations->count() * 15 + $user->events->count() * 5 + $user->activeCollectiveActions->count() * 20) / 2))) }}%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan koneksi, kolaborasi, acara, dan aksi kolektif</p>
+                    </div>
+
+                    <!-- Activity Distribution Chart -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Distribusi Aktivitas</h4>
+                        <div class="relative" style="height: 200px;">
+                            <canvas id="userActivityChart" wire:ignore></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Quality Indicators -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Konektivitas</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Rasio koneksi aktif</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-green-600 dark:text-green-400">
+                                        {{ $user->sentConnections->where('status', 'accepted')->count() > 0 ? round(($user->sentConnections->where('status', 'accepted')->count() / max(1, $user->sentConnections->count())) * 100) : 0 }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Kolaborasi</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Kolaborasi per bulan</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                        {{ $user->collaborations->count() > 0 ? round($user->collaborations->count() / max(1, $user->created_at->diffInMonths(now()))) : 0 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kontribusi Aksi Kolektif</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Aksi yang diikuti</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-orange-600 dark:text-orange-400">
+                                        {{ $user->activeCollectiveActions->count() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Partisipasi</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Aktivitas per minggu</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                                        {{ $user->created_at->diffInWeeks(now()) > 0 ? round(($user->collaborations->count() + $user->events->count() + $user->activeCollectiveActions->count()) / max(1, $user->created_at->diffInWeeks(now()))) : 0 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Sidebar -->
@@ -165,4 +252,53 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // User Activity Distribution Chart
+            const userActivityCtx = document.getElementById('userActivityChart');
+            if (userActivityCtx) {
+                new Chart(userActivityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Koneksi', 'Kolaborasi', 'Acara', 'Aksi Kolektif'],
+                        datasets: [{
+                            data: [
+                                {{ $user->sentConnections->where('status', 'accepted')->count() }},
+                                {{ $user->collaborations->count() }},
+                                {{ $user->events->count() }},
+                                {{ $user->activeCollectiveActions->count() }}
+                            ],
+                            backgroundColor: [
+                                '#3B82F6', // Blue
+                                '#8B5CF6', // Purple
+                                '#EC4899', // Pink
+                                '#F59E0B'  // Orange
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-admin.layout>

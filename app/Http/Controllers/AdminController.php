@@ -297,6 +297,20 @@ class AdminController extends Controller
     }
 
     /**
+     * Show connection details
+     */
+    public function showConnection(Connection $connection)
+    {
+        // Check if connection is soft deleted (if Connection model uses SoftDeletes)
+        if (method_exists($connection, 'trashed') && $connection->trashed()) {
+            return redirect()->route('admin.connections')->with('error', 'Connection not found.');
+        }
+        
+        $connection->load(['requester', 'receiver']);
+        return view('admin.connections.show', compact('connection'));
+    }
+
+    /**
      * Delete connection
      */
     public function deleteConnection(Connection $connection)

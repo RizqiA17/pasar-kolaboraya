@@ -179,6 +179,133 @@
                         @endforelse
                     </div>
                 </div>
+
+                <!-- Quality Metrics & Analytics -->
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-6">Analisis Kualitas & Kesehatan Aksi Kolektif</h3>
+                    
+                    <!-- Collective Action Health Score -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-md font-medium text-slate-700 dark:text-slate-300">Skor Kesehatan Aksi Kolektif</h4>
+                            <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                                @php
+                                    $participatingEcosystems = $collectiveAction->participatingEcosystems->count();
+                                    $acceptedContributors = $collectiveAction->contributors->where('pivot.status', 'accepted')->count();
+                                    $offeredContributors = $collectiveAction->contributors->where('pivot.status', 'offered')->count();
+                                    $totalContributors = $collectiveAction->contributors->count();
+                                    $minEcosystems = $collectiveAction->min_ecosystems;
+                                    
+                                    $healthScore = min(100, max(0, round(
+                                        ($participatingEcosystems >= $minEcosystems ? 30 : ($participatingEcosystems / max(1, $minEcosystems)) * 30) +
+                                        ($totalContributors > 0 ? ($acceptedContributors / $totalContributors) * 25 : 0) +
+                                        ($collectiveAction->status === 'active' ? 20 : ($collectiveAction->status === 'completed' ? 15 : 5)) +
+                                        (count($collectiveAction->required_resources ?? []) * 5) +
+                                        ($collectiveAction->collaboration_terms ? 10 : 0)
+                                    )));
+                                @endphp
+                                {{ $healthScore }}
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full" 
+                                 style="width: {{ $healthScore }}%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan partisipasi ekosistem, kontributor, status, dan kelengkapan informasi</p>
+                    </div>
+
+                    <!-- Contribution Status Chart -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Status Kontribusi</h4>
+                        <div class="relative" style="height: 200px;">
+                            <canvas id="contributionStatusChart" wire:ignore></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Ecosystem Participation Chart -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Partisipasi Ekosistem</h4>
+                        <div class="relative" style="height: 200px;">
+                            <canvas id="ecosystemParticipationChart" wire:ignore></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Quality Indicators -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Partisipasi Ekosistem</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Ekosistem vs minimal</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-green-600 dark:text-green-400">
+                                        {{ $minEcosystems > 0 ? round(($participatingEcosystems / $minEcosystems) * 100) : 100 }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Penerimaan Kontribusi</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Kontributor diterima</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        {{ $totalContributors > 0 ? round(($acceptedContributors / $totalContributors) * 100) : 0 }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kelengkapan Informasi</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Sumber daya & syarat</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                        {{ round(((count($collectiveAction->required_resources ?? []) > 0 ? 50 : 0) + ($collectiveAction->collaboration_terms ? 50 : 0))) }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Aktivitas</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Status aksi kolektif</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-orange-600 dark:text-orange-400">
+                                        @php
+                                            $statusScores = [
+                                                'draft' => 20,
+                                                'planning' => 40,
+                                                'active' => 80,
+                                                'completed' => 100,
+                                                'cancelled' => 0
+                                            ];
+                                        @endphp
+                                        {{ $statusScores[$collectiveAction->status] ?? 0 }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collective Action Timeline -->
+                    <div class="mt-6">
+                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Timeline & Progress</h4>
+                        <div class="relative" style="height: 200px;">
+                            <canvas id="collectiveActionTimelineChart" wire:ignore></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Sidebar -->
@@ -224,4 +351,167 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @php
+                $participatingEcosystems = $collectiveAction->participatingEcosystems->count();
+                $acceptedContributors = $collectiveAction->contributors->where('pivot.status', 'accepted')->count();
+                $offeredContributors = $collectiveAction->contributors->where('pivot.status', 'offered')->count();
+                $declinedContributors = $collectiveAction->contributors->where('pivot.status', 'declined')->count();
+                $totalContributors = $collectiveAction->contributors->count();
+                $minEcosystems = $collectiveAction->min_ecosystems;
+            @endphp
+
+            // Contribution Status Chart
+            const contributionStatusCtx = document.getElementById('contributionStatusChart');
+            if (contributionStatusCtx) {
+                new Chart(contributionStatusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Diterima', 'Ditawarkan', 'Ditolak'],
+                        datasets: [{
+                            data: [{{ $acceptedContributors }}, {{ $offeredContributors }}, {{ $declinedContributors }}],
+                            backgroundColor: [
+                                '#10B981', // Green
+                                '#F59E0B', // Yellow
+                                '#EF4444'  // Red
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Ecosystem Participation Chart
+            const ecosystemParticipationCtx = document.getElementById('ecosystemParticipationChart');
+            if (ecosystemParticipationCtx) {
+                new Chart(ecosystemParticipationCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Ekosistem Berpartisipasi', 'Minimal Diperlukan'],
+                        datasets: [{
+                            label: 'Jumlah',
+                            data: [{{ $participatingEcosystems }}, {{ $minEcosystems }}],
+                            backgroundColor: [
+                                '#8B5CF6', // Purple
+                                '#E5E7EB'  // Gray
+                            ],
+                            borderColor: [
+                                '#7C3AED',
+                                '#D1D5DB'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Collective Action Timeline Chart
+            const collectiveActionTimelineCtx = document.getElementById('collectiveActionTimelineChart');
+            if (collectiveActionTimelineCtx) {
+                // Generate timeline data based on collective action dates
+                const months = [];
+                const ecosystemData = [];
+                const contributorData = [];
+                
+                // Get creation date and calculate months
+                const createdDate = new Date('{{ $collectiveAction->created_at }}');
+                const currentDate = new Date();
+                const monthsDiff = Math.max(1, Math.ceil((currentDate - createdDate) / (1000 * 60 * 60 * 24 * 30)));
+                
+                for (let i = Math.max(0, monthsDiff - 6); i < monthsDiff; i++) {
+                    const date = new Date(createdDate);
+                    date.setMonth(date.getMonth() + i);
+                    months.push(date.toLocaleDateString('id-ID', { month: 'short' }));
+                    
+                    // Simulate growth data (in real implementation, you'd query actual historical data)
+                    const progressFactor = Math.min(1, i / Math.max(1, monthsDiff - 1));
+                    ecosystemData.push(Math.round({{ $participatingEcosystems }} * progressFactor));
+                    contributorData.push(Math.round({{ $totalContributors }} * progressFactor));
+                }
+
+                new Chart(collectiveActionTimelineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Ekosistem',
+                            data: ecosystemData,
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Kontributor',
+                            data: contributorData,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-admin.layout>

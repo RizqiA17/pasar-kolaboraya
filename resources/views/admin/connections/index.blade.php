@@ -119,6 +119,10 @@
                             </div>
                             
                             <div class="flex items-center space-x-3 pt-2">
+                                <a href="{{ route('admin.connections.show', $connection) }}" 
+                                   class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
+                                    Lihat
+                                </a>
                                 <form method="POST" action="{{ route('admin.connections.delete', $connection) }}" class="inline" 
                                       onsubmit="return confirm('Are you sure you want to delete this connection? This action cannot be undone.')">
                                     @csrf
@@ -194,6 +198,10 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end space-x-2">
+                                        <a href="{{ route('admin.connections.show', $connection) }}" 
+                                           class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
+                                            Lihat
+                                        </a>
                                         <form method="POST" action="{{ route('admin.connections.delete', $connection) }}" class="inline" 
                                               onsubmit="return confirm('Are you sure you want to delete this connection? This action cannot be undone.')">
                                             @csrf
