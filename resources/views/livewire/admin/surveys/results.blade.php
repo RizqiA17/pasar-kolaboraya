@@ -370,6 +370,10 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            let radarChartInstanceKoneksi = null;
+            let radarChartInstanceKolaborasi = null;
+            let radarChartInstanceAksi = null;
+
             initializeRadarChart();
 
             function initializeRadarChart() {
@@ -381,15 +385,49 @@
                     return;
                 }
 
-                // Destroy existing chart if it exists
-                if (window.radarChartInstance) {
-                    window.radarChartInstance.destroy();
+                // Destroy existing charts if they exist
+                if (radarChartInstanceKoneksi) {
+                    radarChartInstanceKoneksi.destroy();
+                }
+                if (radarChartInstanceKolaborasi) {
+                    radarChartInstanceKolaborasi.destroy();
+                }
+                if (radarChartInstanceAksi) {
+                    radarChartInstanceAksi.destroy();
                 }
 
                 const ctxKoneksi = canvasKoneksi.getContext('2d');
                 const ctxKolaborasi = canvasKolaborasi.getContext('2d');
                 const ctxAksi = canvasAksi.getContext('2d');
                 const radarData = @json($radarData);
+
+                // Get theme-aware colors
+                function getThemeColors() {
+                    const isDark = localStorage.getItem('theme') === 'dark' || 
+                                  (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    
+                    return {
+                        isDark: isDark,
+                        gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                        angleLinesColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                        textColor: isDark ? '#ffffff' : '#000000',
+                        koneksi: {
+                            bg: 'rgba(59, 130, 246, 0.1)',
+                            border: 'rgba(59, 130, 246, 0.8)',
+                            point: 'rgba(59, 130, 246, 1)'
+                        },
+                        kolaborasi: {
+                            bg: 'rgba(75, 192, 192, 0.1)',
+                            border: 'rgba(75, 192, 192, 0.8)',
+                            point: 'rgba(75, 192, 192, 1)'
+                        },
+                        aksi: {
+                            bg: 'rgba(255, 99, 132, 0.1)',
+                            border: 'rgba(255, 99, 132, 0.8)',
+                            point: 'rgba(255, 99, 132, 1)'
+                        }
+                    };
+                }
 
                 function customRound(value) {
                     if (value > 10) {
@@ -408,8 +446,9 @@
                 const tingkatKolaborasi = radarData.kolaborasi.tingkat_kolaborasi;
                 const sumberDayaDisumbangkan = radarData.kolaborasi.sumber_daya_disumbangkan;
                 const aksiBesar = radarData.aksi.aksi_besar;
+                const themeColors = getThemeColors();
 
-                window.radarChartInstanceKoneksi = new Chart(ctxKoneksi, {
+                radarChartInstanceKoneksi = new Chart(ctxKoneksi, {
                     type: 'radar',
                     data: {
                         labels: [
@@ -424,10 +463,10 @@
                                 kualitasKoneksi,
                                 keluasanJejaring,
                             ],
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            borderColor: 'rgba(59, 130, 246, 0.8)',
+                            backgroundColor: themeColors.koneksi.bg,
+                            borderColor: themeColors.koneksi.border,
                             borderWidth: 2,
-                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                            pointBackgroundColor: themeColors.koneksi.point,
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2,
                             pointRadius: 6,
@@ -451,11 +490,11 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                                    color: themeColors.gridColor,
                                     circular: true
                                 },
                                 angleLines: {
-                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                    color: themeColors.angleLinesColor
                                 }
                             }
                         },
@@ -470,7 +509,7 @@
                                 labels: {
                                     padding: 20,
                                     usePointStyle: true,
-                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
+                                    color: themeColors.textColor,
                                 }
                             }
                         }
@@ -478,7 +517,7 @@
                 });
 
 
-                window.radarChartInstanceKolaborasi = new Chart(ctxKolaborasi, {
+                radarChartInstanceKolaborasi = new Chart(ctxKolaborasi, {
                     type: 'radar',
                     data: {
                         labels: [
@@ -497,10 +536,10 @@
                                 tingkatKolaborasi,
                                 sumberDayaDisumbangkan,
                             ],
-                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                            borderColor: 'rgba(75, 192, 192, 0.8)',
+                            backgroundColor: themeColors.kolaborasi.bg,
+                            borderColor: themeColors.kolaborasi.border,
                             borderWidth: 2,
-                            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                            pointBackgroundColor: themeColors.kolaborasi.point,
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2,
                             pointRadius: 6,
@@ -532,7 +571,7 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                                    color: themeColors.gridColor,
                                     circular: true
                                 },
                                 angleLines: {
@@ -551,14 +590,14 @@
                                 labels: {
                                     padding: 20,
                                     usePointStyle: true,
-                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
+                                    color: themeColors.textColor,
                                 }
                             }
                         }
                     }
                 });
 
-                window.radarChartInstanceAksi = new Chart(ctxAksi, {
+                radarChartInstanceAksi = new Chart(ctxAksi, {
                     type: 'radar',
                     data: {
                         labels: [
@@ -573,10 +612,10 @@
                                 Math.min(radarData.aksi.aksi_sedang),
                                 Math.min(radarData.aksi.aksi_kecil)
                             ],
-                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                            borderColor: 'rgba(255, 99, 132, 0.8)',
+                            backgroundColor: themeColors.aksi.bg,
+                            borderColor: themeColors.aksi.border,
                             borderWidth: 2,
-                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                            pointBackgroundColor: themeColors.aksi.point,
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2,
                             pointRadius: 6,
@@ -614,7 +653,7 @@
                                     backdropColor: 'transparent'
                                 },
                                 grid: {
-                                    color: localStorage.getItem('theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                                    color: themeColors.gridColor,
                                     circular: true
                                 },
                                 angleLines: {
@@ -633,10 +672,40 @@
                                 labels: {
                                     padding: 20,
                                     usePointStyle: true,
-                                    color: localStorage.getItem('theme') === 'dark' ? '#fff' : '#000',
+                                    color: themeColors.textColor,
                                 }
                             }
                         }
+                    }
+                });
+            }
+
+            // Function to update chart colors when theme changes
+            function updateChartColors() {
+                if (radarChartInstanceKoneksi || radarChartInstanceKolaborasi || radarChartInstanceAksi) {
+                    // Re-initialize charts with new theme colors
+                    initializeRadarChart();
+                }
+            }
+
+            // Listen for theme changes
+            function setupThemeListener() {
+                // Listen for storage changes (when theme is changed in another tab)
+                window.addEventListener('storage', function(e) {
+                    if (e.key === 'theme') {
+                        updateChartColors();
+                    }
+                });
+
+                // Listen for custom theme change events
+                document.addEventListener('themeChanged', function() {
+                    updateChartColors();
+                });
+
+                // Listen for system theme changes
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+                    if (!localStorage.getItem('theme')) {
+                        updateChartColors();
                     }
                 });
             }
@@ -645,11 +714,13 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Wait for Livewire to finish loading
                 setTimeout(initializeRadarChart, 100);
+                setupThemeListener();
             });
 
             // Re-initialize chart when Livewire updates
             document.addEventListener('livewire:navigated', function() {
                 setTimeout(initializeRadarChart, 100);
+                setupThemeListener();
             });
 
             // Listen for Livewire updates
@@ -660,6 +731,7 @@
             // Also try to initialize when the page is fully loaded
             window.addEventListener('load', function() {
                 setTimeout(initializeRadarChart, 200);
+                setupThemeListener();
             });
         </script>
     @endpush

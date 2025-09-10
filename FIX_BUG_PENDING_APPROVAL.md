@@ -108,3 +108,4 @@ echo $ca->getUserStatus($user);    // pending_approval
 ## Status: ✅ Fixed
 
 Bug sudah diperbaiki. User tidak akan melihat tombol "Bergabung" lagi jika sudah terdaftar dengan status apapun.
+

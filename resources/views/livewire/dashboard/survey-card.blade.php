@@ -33,7 +33,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Survey Aktif</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Survey Kualitas Ekosistem</h3>
                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">{{ $activeSurvey->name }}</p>
                     <p class="text-gray-500 dark:text-gray-500 text-xs mb-4 line-clamp-2">
                         {{ $activeSurvey->description }}</p>

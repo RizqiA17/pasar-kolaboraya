@@ -32,6 +32,12 @@ function applyTheme() {
         html.classList.remove('dark');
         localStorage.setItem('flux.appearance', 'light');
     }
+    
+    // Dispatch custom event for theme change
+    const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+    document.dispatchEvent(new CustomEvent('themeChanged', {
+        detail: { theme: currentTheme }
+    }));
 }
 
 function bindToggle() {
@@ -45,6 +51,11 @@ function bindToggle() {
         html.classList.toggle('dark', !isDark);
         localStorage.setItem('theme', isDark ? 'light' : 'dark');
         localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+        
+        // Dispatch custom event for theme change
+        document.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { theme: isDark ? 'light' : 'dark' }
+        }));
     };
     toggle.addEventListener('click', toggle._listener);
 }

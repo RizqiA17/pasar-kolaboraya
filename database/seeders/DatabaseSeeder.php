@@ -32,6 +32,10 @@ class DatabaseSeeder extends Seeder
             
             // Ecosystem Builders
             EcosystemBuilderSeeder::class,
+            
+            // Survey Data
+            SurveySeeder::class,
+            SurveyResponseSeeder::class,
         ]);
     }
 }

@@ -22,15 +22,39 @@ class SurveySeeder extends Seeder
             return;
         }
 
-        // Create a test survey
+        // Clear existing surveys (but preserve foreign key relationships)
+        Survey::query()->delete();
+
+        // Create primary active survey
         Survey::create([
-            'name' => 'Survey Kolaborasi Komunitas 2024',
-            'description' => 'Survey untuk mengukur tingkat kolaborasi dan koneksi dalam komunitas Pasar Kolaboraya. Data yang dikumpulkan akan membantu kami memahami pola kolaborasi dan membuat strategi yang lebih baik untuk masa depan.',
+            'name' => 'Survey Kolaborasi Komunitas 2025',
+            'description' => 'Survey untuk mengukur tingkat kolaborasi, koneksi, dan dampak aksi kolektif dalam komunitas Pasar Kolaboraya. Data yang dikumpulkan akan membantu kami memahami pola kolaborasi dan membuat strategi yang lebih baik untuk pengembangan ekosistem.',
             'is_active' => true,
             'created_by' => $superAdmin->id,
-            'started_at' => now(),
+            'started_at' => now()->startOfMonth(),
+            'ended_at' => now()->addMonths(3)->endOfMonth(),
         ]);
 
-        $this->command->info('Survey seeder completed successfully!');
+        // Create historical survey (completed)
+        Survey::create([
+            'name' => 'Survey Baseline Komunitas 2024',
+            'description' => 'Survey baseline untuk mengukur kondisi awal komunitas sebelum implementasi sistem Pasar Kolaboraya. Survey ini telah selesai dan hasilnya digunakan sebagai perbandingan.',
+            'is_active' => false,
+            'created_by' => $superAdmin->id,
+            'started_at' => now()->subMonths(6)->startOfMonth(),
+            'ended_at' => now()->subMonths(3)->endOfMonth(),
+        ]);
+
+        // Create upcoming survey (inactive)
+        Survey::create([
+            'name' => 'Survey Impact Assessment 2025',
+            'description' => 'Survey untuk mengevaluasi dampak implementasi sistem kolaborasi dalam 6 bulan pertama. Survey ini akan diaktifkan setelah periode implementasi selesai.',
+            'is_active' => false,
+            'created_by' => $superAdmin->id,
+            'started_at' => now()->addMonths(6)->startOfMonth(),
+            'ended_at' => now()->addMonths(9)->endOfMonth(),
+        ]);
+
+        $this->command->info('Survey seeder completed successfully! Created 3 surveys.');
     }
 }
