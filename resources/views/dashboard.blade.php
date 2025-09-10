@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <!-- Collaborations Card -->
+                        <!-- Ecosystems Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
                             <div
@@ -98,15 +98,15 @@
                                     </div>
                                     <div class="text-right">
                                         <div class="text-xl font-bold text-gray-900 dark:text-slate-100">
-                                            <livewire:dashboard.stats type="collaborations" />
+                                            <livewire:dashboard.stats type="ecosystems" />
                                         </div>
                                         <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                     </div>
                                 </div>
-                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Kolaborasi</h3>
-                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Proyek kolaborasi yang aktif
+                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Ekosistem</h3>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Ekosistem yang diikuti
                                 </p>
-                                <a href="{{ route('collaborations') }}"
+                                <a href="{{ route('ecosystem.browse') }}"
                                     class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@
                             </div>
                         </div>
 
-                        <!-- Events Card -->
+                        <!-- Collective Actions Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">
                             <div
@@ -135,15 +135,15 @@
                                     </div>
                                     <div class="text-right">
                                         <div class="text-xl font-bold text-gray-900 dark:text-slate-100">
-                                            <livewire:dashboard.stats type="events" />
+                                            <livewire:dashboard.stats type="collective_actions" />
                                         </div>
                                         <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                     </div>
                                 </div>
-                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Aksi</h3>
-                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Event dan aksi yang diikuti
+                                <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Aksi Kolektif</h3>
+                                <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Aksi kolektif yang diikuti
                                 </p>
-                                <a href="{{ route('events') }}"
+                                <a href="{{ route('collective-action.browse') }}"
                                     class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

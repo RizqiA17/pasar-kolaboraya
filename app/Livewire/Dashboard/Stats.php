@@ -41,6 +41,8 @@ class Stats extends Component
                 'connections' => $user->connections()->count(),
                 'collaborations' => $user->collaborations()->count(),
                 'events' => $user->events()->count(),
+                'ecosystems' => $user->ecosystems()->count(),
+                'collective_actions' => $user->collectiveActionMemberships()->count(),
                 default => 0
             };
         } catch (\Exception $e) {
