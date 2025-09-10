@@ -865,7 +865,7 @@
             const themeColors = getThemeColors();
 
             try {
-                connectionQualityRadarChart = new Chart(ctx, {
+            connectionQualityRadarChart = new Chart(ctx, {
                 type: 'radar',
                 data: {
                     labels: [
@@ -983,11 +983,11 @@
 
         // Re-initialize chart when Livewire updates
         document.addEventListener('livewire:navigated', function() {
-            setTimeout(function() {
-                if (document.getElementById('connectionQualityRadarChart')) {
-                    initializeConnectionQualityChart();
-                }
-            }, 200);
+                    setTimeout(function() {
+                        if (document.getElementById('connectionQualityRadarChart')) {
+                            initializeConnectionQualityChart();
+                        }
+                    }, 200);
             setupThemeListener();
         });
 

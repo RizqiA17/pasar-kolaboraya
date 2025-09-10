@@ -565,6 +565,51 @@
         </div>
     </div>
 
+    <!-- Analytics Charts -->
+    @php
+        $analyticsData = $collectiveAction->getCollectiveActionsAnalytics();
+    @endphp
+    
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Aksi Kolektif</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Contribution Types Chart -->
+            <div>
+                <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Jenis Kontribusi</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="contributionTypesChart" wire:ignore></canvas>
+                </div>
+            </div>
+            
+            <!-- Contribution Status Chart -->
+            <div>
+                <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Status Kontribusi</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="contributionStatusChart" wire:ignore></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <!-- Member Roles Chart -->
+            <div>
+                <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Peran Anggota</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="memberRolesChart" wire:ignore></canvas>
+                </div>
+            </div>
+            
+            <!-- Ecosystem Participation Chart -->
+            <div>
+                <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Partisipasi Ekosistem</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="ecosystemParticipationChart" wire:ignore></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Action Details -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Basic Information -->
@@ -1163,6 +1208,277 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let contributionTypesChart = null;
+        let contributionStatusChart = null;
+        let memberRolesChart = null;
+        let ecosystemParticipationChart = null;
+
+        function initializeCollectiveActionCharts() {
+            console.log('Initializing collective action charts...');
+            
+            // Initialize Contribution Types Chart
+            initializeContributionTypesChart();
+            
+            // Initialize Contribution Status Chart
+            initializeContributionStatusChart();
+            
+            // Initialize Member Roles Chart
+            initializeMemberRolesChart();
+            
+            // Initialize Ecosystem Participation Chart
+            initializeEcosystemParticipationChart();
+        }
+
+        function initializeContributionTypesChart() {
+            const canvas = document.getElementById('contributionTypesChart');
+            if (!canvas) return;
+
+            if (contributionTypesChart) {
+                contributionTypesChart.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const analyticsData = @json($analyticsData);
+            
+            const contributionTypes = analyticsData.contribution_types;
+            const labels = ['Relawan', 'Dana', 'Keahlian', 'Sumber Daya', 'Promosi', 'Lainnya'];
+            const data = [
+                contributionTypes.volunteer || 0,
+                contributionTypes.funding || 0,
+                contributionTypes.expertise || 0,
+                contributionTypes.resources || 0,
+                contributionTypes.promotion || 0,
+                contributionTypes.other || 0
+            ];
+
+            const colors = [
+                'rgba(34, 197, 94, 0.8)',   // Green
+                'rgba(59, 130, 246, 0.8)',  // Blue
+                'rgba(168, 85, 247, 0.8)',  // Purple
+                'rgba(245, 158, 11, 0.8)',  // Yellow
+                'rgba(239, 68, 68, 0.8)',   // Red
+                'rgba(156, 163, 175, 0.8)'  // Gray
+            ];
+
+            try {
+                contributionTypesChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating contribution types chart:', error);
+            }
+        }
+
+        function initializeContributionStatusChart() {
+            const canvas = document.getElementById('contributionStatusChart');
+            if (!canvas) return;
+
+            if (contributionStatusChart) {
+                contributionStatusChart.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const analyticsData = @json($analyticsData);
+            
+            const contributionStatus = analyticsData.contribution_status;
+            const labels = ['Ditawarkan', 'Diterima', 'Selesai', 'Ditolak'];
+            const data = [
+                contributionStatus.offered || 0,
+                contributionStatus.accepted || 0,
+                contributionStatus.completed || 0,
+                contributionStatus.declined || 0
+            ];
+
+            const colors = [
+                'rgba(245, 158, 11, 0.8)',  // Yellow
+                'rgba(34, 197, 94, 0.8)',   // Green
+                'rgba(59, 130, 246, 0.8)',  // Blue
+                'rgba(239, 68, 68, 0.8)'    // Red
+            ];
+
+            try {
+                contributionStatusChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah Kontribusi',
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating contribution status chart:', error);
+            }
+        }
+
+        function initializeMemberRolesChart() {
+            const canvas = document.getElementById('memberRolesChart');
+            if (!canvas) return;
+
+            if (memberRolesChart) {
+                memberRolesChart.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const analyticsData = @json($analyticsData);
+            
+            const memberRoles = analyticsData.member_roles;
+            const labels = ['Admin', 'Anggota', 'Kontributor'];
+            const data = [
+                memberRoles.admin || 0,
+                memberRoles.member || 0,
+                memberRoles.contributor || 0
+            ];
+
+            const colors = [
+                'rgba(239, 68, 68, 0.8)',   // Red
+                'rgba(34, 197, 94, 0.8)',   // Green
+                'rgba(168, 85, 247, 0.8)'   // Purple
+            ];
+
+            try {
+                memberRolesChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating member roles chart:', error);
+            }
+        }
+
+        function initializeEcosystemParticipationChart() {
+            const canvas = document.getElementById('ecosystemParticipationChart');
+            if (!canvas) return;
+
+            if (ecosystemParticipationChart) {
+                ecosystemParticipationChart.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const analyticsData = @json($analyticsData);
+            
+            const ecosystemParticipation = analyticsData.ecosystem_participation;
+            const labels = ['Diterima', 'Menunggu'];
+            const data = [
+                ecosystemParticipation.accepted || 0,
+                ecosystemParticipation.pending || 0
+            ];
+
+            const colors = [
+                'rgba(34, 197, 94, 0.8)',   // Green
+                'rgba(245, 158, 11, 0.8)'   // Yellow
+            ];
+
+            try {
+                ecosystemParticipationChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating ecosystem participation chart:', error);
+            }
+        }
+
+        // Initialize charts when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initializeCollectiveActionCharts, 200);
+        });
+
+        // Re-initialize charts when Livewire updates
+        document.addEventListener('livewire:updated', function() {
+            setTimeout(initializeCollectiveActionCharts, 200);
+        });
+    </script>
+@endpush
 
 @if($collectiveAction->latitude && $collectiveAction->longitude)
 @push('styles')

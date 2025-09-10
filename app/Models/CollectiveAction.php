@@ -738,4 +738,69 @@ class CollectiveAction extends Model
             ],
         ];
     }
+
+    /**
+     * Get analytics data for charts
+     */
+    public function getCollectiveActionsAnalytics(): array
+    {
+        // Status distribution
+        $statusDistribution = [
+            'active' => $this->status === 'active' ? 1 : 0,
+            'completed' => $this->status === 'completed' ? 1 : 0,
+            'cancelled' => $this->status === 'cancelled' ? 1 : 0,
+            'draft' => $this->status === 'draft' ? 1 : 0,
+        ];
+
+        // Scale distribution
+        $scaleDistribution = [
+            'kecil' => $this->scale === 'kecil' ? 1 : 0,
+            'sedang' => $this->scale === 'sedang' ? 1 : 0,
+            'besar' => $this->scale === 'besar' ? 1 : 0,
+        ];
+
+        // Contribution types distribution
+        $contributionTypes = [
+            'volunteer' => $this->volunteerContributions()->count(),
+            'funding' => $this->fundingContributions()->count(),
+            'expertise' => $this->expertiseContributions()->count(),
+            'resources' => $this->resourceContributions()->count(),
+            'promotion' => $this->promotionContributions()->count(),
+            'other' => $this->otherContributions()->count(),
+        ];
+
+        // Contribution status distribution
+        $contributionStatus = [
+            'offered' => $this->offeredContributions()->count(),
+            'accepted' => $this->acceptedContributions()->count(),
+            'completed' => $this->completedContributions()->count(),
+            'declined' => $this->declinedContributions()->count(),
+        ];
+
+        // Member roles distribution
+        $memberRoles = [
+            'admin' => $this->adminUsers()->count(),
+            'member' => $this->memberUsers()->count(),
+            'contributor' => $this->contributorUsers()->count(),
+        ];
+
+        // Ecosystem participation
+        $ecosystemParticipation = [
+            'total_invited' => $this->invitations()->count(),
+            'accepted' => $this->acceptedInvitations()->count(),
+            'pending' => $this->pendingInvitations()->count(),
+        ];
+
+        return [
+            'status_distribution' => $statusDistribution,
+            'scale_distribution' => $scaleDistribution,
+            'contribution_types' => $contributionTypes,
+            'contribution_status' => $contributionStatus,
+            'member_roles' => $memberRoles,
+            'ecosystem_participation' => $ecosystemParticipation,
+            'total_contributions' => $this->contributions()->count(),
+            'total_funding' => $this->getTotalFundingAttribute(),
+            'total_members' => $this->users()->count(),
+        ];
+    }
 }
