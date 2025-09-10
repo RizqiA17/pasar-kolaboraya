@@ -113,21 +113,21 @@
                     </div>
                 </div>
 
-                <!-- Kolaborasi -->
+                <!-- Ekosistem -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Kolaborasi</h3>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Ekosistem</h3>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $user->collaborations->count() }}</div>
-                        <div class="text-sm text-slate-600 dark:text-slate-400">Active Kolaborasi</div>
+                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $user->ecosystems->count() }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Ekosistem Aktif</div>
                     </div>
                 </div>
 
-                <!-- Acara -->
+                <!-- Aksi Kolektif -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Acara</h3>
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Aksi Kolektif</h3>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ $user->events->count() }}</div>
-                        <div class="text-sm text-slate-600 dark:text-slate-400">Participating Acara</div>
+                        <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ $user->activeCollectiveActions->count() }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Aksi Kolektif Aktif</div>
                     </div>
                 </div>
 
@@ -140,14 +140,14 @@
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-md font-medium text-slate-700 dark:text-slate-300">Skor Keterlibatan</h4>
                             <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                                {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->collaborations->count() * 15 + $user->events->count() * 5 + $user->activeCollectiveActions->count() * 20) / 2))) }}
+                                {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->ecosystems->count() * 15 + $user->activeCollectiveActions->count() * 20) / 2))) }}
                             </span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                             <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full" 
-                                 style="width: {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->collaborations->count() * 15 + $user->events->count() * 5 + $user->activeCollectiveActions->count() * 20) / 2))) }}%"></div>
+                                 style="width: {{ min(100, max(0, round(($user->sentConnections->where('status', 'accepted')->count() * 10 + $user->ecosystems->count() * 15 + $user->activeCollectiveActions->count() * 20) / 2))) }}%"></div>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan koneksi, kolaborasi, acara, dan aksi kolektif</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan koneksi, ekosistem, dan aksi kolektif</p>
                     </div>
 
                     <!-- Activity Distribution Chart -->
@@ -177,12 +177,12 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Kolaborasi</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Kolaborasi per bulan</p>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Partisipasi Ekosistem</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Ekosistem per bulan</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
-                                        {{ $user->collaborations->count() > 0 ? round($user->collaborations->count() / max(1, $user->created_at->diffInMonths(now()))) : 0 }}
+                                        {{ $user->ecosystems->count() > 0 ? round($user->ecosystems->count() / max(1, $user->created_at->diffInMonths(now()))) : 0 }}
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
-                                        {{ $user->created_at->diffInWeeks(now()) > 0 ? round(($user->collaborations->count() + $user->events->count() + $user->activeCollectiveActions->count()) / max(1, $user->created_at->diffInWeeks(now()))) : 0 }}
+                                        {{ $user->created_at->diffInWeeks(now()) > 0 ? round(($user->ecosystems->count() + $user->activeCollectiveActions->count()) / max(1, $user->created_at->diffInWeeks(now()))) : 0 }}
                                     </div>
                                 </div>
                             </div>
@@ -263,18 +263,16 @@
                 new Chart(userActivityCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Koneksi', 'Kolaborasi', 'Acara', 'Aksi Kolektif'],
+                        labels: ['Koneksi', 'Ekosistem', 'Aksi Kolektif'],
                         datasets: [{
                             data: [
                                 {{ $user->sentConnections->where('status', 'accepted')->count() }},
-                                {{ $user->collaborations->count() }},
-                                {{ $user->events->count() }},
+                                {{ $user->ecosystems->count() }},
                                 {{ $user->activeCollectiveActions->count() }}
                             ],
                             backgroundColor: [
                                 '#3B82F6', // Blue
                                 '#8B5CF6', // Purple
-                                '#EC4899', // Pink
                                 '#F59E0B'  // Orange
                             ],
                             borderWidth: 0

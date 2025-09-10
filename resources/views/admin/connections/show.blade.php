@@ -95,19 +95,19 @@
                                 @php
                                     $requesterConnections = $connection->requester->sentConnections->where('status', 'accepted')->count();
                                     $receiverConnections = $connection->receiver->sentConnections->where('status', 'accepted')->count();
-                                    $requesterCollaborations = $connection->requester->collaborations->count();
-                                    $receiverCollaborations = $connection->receiver->collaborations->count();
-                                    $requesterEvents = $connection->requester->events->count();
-                                    $receiverEvents = $connection->receiver->events->count();
+                                    $requesterEcosystems = $connection->requester->ecosystems->count();
+                                    $receiverEcosystems = $connection->receiver->ecosystems->count();
+                                    $requesterCollectiveActions = $connection->requester->activeCollectiveActions->count();
+                                    $receiverCollectiveActions = $connection->receiver->activeCollectiveActions->count();
                                     
                                     $qualityScore = min(100, max(0, round(
                                         ($connection->status === 'accepted' ? 40 : ($connection->status === 'pending' ? 20 : 0)) +
                                         (min($requesterConnections, 10) * 2) +
                                         (min($receiverConnections, 10) * 2) +
-                                        (min($requesterCollaborations, 5) * 3) +
-                                        (min($receiverCollaborations, 5) * 3) +
-                                        (min($requesterEvents, 5) * 2) +
-                                        (min($receiverEvents, 5) * 2)
+                                        (min($requesterEcosystems, 5) * 3) +
+                                        (min($receiverEcosystems, 5) * 3) +
+                                        (min($requesterCollectiveActions, 5) * 2) +
+                                        (min($receiverCollectiveActions, 5) * 2)
                                     )));
                                 @endphp
                                 {{ $qualityScore }}
@@ -169,12 +169,12 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kolaborasi Pengirim</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Total kolaborasi</p>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Ekosistem Pengirim</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Total ekosistem</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
-                                        {{ $requesterCollaborations }}
+                                        {{ $requesterEcosystems }}
                                     </div>
                                 </div>
                             </div>
@@ -183,12 +183,12 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kolaborasi Penerima</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Total kolaborasi</p>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Ekosistem Penerima</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Total ekosistem</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-orange-600 dark:text-orange-400">
-                                        {{ $receiverCollaborations }}
+                                        {{ $receiverEcosystems }}
                                     </div>
                                 </div>
                             </div>
@@ -252,10 +252,10 @@
             @php
                 $requesterConnections = $connection->requester->sentConnections->where('status', 'accepted')->count();
                 $receiverConnections = $connection->receiver->sentConnections->where('status', 'accepted')->count();
-                $requesterCollaborations = $connection->requester->collaborations->count();
-                $receiverCollaborations = $connection->receiver->collaborations->count();
-                $requesterEvents = $connection->requester->events->count();
-                $receiverEvents = $connection->receiver->events->count();
+                $requesterEcosystems = $connection->requester->ecosystems->count();
+                $receiverEcosystems = $connection->receiver->ecosystems->count();
+                $requesterCollectiveActions = $connection->requester->activeCollectiveActions->count();
+                $receiverCollectiveActions = $connection->receiver->activeCollectiveActions->count();
             @endphp
 
             // User Activity Comparison Chart
@@ -264,16 +264,16 @@
                 new Chart(userActivityComparisonCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Koneksi', 'Kolaborasi', 'Acara'],
+                        labels: ['Koneksi', 'Ekosistem', 'Aksi Kolektif'],
                         datasets: [{
                             label: '{{ $connection->requester->name }}',
-                            data: [{{ $requesterConnections }}, {{ $requesterCollaborations }}, {{ $requesterEvents }}],
+                            data: [{{ $requesterConnections }}, {{ $requesterEcosystems }}, {{ $requesterCollectiveActions }}],
                             backgroundColor: '#3B82F6',
                             borderColor: '#2563EB',
                             borderWidth: 1
                         }, {
                             label: '{{ $connection->receiver->name }}',
-                            data: [{{ $receiverConnections }}, {{ $receiverCollaborations }}, {{ $receiverEvents }}],
+                            data: [{{ $receiverConnections }}, {{ $receiverEcosystems }}, {{ $receiverCollectiveActions }}],
                             backgroundColor: '#10B981',
                             borderColor: '#059669',
                             borderWidth: 1
@@ -311,12 +311,12 @@
                 new Chart(connectionNetworkCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Koneksi Aktif', 'Kolaborasi', 'Acara'],
+                        labels: ['Koneksi Aktif', 'Ekosistem', 'Aksi Kolektif'],
                         datasets: [{
                             data: [
                                 {{ $requesterConnections + $receiverConnections }},
-                                {{ $requesterCollaborations + $receiverCollaborations }},
-                                {{ $requesterEvents + $receiverEvents }}
+                                {{ $requesterEcosystems + $receiverEcosystems }},
+                                {{ $requesterCollectiveActions + $receiverCollectiveActions }}
                             ],
                             backgroundColor: [
                                 '#8B5CF6', // Purple

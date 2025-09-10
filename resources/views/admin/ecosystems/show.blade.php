@@ -244,7 +244,7 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Kolaborasi</h5>
+                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Partisipasi Aksi Kolektif</h5>
                                     <p class="text-xs text-slate-500 dark:text-slate-400">Aksi kolektif per bulan</p>
                                 </div>
                                 <div class="text-right">
