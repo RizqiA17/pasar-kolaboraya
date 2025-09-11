@@ -594,26 +594,25 @@
                                         color: themeColors.textColor,
                                     }
                                 },
-                                tooltip: {
+                                tooltip: {                                    
                                     callbacks: {
                                         title: function(context) {
                                             return context[0].label;
                                         },
                                         label: function(context) {
-                                            const label = context.label;
+                                            const label = context.dataset.label || '';
                                             const value = context.parsed.r;
                                             
-                                            if (label === 'Sumber Daya yang Disumbangkan') {
-                                                const resourceTypes = jenisSumberDaya;
-                                                let resourceText = '';
-                                                if (resourceTypes && resourceTypes.length > 0) {
-                                                    resourceText = '\nJenis Sumber Daya:\n' + resourceTypes.join(', ');
-                                                } else {
-                                                    resourceText = '\nJenis Sumber Daya: Tidak ada data';
-                                                }
-                                                return `Rata-rata Skor: ${value}${resourceText}`;
+                                            // Check if this is the "Sumber Daya yang Disumbangkan" point
+                                            if (context.label === 'Sumber Daya yang Disumbangkan' && jenisSumberDaya && jenisSumberDaya.length > 0) {
+                                                const resourceTypes = jenisSumberDaya.join(', ');
+                                                return [
+                                                    `${label}: ${value}`,
+                                                    `Jenis Sumber Daya: ${resourceTypes}`
+                                                ];
                                             }
-                                            return `Rata-rata Skor: ${value}`;
+                                            
+                                            return `${label}: ${value}`;
                                         }
                                     },
                                     backgroundColor: themeColors.isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
