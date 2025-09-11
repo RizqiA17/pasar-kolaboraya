@@ -445,6 +445,7 @@
                     const jumlahProyek = radarData.kolaborasi.jumlah_proyek;
                     const tingkatKolaborasi = radarData.kolaborasi.tingkat_kolaborasi;
                     const sumberDayaDisumbangkan = radarData.kolaborasi.sumber_daya_disumbangkan;
+                    const jenisSumberDaya = radarData.kolaborasi.jenis_sumber_daya;
                     const aksiBesar = radarData.aksi.aksi_besar;
                     const themeColors = getThemeColors();
     
@@ -591,6 +592,39 @@
                                         padding: 20,
                                         usePointStyle: true,
                                         color: themeColors.textColor,
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(context) {
+                                            return context[0].label;
+                                        },
+                                        label: function(context) {
+                                            const label = context.label;
+                                            const value = context.parsed.r;
+                                            
+                                            if (label === 'Sumber Daya yang Disumbangkan') {
+                                                const resourceTypes = jenisSumberDaya;
+                                                let resourceText = '';
+                                                if (resourceTypes && resourceTypes.length > 0) {
+                                                    resourceText = '\nJenis Sumber Daya:\n' + resourceTypes.join(', ');
+                                                } else {
+                                                    resourceText = '\nJenis Sumber Daya: Tidak ada data';
+                                                }
+                                                return `Rata-rata Skor: ${value}${resourceText}`;
+                                            }
+                                            return `Rata-rata Skor: ${value}`;
+                                        }
+                                    },
+                                    backgroundColor: themeColors.isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                                    titleColor: themeColors.textColor,
+                                    bodyColor: themeColors.textColor,
+                                    borderColor: themeColors.isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                                    borderWidth: 1,
+                                    padding: 12,
+                                    displayColors: false,
+                                    multiLabelBackground: function(context) {
+                                        return 'transparent';
                                     }
                                 }
                             }

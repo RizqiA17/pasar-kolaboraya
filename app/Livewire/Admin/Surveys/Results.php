@@ -33,7 +33,7 @@ class Results extends Component
     public function getRadarChartData()
     {
         $averages = $this->getAverageScores();
-        // dd($averages);
+        // dd();
         
         // Convert averages to radar chart format
         return [
@@ -48,6 +48,7 @@ class Results extends Component
                 'jumlah_proyek' => $averages['kolaborasi']['jumlah_proyek_kolaborasi'] ?? 0,
                 'tingkat_kolaborasi' => $averages['kolaborasi']['tingkat_kolaborasi'] ?? 0,
                 'sumber_daya_disumbangkan' => $averages['kolaborasi']['sumber_daya_disumbangkan'] ?? 0,
+                'jenis_sumber_daya' => $this->survey->getResources(),
             ],
             'aksi' => [
                 'aksi_besar' => $averages['aksi']['jumlah_aksi_besar'] ?? 0,

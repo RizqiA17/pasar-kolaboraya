@@ -43,6 +43,15 @@ class Survey extends Model
         return $query->where('is_active', true);
     }
 
+    public function getResources()
+    {
+        return $this->responses
+            ->flatMap(fn($r) => $r['sumber_daya_disumbangkan'] ?? [])
+            ->unique()
+            ->values()
+            ->all();
+    }
+
     public function getResponsesCount()
     {
         return $this->responses()->count();
@@ -51,7 +60,7 @@ class Survey extends Model
     public function getAverageScores()
     {
         $responses = $this->responses;
-        
+
         if ($responses->isEmpty()) {
             return [
                 'koneksi' => 0,
@@ -72,10 +81,10 @@ class Survey extends Model
                 'jumlah_proyek_kolaborasi' => round($responses->avg('jumlah_proyek_kolaborasi'), 2),
                 'tingkat_kolaborasi' => round($responses->avg('tingkat_kolaborasi'), 2),
                 'sumber_daya_disumbangkan' => count($responses
-                ->flatMap(fn($r) => $r['sumber_daya_disumbangkan'] ?? [])
-                ->unique()
-                ->values()
-                ->all(),)
+                    ->flatMap(fn($r) => $r['sumber_daya_disumbangkan'] ?? [])
+                    ->unique()
+                    ->values()
+                    ->all(), )
             ],
             'aksi' => [
                 'jumlah_aksi_besar' => round($responses->avg('jumlah_aksi_besar'), 2),
