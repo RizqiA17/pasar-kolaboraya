@@ -96,7 +96,21 @@
                                         <span class="text-sm text-blue-700 dark:text-blue-300">Rata-rata Keluasan
                                             Jejaring:</span>
                                         <span
-                                            class="font-semibold text-blue-800 dark:text-blue-200">{{ $averageScores['koneksi']['keluasan_jejaring'] ?? 0 }}</span>
+                                            class="font-semibold text-blue-800 dark:text-blue-200">{{ number_format($averageScores['koneksi']['keluasan_jejaring'] ?? 0, 1) }}/5</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="text-xs text-blue-600 dark:text-blue-400 mb-1">Distribusi Keluasan Jejaring:</div>
+                                        <div class="space-y-1">
+                                            @php
+                                                $labels = [1 => 'Lokal', 2 => 'Kabupaten', 3 => 'Provinsi', 4 => 'Nasional', 5 => 'Internasional'];
+                                            @endphp
+                                            @foreach($keluasanJejaringDistribution as $value => $count)
+                                                <div class="flex justify-between text-xs">
+                                                    <span class="text-blue-600 dark:text-blue-400">{{ $labels[$value] }}:</span>
+                                                    <span class="text-blue-800 dark:text-blue-200">{{ $count }} respon</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -454,8 +468,8 @@
                         data: {
                             labels: [
                                 'Jumlah Koneksi',
-                                'Kualitas Koneksi',
-                                'Keluasan Jejaring',
+                                'Kualitas Koneksi (1-5)',
+                                'Keluasan Jejaring (1-5)',
                             ],
                             datasets: [{
                                 label: 'Rata-rata Skor',
@@ -480,14 +494,11 @@
                             scales: {
                                 r: {
                                     beginAtZero: true,
-                                    max: customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)),
+                                    max: Math.max(5, customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring))),
                                     min: 0,
                                     ticks: {
-                                        stepSize: customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) >
-                                            10 ? customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) /
-                                            customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) * 10 :
-                                            customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)) /
-                                            customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring)),
+                                        stepSize: Math.max(5, customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring))) > 10 ? 
+                                            Math.max(5, customRound(Math.max(jumlahKoneksi, kualitasKoneksi, keluasanJejaring))) / 10 : 1,
                                         backdropColor: 'transparent'
                                     },
                                     grid: {

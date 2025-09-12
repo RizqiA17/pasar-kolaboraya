@@ -85,18 +85,40 @@ class Results extends Component
         return $reasons;
     }
 
+    public function getKeluasanJejaringDistribution()
+    {
+        $responses = $this->survey->responses;
+        $distribution = [
+            1 => 0, // Lokal
+            2 => 0, // Kabupaten
+            3 => 0, // Provinsi
+            4 => 0, // Nasional
+            5 => 0, // Internasional
+        ];
+
+        foreach ($responses as $response) {
+            if (isset($distribution[$response->keluasan_jejaring])) {
+                $distribution[$response->keluasan_jejaring]++;
+            }
+        }
+
+        return $distribution;
+    }
+
     public function render()
     {
         $averageScores = $this->getAverageScores();
         $radarData = $this->getRadarChartData();
         $anonymousReasons = $this->getAnonymousReasons();
         $totalResponses = $this->survey->responses->count();
+        $keluasanJejaringDistribution = $this->getKeluasanJejaringDistribution();
 
         return view('livewire.admin.surveys.results', compact(
             'averageScores', 
             'radarData', 
             'anonymousReasons', 
-            'totalResponses'
+            'totalResponses',
+            'keluasanJejaringDistribution'
         ));
     }
 }
