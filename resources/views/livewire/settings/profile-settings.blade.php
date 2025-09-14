@@ -6,7 +6,8 @@
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
                             </path>
                         </svg>
@@ -17,8 +18,8 @@
                 </div>
                 <button type="button" onclick="this.parentElement.parentElement.remove()"
                     class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
+                    <svg class="h-5 w-5 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
                     </svg>
@@ -33,7 +34,8 @@
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
-                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                             </path>
@@ -45,8 +47,8 @@
                 </div>
                 <button type="button" onclick="this.parentElement.parentElement.remove()"
                     class="ml-auto flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
+                    <svg class="h-5 w-5 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
                     </svg>
@@ -63,8 +65,8 @@
         <div class="relative p-8 sm:p-12 text-white">
             <div class="max-w-3xl">
                 <h1 class="text-3xl sm:text-4xl font-bold mb-4">Pengaturan Profil</h1>
-                <p class="text-lg text-blue-100 dark:text-blue-200 leading-relaxed">Kelola informasi profil, minat, keahlian, dan
-                    kontribusi Anda untuk terhubung dengan kreator yang memiliki passion serupa.</p>
+                <p class="text-lg text-blue-100 dark:text-blue-200 leading-relaxed">Kelola informasi profil, minat, dan
+                    keahlian Anda untuk terhubung dengan kreator yang memiliki passion serupa.</p>
                 <div class="mt-6 flex items-center space-x-4">
                     <div class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
                         <svg class="h-5 w-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +95,8 @@
         <!-- Sidebar Navigation -->
         <div class="lg:col-span-1">
             <div class="sticky top-16">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Menu Pengaturan</h3>
                     <nav class="space-y-2">
                         <button wire:click="setTab('profile')"
@@ -138,7 +141,7 @@
                             </div>
                             Keahlian
                         </button>
-                        <button wire:click="setTab('contributions')"
+                        {{-- <button wire:click="setTab('contributions')"
                             class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'contributions') bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 dark:hover:from-amber-900/30 dark:hover:to-orange-900/30 hover:text-amber-700 dark:hover:text-amber-300 hover:border hover:border-amber-200 dark:hover:border-amber-600 transition-all duration-200 @endif">
                             <div
                                 class="h-8 w-8 rounded-lg @if ($tab === 'contributions') bg-amber-100 dark:bg-amber-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/50">
@@ -150,13 +153,13 @@
                                 </svg>
                             </div>
                             Kontribusi
-                        </button>
+                        </button> --}}
                         <button wire:click="setTab('danger')"
                             class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'danger') bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 dark:hover:from-red-900/30 dark:hover:to-pink-900/30 hover:text-red-700 dark:hover:text-red-300 hover:border hover:border-red-200 dark:hover:border-red-600 transition-all duration-200 @endif">
                             <div
                                 class="h-8 w-8 rounded-lg @if ($tab === 'danger') bg-red-100 dark:bg-red-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-red-100 dark:group-hover:bg-red-900/50">
-                                <svg class="h-4 w-4 @if ($tab === 'danger') text-red-600 dark:text-red-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-red-600 dark:group-hover:text-red-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                <svg class="h-4 w-4 @if ($tab === 'danger') text-red-600 dark:text-red-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-red-600 dark:group-hover:text-red-400"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                     </path>
@@ -173,21 +176,26 @@
         <div class="lg:col-span-3 space-y-8">
             @if ($tab === 'profile')
                 <!-- Profile Information Section -->
-                <div id="profile-info" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 px-6 py-4 border-b border-blue-100 dark:border-blue-800">
+                <div id="profile-info"
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 px-6 py-4 border-b border-blue-100 dark:border-blue-800">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
-                                <div class="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                <div
+                                    class="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                                         </path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Informasi Profil</h3>
-                                    <p class="text-sm text-gray-600 dark:text-slate-400">Update informasi profil dan alamat email Anda.</p>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Informasi
+                                        Profil</h3>
+                                    <p class="text-sm text-gray-600 dark:text-slate-400">Update informasi profil dan
+                                        alamat email Anda.</p>
                                 </div>
                             </div>
                             <span
@@ -199,7 +207,8 @@
                         <form wire:submit="updateProfileInformation" class="space-y-6">
                             <!-- Profile Photo Upload Section -->
                             <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900 dark:text-slate-100">Foto Profil</label>
+                                <label class="block text-sm font-medium text-gray-900 dark:text-slate-100">Foto
+                                    Profil</label>
                                 <div class="flex items-center space-x-6">
                                     <div class="flex-shrink-0">
                                         <x-ui.avatar :user="auth()->user()" size="xl" />
@@ -230,7 +239,8 @@
                                                 Upload
                                             </button>
                                         </div>
-                                        <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG,
+                                            GIF. Maksimal 2MB.</p>
                                         @error('profilePhoto')
                                             <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                         @enderror
@@ -240,7 +250,8 @@
 
                             <!-- Banner Upload Section -->
                             <div class="space-y-4">
-                                <label class="block text-sm font-medium text-gray-900 dark:text-slate-100">Banner</label>
+                                <label
+                                    class="block text-sm font-medium text-gray-900 dark:text-slate-100">Banner</label>
                                 <div class="space-y-4">
                                     <x-ui.banner :user="auth()->user()" height="h-32" />
                                     <div class="flex items-center space-x-3">
@@ -265,7 +276,8 @@
                                             Upload
                                         </button>
                                     </div>
-                                    <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF. Maksimal 5MB.</p>
+                                    <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF.
+                                        Maksimal 5MB.</p>
                                     @error('banner')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
@@ -274,7 +286,8 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
-                                    <label for="name" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nama
+                                    <label for="name"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nama
                                         Lengkap</label>
                                     <div class="relative">
                                         <div
@@ -343,7 +356,8 @@
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label for="phone" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nomor
+                                    <label for="phone"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nomor
                                         Telepon</label>
                                     <div class="relative">
                                         <div
@@ -366,7 +380,8 @@
                             </div>
 
                             <div class="space-y-2">
-                                <label for="vision" class="block text-sm font-medium text-gray-900 dark:text-slate-100">Visi &
+                                <label for="vision"
+                                    class="block text-sm font-medium text-gray-900 dark:text-slate-100">Visi &
                                     Misi</label>
                                 <div class="relative">
                                     <div class="absolute top-3 left-3 flex items-start pointer-events-none">
@@ -390,8 +405,8 @@
                                 <div class="rounded-xl bg-amber-50 border border-amber-200 p-4">
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0">
-                                            <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
+                                            <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                                                 </path>
@@ -408,7 +423,8 @@
                                             </p>
 
                                             @if (session('status') === 'verification-link-sent')
-                                                <p class="mt-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                                                <p
+                                                    class="mt-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
                                                     {{ __('A new verification link has been sent to your email address.') }}
                                                 </p>
                                             @endif
@@ -461,51 +477,72 @@
                 </div>
             @elseif ($tab === 'interests')
                 <!-- Enhanced Interests Section -->
-                <div id="interests" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                <div id="interests"
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
                     <!-- Enhanced Header with Stats -->
-                    <div class="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-900/30 dark:via-pink-900/30 dark:to-rose-900/30 px-6 py-6 border-b border-purple-100 dark:border-purple-800">
+                    <div
+                        class="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-900/30 dark:via-pink-900/30 dark:to-rose-900/30 px-6 py-6 border-b border-purple-100 dark:border-purple-800">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-4">
-                                <div class="h-12 min-w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 flex items-center justify-center shadow-lg dark:shadow-slate-900/50">
-                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                <div
+                                    class="h-12 min-w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 flex items-center justify-center shadow-lg dark:shadow-slate-900/50">
+                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-slate-100">Minat & Ketertarikan</h3>
-                                    <p class="text-gray-600 dark:text-slate-400">Pilih minat yang sesuai untuk terhubung dengan kreator serupa</p>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-slate-100">Minat &
+                                        Ketertarikan</h3>
+                                    <p class="text-gray-600 dark:text-slate-400">Pilih minat yang sesuai untuk
+                                        terhubung dengan kreator serupa</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ count($selectedInterests) }}</div>
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                                    {{ count($selectedInterests) }}</div>
                                 <div class="text-sm text-gray-600 dark:text-slate-400">Minat Dipilih</div>
                             </div>
                         </div>
-                        
+
                         <!-- Quick Stats -->
                         <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
+                            <div
+                                class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
                                 <div class="flex items-center space-x-2">
-                                    <div class="h-8 w-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
-                                        <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                            </path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">{{ count($selectedInterests) }}</div>
+                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">
+                                            {{ count($selectedInterests) }}</div>
                                         <div class="text-xs text-gray-600 dark:text-slate-400">Dipilih</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
+                            <div
+                                class="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-3 border border-purple-200 dark:border-purple-700">
                                 <div class="flex items-center space-x-2">
-                                    <div class="h-8 w-8 rounded-lg bg-pink-100 dark:bg-pink-900/50 flex items-center justify-center">
-                                        <svg class="h-5 w-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    <div
+                                        class="h-8 w-8 rounded-lg bg-pink-100 dark:bg-pink-900/50 flex items-center justify-center">
+                                        <svg class="h-5 w-5 text-pink-600 dark:text-pink-400" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                            </path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">{{ count($interests) }}</div>
+                                        <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">
+                                            {{ count($interests) }}</div>
                                         <div class="text-xs text-gray-600 dark:text-slate-400">Tersedia</div>
                                     </div>
                                 </div>
@@ -530,22 +567,28 @@
                         <!-- Progress Indicator -->
                         <div class="mb-6">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-medium text-gray-700 dark:text-slate-300">Progress Pemilihan Minat</span>
+                                <span class="text-sm font-medium text-gray-700 dark:text-slate-300">Progress Pemilihan
+                                    Minat</span>
                                 <span class="text-sm text-gray-500 dark:text-slate-400">
                                     @php
-                                        $interestProgress = count($interests) > 0 ? round((count($selectedInterests) / count($interests)) * 100) : 0;
+                                        $interestProgress =
+                                            count($interests) > 0
+                                                ? round((count($selectedInterests) / count($interests)) * 100)
+                                                : 0;
                                     @endphp
                                     {{ $interestProgress }}%
                                 </span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-purple-500 to-pink-600 dark:from-purple-400 dark:to-pink-500 h-2 rounded-full transition-all duration-500 ease-out" style="width: {{ $interestProgress }}%"></div>
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-600 dark:from-purple-400 dark:to-pink-500 h-2 rounded-full transition-all duration-500 ease-out"
+                                    style="width: {{ $interestProgress }}%"></div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach ($interests as $interest)
-                                <label class="group relative flex items-start p-5 cursor-pointer bg-white dark:bg-slate-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 rounded-xl transition-all duration-200 ring-1 ring-gray-200 dark:ring-slate-600 hover:ring-purple-300 dark:hover:ring-purple-600 hover:shadow-md dark:hover:shadow-slate-900/50 transform hover:-translate-y-1">
+                                <label
+                                    class="group relative flex items-start p-5 cursor-pointer bg-white dark:bg-slate-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 rounded-xl transition-all duration-200 ring-1 ring-gray-200 dark:ring-slate-600 hover:ring-purple-300 dark:hover:ring-purple-600 hover:shadow-md dark:hover:shadow-slate-900/50 transform hover:-translate-y-1">
                                     <div class="min-w-0 flex flex-col flex-1">
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center">
@@ -559,16 +602,19 @@
                                                         </svg>
                                                     </div> --}}
                                                 </div>
-                                                <span class="ml-3 text-sm font-semibold text-gray-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors duration-200">{{ $interest->name }}</span>
+                                                <span
+                                                    class="ml-3 text-sm font-semibold text-gray-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors duration-200">{{ $interest->name }}</span>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
-                                                <span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-200 dark:ring-purple-600 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-200 dark:ring-purple-600 opacity-0 group-hover:opacity-100 transition-all duration-200">
                                                     {{ rand(10, 50) }} kreator
                                                 </span>
                                             </div>
                                         </div>
                                         @if ($interest->description)
-                                            <p class="text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-slate-300 transition-colors duration-200">
+                                            <p
+                                                class="text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-slate-300 transition-colors duration-200">
                                                 {{ $interest->description }}
                                             </p>
                                         @endif
@@ -577,26 +623,36 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-8 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
+                        <div
+                            class="mt-8 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
                             <div class="flex items-center space-x-4">
-                                <button wire:click="updateInterests"
-                                    wire:loading.attr="disabled"
+                                <button wire:click="updateInterests" wire:loading.attr="disabled"
                                     class="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg dark:shadow-slate-900/50 text-white bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                    <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    <svg wire:loading.remove class="mr-2 h-5 w-5" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    <svg wire:loading class="mr-2 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    <svg wire:loading class="mr-2 h-5 w-5 animate-spin" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
                                     </svg>
                                     Simpan Minat
                                 </button>
 
                                 <!-- Unsaved Changes Indicator -->
                                 <div id="interests-unsaved-indicator" class="hidden">
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-600">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-600">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                            </path>
                                         </svg>
                                         Belum Disimpan
                                     </span>
@@ -604,9 +660,12 @@
                             </div>
 
                             <x-action-message class="mr-3" on="interests-updated">
-                                <div class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30 animate-bounce">
-                                    <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                <div
+                                    class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30 animate-bounce">
+                                    <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Minat berhasil disimpan! 🎉
                                 </div>
@@ -616,12 +675,15 @@
                 </div>
             @elseif ($tab === 'skills')
                 <!-- Skills Section -->
-                <div id="skills" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 px-6 py-4 border-b border-green-100 dark:border-green-800">
+                <div id="skills"
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 px-6 py-4 border-b border-green-100 dark:border-green-800">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian</h3>
-                                <p class="text-sm text-gray-600 dark:text-slate-400">Pilih keahlian yang Anda miliki untuk memudahkan
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Pilih keahlian yang Anda miliki
+                                    untuk memudahkan
                                     kolaborasi dengan kreator lain.</p>
                             </div>
                             <span
@@ -664,7 +726,8 @@
                                             </div>
                                         </div>
                                         @if ($skill->description)
-                                            <p class="mt-2 text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed">
+                                            <p
+                                                class="mt-2 text-xs text-gray-600 dark:text-slate-400 ml-8 leading-relaxed">
                                                 {{ $skill->description }}</p>
                                         @endif
                                     </div>
@@ -672,7 +735,8 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
+                        <div
+                            class="mt-6 flex items-center justify-between pt-6 border-t border-gray-200 dark:border-slate-600">
                             <div class="flex items-center space-x-3">
                                 <button wire:click="updateSkills"
                                     class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm dark:shadow-slate-900/50 text-white bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-green-400 transition-all duration-200 transform hover:scale-105">
@@ -688,8 +752,8 @@
                                 <div id="skills-unsaved-indicator" class="hidden">
                                     <span
                                         class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-300 ring-1 ring-inset ring-amber-200 dark:ring-amber-600">
-                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                                             </path>
@@ -702,8 +766,8 @@
                             <x-action-message class="mr-3" on="skills-updated">
                                 <span
                                     class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-3 py-2 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30">
-                                    <svg class="mr-2 h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="mr-2 h-4 w-4 text-green-600 dark:text-green-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -715,12 +779,15 @@
                 </div>
             @elseif ($tab === 'contributions')
                 <!-- Contributions Section -->
-                <div id="contributions" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
-                    <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 px-6 py-4 border-b border-amber-100 dark:border-amber-800">
+                <div id="contributions"
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 px-6 py-4 border-b border-amber-100 dark:border-amber-800">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi</h3>
-                                <p class="text-sm text-gray-600 dark:text-slate-400">Tambahkan kontribusi yang telah Anda berikan untuk
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Tambahkan kontribusi yang telah
+                                    Anda berikan untuk
                                     menginspirasi kreator lain.</p>
                             </div>
                             <button type="button"
@@ -743,13 +810,17 @@
                                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
                                 </div>
-                                <h4 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">Tambah Kontribusi Baru</h4>
-                                <p class="text-gray-600 dark:text-slate-400">Pilih jenis kontribusi dan ceritakan pengalaman Anda</p>
+                                <h4 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">Tambah Kontribusi
+                                    Baru</h4>
+                                <p class="text-gray-600 dark:text-slate-400">Pilih jenis kontribusi dan ceritakan
+                                    pengalaman Anda</p>
                             </div>
 
                             <!-- Interactive Contribution Type Selection -->
                             <div class="mb-8">
-                                <label class="block text-sm font-semibold text-gray-900 dark:text-slate-100 mb-4 text-center">Pilih Jenis
+                                <label
+                                    class="block text-sm font-semibold text-gray-900 dark:text-slate-100 mb-4 text-center">Pilih
+                                    Jenis
                                     Kontribusi</label>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     @foreach ($contributions as $contribution)
@@ -898,7 +969,8 @@
                                                     <div
                                                         class="text-sm font-medium text-gray-900 dark:text-slate-100 peer-checked:text-blue-900 dark:peer-checked:text-blue-300">
                                                         {{ $contribution->name }}</div>
-                                                    <div class="text-xs text-gray-500 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400">
+                                                    <div
+                                                        class="text-xs text-gray-500 dark:text-slate-400 peer-checked:text-blue-600 dark:peer-checked:text-blue-400">
                                                         {{ $contribution->category }}</div>
                                                 </div>
                                                 <!-- Checkmark for selected -->
@@ -935,7 +1007,8 @@
                                         <textarea wire:model="newContribution.description" rows="4"
                                             class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 dark:text-slate-100 dark:bg-slate-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-blue-600 dark:focus:border-blue-400 transition-all duration-200 resize-none"
                                             placeholder="Jelaskan detail kontribusi Anda, dampak yang dihasilkan, dan pelajaran yang didapat..."></textarea>
-                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-slate-500">
+                                        <div
+                                            class="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-slate-500">
                                             {{ strlen($newContribution['description'] ?? '') }}/500
                                         </div>
                                     </div>
@@ -1002,8 +1075,8 @@
                                 <x-action-message class="text-center" on="contribution-added">
                                     <div
                                         class="inline-flex items-center rounded-xl bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20 dark:ring-green-600/30 animate-bounce">
-                                        <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                        <svg class="mr-2 h-5 w-5 text-green-600 dark:text-green-400" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7"></path>
                                         </svg>
@@ -1021,15 +1094,16 @@
                                 <li>
                                     <div class="relative pb-8">
                                         @if (!$loop->last)
-                                            <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200 dark:bg-slate-600"
+                                            <span
+                                                class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200 dark:bg-slate-600"
                                                 aria-hidden="true"></span>
                                         @endif
                                         <div class="relative flex items-start space-x-3">
                                             <div class="relative">
                                                 <span
                                                     class="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center ring-8 ring-white dark:ring-slate-800">
-                                                    <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="h-5 w-5 text-blue-600 dark:text-blue-400"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
                                                             d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
@@ -1043,7 +1117,8 @@
                                                 <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
                                                     {{ $contribution->pivot->description }}</p>
                                                 <div class="mt-2 flex items-center space-x-4">
-                                                    <div class="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                                                    <div
+                                                        class="flex items-center text-sm text-gray-500 dark:text-slate-400">
                                                         <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 dark:text-slate-500"
                                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1075,13 +1150,16 @@
                 </div>
             @elseif ($tab === 'danger')
                 <!-- Delete Account Section -->
-                <div id="danger" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-red-200 dark:border-red-800 overflow-hidden">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 px-6 py-4 border-b border-red-100 dark:border-red-800">
+                <div id="danger"
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-red-200 dark:border-red-800 overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 px-6 py-4 border-b border-red-100 dark:border-red-800">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
-                                <div class="h-10 w-10 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                <div
+                                    class="h-10 w-10 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                         </path>
@@ -1089,7 +1167,8 @@
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-semibold text-red-600 dark:text-red-400">Danger Zone</h3>
-                                    <p class="text-sm text-gray-600 dark:text-slate-400">Tindakan ini tidak dapat dibatalkan. Harap
+                                    <p class="text-sm text-gray-600 dark:text-slate-400">Tindakan ini tidak dapat
+                                        dibatalkan. Harap
                                         berhati-hati.</p>
                                 </div>
                             </div>
@@ -1099,12 +1178,14 @@
                     </div>
 
                     <div class="p-6">
-                        <div class="rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 p-6 border border-red-200 dark:border-red-700">
+                        <div
+                            class="rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/30 dark:to-pink-900/30 p-6 border border-red-200 dark:border-red-700">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
-                                    <div class="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
-                                        <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                    <div
+                                        class="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                                        <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                                             </path>
@@ -1112,7 +1193,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-3">Hapus Akun Permanen</h3>
+                                    <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-3">Hapus Akun
+                                        Permanen</h3>
                                     <div class="text-sm text-red-700 dark:text-red-400 space-y-3">
                                         <p class="font-medium">Setelah akun Anda dihapus:</p>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -1122,7 +1204,8 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span class="dark:text-slate-300">Semua data profil Anda akan dihapus</span>
+                                                <span class="dark:text-slate-300">Semua data profil Anda akan
+                                                    dihapus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
                                                 <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
@@ -1130,7 +1213,8 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span class="dark:text-slate-300">Kontribusi dan kolaborasi Anda akan dihapus</span>
+                                                <span class="dark:text-slate-300">Kontribusi dan kolaborasi Anda akan
+                                                    dihapus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
                                                 <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
@@ -1138,7 +1222,8 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span class="dark:text-slate-300">Koneksi dengan kreator lain akan terputus</span>
+                                                <span class="dark:text-slate-300">Koneksi dengan kreator lain akan
+                                                    terputus</span>
                                             </div>
                                             <div class="flex items-center space-x-2">
                                                 <svg class="h-4 w-4 text-red-500 dark:text-red-400" fill="none"
@@ -1146,7 +1231,8 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
-                                                <span class="dark:text-slate-300">Tindakan ini tidak dapat dibatalkan</span>
+                                                <span class="dark:text-slate-300">Tindakan ini tidak dapat
+                                                    dibatalkan</span>
                                             </div>
                                         </div>
                                     </div>

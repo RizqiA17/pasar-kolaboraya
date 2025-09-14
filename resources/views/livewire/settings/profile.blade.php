@@ -362,7 +362,7 @@
                                                 @endif
                                             @empty
                                                 <li>
-                                                    <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada kontribusi yang
+                                                    <div class="text-sm text-gray-500 dark:text-slate-400 pb-8">Belum ada kontribusi yang
                                                         ditambahkan</div>
                                                 </li>
                                             @endforelse
