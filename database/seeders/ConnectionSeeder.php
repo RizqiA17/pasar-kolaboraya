@@ -20,19 +20,37 @@ class ConnectionSeeder extends Seeder
         }
 
         $users = User::all();
+        $connectionsCreated = 0;
         
         foreach ($users as $user) {
-            // Create 3-5 connections for each user
-            $numberOfConnections = fake()->numberBetween(3, 5);
+            // Create 2-6 connections for each user
+            $numberOfConnections = fake()->numberBetween(2, 6);
             $otherUsers = $users->where('id', '!=', $user->id)->random($numberOfConnections);
             
             foreach ($otherUsers as $otherUser) {
-                Connection::create([
-                    'requester_id' => $user->id,
-                    'receiver_id' => $otherUser->id,
-                    'status' => fake()->randomElement(['pending', 'accepted', 'rejected']),
-                ]);
+                // Avoid duplicate connections
+                $existingConnection = Connection::where(function($query) use ($user, $otherUser) {
+                    $query->where('requester_id', $user->id)
+                          ->where('receiver_id', $otherUser->id);
+                })->orWhere(function($query) use ($user, $otherUser) {
+                    $query->where('requester_id', $otherUser->id)
+                          ->where('receiver_id', $user->id);
+                })->exists();
+
+                if (!$existingConnection) {
+                    // More realistic status distribution: 60% accepted, 25% pending, 15% rejected
+                    $status = fake()->randomElement(['accepted', 'accepted', 'accepted', 'accepted', 'accepted', 'accepted', 'pending', 'pending', 'pending', 'rejected', 'rejected']);
+                    
+                    Connection::create([
+                        'requester_id' => $user->id,
+                        'receiver_id' => $otherUser->id,
+                        'status' => $status,
+                    ]);
+                    $connectionsCreated++;
+                }
             }
         }
+
+        $this->command->info("Connection seeder completed! Created {$connectionsCreated} connections.");
     }
 }

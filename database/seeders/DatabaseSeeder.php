@@ -11,8 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('Starting database seeding...');
+        
         $this->call([
-            // System Settings
+            // System Settings (must be first)
             SystemSettingSeeder::class,
             
             // Master Data
@@ -34,17 +36,26 @@ class DatabaseSeeder extends Seeder
             // Pasar Kolaboraya System
             PasarKolaborayaSeeder::class,
             
-            // EventSeeder::class,
-            // CollaborationSeeder::class,
-            // TodoSeeder::class,
-            // CommentSeeder::class,
-            
-            // Ecosystem Builders
+            // Ecosystem Builders (after users and skills)
             EcosystemBuilderSeeder::class,
+            
+            // Collective Actions (after ecosystems)
+            CollectiveActionSeeder::class,
+            
+            // Ecosystem Contributions (after ecosystems and users)
+            EcosystemContributionSeeder::class,
             
             // Survey Data
             SurveySeeder::class,
             SurveyResponseSeeder::class,
+            
+            // Optional seeders (uncomment if needed)
+            // EventSeeder::class,
+            // CollaborationSeeder::class,
+            // TodoSeeder::class,
+            // CommentSeeder::class,
         ]);
+        
+        $this->command->info('Database seeding completed successfully!');
     }
 }

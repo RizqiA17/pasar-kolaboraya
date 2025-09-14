@@ -24,23 +24,25 @@ class ActivityTimeline extends Component
         $activities = collect();
 
         // AKSI KOLEKTIF: Get collective actions where user is involved through ecosystem membership
-        $collectiveActions = CollectiveAction::whereHas('acceptedInvitations', function($query) use ($user) {
-            $query->whereHas('ecosystem', function($ecosystemQuery) use ($user) {
-                $ecosystemQuery->whereHas('acceptedUsers', function($userQuery) use ($user) {
-                    $userQuery->where('user_id', $user->id);
+        // Filter by user's active session
+        $collectiveActions = CollectiveAction::forUserActiveSession($user)
+            ->whereHas('acceptedInvitations', function($query) use ($user) {
+                $query->whereHas('ecosystem', function($ecosystemQuery) use ($user) {
+                    $ecosystemQuery->whereHas('acceptedUsers', function($userQuery) use ($user) {
+                        $userQuery->where('user_id', $user->id);
+                    });
                 });
+            })->get()->map(function($item) {
+                $item->type = 'collective_action';
+                return $item;
             });
-        })->get()->map(function($item) {
-            $item->type = 'collective_action';
-            return $item;
-        });
 
         // EKOSISTEM: Get ecosystems where user is a member
-        $userEcosystems = DB::table('ecosystem_users')
-            ->where('user_id', $user->id)
-            ->where('status', 'accepted')
-            ->join('ecosystems', 'ecosystem_users.ecosystem_id', '=', 'ecosystems.id')
-            ->select('ecosystems.*')
+        // Filter by user's active session
+        $userEcosystems = Ecosystem::forUserActiveSession($user)
+            ->whereHas('acceptedUsers', function($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
             ->get()
             ->map(function($item) {
                 $item->type = 'ecosystem';
@@ -49,7 +51,11 @@ class ActivityTimeline extends Component
             });
 
         // KONTRIBUSI EKOSISTEM: Get ecosystem contributions made by user
+        // Filter by user's active session
         $ecosystemContributions = EcosystemContribution::where('user_id', $user->id)
+            ->whereHas('ecosystem', function($query) use ($user) {
+                $query->forUserActiveSession($user);
+            })
             ->with(['ecosystem', 'contribution'])
             ->get()
             ->map(function($item) {
@@ -61,7 +67,11 @@ class ActivityTimeline extends Component
             });
 
         // KONTRIBUSI AKSI KOLEKTIF: Get collective action contributions made by user
+        // Filter by user's active session
         $collectiveActionContributions = CollectiveActionContribution::where('user_id', $user->id)
+            ->whereHas('collectiveAction', function($query) use ($user) {
+                $query->forUserActiveSession($user);
+            })
             ->with(['collectiveAction', 'contribution'])
             ->get()
             ->map(function($item) {

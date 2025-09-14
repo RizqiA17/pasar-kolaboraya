@@ -320,6 +320,32 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Scope to filter collective actions by PasarKolaboraya session
+     * Only show collective actions where the creator is in the same active session
+     */
+    public function scopeForPasarKolaboraya($query, $pasarKolaborayaId)
+    {
+        return $query->whereHas('creator', function ($userQuery) use ($pasarKolaborayaId) {
+            $userQuery->whereHas('pasarKolaborayas', function ($pasarQuery) use ($pasarKolaborayaId) {
+                $pasarQuery->where('pasar_kolaboraya_users.pasar_kolaboraya_id', $pasarKolaborayaId)
+                          ->where('pasar_kolaboraya_users.status', 'accepted');
+            });
+        });
+    }
+
+    /**
+     * Scope to filter collective actions by user's active PasarKolaboraya session
+     */
+    public function scopeForUserActiveSession($query, User $user)
+    {
+        if (!$user->hasActivePasarKolaboraya()) {
+            return $query->whereRaw('1 = 0'); // Return empty result
+        }
+        
+        return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
+    }
+
+    /**
      * Get scale label
      */
     public function getScaleLabelAttribute(): string

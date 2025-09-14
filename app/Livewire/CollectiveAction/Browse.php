@@ -56,8 +56,11 @@ class Browse extends Component
 
     public function getCollectiveActionsProperty()
     {
+        $user = Auth::user();
+        
         $query = CollectiveAction::with(['creator'])
-            ->where('status', '!=', 'draft');
+            ->where('status', '!=', 'draft')
+            ->forUserActiveSession($user); // Filter by user's active session
 
         // Search filter
         if ($this->search) {

@@ -17,8 +17,13 @@ class EcosystemBuilderSeeder extends Seeder
     {
         // Check if ecosystem builders already exist
         if (User::where('is_ecosystem_builder', true)->count() > 0) {
-            $this->command->info('Ecosystem builders already exist. Skipping ecosystem builder creation.');
-            return;
+            $this->command->info('Ecosystem builders already exist. Checking if ecosystems need to be created...');
+            
+            // Check if we have active ecosystems
+            if (Ecosystem::where('is_active', true)->count() > 0) {
+                $this->command->info('Active ecosystems already exist. Skipping ecosystem creation.');
+                return;
+            }
         }
 
         // Get super admin for approval

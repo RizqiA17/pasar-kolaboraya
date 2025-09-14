@@ -37,7 +37,10 @@ class Browse extends Component
         $this->skills = Skill::all();
         
         // Get unique regions from existing ecosystems
+        // Filter by user's active session
+        $user = Auth::user();
         $this->regions = Ecosystem::where('is_active', true)
+            ->forUserActiveSession($user) // Filter by user's active session
             ->distinct()
             ->pluck('work_region')
             ->filter()
@@ -76,8 +79,11 @@ class Browse extends Component
 
     public function getEcosystemsProperty()
     {
+        $user = Auth::user();
+        
         $query = Ecosystem::with(['creator', 'acceptedUsers'])
-            ->where('is_active', true);
+            ->where('is_active', true)
+            ->forUserActiveSession($user); // Filter by user's active session
 
         // Search filter
         if ($this->search) {

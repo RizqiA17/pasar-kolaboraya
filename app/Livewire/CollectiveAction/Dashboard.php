@@ -105,7 +105,10 @@ class Dashboard extends Component
         }
         
         // Get ecosystems that are not yet invited and not user's own
+        // Filter by user's active session
+        $user = Auth::user();
         $this->available_ecosystems = Ecosystem::where('is_active', true)
+            ->forUserActiveSession($user) // Filter by user's active session
             ->whereNotIn('id', array_merge($invitedEcosystemIds, $userEcosystemIds))
             ->where('creator_id', '!=', Auth::id())
             ->get();

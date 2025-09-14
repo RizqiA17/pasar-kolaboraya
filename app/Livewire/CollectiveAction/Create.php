@@ -81,8 +81,11 @@ class Create extends Component
         }
 
         // Get all active ecosystems except user's own ecosystems  
-        $userEcosystemIds = Auth::user()->acceptedEcosystems->pluck('id')->toArray();
+        // Filter by user's active session
+        $user = Auth::user();
+        $userEcosystemIds = $user->acceptedEcosystems->pluck('id')->toArray();
         $this->availableEcosystems = Ecosystem::where('is_active', true)
+            ->forUserActiveSession($user) // Filter by user's active session
             ->whereNotIn('id', $userEcosystemIds)
             ->where('creator_id', '!=', Auth::id())
             ->get();
