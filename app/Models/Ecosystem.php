@@ -265,51 +265,11 @@ class Ecosystem extends Model
     }
 
     /**
-     * Get volunteer contributions
+     * Get contributions by contribution type
      */
-    public function volunteerContributions(): HasMany
+    public function contributionsByType($contributionId): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'volunteer');
-    }
-
-    /**
-     * Get funding contributions
-     */
-    public function fundingContributions(): HasMany
-    {
-        return $this->contributions()->where('contribution_type', 'funding');
-    }
-
-    /**
-     * Get expertise contributions
-     */
-    public function expertiseContributions(): HasMany
-    {
-        return $this->contributions()->where('contribution_type', 'expertise');
-    }
-
-    /**
-     * Get resource contributions
-     */
-    public function resourceContributions(): HasMany
-    {
-        return $this->contributions()->where('contribution_type', 'resources');
-    }
-
-    /**
-     * Get promotion contributions
-     */
-    public function promotionContributions(): HasMany
-    {
-        return $this->contributions()->where('contribution_type', 'promotion');
-    }
-
-    /**
-     * Get other contributions
-     */
-    public function otherContributions(): HasMany
-    {
-        return $this->contributions()->where('contribution_type', 'other');
+        return $this->contributions()->where('contribution_id', $contributionId);
     }
 
     /**
@@ -318,7 +278,7 @@ class Ecosystem extends Model
     public function contributors(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'ecosystem_contributions')
-            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
+            ->withPivot(['contribution_id', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
             ->withTimestamps();
     }
 
@@ -345,6 +305,15 @@ class Ecosystem extends Model
     {
         if (!$this->is_active) {
             return false;
+        }
+
+        // Creator can always contribute
+        if ($user->id === $this->creator_id) {
+            // Check if creator is already a contributor
+            if ($this->contributors()->where('users.id', $user->id)->exists()) {
+                return false;
+            }
+            return true;
         }
 
         // Only accepted users can contribute

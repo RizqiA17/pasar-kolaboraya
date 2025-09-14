@@ -40,17 +40,18 @@
         <form wire:submit="submitContribution" class="p-6 space-y-6">
             <!-- Contribution Type -->
             <div>
-                <label for="contribution_type" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                <label for="contribution_id" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                     Jenis Kontribusi <span class="text-red-500">*</span>
                 </label>
-                <select wire:model.live="contribution_type" 
-                        id="contribution_type"
-                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    @foreach($contributionTypes as $value => $label)
-                        <option value="{{ $value }}">{{ $label }}</option>
+                <select wire:model.live="contribution_id" 
+                        id="contribution_id"
+                        class="mt-1 p-4 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Pilih jenis kontribusi...</option>
+                    @foreach($contributionTypes as $contribution)
+                        <option value="{{ $contribution->id }}">{{ $contribution->name }}</option>
                     @endforeach
                 </select>
-                @error('contribution_type') 
+                @error('contribution_id') 
                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> 
                 @enderror
             </div>
@@ -63,7 +64,7 @@
                 <textarea wire:model="contribution_description" 
                           id="contribution_description"
                           rows="4"
-                          class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          class="mt-1 p-4 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           placeholder="Jelaskan secara detail kontribusi yang ingin Anda berikan..."></textarea>
                 @error('contribution_description') 
                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> 
@@ -72,7 +73,11 @@
             </div>
 
             <!-- Contribution Amount (for funding) -->
-            @if($contribution_type === 'funding')
+            @php
+                $selectedContribution = $contributionTypes->firstWhere('id', $contribution_id);
+                $isFunding = $selectedContribution && str_contains(strtolower($selectedContribution->name), 'dana');
+            @endphp
+            @if($isFunding)
                 <div>
                     <label for="contribution_amount" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                         Jumlah Dana <span class="text-red-500">*</span>
@@ -94,7 +99,10 @@
             @endif
 
             <!-- Resource Details (for resources) -->
-            @if($contribution_type === 'resources')
+            @php
+                $isResources = $selectedContribution && str_contains(strtolower($selectedContribution->name), 'sumber daya');
+            @endphp
+            @if($isResources)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                         Detail Sumber Daya

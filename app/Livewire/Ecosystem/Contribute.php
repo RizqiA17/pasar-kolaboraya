@@ -4,6 +4,7 @@ namespace App\Livewire\Ecosystem;
 
 use App\Models\Ecosystem;
 use App\Models\EcosystemContribution;
+use App\Models\Contribution;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -12,19 +13,12 @@ use Livewire\Component;
 class Contribute extends Component
 {
     public Ecosystem $ecosystem;
-    public $contribution_type = 'volunteer';
+    public $contribution_id = '';
     public $contribution_description = '';
     public $contribution_amount = '';
     public $contribution_details = [];
 
-    public $contributionTypes = [
-        'volunteer' => 'Relawan/Tenaga',
-        'funding' => 'Dana/Pendanaan',
-        'expertise' => 'Keahlian/Expertise',
-        'resources' => 'Sumber Daya/Fasilitas',
-        'promotion' => 'Promosi/Marketing',
-        'other' => 'Lainnya',
-    ];
+    public $contributionTypes;
 
     public $resourceTypes = [
         'dana' => 'Dana/Pendanaan',
@@ -38,7 +32,7 @@ class Contribute extends Component
     ];
 
     protected $rules = [
-        'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
+        'contribution_id' => 'required|exists:contributions,id',
         'contribution_description' => 'required|string|min:10|max:1000',
         'contribution_amount' => 'nullable|numeric|min:0',
         'contribution_details' => 'nullable|array',
@@ -49,7 +43,8 @@ class Contribute extends Component
         $rules = $this->rules;
         
         // Add amount validation for funding contributions
-        if ($this->contribution_type === 'funding') {
+        $selectedContribution = $this->contributionTypes->where('id', $this->contribution_id)->first();
+        if ($selectedContribution && str_contains(strtolower($selectedContribution->name), 'dana')) {
             $rules['contribution_amount'] = 'required|numeric|min:1';
         }
         
@@ -59,6 +54,9 @@ class Contribute extends Component
     public function mount(Ecosystem $ecosystem)
     {
         $this->ecosystem = $ecosystem;
+        
+        // Load contribution types from database
+        $this->contributionTypes = Contribution::all();
         
         // Check if user is authenticated
         if (!Auth::check()) {
@@ -71,7 +69,7 @@ class Contribute extends Component
         }
     }
 
-    public function updatedContributionType()
+    public function updatedContributionId()
     {
         // Reset amount when changing type
         $this->contribution_amount = '';
@@ -100,7 +98,8 @@ class Contribute extends Component
 
         // Prepare contribution details
         $details = [];
-        if ($this->contribution_type === 'resources' && !empty($this->contribution_details)) {
+        $selectedContribution = $this->contributionTypes->where('id', $this->contribution_id)->first();
+        if ($selectedContribution && str_contains(strtolower($selectedContribution->name), 'sumber daya') && !empty($this->contribution_details)) {
             $details = $this->contribution_details;
         }
 
@@ -108,7 +107,7 @@ class Contribute extends Component
         $contribution = EcosystemContribution::create([
             'ecosystem_id' => $this->ecosystem->id,
             'user_id' => Auth::id(),
-            'contribution_type' => $this->contribution_type,
+            'contribution_id' => $this->contribution_id,
             'contribution_description' => $this->contribution_description,
             'contribution_amount' => $this->contribution_amount ?: null,
             'contribution_details' => $details,

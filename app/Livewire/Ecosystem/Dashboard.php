@@ -215,22 +215,24 @@ class Dashboard extends Component
     public function getContributionsProperty()
     {
         return $this->ecosystem->contributions()
-            ->with(['user.profile'])
+            ->with(['user.profile', 'contribution'])
             ->latest()
             ->paginate(10);
     }
 
     public function getPendingContributionsProperty()
     {
-        return $this->ecosystem->pendingContributions()
-            ->with(['profile'])
+        return $this->ecosystem->contributions()
+            ->where('status', 'offered')
+            ->with(['user.profile', 'contribution'])
             ->get();
     }
 
     public function getAcceptedContributionsProperty()
     {
-        return $this->ecosystem->acceptedContributors()
-            ->with(['profile'])
+        return $this->ecosystem->contributions()
+            ->where('status', 'accepted')
+            ->with(['user.profile', 'contribution'])
             ->get();
     }
 

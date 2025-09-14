@@ -10,7 +10,7 @@ class EcosystemContribution extends Model
     protected $fillable = [
         'ecosystem_id',
         'user_id',
-        'contribution_type',
+        'contribution_id',
         'contribution_description',
         'contribution_amount',
         'contribution_details',
@@ -43,6 +43,14 @@ class EcosystemContribution extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the contribution type this contribution belongs to
+     */
+    public function contribution(): BelongsTo
+    {
+        return $this->belongsTo(Contribution::class);
     }
 
     /**
@@ -82,15 +90,7 @@ class EcosystemContribution extends Model
      */
     public function getContributionTypeLabelAttribute(): string
     {
-        return match($this->contribution_type) {
-            'volunteer' => 'Relawan/Tenaga',
-            'funding' => 'Dana/Pendanaan',
-            'expertise' => 'Keahlian/Expertise',
-            'resources' => 'Sumber Daya/Fasilitas',
-            'promotion' => 'Promosi/Marketing',
-            'other' => 'Lainnya',
-            default => 'Tidak Diketahui'
-        };
+        return $this->contribution ? $this->contribution->name : 'Tidak Diketahui';
     }
 
     /**

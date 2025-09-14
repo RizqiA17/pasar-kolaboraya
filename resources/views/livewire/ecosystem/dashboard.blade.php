@@ -265,6 +265,22 @@
                         </div>
                         <div class="p-6">
                             @if ($isOwner)
+                                @if ($ecosystem->canUserContribute(Auth::user()))
+                                    <div class="flex items-center justify-between text-blue-600 dark:text-blue-400 mb-4">
+                                        <div class="flex items-center">
+                                            <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
+                                            <span>Anda adalah pemilik ekosistem dan dapat berkontribusi</span>
+                                        </div>
+                                        <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
+                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            Berkontribusi
+                                        </a>
+                                    </div>
+                                @endif
+
                                 @if ($pendingRequests->count() > 0)
                                     <div class="flex items-center text-amber-600 dark:text-amber-400 mb-4">
                                         <div class="w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full mr-3"></div>
@@ -843,39 +859,39 @@
                                             <div class="flex-1">
                                                 <div class="flex items-center space-x-3 mb-3">
                                                     <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
-                                                        @if ($contribution->profile && $contribution->profile->profile_photo)
-                                                            <img src="{{ asset('storage/' . $contribution->profile->profile_photo) }}"
-                                                                alt="{{ $contribution->name }}"
+                                                        @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
+                                                            <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
+                                                                alt="{{ $contribution->user->name }}"
                                                                 class="w-10 h-10 rounded-full object-cover">
                                                         @else
-                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->name, 0, 1) }}</span>
+                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
                                                         @endif
                                                     </div>
                                                     <div>
-                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->name }}</h4>
-                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->email }}</p>
+                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->user->name }}</h4>
+                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->user->email }}</p>
                                                     </div>
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->pivot->status_color_class }}">
-                                                        {{ $contribution->pivot->contribution_type_label }}
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
+                                                        {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
                                                     </span>
                                                 </div>
                                                 
                                                 <div class="mb-3">
                                                     <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Deskripsi:</strong></p>
-                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->pivot->contribution_description }}</p>
+                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->contribution_description }}</p>
                                                 </div>
 
-                                                @if ($contribution->pivot->contribution_amount)
+                                                @if ($contribution->contribution_amount)
                                                     <div class="mb-3">
-                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->pivot->contribution_amount, 0, ',', '.') }}</p>
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
                                                     </div>
                                                 @endif
 
-                                                @if ($contribution->pivot->contribution_details)
+                                                @if ($contribution->contribution_details)
                                                     <div class="mb-3">
                                                         <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Detail Tambahan:</strong></p>
                                                         <div class="mt-1 space-y-1">
-                                                            @foreach ($contribution->pivot->contribution_details as $detail)
+                                                            @foreach ($contribution->contribution_details as $detail)
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                     • {{ $detail['type'] ?? 'N/A' }}: {{ $detail['description'] ?? 'N/A' }}
                                                                     @if (isset($detail['quantity']) && $detail['quantity'])
@@ -888,17 +904,17 @@
                                                 @endif
 
                                                 <div class="text-xs text-gray-500 dark:text-slate-400">
-                                                    Diajukan {{ $contribution->pivot->offered_at ? $contribution->pivot->offered_at->diffForHumans() : 'N/A' }}
+                                                    Diajukan {{ $contribution->offered_at ? $contribution->offered_at->diffForHumans() : 'N/A' }}
                                                 </div>
                                             </div>
                                             
                                             @if ($isOwner)
                                                 <div class="ml-4 flex space-x-2">
-                                                    <button wire:click="acceptContribution({{ $contribution->pivot->id }})"
+                                                    <button wire:click="acceptContribution({{ $contribution->id }})"
                                                         class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Terima
                                                     </button>
-                                                    <button wire:click="declineContribution({{ $contribution->pivot->id }})"
+                                                    <button wire:click="declineContribution({{ $contribution->id }})"
                                                         class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Tolak
                                                     </button>
@@ -940,7 +956,7 @@
                                                         {{ $contribution->status_label }}
                                                     </span>
                                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                                                        {{ $contribution->contribution_type_label }}
+                                                        {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
                                                     </span>
                                                 </div>
                                                 
