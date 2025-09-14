@@ -20,6 +20,7 @@ class ConnectionSeeder extends Seeder
         }
 
         $users = User::all();
+        $pasarKolaboraya = \App\Models\PasarKolaboraya::where('status', 'active')->first();
         $connectionsCreated = 0;
         
         foreach ($users as $user) {
@@ -44,6 +45,7 @@ class ConnectionSeeder extends Seeder
                     Connection::create([
                         'requester_id' => $user->id,
                         'receiver_id' => $otherUser->id,
+                        'pasar_kolaboraya_id' => $pasarKolaboraya?->id,
                         'status' => $status,
                     ]);
                     $connectionsCreated++;
