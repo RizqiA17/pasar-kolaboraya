@@ -1,4 +1,4 @@
-@props([
+    @props([
     'user' => null,
     'showBanner' => true,
     'showAvatar' => true,

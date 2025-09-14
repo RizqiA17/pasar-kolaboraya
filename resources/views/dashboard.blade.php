@@ -226,6 +226,8 @@
 
                     <!-- Right Sidebar - Single column, consistent spacing -->
                     <div class="space-y-6">
+                        <!-- Active Session Info - Show current session status -->
+                        <livewire:dashboard.active-session-info />
                         <!-- Survey Card - Show active survey -->
                         <livewire:dashboard.survey-card />
                         <!-- Connection Quality - Only show if connections exist -->

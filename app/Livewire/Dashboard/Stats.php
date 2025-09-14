@@ -38,11 +38,26 @@ class Stats extends Component
             }
             
             return match($this->type) {
-                'connections' => $user->connections()->count(),
+                'connections' => \App\Models\Connection::forUserActiveSession($user)
+                    ->where('status', 'accepted')
+                    ->where(function($query) use ($user) {
+                        $query->where('requester_id', $user->id)
+                              ->orWhere('receiver_id', $user->id);
+                    })->count(),
                 'collaborations' => $user->collaborations()->count(),
                 'events' => $user->events()->count(),
-                'ecosystems' => $user->ecosystems()->count(),
-                'collective_actions' => $user->collectiveActionMemberships()->count(),
+                'ecosystems' => \App\Models\Ecosystem::forUserActiveSession($user)
+                    ->whereHas('acceptedUsers', function($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    })->count(),
+                'collective_actions' => \App\Models\CollectiveAction::forUserActiveSession($user)
+                    ->whereHas('acceptedInvitations', function($query) use ($user) {
+                        $query->whereHas('ecosystem', function($ecosystemQuery) use ($user) {
+                            $ecosystemQuery->whereHas('acceptedUsers', function($userQuery) use ($user) {
+                                $userQuery->where('user_id', $user->id);
+                            });
+                        });
+                    })->count(),
                 default => 0
             };
         } catch (\Exception $e) {
