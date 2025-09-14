@@ -10,7 +10,7 @@ class CollectiveActionContribution extends Model
     protected $fillable = [
         'collective_action_id',
         'user_id',
-        'contribution_type',
+        'contribution_id',
         'contribution_description',
         'contribution_amount',
         'contribution_details',
@@ -43,6 +43,14 @@ class CollectiveActionContribution extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the contribution type this contribution belongs to
+     */
+    public function contribution(): BelongsTo
+    {
+        return $this->belongsTo(Contribution::class);
     }
 
     /**
@@ -82,15 +90,7 @@ class CollectiveActionContribution extends Model
      */
     public function getContributionTypeLabelAttribute(): string
     {
-        return match($this->contribution_type) {
-            'volunteer' => 'Relawan/Tenaga',
-            'funding' => 'Dana/Pendanaan',
-            'expertise' => 'Keahlian/Expertise',
-            'resources' => 'Sumber Daya/Fasilitas',
-            'promotion' => 'Promosi/Marketing',
-            'other' => 'Lainnya',
-            default => ucfirst($this->contribution_type),
-        };
+        return $this->contribution ? $this->contribution->name : 'Unknown';
     }
 
     /**
@@ -158,7 +158,9 @@ class CollectiveActionContribution extends Model
      */
     public function scopeFunding($query)
     {
-        return $query->where('contribution_type', 'funding');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%funding%')->orWhere('name', 'like', '%dana%');
+        });
     }
 
     /**
@@ -166,7 +168,9 @@ class CollectiveActionContribution extends Model
      */
     public function scopeVolunteer($query)
     {
-        return $query->where('contribution_type', 'volunteer');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%volunteer%')->orWhere('name', 'like', '%relawan%');
+        });
     }
 
     /**
@@ -174,7 +178,9 @@ class CollectiveActionContribution extends Model
      */
     public function scopeExpertise($query)
     {
-        return $query->where('contribution_type', 'expertise');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%expertise%')->orWhere('name', 'like', '%keahlian%');
+        });
     }
 
     /**
@@ -182,7 +188,9 @@ class CollectiveActionContribution extends Model
      */
     public function scopeResources($query)
     {
-        return $query->where('contribution_type', 'resources');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%resource%')->orWhere('name', 'like', '%sumber daya%');
+        });
     }
 
     /**
@@ -190,7 +198,9 @@ class CollectiveActionContribution extends Model
      */
     public function scopePromotion($query)
     {
-        return $query->where('contribution_type', 'promotion');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%promotion%')->orWhere('name', 'like', '%promosi%');
+        });
     }
 
     /**
@@ -198,6 +208,8 @@ class CollectiveActionContribution extends Model
      */
     public function scopeOther($query)
     {
-        return $query->where('contribution_type', 'other');
+        return $query->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%other%')->orWhere('name', 'like', '%lainnya%');
+        });
     }
 }

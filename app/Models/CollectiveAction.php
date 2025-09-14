@@ -150,7 +150,9 @@ class CollectiveAction extends Model
      */
     public function fundingContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'funding');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%funding%')->orWhere('name', 'like', '%dana%');
+        });
     }
 
     /**
@@ -158,7 +160,9 @@ class CollectiveAction extends Model
      */
     public function volunteerContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'volunteer');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%volunteer%')->orWhere('name', 'like', '%relawan%');
+        });
     }
 
     /**
@@ -166,7 +170,9 @@ class CollectiveAction extends Model
      */
     public function expertiseContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'expertise');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%expertise%')->orWhere('name', 'like', '%keahlian%');
+        });
     }
 
     /**
@@ -174,7 +180,9 @@ class CollectiveAction extends Model
      */
     public function resourceContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'resources');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%resource%')->orWhere('name', 'like', '%sumber daya%');
+        });
     }
 
     /**
@@ -182,7 +190,9 @@ class CollectiveAction extends Model
      */
     public function promotionContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'promotion');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%promotion%')->orWhere('name', 'like', '%promosi%');
+        });
     }
 
     /**
@@ -190,7 +200,9 @@ class CollectiveAction extends Model
      */
     public function otherContributions(): HasMany
     {
-        return $this->contributions()->where('contribution_type', 'other');
+        return $this->contributions()->whereHas('contribution', function($q) {
+            $q->where('name', 'like', '%other%')->orWhere('name', 'like', '%lainnya%');
+        });
     }
 
     /**
@@ -199,7 +211,7 @@ class CollectiveAction extends Model
     public function contributors(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'collective_action_contributions')
-            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
+            ->withPivot(['contribution_id', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
             ->withTimestamps();
     }
 

@@ -7,50 +7,55 @@ use Illuminate\Database\Seeder;
 
 class ContributionSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
         $contributions = [
-            // Sumber Daya yang Disumbangkan (Resources Contributed)
             [
-                'name' => 'Dana',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'currency-dollar',
-                'description' => 'Kontribusi berupa dana atau pendanaan untuk mendukung kegiatan kolaborasi',
+                'name' => 'Relawan/Tenaga',
+                'icon' => 'fas fa-hands-helping',
+                'category' => 'volunteer',
+                'description' => 'Kontribusi berupa tenaga dan waktu untuk membantu kegiatan',
             ],
             [
-                'name' => 'Infrastruktur',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'building-office',
-                'description' => 'Kontribusi berupa infrastruktur fisik atau fasilitas untuk mendukung kegiatan',
+                'name' => 'Dana/Pendanaan',
+                'icon' => 'fas fa-money-bill-wave',
+                'category' => 'funding',
+                'description' => 'Kontribusi berupa dana untuk mendukung kegiatan',
             ],
             [
-                'name' => 'Relasi',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'user-group',
-                'description' => 'Kontribusi berupa jaringan relasi dan koneksi untuk memperluas dampak kolaborasi',
+                'name' => 'Keahlian/Expertise',
+                'icon' => 'fas fa-user-graduate',
+                'category' => 'expertise',
+                'description' => 'Kontribusi berupa keahlian dan pengetahuan khusus',
             ],
             [
-                'name' => 'Keahlian',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'academic-cap',
-                'description' => 'Kontribusi berupa keahlian, pengetahuan, dan keterampilan khusus',
+                'name' => 'Sumber Daya/Fasilitas',
+                'icon' => 'fas fa-tools',
+                'category' => 'resources',
+                'description' => 'Kontribusi berupa fasilitas, peralatan, atau sumber daya lainnya',
             ],
             [
-                'name' => 'Akses Pasar',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'chart-bar',
-                'description' => 'Kontribusi berupa akses ke pasar, pelanggan, atau target audiens',
+                'name' => 'Promosi/Marketing',
+                'icon' => 'fas fa-bullhorn',
+                'category' => 'promotion',
+                'description' => 'Kontribusi berupa promosi dan pemasaran kegiatan',
             ],
             [
-                'name' => 'Teknologi',
-                'category' => 'Sumber Daya yang Disumbangkan',
-                'icon' => 'computer-desktop',
-                'description' => 'Kontribusi berupa teknologi, platform, atau tools untuk mendukung kolaborasi',
+                'name' => 'Lainnya',
+                'icon' => 'fas fa-ellipsis-h',
+                'category' => 'other',
+                'description' => 'Kontribusi lainnya yang tidak termasuk dalam kategori di atas',
             ],
         ];
 
         foreach ($contributions as $contribution) {
-            Contribution::create($contribution);
+            Contribution::updateOrCreate(
+                ['name' => $contribution['name']],
+                $contribution
+            );
         }
     }
 }

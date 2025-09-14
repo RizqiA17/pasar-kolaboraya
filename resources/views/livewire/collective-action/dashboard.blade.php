@@ -840,17 +840,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <flux:select 
-                            wire:model="contribution_type" 
+                            wire:model="contribution_id" 
                             :label="'Jenis Kontribusi'" 
                             required
                         >
-                            @foreach($contributionTypes as $key => $label)
-                                <option value="{{ $key }}">{{ $label }}</option>
+                            @foreach($contributionTypes as $id => $name)
+                                <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
                         </flux:select>
                     </div>
                     
-                    @if($contribution_type === 'funding')
+                    @php
+                        $selectedContribution = \App\Models\Contribution::find($contribution_id);
+                        $isFunding = $selectedContribution && (str_contains(strtolower($selectedContribution->name), 'funding') || str_contains(strtolower($selectedContribution->name), 'dana'));
+                    @endphp
+                    @if($isFunding)
                         <div>
                             <flux:input
                                 wire:model="contribution_amount"

@@ -3,6 +3,7 @@
 namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
+use App\Models\Contribution;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -11,19 +12,12 @@ use Livewire\Component;
 class Contribute extends Component
 {
     public CollectiveAction $collectiveAction;
-    public $contribution_type = 'volunteer';
+    public $contribution_id = '';
     public $contribution_description = '';
     public $contribution_amount = '';
     public $contribution_details = [];
 
-    public $contributionTypes = [
-        'volunteer' => 'Relawan/Tenaga',
-        'funding' => 'Dana/Pendanaan',
-        'expertise' => 'Keahlian/Expertise',
-        'resources' => 'Sumber Daya/Fasilitas',
-        'promotion' => 'Promosi/Marketing',
-        'other' => 'Lainnya',
-    ];
+    public $contributionTypes = [];
 
     public $resourceTypes = [
         'dana' => 'Dana/Pendanaan',
@@ -36,23 +30,17 @@ class Contribute extends Component
         'relasi' => 'Relasi/Networking',
     ];
 
-    protected $rules = [
-        'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
-        'contribution_description' => 'required|string|min:10|max:1000',
-        'contribution_amount' => 'nullable|numeric|min:0',
-        'contribution_details' => 'nullable|array',
-    ];
-
     protected function rules()
     {
         $rules = [
-            'contribution_type' => 'required|in:volunteer,funding,expertise,resources,promotion,other',
+            'contribution_id' => 'required|exists:contributions,id',
             'contribution_description' => 'required|string|min:10|max:1000',
             'contribution_details' => 'nullable|array',
         ];
 
         // Only require amount for funding contributions
-        if ($this->contribution_type === 'funding') {
+        $contribution = Contribution::find($this->contribution_id);
+        if ($contribution && (str_contains(strtolower($contribution->name), 'funding') || str_contains(strtolower($contribution->name), 'dana'))) {
             $rules['contribution_amount'] = 'required|numeric|min:0';
         } else {
             $rules['contribution_amount'] = 'nullable|numeric|min:0';
@@ -62,7 +50,8 @@ class Contribute extends Component
     }
 
     protected $messages = [
-        'contribution_type.required' => 'Jenis kontribusi wajib dipilih',
+        'contribution_id.required' => 'Jenis kontribusi wajib dipilih',
+        'contribution_id.exists' => 'Jenis kontribusi tidak valid',
         'contribution_description.required' => 'Deskripsi kontribusi wajib diisi',
         'contribution_description.min' => 'Deskripsi kontribusi minimal 10 karakter',
         'contribution_description.max' => 'Deskripsi kontribusi maksimal 1000 karakter',
@@ -73,6 +62,9 @@ class Contribute extends Component
     public function mount(CollectiveAction $collectiveAction)
     {
         $this->collectiveAction = $collectiveAction;
+
+        // Load contribution types from database
+        $this->contributionTypes = Contribution::orderBy('name')->pluck('name', 'id')->toArray();
 
         // Check if user can contribute
         if (!$collectiveAction->canUserContribute(Auth::user())) {
@@ -99,7 +91,7 @@ class Contribute extends Component
 
         // Prepare contribution data
         $contributionData = [
-            'contribution_type' => $this->contribution_type,
+            'contribution_id' => $this->contribution_id,
             'contribution_description' => $this->contribution_description,
             'contribution_amount' => $contributionAmount,
             'contribution_details' => $this->contribution_details,

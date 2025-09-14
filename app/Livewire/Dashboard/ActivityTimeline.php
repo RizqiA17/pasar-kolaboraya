@@ -2,43 +2,58 @@
 
 namespace App\Livewire\Dashboard;
 
-use App\Models\Event;
-use App\Models\Collaboration;
+use App\Models\CollectiveAction;
+use App\Models\Ecosystem;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityTimeline extends Component
 {
     public function getActivitiesProperty()
     {
-        $user = auth()->user();
+        $user = Auth::user();
+        
+        if (!$user) {
+            return collect();
+        }
 
-        $events = Event::where(function($query) use ($user) {
-            $query->whereHas('participants', function($q) use ($user) {
-                $q->where('user_id', $user->id);
+        $activities = collect();
+
+        // HANYA AKSI KOLEKTIF: Get collective actions where user is involved through ecosystem membership
+        $collectiveActions = CollectiveAction::whereHas('acceptedInvitations', function($query) use ($user) {
+            $query->whereHas('ecosystem', function($ecosystemQuery) use ($user) {
+                $ecosystemQuery->whereHas('acceptedUsers', function($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
             });
-        })->select([
-            'id',
-            'title',
-            'created_at',
-            DB::raw("'event' as type")
-        ]);
+        })->get()->map(function($item) {
+            $item->type = 'collective_action';
+            return $item;
+        });
 
-        $collaborations = Collaboration::where(function($query) use ($user) {
-            $query->whereHas('members', function($q) use ($user) {
-                $q->where('user_id', $user->id);
+        // HANYA EKOSISTEM: Get ecosystems where user is a member
+        $userEcosystems = DB::table('ecosystem_users')
+            ->where('user_id', $user->id)
+            ->where('status', 'accepted')
+            ->join('ecosystems', 'ecosystem_users.ecosystem_id', '=', 'ecosystems.id')
+            ->select('ecosystems.*')
+            ->get()
+            ->map(function($item) {
+                $item->type = 'ecosystem';
+                $item->title = $item->ecosystem_title;
+                return $item;
             });
-        })->select([
-            'id',
-            'title',
-            'created_at',
-            DB::raw("'collaboration' as type")
-        ]);
 
-        return $events->union($collaborations)
-            ->orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get();
+        // Merge only ecosystem-related activities
+        $activities = $activities->merge($collectiveActions)
+                                ->merge($userEcosystems);
+
+        // Remove duplicates and sort by created_at
+        return $activities->unique('id')
+                         ->sortByDesc('created_at')
+                         ->take(5)
+                         ->values();
     }
 
     public function render()

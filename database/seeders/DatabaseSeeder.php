@@ -25,17 +25,17 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProfileSeeder::class,
             ConnectionSeeder::class,
-            EventSeeder::class,
-            CollaborationSeeder::class,
-            TodoSeeder::class,
-            CommentSeeder::class,
+            // EventSeeder::class,
+            // CollaborationSeeder::class,
+            // TodoSeeder::class,
+            // CommentSeeder::class,
             
-            // Ecosystem Builders
-            EcosystemBuilderSeeder::class,
+            // // Ecosystem Builders
+            // EcosystemBuilderSeeder::class,
             
-            // Survey Data
-            SurveySeeder::class,
-            SurveyResponseSeeder::class,
+            // // Survey Data
+            // SurveySeeder::class,
+            // SurveyResponseSeeder::class,
         ]);
     }
 }

@@ -109,18 +109,22 @@
             <!-- Contribution Type -->
             <div class="mb-6">
                 <flux:select 
-                    wire:model="contribution_type" 
+                    wire:model="contribution_id" 
                     :label="'Jenis Kontribusi'" 
                     required
                     class="mb-4"
                 >
-                    @foreach($contributionTypes as $key => $label)
-                        <option value="{{ $key }}">{{ $label }}</option>
+                    @foreach($contributionTypes as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
                     @endforeach
                 </flux:select>
                 
                 <!-- Dynamic form based on contribution type -->
-                @if($contribution_type === 'funding')
+                @php
+                    $selectedContribution = \App\Models\Contribution::find($contribution_id);
+                    $isFunding = $selectedContribution && (str_contains(strtolower($selectedContribution->name), 'funding') || str_contains(strtolower($selectedContribution->name), 'dana'));
+                @endphp
+                @if($isFunding)
                     <div class="mt-4">
                         <flux:input
                             wire:model="contribution_amount"
@@ -183,7 +187,7 @@
                         />
                     </div>
                 </div>
-            @elseif($contribution_type === 'expertise')
+            @elseif($selectedContribution && (str_contains(strtolower($selectedContribution->name), 'expertise') || str_contains(strtolower($selectedContribution->name), 'keahlian')))
                 <div class="mb-6">
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Detail Keahlian</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -202,7 +206,7 @@
                         />
                     </div>
                 </div>
-            @elseif($contribution_type === 'resources')
+            @elseif($selectedContribution && (str_contains(strtolower($selectedContribution->name), 'resource') || str_contains(strtolower($selectedContribution->name), 'sumber daya')))
                 <div class="mb-6">
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Detail Sumber Daya</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -220,7 +224,7 @@
                         />
                     </div>
                 </div>
-            @elseif($contribution_type === 'promotion')
+            @elseif($selectedContribution && (str_contains(strtolower($selectedContribution->name), 'promotion') || str_contains(strtolower($selectedContribution->name), 'promosi')))
                 <div class="mb-6">
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Detail Promosi</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
