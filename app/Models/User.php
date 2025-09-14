@@ -114,7 +114,8 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function connections()
     {
         return $this->hasMany(Connection::class, 'requester_id')
-            ->where('status', 'accepted');
+            ->where('status', 'accepted')
+            ->forUserActiveSession($this); // Filter by user's active session
     }
 
     public function collaborations()
@@ -182,12 +183,14 @@ class User extends Authenticatable // implements MustVerifyEmail
         }
 
         // Get users who have similar interests through their profile
+        // Filter by users in the same active session
         return User::whereHas('profile', function ($query) use ($userInterests) {
             $query->whereHas('interests', function ($subQuery) use ($userInterests) {
                 $subQuery->whereIn('interests.id', $userInterests);
             });
         })
             ->where('id', '!=', $this->id)
+            ->where('active_pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id) // Filter by same active session
             ->limit($limit)
             ->get();
     }
@@ -209,12 +212,14 @@ class User extends Authenticatable // implements MustVerifyEmail
         }
 
         // Get users who have similar skills through their profile
+        // Filter by users in the same active session
         return User::whereHas('profile', function ($query) use ($userSkills) {
             $query->whereHas('skills', function ($subQuery) use ($userSkills) {
                 $subQuery->whereIn('skills.id', $userSkills);
             });
         })
             ->where('id', '!=', $this->id)
+            ->where('active_pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id) // Filter by same active session
             ->limit($limit)
             ->get();
     }
@@ -226,10 +231,17 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         $userEventIds = $this->events()->pluck('event_id');
 
+        if ($userEventIds->isEmpty()) {
+            return collect();
+        }
+
+        // Get users who participated in the same events
+        // Filter by users in the same active session
         return User::whereHas('events', function ($query) use ($userEventIds) {
             $query->whereIn('event_id', $userEventIds);
         })
             ->where('id', '!=', $this->id)
+            ->where('active_pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id) // Filter by same active session
             ->withCount([
                 'events' => function ($query) use ($userEventIds) {
                     $query->whereIn('event_id', $userEventIds);
@@ -247,18 +259,25 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         $currentUserId = $this->id;
 
-        // Get IDs of current user's friends
+        // Get IDs of current user's friends in the same active session
         $myFriendIds = $this->connections()
             ->where('status', 'accepted')
+            ->forUserActiveSession($this) // Filter by user's active session
             ->pluck('receiver_id')
             ->toArray();
 
+        if (empty($myFriendIds)) {
+            return collect();
+        }
+
         // Get users who are friends with my friends but not with me
+        // Filter by users in the same active session
         return User::whereHas('connections', function ($query) use ($myFriendIds) {
             $query->whereIn('receiver_id', $myFriendIds)
                 ->where('status', 'accepted');
         })
             ->where('id', '!=', $currentUserId)
+            ->where('active_pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id) // Filter by same active session
             ->whereNotIn('id', $myFriendIds)  // Exclude users who are already friends
             ->whereDoesntHave('receivedConnections', function ($query) use ($currentUserId) {  // Exclude pending requests
                 $query->where('requester_id', $currentUserId);
@@ -277,7 +296,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Get connection status with another user
      */
-    public function getConnectionStatus($otherUserId)
+public function getConnectionStatus($otherUserId)
     {
         $currentUserId = $this->id;
 
@@ -285,14 +304,16 @@ class User extends Authenticatable // implements MustVerifyEmail
             return 'self';
         }
 
-        // Check if already connected
+        // Check if already connected - filter by active session
         $existingConnection = Connection::where(function ($query) use ($otherUserId, $currentUserId) {
             $query->where('requester_id', $currentUserId)
                 ->where('receiver_id', $otherUserId);
         })->orWhere(function ($query) use ($otherUserId, $currentUserId) {
             $query->where('requester_id', $otherUserId)
                 ->where('receiver_id', $currentUserId);
-        })->first();
+        })
+        ->forUserActiveSession($this) // Filter by user's active session
+        ->first();
 
         if (!$existingConnection) {
             return 'not_connected';
