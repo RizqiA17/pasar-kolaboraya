@@ -458,6 +458,14 @@ class User extends Authenticatable // implements MustVerifyEmail
     }
 
     /**
+     * Get ecosystem contributions made by this user
+     */
+    public function ecosystemContributions(): HasMany
+    {
+        return $this->hasMany(EcosystemContribution::class);
+    }
+
+    /**
      * Get collective action contributions made by this user
      */
     public function collectiveActionContributions(): HasMany

@@ -21,7 +21,18 @@ class ViewProfile extends Component
 
     public function mount($userId)
     {
-        $this->user = User::findOrFail($userId);
+        $this->user = User::with([
+            'profile',
+            'ecosystems',
+            'acceptedEcosystems',
+            'pendingEcosystems',
+            'createdEcosystems',
+            'collectiveActionMemberships',
+            'activeCollectiveActions',
+            'adminCollectiveActions',
+            'memberCollectiveActions',
+            'contributorCollectiveActions'
+        ])->findOrFail($userId);
         $this->profile = $this->user->profile;
     }
 
@@ -107,15 +118,26 @@ class ViewProfile extends Component
         }
     }
 
-    public function startCollaboration($userId)
+    public function startEcosystem($userId)
     {
-        // Check if collaborations are enabled
-        if (!SystemSetting::isCollaborationsEnabled() && !Auth::user()->isSuperAdmin()) {
-            session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
+        // Check if ecosystems are enabled
+        if (!SystemSetting::isEcosystemsEnabled(Auth::user()) && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur ekosistem sedang dinonaktifkan oleh administrator.');
             return;
         }
 
-        return redirect()->route('collaborations.new-collaboration', ['id' => $userId]);
+        return redirect()->route('ecosystems.create', ['invite_user_id' => $userId]);
+    }
+
+    public function startCollectiveAction($userId)
+    {
+        // Check if collective actions are enabled
+        if (!SystemSetting::isCollectiveActionsEnabled() && !Auth::user()->isSuperAdmin()) {
+            session()->flash('error', 'Fitur aksi kolektif sedang dinonaktifkan oleh administrator.');
+            return;
+        }
+
+        return redirect()->route('collective-actions.create', ['invite_user_id' => $userId]);
     }
 
     public function updateConnectionStatus($userId, $status)
