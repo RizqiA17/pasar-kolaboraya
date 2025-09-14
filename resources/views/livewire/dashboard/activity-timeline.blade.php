@@ -1,4 +1,4 @@
-<div class="space-y-6" wire:poll.10s>
+<div class="space-y-4" wire:poll.10s>
     @forelse($activities as $activity)
         <div class="group relative">
             <!-- Timeline Line -->
@@ -37,99 +37,101 @@
 
                 <!-- Enhanced Content -->
                 <div class="ml-6 flex-1">
-                    <div class="bg-white dark:bg-zinc-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-blue-200 dark:group-hover:border-blue-700">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                    {{ $activity->title }}
-                                </h4>
-                                
-                                <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                    @if($activity->type === 'collective_action')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
-                                            <flux:icon.rocket-launch class="w-3 h-3 mr-1" />
-                                            Aksi Kolektif
-                                        </span>
-                                    @elseif($activity->type === 'ecosystem')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                                            <flux:icon.building-office class="w-3 h-3 mr-1" />
-                                            Ekosistem
-                                        </span>
-                                    @elseif($activity->type === 'ecosystem_contribution')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                                            <flux:icon.hand-raised class="w-3 h-3 mr-1" />
-                                            Kontribusi Ekosistem
-                                        </span>
-                                    @elseif($activity->type === 'collective_action_contribution')
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
-                                            <flux:icon.heart class="w-3 h-3 mr-1" />
-                                            Kontribusi Aksi Kolektif
-                                        </span>
-                                    @endif
+                    <div class="bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-blue-200 dark:group-hover:border-blue-700 min-h-[140px]">
+                        <div class="flex items-start justify-between h-full">
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                                        {{ $activity->title }}
+                                    </h4>
                                     
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                                        <flux:icon.clock class="w-3 h-3 mr-1" />
-                                        {{ Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}
-                                    </span>
-                                </div>
-                                
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    @if($activity->type === 'collective_action')
-                                        🚀 Aksi kolektif baru telah dibuat dan melibatkan ekosistem Anda
-                                    @elseif($activity->type === 'ecosystem')
-                                        🏢 Anda telah bergabung dengan ekosistem baru
-                                    @elseif($activity->type === 'ecosystem_contribution')
-                                        🤝 Anda telah mengajukan kontribusi untuk ekosistem {{ $activity->ecosystem_title ?? 'ini' }}
-                                        @if(isset($activity->contribution_description))
-                                            <br><span class="text-xs text-gray-400">{{ Str::limit($activity->contribution_description, 100) }}</span>
+                                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                                        @if($activity->type === 'collective_action')
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                                <flux:icon.rocket-launch class="w-3 h-3 mr-1.5" />
+                                                Aksi Kolektif
+                                            </span>
+                                        @elseif($activity->type === 'ecosystem')
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                                <flux:icon.building-office class="w-3 h-3 mr-1.5" />
+                                                Ekosistem
+                                            </span>
+                                        @elseif($activity->type === 'ecosystem_contribution')
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                <flux:icon.hand-raised class="w-3 h-3 mr-1.5" />
+                                                Kontribusi Ekosistem
+                                            </span>
+                                        @elseif($activity->type === 'collective_action_contribution')
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                                <flux:icon.heart class="w-3 h-3 mr-1.5" />
+                                                Kontribusi Aksi Kolektif
+                                            </span>
                                         @endif
-                                    @elseif($activity->type === 'collective_action_contribution')
-                                        ❤️ Anda telah mengajukan kontribusi untuk aksi kolektif {{ $activity->collectiveAction->title ?? 'ini' }}
-                                        @if(isset($activity->contribution_description))
-                                            <br><span class="text-xs text-gray-400">{{ Str::limit($activity->contribution_description, 100) }}</span>
-                                        @endif
-                                    @endif
-                                </p>
-                                
-                                @if(in_array($activity->type, ['ecosystem_contribution', 'collective_action_contribution']))
-                                    <div class="mt-2">
-                                        @php
-                                            $statusConfig = [
-                                                'offered' => ['class' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300', 'label' => 'Menunggu Persetujuan'],
-                                                'accepted' => ['class' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300', 'label' => 'Diterima'],
-                                                'completed' => ['class' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300', 'label' => 'Selesai'],
-                                                'declined' => ['class' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', 'label' => 'Ditolak']
-                                            ];
-                                            $config = $statusConfig[$activity->status] ?? $statusConfig['offered'];
-                                        @endphp
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $config['class'] }}">
-                                            {{ $config['label'] }}
+                                        
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                            <flux:icon.clock class="w-3 h-3 mr-1.5" />
+                                            {{ Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}
                                         </span>
                                     </div>
-                                @endif
+                                    
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                                        @if($activity->type === 'collective_action')
+                                            Aksi kolektif baru telah dibuat dan melibatkan ekosistem Anda
+                                        @elseif($activity->type === 'ecosystem')
+                                            Anda telah bergabung dengan ekosistem baru
+                                        @elseif($activity->type === 'ecosystem_contribution')
+                                            Anda telah mengajukan kontribusi untuk ekosistem {{ $activity->ecosystem_title ?? 'ini' }}
+                                            @if(isset($activity->contribution_description))
+                                                <br><span class="text-xs text-gray-400 mt-1 block">{{ Str::limit($activity->contribution_description, 100) }}</span>
+                                            @endif
+                                        @elseif($activity->type === 'collective_action_contribution')
+                                            Anda telah mengajukan kontribusi untuk aksi kolektif {{ $activity->collectiveAction->title ?? 'ini' }}
+                                            @if(isset($activity->contribution_description))
+                                                <br><span class="text-xs text-gray-400 mt-1 block">{{ Str::limit($activity->contribution_description, 100) }}</span>
+                                            @endif
+                                        @endif
+                                    </p>
+                                    
+                                    @if(in_array($activity->type, ['ecosystem_contribution', 'collective_action_contribution']))
+                                        <div class="mt-3">
+                                            @php
+                                                $statusConfig = [
+                                                    'offered' => ['class' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300', 'label' => 'Menunggu Persetujuan'],
+                                                    'accepted' => ['class' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300', 'label' => 'Diterima'],
+                                                    'completed' => ['class' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300', 'label' => 'Selesai'],
+                                                    'declined' => ['class' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', 'label' => 'Ditolak']
+                                                ];
+                                                $config = $statusConfig[$activity->status] ?? $statusConfig['offered'];
+                                            @endphp
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium {{ $config['class'] }}">
+                                                {{ $config['label'] }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             
                             <!-- Action Button -->
-                            <div class="ml-4">
+                            <div class="ml-4 flex-shrink-0">
                                 @if($activity->type === 'collective_action')
-                                    <a href="{{ route('collective-action.show', $activity->id) }}" class="inline-flex items-center px-3 py-2 text-xs font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-lg transition-colors">
+                                    <a href="{{ route('collective-action.show', $activity->id) }}" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-lg transition-colors whitespace-nowrap">
                                         Lihat Aksi Kolektif
-                                        <flux:icon.arrow-right class="w-3 h-3 ml-1" />
+                                        <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                     </a>
                                 @elseif($activity->type === 'ecosystem')
-                                    <a href="{{ route('ecosystem.dashboard', $activity->id) }}" class="inline-flex items-center px-3 py-2 text-xs font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30 dark:hover:bg-purple-900/50 rounded-lg transition-colors">
+                                    <a href="{{ route('ecosystem.dashboard', $activity->id) }}" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30 dark:hover:bg-purple-900/50 rounded-lg transition-colors whitespace-nowrap">
                                         Lihat Ekosistem
-                                        <flux:icon.arrow-right class="w-3 h-3 ml-1" />
+                                        <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                     </a>
                                 @elseif($activity->type === 'ecosystem_contribution')
-                                    <a href="{{ route('ecosystem.dashboard', $activity->ecosystem_id) }}" class="inline-flex items-center px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 rounded-lg transition-colors">
+                                    <a href="{{ route('ecosystem.dashboard', $activity->ecosystem_id) }}" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 rounded-lg transition-colors whitespace-nowrap">
                                         Lihat Ekosistem
-                                        <flux:icon.arrow-right class="w-3 h-3 ml-1" />
+                                        <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                     </a>
                                 @elseif($activity->type === 'collective_action_contribution')
-                                    <a href="{{ route('collective-action.show', $activity->collective_action_id) }}" class="inline-flex items-center px-3 py-2 text-xs font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30 dark:hover:bg-orange-900/50 rounded-lg transition-colors">
+                                    <a href="{{ route('collective-action.show', $activity->collective_action_id) }}" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 dark:text-orange-400 dark:bg-orange-900/30 dark:hover:bg-orange-900/50 rounded-lg transition-colors whitespace-nowrap">
                                         Lihat Aksi Kolektif
-                                        <flux:icon.arrow-right class="w-3 h-3 ml-1" />
+                                        <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                     </a>
                                 @endif
                             </div>
