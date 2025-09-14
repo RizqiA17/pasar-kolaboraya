@@ -25,17 +25,26 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProfileSeeder::class,
             ConnectionSeeder::class,
+            SuperAdminSeeder::class,
+            
+            // Container System
+            ContainerSeeder::class,
+            ContainerUserSeeder::class,
+            
+            // Pasar Kolaboraya System
+            PasarKolaborayaSeeder::class,
+            
             // EventSeeder::class,
             // CollaborationSeeder::class,
             // TodoSeeder::class,
             // CommentSeeder::class,
             
-            // // Ecosystem Builders
-            // EcosystemBuilderSeeder::class,
+            // Ecosystem Builders
+            EcosystemBuilderSeeder::class,
             
-            // // Survey Data
-            // SurveySeeder::class,
-            // SurveyResponseSeeder::class,
+            // Survey Data
+            SurveySeeder::class,
+            SurveyResponseSeeder::class,
         ]);
     }
 }

@@ -12,6 +12,12 @@ class FeatureSettingsSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if feature settings already exist
+        if (SystemSetting::whereIn('key', ['connections_enabled', 'collaborations_enabled', 'user_actions_enabled'])->count() > 0) {
+            $this->command->info('Feature settings already exist. Skipping feature setting creation.');
+            return;
+        }
+
         // Initialize new feature settings with default values
         SystemSetting::setValue(
             'connections_enabled',

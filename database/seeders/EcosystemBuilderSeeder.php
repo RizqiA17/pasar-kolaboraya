@@ -15,6 +15,20 @@ class EcosystemBuilderSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if ecosystem builders already exist
+        if (User::where('is_ecosystem_builder', true)->count() > 0) {
+            $this->command->info('Ecosystem builders already exist. Skipping ecosystem builder creation.');
+            return;
+        }
+
+        // Get super admin for approval
+        $superAdmin = User::where('role', 'super_admin')->first();
+        
+        if (!$superAdmin) {
+            $this->command->error('Super admin not found. Please run UserSeeder first.');
+            return;
+        }
+
         // Get some skills for the ecosystems
         $skills = Skill::all();
         $skillIds = $skills->pluck('id')->toArray();
@@ -31,7 +45,7 @@ class EcosystemBuilderSeeder extends Seeder
                     'ecosystem_builder_status' => 'approved',
                     'ecosystem_builder_reason' => 'Experienced in sustainable development and community building with 10+ years of expertise.',
                     'ecosystem_builder_approved_at' => now(),
-                    'ecosystem_builder_approved_by' => 1, // Assuming admin user ID is 1
+                    'ecosystem_builder_approved_by' => $superAdmin->id,
                 ],
                 'ecosystem' => [
                     'organization_name' => 'Green Future Initiative',

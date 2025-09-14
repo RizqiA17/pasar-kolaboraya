@@ -9,6 +9,12 @@ class EventCategorySeeder extends Seeder
 {
     public function run()
     {
+        // Check if event categories already exist
+        if (DB::table('event_categories')->count() > 0) {
+            $this->command->info('Event categories already exist. Skipping event category creation.');
+            return;
+        }
+
         $categories = [
             [
                 'name' => 'Workshop & Pelatihan',

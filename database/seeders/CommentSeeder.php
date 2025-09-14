@@ -14,6 +14,12 @@ class CommentSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if comments already exist
+        if (Comment::count() > 0) {
+            $this->command->info('Comments already exist. Skipping comment creation.');
+            return;
+        }
+
         $todos = Todo::with('collaboration.members')->get();
         
         foreach ($todos as $todo) {

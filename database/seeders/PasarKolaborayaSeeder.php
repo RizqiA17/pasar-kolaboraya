@@ -14,11 +14,17 @@ class PasarKolaborayaSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if Pasar Kolaboraya already exist
+        if (PasarKolaboraya::count() > 0) {
+            $this->command->info('Pasar Kolaboraya already exist. Skipping Pasar Kolaboraya creation.');
+            return;
+        }
+
         // Get super admin
         $superAdmin = User::where('role', 'super_admin')->first();
         
         if (!$superAdmin) {
-            $this->command->error('Super admin not found. Please run SuperAdminSeeder first.');
+            $this->command->error('Super admin not found. Please run UserSeeder first.');
             return;
         }
 

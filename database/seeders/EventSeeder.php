@@ -13,6 +13,12 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if events already exist
+        if (Event::count() > 0) {
+            $this->command->info('Events already exist. Skipping event creation.');
+            return;
+        }
+
         $users = User::all();
         
         // Create 10 events

@@ -13,6 +13,12 @@ class TodoSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if todos already exist
+        if (Todo::count() > 0) {
+            $this->command->info('Todos already exist. Skipping todo creation.');
+            return;
+        }
+
         $collaborations = Collaboration::all();
         
         foreach ($collaborations as $collaboration) {

@@ -9,6 +9,12 @@ class InterestSeeder extends Seeder
 {
     public function run()
     {
+        // Check if interests already exist
+        if (Interest::count() > 0) {
+            $this->command->info('Interests already exist. Skipping interest creation.');
+            return;
+        }
+
         $interests = [
             // Sosial & Komunitas
             [

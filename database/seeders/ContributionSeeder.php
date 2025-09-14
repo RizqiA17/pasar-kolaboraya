@@ -12,6 +12,12 @@ class ContributionSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if contributions already exist
+        if (Contribution::count() > 0) {
+            $this->command->info('Contributions already exist. Skipping contribution creation.');
+            return;
+        }
+
         $contributions = [
             [
                 'name' => 'Relawan/Tenaga',

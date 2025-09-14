@@ -36,6 +36,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'ecosystem_builder_approved_at',
         'ecosystem_builder_approved_by',
         'active_pasar_kolaboraya_id',
+        'active_container_id',
     ];
 
     /**
@@ -705,5 +706,98 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function isContributorOfCollectiveAction(CollectiveAction $collectiveAction): bool
     {
         return $collectiveAction->isUserContributor($this);
+    }
+
+    /**
+     * Get the active container for this user
+     */
+    public function activeContainer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Container::class, 'active_container_id');
+    }
+
+    /**
+     * Get all containers this user is part of
+     */
+    public function containers(): BelongsToMany
+    {
+        return $this->belongsToMany(Container::class, 'container_users')
+                    ->withPivot(['role', 'status', 'joined_at'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get accepted containers for this user
+     */
+    public function acceptedContainers(): BelongsToMany
+    {
+        return $this->containers()->wherePivot('status', 'active');
+    }
+
+    /**
+     * Get admin containers for this user
+     */
+    public function adminContainers(): BelongsToMany
+    {
+        return $this->containers()->wherePivot('role', 'admin')->wherePivot('status', 'active');
+    }
+
+    /**
+     * Get member containers for this user
+     */
+    public function memberContainers(): BelongsToMany
+    {
+        return $this->containers()->wherePivot('role', 'member')->wherePivot('status', 'active');
+    }
+
+    /**
+     * Check if user has any containers
+     */
+    public function hasContainers(): bool
+    {
+        return $this->acceptedContainers()->exists();
+    }
+
+    /**
+     * Check if user has active container
+     */
+    public function hasActiveContainer(): bool
+    {
+        return !is_null($this->active_container_id);
+    }
+
+    /**
+     * Set active container
+     */
+    public function setActiveContainer(Container $container): bool
+    {
+        // Check if user is member of this container
+        if (!$container->isUserMember($this)) {
+            return false;
+        }
+
+        $this->update(['active_container_id' => $container->id]);
+        return true;
+    }
+
+    /**
+     * Clear active container
+     */
+    public function clearActiveContainer(): void
+    {
+        $this->update(['active_container_id' => null]);
+    }
+
+    /**
+     * Get users in the same active container
+     */
+    public function getUsersInActiveContainer()
+    {
+        if (!$this->hasActiveContainer()) {
+            return collect();
+        }
+
+        return $this->activeContainer->activeUsers()
+            ->where('users.id', '!=', $this->id);
     }
 }

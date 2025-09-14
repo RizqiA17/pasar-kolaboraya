@@ -14,6 +14,11 @@ class ProfileSeeder extends Seeder
     public function run(): void
     {
         User::all()->each(function ($user) {
+            // Check if profile already exists for this user
+            if ($user->profile) {
+                return; // Skip if profile already exists
+            }
+
             Profile::create([
                 'user_id' => $user->id,
                 'organization' => fake()->company(),

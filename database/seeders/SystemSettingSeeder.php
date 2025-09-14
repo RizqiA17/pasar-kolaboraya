@@ -13,6 +13,12 @@ class SystemSettingSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if system settings already exist
+        if (SystemSetting::count() > 0) {
+            $this->command->info('System settings already exist. Skipping system setting creation.');
+            return;
+        }
+
         // Initialize system settings
         SystemSetting::setValue(
             'login_enabled',

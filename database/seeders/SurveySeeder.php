@@ -22,8 +22,11 @@ class SurveySeeder extends Seeder
             return;
         }
 
-        // Clear existing surveys (but preserve foreign key relationships)
-        Survey::query()->delete();
+        // Check if surveys already exist
+        if (Survey::count() > 0) {
+            $this->command->info('Surveys already exist. Skipping survey creation.');
+            return;
+        }
 
         // Create primary active survey
         Survey::create([

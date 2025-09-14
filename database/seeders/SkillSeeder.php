@@ -9,6 +9,12 @@ class SkillSeeder extends Seeder
 {
     public function run()
     {
+        // Check if skills already exist
+        if (Skill::count() > 0) {
+            $this->command->info('Skills already exist. Skipping skill creation.');
+            return;
+        }
+
         $skills = [
             // Manajemen & Organisasi
             [

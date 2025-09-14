@@ -14,10 +14,17 @@ class CollaborationSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if collaborations already exist
+        if (Collaboration::count() > 0) {
+            $this->command->info('Collaborations already exist. Skipping collaboration creation.');
+            return;
+        }
+
         $users = User::all();
         
         if ($users->count() < 3) {
-            throw new \Exception('Need at least 3 users to create collaborations');
+            $this->command->error('Need at least 3 users to create collaborations. Please run UserSeeder first.');
+            return;
         }
 
         // Create test collaborations for different scenarios

@@ -13,6 +13,12 @@ class ConnectionSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if connections already exist
+        if (Connection::count() > 0) {
+            $this->command->info('Connections already exist. Skipping connection creation.');
+            return;
+        }
+
         $users = User::all();
         
         foreach ($users as $user) {

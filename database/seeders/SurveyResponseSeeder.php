@@ -32,8 +32,11 @@ class SurveyResponseSeeder extends Seeder
             return;
         }
 
-        // Clear existing responses
-        SurveyResponse::query()->delete();
+        // Check if responses already exist
+        if (SurveyResponse::count() > 0) {
+            $this->command->info('Survey responses already exist. Skipping response creation.');
+            return;
+        }
 
         // Sample responses for historical survey (completed survey)
         $this->createHistoricalResponses($historicalSurvey, $users->take(8));
