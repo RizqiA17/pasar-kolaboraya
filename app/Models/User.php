@@ -722,6 +722,27 @@ public function getConnectionStatus($otherUserId)
     }
 
     /**
+     * Scope to filter users by PasarKolaboraya session
+     * Only show users that belong to the specified session
+     */
+    public function scopeForPasarKolaboraya($query, $pasarKolaborayaId)
+    {
+        return $query->where('active_pasar_kolaboraya_id', $pasarKolaborayaId);
+    }
+
+    /**
+     * Scope to filter users by user's active PasarKolaboraya session
+     */
+    public function scopeForUserActiveSession($query, User $user)
+    {
+        if (!$user->hasActivePasarKolaboraya()) {
+            return $query->whereRaw('1 = 0'); // Return empty result
+        }
+        
+        return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
+    }
+
+    /**
      * Check if user is contributor of a collective action
      */
     public function isContributorOfCollectiveAction(CollectiveAction $collectiveAction): bool

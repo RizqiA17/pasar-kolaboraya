@@ -4,6 +4,7 @@ namespace App\Livewire\Components;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\SystemSetting;
 
 class SearchBar extends Component
@@ -56,6 +57,12 @@ class SearchBar extends Component
             // Model dari database
             if ($this->model && class_exists($this->model) && count($this->fields)) {
                 $queryBuilder = $this->model::query();
+                $user = Auth::user();
+
+                // Apply session filtering for User model
+                if ($this->model === \App\Models\User::class) {
+                    $queryBuilder->forUserActiveSession($user);
+                }
 
                 foreach ($this->fields as $index => $field) {
                     if (str_contains($field, '.')) {
@@ -73,9 +80,9 @@ class SearchBar extends Component
                         }
                         
                         if ($relation == 'requester') {
-                            $queryBuilder->where('receiver_id', auth()->user()->id)->where('status', 'accepted');
+                            $queryBuilder->where('receiver_id', $user->id)->where('status', 'accepted');
                         } else if ($relation == 'receiver') {
-                            $queryBuilder->where('requester_id', auth()->user()->id)->where('status', 'accepted');
+                            $queryBuilder->where('requester_id', $user->id)->where('status', 'accepted');
                         }
                         
                     } else {
@@ -122,16 +129,17 @@ class SearchBar extends Component
 
     private function searchModels()
     {
+        $user = Auth::user();
         $models = [
             'User' => [\App\Models\User::class, ['name', 'email']],
         ];
 
         // Only add models if their features are enabled
-        if (SystemSetting::isUserActionsEnabled() || auth()->user()->isSuperAdmin()) {
+        if (SystemSetting::isUserActionsEnabled() || $user->isSuperAdmin()) {
             $models['Event'] = [\App\Models\Event::class, ['title']];
         }
 
-        if (SystemSetting::isCollaborationsEnabled() || auth()->user()->isSuperAdmin()) {
+        if (SystemSetting::isCollaborationsEnabled() || $user->isSuperAdmin()) {
             $models['Collaboration'] = [\App\Models\Collaboration::class, ['title']];
         }
 
@@ -143,6 +151,11 @@ class SearchBar extends Component
             }
 
             $queryBuilder = $modelClass::query();
+
+            // Apply session filtering for User model
+            if ($modelClass === \App\Models\User::class) {
+                $queryBuilder->forUserActiveSession($user);
+            }
 
             foreach ($fields as $index => $field) {
                 if ($index === 0) {
