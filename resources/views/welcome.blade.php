@@ -12,7 +12,7 @@
                     <x-dark-mode-toggle />
                     
                     @if (Route::has('login'))
-                        <div class="space-x-4">
+                        <div class="space-x-4 flex">
                             @auth
                                 <a href="{{ url('/dashboard') }}"
                                     class="px-4 py-2 bg-navy dark:bg-slate-700 text-white rounded-full hover:bg-blue-700 dark:hover:bg-slate-600 transition">Beranda</a>

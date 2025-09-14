@@ -3,15 +3,15 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Survey</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola survey untuk mengukur kolaborasi dalam komunitas</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Pasar Kecil</h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola pasar kecil untuk mengukur kolaborasi dalam komunitas</p>
             </div>
             <button 
                 wire:click="openCreateModal"
                 class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
                 <flux:icon.plus class="size-4 mr-2" />
-                Buat Survey Baru
+                Buat Pasar Kecil Baru
             </button>
         </div>
 
@@ -23,7 +23,7 @@
                         <input 
                             type="text" 
                             wire:model.live="search"
-                            placeholder="Cari survey berdasarkan nama atau deskripsi..."
+                            placeholder="Cari pasar kecil berdasarkan nama atau deskripsi..."
                             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
                         >
                         <flux:icon.magnifying-glass class="absolute left-3 top-3 size-4 text-gray-400" />
@@ -215,7 +215,7 @@
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         <flux:icon.plus class="size-4 mr-2" />
-                        Buat Survey Baru
+                        Buat Pasar Kecil Baru
                     </button>
                 </div>
             @endif
@@ -227,7 +227,7 @@
                 <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Buat Survey Baru</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Buat Pasar Kecil Baru</h3>
                             <button wire:click="closeCreateModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
