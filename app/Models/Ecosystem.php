@@ -11,6 +11,7 @@ class Ecosystem extends Model
 {
     protected $fillable = [
         'creator_id',
+        'pasar_kolaboraya_id',
         'organization_name',
         'ecosystem_title',
         'issues_addressed',
@@ -38,6 +39,14 @@ class Ecosystem extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    /**
+     * Get the Pasar Kolaboraya session this ecosystem belongs to
+     */
+    public function pasarKolaboraya(): BelongsTo
+    {
+        return $this->belongsTo(PasarKolaboraya::class, 'pasar_kolaboraya_id');
     }
 
     /**
@@ -332,16 +341,11 @@ class Ecosystem extends Model
 
     /**
      * Scope to filter ecosystems by PasarKolaboraya session
-     * Only show ecosystems where the creator is in the same active session
+     * Only show ecosystems that belong to the specified session
      */
     public function scopeForPasarKolaboraya($query, $pasarKolaborayaId)
     {
-        return $query->whereHas('creator', function ($userQuery) use ($pasarKolaborayaId) {
-            $userQuery->whereHas('pasarKolaborayas', function ($pasarQuery) use ($pasarKolaborayaId) {
-                $pasarQuery->where('pasar_kolaboraya_users.pasar_kolaboraya_id', $pasarKolaborayaId)
-                          ->where('pasar_kolaboraya_users.status', 'accepted');
-            });
-        });
+        return $query->where('pasar_kolaboraya_id', $pasarKolaborayaId);
     }
 
     /**

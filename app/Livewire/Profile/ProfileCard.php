@@ -47,6 +47,7 @@ class ProfileCard extends Component
         Connection::create([
             'requester_id' => Auth::id(),
             'receiver_id' => $userId,
+            'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'status' => 'pending'
         ]);
 
@@ -62,9 +63,11 @@ class ProfileCard extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -82,9 +85,11 @@ class ProfileCard extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -114,13 +119,16 @@ class ProfileCard extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where(function ($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                   ->where('receiver_id', $userId);
         })->orWhere(function ($query) use ($userId) {
             $query->where('requester_id', $userId)
                   ->where('receiver_id', Auth::id());
-        })->where('status', 'accepted')->first();
+        })->where('status', 'accepted')
+            ->forUserActiveSession($user) // Filter by user's active session
+            ->first();
 
         if ($connection) {
             $connection->delete();

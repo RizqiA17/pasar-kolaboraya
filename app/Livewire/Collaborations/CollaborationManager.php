@@ -85,12 +85,14 @@ class CollaborationManager extends Component
     private function getConnectedUserIds()
     {
         $currentUserId = Auth::id();
+        $user = Auth::user();
         
         return Connection::where('status', 'accepted')
             ->where(function ($query) use ($currentUserId) {
                 $query->where('requester_id', $currentUserId)
                     ->orWhere('receiver_id', $currentUserId);
             })
+            ->forUserActiveSession($user) // Filter by user's active session
             ->get()
             ->map(function ($connection) use ($currentUserId) {
                 // Return the ID of the other user (not the current user)
@@ -199,7 +201,7 @@ class CollaborationManager extends Component
     public function createCollaboration()
     {
         // Check if collaborations feature is enabled
-        if (!SystemSetting::isCollaborationsEnabled() && !auth()->user()->isSuperAdmin()) {
+        if (!SystemSetting::isCollaborationsEnabled() && !Auth::user()->isSuperAdmin()) {
             session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
             return;
         }
@@ -240,7 +242,7 @@ class CollaborationManager extends Component
     public function inviteUsers()
     {
         // Check if collaborations feature is enabled
-        if (!SystemSetting::isCollaborationsEnabled() && !auth()->user()->isSuperAdmin()) {
+        if (!SystemSetting::isCollaborationsEnabled() && !Auth::user()->isSuperAdmin()) {
             session()->flash('error', 'Fitur kolaborasi sedang dinonaktifkan oleh administrator.');
             return;
         }

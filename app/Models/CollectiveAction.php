@@ -17,6 +17,7 @@ class CollectiveAction extends Model
         'goals',
         'required_resources',
         'created_by',
+        'pasar_kolaboraya_id',
         'start_date',
         'end_date',
         'location',
@@ -39,6 +40,14 @@ class CollectiveAction extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the Pasar Kolaboraya session this collective action belongs to
+     */
+    public function pasarKolaboraya(): BelongsTo
+    {
+        return $this->belongsTo(PasarKolaboraya::class, 'pasar_kolaboraya_id');
     }
 
     /**
@@ -321,16 +330,11 @@ class CollectiveAction extends Model
 
     /**
      * Scope to filter collective actions by PasarKolaboraya session
-     * Only show collective actions where the creator is in the same active session
+     * Only show collective actions that belong to the specified session
      */
     public function scopeForPasarKolaboraya($query, $pasarKolaborayaId)
     {
-        return $query->whereHas('creator', function ($userQuery) use ($pasarKolaborayaId) {
-            $userQuery->whereHas('pasarKolaborayas', function ($pasarQuery) use ($pasarKolaborayaId) {
-                $pasarQuery->where('pasar_kolaboraya_users.pasar_kolaboraya_id', $pasarKolaborayaId)
-                          ->where('pasar_kolaboraya_users.status', 'accepted');
-            });
-        });
+        return $query->where('pasar_kolaboraya_id', $pasarKolaborayaId);
     }
 
     /**

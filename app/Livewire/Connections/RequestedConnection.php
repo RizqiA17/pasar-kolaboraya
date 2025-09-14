@@ -27,8 +27,10 @@ class RequestedConnection extends Component
 
     public function loadRequests()
     {
+        $user = Auth::user();
         $request = Connection::where('status', 'pending')
             ->where('receiver_id', Auth::id())
+            ->forUserActiveSession($user) // Filter by user's active session
             ->with(['requester.profile'])
             ->get();
         $this->requests = $request->map(function ($item) {

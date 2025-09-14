@@ -82,6 +82,7 @@ class EcosystemSetup extends Component
         // Create the ecosystem
         $ecosystem = Ecosystem::create([
             'creator_id' => Auth::id(),
+            'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'organization_name' => $this->organization_name,
             'ecosystem_title' => $this->ecosystem_title,
             'issues_addressed' => $this->selectedIssues,

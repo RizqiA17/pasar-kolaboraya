@@ -37,7 +37,9 @@ class ListConnection extends Component
         $ids = collect($this->searchData)->pluck('id')->toArray();
 
         // Ambil semua connection dua arah
+        $user = Auth::user();
         $connections = Connection::whereIn('id', $ids)
+            ->forUserActiveSession($user) // Filter by user's active session
             ->get()
             ->groupBy(function ($conn) {
                 return $conn->requester_id . '-' . $conn->receiver_id;
@@ -105,11 +107,13 @@ class ListConnection extends Component
 
     public function loadFriends()
     {
+        $user = Auth::user();
         $connections = Connection::where('status', 'accepted')
             ->where(function ($query) {
                 $query->where('requester_id', Auth::id())
                     ->orWhere('receiver_id', Auth::id());
             })
+            ->forUserActiveSession($user) // Filter by user's active session
             ->with(['requester', 'receiver'])
             ->get();
 

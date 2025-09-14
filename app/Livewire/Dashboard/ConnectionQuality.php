@@ -52,6 +52,7 @@ class ConnectionQuality extends Component
                     $query->where('requester_id', $user->id)
                         ->orWhere('receiver_id', $user->id);
                 })
+                ->forUserActiveSession($user) // Filter by user's active session
                 ->with(['requester.profile.interests', 'requester.profile.skills', 
                        'receiver.profile.interests', 'receiver.profile.skills'])
                 ->get();

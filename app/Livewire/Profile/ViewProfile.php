@@ -62,9 +62,11 @@ class ViewProfile extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -82,9 +84,11 @@ class ViewProfile extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -102,6 +106,7 @@ class ViewProfile extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where(function ($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                 ->where('receiver_id', $userId);
@@ -109,6 +114,7 @@ class ViewProfile extends Component
             $query->where('requester_id', $userId)
                 ->where('receiver_id', Auth::id());
         })->where('status', 'accepted')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {

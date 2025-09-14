@@ -113,6 +113,7 @@ class Create extends Component
             'goals' => $this->goals,
             'required_resources' => $this->required_resources,
             'created_by' => Auth::id(),
+            'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,

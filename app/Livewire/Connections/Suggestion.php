@@ -24,6 +24,7 @@ class Suggestion extends Component
         Connection::create([
             'requester_id' => Auth::id(),
             'receiver_id' => $userId,
+            'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'status' => 'pending'
         ]);
 
@@ -39,9 +40,11 @@ class Suggestion extends Component
             return;
         }
 
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -53,9 +56,11 @@ class Suggestion extends Component
 
     public function rejectConnection($userId)
     {
+        $user = Auth::user();
         $connection = Connection::where('requester_id', $userId)
             ->where('receiver_id', Auth::id())
             ->where('status', 'pending')
+            ->forUserActiveSession($user) // Filter by user's active session
             ->first();
 
         if ($connection) {
@@ -73,6 +78,7 @@ class Suggestion extends Component
 
     public function disconnect($userId)
     {
+        $user = Auth::user();
         $connection = Connection::where(function($query) use ($userId) {
             $query->where('requester_id', Auth::id())
                   ->where('receiver_id', $userId);
@@ -80,6 +86,7 @@ class Suggestion extends Component
             $query->where('requester_id', $userId)
                   ->where('receiver_id', Auth::id());
         })->where('status', 'accepted')
+        ->forUserActiveSession($user) // Filter by user's active session
         ->first();
 
         if ($connection) {

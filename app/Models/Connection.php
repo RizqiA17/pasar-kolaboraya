@@ -13,6 +13,7 @@ class Connection extends Model
     protected $fillable = [
         'requester_id',
         'receiver_id',
+        'pasar_kolaboraya_id',
         'status',
     ];
 
@@ -24,6 +25,11 @@ class Connection extends Model
     public function receiver()
     {
         return $this->belongsTo(User::class, 'receiver_id');
+    }
+
+    public function pasarKolaboraya()
+    {
+        return $this->belongsTo(PasarKolaboraya::class, 'pasar_kolaboraya_id');
     }
 
     public function searchRequest()
@@ -40,6 +46,27 @@ class Connection extends Model
         return $this->hasMany(Connection::class, 'receiver_id')
             ->where('receiver_id', $this->id)
             ->where('status', 'pending');
+    }
+
+    /**
+     * Scope to filter connections by PasarKolaboraya session
+     * Only show connections that belong to the specified session
+     */
+    public function scopeForPasarKolaboraya($query, $pasarKolaborayaId)
+    {
+        return $query->where('pasar_kolaboraya_id', $pasarKolaborayaId);
+    }
+
+    /**
+     * Scope to filter connections by user's active PasarKolaboraya session
+     */
+    public function scopeForUserActiveSession($query, $user)
+    {
+        if (!$user->hasActivePasarKolaboraya()) {
+            return $query->whereRaw('1 = 0'); // Return empty result
+        }
+        
+        return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
     }
 }
 
