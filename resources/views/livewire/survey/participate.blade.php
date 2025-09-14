@@ -24,7 +24,7 @@
                         
                         @if($currentStep == 1)
                             <!-- Kategori Koneksi -->
-                            <div class="space-y-6">
+                            <div class="space-y-6" wire:key="step-1">
                                 <div class="text-center mb-6">
                                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Kategori Koneksi</h2>
                                     <p class="text-gray-600 dark:text-gray-400">Berikan informasi tentang koneksi dan jaringan Anda</p>
@@ -38,6 +38,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="jumlah_koneksi" 
+                                        wire:key="jumlah_koneksi"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah koneksi Anda"
@@ -48,6 +49,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="jumlah_koneksi_alasan"
+                                            wire:key="jumlah_koneksi_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan mengapa jumlah koneksi Anda sebanyak ini..."
@@ -62,6 +64,7 @@
                                     </label>
                                     <select 
                                         wire:model="rata_kualitas_koneksi"
+                                        wire:key="rata_kualitas_koneksi"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                     >
                                         <option value="">Pilih kualitas koneksi</option>
@@ -77,6 +80,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="rata_kualitas_koneksi_alasan"
+                                            wire:key="rata_kualitas_koneksi_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan penilaian kualitas koneksi Anda..."
@@ -87,10 +91,11 @@
                                 <!-- Keluasan Jejaring -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        3. Keluasan Jejaring
+                                        3. Keluasan Jejaring (1-5)
                                     </label>
                                     <select 
                                         wire:model="keluasan_jejaring"
+                                        wire:key="keluasan_jejaring"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                     >
                                         <option value="">Pilih keluasan jejaring</option>
@@ -106,6 +111,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="keluasan_jejaring_alasan"
+                                            wire:key="keluasan_jejaring_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan keluasan jejaring Anda..."
@@ -116,7 +122,7 @@
 
                         @elseif($currentStep == 2)
                             <!-- Kategori Kolaborasi -->
-                            <div class="space-y-6">
+                            <div class="space-y-6" wire:key="step-2">
                                 <div class="text-center mb-6">
                                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Kategori Kolaborasi</h2>
                                     <p class="text-gray-600 dark:text-gray-400">Berikan informasi tentang kolaborasi yang pernah Anda lakukan</p>
@@ -129,6 +135,7 @@
                                     </label>
                                     <select 
                                         wire:model="kualitas_kolaborasi"
+                                        wire:key="kualitas_kolaborasi"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                     >
                                         <option value="">Pilih kualitas kolaborasi</option>
@@ -144,6 +151,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="kualitas_kolaborasi_alasan"
+                                            wire:key="kualitas_kolaborasi_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan penilaian kualitas kolaborasi Anda..."
@@ -159,6 +167,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="keragaman_kolaborator" 
+                                        wire:key="keragaman_kolaborator"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah jenis/segmen kolaborator"
@@ -169,6 +178,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="keragaman_kolaborator_alasan"
+                                            wire:key="keragaman_kolaborator_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan keragaman kolaborator Anda..."
@@ -184,6 +194,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="jumlah_proyek_kolaborasi" 
+                                        wire:key="jumlah_proyek_kolaborasi"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah proyek kolaborasi"
@@ -194,6 +205,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="jumlah_proyek_kolaborasi_alasan"
+                                            wire:key="jumlah_proyek_kolaborasi_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan jumlah proyek kolaborasi Anda..."
@@ -208,6 +220,7 @@
                                     </label>
                                     <select 
                                         wire:model="tingkat_kolaborasi"
+                                        wire:key="tingkat_kolaborasi"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                     >
                                         <option value="">Pilih tingkat kolaborasi</option>
@@ -223,6 +236,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="tingkat_kolaborasi_alasan"
+                                            wire:key="tingkat_kolaborasi_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan tingkat kolaborasi Anda..."
@@ -241,6 +255,7 @@
                                                 <input 
                                                     type="checkbox" 
                                                     wire:model="sumber_daya_disumbangkan" 
+                                                    wire:key="sumber_daya_{{ $key }}"
                                                     value="{{ $key }}"
                                                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                                 >
@@ -254,6 +269,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="sumber_daya_disumbangkan_alasan"
+                                            wire:key="sumber_daya_disumbangkan_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan sumber daya yang Anda sumbangkan..."
@@ -264,7 +280,7 @@
 
                         @elseif($currentStep == 3)
                             <!-- Kategori Aksi -->
-                            <div class="space-y-6">
+                            <div class="space-y-6" wire:key="step-3">
                                 <div class="text-center mb-6">
                                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Kategori Aksi</h2>
                                     <p class="text-gray-600 dark:text-gray-400">Berikan informasi tentang aksi-aksi yang pernah Anda lakukan</p>
@@ -278,6 +294,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="jumlah_aksi_besar" 
+                                        wire:key="jumlah_aksi_besar"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah aksi besar"
@@ -288,6 +305,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="jumlah_aksi_besar_alasan"
+                                            wire:key="jumlah_aksi_besar_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan aksi besar yang pernah Anda lakukan..."
@@ -303,6 +321,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="jumlah_aksi_sedang" 
+                                        wire:key="jumlah_aksi_sedang"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah aksi sedang"
@@ -313,6 +332,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="jumlah_aksi_sedang_alasan"
+                                            wire:key="jumlah_aksi_sedang_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan aksi sedang yang pernah Anda lakukan..."
@@ -328,6 +348,7 @@
                                     <input 
                                         type="number" 
                                         wire:model="jumlah_aksi_kecil" 
+                                        wire:key="jumlah_aksi_kecil"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
                                         placeholder="Masukkan jumlah aksi kecil"
@@ -338,6 +359,7 @@
                                         <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Alasan:</label>
                                         <textarea 
                                             wire:model="jumlah_aksi_kecil_alasan"
+                                            wire:key="jumlah_aksi_kecil_alasan"
                                             rows="2"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white text-sm"
                                             placeholder="Jelaskan aksi kecil yang pernah Anda lakukan..."

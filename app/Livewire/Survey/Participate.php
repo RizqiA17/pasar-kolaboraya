@@ -11,7 +11,7 @@ class Participate extends Component
     public $survey;
     public $currentStep = 1;
     public $totalSteps = 3;
-    
+
     // Kategori Koneksi
     public $jumlah_koneksi = '';
     public $jumlah_koneksi_alasan = '';
@@ -19,7 +19,7 @@ class Participate extends Component
     public $rata_kualitas_koneksi_alasan = '';
     public $keluasan_jejaring = '';
     public $keluasan_jejaring_alasan = '';
-    
+
     // Kategori Kolaborasi
     public $kualitas_kolaborasi = '';
     public $kualitas_kolaborasi_alasan = '';
@@ -31,7 +31,7 @@ class Participate extends Component
     public $tingkat_kolaborasi_alasan = '';
     public $sumber_daya_disumbangkan = [];
     public $sumber_daya_disumbangkan_alasan = '';
-    
+
     // Kategori Aksi
     public $jumlah_aksi_besar = '';
     public $jumlah_aksi_besar_alasan = '';
@@ -43,7 +43,7 @@ class Participate extends Component
     public function mount()
     {
         $this->survey = Survey::active()->first();
-        
+
         if (!$this->survey) {
             session()->flash('error', 'Tidak ada survey yang aktif saat ini');
             return redirect()->route('dashboard');
@@ -59,10 +59,39 @@ class Participate extends Component
     public function nextStep()
     {
         $this->validateCurrentStep();
-        
+
         if ($this->currentStep < $this->totalSteps) {
             $this->currentStep++;
         }
+        // if ($this->currentStep === ($this->totalSteps)) {
+        //     dd([
+        //         'totalSteps' => $this->currentStep,
+        //         'jumlah_koneksi' => $this->jumlah_koneksi,
+        //         'jumlah_koneksi_alasan' => $this->jumlah_koneksi_alasan,
+        //         'rata_kualitas_koneksi' => $this->rata_kualitas_koneksi,
+        //         'rata_kualitas_koneksi_alasan' => $this->rata_kualitas_koneksi_alasan,
+        //         'keluasan_jejaring' => $this->keluasan_jejaring,
+        //         'keluasan_jejaring_alasan' => $this->keluasan_jejaring_alasan,
+        //         // Kategori Kolaborasi
+        //         'kualitas_kolaborasi' => $this->kualitas_kolaborasi,
+        //         'kualitas_kolaborasi_alasan' => $this->kualitas_kolaborasi_alasan,
+        //         'keragaman_kolaborator' => $this->keragaman_kolaborator,
+        //         'keragaman_kolaborator_alasan' => $this->keragaman_kolaborator_alasan,
+        //         'jumlah_proyek_kolaborasi' => $this->jumlah_proyek_kolaborasi,
+        //         'jumlah_proyek_kolaborasi_alasan' => $this->jumlah_proyek_kolaborasi_alasan,
+        //         'tingkat_kolaborasi' => $this->tingkat_kolaborasi,
+        //         'tingkat_kolaborasi_alasan' => $this->tingkat_kolaborasi_alasan,
+        //         'sumber_daya_disumbangkan' => $this->sumber_daya_disumbangkan,
+        //         'sumber_daya_disumbangkan_alasan' => $this->sumber_daya_disumbangkan_alasan,
+        //         // Kategori Aksi
+        //         'jumlah_aksi_besar' => $this->jumlah_aksi_besar,
+        //         'jumlah_aksi_besar_alasan' => $this->jumlah_aksi_besar_alasan,
+        //         'jumlah_aksi_sedang' => $this->jumlah_aksi_sedang,
+        //         'jumlah_aksi_sedang_alasan' => $this->jumlah_aksi_sedang_alasan,
+        //         'jumlah_aksi_kecil' => $this->jumlah_aksi_kecil,
+        //         'jumlah_aksi_kecil_alasan' => $this->jumlah_aksi_kecil_alasan,
+        //     ]);
+        // }
     }
 
     public function previousStep()
@@ -75,7 +104,7 @@ class Participate extends Component
     public function validateCurrentStep()
     {
         $rules = [];
-        
+
         if ($this->currentStep == 1) {
             $rules = [
                 'jumlah_koneksi' => 'required|integer|min:0',
@@ -97,14 +126,14 @@ class Participate extends Component
                 'jumlah_aksi_kecil' => 'required|integer|min:0',
             ];
         }
-        
+
         $this->validate($rules);
     }
 
     public function submit()
     {
         $this->validateCurrentStep();
-        
+
         SurveyResponse::create([
             'survey_id' => $this->survey->id,
             'user_id' => auth()->user()->id,
