@@ -452,8 +452,8 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi & Pencapaian</h3>
                                         </div>
                                         @php
-                                            $totalContributions = \App\Models\EcosystemContribution::where('user_id', $user->id)->where('status', 'accepted')->count() + 
-                                                                 \App\Models\CollectiveActionContribution::where('user_id', $user->id)->where('status', 'accepted')->count();
+                                            $totalContributions = \App\Models\EcosystemContribution::where('user_id', $user->id)->whereIn('status', ['accepted', 'completed'])->count() + 
+                                                                 \App\Models\CollectiveActionContribution::where('user_id', $user->id)->whereIn('status', ['accepted', 'completed'])->count();
                                         @endphp
                                         @if ($totalContributions > 0)
                                             <span
@@ -468,14 +468,14 @@
                                             @php
                                                 // Get ecosystem contributions
                                                 $ecosystemContributions = \App\Models\EcosystemContribution::where('user_id', $user->id)
-                                                    ->where('status', 'accepted')
+                                                    ->whereIn('status', ['accepted', 'completed'])
                                                     ->with(['ecosystem', 'contribution'])
                                                     ->orderBy('accepted_at', 'desc')
                                                     ->get();
                                                 
                                                 // Get collective action contributions
                                                 $collectiveActionContributions = \App\Models\CollectiveActionContribution::where('user_id', $user->id)
-                                                    ->where('status', 'accepted')
+                                                    ->whereIn('status', ['accepted', 'completed'])
                                                     ->with(['collectiveAction', 'contribution'])
                                                     ->orderBy('accepted_at', 'desc')
                                                     ->get();
