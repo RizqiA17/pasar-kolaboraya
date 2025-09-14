@@ -43,6 +43,8 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <!-- Connections Card -->
                         <div
                             class="col-span-1 group relative overflow-hidden rounded-xl p-5 text-gray-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-700">

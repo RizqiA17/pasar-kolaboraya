@@ -33,6 +33,7 @@
             </div>
         </a>
 
+
         <!-- Modern Navigation Bar -->
         <flux:navbar class="relative col-span-1 z-10 -mb-px max-lg:hidden justify-center">
             <flux:navbar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
@@ -248,6 +249,81 @@
                         </div>
                     </flux:menu.radio.group>
 
+                    <!-- Active Session Information -->
+                    @if(auth()->user()->hasActivePasarKolaboraya())
+                        <div class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                                    <flux:icon.cube class="w-4 h-4 text-blue-600 dark:text-blue-300" />
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                                        Sesi Aktif
+                                    </h4>
+                                    <p class="text-xs text-blue-600 dark:text-blue-300">
+                                        {{ auth()->user()->activePasarKolaboraya->name }}
+                                    </p>
+                                    <p class="text-xs text-blue-500 dark:text-blue-400">
+                                        {{ auth()->user()->activePasarKolaboraya->acceptedUsers->count() }} anggota
+                                    </p>
+                                </div>
+                                <flux:button 
+                                    href="{{ route('pasar-kolaboraya.select') }}"
+                                    size="xs"
+                                    {{-- variant="secondary" --}}
+                                >
+                                    Ganti
+                                </flux:button>
+                            </div>
+                        </div>
+                    @elseif(auth()->user()->hasPasarKolaborayas())
+                        <div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
+                                    <flux:icon.exclamation-triangle class="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                                        Pilih Sesi
+                                    </h4>
+                                    <p class="text-xs text-yellow-600 dark:text-yellow-300">
+                                        {{ auth()->user()->acceptedPasarKolaborayas->count() }} Pasar Kolaboraya tersedia
+                                    </p>
+                                </div>
+                                <flux:button 
+                                    href="{{ route('pasar-kolaboraya.select') }}"
+                                    size="xs"
+                                    variant="primary"
+                                >
+                                    Pilih
+                                </flux:button>
+                            </div>
+                        </div>
+                    @else
+                        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/20 border-l-4 border-gray-400">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                                    <flux:icon.information-circle class="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                                        Belum Bergabung
+                                    </h4>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                                        Hubungi admin untuk diundang
+                                    </p>
+                                </div>
+                                <flux:button 
+                                    href="{{ route('pasar-kolaboraya.join-request') }}"
+                                    size="xs"
+                                    {{-- variant="secondary" --}}
+                                >
+                                    Minta
+                                </flux:button>
+                            </div>
+                        </div>
+                    @endif
+
                     <div
                         class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                     </div>
@@ -302,6 +378,81 @@
                         </div>
                     </div>
                 </flux:menu.radio.group>
+
+                <!-- Active Session Information for Mobile -->
+                @if(auth()->user()->hasActivePasarKolaboraya())
+                    <div class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                                <flux:icon.cube class="w-4 h-4 text-blue-600 dark:text-blue-300" />
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                                    Sesi Aktif
+                                </h4>
+                                <p class="text-xs text-blue-600 dark:text-blue-300">
+                                    {{ auth()->user()->activePasarKolaboraya->name }}
+                                </p>
+                                <p class="text-xs text-blue-500 dark:text-blue-400">
+                                    {{ auth()->user()->activePasarKolaboraya->acceptedUsers->count() }} anggota
+                                </p>
+                            </div>
+                            <flux:button 
+                                href="{{ route('pasar-kolaboraya.select') }}"
+                                size="xs"
+                                {{-- variant="secondary" --}}
+                            >
+                                Ganti
+                            </flux:button>
+                        </div>
+                    </div>
+                @elseif(auth()->user()->hasPasarKolaborayas())
+                    <div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
+                                <flux:icon.exclamation-triangle class="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                                    Pilih Sesi
+                                </h4>
+                                <p class="text-xs text-yellow-600 dark:text-yellow-300">
+                                    {{ auth()->user()->acceptedPasarKolaborayas->count() }} Pasar Kolaboraya tersedia
+                                </p>
+                            </div>
+                            <flux:button 
+                                href="{{ route('pasar-kolaboraya.select') }}"
+                                size="xs"
+                                variant="primary"
+                            >
+                                Pilih
+                            </flux:button>
+                        </div>
+                    </div>
+                @else
+                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/20 border-l-4 border-gray-400">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                                <flux:icon.information-circle class="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                                    Belum Bergabung
+                                </h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-300">
+                                    Hubungi admin untuk diundang
+                                </p>
+                            </div>
+                            <flux:button 
+                                href="{{ route('pasar-kolaboraya.join-request') }}"
+                                size="xs"
+                                {{-- variant="secondary" --}}
+                            >
+                                Minta
+                            </flux:button>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-600 to-transparent">
                 </div>

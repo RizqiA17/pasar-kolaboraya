@@ -35,6 +35,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'ecosystem_builder_reason',
         'ecosystem_builder_approved_at',
         'ecosystem_builder_approved_by',
+        'active_pasar_kolaboraya_id',
     ];
 
     /**
@@ -595,6 +596,107 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function isMemberOfCollectiveAction(CollectiveAction $collectiveAction): bool
     {
         return $collectiveAction->isUserMember($this);
+    }
+
+    /**
+     * Get the active Pasar Kolaboraya for this user
+     */
+    public function activePasarKolaboraya(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(PasarKolaboraya::class, 'active_pasar_kolaboraya_id');
+    }
+
+    /**
+     * Get all Pasar Kolaboraya this user is part of
+     */
+    public function pasarKolaborayas(): BelongsToMany
+    {
+        return $this->belongsToMany(PasarKolaboraya::class, 'pasar_kolaboraya_users')
+                    ->withPivot(['status', 'role', 'invited_by', 'join_reason', 'admin_notes', 'joined_at', 'responded_at'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get accepted Pasar Kolaboraya for this user
+     */
+    public function acceptedPasarKolaborayas(): BelongsToMany
+    {
+        return $this->pasarKolaborayas()->wherePivot('status', 'accepted');
+    }
+
+    /**
+     * Get pending Pasar Kolaboraya requests for this user
+     */
+    public function pendingPasarKolaborayas(): BelongsToMany
+    {
+        return $this->pasarKolaborayas()->wherePivot('status', 'pending');
+    }
+
+    /**
+     * Get admin Pasar Kolaboraya for this user
+     */
+    public function adminPasarKolaborayas(): BelongsToMany
+    {
+        return $this->pasarKolaborayas()->wherePivot('role', 'admin')->wherePivot('status', 'accepted');
+    }
+
+    /**
+     * Get member Pasar Kolaboraya for this user
+     */
+    public function memberPasarKolaborayas(): BelongsToMany
+    {
+        return $this->pasarKolaborayas()->wherePivot('role', 'member')->wherePivot('status', 'accepted');
+    }
+
+    /**
+     * Check if user has any Pasar Kolaboraya
+     */
+    public function hasPasarKolaborayas(): bool
+    {
+        return $this->acceptedPasarKolaborayas()->exists();
+    }
+
+    /**
+     * Check if user has active Pasar Kolaboraya
+     */
+    public function hasActivePasarKolaboraya(): bool
+    {
+        return !is_null($this->active_pasar_kolaboraya_id);
+    }
+
+    /**
+     * Set active Pasar Kolaboraya
+     */
+    public function setActivePasarKolaboraya(PasarKolaboraya $pasarKolaboraya): bool
+    {
+        // Check if user is member of this Pasar Kolaboraya
+        if (!$pasarKolaboraya->isUserMember($this)) {
+            return false;
+        }
+
+        $this->update(['active_pasar_kolaboraya_id' => $pasarKolaboraya->id]);
+        return true;
+    }
+
+    /**
+     * Clear active Pasar Kolaboraya
+     */
+    public function clearActivePasarKolaboraya(): void
+    {
+        $this->update(['active_pasar_kolaboraya_id' => null]);
+    }
+
+    /**
+     * Get users in the same active Pasar Kolaboraya
+     */
+    public function getUsersInActivePasarKolaboraya()
+    {
+        if (!$this->hasActivePasarKolaboraya()) {
+            return collect();
+        }
+
+        return $this->activePasarKolaboraya->acceptedUsers()
+            ->where('users.id', '!=', $this->id);
     }
 
     /**

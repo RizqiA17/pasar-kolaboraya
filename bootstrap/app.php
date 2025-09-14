@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.form.feature.access' => \App\Http\Middleware\CheckFormFeatureAccess::class,
             'ecosystem.builder.only' => \App\Http\Middleware\EcosystemBuilderOnly::class,
             'read.only.access' => \App\Http\Middleware\ReadOnlyAccess::class,
+            'check.active.pasar.kolaboraya' => \App\Http\Middleware\CheckActivePasarKolaboraya::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes

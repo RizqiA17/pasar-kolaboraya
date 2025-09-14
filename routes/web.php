@@ -67,13 +67,13 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
     // Route untuk melihat profile user lain
     Route::get('profile/{userId}', \App\Livewire\Profile\ViewProfile::class)->name('profile.view');
 
-    // Connection routes - protected by feature access middleware
-    Route::middleware('check.feature.access:connections')->group(function () {
+    // Connection routes - protected by feature access middleware and active session
+    Route::middleware(['check.feature.access:connections', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('connections', ConnectionsTab::class)->name('connections');
     });
 
-    // Collaboration routes - protected by feature access middleware
-    Route::middleware('check.feature.access:collaborations')->group(function () {
+    // Collaboration routes - protected by feature access middleware and active session
+    Route::middleware(['check.feature.access:collaborations', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('collaborations', \App\Livewire\Collaborations\CollaborationManager::class)->name('collaborations.manage');
         Route::get('collaborations/list', ListCollaboration::class)->name('collaborations');
         Route::get('collaborations/create', Create::class)->name('collaborations.create');
@@ -81,18 +81,20 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
         Route::get('collaborations/{collaboration}/todos', \App\Livewire\Collaborations\TodoList::class)->name('collaboration.todos');
     });
 
-    // Event Routes - protected by user actions middleware
-    Route::middleware('check.feature.access:user_actions')->group(function () {
+    // Event Routes - protected by user actions middleware and active session
+    Route::middleware(['check.feature.access:user_actions', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('events', \App\Livewire\Events\ListEvent::class)->name('events');
         Route::get('events/create', \App\Livewire\Events\CreateEvent::class)->name('events.create');
         Route::get('events/{event}', \App\Livewire\Events\ShowEvent::class)->name('events.show');
     });
 
-    // Survey Routes
-    Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
+    // Survey Routes - protected by active session
+    Route::middleware('check.active.pasar.kolaboraya')->group(function () {
+        Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
+    });
 
-    // Ecosystem Routes (Protected by ecosystems feature check)
-    Route::middleware('check.feature.access:ecosystems')->group(function () {
+    // Ecosystem Routes (Protected by ecosystems feature check and active session)
+    Route::middleware(['check.feature.access:ecosystems', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('ecosystem', \App\Livewire\Ecosystem\Browse::class)->name('ecosystem.browse');
         Route::get('ecosystem/create', \App\Livewire\Ecosystem\Create::class)->name('ecosystem.create');
         Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
@@ -101,8 +103,8 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
         Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
     });
 
-    // Collective Action Routes (Protected by collective_actions feature check)
-    Route::middleware('check.feature.access:collective_actions')->group(function () {
+    // Collective Action Routes (Protected by collective_actions feature check and active session)
+    Route::middleware(['check.feature.access:collective_actions', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('collective-actions', \App\Livewire\CollectiveAction\Browse::class)->name('collective-action.browse');
         Route::get('collective-actions/create', \App\Livewire\CollectiveAction\Create::class)->name('collective-action.create')->middleware('ecosystem.builder.only');
         Route::get('collective-actions/{collectiveAction}', \App\Livewire\CollectiveAction\Dashboard::class)->name('collective-action.show');
@@ -113,6 +115,12 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
         Route::get('collective-actions/invitations/{invitation}/respond', \App\Livewire\CollectiveAction\RespondInvitation::class)->name('collective-action.respond-invitation')->middleware('ecosystem.builder.only');
     });
 
+});
+
+// Pasar Kolaboraya Routes - These should be accessible without active session check
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
+    Route::get('pasar-kolaboraya/select', \App\Livewire\PasarKolaboraya\SessionSelector::class)->name('pasar-kolaboraya.select');
+    Route::get('pasar-kolaboraya/join-request', \App\Livewire\PasarKolaboraya\JoinRequest::class)->name('pasar-kolaboraya.join-request');
 });
 
 // Admin routes - only accessible by super admin
@@ -172,6 +180,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // Survey management routes
     Route::get('/surveys', \App\Livewire\Admin\Surveys\Index::class)->name('surveys');
     Route::get('/surveys/{surveyId}/results', \App\Livewire\Admin\Surveys\Results::class)->name('surveys.results');
+    
+    // Pasar Kolaboraya management routes
+    Route::get('/pasar-kolaboraya', \App\Livewire\Admin\PasarKolaborayaManagement::class)->name('pasar-kolaboraya.manage');
+    Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
+    Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
 });
 
 require __DIR__ . '/auth.php';
