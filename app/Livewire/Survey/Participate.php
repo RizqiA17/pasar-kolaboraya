@@ -80,7 +80,7 @@ class Participate extends Component
             $rules = [
                 'jumlah_koneksi' => 'required|integer|min:0',
                 'rata_kualitas_koneksi' => 'required|integer|min:1|max:5',
-                'keluasan_jejaring' => 'required|integer|min:0',
+                'keluasan_jejaring' => 'required|integer|min:1|max:5',
             ];
         } elseif ($this->currentStep == 2) {
             $rules = [

@@ -62,4 +62,28 @@ class SurveyResponse extends Model
             'teknologi' => 'Teknologi',
         ];
     }
+
+    public function getKeluasanJejaringLabel()
+    {
+        $labels = [
+            1 => 'Lokal',
+            2 => 'Kabupaten',
+            3 => 'Provinsi',
+            4 => 'Nasional',
+            5 => 'Internasional',
+        ];
+
+        return $labels[$this->keluasan_jejaring] ?? 'Tidak Diketahui';
+    }
+
+    public static function getKeluasanJejaringOptions()
+    {
+        return [
+            1 => '1 - Lokal',
+            2 => '2 - Kabupaten',
+            3 => '3 - Provinsi',
+            4 => '4 - Nasional',
+            5 => '5 - Internasional',
+        ];
+    }
 }

@@ -87,15 +87,19 @@
                                 <!-- Keluasan Jejaring -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        3. Keluasan Jejaring (Jumlah Sektor Unik)
+                                        3. Keluasan Jejaring
                                     </label>
-                                    <input 
-                                        type="number" 
-                                        wire:model="keluasan_jejaring" 
-                                        min="0"
+                                    <select 
+                                        wire:model="keluasan_jejaring"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-white"
-                                        placeholder="Masukkan jumlah sektor unik dalam jejaring Anda"
                                     >
+                                        <option value="">Pilih keluasan jejaring</option>
+                                        <option value="1">1 - Lokal</option>
+                                        <option value="2">2 - Kabupaten</option>
+                                        <option value="3">3 - Provinsi</option>
+                                        <option value="4">4 - Nasional</option>
+                                        <option value="5">5 - Internasional</option>
+                                    </select>
                                     @error('keluasan_jejaring') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     
                                     <div class="mt-2">
