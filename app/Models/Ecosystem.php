@@ -257,6 +257,111 @@ class Ecosystem extends Model
     }
 
     /**
+     * Get contributions for this ecosystem
+     */
+    public function contributions(): HasMany
+    {
+        return $this->hasMany(EcosystemContribution::class);
+    }
+
+    /**
+     * Get volunteer contributions
+     */
+    public function volunteerContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'volunteer');
+    }
+
+    /**
+     * Get funding contributions
+     */
+    public function fundingContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'funding');
+    }
+
+    /**
+     * Get expertise contributions
+     */
+    public function expertiseContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'expertise');
+    }
+
+    /**
+     * Get resource contributions
+     */
+    public function resourceContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'resources');
+    }
+
+    /**
+     * Get promotion contributions
+     */
+    public function promotionContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'promotion');
+    }
+
+    /**
+     * Get other contributions
+     */
+    public function otherContributions(): HasMany
+    {
+        return $this->contributions()->where('contribution_type', 'other');
+    }
+
+    /**
+     * Get users who have contributed to this ecosystem (via contributions table)
+     */
+    public function contributors(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'ecosystem_contributions')
+            ->withPivot(['contribution_type', 'contribution_description', 'contribution_amount', 'contribution_details', 'status', 'offered_at', 'accepted_at', 'completed_at', 'admin_notes'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get accepted contributors
+     */
+    public function acceptedContributors(): BelongsToMany
+    {
+        return $this->contributors()->wherePivot('status', 'accepted');
+    }
+
+    /**
+     * Get pending contributions
+     */
+    public function pendingContributions(): BelongsToMany
+    {
+        return $this->contributors()->wherePivot('status', 'offered');
+    }
+
+    /**
+     * Check if user can contribute to this ecosystem
+     */
+    public function canUserContribute(User $user): bool
+    {
+        if (!$this->is_active) {
+            return false;
+        }
+
+        // Only accepted users can contribute
+        $userStatus = $this->getUserStatus($user);
+        if ($userStatus !== 'accepted') {
+            return false;
+        }
+
+        // Check if user is already a contributor
+        if ($this->contributors()->where('users.id', $user->id)->exists()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Calculate connection quality metrics for radar chart
      * Based on ecosystem member connections and interactions
      */

@@ -212,6 +212,105 @@ class Dashboard extends Component
             ->paginate(10);
     }
 
+    public function getContributionsProperty()
+    {
+        return $this->ecosystem->contributions()
+            ->with(['user.profile'])
+            ->latest()
+            ->paginate(10);
+    }
+
+    public function getPendingContributionsProperty()
+    {
+        return $this->ecosystem->pendingContributions()
+            ->with(['profile'])
+            ->get();
+    }
+
+    public function getAcceptedContributionsProperty()
+    {
+        return $this->ecosystem->acceptedContributors()
+            ->with(['profile'])
+            ->get();
+    }
+
+    public function acceptContribution($contributionId)
+    {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat menerima kontribusi.');
+            return;
+        }
+
+        $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
+        
+        if ($contribution->status !== 'offered') {
+            session()->flash('error', 'Kontribusi tidak dapat diproses.');
+            return;
+        }
+
+        $contribution->update([
+            'status' => 'accepted',
+            'accepted_at' => now(),
+        ]);
+
+        session()->flash('message', "Kontribusi dari {$contribution->user->name} telah diterima.");
+        
+        // Refresh the component
+        $this->ecosystem = $this->ecosystem->fresh();
+    }
+
+    public function declineContribution($contributionId)
+    {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat menolak kontribusi.');
+            return;
+        }
+
+        $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
+        
+        if ($contribution->status !== 'offered') {
+            session()->flash('error', 'Kontribusi tidak dapat diproses.');
+            return;
+        }
+
+        $contribution->update([
+            'status' => 'declined',
+        ]);
+
+        session()->flash('message', "Kontribusi dari {$contribution->user->name} telah ditolak.");
+        
+        // Refresh the component
+        $this->ecosystem = $this->ecosystem->fresh();
+    }
+
+    public function completeContribution($contributionId)
+    {
+        // Check if user is the ecosystem creator
+        if (Auth::id() !== $this->ecosystem->creator_id) {
+            session()->flash('error', 'Akses ditolak. Hanya pemilik ekosistem yang dapat menyelesaikan kontribusi.');
+            return;
+        }
+
+        $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
+        
+        if ($contribution->status !== 'accepted') {
+            session()->flash('error', 'Kontribusi harus diterima terlebih dahulu.');
+            return;
+        }
+
+        $contribution->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        session()->flash('message', "Kontribusi dari {$contribution->user->name} telah diselesaikan.");
+        
+        // Refresh the component
+        $this->ecosystem = $this->ecosystem->fresh();
+    }
+
     public function render()
     {
         $this->pendingInvitations = $this->getPendingInvitationsProperty();
@@ -223,6 +322,9 @@ class Dashboard extends Component
             'acceptedMembers' => $this->acceptedMembers,
             'ecosystemQuality' => $this->ecosystemQuality,
             'connectionQualityData' => $this->connectionQualityData,
+            'contributions' => $this->contributions,
+            'pendingContributions' => $this->pendingContributions,
+            'acceptedContributions' => $this->acceptedContributions,
         ]);
     }
 }

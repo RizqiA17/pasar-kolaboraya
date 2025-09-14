@@ -98,6 +98,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
         Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
         Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
         Route::get('ecosystem/{ecosystem}/settings', \App\Livewire\Ecosystem\Settings::class)->name('ecosystem.settings');
+        Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
     });
 
     // Collective Action Routes (Protected by collective_actions feature check)

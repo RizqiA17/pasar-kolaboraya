@@ -10,84 +10,42 @@ class ContributionSeeder extends Seeder
     public function run()
     {
         $contributions = [
-            // Program & Inisiatif
+            // Sumber Daya yang Disumbangkan (Resources Contributed)
             [
-                'name' => 'Program Pendidikan',
-                'category' => 'Program & Inisiatif',
-                'icon' => 'academic-cap',
-                'description' => 'Menginisiasi atau berkontribusi dalam program pendidikan',
+                'name' => 'Dana',
+                'category' => 'Sumber Daya yang Disumbangkan',
+                'icon' => 'currency-dollar',
+                'description' => 'Kontribusi berupa dana atau pendanaan untuk mendukung kegiatan kolaborasi',
             ],
             [
-                'name' => 'Kampanye Lingkungan',
-                'category' => 'Program & Inisiatif',
-                'icon' => 'globe',
-                'description' => 'Menginisiasi atau berkontribusi dalam kampanye lingkungan',
+                'name' => 'Infrastruktur',
+                'category' => 'Sumber Daya yang Disumbangkan',
+                'icon' => 'building-office',
+                'description' => 'Kontribusi berupa infrastruktur fisik atau fasilitas untuk mendukung kegiatan',
             ],
             [
-                'name' => 'Program Pemberdayaan',
-                'category' => 'Program & Inisiatif',
-                'icon' => 'users',
-                'description' => 'Menginisiasi atau berkontribusi dalam program pemberdayaan',
-            ],
-
-            // Pengembangan Komunitas
-            [
-                'name' => 'Pembentukan Komunitas',
-                'category' => 'Pengembangan Komunitas',
+                'name' => 'Relasi',
+                'category' => 'Sumber Daya yang Disumbangkan',
                 'icon' => 'user-group',
-                'description' => 'Membentuk atau mengembangkan komunitas',
+                'description' => 'Kontribusi berupa jaringan relasi dan koneksi untuk memperluas dampak kolaborasi',
             ],
             [
-                'name' => 'Pelatihan & Workshop',
-                'category' => 'Pengembangan Komunitas',
-                'icon' => 'presentation',
-                'description' => 'Memberikan pelatihan atau workshop',
+                'name' => 'Keahlian',
+                'category' => 'Sumber Daya yang Disumbangkan',
+                'icon' => 'academic-cap',
+                'description' => 'Kontribusi berupa keahlian, pengetahuan, dan keterampilan khusus',
             ],
             [
-                'name' => 'Mentoring',
-                'category' => 'Pengembangan Komunitas',
-                'icon' => 'chat',
-                'description' => 'Menjadi mentor atau pembimbing',
-            ],
-
-            // Kolaborasi & Kemitraan
-            [
-                'name' => 'Kolaborasi Lintas Sektor',
-                'category' => 'Kolaborasi & Kemitraan',
-                'icon' => 'puzzle',
-                'description' => 'Membangun kolaborasi antar sektor',
+                'name' => 'Akses Pasar',
+                'category' => 'Sumber Daya yang Disumbangkan',
+                'icon' => 'chart-bar',
+                'description' => 'Kontribusi berupa akses ke pasar, pelanggan, atau target audiens',
             ],
             [
-                'name' => 'Kemitraan Strategis',
-                'category' => 'Kolaborasi & Kemitraan',
-                'icon' => 'handshake',
-                'description' => 'Membangun kemitraan strategis',
-            ],
-            [
-                'name' => 'Jejaring Sosial',
-                'category' => 'Kolaborasi & Kemitraan',
-                'icon' => 'network',
-                'description' => 'Membangun jejaring sosial',
-            ],
-
-            // Inovasi & Solusi
-            [
-                'name' => 'Inovasi Teknologi',
-                'category' => 'Inovasi & Solusi',
-                'icon' => 'light-bulb',
-                'description' => 'Mengembangkan inovasi teknologi',
-            ],
-            [
-                'name' => 'Solusi Sosial',
-                'category' => 'Inovasi & Solusi',
-                'icon' => 'star',
-                'description' => 'Mengembangkan solusi untuk masalah sosial',
-            ],
-            [
-                'name' => 'Riset & Publikasi',
-                'category' => 'Inovasi & Solusi',
-                'icon' => 'document-text',
-                'description' => 'Melakukan riset dan publikasi',
+                'name' => 'Teknologi',
+                'category' => 'Sumber Daya yang Disumbangkan',
+                'icon' => 'computer-desktop',
+                'description' => 'Kontribusi berupa teknologi, platform, atau tools untuk mendukung kolaborasi',
             ],
         ];
 

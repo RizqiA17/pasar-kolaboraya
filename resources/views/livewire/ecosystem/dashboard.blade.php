@@ -127,6 +127,14 @@
                     class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'actions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
                     Aksi Kolektif
                 </button>
+                <button wire:click="setActiveTab('contributions')"
+                    class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'contributions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                    Kontribusi
+                    @if ($pendingContributions->count() > 0)
+                        <span
+                            class="ml-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 py-1 px-2 rounded-full text-xs">{{ $pendingContributions->count() }}</span>
+                    @endif
+                </button>
             </nav>
         </div>
 
@@ -194,12 +202,23 @@
                             <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status Anda</h3>
 
                             @if ($userStatus === 'accepted')
-                                <div class="flex items-center text-green-700 dark:text-green-300">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span class="font-medium">Anda adalah anggota aktif dari ekosistem ini</span>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-green-700 dark:text-green-300">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="font-medium">Anda adalah anggota aktif dari ekosistem ini</span>
+                                    </div>
+                                    @if ($ecosystem->canUserContribute(Auth::user()))
+                                        <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
+                                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            Berkontribusi
+                                        </a>
+                                    @endif
                                 </div>
                             @elseif($userStatus === 'pending')
                                 <div class="flex items-center text-amber-700 dark:text-amber-300">
@@ -789,6 +808,193 @@
                                 </div>
                             @endif
                         </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Contributions Tab -->
+            @if ($activeTab === 'contributions')
+                <div class="space-y-6">
+                    <!-- Contribution Actions -->
+                    @if ($isOwner || $isEcosystemBuilder)
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kelola Kontribusi</h3>
+                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Terima, tolak, atau selesaikan kontribusi dari anggota</p>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-slate-400">
+                                    {{ $contributions->total() }} total kontribusi
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Pending Contributions -->
+                    @if ($pendingContributions->count() > 0)
+                        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                            <div class="p-6 border-b border-amber-200 dark:border-amber-800">
+                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
+                            </div>
+                            <div class="divide-y divide-amber-200 dark:divide-amber-800">
+                                @foreach ($pendingContributions as $contribution)
+                                    <div class="p-6">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-3">
+                                                    <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
+                                                        @if ($contribution->profile && $contribution->profile->profile_photo)
+                                                            <img src="{{ asset('storage/' . $contribution->profile->profile_photo) }}"
+                                                                alt="{{ $contribution->name }}"
+                                                                class="w-10 h-10 rounded-full object-cover">
+                                                        @else
+                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->name, 0, 1) }}</span>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->name }}</h4>
+                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->email }}</p>
+                                                    </div>
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->pivot->status_color_class }}">
+                                                        {{ $contribution->pivot->contribution_type_label }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Deskripsi:</strong></p>
+                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->pivot->contribution_description }}</p>
+                                                </div>
+
+                                                @if ($contribution->pivot->contribution_amount)
+                                                    <div class="mb-3">
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->pivot->contribution_amount, 0, ',', '.') }}</p>
+                                                    </div>
+                                                @endif
+
+                                                @if ($contribution->pivot->contribution_details)
+                                                    <div class="mb-3">
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Detail Tambahan:</strong></p>
+                                                        <div class="mt-1 space-y-1">
+                                                            @foreach ($contribution->pivot->contribution_details as $detail)
+                                                                <div class="text-sm text-gray-600 dark:text-slate-400">
+                                                                    • {{ $detail['type'] ?? 'N/A' }}: {{ $detail['description'] ?? 'N/A' }}
+                                                                    @if (isset($detail['quantity']) && $detail['quantity'])
+                                                                        ({{ $detail['quantity'] }})
+                                                                    @endif
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                <div class="text-xs text-gray-500 dark:text-slate-400">
+                                                    Diajukan {{ $contribution->pivot->offered_at ? $contribution->pivot->offered_at->diffForHumans() : 'N/A' }}
+                                                </div>
+                                            </div>
+                                            
+                                            @if ($isOwner)
+                                                <div class="ml-4 flex space-x-2">
+                                                    <button wire:click="acceptContribution({{ $contribution->pivot->id }})"
+                                                        class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        Terima
+                                                    </button>
+                                                    <button wire:click="declineContribution({{ $contribution->pivot->id }})"
+                                                        class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        Tolak
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- All Contributions -->
+                    <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        <div class="p-6 border-b border-gray-200 dark:border-slate-700">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Semua Kontribusi</h3>
+                        </div>
+                        @if ($contributions->count() > 0)
+                            <div class="divide-y divide-gray-200 dark:divide-slate-700">
+                                @foreach ($contributions as $contribution)
+                                    <div class="p-6">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-3">
+                                                    <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
+                                                        @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
+                                                            <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
+                                                                alt="{{ $contribution->user->name }}"
+                                                                class="w-10 h-10 rounded-full object-cover">
+                                                        @else
+                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->user->name }}</h4>
+                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->user->email }}</p>
+                                                    </div>
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
+                                                        {{ $contribution->status_label }}
+                                                    </span>
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                        {{ $contribution->contribution_type_label }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Deskripsi:</strong></p>
+                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->contribution_description }}</p>
+                                                </div>
+
+                                                @if ($contribution->contribution_amount)
+                                                    <div class="mb-3">
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
+                                                    </div>
+                                                @endif
+
+                                                <div class="text-xs text-gray-500 dark:text-slate-400">
+                                                    @if ($contribution->offered_at)
+                                                        Diajukan {{ $contribution->offered_at->diffForHumans() }}
+                                                    @endif
+                                                    @if ($contribution->accepted_at)
+                                                        • Diterima {{ $contribution->accepted_at->diffForHumans() }}
+                                                    @endif
+                                                    @if ($contribution->completed_at)
+                                                        • Selesai {{ $contribution->completed_at->diffForHumans() }}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            
+                                            @if ($isOwner && $contribution->status === 'accepted')
+                                                <div class="ml-4">
+                                                    <button wire:click="completeContribution({{ $contribution->id }})"
+                                                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        Tandai Selesai
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="p-6 border-t border-gray-200 dark:border-slate-700">
+                                {{ $contributions->links() }}
+                            </div>
+                        @else
+                            <div class="p-6 text-center text-gray-500 dark:text-slate-400">
+                                <div class="text-4xl mb-2">🤝</div>
+                                <p>Belum ada kontribusi yang diajukan.</p>
+                                @if ($ecosystem->canUserContribute(Auth::user()))
+                                    <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
+                                        class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Ajukan Kontribusi
+                                    </a>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif
