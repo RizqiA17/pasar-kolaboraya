@@ -53,11 +53,12 @@
                 $userActionsEnabled = \App\Models\SystemSetting::isUserActionsEnabled();
                 $collectiveActionsEnabled = \App\Models\SystemSetting::isCollectiveActionsEnabled();
                 $isSuperAdmin = $user->isSuperAdmin();
-                $isEcosystemBuilder = $user->isEcosystemBuilder();
+                $isEcosystemBuilder = $user->isApprovedEcosystemBuilder();
+                $hasActiveMarketSession = $user->hasActivePasarKolaboraya();
             @endphp
 
             <!-- Koneksi -->
-            @if ($connectionsEnabled || $isSuperAdmin)
+            @if (($connectionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
                 <flux:navbar.item icon="link" :href="route('connections')"
                     :current="request()->routeIs('connections')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl mx-1"
@@ -81,7 +82,13 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
-                        <span>Fitur koneksi sedang dinonaktifkan oleh administrator</span>
+                        <span>
+                            @if (!$hasActiveMarketSession)
+                                Anda harus bergabung dengan sesi pasar terlebih dahulu
+                            @else
+                                Fitur koneksi sedang dinonaktifkan oleh administrator
+                            @endif
+                        </span>
                         <div
                             class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
                         </div>
@@ -122,8 +129,10 @@
             @endif --}}
 
             <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
-            @if ($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder)
-                <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')" :current="request()->routeIs('ecosystem.*')"
+            @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession)
+            {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
+                <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')"
+                    :current="request()->routeIs('ecosystem.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
                     wire:navigate>
                     <span class="relative z-10">{{ __('Ekosistem') }}</span>
@@ -144,7 +153,14 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
-                        <span>Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat mengakses.</span>
+                        <span>
+                            @if (!$hasActiveMarketSession)
+                                Anda harus bergabung dengan sesi pasar terlebih dahulu
+                            @else
+                                Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat
+                                mengakses.
+                            @endif
+                        </span>
                         <div
                             class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
                         </div>
@@ -153,8 +169,9 @@
             @endif
 
             <!-- Aksi Kolektif (follows user actions setting) -->
-            @if ($collectiveActionsEnabled || $isSuperAdmin)
-                <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')" :current="request()->routeIs('collective-action.*')"
+            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+                <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')"
+                    :current="request()->routeIs('collective-action.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
                     wire:navigate>
                     <span class="relative z-10">{{ __('Aksi Kolektif') }}</span>
@@ -175,7 +192,13 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50">
-                        <span>Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.</span>
+                        <span>
+                            @if (!$hasActiveMarketSession)
+                                Anda harus bergabung dengan sesi pasar terlebih dahulu
+                            @else
+                                Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.
+                            @endif
+                        </span>
                         <div
                             class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
                         </div>
@@ -191,7 +214,7 @@
         <div class="flex col-span-1 items-center gap-2 justify-end">
             <!-- Dark Mode Toggle -->
             <x-dark-mode-toggle class="relative z-10" />
-            
+
             <!-- Modern Notification System -->
             <x-flux::dropdown align="right" width="128" class="relative z-10"
                 x-on:show="Livewire.dispatch('dropdown-shown')" x-on:hide="Livewire.dispatch('dropdown-hidden')">
@@ -250,10 +273,11 @@
                     </flux:menu.radio.group>
 
                     <!-- Active Session Information -->
-                    @if(auth()->user()->hasActivePasarKolaboraya())
+                    @if (auth()->user()->hasActivePasarKolaboraya())
                         <div class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
                             <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                                <div
+                                    class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
                                     <flux:icon.cube class="w-4 h-4 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <div class="flex-1">
@@ -267,11 +291,8 @@
                                         {{ auth()->user()->activePasarKolaboraya->acceptedUsers->count() }} anggota
                                     </p>
                                 </div>
-                                <flux:button 
-                                    href="{{ route('pasar-kolaboraya.select') }}"
-                                    size="xs"
-                                    {{-- variant="secondary" --}}
-                                >
+                                <flux:button href="{{ route('pasar-kolaboraya.select') }}" size="xs"
+                                    {{-- variant="secondary" --}}>
                                     Ganti
                                 </flux:button>
                             </div>
@@ -279,22 +300,22 @@
                     @elseif(auth()->user()->hasPasarKolaborayas())
                         <div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
                             <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
-                                    <flux:icon.exclamation-triangle class="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
+                                <div
+                                    class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
+                                    <flux:icon.exclamation-triangle
+                                        class="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
                                         Pilih Sesi
                                     </h4>
                                     <p class="text-xs text-yellow-600 dark:text-yellow-300">
-                                        {{ auth()->user()->acceptedPasarKolaborayas->count() }} Pasar Kolaboraya tersedia
+                                        {{ auth()->user()->acceptedPasarKolaborayas->count() }} Pasar Kolaboraya
+                                        tersedia
                                     </p>
                                 </div>
-                                <flux:button 
-                                    href="{{ route('pasar-kolaboraya.select') }}"
-                                    size="xs"
-                                    variant="primary"
-                                >
+                                <flux:button href="{{ route('pasar-kolaboraya.select') }}" size="xs"
+                                    variant="primary">
                                     Pilih
                                 </flux:button>
                             </div>
@@ -302,7 +323,8 @@
                     @else
                         <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/20 border-l-4 border-gray-400">
                             <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                                <div
+                                    class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
                                     <flux:icon.information-circle class="w-4 h-4 text-gray-600 dark:text-gray-300" />
                                 </div>
                                 <div class="flex-1">
@@ -313,11 +335,8 @@
                                         Hubungi admin untuk diundang
                                     </p>
                                 </div>
-                                <flux:button 
-                                    href="{{ route('pasar-kolaboraya.join-request') }}"
-                                    size="xs"
-                                    {{-- variant="secondary" --}}
-                                >
+                                <flux:button href="{{ route('pasar-kolaboraya.join-request') }}" size="xs"
+                                    {{-- variant="secondary" --}}>
                                     Minta
                                 </flux:button>
                             </div>
@@ -380,10 +399,11 @@
                 </flux:menu.radio.group>
 
                 <!-- Active Session Information for Mobile -->
-                @if(auth()->user()->hasActivePasarKolaboraya())
+                @if (auth()->user()->hasActivePasarKolaboraya())
                     <div class="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                            <div
+                                class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
                                 <flux:icon.cube class="w-4 h-4 text-blue-600 dark:text-blue-300" />
                             </div>
                             <div class="flex-1">
@@ -397,11 +417,8 @@
                                     {{ auth()->user()->activePasarKolaboraya->acceptedUsers->count() }} anggota
                                 </p>
                             </div>
-                            <flux:button 
-                                href="{{ route('pasar-kolaboraya.select') }}"
-                                size="xs"
-                                {{-- variant="secondary" --}}
-                            >
+                            <flux:button href="{{ route('pasar-kolaboraya.select') }}" size="xs"
+                                {{-- variant="secondary" --}}>
                                 Ganti
                             </flux:button>
                         </div>
@@ -409,7 +426,8 @@
                 @elseif(auth()->user()->hasPasarKolaborayas())
                     <div class="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
+                            <div
+                                class="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
                                 <flux:icon.exclamation-triangle class="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
                             </div>
                             <div class="flex-1">
@@ -420,11 +438,8 @@
                                     {{ auth()->user()->acceptedPasarKolaborayas->count() }} Pasar Kolaboraya tersedia
                                 </p>
                             </div>
-                            <flux:button 
-                                href="{{ route('pasar-kolaboraya.select') }}"
-                                size="xs"
-                                variant="primary"
-                            >
+                            <flux:button href="{{ route('pasar-kolaboraya.select') }}" size="xs"
+                                variant="primary">
                                 Pilih
                             </flux:button>
                         </div>
@@ -432,7 +447,8 @@
                 @else
                     <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/20 border-l-4 border-gray-400">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                            <div
+                                class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
                                 <flux:icon.information-circle class="w-4 h-4 text-gray-600 dark:text-gray-300" />
                             </div>
                             <div class="flex-1">
@@ -443,11 +459,8 @@
                                     Hubungi admin untuk diundang
                                 </p>
                             </div>
-                            <flux:button 
-                                href="{{ route('pasar-kolaboraya.join-request') }}"
-                                size="xs"
-                                {{-- variant="secondary" --}}
-                            >
+                            <flux:button href="{{ route('pasar-kolaboraya.join-request') }}" size="xs"
+                                {{-- variant="secondary" --}}>
                                 Minta
                             </flux:button>
                         </div>
@@ -499,7 +512,7 @@
                 </a>
 
                 <!-- Connections -->
-                @if ($connectionsEnabled || $isSuperAdmin)
+                @if (($connectionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
                     <a href="{{ route('connections') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
                         wire:navigate>
@@ -533,7 +546,13 @@
                             x-transition:leave-start="opacity-100 scale-100"
                             x-transition:leave-end="opacity-0 scale-95"
                             class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
-                            <span>Fitur koneksi sedang dinonaktifkan</span>
+                            <span>
+                                @if (!$hasActiveMarketSession)
+                                    Bergabung dengan sesi pasar terlebih dahulu
+                                @else
+                                    Fitur koneksi sedang dinonaktifkan
+                                @endif
+                            </span>
                             <div
                                 class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
                             </div>
@@ -585,32 +604,102 @@
                 @endif --}}
 
                 <!-- Ekosistem -->
-                <a href="{{ route('ecosystem.browse') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
-                    wire:navigate>
-                    <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
+                @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession)
+                    <a href="{{ route('ecosystem.browse') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
+                        wire:navigate>
+                        <div class="w-6 h-6 mb-1">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium">{{ __('Ekosistem') }}</span>
+                    </a>
+                @else
+                    <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
+                        x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                        <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                </path>
+                            </svg>
+                        </div>
+                        <span
+                            class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Ekosistem') }}</span>
+
+                        <!-- Tooltip -->
+                        <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                            <span>
+                                @if (!$hasActiveMarketSession)
+                                    Bergabung dengan sesi pasar terlebih dahulu
+                                @else
+                                    Fitur ekosistem dinonaktifkan untuk user biasa
+                                @endif
+                            </span>
+                            <div
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                            </div>
+                        </div>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Ekosistem') }}</span>
-                </a>
+                @endif
 
                 <!-- Aksi Kolektif -->
-                <a href="{{ route('collective-action.browse') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
-                    wire:navigate>
-                    <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                            </path>
-                        </svg>
+                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+                    <a href="{{ route('collective-action.browse') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
+                        wire:navigate>
+                        <div class="w-6 h-6 mb-1">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium">{{ __('Aksi Kolektif') }}</span>
+                    </a>
+                @else
+                    <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
+                        x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                        <div class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
+                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <span
+                            class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Aksi Kolektif') }}</span>
+
+                        <!-- Tooltip -->
+                        <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50">
+                            <span>
+                                @if (!$hasActiveMarketSession)
+                                    Bergabung dengan sesi pasar terlebih dahulu
+                                @else
+                                    Fitur aksi kolektif dinonaktifkan
+                                @endif
+                            </span>
+                            <div
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-slate-800 dark:border-b-slate-700">
+                            </div>
+                        </div>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Aksi Kolektif') }}</span>
-                </a>
+                @endif
 
                 <!-- Aksi -->
                 {{-- @if ($userActionsEnabled || $isSuperAdmin)

@@ -89,9 +89,9 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
     });
 
     // Survey Routes - protected by active session
-    Route::middleware('check.active.pasar.kolaboraya')->group(function () {
+    // Route::middleware('check.active.pasar.kolaboraya')->group(function () {
         Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
-    });
+    // });
 
     // Ecosystem Routes (Protected by ecosystems feature check and active session)
     Route::middleware(['check.feature.access:ecosystems', 'check.active.pasar.kolaboraya'])->group(function () {
