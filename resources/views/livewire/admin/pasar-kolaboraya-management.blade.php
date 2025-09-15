@@ -116,9 +116,9 @@
                                     <flux:icon.cube class="w-5 h-5 text-white" />
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">
+                                    <a href="{{ route('admin.market-analysis.show', $pasarKolaboraya->id) }}"  class="text-lg font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                                         {{ $pasarKolaboraya->name }}
-                                    </h3>
+                                    </a>
                                     <p class="text-sm text-slate-500 dark:text-slate-400">
                                         Dibuat oleh {{ $pasarKolaboraya->creator->name }}
                                     </p>

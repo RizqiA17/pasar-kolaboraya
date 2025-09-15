@@ -256,7 +256,7 @@
                                     <x-ui.banner :user="auth()->user()" height="h-32" />
                                     <div class="flex items-center space-x-3">
                                         <input type="file" wire:model="banner" id="banner" accept="image/*"
-                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                            class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                         <button type="button" wire:click="updateBanner" wire:loading.attr="disabled"
                                             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
@@ -301,7 +301,7 @@
                                         </div>
                                         <input type="text" wire:model="name" id="name" required autofocus
                                             autocomplete="name"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan nama lengkap Anda">
                                     </div>
                                     @error('name')
@@ -324,7 +324,7 @@
                                         </div>
                                         <input type="email" wire:model="email" id="email" required
                                             autocomplete="email"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan email Anda">
                                     </div>
                                     @error('email')
@@ -347,7 +347,7 @@
                                         </div>
                                         <input type="text" wire:model="organization" id="organization"
                                             autocomplete="organization"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Nama organisasi atau perusahaan">
                                     </div>
                                     @error('organization')
@@ -370,7 +370,7 @@
                                             </svg>
                                         </div>
                                         <input type="tel" wire:model="phone" id="phone" autocomplete="tel"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Nomor telepon (opsional)">
                                     </div>
                                     @error('phone')
@@ -393,7 +393,7 @@
                                         </svg>
                                     </div>
                                     <textarea wire:model="vision" id="vision" rows="4"
-                                        class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 sm:text-sm sm:leading-6"
+                                        class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                         placeholder="Ceritakan visi dan misi Anda dalam berkarya..."></textarea>
                                 </div>
                                 @error('vision')
@@ -1032,7 +1032,7 @@
                                     </label>
                                     <div class="relative">
                                         <input type="date" wire:model="newContribution.date"
-                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 dark:text-slate-100 dark:bg-slate-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-blue-600 dark:focus:border-blue-400 transition-all duration-200">
+                                            class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 dark:text-slate-100 dark:bg-slate-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-blue-600 dark:focus:border-blue-400 transition-all duration-200">
                                     </div>
                                     @error('newContribution.date')
                                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{{ $message }}</p>

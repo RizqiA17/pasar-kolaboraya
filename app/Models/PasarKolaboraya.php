@@ -226,4 +226,226 @@ class PasarKolaboraya extends Model
             default => 'Tidak Diketahui'
         };
     }
+
+    /**
+     * Get ecosystems for this Pasar Kolaboraya
+     */
+    public function ecosystems(): HasMany
+    {
+        return $this->hasMany(Ecosystem::class, 'pasar_kolaboraya_id');
+    }
+
+    /**
+     * Get collective actions for this Pasar Kolaboraya
+     */
+    public function collectiveActions(): HasMany
+    {
+        return $this->hasMany(CollectiveAction::class, 'pasar_kolaboraya_id');
+    }
+
+    /**
+     * Get connections for this Pasar Kolaboraya
+     */
+    public function connections(): HasMany
+    {
+        return $this->hasMany(Connection::class, 'pasar_kolaboraya_id');
+    }
+
+    /**
+     * Calculate overall health score for this Pasar Kolaboraya
+     */
+    public function calculateHealthScore(): float
+    {
+        $totalUsers = $this->acceptedUsers->count();
+        if ($totalUsers === 0) return 0;
+
+        $ecosystemHealth = $this->calculateEcosystemHealth();
+        $collaborationIndex = $this->calculateCollaborationIndex();
+        $participationRate = $this->calculateParticipationRate();
+        $engagementScore = $this->calculateEngagementScore();
+        $networkDiversity = $this->calculateNetworkDiversity();
+        $resourceUtilization = $this->calculateResourceUtilization();
+
+        return round((
+            $ecosystemHealth * 0.25 +
+            $collaborationIndex * 0.20 +
+            $participationRate * 0.15 +
+            $engagementScore * 0.15 +
+            $networkDiversity * 0.15 +
+            $resourceUtilization * 0.10
+        ), 2);
+    }
+
+    /**
+     * Calculate ecosystem health score
+     */
+    public function calculateEcosystemHealth(): float
+    {
+        $ecosystems = $this->ecosystems;
+        if ($ecosystems->isEmpty()) return 0;
+        
+        $totalScore = 0;
+        foreach ($ecosystems as $ecosystem) {
+            $memberCount = $ecosystem->users()->count();
+            
+            // Get skills count from ecosystem members
+            $skillCount = $ecosystem->acceptedUsers()->with('profile.skills')->get()
+                ->flatMap(function($user) {
+                    return $user->profile ? $user->profile->skills : collect();
+                })
+                ->unique('id')
+                ->count();
+            
+            $contributionCount = $ecosystem->contributions()->count();
+            
+            $ecosystemScore = min(100, ($memberCount * 10) + ($skillCount * 5) + ($contributionCount * 3));
+            $totalScore += $ecosystemScore;
+        }
+        
+        return round($totalScore / $ecosystems->count(), 2);
+    }
+
+    /**
+     * Calculate collaboration index
+     */
+    public function calculateCollaborationIndex(): float
+    {
+        $collectiveActions = $this->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalParticipants = 0;
+        foreach ($collectiveActions as $action) {
+            $totalParticipants += $action->users()->count();
+        }
+        
+        $avgParticipants = $totalParticipants / $collectiveActions->count();
+        $totalUsers = $this->acceptedUsers->count();
+        
+        return $totalUsers > 0 ? round(($avgParticipants / $totalUsers) * 100, 2) : 0;
+    }
+
+    /**
+     * Calculate participation rate
+     */
+    public function calculateParticipationRate(): float
+    {
+        $totalUsers = $this->acceptedUsers->count();
+        if ($totalUsers === 0) return 0;
+        
+        $activeUsers = $this->acceptedUsers->where('active_pasar_kolaboraya_id', $this->id)->count();
+        return round(($activeUsers / $totalUsers) * 100, 2);
+    }
+
+    /**
+     * Calculate engagement score
+     */
+    public function calculateEngagementScore(): float
+    {
+        $totalUsers = $this->acceptedUsers->count();
+        if ($totalUsers === 0) return 0;
+        
+        $activeUsers = $this->acceptedUsers->where('active_pasar_kolaboraya_id', $this->id)->count();
+        $usersWithConnections = $this->acceptedUsers->filter(function($user) {
+            return $user->sentConnections()->where('pasar_kolaboraya_id', $this->id)->where('status', 'accepted')->count() > 0;
+        })->count();
+        
+        $usersWithEcosystems = $this->acceptedUsers->filter(function($user) {
+            return $user->ecosystems()->where('pasar_kolaboraya_id', $this->id)->count() > 0;
+        })->count();
+        
+        $usersWithActions = $this->acceptedUsers->filter(function($user) {
+            return $user->activeCollectiveActions()->where('pasar_kolaboraya_id', $this->id)->count() > 0;
+        })->count();
+        
+        $engagementScore = (
+            ($activeUsers / $totalUsers) * 30 +
+            ($usersWithConnections / $totalUsers) * 25 +
+            ($usersWithEcosystems / $totalUsers) * 25 +
+            ($usersWithActions / $totalUsers) * 20
+        );
+        
+        return round($engagementScore, 2);
+    }
+
+    /**
+     * Calculate network diversity
+     */
+    public function calculateNetworkDiversity(): float
+    {
+        $users = $this->acceptedUsers;
+        if ($users->isEmpty()) return 0;
+        
+        $sectors = $users->pluck('profile.organization')->filter()->unique()->count();
+        $skills = $users->flatMap(function($user) {
+            return $user->profile ? $user->profile->skills->pluck('name') : collect();
+        })->unique()->count();
+        
+        $diversityScore = min(100, ($sectors * 5) + ($skills * 2));
+        
+        return round($diversityScore, 2);
+    }
+
+    /**
+     * Calculate resource utilization
+     */
+    public function calculateResourceUtilization(): float
+    {
+        $collectiveActions = $this->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalResources = 0;
+        $utilizedResources = 0;
+        
+        foreach ($collectiveActions as $action) {
+            $requiredResources = is_array($action->required_resources) ? count($action->required_resources) : 0;
+            $totalResources += $requiredResources;
+            
+            // Count how many resources are actually provided
+            $providedResources = $action->contributions()->count();
+            $utilizedResources += min($providedResources, $requiredResources);
+        }
+        
+        return $totalResources > 0 ? round(($utilizedResources / $totalResources) * 100, 2) : 0;
+    }
+
+    /**
+     * Get health status based on overall score
+     */
+    public function getHealthStatusAttribute(): string
+    {
+        $score = $this->calculateHealthScore();
+        
+        if ($score >= 80) return 'excellent';
+        if ($score >= 60) return 'good';
+        if ($score >= 40) return 'fair';
+        return 'poor';
+    }
+
+    /**
+     * Get health status label
+     */
+    public function getHealthStatusLabelAttribute(): string
+    {
+        return match($this->health_status) {
+            'excellent' => 'Sangat Sehat',
+            'good' => 'Sehat',
+            'fair' => 'Cukup Sehat',
+            'poor' => 'Perlu Perhatian',
+            default => 'Tidak Diketahui'
+        };
+    }
+
+    /**
+     * Get health status color
+     */
+    public function getHealthStatusColorAttribute(): string
+    {
+        return match($this->health_status) {
+            'excellent' => 'green',
+            'good' => 'blue',
+            'fair' => 'yellow',
+            'poor' => 'red',
+            default => 'gray'
+        };
+    }
 }

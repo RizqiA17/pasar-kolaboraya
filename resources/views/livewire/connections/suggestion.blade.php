@@ -147,8 +147,8 @@
                                         </path>
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                                <p class="text-gray-500 max-w-sm mx-auto">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-slate-100 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500 dark:text-slate-400 max-w-sm mx-auto">
                                     Mulai terhubung dengan lebih banyak kreator untuk mendapatkan rekomendasi yang lebih
                                     baik.
                                 </p>
@@ -267,8 +267,8 @@
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum Ada Rekomendasi</h3>
-                                <p class="text-gray-500">Belum ada rekomendasi dari aksi yang sama</p>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-slate-100 mb-1">Belum Ada Rekomendasi</h3>
+                                <p class="text-gray-500 dark:text-slate-400">Belum ada rekomendasi dari aksi yang sama</p>
                             </div>
                         @endforelse
                     </div>

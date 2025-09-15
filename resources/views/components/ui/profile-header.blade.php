@@ -17,7 +17,7 @@
             <div class="flex flex-col md:flex-row items-start gap-6">
                 <!-- Profile Image -->
                 <div class="relative flex-shrink-0">
-                    <div class="h-48 w-48 rounded-xl bg-white shadow-xl overflow-hidden">
+                    <div class="h-48 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 overflow-hidden">
                         @if($user->profile?->profile_photo)
                             <img 
                                 src="{{ asset('storage/' . $user->profile->profile_photo) }}"

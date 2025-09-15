@@ -94,6 +94,46 @@
             </div>
         </div>
 
+        <!-- Market Analysis Card -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+            <div class="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Analisis Sesi Pasar</h3>
+                <a href="{{ route('admin.market-analysis') }}" class="text-xs sm:text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium">
+                    Lihat analisis detail →
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Sesi Aktif</p>
+                    <p class="text-lg sm:text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                        {{ \App\Models\PasarKolaboraya::where('status', 'active')->count() }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Sesi</p>
+                    <p class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">
+                        {{ \App\Models\PasarKolaboraya::count() }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Rata-rata Kesehatan</p>
+                    <p class="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
+                        @php
+                            $activeSessions = \App\Models\PasarKolaboraya::where('status', 'active')->with(['acceptedUsers.profile.skills', 'ecosystems', 'collectiveActions'])->get();
+                            $avgHealth = $activeSessions->avg(function($session) { return $session->calculateHealthScore(); });
+                        @endphp
+                        {{ $avgHealth ? round($avgHealth, 1) : 0 }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Partisipan</p>
+                    <p class="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">
+                        {{ \App\Models\PasarKolaboraya::where('status', 'active')->withCount('acceptedUsers')->get()->sum('accepted_users_count') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Additional Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">

@@ -14,6 +14,7 @@ use App\Models\Skill;
 use App\Models\Contribution;
 use App\Models\EventCategory;
 use App\Models\SystemSetting;
+use App\Models\PasarKolaboraya;
 use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -144,6 +145,242 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users.show', $user)
             ->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * Display market session analysis
+     */
+    public function marketAnalysis(Request $request)
+    {
+        $query = PasarKolaboraya::with(['creator', 'acceptedUsers', 'ecosystems', 'collectiveActions']);
+
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('status') && $request->status) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $sessions = $query->orderBy('created_at', 'desc')->paginate(15)->appends($request->query());
+
+        return view('admin.market-analysis.index', compact('sessions'));
+    }
+
+    /**
+     * Show detailed market session analysis
+     */
+    public function showMarketAnalysis(PasarKolaboraya $pasarKolaboraya)
+    {
+        $pasarKolaboraya->load([
+            'creator', 
+            'acceptedUsers.profile.skills', 
+            'ecosystems.creator', 
+            'collectiveActions.creator',
+            'pasarKolaborayaUsers.user.profile.skills'
+        ]);
+
+        // Calculate health metrics
+        $healthMetrics = $this->calculateMarketHealthMetrics($pasarKolaboraya);
+
+        return view('admin.market-analysis.show', compact('pasarKolaboraya', 'healthMetrics'));
+    }
+
+    /**
+     * Calculate market health metrics
+     */
+    private function calculateMarketHealthMetrics(PasarKolaboraya $pasarKolaboraya)
+    {
+        $totalUsers = $pasarKolaboraya->acceptedUsers->count();
+        $totalEcosystems = $pasarKolaboraya->ecosystems->count();
+        $totalCollectiveActions = $pasarKolaboraya->collectiveActions->count();
+        
+        // Calculate connection density
+        $totalConnections = Connection::where('pasar_kolaboraya_id', $pasarKolaboraya->id)
+            ->where('status', 'accepted')
+            ->count();
+        
+        $connectionDensity = $totalUsers > 1 ? round(($totalConnections / ($totalUsers * ($totalUsers - 1) / 2)) * 100, 2) : 0;
+        
+        // Calculate ecosystem health score
+        $ecosystemHealthScore = $this->calculateEcosystemHealthScore($pasarKolaboraya);
+        
+        // Calculate collaboration index
+        $collaborationIndex = $this->calculateCollaborationIndex($pasarKolaboraya);
+        
+        // Calculate participation rate
+        $activeUsers = $pasarKolaboraya->acceptedUsers->where('active_pasar_kolaboraya_id', $pasarKolaboraya->id)->count();
+        $participationRate = $totalUsers > 0 ? round(($activeUsers / $totalUsers) * 100, 2) : 0;
+        
+        // Calculate growth metrics
+        $daysSinceStart = $pasarKolaboraya->created_at->diffInDays(now());
+        $userGrowthRate = $daysSinceStart > 0 ? round(($totalUsers / $daysSinceStart) * 30, 2) : 0; // per month
+        
+        // Calculate engagement score
+        $engagementScore = $this->calculateEngagementScore($pasarKolaboraya);
+        
+        // Calculate network diversity
+        $networkDiversity = $this->calculateNetworkDiversity($pasarKolaboraya);
+        
+        // Calculate resource utilization
+        $resourceUtilization = $this->calculateResourceUtilization($pasarKolaboraya);
+        
+        // Calculate overall health score
+        $overallHealthScore = round((
+            $ecosystemHealthScore * 0.25 +
+            $collaborationIndex * 0.20 +
+            $participationRate * 0.15 +
+            $engagementScore * 0.15 +
+            $networkDiversity * 0.15 +
+            $resourceUtilization * 0.10
+        ), 2);
+
+        return [
+            'total_users' => $totalUsers,
+            'total_ecosystems' => $totalEcosystems,
+            'total_collective_actions' => $totalCollectiveActions,
+            'total_connections' => $totalConnections,
+            'connection_density' => $connectionDensity,
+            'ecosystem_health_score' => $ecosystemHealthScore,
+            'collaboration_index' => $collaborationIndex,
+            ' yanparticipation_rate' => $participationRate,
+            'user_growth_rate' => $userGrowthRate,
+            'engagement_score' => $engagementScore,
+            'network_diversity' => $networkDiversity,
+            'resource_utilization' => $resourceUtilization,
+            'overall_health_score' => $overallHealthScore,
+            'days_since_start' => $daysSinceStart,
+            'active_users' => $activeUsers
+        ];
+    }
+
+    /**
+     * Calculate ecosystem health score
+     */
+    private function calculateEcosystemHealthScore(PasarKolaboraya $pasarKolaboraya)
+    {
+        $ecosystems = $pasarKolaboraya->ecosystems;
+        if ($ecosystems->isEmpty()) return 0;
+        
+        $totalScore = 0;
+        foreach ($ecosystems as $ecosystem) {
+            $memberCount = $ecosystem->users()->count();
+            
+            // Get skills count from ecosystem members
+            $skillCount = $ecosystem->acceptedUsers()->with('profile.skills')->get()
+                ->flatMap(function($user) {
+                    return $user->profile ? $user->profile->skills : collect();
+                })
+                ->unique('id')
+                ->count();
+            
+            $contributionCount = $ecosystem->contributions()->count();
+            
+            $ecosystemScore = min(100, ($memberCount * 10) + ($skillCount * 5) + ($contributionCount * 3));
+            $totalScore += $ecosystemScore;
+        }
+        
+        return round($totalScore / $ecosystems->count(), 2);
+    }
+
+    /**
+     * Calculate collaboration index
+     */
+    private function calculateCollaborationIndex(PasarKolaboraya $pasarKolaboraya)
+    {
+        $collectiveActions = $pasarKolaboraya->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalParticipants = 0;
+        foreach ($collectiveActions as $action) {
+            $totalParticipants += $action->users()->count();
+        }
+        
+        $avgParticipants = $totalParticipants / $collectiveActions->count();
+        $totalUsers = $pasarKolaboraya->acceptedUsers->count();
+        
+        return $totalUsers > 0 ? round(($avgParticipants / $totalUsers) * 100, 2) : 0;
+    }
+
+    /**
+     * Calculate engagement score
+     */
+    private function calculateEngagementScore(PasarKolaboraya $pasarKolaboraya)
+    {
+        $totalUsers = $pasarKolaboraya->acceptedUsers->count();
+        if ($totalUsers === 0) return 0;
+        
+        $activeUsers = $pasarKolaboraya->acceptedUsers->where('active_pasar_kolaboraya_id', $pasarKolaboraya->id)->count();
+        $usersWithConnections = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+            return $user->sentConnections()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->where('status', 'accepted')->count() > 0;
+        })->count();
+        
+        $usersWithEcosystems = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+            return $user->ecosystems()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->count() > 0;
+        })->count();
+        
+        $usersWithActions = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+            return $user->activeCollectiveActions()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->count() > 0;
+        })->count();
+        
+        $engagementScore = (
+            ($activeUsers / $totalUsers) * 30 +
+            ($usersWithConnections / $totalUsers) * 25 +
+            ($usersWithEcosystems / $totalUsers) * 25 +
+            ($usersWithActions / $totalUsers) * 20
+        );
+        
+        return round($engagementScore, 2);
+    }
+
+    /**
+     * Calculate network diversity
+     */
+    private function calculateNetworkDiversity(PasarKolaboraya $pasarKolaboraya)
+    {
+        $users = $pasarKolaboraya->acceptedUsers;
+        if ($users->isEmpty()) return 0;
+        
+        $sectors = $users->pluck('profile.organization')->filter()->unique()->count();
+        $skills = $users->flatMap(function($user) {
+            return $user->profile ? $user->profile->skills->pluck('name') : collect();
+        })->unique()->count();
+        
+        $maxPossibleDiversity = 100; // Assuming max 10 sectors and 50 skills
+        $diversityScore = min(100, ($sectors * 5) + ($skills * 2));
+        
+        return round($diversityScore, 2);
+    }
+
+    /**
+     * Calculate resource utilization
+     */
+    private function calculateResourceUtilization(PasarKolaboraya $pasarKolaboraya)
+    {
+        $collectiveActions = $pasarKolaboraya->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalResources = 0;
+        $utilizedResources = 0;
+        
+        foreach ($collectiveActions as $action) {
+            $requiredResources = is_array($action->required_resources) ? count($action->required_resources) : 0;
+            $totalResources += $requiredResources;
+            
+            // Count how many resources are actually provided
+            $providedResources = $action->contributions()->count();
+            $utilizedResources += min($providedResources, $requiredResources);
+        }
+        
+        return $totalResources > 0 ? round(($utilizedResources / $totalResources) * 100, 2) : 0;
     }
 
     /**

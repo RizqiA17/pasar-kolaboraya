@@ -147,6 +147,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // Connections management
     Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
     Route::get('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'showConnection'])->name('connections.show');
+    
+    // Market Analysis
+    Route::get('/market-analysis', [App\Http\Controllers\AdminController::class, 'marketAnalysis'])->name('market-analysis');
+    Route::get('/pasar-kolaboraya/{pasarKolaboraya}', [App\Http\Controllers\AdminController::class, 'showMarketAnalysis'])->name('market-analysis.show');
     Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->middleware('check.form.feature.access:connections')->name('connections.delete');
     
     // Ecosystem Builder management
