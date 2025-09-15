@@ -793,6 +793,9 @@
 
     @fluxScripts
 
+    {{-- Chart.js for dashboard visualizations --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     {{-- Stack for additional styles and scripts --}}
     @stack('styles')
     @stack('scripts')

@@ -142,7 +142,7 @@ class Dashboard extends Component
 
     public function getEcosystemQualityProperty()
     {
-        return $this->ecosystem->calculateQuality();
+        return $this->ecosystem->calculateEkosistemScore();
     }
 
     public function getConnectionQualityDataProperty()

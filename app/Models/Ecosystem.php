@@ -492,4 +492,98 @@ class Ecosystem extends Model
             ]
         ];
     }
+
+    /**
+     * Calculate Pilar II - Ekosistem scoring for this ecosystem
+     * Based on the new scoring system requirements
+     */
+    public function calculateEkosistemScore(): array
+    {
+        // 1. Membership Activation Rate
+        $accepted = $this->acceptedUsers()->count();
+        $maxUsers = $this->max_users ?? 1; // Prevent division by zero
+        $activationRate = $accepted / $maxUsers;
+        $activationScore = min($activationRate, 1) * 100;
+
+        // 2. Ecosystem Acceptance Rate
+        $rejected = $this->users()->wherePivot('status', 'rejected')->count();
+        $totalDecisions = $accepted + $rejected;
+        $acceptanceRate = $totalDecisions > 0 ? $accepted / $totalDecisions : 0;
+        $acceptanceScore = $acceptanceRate * 100;
+
+        // 3. Ecosystem Contribution Completion Rate
+        $completed = $this->contributions()->where('status', 'completed')->count();
+        $totalContributions = $this->contributions()->count();
+        $completionRate = $totalContributions > 0 ? $completed / $totalContributions : 0;
+        $completionScore = $completionRate * 100;
+
+        // 4. Ecosystem Contribution Diversity (HHI calculation)
+        $contributionTypes = $this->contributions()
+            ->join('contributions', 'ecosystem_contributions.contribution_id', '=', 'contributions.id')
+            ->selectRaw('contributions.category, COUNT(*) as count')
+            ->groupBy('contributions.category')
+            ->get();
+
+        $totalContributionCount = $contributionTypes->sum('count');
+        $hhi = 0;
+        $uniqueTypes = $contributionTypes->count();
+
+        if ($totalContributionCount > 0) {
+            foreach ($contributionTypes as $type) {
+                $proportion = $type->count / $totalContributionCount;
+                $hhi += pow($proportion, 2);
+            }
+        }
+
+        $diversityScore = $uniqueTypes > 1 ? (1 - $hhi) / (1 - 1 / $uniqueTypes) * 100 : 0;
+
+        // 5. Role Fit (Kesesuaian Kebutuhan Skill)
+        $existingRoles = collect($this->existing_roles ?? []);
+        $neededRoles = collect($this->needed_roles ?? []);
+        $coverage = $neededRoles->count() > 0 
+            ? $existingRoles->intersect($neededRoles)->count() / $neededRoles->count() 
+            : 0;
+        $roleFitScore = $coverage * 100;
+
+        // 6. Ecosystem Engagement in Collective Actions
+        $invited = $this->collectiveActionInvitations()->count();
+        $acceptedInvitations = $this->collectiveActionInvitations()->where('status', 'accepted')->count();
+        $engagementRate = $invited > 0 ? $acceptedInvitations / $invited : 0;
+        $engagementScore = $engagementRate * 100;
+
+        // Calculate final Ekosistem score as average of all 6 metrics
+        $ekosistemScore = (
+            $activationScore + 
+            $acceptanceScore + 
+            $completionScore + 
+            $diversityScore + 
+            $roleFitScore + 
+            $engagementScore
+        ) / 6;
+
+        return [
+            'activation_score' => round($activationScore, 1),
+            'acceptance_score' => round($acceptanceScore, 1),
+            'completion_score' => round($completionScore, 1),
+            'diversity_score' => round($diversityScore, 1),
+            'role_fit_score' => round($roleFitScore, 1),
+            'engagement_score' => round($engagementScore, 1),
+            'ekosistem_score' => round($ekosistemScore, 1),
+            'details' => [
+                'accepted_members' => $accepted,
+                'max_users' => $maxUsers,
+                'rejected_members' => $rejected,
+                'total_decisions' => $totalDecisions,
+                'completed_contributions' => $completed,
+                'total_contributions' => $totalContributions,
+                'contribution_types_count' => $uniqueTypes,
+                'hhi_value' => round($hhi, 4),
+                'existing_roles_count' => $existingRoles->count(),
+                'needed_roles_count' => $neededRoles->count(),
+                'role_coverage_count' => $existingRoles->intersect($neededRoles)->count(),
+                'invited_to_actions' => $invited,
+                'accepted_invitations' => $acceptedInvitations
+            ]
+        ];
+    }
 }

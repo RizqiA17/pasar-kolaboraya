@@ -263,7 +263,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Calculate ecosystem health score
+     * Calculate ecosystem health score using Pilar II - Ekosistem scoring
      */
     private function calculateEcosystemHealthScore(PasarKolaboraya $pasarKolaboraya)
     {
@@ -272,20 +272,8 @@ class AdminController extends Controller
         
         $totalScore = 0;
         foreach ($ecosystems as $ecosystem) {
-            $memberCount = $ecosystem->users()->count();
-            
-            // Get skills count from ecosystem members
-            $skillCount = $ecosystem->acceptedUsers()->with('profile.skills')->get()
-                ->flatMap(function($user) {
-                    return $user->profile ? $user->profile->skills : collect();
-                })
-                ->unique('id')
-                ->count();
-            
-            $contributionCount = $ecosystem->contributions()->count();
-            
-            $ecosystemScore = min(100, ($memberCount * 10) + ($skillCount * 5) + ($contributionCount * 3));
-            $totalScore += $ecosystemScore;
+            $ekosistemData = $ecosystem->calculateEkosistemScore();
+            $totalScore += $ekosistemData['ekosistem_score'];
         }
         
         return round($totalScore / $ecosystems->count(), 2);

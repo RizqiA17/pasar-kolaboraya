@@ -73,8 +73,8 @@
             </div>
             <div class="text-right">
                 <div class="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {{ $ecosystemQuality['percentage'] }}%</div>
-                <div class="text-sm text-gray-500 dark:text-slate-400">Kualitas Ekosistem</div>
+                    {{ $ecosystemQuality['ekosistem_score'] }}%</div>
+                <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
                 @if ($isOwner)
                     <div class="mt-3">
                         <a href="{{ route('ecosystem.settings', $ecosystem) }}" 
@@ -143,40 +143,74 @@
             @if ($activeTab === 'overview')
                 <div class="space-y-6">
                     <!-- Quality Overview -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Overall Ekosistem Score -->
                         <div
                             class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-6 border border-green-200 dark:border-green-800">
-                            <div class="flex items-center">
-                                <div class="text-3xl">🎯</div>
-                                <div class="ml-4">
-                                    <div class="text-2xl font-bold text-green-700 dark:text-green-400">
-                                        {{ $ecosystemQuality['percentage'] }}%</div>
-                                    <div class="text-sm text-green-600 dark:text-green-300">Kualitas Ekosistem</div>
-                                </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-700 dark:text-green-400">
+                                    {{ $ecosystemQuality['ekosistem_score'] }}%</div>
+                                <div class="text-sm text-green-600 dark:text-green-300 mt-1">Skor Ekosistem</div>
                             </div>
                         </div>
 
+                        <!-- Membership Activation Rate -->
                         <div
                             class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
-                            <div class="flex items-center">
-                                <div class="text-3xl">🧠</div>
-                                <div class="ml-4">
-                                    <div class="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                                        {{ $ecosystemQuality['covered_skills'] }}</div>
-                                    <div class="text-sm text-blue-600 dark:text-blue-300">Keahlian Tercakup</div>
-                                </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-blue-700 dark:text-blue-400">
+                                    {{ $ecosystemQuality['activation_score'] }}%</div>
+                                <div class="text-sm text-blue-600 dark:text-blue-300 mt-1">Tingkat Aktivasi</div>
                             </div>
                         </div>
 
+                        <!-- Acceptance Rate -->
                         <div
                             class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-6 border border-purple-200 dark:border-purple-800">
-                            <div class="flex items-center">
-                                <div class="text-3xl">👥</div>
-                                <div class="ml-4">
-                                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-400">
-                                        {{ $ecosystem->acceptedUsers()->count() }}</div>
-                                    <div class="text-sm text-purple-600 dark:text-purple-300">Anggota Aktif</div>
-                                </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-purple-700 dark:text-purple-400">
+                                    {{ $ecosystemQuality['acceptance_score'] }}%</div>
+                                <div class="text-sm text-purple-600 dark:text-purple-300 mt-1">Tingkat Penerimaan</div>
+                            </div>
+                        </div>
+
+                        <!-- Contribution Completion Rate -->
+                        <div
+                            class="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-6 border border-orange-200 dark:border-orange-800">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-orange-700 dark:text-orange-400">
+                                    {{ $ecosystemQuality['completion_score'] }}%</div>
+                                <div class="text-sm text-orange-600 dark:text-orange-300 mt-1">Tingkat Penyelesaian</div>
+                            </div>
+                        </div>
+
+                        <!-- Contribution Diversity -->
+                        <div
+                            class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 rounded-lg p-6 border border-indigo-200 dark:border-indigo-800">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-indigo-700 dark:text-indigo-400">
+                                    {{ $ecosystemQuality['diversity_score'] }}%</div>
+                                <div class="text-sm text-indigo-600 dark:text-indigo-300 mt-1">Keragaman Kontribusi</div>
+                            </div>
+                        </div>
+
+                        <!-- Role Fit -->
+                        <div
+                            class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg p-6 border border-pink-200 dark:border-pink-800">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-pink-700 dark:text-pink-400">
+                                    {{ $ecosystemQuality['role_fit_score'] }}%</div>
+                                <div class="text-sm text-pink-600 dark:text-pink-300 mt-1">Kesesuaian Peran</div>
+                            </div>
+                        </div>
+
+                        <!-- Engagement in Collective Actions -->
+                        <div
+                            class="bg-gradient-to-r from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 rounded-lg p-6 border border-teal-200 dark:border-teal-800">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-teal-700 dark:text-teal-400">
+                                    {{ $ecosystemQuality['engagement_score'] }}%</div>
+                                <div class="text-sm text-teal-600 dark:text-teal-300 mt-1">Keterlibatan Aksi Kolektif</div>
                             </div>
                         </div>
                     </div>
@@ -514,178 +548,329 @@
 
             <!-- Quality Tab -->
             @if ($activeTab === 'quality')
-                @php
-                    $skillsBreakdown = $ecosystem->getSkillsBreakdown();
-                    $neededSkillsGap = $ecosystem->getNeededSkillsGap();
-                @endphp
-
                 <div class="space-y-6" wire:key="quality-tab-{{ $activeTab }}">
-                    <!-- Quality Metrics -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 text-center">
-                            <div class="text-3xl font-bold text-green-600 dark:text-green-400">
-                                {{ $ecosystemQuality['percentage'] }}%</div>
-                            <div class="text-sm text-gray-600 dark:text-slate-400 mt-1">Kualitas Keseluruhan</div>
+                    <!-- Overall Score -->
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-8 border border-green-200 dark:border-green-800 text-center">
+                        <div class="text-6xl font-bold text-green-700 dark:text-green-400 mb-2">
+                            {{ $ecosystemQuality['ekosistem_score'] }}%
                         </div>
-
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 text-center">
-                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                {{ $ecosystemQuality['covered_skills'] }}</div>
-                            <div class="text-sm text-gray-600 dark:text-slate-400 mt-1">Keahlian Tercakup</div>
-                        </div>
-
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 text-center">
-                            <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                                {{ $ecosystemQuality['existing_skills_count'] }}</div>
-                            <div class="text-sm text-gray-600 dark:text-slate-400 mt-1">Keahlian Ekosistem</div>
-                        </div>
-
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 text-center">
-                            <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                                {{ $ecosystemQuality['member_skills_count'] }}</div>
-                            <div class="text-sm text-gray-600 dark:text-slate-400 mt-1">Keahlian Anggota</div>
+                        <div class="text-xl text-green-600 dark:text-green-300 font-semibold">Skor Kualitas Ekosistem</div>
+                        <div class="text-sm text-green-500 dark:text-green-400 mt-2">
+                            Rata-rata dari 6 metrik kualitas ekosistem
                         </div>
                     </div>
 
-                    <!-- Skills Breakdown -->
+                    <!-- Detailed Metrics -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Membership Activation Rate -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Tingkat Aktivasi</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Keanggotaan</div>
+                                </div>
+                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                                    {{ $ecosystemQuality['activation_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Anggota diterima:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['accepted_members'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Maksimal anggota:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['max_users'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acceptance Rate -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Tingkat Penerimaan</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Kualitas Aplikasi</div>
+                                </div>
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                                    {{ $ecosystemQuality['acceptance_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Diterima:</span>
+                                    <span class="font-medium text-green-600">{{ $ecosystemQuality['details']['accepted_members'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Ditolak:</span>
+                                    <span class="font-medium text-red-600">{{ $ecosystemQuality['details']['rejected_members'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Total keputusan:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['total_decisions'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contribution Completion Rate -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Tingkat Penyelesaian</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Kontribusi</div>
+                                </div>
+                                <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                                    {{ $ecosystemQuality['completion_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Diselesaikan:</span>
+                                    <span class="font-medium text-green-600">{{ $ecosystemQuality['details']['completed_contributions'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Total kontribusi:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['total_contributions'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contribution Diversity -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keragaman Kontribusi</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">HHI Index</div>
+                                </div>
+                                <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                                    {{ $ecosystemQuality['diversity_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Jenis kontribusi:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['contribution_types_count'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>HHI Value:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['hhi_value'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Role Fit -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kesesuaian Peran</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Skill Match</div>
+                                </div>
+                                <div class="text-3xl font-bold text-pink-600 dark:text-pink-400">
+                                    {{ $ecosystemQuality['role_fit_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Peran yang ada:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Peran dibutuhkan:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['needed_roles_count'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Yang cocok:</span>
+                                    <span class="font-medium text-green-600">{{ $ecosystemQuality['details']['role_coverage_count'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Engagement in Collective Actions -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keterlibatan Aksi</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Kolektif</div>
+                                </div>
+                                <div class="text-3xl font-bold text-teal-600 dark:text-teal-400">
+                                    {{ $ecosystemQuality['engagement_score'] }}%
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
+                                <div class="flex justify-between">
+                                    <span>Diundang:</span>
+                                    <span class="font-medium">{{ $ecosystemQuality['details']['invited_to_actions'] }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Diterima:</span>
+                                    <span class="font-medium text-green-600">{{ $ecosystemQuality['details']['accepted_invitations'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Existing Skills -->
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        <!-- Radar Chart -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                             <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian Ekosistem
-                                </h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Radar Chart - 6 Metrik Kualitas</h3>
+                                <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi komprehensif kesehatan ekosistem</p>
                             </div>
                             <div class="p-6">
-                                @if ($skillsBreakdown['existing_skills']->count() > 0)
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        @foreach ($skillsBreakdown['existing_skills'] as $skill)
-                                            <div class="flex items-center space-x-2">
-                                                <span
-                                                    class="text-sm text-gray-700 dark:text-slate-300">{{ $skill->name }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-gray-500 dark:text-slate-400 text-center">Belum ada keahlian yang
-                                        ditetapkan.</p>
-                                @endif
+                                <div class="relative" style="height: 400px;">
+                                    <canvas id="ecosystemRadarChart" wire:key="radar-chart-{{ $activeTab }}" wire:ignore></canvas>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Member Skills -->
-                        <div
-                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        <!-- Bar Chart -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                             <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian Anggota
-                                </h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Perbandingan Skor Metrik</h3>
+                                <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Analisis detail setiap metrik kualitas</p>
                             </div>
                             <div class="p-6">
-                                @if ($skillsBreakdown['member_skills']->count() > 0)
-                                    <div class="space-y-2">
-                                        @foreach ($skillsBreakdown['member_skills'] as $skillData)
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center space-x-2">
-                                                    <span
-                                                        class="text-sm text-gray-700 dark:text-slate-300">{{ $skillData['skill']->name }}</span>
-                                                </div>
-                                                <span
-                                                    class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded">{{ $skillData['user_count'] }}
-                                                    orang</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-gray-500 dark:text-slate-400 text-center">Belum ada anggota dengan
-                                        keahlian.</p>
-                                @endif
+                                <div class="relative" style="height: 400px;">
+                                    <canvas id="ecosystemBarChart" wire:key="bar-chart-{{ $activeTab }}" wire:ignore></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Connection Quality Analysis -->
-                    <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg" 
-                         x-data="{ chart: null }"
-                         x-init="
-                            $nextTick(() => {
-                                setTimeout(() => {
-                                    if (document.getElementById('connectionQualityRadarChart')) {
-                                        initializeConnectionQualityChart();
-                                    }
-                                }, 100);
-                            });
-                         ">
-                        <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Analisis Kualitas Koneksi</h3>
-                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi kualitas jejaring ekosistem</p>
-                        </div>
-                        <div class="p-6">
-                            <div class="relative" style="height: 500px;">
-                                <canvas id="connectionQualityRadarChart" wire:key="chart-{{ $activeTab }}" wire:ignore></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Needed Skills Gap -->
+                    <!-- Progress Bars Section -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                         <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Analisis Kebutuhan
-                                Keahlian</h3>
-                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Tingkat kecukupan:
-                                {{ $neededSkillsGap['coverage_percentage'] }}%</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Progress Bars - Detail Metrik</h3>
+                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi progress setiap metrik dengan detail</p>
                         </div>
-                        <div class="p-6">
-                            @if ($neededSkillsGap['gap_skills']->count() > 0)
-                                <div class="mb-4">
-                                    <h4 class="font-medium text-red-700 dark:text-red-400 mb-2">🚨 Keahlian yang Masih
-                                        Dibutuhkan:</h4>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                                        @foreach ($neededSkillsGap['gap_skills'] as $skill)
-                                            <div
-                                                class="flex items-center space-x-2 bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-200 dark:border-red-800">
-                                                <span
-                                                    class="text-sm text-red-700 dark:text-red-300">{{ $skill->name }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @else
-                                <div class="text-center text-green-600 dark:text-green-400">
-                                    <div class="text-4xl mb-2">✅</div>
-                                    <p class="font-medium">Semua keahlian yang dibutuhkan sudah tercakup!</p>
-                                </div>
-                            @endif
+                        <div class="p-6 space-y-6">
+                            @php
+                                $metrics = [
+                                    'activation_score' => ['Tingkat Aktivasi', 'blue'],
+                                    'acceptance_score' => ['Tingkat Penerimaan', 'purple'],
+                                    'completion_score' => ['Tingkat Penyelesaian', 'orange'],
+                                    'diversity_score' => ['Keragaman Kontribusi', 'indigo'],
+                                    'role_fit_score' => ['Kesesuaian Peran', 'pink'],
+                                    'engagement_score' => ['Keterlibatan Aksi', 'teal']
+                                ];
+                            @endphp
 
-                            @if ($neededSkillsGap['needed_skills']->count() > 0)
-                                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
-                                    <h4 class="font-medium text-gray-700 dark:text-slate-300 mb-2">📋 Total Keahlian
-                                        yang Dibutuhkan:</h4>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                                        @foreach ($neededSkillsGap['needed_skills'] as $skill)
-                                            @php
-                                                $isCovered = !$neededSkillsGap['gap_skills']->contains(
-                                                    'id',
-                                                    $skill->id,
-                                                );
-                                            @endphp
-                                            <div
-                                                class="flex items-center space-x-2 p-2 rounded {{ $isCovered ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600' }}">
-                                                <span
-                                                    class="text-sm {{ $isCovered ? 'text-green-700 dark:text-green-300' : 'text-gray-700 dark:text-slate-300' }}">{{ $skill->name }}</span>
-                                                @if ($isCovered)
-                                                    <span class="text-green-600 dark:text-green-400">✓</span>
-                                                @endif
-                                            </div>
-                                        @endforeach
+                            @foreach ($metrics as $key => $data)
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-medium text-gray-900 dark:text-slate-100">{{ $data[0] }}</span>
+                                        <span class="text-xl font-bold text-{{ $data[1] }}-600 dark:text-{{ $data[1] }}-400">
+                                            {{ $ecosystemQuality[$key] }}%
+                                        </span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                                        <div class="bg-{{ $data[1] }}-500 h-2 rounded-full transition-all duration-1000 ease-out" 
+                                             style="width: {{ $ecosystemQuality[$key] }}%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 dark:text-slate-400">
+                                        @if ($key === 'activation_score')
+                                            {{ $ecosystemQuality['details']['accepted_members'] }} dari {{ $ecosystemQuality['details']['max_users'] }} anggota
+                                        @elseif ($key === 'acceptance_score')
+                                            {{ $ecosystemQuality['details']['accepted_members'] }} diterima, {{ $ecosystemQuality['details']['rejected_members'] }} ditolak
+                                        @elseif ($key === 'completion_score')
+                                            {{ $ecosystemQuality['details']['completed_contributions'] }} dari {{ $ecosystemQuality['details']['total_contributions'] }} kontribusi
+                                        @elseif ($key === 'diversity_score')
+                                            {{ $ecosystemQuality['details']['contribution_types_count'] }} jenis kontribusi (HHI: {{ $ecosystemQuality['details']['hhi_value'] }})
+                                        @elseif ($key === 'role_fit_score')
+                                            {{ $ecosystemQuality['details']['role_coverage_count'] }} dari {{ $ecosystemQuality['details']['needed_roles_count'] }} peran yang dibutuhkan
+                                        @elseif ($key === 'engagement_score')
+                                            {{ $ecosystemQuality['details']['accepted_invitations'] }} dari {{ $ecosystemQuality['details']['invited_to_actions'] }} undangan aksi kolektif
+                                        @endif
                                     </div>
                                 </div>
-                            @endif
+                            @endforeach
                         </div>
                     </div>
+
+                    <!-- Summary Information -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Ecosystem Summary -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                            <div class="p-6 border-b border-gray-200 dark:border-slate-700">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Ringkasan Ekosistem</h3>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Total Anggota:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-slate-100">{{ $ecosystem->acceptedUsers()->count() }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Maksimal Anggota:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-slate-100">{{ $ecosystem->max_users ?? 'Tidak terbatas' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Total Kontribusi:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-slate-100">{{ $ecosystem->contributions()->count() }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Status:</span>
+                                    <span class="px-2 py-1 rounded-full text-xs font-medium {{ $ecosystem->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' }}">
+                                        {{ $ecosystem->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Insights -->
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                            <div class="p-6 border-b border-gray-200 dark:border-slate-700">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Insight Kinerja</h3>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                @php
+                                    $bestMetric = '';
+                                    $bestScore = 0;
+                                    $worstMetric = '';
+                                    $worstScore = 100;
+                                    
+                                    $metrics = [
+                                        'activation_score' => 'Tingkat Aktivasi',
+                                        'acceptance_score' => 'Tingkat Penerimaan', 
+                                        'completion_score' => 'Tingkat Penyelesaian',
+                                        'diversity_score' => 'Keragaman Kontribusi',
+                                        'role_fit_score' => 'Kesesuaian Peran',
+                                        'engagement_score' => 'Keterlibatan Aksi'
+                                    ];
+                                    
+                                    foreach ($metrics as $key => $label) {
+                                        $score = $ecosystemQuality[$key];
+                                        if ($score > $bestScore) {
+                                            $bestScore = $score;
+                                            $bestMetric = $label;
+                                        }
+                                        if ($score < $worstScore) {
+                                            $worstScore = $score;
+                                            $worstMetric = $label;
+                                        }
+                                    }
+                                @endphp
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Metrik Terbaik:</span>
+                                    <span class="font-semibold text-green-600 dark:text-green-400">{{ $bestMetric }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Skor Terbaik:</span>
+                                    <span class="font-semibold text-green-600 dark:text-green-400">{{ $bestScore }}%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Perlu Perbaikan:</span>
+                                    <span class="font-semibold text-orange-600 dark:text-orange-400">{{ $worstMetric }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-slate-400">Skor Terendah:</span>
+                                    <span class="font-semibold text-orange-600 dark:text-orange-400">{{ $worstScore }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             @endif
 
@@ -1257,6 +1442,188 @@
         window.addEventListener('load', function() {
             setTimeout(initializeConnectionQualityChart, 200);
             setupThemeListener();
+        });
+
+        // Ecosystem Charts
+        let ecosystemRadarChart = null;
+        let ecosystemBarChart = null;
+
+        function initializeEcosystemCharts() {
+            // Destroy existing charts
+            if (ecosystemRadarChart) {
+                ecosystemRadarChart.destroy();
+            }
+            if (ecosystemBarChart) {
+                ecosystemBarChart.destroy();
+            }
+
+            // Initialize Radar Chart
+            const radarCtx = document.getElementById('ecosystemRadarChart');
+            if (radarCtx) {
+                const isDark = document.documentElement.classList.contains('dark');
+                const textColor = isDark ? '#e2e8f0' : '#374151';
+                const gridColor = isDark ? '#475569' : '#e5e7eb';
+                
+                ecosystemRadarChart = new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Tingkat Aktivasi',
+                            'Tingkat Penerimaan', 
+                            'Tingkat Penyelesaian',
+                            'Keragaman Kontribusi',
+                            'Kesesuaian Peran',
+                            'Keterlibatan Aksi'
+                        ],
+                        datasets: [{
+                            label: 'Skor Ekosistem',
+                            data: [
+                                {{ $ecosystemQuality['activation_score'] }},
+                                {{ $ecosystemQuality['acceptance_score'] }},
+                                {{ $ecosystemQuality['completion_score'] }},
+                                {{ $ecosystemQuality['diversity_score'] }},
+                                {{ $ecosystemQuality['role_fit_score'] }},
+                                {{ $ecosystemQuality['engagement_score'] }}
+                            ],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: textColor
+                                }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    color: textColor,
+                                    stepSize: 20
+                                },
+                                grid: {
+                                    color: gridColor
+                                },
+                                pointLabels: {
+                                    color: textColor,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('ecosystemBarChart');
+            if (barCtx) {
+                const isDark = document.documentElement.classList.contains('dark');
+                const textColor = isDark ? '#e2e8f0' : '#374151';
+                const gridColor = isDark ? '#475569' : '#e5e7eb';
+                
+                ecosystemBarChart = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            'Aktivasi',
+                            'Penerimaan', 
+                            'Penyelesaian',
+                            'Keragaman',
+                            'Peran',
+                            'Keterlibatan'
+                        ],
+                        datasets: [{
+                            label: 'Skor (%)',
+                            data: [
+                                {{ $ecosystemQuality['activation_score'] }},
+                                {{ $ecosystemQuality['acceptance_score'] }},
+                                {{ $ecosystemQuality['completion_score'] }},
+                                {{ $ecosystemQuality['diversity_score'] }},
+                                {{ $ecosystemQuality['role_fit_score'] }},
+                                {{ $ecosystemQuality['engagement_score'] }}
+                            ],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',   // blue
+                                'rgba(147, 51, 234, 0.8)',   // purple
+                                'rgba(249, 115, 22, 0.8)',   // orange
+                                'rgba(99, 102, 241, 0.8)',   // indigo
+                                'rgba(236, 72, 153, 0.8)',   // pink
+                                'rgba(20, 184, 166, 0.8)'    // teal
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(147, 51, 234, 1)',
+                                'rgba(249, 115, 22, 1)',
+                                'rgba(99, 102, 241, 1)',
+                                'rgba(236, 72, 153, 1)',
+                                'rgba(20, 184, 166, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    color: textColor,
+                                    stepSize: 20
+                                },
+                                grid: {
+                                    color: gridColor
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: textColor
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize ecosystem charts when quality tab is active
+        function checkEcosystemCharts() {
+            const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+            if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                setTimeout(initializeEcosystemCharts, 200);
+            }
+        }
+
+        // Listen for tab changes
+        document.addEventListener('livewire:navigated', function() {
+            checkEcosystemCharts();
+        });
+
+        // Check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkEcosystemCharts();
         });
     </script>
 @endpush
