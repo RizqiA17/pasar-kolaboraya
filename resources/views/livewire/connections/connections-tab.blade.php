@@ -36,8 +36,6 @@
             @endif
         </div>
     </div>
-
-
     {{-- Content Sections --}}
     @if ($tab === 'requests')
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">

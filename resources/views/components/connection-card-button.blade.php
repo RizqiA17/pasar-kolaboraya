@@ -51,7 +51,7 @@
         </div>
     @elseif($connectionStatus === 'connected')
         <div class="space-y-2">
-            @if($collaborationsEnabled || $isSuperAdmin)
+            {{-- @if($collaborationsEnabled || $isSuperAdmin)
                 <button wire:click="startCollaboration({{ $userId }})"
                     class="w-full py-1.5 px-4 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
                     </svg>
                     Kolaborasi Dinonaktifkan
                 </button>
-            @endif
+            @endif --}}
             <button wire:click="disconnect({{ $userId }})" onclick="updateButtonAfterDisconnect({{ $userId }})"
                 class="w-full py-1.5 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

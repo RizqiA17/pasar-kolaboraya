@@ -15,7 +15,8 @@
                 <div class="flex flex-col md:flex-row items-start gap-6">
                     <!-- Profile Image -->
                     <div class="relative flex-shrink-0 ">
-                        <div class="h-48 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 overflow-hidden">
+                        <div
+                            class="h-48 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 overflow-hidden">
                             @if (auth()->user()->profile?->profile_photo)
                                 <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}"
                                     alt="Profile" class="h-full w-full object-cover">
@@ -42,7 +43,8 @@
                     <div class="flex-1 min-w-0 mt-18 w-full">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ auth()->user()->name }}</h1>
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                                    {{ auth()->user()->name }}</h1>
                                 <p class="text-gray-500 dark:text-slate-400">{{ auth()->user()->email }}</p>
                                 @if (auth()->user()->profile?->organization)
                                     <div class="flex items-center mt-2 text-gray-600 dark:text-slate-400">
@@ -70,8 +72,8 @@
                             <div class="flex gap-4">
                                 <a href="{{ route('settings.profile-settings') }}"
                                     class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-                                    <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400 dark:text-slate-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                         </path>
@@ -120,8 +122,8 @@
                                                 @break
 
                                                 @case('github')
-                                                    <svg class="h-5 w-5 mr-1.5 text-gray-900 dark:text-slate-300" fill="currentColor"
-                                                        viewBox="0 0 24 24">
+                                                    <svg class="h-5 w-5 mr-1.5 text-gray-900 dark:text-slate-300"
+                                                        fill="currentColor" viewBox="0 0 24 24">
                                                         <path
                                                             d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                                     </svg>
@@ -138,12 +140,14 @@
                                         </a>
                                     @endif
                                     @empty
-                                        <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan sosial</span>
+                                        <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan
+                                            sosial</span>
                                     @endforelse
                                 </div>
                             @else
                                 <div class="mt-4">
-                                    <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan sosial</span>
+                                    <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan tautan
+                                        sosial</span>
                                 </div>
                             @endif
 
@@ -222,7 +226,8 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-[#379eff]/50 to-blue-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center gap-2">
@@ -232,7 +237,8 @@
                                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian
+                                            </h3>
                                         </div>
                                         @if (auth()->user()->profile?->skills)
                                             <span
@@ -248,7 +254,8 @@
                                                     class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">{{ $skill->name }}</span>
                                             @endif
                                         @empty
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan keahlian</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan
+                                                keahlian</span>
                                         @endforelse
                                     </div>
                                 </div>
@@ -261,7 +268,8 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/50 to-green-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center gap-2">
@@ -271,7 +279,8 @@
                                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Minat & Ketertarikan</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Minat &
+                                                Ketertarikan</h3>
                                         </div>
                                         @if (auth()->user()->profile?->interests)
                                             <span
@@ -287,7 +296,8 @@
                                                     class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">{{ $interest->name }}</span>
                                             @endif
                                         @empty
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan minat</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan
+                                                minat</span>
                                         @endforelse
                                     </div>
                                 </div>
@@ -304,7 +314,8 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-[#379eff]/50 to-blue-500/50 rounded-xl opacity-50 group-hover:opacity-75 blur transition duration-1000 group-hover:duration-200">
                             </div>
-                            <div class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="relative bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -314,7 +325,8 @@
                                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi & Pencapaian</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi
+                                                & Pencapaian</h3>
                                         </div>
                                         @if (auth()->user()->profile?->contributions)
                                             <span
@@ -362,7 +374,8 @@
                                                 @endif
                                             @empty
                                                 <li>
-                                                    <div class="text-sm text-gray-500 dark:text-slate-400 pb-8">Belum ada kontribusi yang
+                                                    <div class="text-sm text-gray-500 dark:text-slate-400 pb-8">Belum ada
+                                                        kontribusi yang
                                                         ditambahkan</div>
                                                 </li>
                                             @endforelse
@@ -372,9 +385,10 @@
                                                     <div class="relative flex space-x-3">
                                                         <div>
                                                             <span
-                                                                class="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center ring-8 ring-white">
-                                                                <svg class="h-4 w-4 text-purple-600" fill="none"
-                                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                                class="h-8 w-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-8 ring-white dark:ring-slate-800">
+                                                                <svg class="h-4 w-4 text-purple-600 dark:text-purple-400"
+                                                                    fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2"
                                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
@@ -383,13 +397,16 @@
                                                             </span>
                                                         </div>
                                                         <div class="min-w-0 flex-1">
-                                                            <div class="text-sm font-medium text-purple-600 dark:text-purple-400 mb-1">Visi
+                                                            <div
+                                                                class="text-sm font-medium text-purple-600 dark:text-purple-400 mb-1">
+                                                                Visi
                                                                 & Misi</div>
                                                             @if (auth()->user()->profile?->vision)
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                     {{ auth()->user()->profile->vision }}</div>
                                                             @else
-                                                                <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada visi & misi
+                                                                <div class="text-sm text-gray-500 dark:text-slate-400">
+                                                                    Belum ada visi & misi
                                                                     yang ditambahkan</div>
                                                             @endif
                                                         </div>
@@ -414,7 +431,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Active Collaborations -->
                         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -424,14 +442,16 @@
                                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kolaborasi Aktif</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kolaborasi
+                                                Aktif</h3>
                                         </div>
                                     </div>
                                     <!-- Collaboration List -->
                                     <div class="space-y-4">
                                         @php $acceptedCollabUsers = auth()->user()->collaborations; @endphp
                                         @if ($acceptedCollabUsers->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada kolaborasi aktif</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada
+                                                kolaborasi aktif</p>
                                         @else
                                             @foreach ($acceptedCollabUsers as $collabUser)
                                                 @if ($collabUser->collaboration)
@@ -449,7 +469,8 @@
                                                                 </span>
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                <p
+                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $collabUser->collaboration->title }}</p>
                                                                 <p class="text-sm text-gray-500 dark:text-slate-400">
                                                                     {{ $collabUser->collaboration->description }}</p>
@@ -470,9 +491,11 @@
 
                         <!-- Collaboration Stats -->
                         <div class="col-span-1">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Kolaborasi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik
+                                        Kolaborasi</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Total Kolaborasi</span>
@@ -485,7 +508,8 @@
                                                 class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->collaborations->where('status', 'active')->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi Selesai</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi
+                                                Selesai</span>
                                             <span
                                                 class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->collaborations->where('status', 'completed')->count() }}</span>
                                         </div>
@@ -503,7 +527,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Aksi Mendatang -->
                         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -513,7 +538,8 @@
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aksi Mendatang</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aksi
+                                                Mendatang</h3>
                                         </div>
                                     </div>
                                     <!-- Daftar Aksi -->
@@ -530,7 +556,8 @@
                                                 ->get();
                                         @endphp
                                         @if ($upcoming->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada aksi yang akan datang</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada aksi
+                                                yang akan datang</p>
                                         @else
                                             @foreach ($upcoming as $eventUser)
                                                 @if ($eventUser->event)
@@ -555,17 +582,21 @@
                                                                 @endif
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                <p
+                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $event->title }}</p>
-                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $event->description }}
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
+                                                                    {{ $event->description }}
                                                                 </p>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     <p class="text-xs text-gray-400 dark:text-slate-500">
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('d M Y H:i') }}
                                                                     </p>
                                                                     @if ($event->location)
-                                                                        <span class="text-xs text-gray-400 dark:text-slate-500">•</span>
-                                                                        <p class="text-xs text-gray-400 dark:text-slate-500">
+                                                                        <span
+                                                                            class="text-xs text-gray-400 dark:text-slate-500">•</span>
+                                                                        <p
+                                                                            class="text-xs text-gray-400 dark:text-slate-500">
                                                                             {{ $event->location }}</p>
                                                                     @endif
                                                                 </div>
@@ -593,9 +624,11 @@
 
                         <!-- Statistik Aksi -->
                         <div class="col-span-1">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Aksi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Aksi
+                                    </h3>
                                     @php
                                         $totalEvents = \App\Models\EventUser::where('user_id', auth()->id())->count();
                                         $upcomingCount = \App\Models\EventUser::where('user_id', auth()->id())
@@ -612,15 +645,18 @@
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Total Aksi</span>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $totalEvents }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $totalEvents }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Mendatang</span>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $upcomingCount }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $upcomingCount }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Selesai</span>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $pastCount }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $pastCount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -636,7 +672,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Connected Users -->
                         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -646,13 +683,15 @@
                                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Koneksi Saya</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Koneksi
+                                                Saya</h3>
                                         </div>
                                     </div>
                                     <!-- Connection List -->
                                     <div class="space-y-4">
                                         @if (auth()->user()->connections->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi</p>
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi
+                                            </p>
                                         @else
                                             @foreach (auth()->user()->connections as $conn)
                                                 @php $otherUser = $conn->receiver; @endphp
@@ -661,8 +700,8 @@
                                                         class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                                         <div class="flex items-center space-x-4">
                                                             <div class="flex-shrink-0">
-                                                                    <span
-                                                                        class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700"><svg
+                                                                <span
+                                                                    class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700"><svg
                                                                         class="h-full w-full text-gray-300 dark:text-slate-400"
                                                                         fill="currentColor" viewBox="0 0 24 24">
                                                                         <path
@@ -670,9 +709,11 @@
                                                                     </svg></span>
                                                             </div>
                                                             <div>
-                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                <p
+                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $otherUser->name }}</p>
-                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $otherUser->email }}
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
+                                                                    {{ $otherUser->email }}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -692,9 +733,11 @@
 
                         <!-- Connection Stats -->
                         <div class="col-span-1">
-                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div
+                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Koneksi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik
+                                        Koneksi</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Total Koneksi</span>
@@ -707,7 +750,8 @@
                                                 class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->pendingReceivedConnections()->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Terkirim</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan
+                                                Terkirim</span>
                                             <span
                                                 class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->pendingSentConnections()->count() }}</span>
                                         </div>

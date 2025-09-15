@@ -431,4 +431,65 @@ class Ecosystem extends Model
             'kekuatan_jejaring' => round($networkStrength, 1)
         ];
     }
+
+    /**
+     * Calculate Pilar I - Koneksi scoring for this ecosystem
+     * Based on the new scoring system requirements
+     */
+    public function calculateKoneksiScore(): array
+    {
+        $acceptedMembers = $this->acceptedUsers()->get();
+        
+        if ($acceptedMembers->isEmpty()) {
+            return [
+                'accepted_score' => 0,
+                'recency_score' => 0,
+                'activation_score' => 0,
+                'role_fit_score' => 0,
+                'koneksi_score' => 0,
+                'details' => []
+            ];
+        }
+
+        // Calculate average scores across all members
+        $totalAcceptedScore = 0;
+        $totalRecencyScore = 0;
+        $totalActivationScore = 0;
+        $totalRoleFitScore = 0;
+        $memberCount = 0;
+
+        foreach ($acceptedMembers as $member) {
+            $memberKoneksiData = Connection::calculateKoneksiScore($member->id, $this->pasar_kolaboraya_id);
+            
+            $totalAcceptedScore += $memberKoneksiData['accepted_score'];
+            $totalRecencyScore += $memberKoneksiData['recency_score'];
+            $totalActivationScore += $memberKoneksiData['activation_score'];
+            $totalRoleFitScore += $memberKoneksiData['role_fit_score'];
+            $memberCount++;
+        }
+
+        // Calculate average scores
+        $avgAcceptedScore = $memberCount > 0 ? $totalAcceptedScore / $memberCount : 0;
+        $avgRecencyScore = $memberCount > 0 ? $totalRecencyScore / $memberCount : 0;
+        $avgActivationScore = $memberCount > 0 ? $totalActivationScore / $memberCount : 0;
+        $avgRoleFitScore = $memberCount > 0 ? $totalRoleFitScore / $memberCount : 0;
+
+        // Calculate final Koneksi score
+        $koneksiScore = ($avgAcceptedScore + $avgRecencyScore + $avgActivationScore + $avgRoleFitScore) / 4;
+
+        return [
+            'accepted_score' => round($avgAcceptedScore, 1),
+            'recency_score' => round($avgRecencyScore, 1),
+            'activation_score' => round($avgActivationScore, 1),
+            'role_fit_score' => round($avgRoleFitScore, 1),
+            'koneksi_score' => round($koneksiScore, 1),
+            'details' => [
+                'member_count' => $memberCount,
+                'max_users' => $this->max_users,
+                'needed_roles_count' => count($this->needed_roles ?? []),
+                'existing_roles_count' => count($this->existing_roles ?? []),
+                'coverage_count' => count(array_intersect($this->existing_roles ?? [], $this->needed_roles ?? []))
+            ]
+        ];
+    }
 }

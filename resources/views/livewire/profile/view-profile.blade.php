@@ -179,7 +179,7 @@
                                                 </div>
                                             @elseif($connectionStatus === 'connected')
                                                 <div class="flex flex-col sm:flex-row gap-2 w-full">
-                                                    @if ($ecosystemsEnabled || $isSuperAdmin)
+                                                    {{-- @if ($ecosystemsEnabled || $isSuperAdmin)
                                                         <button wire:click="startEcosystem({{ $user->id }})"
                                                             class="flex-1 py-3 px-4 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -199,7 +199,7 @@
                                                             </svg>
                                                             Ekosistem Dinonaktifkan
                                                         </button>
-                                                    @endif
+                                                    @endif --}}
                                                     <button wire:click="disconnect({{ $user->id }})"
                                                         class="flex-1 py-3 px-4 bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
