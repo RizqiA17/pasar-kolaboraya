@@ -834,14 +834,15 @@
                                     <!-- Connection List -->
                                     <div class="space-y-4">
                                         @php
-                                            $accepted = $user->connections; // Connection rows where current user is requester and accepted
+                                            $accepted = $user->getAllConnectionsFlexible(); // All accepted connections for this user
                                         @endphp
                                         @if ($accepted->isEmpty())
                                             <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi</p>
                                         @else
                                             @foreach ($accepted as $conn)
                                                 @php
-                                                    $otherUser = $conn->receiver;
+                                                    // Determine which user is the connection (not the current user)
+                                                    $otherUser = $conn->requester_id == $user->id ? $conn->receiver : $conn->requester;
                                                 @endphp
                                                 @if ($otherUser)
                                                     <div
@@ -887,7 +888,7 @@
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Total Koneksi</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->connections->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->getAllConnectionsFlexible()->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Masuk</span>

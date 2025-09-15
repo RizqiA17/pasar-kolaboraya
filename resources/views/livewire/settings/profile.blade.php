@@ -1,13 +1,48 @@
 <div class="w-full bg-white dark:bg-slate-900 relative min-h-screen">
     <!-- SVG Accent Elements -->
-    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10" />
-    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10" />
-    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10" />
+    <x-svg-accent position="top-left" size="w-20 h-20" opacity="opacity-10 dark:opacity-5" />
+    <x-svg-accent position="center-right" size="w-16 h-16" opacity="opacity-10 dark:opacity-5" />
+    <x-svg-accent position="bottom-left" size="w-14 h-14" opacity="opacity-10 dark:opacity-5" />
+
+    <!-- Flash Messages -->
+    @if (session()->has('message'))
+        <div class="fixed top-4 right-4 z-50">
+            <div class="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-300 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('message') }}</span>
+                <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3"
+                    onclick="this.parentElement.remove()">
+                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20">
+                        <title>Close</title>
+                        <path
+                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 0 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 0 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="fixed top-4 right-4 z-50">
+            <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+                <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3"
+                    onclick="this.parentElement.remove()">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20">
+                        <title>Close</title>
+                        <path
+                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 0 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 0 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    @endif
 
     <!-- Hero Section -->
     <div class="relative">
         <!-- Cover Image -->
-        <x-ui.banner :user="auth()->user()" height="h-40" />
+        <x-ui.banner :user="$user" height="h-40" />
 
         <!-- Profile Info -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
@@ -17,14 +52,14 @@
                     <div class="relative flex-shrink-0 ">
                         <div
                             class="h-48 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 overflow-hidden">
-                            @if (auth()->user()->profile?->profile_photo)
-                                <img src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}"
-                                    alt="Profile" class="h-full w-full object-cover">
+                            @if ($user->profile?->profile_photo)
+                                <img src="{{ asset('storage/' . $user->profile->profile_photo) }}"
+                                    alt="{{ $user->name }}'s profile photo" class="h-full w-full object-cover">
                             @else
                                 <div
                                     class="h-full w-full bg-gradient-to-br from-blue-400 to-indigo-500 dark:from-blue-500 dark:to-indigo-600 flex items-center justify-center">
                                     <span class="text-white text-6xl font-bold">
-                                        {{ auth()->user()->initials() }}
+                                        {{ $user->initials() }}
                                     </span>
                                 </div>
                             @endif
@@ -40,13 +75,12 @@
                     </div>
 
                     <!-- Profile Details -->
-                    <div class="flex-1 min-w-0 mt-18 w-full">
+                    <div class="flex-1 min-w-0 mt-18">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">
-                                    {{ auth()->user()->name }}</h1>
-                                <p class="text-gray-500 dark:text-slate-400">{{ auth()->user()->email }}</p>
-                                @if (auth()->user()->profile?->organization)
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ $user->name }}</h1>
+                                <p class="text-gray-500 dark:text-slate-400">{{ $user->email }}</p>
+                                @if ($profile?->organization)
                                     <div class="flex items-center mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -54,10 +88,10 @@
                                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                             </path>
                                         </svg>
-                                        <span>{{ auth()->user()->profile->organization }}</span>
+                                        <span>{{ $profile->organization }}</span>
                                     </div>
                                 @endif
-                                @if (auth()->user()->profile?->phone)
+                                @if ($profile?->phone)
                                     <div class="flex items-center mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -65,7 +99,7 @@
                                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
                                             </path>
                                         </svg>
-                                        <span>{{ auth()->user()->profile->phone }}</span>
+                                        <span>{{ $profile->phone }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -93,14 +127,14 @@
                         </div>
 
                         <!-- Social Media Links -->
-                        @if (auth()->user()->profile?->social_media)
+                        @if ($profile?->social_media)
                             @php
-                                $nonEmptyLinks = collect(auth()->user()->profile->social_media ?? [])->filter(
-                                    fn($u) => !empty($u),
-                                );
+                                $nonEmptyLinks = collect($profile->social_media ?? [])->filter(function ($u) {
+                                    return !empty($u);
+                                });
                             @endphp
                             <div class="mt-4 flex flex-wrap gap-3">
-                                @forelse (auth()->user()->profile->social_media as $platform => $url)
+                                @forelse ($profile->social_media as $platform => $url)
                                     @if (!empty($url))
                                         <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
                                             class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors">
@@ -159,11 +193,11 @@
 
         <!-- Tab Navigation -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="border-b border-gray-200 dark:border-slate-700">
+            <div class="border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <!-- Profile Tab -->
                     <button onclick="showTab('profile')"
-                        class="tab-button border-purple-500 text-purple-600 dark:text-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-purple-500 text-purple-600 dark:text-purple-400 dark:border-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
                         data-tab="profile">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -172,33 +206,33 @@
                         Profil
                     </button>
 
-                    <!-- Collaborations Tab -->
-                    <button onclick="showTab('collaborations')"
-                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
-                        data-tab="collaborations">
+                    <!-- Ecosystems Tab -->
+                    <button onclick="showTab('ecosystems')"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center transition-colors duration-200"
+                        data-tab="ecosystems">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
                             </path>
                         </svg>
-                        Kolaborasi
+                        Ekosistem
                     </button>
 
-                    <!-- Aksi Tab -->
-                    <button onclick="showTab('events')"
-                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
-                        data-tab="events">
+                    <!-- Collective Actions Tab -->
+                    <button onclick="showTab('collective-actions')"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center transition-colors duration-200"
+                        data-tab="collective-actions">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z">
                             </path>
                         </svg>
-                        Aksi
+                        Aksi Kolektif
                     </button>
 
                     <!-- Connections Tab -->
                     <button onclick="showTab('connections')"
-                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center"
+                        class="tab-button border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center transition-colors duration-200"
                         data-tab="connections">
                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -240,15 +274,15 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian
                                             </h3>
                                         </div>
-                                        @if (auth()->user()->profile?->skills)
+                                        @if ($profile?->skills)
                                             <span
                                                 class="inline-flex items-center rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 px-2.5 py-1 text-xs font-medium text-[#379eff] dark:text-[#379eff]">
-                                                {{ auth()->user()->profile->skills->count() }} skills
+                                                {{ $profile->skills->count() }} skills
                                             </span>
                                         @endif
                                     </div>
                                     <div class="flex flex-wrap gap-2">
-                                        @forelse (auth()->user()->profile?->skills ?? [] as $skill)
+                                        @forelse ($profile?->skills ?? [] as $skill)
                                             @if ($skill && $skill->name)
                                                 <span
                                                     class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">{{ $skill->name }}</span>
@@ -282,15 +316,15 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Minat &
                                                 Ketertarikan</h3>
                                         </div>
-                                        @if (auth()->user()->profile?->interests)
+                                        @if ($profile?->interests)
                                             <span
                                                 class="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
-                                                {{ auth()->user()->profile->interests->count() }} interests
+                                                {{ $profile->interests->count() }} interests
                                             </span>
                                         @endif
                                     </div>
                                     <div class="flex flex-wrap gap-2">
-                                        @forelse (auth()->user()->profile?->interests ?? [] as $interest)
+                                        @forelse ($profile?->interests ?? [] as $interest)
                                             @if ($interest && $interest->name)
                                                 <span
                                                     class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">{{ $interest->name }}</span>
@@ -328,17 +362,62 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kontribusi
                                                 & Pencapaian</h3>
                                         </div>
-                                        @if (auth()->user()->profile?->contributions)
+                                        @php
+                                            $totalContributions = \App\Models\EcosystemContribution::where('user_id', $user->id)->whereIn('status', ['accepted', 'completed'])->count() + 
+                                                                 \App\Models\CollectiveActionContribution::where('user_id', $user->id)->whereIn('status', ['accepted', 'completed'])->count();
+                                        @endphp
+                                        @if ($totalContributions > 0)
                                             <span
                                                 class="inline-flex items-center rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 px-2.5 py-1 text-xs font-medium text-[#379eff] dark:text-[#379eff]">
-                                                {{ auth()->user()->profile->contributions->count() }} contributions
+                                                {{ $totalContributions }}
+                                                contributions
                                             </span>
                                         @endif
                                     </div>
                                     <div class="flow-root">
                                         <ul role="list" class="-mb-8">
-                                            @forelse ((auth()->user()->profile?->contributions ?? []) as $contribution)
-                                                @if ($contribution && $contribution->name && $contribution->description && $contribution->date)
+                                            @php
+                                                // Get ecosystem contributions
+                                                $ecosystemContributions = \App\Models\EcosystemContribution::where('user_id', $user->id)
+                                                    ->whereIn('status', ['accepted', 'completed'])
+                                                    ->with(['ecosystem', 'contribution'])
+                                                    ->orderBy('accepted_at', 'desc')
+                                                    ->get();
+                                                
+                                                // Get collective action contributions
+                                                $collectiveActionContributions = \App\Models\CollectiveActionContribution::where('user_id', $user->id)
+                                                    ->whereIn('status', ['accepted', 'completed'])
+                                                    ->with(['collectiveAction', 'contribution'])
+                                                    ->orderBy('accepted_at', 'desc')
+                                                    ->get();
+                                                
+                                                // Combine and sort all contributions
+                                                $allContributions = collect()
+                                                    ->merge($ecosystemContributions->map(function($contrib) {
+                                                        return (object)[
+                                                            'type' => 'ecosystem',
+                                                            'title' => $contrib->ecosystem->ecosystem_title ?? 'Ekosistem',
+                                                            'description' => $contrib->contribution_description,
+                                                            'contribution_type' => $contrib->contribution->name ?? 'Kontribusi',
+                                                            'date' => $contrib->accepted_at,
+                                                            'status' => $contrib->status
+                                                        ];
+                                                    }))
+                                                    ->merge($collectiveActionContributions->map(function($contrib) {
+                                                        return (object)[
+                                                            'type' => 'collective_action',
+                                                            'title' => $contrib->collectiveAction->title ?? 'Aksi Kolektif',
+                                                            'description' => $contrib->contribution_description,
+                                                            'contribution_type' => $contrib->contribution->name ?? 'Kontribusi',
+                                                            'date' => $contrib->accepted_at,
+                                                            'status' => $contrib->status
+                                                        ];
+                                                    }))
+                                                    ->sortByDesc('date')
+                                                    ->take(10); // Limit to 10 most recent
+                                            @endphp
+                                            
+                                            @forelse ($allContributions as $contribution)
                                                     <li>
                                                         <div class="relative pb-8">
                                                             @if (!$loop->last)
@@ -349,21 +428,33 @@
                                                             <div class="relative flex space-x-3">
                                                                 <div>
                                                                     <span
-                                                                        class="h-8 w-8 rounded-full bg-[#379eff]/10 flex items-center justify-center ring-8 ring-white">
+                                                                        class="h-8 w-8 rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 flex items-center justify-center ring-8 ring-white dark:ring-slate-800">
+                                                                    @if($contribution->type === 'ecosystem')
                                                                         <svg class="h-4 w-4 text-[#379eff]" fill="none"
                                                                             stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round"
                                                                                 stroke-linejoin="round" stroke-width="2"
-                                                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
                                                                             </path>
                                                                         </svg>
+                                                                    @else
+                                                                        <svg class="h-4 w-4 text-[#379eff]" fill="none"
+                                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z">
+                                                                            </path>
+                                                                        </svg>
+                                                                    @endif
                                                                     </span>
                                                                 </div>
                                                                 <div class="min-w-0 flex-1">
+                                                                <div class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                    {{ $contribution->title }}
+                                                                </div>
                                                                     <div class="text-sm text-gray-600 dark:text-slate-400">
-                                                                        {{ $contribution->name }}</div>
-                                                                    <div class="text-sm text-gray-600 dark:text-slate-400">
-                                                                        {{ $contribution->description }}</div>
+                                                                    {{ $contribution->contribution_type }}: {{ $contribution->description }}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
                                                                     {{ \Carbon\Carbon::parse($contribution->date)->format('d M Y') }}
@@ -371,24 +462,21 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                @endif
                                             @empty
                                                 <li>
-                                                    <div class="text-sm text-gray-500 dark:text-slate-400 pb-8">Belum ada
-                                                        kontribusi yang
+                                                    <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada kontribusi yang
                                                         ditambahkan</div>
                                                 </li>
                                             @endforelse
 
-                                            <li>
+                                            <li class="mt-8">
                                                 <div class="relative pb-8">
                                                     <div class="relative flex space-x-3">
                                                         <div>
                                                             <span
                                                                 class="h-8 w-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-8 ring-white dark:ring-slate-800">
-                                                                <svg class="h-4 w-4 text-purple-600 dark:text-purple-400"
-                                                                    fill="none" stroke="currentColor"
-                                                                    viewBox="0 0 24 24">
+                                                                <svg class="h-4 w-4 text-purple-600 dark:text-purple-400" fill="none"
+                                                                    stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2"
                                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
@@ -397,16 +485,13 @@
                                                             </span>
                                                         </div>
                                                         <div class="min-w-0 flex-1">
-                                                            <div
-                                                                class="text-sm font-medium text-purple-600 dark:text-purple-400 mb-1">
-                                                                Visi
-                                                                & Misi</div>
-                                                            @if (auth()->user()->profile?->vision)
+                                                            <div class="text-sm font-medium text-purple-600 dark:text-purple-400 mb-1">Visi &
+                                                                Misi</div>
+                                                            @if ($profile?->vision)
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
-                                                                    {{ auth()->user()->profile->vision }}</div>
+                                                                    {{ $profile->vision }}</div>
                                                             @else
-                                                                <div class="text-sm text-gray-500 dark:text-slate-400">
-                                                                    Belum ada visi & misi
+                                                                <div class="text-sm text-gray-500 dark:text-slate-400">Belum ada visi & misi
                                                                     yang ditambahkan</div>
                                                             @endif
                                                         </div>
@@ -425,63 +510,64 @@
             </div>
             <!-- End Profile Tab Content -->
 
-            <!-- Collaborations Tab Content -->
-            <div id="collaborations-content" class="tab-content hidden">
+            <!-- Ecosystems Tab Content -->
+            <div id="ecosystems-content" class="tab-content hidden">
                 <div class="py-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Active Collaborations -->
+                        <!-- Active Ecosystems -->
                         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
                                             <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kolaborasi
-                                                Aktif</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Ekosistem Aktif</h3>
                                         </div>
                                     </div>
-                                    <!-- Collaboration List -->
+                                    <!-- Ecosystem List -->
                                     <div class="space-y-4">
-                                        @php $acceptedCollabUsers = auth()->user()->collaborations; @endphp
-                                        @if ($acceptedCollabUsers->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada
-                                                kolaborasi aktif</p>
+                                        @php
+                                            $acceptedEcosystems = $user->acceptedEcosystems;
+                                        @endphp
+                                        @if ($acceptedEcosystems->isEmpty())
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada ekosistem aktif</p>
                                         @else
-                                            @foreach ($acceptedCollabUsers as $collabUser)
-                                                @if ($collabUser->collaboration)
-                                                    <div
-                                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
-                                                        <div class="flex items-center space-x-4">
-                                                            <div class="flex-shrink-0">
-                                                                <span
-                                                                    class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700">
-                                                                    <svg class="h-full w-full text-gray-300 dark:text-slate-400"
-                                                                        fill="currentColor" viewBox="0 0 24 24">
-                                                                        <path
-                                                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <p
-                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
-                                                                    {{ $collabUser->collaboration->title }}</p>
-                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                                    {{ $collabUser->collaboration->description }}</p>
-                                                            </div>
-                                                        </div>
-                                                        {{-- <div class="flex items-center space-x-2">
+                                            @foreach ($acceptedEcosystems as $ecosystem)
+                                                <div
+                                                    class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
+                                                    <div class="flex items-center space-x-4">
+                                                        <div class="flex-shrink-0">
                                                             <span
-                                                                class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Aktif</span>
-                                                        </div> --}}
+                                                                class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700">
+                                                                <svg class="h-full w-full text-gray-300 dark:text-slate-400"
+                                                                    fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path
+                                                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                            {{ $ecosystem->ecosystem_title }}</p>
+                                                            <p class="text-sm text-gray-500 dark:text-slate-400">
+                                                            {{ $ecosystem->organization_name }}</p>
+                                                            <p class="text-xs text-gray-400 dark:text-slate-500">
+                                                                {{ $ecosystem->work_region }}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                @endif
+                                                    <div class="flex items-center space-x-2">
+                                                        <span
+                                                            class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">
+                                                            Aktif
+                                                        </span>
+                                                    </div>
+                                                    </div>
                                             @endforeach
                                         @endif
                                     </div>
@@ -489,29 +575,31 @@
                             </div>
                         </div>
 
-                        <!-- Collaboration Stats -->
+                        <!-- Ecosystem Stats -->
                         <div class="col-span-1">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik
-                                        Kolaborasi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Ekosistem</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Kolaborasi</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Ekosistem</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->collaborations->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->ecosystems->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi Aktif</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Ekosistem Aktif</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->collaborations->where('status', 'active')->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->acceptedEcosystems->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Kolaborasi
-                                                Selesai</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Menunggu Persetujuan</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->collaborations->where('status', 'completed')->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->pendingEcosystems->count() }}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Dibuat Sendiri</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->createdEcosystems->count() }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -521,14 +609,13 @@
                 </div>
             </div>
 
-            <!-- Aksi Tab Content -->
-            <div id="events-content" class="tab-content hidden">
+            <!-- Collective Actions Tab Content -->
+            <div id="collective-actions-content" class="tab-content hidden">
                 <div class="py-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Aksi Mendatang -->
                         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex items-center gap-2">
@@ -538,39 +625,22 @@
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aksi
-                                                Mendatang</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Aksi Kolektif Aktif</h3>
                                         </div>
                                     </div>
-                                    <!-- Daftar Aksi -->
+                                    <!-- Collective Action List -->
                                     <div class="space-y-4">
                                         @php
-                                            $upcoming = \App\Models\EventUser::with([
-                                                'event.categories',
-                                                'event.participants',
-                                            ])
-                                                ->where('user_id', auth()->id())
-                                                ->whereHas('event', function ($q) {
-                                                    $q->where('start_date', '>=', now());
-                                                })
-                                                ->get();
+                                            $activeCollectiveActions = $user->activeCollectiveActions;
                                         @endphp
-                                        @if ($upcoming->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada aksi
-                                                yang akan datang</p>
+                                        @if ($activeCollectiveActions->isEmpty())
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada aksi kolektif aktif</p>
                                         @else
-                                            @foreach ($upcoming as $eventUser)
-                                                @if ($eventUser->event)
-                                                    @php $event = $eventUser->event; @endphp
-                                                    <div
-                                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
-                                                        <div class="flex items-center space-x-4">
-                                                            <div class="flex-shrink-0">
-                                                                @if ($event->banner)
-                                                                    <img src="{{ asset('storage/' . $event->banner) }}"
-                                                                        alt="{{ $event->title }}"
-                                                                        class="h-12 w-12 object-cover rounded-lg">
-                                                                @else
+                                            @foreach ($activeCollectiveActions as $collectiveAction)
+                                                <div
+                                                    class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
+                                                    <div class="flex items-center space-x-4">
+                                                        <div class="flex-shrink-0">
                                                                     <span
                                                                         class="inline-block h-12 w-12 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-700">
                                                                         <svg class="h-full w-full text-gray-300 dark:text-slate-400"
@@ -579,42 +649,35 @@
                                                                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                                         </svg>
                                                                     </span>
-                                                                @endif
                                                             </div>
                                                             <div>
-                                                                <p
-                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
-                                                                    {{ $event->title }}</p>
-                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                                    {{ $event->description }}
+                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                    {{ $collectiveAction->title }}</p>
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $collectiveAction->description }}
                                                                 </p>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     <p class="text-xs text-gray-400 dark:text-slate-500">
-                                                                        {{ \Carbon\Carbon::parse($event->start_date)->format('d M Y H:i') }}
+                                                                        {{ \Carbon\Carbon::parse($collectiveAction->start_date)->format('d M Y') }}
                                                                     </p>
-                                                                    @if ($event->location)
-                                                                        <span
-                                                                            class="text-xs text-gray-400 dark:text-slate-500">•</span>
-                                                                        <p
-                                                                            class="text-xs text-gray-400 dark:text-slate-500">
-                                                                            {{ $event->location }}</p>
+                                                                    @if ($collectiveAction->location)
+                                                                        <span class="text-xs text-gray-400 dark:text-slate-500">•</span>
+                                                                        <p class="text-xs text-gray-400 dark:text-slate-500">
+                                                                            {{ $collectiveAction->location }}</p>
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex flex-col items-end gap-2">
-                                                            @foreach ($event->categories as $category)
                                                                 <span
-                                                                    class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300">{{ $category->name }}</span>
-                                                            @endforeach
-                                                            {{-- @if ($event->max_participants)
-                                                                <span
-                                                                    class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">{{ $event->participants()->count() }}/{{ $event->max_participants }}
-                                                                    Peserta</span>
-                                                            @endif --}}
+                                                                class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300">
+                                                                {{ ucfirst($collectiveAction->pivot->role) }}
+                                                            </span>
+                                                            <span
+                                                                class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">
+                                                                {{ ucfirst($collectiveAction->status) }}
+                                                            </span>
                                                         </div>
                                                     </div>
-                                                @endif
                                             @endforeach
                                         @endif
                                     </div>
@@ -622,41 +685,38 @@
                             </div>
                         </div>
 
-                        <!-- Statistik Aksi -->
+                        <!-- Collective Action Stats -->
                         <div class="col-span-1">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Aksi
-                                    </h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Aksi Kolektif</h3>
                                     @php
-                                        $totalEvents = \App\Models\EventUser::where('user_id', auth()->id())->count();
-                                        $upcomingCount = \App\Models\EventUser::where('user_id', auth()->id())
-                                            ->whereHas('event', function ($q) {
-                                                $q->where('start_date', '>=', now());
-                                            })
-                                            ->count();
-                                        $pastCount = \App\Models\EventUser::where('user_id', auth()->id())
-                                            ->whereHas('event', function ($q) {
-                                                $q->where('end_date', '<', now());
-                                            })
-                                            ->count();
+                                        $totalCollectiveActions = $user->collectiveActionMemberships->count();
+                                        $activeCount = $user->activeCollectiveActions->count();
+                                        $adminCount = $user->adminCollectiveActions->count();
+                                        $memberCount = $user->memberCollectiveActions->count();
+                                        $contributorCount = $user->contributorCollectiveActions->count();
                                     @endphp
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Aksi</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $totalEvents }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Total Aksi Kolektif</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $totalCollectiveActions }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Mendatang</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $upcomingCount }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Aktif</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $activeCount }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Aksi Selesai</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $pastCount }}</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Sebagai Admin</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $adminCount }}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Sebagai Member</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $memberCount }}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Sebagai Contributor</span>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $contributorCount }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -683,37 +743,40 @@
                                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                                 </path>
                                             </svg>
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Koneksi
-                                                Saya</h3>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Koneksi</h3>
                                         </div>
                                     </div>
                                     <!-- Connection List -->
                                     <div class="space-y-4">
-                                        @if (auth()->user()->connections->isEmpty())
-                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi
-                                            </p>
+                                        @php
+                                            $accepted = $user->getAllConnectionsFlexible(); // All accepted connections for this user
+                                        @endphp
+                                        @if ($accepted->isEmpty())
+                                            <p class="text-gray-500 dark:text-slate-400 text-center py-4">Belum ada koneksi</p>
                                         @else
-                                            @foreach (auth()->user()->connections as $conn)
-                                                @php $otherUser = $conn->receiver; @endphp
+                                            @foreach ($accepted as $conn)
+                                                @php
+                                                    // Determine which user is the connection (not the current user)
+                                                    $otherUser = $conn->requester_id == $user->id ? $conn->receiver : $conn->requester;
+                                                @endphp
                                                 @if ($otherUser)
                                                     <div
                                                         class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                                         <div class="flex items-center space-x-4">
                                                             <div class="flex-shrink-0">
                                                                 <span
-                                                                    class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700"><svg
-                                                                        class="h-full w-full text-gray-300 dark:text-slate-400"
+                                                                    class="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700">
+                                                                    <svg class="h-full w-full text-gray-300 dark:text-slate-400"
                                                                         fill="currentColor" viewBox="0 0 24 24">
                                                                         <path
                                                                             d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                                    </svg></span>
+                                                                    </svg>
+                                                                </span>
                                                             </div>
                                                             <div>
-                                                                <p
-                                                                    class="text-sm font-medium text-gray-900 dark:text-slate-100">
+                                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $otherUser->name }}</p>
-                                                                <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                                    {{ $otherUser->email }}
+                                                                <p class="text-sm text-gray-500 dark:text-slate-400">{{ $otherUser->email }}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -733,27 +796,24 @@
 
                         <!-- Connection Stats -->
                         <div class="col-span-1">
-                            <div
-                                class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 overflow-hidden">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik
-                                        Koneksi</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Statistik Koneksi</h3>
                                     <div class="space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Total Koneksi</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->connections->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->getAllConnectionsFlexible()->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Masuk</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->pendingReceivedConnections()->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->pendingReceivedConnections()->count() }}</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan
-                                                Terkirim</span>
+                                            <span class="text-sm text-gray-500 dark:text-slate-400">Permintaan Terkirim</span>
                                             <span
-                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ auth()->user()->pendingSentConnections()->count() }}</span>
+                                                class="text-sm font-medium text-gray-900 dark:text-slate-100">{{ $user->pendingSentConnections()->count() }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -776,9 +836,9 @@
                 // Remove active state from all tab buttons
                 const tabButtons = document.querySelectorAll('.tab-button');
                 tabButtons.forEach(button => {
-                    button.classList.remove('border-purple-500', 'text-purple-600');
-                    button.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700',
-                        'hover:border-gray-300');
+                    button.classList.remove('border-purple-500', 'text-purple-600', 'dark:text-purple-400', 'dark:border-purple-400');
+                    button.classList.add('border-transparent', 'text-gray-500', 'dark:text-slate-400', 'hover:text-gray-700', 'dark:hover:text-slate-300',
+                        'hover:border-gray-300', 'dark:hover:border-slate-600');
                 });
 
                 // Show selected tab content
@@ -790,9 +850,9 @@
                 // Add active state to selected tab button
                 const selectedButton = document.querySelector(`[data-tab="${tabName}"]`);
                 if (selectedButton) {
-                    selectedButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700',
-                        'hover:border-gray-300');
-                    selectedButton.classList.add('border-purple-500', 'text-purple-600');
+                    selectedButton.classList.remove('border-transparent', 'text-gray-500', 'dark:text-slate-400', 'hover:text-gray-700', 'dark:hover:text-slate-300',
+                        'hover:border-gray-300', 'dark:hover:border-slate-600');
+                    selectedButton.classList.add('border-purple-500', 'text-purple-600', 'dark:text-purple-400', 'dark:border-purple-400');
                 }
             }
 

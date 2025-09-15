@@ -118,6 +118,50 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->forUserActiveSession($this); // Filter by user's active session
     }
 
+    /**
+     * Get all accepted connections for this user (both as requester and receiver)
+     */
+    public function allConnections()
+    {
+        return Connection::where(function ($query) {
+            $query->where('requester_id', $this->id)
+                ->orWhere('receiver_id', $this->id);
+        })
+        ->where('status', 'accepted')
+        ->forUserActiveSession($this); // Filter by user's active session
+    }
+
+    /**
+     * Get all accepted connections for this user (both as requester and receiver) as a collection
+     */
+    public function getAllConnections()
+    {
+        return $this->allConnections()->get();
+    }
+
+    /**
+     * Get all accepted connections for this user (both as requester and receiver) as a collection
+     * This version handles both old connections without session and new ones with session
+     */
+    public function getAllConnectionsFlexible()
+    {
+        $query = Connection::where(function ($query) {
+            $query->where('requester_id', $this->id)
+                ->orWhere('receiver_id', $this->id);
+        })
+        ->where('status', 'accepted');
+
+        // If user has active session, filter by it, otherwise show all connections
+        if ($this->hasActivePasarKolaboraya()) {
+            $query->where(function ($q) {
+                $q->where('pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id)
+                  ->orWhereNull('pasar_kolaboraya_id'); // Include old connections without session
+            });
+        }
+
+        return $query->get();
+    }
+
     public function collaborations()
     {
         return $this->hasMany(CollaborationUser::class)->where('status', 'accepted')->where('user_id', $this->id);
@@ -157,13 +201,15 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function pendingReceivedConnections(){
         return $this->hasMany(Connection::class, 'receiver_id')
             ->where('receiver_id', $this->id)
-            ->where('status', 'pending');
+            ->where('status', 'pending')
+            ->forUserActiveSession($this); // Filter by user's active session
     }
 
     public function pendingSentConnections(){
         return $this->hasMany(Connection::class, 'requester_id')
             ->where('requester_id', $this->id)
-            ->where('status', 'pending');
+            ->where('status', 'pending')
+            ->forUserActiveSession($this); // Filter by user's active session
     }
 
     /**

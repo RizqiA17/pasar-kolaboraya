@@ -13,6 +13,9 @@ use Livewire\Component;
 #[Layout('components.layouts.app', ['title' => 'Profile'])]
 class Profile extends Component
 {
+    public User $user;
+    public ?ProfileModel $profile = null;
+    
     public string $name = '';
     public string $email = '';
     public ?string $organization = '';
@@ -38,6 +41,10 @@ class Profile extends Component
         if (!$profile) {
             $profile = $user->profile()->create();
         }
+
+        // Assign to public properties for view access
+        $this->user = $user;
+        $this->profile = $profile;
 
         $this->name = $user->name;
         $this->email = $user->email;
@@ -85,12 +92,15 @@ class Profile extends Component
         $user->save();
 
         // Update or create profile
-        $user->profile()->updateOrCreate([], [
+        $profile = $user->profile()->updateOrCreate([], [
             'organization' => $validated['organization'],
             'phone' => $validated['phone'],
             'social_media' => $validated['social_media'],
             'vision' => $validated['vision'],
         ]);
+
+        // Refresh the profile property
+        $this->profile = $profile;
 
         $this->dispatch('profile-updated', name: $user->name);
     }
@@ -113,6 +123,9 @@ class Profile extends Component
 
         $profile->skills()->sync($skillsData);
 
+        // Refresh the profile property
+        $this->profile = $profile->fresh();
+
         $this->dispatch('skills-updated');
     }
 
@@ -133,6 +146,9 @@ class Profile extends Component
         })->toArray();
 
         $profile->interests()->sync($interestsData);
+
+        // Refresh the profile property
+        $this->profile = $profile->fresh();
 
         $this->dispatch('interests-updated');
     }
@@ -166,7 +182,8 @@ class Profile extends Component
             'date' => '',
         ];
 
-        // Refresh contributions list
+        // Refresh the profile property and contributions list
+        $this->profile = $profile->fresh();
         $this->userContributions = $profile->contributions()->get()->toArray();
 
         $this->dispatch('contribution-added');
@@ -181,7 +198,8 @@ class Profile extends Component
         if ($profile) {
             $profile->contributions()->detach($contributionId);
 
-            // Refresh contributions list
+            // Refresh the profile property and contributions list
+            $this->profile = $profile->fresh();
             $this->userContributions = $profile->contributions()->get()->toArray();
         }
     }
