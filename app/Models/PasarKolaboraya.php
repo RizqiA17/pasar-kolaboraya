@@ -260,6 +260,7 @@ class PasarKolaboraya extends Model
         if ($totalUsers === 0) return 0;
 
         $ecosystemHealth = $this->calculateEcosystemHealth();
+        $collectiveActionQuality = $this->calculateCollectiveActionQuality();
         $collaborationIndex = $this->calculateCollaborationIndex();
         $participationRate = $this->calculateParticipationRate();
         $engagementScore = $this->calculateEngagementScore();
@@ -268,10 +269,11 @@ class PasarKolaboraya extends Model
 
         return round((
             $ecosystemHealth * 0.25 +
-            $collaborationIndex * 0.20 +
-            $participationRate * 0.15 +
-            $engagementScore * 0.15 +
-            $networkDiversity * 0.15 +
+            $collectiveActionQuality * 0.20 +
+            $collaborationIndex * 0.15 +
+            $participationRate * 0.10 +
+            $engagementScore * 0.10 +
+            $networkDiversity * 0.10 +
             $resourceUtilization * 0.10
         ), 2);
     }
@@ -291,6 +293,23 @@ class PasarKolaboraya extends Model
         }
         
         return round($totalScore / $ecosystems->count(), 2);
+    }
+
+    /**
+     * Calculate collective action quality score using Pilar III - Aksi Kolektif scoring
+     */
+    public function calculateCollectiveActionQuality(): float
+    {
+        $collectiveActions = $this->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalScore = 0;
+        foreach ($collectiveActions as $action) {
+            $aksiData = $action->calculateAksiScore();
+            $totalScore += $aksiData['aksi_score'];
+        }
+        
+        return round($totalScore / $collectiveActions->count(), 2);
     }
 
     /**

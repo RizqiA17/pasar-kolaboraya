@@ -265,6 +265,85 @@
                     @endforelse
                 </div>
             </div>
+
+            <!-- Collective Action Quality Metrics -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
+                    <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-200">Kualitas Aksi Kolektif</h3>
+                    <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
+                        Pilar III
+                    </span>
+                </div>
+                
+                @php
+                    $activeSessions = \App\Models\PasarKolaboraya::where('status', 'active')->with(['collectiveActions'])->get();
+                    $totalCollectiveActions = $activeSessions->sum(function($session) { return $session->collectiveActions->count(); });
+                    $avgCollectiveActionQuality = $activeSessions->avg(function($session) { return $session->calculateCollectiveActionQuality(); });
+                @endphp
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Rata-rata Kualitas</p>
+                        <p class="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
+                            {{ $avgCollectiveActionQuality ? round($avgCollectiveActionQuality, 1) : 0 }}%
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Aksi Kolektif</p>
+                        <p class="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">
+                            {{ $totalCollectiveActions }}
+                        </p>
+                    </div>
+                </div>
+
+                @if($totalCollectiveActions > 0)
+                    <div class="mt-4 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <h4 class="text-sm font-medium text-slate-800 dark:text-slate-200 mb-2">Distribusi Kualitas</h4>
+                        <div class="space-y-2">
+                            @php
+                                $qualityRanges = [
+                                    'excellent' => ['min' => 80, 'max' => 100, 'label' => 'Sangat Baik', 'color' => 'green'],
+                                    'good' => ['min' => 60, 'max' => 79, 'label' => 'Baik', 'color' => 'blue'],
+                                    'fair' => ['min' => 40, 'max' => 59, 'label' => 'Cukup', 'color' => 'yellow'],
+                                    'poor' => ['min' => 0, 'max' => 39, 'label' => 'Perlu Perbaikan', 'color' => 'red']
+                                ];
+                                
+                                $qualityDistribution = [];
+                                foreach($activeSessions as $session) {
+                                    foreach($session->collectiveActions as $action) {
+                                        $score = $action->calculateAksiScore()['aksi_score'];
+                                        foreach($qualityRanges as $key => $range) {
+                                            if($score >= $range['min'] && $score <= $range['max']) {
+                                                $qualityDistribution[$key] = ($qualityDistribution[$key] ?? 0) + 1;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            @endphp
+                            
+                            @foreach($qualityRanges as $key => $range)
+                                @if(isset($qualityDistribution[$key]) && $qualityDistribution[$key] > 0)
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-slate-600 dark:text-slate-400">{{ $range['label'] }}</span>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-16 bg-slate-200 dark:bg-slate-600 rounded-full h-2">
+                                                <div class="bg-{{ $range['color'] }}-500 h-2 rounded-full" 
+                                                     style="width: {{ ($qualityDistribution[$key] / $totalCollectiveActions) * 100 }}%"></div>
+                                            </div>
+                                            <span class="text-slate-800 dark:text-slate-200 font-medium">{{ $qualityDistribution[$key] }}</span>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="mt-4 text-center text-slate-500 dark:text-slate-400">
+                        <p class="text-sm">Belum ada aksi kolektif untuk dianalisis</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </x-admin.layout>

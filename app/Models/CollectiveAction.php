@@ -782,6 +782,108 @@ class CollectiveAction extends Model
     }
 
     /**
+     * Calculate Aksi Score (Pilar III — Aksi Kolektif)
+     * Returns array with 6 metrics and overall score
+     */
+    public function calculateAksiScore(): array
+    {
+        // 1. Action Activity Rate
+        // For single action: 1 if active or completed, 0 otherwise
+        $isActive = $this->status === 'active' ? 1 : 0;
+        $isCompleted = $this->status === 'completed' ? 1 : 0;
+        $activityScore = ($isActive + $isCompleted) * 100;
+
+        // 2. Scale & Scope Impact
+        $scaleWeights = ['kecil' => 1, 'sedang' => 2, 'besar' => 3];
+        $scopeWeights = ['local' => 1, 'national' => 2, 'international' => 3];
+        
+        $scaleWeight = $scaleWeights[$this->scale] ?? 1;
+        $scopeWeight = $scopeWeights[$this->scope] ?? 1;
+        $impactValue = $scaleWeight * $scopeWeight;
+        
+        // For single action, impact_raw = impact_value
+        $impactRaw = $impactValue;
+        $impactRef = 300; // Reference maximum value
+        $impactScore = min($impactRaw / $impactRef, 1) * 100;
+
+        // 3. Action Participation Rate (Users)
+        $participants = $this->activeUsers()->count();
+        $totalRegistered = $this->users()->count();
+        $participationRate = $totalRegistered > 0 ? $participants / $totalRegistered : 0;
+        $participationScore = $participationRate * 100;
+
+        // 4. Action Ecosystem Engagement
+        $accepted = $this->acceptedInvitations()->count();
+        $invited = $this->invitations()->count();
+        $engagementRate = $invited > 0 ? $accepted / $invited : 0;
+        $engagementScore = $engagementRate * 100;
+
+        // 5. Action Contribution Completion Rate
+        $completedContributions = $this->completedContributions()->count();
+        $totalContributions = $this->contributions()->count();
+        $completionRate = $totalContributions > 0 ? $completedContributions / $totalContributions : 0;
+        $completionScore = $completionRate * 100;
+
+        // 6. Action Contribution Diversity
+        $contributionTypes = $this->contributions()
+            ->join('contributions', 'collective_action_contributions.contribution_id', '=', 'contributions.id')
+            ->selectRaw('contributions.category, COUNT(*) as count')
+            ->groupBy('contributions.category')
+            ->get();
+
+        $totalContributionCount = $contributionTypes->sum('count');
+        $hhi = 0;
+        $uniqueTypes = $contributionTypes->count();
+
+        if ($totalContributionCount > 0) {
+            foreach ($contributionTypes as $type) {
+                $proportion = $type->count / $totalContributionCount;
+                $hhi += pow($proportion, 2);
+            }
+        }
+
+        $diversityScore = $uniqueTypes > 1 ? (1 - $hhi) / (1 - 1 / $uniqueTypes) * 100 : 0;
+
+        // Calculate final Aksi score as average of all 6 metrics
+        $aksiScore = (
+            $activityScore + 
+            $impactScore + 
+            $participationScore + 
+            $engagementScore + 
+            $completionScore + 
+            $diversityScore
+        ) / 6;
+
+        return [
+            'activity_score' => round($activityScore, 1),
+            'impact_score' => round($impactScore, 1),
+            'participation_score' => round($participationScore, 1),
+            'engagement_score' => round($engagementScore, 1),
+            'completion_score' => round($completionScore, 1),
+            'diversity_score' => round($diversityScore, 1),
+            'aksi_score' => round($aksiScore, 1),
+            'details' => [
+                'is_active' => $isActive,
+                'is_completed' => $isCompleted,
+                'action_status' => $this->status,
+                'scale_weight' => $scaleWeight,
+                'scope_weight' => $scopeWeight,
+                'impact_value' => $impactValue,
+                'impact_raw' => $impactRaw,
+                'impact_ref' => $impactRef,
+                'active_participants' => $participants,
+                'total_registered' => $totalRegistered,
+                'accepted_ecosystems' => $accepted,
+                'invited_ecosystems' => $invited,
+                'completed_contributions' => $completedContributions,
+                'total_contributions' => $totalContributions,
+                'contribution_types_count' => $uniqueTypes,
+                'hhi_value' => round($hhi, 4)
+            ]
+        ];
+    }
+
+    /**
      * Get analytics data for charts
      */
     public function getCollectiveActionsAnalytics(): array

@@ -213,6 +213,9 @@ class AdminController extends Controller
         // Calculate ecosystem health score
         $ecosystemHealthScore = $this->calculateEcosystemHealthScore($pasarKolaboraya);
         
+        // Calculate collective action quality score
+        $collectiveActionQualityScore = $this->calculateCollectiveActionQualityScore($pasarKolaboraya);
+        
         // Calculate collaboration index
         $collaborationIndex = $this->calculateCollaborationIndex($pasarKolaboraya);
         
@@ -236,10 +239,11 @@ class AdminController extends Controller
         // Calculate overall health score
         $overallHealthScore = round((
             $ecosystemHealthScore * 0.25 +
-            $collaborationIndex * 0.20 +
-            $participationRate * 0.15 +
-            $engagementScore * 0.15 +
-            $networkDiversity * 0.15 +
+            $collectiveActionQualityScore * 0.20 +
+            $collaborationIndex * 0.15 +
+            $participationRate * 0.10 +
+            $engagementScore * 0.10 +
+            $networkDiversity * 0.10 +
             $resourceUtilization * 0.10
         ), 2);
 
@@ -250,8 +254,9 @@ class AdminController extends Controller
             'total_connections' => $totalConnections,
             'connection_density' => $connectionDensity,
             'ecosystem_health_score' => $ecosystemHealthScore,
+            'collective_action_quality_score' => $collectiveActionQualityScore,
             'collaboration_index' => $collaborationIndex,
-            ' yanparticipation_rate' => $participationRate,
+            'participation_rate' => $participationRate,
             'user_growth_rate' => $userGrowthRate,
             'engagement_score' => $engagementScore,
             'network_diversity' => $networkDiversity,
@@ -277,6 +282,23 @@ class AdminController extends Controller
         }
         
         return round($totalScore / $ecosystems->count(), 2);
+    }
+
+    /**
+     * Calculate collective action quality score using Pilar III - Aksi Kolektif scoring
+     */
+    private function calculateCollectiveActionQualityScore(PasarKolaboraya $pasarKolaboraya)
+    {
+        $collectiveActions = $pasarKolaboraya->collectiveActions;
+        if ($collectiveActions->isEmpty()) return 0;
+        
+        $totalScore = 0;
+        foreach ($collectiveActions as $action) {
+            $aksiData = $action->calculateAksiScore();
+            $totalScore += $aksiData['aksi_score'];
+        }
+        
+        return round($totalScore / $collectiveActions->count(), 2);
     }
 
     /**

@@ -610,6 +610,171 @@
         </div>
     </div>
 
+    <!-- Action Quality Metrics (Pilar III - Aksi Kolektif) -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Kualitas Aksi Kolektif</h2>
+            <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                Pilar III
+            </span>
+        </div>
+
+        @php
+            $aksiQuality = $collectiveAction->calculateAksiScore();
+        @endphp
+
+        <!-- Overall Score -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
+                <span class="text-2xl font-bold text-white">{{ $aksiQuality['aksi_score'] }}%</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Skor Aksi Kolektif</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Rata-rata dari 6 metrik kualitas</p>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Activity Score -->
+            <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Tingkat Aktivitas</h4>
+                    <span class="text-xl font-bold text-green-600 dark:text-green-400">{{ $aksiQuality['activity_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['activity_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    Status: {{ $aksiQuality['details']['action_status'] }} 
+                    @if($aksiQuality['details']['is_active'])
+                        (Aktif)
+                    @elseif($aksiQuality['details']['is_completed'])
+                        (Selesai)
+                    @else
+                        (Tidak Aktif)
+                    @endif
+                </p>
+            </div>
+
+            <!-- Impact Score -->
+            <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Dampak Skala & Cakupan</h4>
+                    <span class="text-xl font-bold text-purple-600 dark:text-purple-400">{{ $aksiQuality['impact_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['impact_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    {{ ucfirst($collectiveAction->scale) }} × {{ ucfirst($collectiveAction->scope) }} 
+                    ({{ $aksiQuality['details']['impact_value'] }}/{{ $aksiQuality['details']['impact_ref'] }})
+                </p>
+            </div>
+
+            <!-- Participation Score -->
+            <div class="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Tingkat Partisipasi</h4>
+                    <span class="text-xl font-bold text-orange-600 dark:text-orange-400">{{ $aksiQuality['participation_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['participation_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    {{ $aksiQuality['details']['active_participants'] }} dari {{ $aksiQuality['details']['total_registered'] }} user aktif
+                </p>
+            </div>
+
+            <!-- Engagement Score -->
+            <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 rounded-lg p-4 border border-indigo-200 dark:border-indigo-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Keterlibatan Ekosistem</h4>
+                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400">{{ $aksiQuality['engagement_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['engagement_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    {{ $aksiQuality['details']['accepted_ecosystems'] }} dari {{ $aksiQuality['details']['invited_ecosystems'] }} ekosistem
+                </p>
+            </div>
+
+            <!-- Completion Score -->
+            <div class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg p-4 border border-pink-200 dark:border-pink-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Penyelesaian Kontribusi</h4>
+                    <span class="text-xl font-bold text-pink-600 dark:text-pink-400">{{ $aksiQuality['completion_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['completion_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    {{ $aksiQuality['details']['completed_contributions'] }} dari {{ $aksiQuality['details']['total_contributions'] }} kontribusi
+                </p>
+            </div>
+
+            <!-- Diversity Score -->
+            <div class="bg-gradient-to-r from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 rounded-lg p-4 border border-teal-200 dark:border-teal-800">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-900 dark:text-slate-100">Keragaman Kontribusi</h4>
+                    <span class="text-xl font-bold text-teal-600 dark:text-teal-400">{{ $aksiQuality['diversity_score'] }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                    <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['diversity_score'] }}%"></div>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-slate-400">
+                    {{ $aksiQuality['details']['contribution_types_count'] }} jenis (HHI: {{ $aksiQuality['details']['hhi_value'] }})
+                </p>
+            </div>
+        </div>
+
+        <!-- Performance Insights -->
+        <div class="mt-6 p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
+            <h4 class="font-medium text-gray-900 dark:text-slate-100 mb-3">Insight Performa</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <span class="text-gray-600 dark:text-slate-400">Metrik Terbaik:</span>
+                    <span class="font-medium text-green-600 dark:text-green-400">
+                        @php
+                            $bestMetric = '';
+                            $bestScore = 0;
+                            $metrics = [
+                                'activity_score' => 'Aktivitas',
+                                'impact_score' => 'Dampak',
+                                'participation_score' => 'Partisipasi',
+                                'engagement_score' => 'Keterlibatan',
+                                'completion_score' => 'Penyelesaian',
+                                'diversity_score' => 'Keragaman'
+                            ];
+                            foreach($metrics as $key => $label) {
+                                if($aksiQuality[$key] > $bestScore) {
+                                    $bestScore = $aksiQuality[$key];
+                                    $bestMetric = $label;
+                                }
+                            }
+                        @endphp
+                        {{ $bestMetric }} ({{ $bestScore }}%)
+                    </span>
+                </div>
+                <div>
+                    <span class="text-gray-600 dark:text-slate-400">Perlu Perbaikan:</span>
+                    <span class="font-medium text-orange-600 dark:text-orange-400">
+                        @php
+                            $worstMetric = '';
+                            $worstScore = 100;
+                            foreach($metrics as $key => $label) {
+                                if($aksiQuality[$key] < $worstScore) {
+                                    $worstScore = $aksiQuality[$key];
+                                    $worstMetric = $label;
+                                }
+                            }
+                        @endphp
+                        {{ $worstMetric }} ({{ $worstScore }}%)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Action Details -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Basic Information -->
