@@ -264,6 +264,163 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Pilar II - Ekosistem Quality Metrics -->
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kualitas Ekosistem</h3>
+                        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                            Pilar II
+                        </span>
+                    </div>
+
+                    @php
+                        $ekosistemQuality = $ecosystem->calculateEkosistemScore();
+                    @endphp
+
+                    <!-- Overall Score -->
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full mb-4">
+                            <span class="text-xl font-bold text-white">{{ $ekosistemQuality['ekosistem_score'] }}%</span>
+                        </div>
+                        <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Skor Kualitas Ekosistem</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Rata-rata dari 6 metrik kualitas</p>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Membership Activation Rate -->
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Tingkat Aktivasi Keanggotaan</h5>
+                                <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ $ekosistemQuality['activation_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['activation_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['max_users'] }} anggota
+                            </p>
+                        </div>
+
+                        <!-- Ecosystem Acceptance Rate -->
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Tingkat Penerimaan Ekosistem</h5>
+                                <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ $ekosistemQuality['acceptance_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['acceptance_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['total_decisions'] }} keputusan
+                            </p>
+                        </div>
+
+                        <!-- Ecosystem Contribution Completion Rate -->
+                        <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Penyelesaian Kontribusi</h5>
+                                <span class="text-lg font-bold text-purple-600 dark:text-purple-400">{{ $ekosistemQuality['completion_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['completion_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['completed_contributions'] }} dari {{ $ekosistemQuality['details']['total_contributions'] }} kontribusi
+                            </p>
+                        </div>
+
+                        <!-- Ecosystem Contribution Diversity -->
+                        <div class="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Keragaman Kontribusi</h5>
+                                <span class="text-lg font-bold text-orange-600 dark:text-orange-400">{{ $ekosistemQuality['diversity_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['diversity_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['contribution_types_count'] }} jenis (HHI: {{ $ekosistemQuality['details']['hhi_value'] }})
+                            </p>
+                        </div>
+
+                        <!-- Role Fit -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 rounded-lg p-4 border border-indigo-200 dark:border-indigo-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Kesesuaian Kebutuhan Skill</h5>
+                                <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ $ekosistemQuality['role_fit_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['role_fit_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['role_coverage_count'] }} dari {{ $ekosistemQuality['details']['needed_roles_count'] }} peran
+                            </p>
+                        </div>
+
+                        <!-- Ecosystem Engagement in Collective Actions -->
+                        <div class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg p-4 border border-pink-200 dark:border-pink-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Keterlibatan Aksi Kolektif</h5>
+                                <span class="text-lg font-bold text-pink-600 dark:text-pink-400">{{ $ekosistemQuality['engagement_score'] }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                <div class="bg-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['engagement_score'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $ekosistemQuality['details']['accepted_invitations'] }} dari {{ $ekosistemQuality['details']['invited_to_actions'] }} undangan
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Performance Insights -->
+                    <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <h4 class="font-medium text-slate-800 dark:text-slate-200 mb-3">Insight Performa</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-600 dark:text-slate-400">Kekuatan Utama:</span>
+                                <span class="font-medium text-green-600 dark:text-green-400">
+                                    @php
+                                        $bestMetric = '';
+                                        $bestScore = 0;
+                                        $metrics = [
+                                            'activation_score' => 'Aktivasi Keanggotaan',
+                                            'acceptance_score' => 'Penerimaan Ekosistem',
+                                            'completion_score' => 'Penyelesaian Kontribusi',
+                                            'diversity_score' => 'Keragaman Kontribusi',
+                                            'role_fit_score' => 'Kesesuaian Skill',
+                                            'engagement_score' => 'Keterlibatan Aksi'
+                                        ];
+                                        foreach($metrics as $key => $label) {
+                                            if($ekosistemQuality[$key] > $bestScore) {
+                                                $bestScore = $ekosistemQuality[$key];
+                                                $bestMetric = $label;
+                                            }
+                                        }
+                                    @endphp
+                                    {{ $bestMetric }} ({{ $bestScore }}%)
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-slate-600 dark:text-slate-400">Area Perbaikan:</span>
+                                <span class="font-medium text-orange-600 dark:text-orange-400">
+                                    @php
+                                        $worstMetric = '';
+                                        $worstScore = 100;
+                                        foreach($metrics as $key => $label) {
+                                            if($ekosistemQuality[$key] < $worstScore) {
+                                                $worstScore = $ekosistemQuality[$key];
+                                                $worstMetric = $label;
+                                            }
+                                        }
+                                    @endphp
+                                    {{ $worstMetric }} ({{ $worstScore }}%)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Sidebar -->
