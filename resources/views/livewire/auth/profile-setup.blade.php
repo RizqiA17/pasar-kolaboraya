@@ -26,6 +26,13 @@
         <!-- SVG Accent for Step Content -->
         <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
         
+        <!-- Data Saved Indicator -->
+        @if($hasChanges)
+            <div class="absolute top-4 right-4 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-xs font-medium">
+                Ada perubahan data
+            </div>
+        @endif
+        
         @if ($currentStep === 1)
             <!-- Step 1: Basic Information -->
             <div class="space-y-6">
@@ -493,13 +500,14 @@
         <!-- Navigation Buttons -->
         <div
             class="grid grid-cols-3 items-center justify-between mt-8 pt-6 border-t border-gray-200 dark:border-slate-600">
-            <div class="col-span-1">
+            <div class="col-span-1 px-1">
                 @if ($currentStep > 1)
                     <flux:button wire:click="previousStep" variant="subtle" icon="chevron-left">
-                        <p class="max-md:hidden">Sebelumnya</p>
+                        <p class="max-md:hidden">Kembali</p>
                     </flux:button>
                 @endif
             </div>
+
 
             <div class="grid grid-cols-2 col-span-2 items-center space-x-3">
                 @if ($currentStep < $totalSteps)
@@ -509,7 +517,7 @@
 
                     <flux:button wire:click="nextStep" variant="primary" icon:trailing="chevron-right"
                         class="col-span-1">
-                        <p class="max-md:hidden">Selanjutnya</p>
+                        <p class="max-md:hidden">Lanjut</p>
                     </flux:button>
                 @else
                     <div class="col-span-1"></div>
@@ -519,6 +527,12 @@
                         </flux:button>
                 @endif
             </div>
+        </div>
+        
+        <div class="w-full mt-4">
+            <flux:button wire:click="skipAllSteps" variant="subtle" class="w-full text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">
+                <p class="max-md:hidden">Lengkapi Nanti</p>
+            </flux:button>
         </div>
     </div>
 

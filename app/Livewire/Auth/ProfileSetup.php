@@ -53,6 +53,10 @@ class ProfileSetup extends Component
     public $skillSearch = '';
     public $interestSearch = '';
 
+    // Data change tracking
+    public $originalData = [];
+    public $hasChanges = false;
+
     protected $messages = [
         'organization.max' => 'Nama organisasi maksimal 255 karakter',
         'phone.max' => 'Nomor telepon maksimal 255 karakter',
@@ -77,6 +81,13 @@ class ProfileSetup extends Component
     {
         $this->peran = Peran::all();
         $this->loadExistingProfile();
+        $this->storeOriginalData();
+    }
+
+    public function updated($propertyName)
+    {
+        // Check for changes whenever any property is updated
+        $this->checkForChanges();
     }
 
     public function loadExistingProfile()
@@ -134,8 +145,54 @@ class ProfileSetup extends Component
         }
     }
 
+    public function storeOriginalData()
+    {
+        $this->originalData = [
+            'organization' => $this->organization,
+            'phone' => $this->phone,
+            'vision' => $this->vision,
+            'socialMediaItems' => $this->socialMediaItems,
+            'selectedSkills' => $this->selectedSkills,
+            'skillLevels' => $this->skillLevels,
+            'primarySkills' => $this->primarySkills,
+            'selectedInterests' => $this->selectedInterests,
+            'interestLevels' => $this->interestLevels,
+            'selectedContributions' => $this->selectedContributions,
+            'contributionDescriptions' => $this->contributionDescriptions,
+            'contributionDates' => $this->contributionDates,
+            'selectedRole' => $this->selectedRole,
+        ];
+    }
+
+    public function checkForChanges()
+    {
+        $currentData = [
+            'organization' => $this->organization,
+            'phone' => $this->phone,
+            'vision' => $this->vision,
+            'socialMediaItems' => $this->socialMediaItems,
+            'selectedSkills' => $this->selectedSkills,
+            'skillLevels' => $this->skillLevels,
+            'primarySkills' => $this->primarySkills,
+            'selectedInterests' => $this->selectedInterests,
+            'interestLevels' => $this->interestLevels,
+            'selectedContributions' => $this->selectedContributions,
+            'contributionDescriptions' => $this->contributionDescriptions,
+            'contributionDates' => $this->contributionDates,
+            'selectedRole' => $this->selectedRole,
+        ];
+
+        $this->hasChanges = $this->originalData !== $currentData;
+        return $this->hasChanges;
+    }
+
     public function nextStep()
     {
+        // Check for changes and save if there are any
+        if ($this->checkForChanges()) {
+            $this->saveCurrentStepData();
+        }
+
         // Validate current step before proceeding
         if ($this->currentStep === 5) {
             $this->validate([
@@ -146,6 +203,7 @@ class ProfileSetup extends Component
         if ($this->currentStep < $this->totalSteps) {
             $this->currentStep++;
             $this->updateProgress();
+            $this->storeOriginalData(); // Update original data after step change
         }
     }
 
@@ -164,7 +222,70 @@ class ProfileSetup extends Component
 
     public function skipStep()
     {
+        // Skip current step without saving data
+        if ($this->currentStep < $this->totalSteps) {
+            $this->currentStep++;
+            $this->updateProgress();
+            $this->storeOriginalData(); // Update original data after step change
+        }
+    }
+
+    public function skipAllSteps()
+    {
+        // Skip entire profile setup and redirect to dashboard
         $this->redirect(route('dashboard', absolute: false), navigate: true);
+    }
+
+    public function saveCurrentStepData()
+    {
+        $user = Auth::user();
+        
+        // Create or update profile with current data
+        $profile = $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'organization' => $this->organization,
+                'phone' => $this->phone,
+                'vision' => $this->vision,
+                'social_media' => $this->formatSocialMediaForSave(),
+                'peran_id' => $this->selectedRole,
+            ]
+        );
+
+        // Sync skills
+        if (!empty($this->selectedSkills)) {
+            $skillData = [];
+            foreach ($this->selectedSkills as $skillId) {
+                $skillData[$skillId] = [
+                    'level' => $this->mapSkillLevelToInteger($this->skillLevels[$skillId] ?? 'beginner'),
+                    'is_primary' => in_array($skillId, $this->primarySkills)
+                ];
+            }
+            $profile->skills()->sync($skillData);
+        }
+
+        // Sync interests
+        if (!empty($this->selectedInterests)) {
+            $interestData = [];
+            foreach ($this->selectedInterests as $interestId) {
+                $interestData[$interestId] = [
+                    'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low')
+                ];
+            }
+            $profile->interests()->sync($interestData);
+        }
+
+        // Sync contributions
+        if (!empty($this->selectedContributions)) {
+            $contributionData = [];
+            foreach ($this->selectedContributions as $contributionId) {
+                $contributionData[$contributionId] = [
+                    'description' => $this->contributionDescriptions[$contributionId] ?? '',
+                    'date' => $this->contributionDates[$contributionId] ?? now()
+                ];
+            }
+            $profile->contributions()->sync($contributionData);
+        }
     }
 
     public function selectRole($roleId)
@@ -176,10 +297,10 @@ class ProfileSetup extends Component
     public function getFilteredRoles()
     {
         if (empty($this->roleSearch)) {
-            return $this->peran;
+            return collect($this->peran);
         }
 
-        return $this->peran->filter(function ($role) {
+        return collect($this->peran)->filter(function ($role) {
             return stripos($role->nama, $this->roleSearch) !== false ||
                    stripos($role->deskripsi, $this->roleSearch) !== false;
         });
@@ -348,53 +469,9 @@ class ProfileSetup extends Component
 
     public function saveProfile()
     {
-        $user = Auth::user();
-        
-        // Create or update profile
-        $profile = $user->profile()->updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'organization' => $this->organization,
-                'phone' => $this->phone,
-                'vision' => $this->vision,
-                'social_media' => $this->formatSocialMediaForSave(),
-                'peran_id' => $this->selectedRole,
-            ]
-        );
-
-        // Sync skills
-        if (!empty($this->selectedSkills)) {
-            $skillData = [];
-            foreach ($this->selectedSkills as $skillId) {
-                $skillData[$skillId] = [
-                    'level' => $this->mapSkillLevelToInteger($this->skillLevels[$skillId] ?? 'beginner'),
-                    'is_primary' => in_array($skillId, $this->primarySkills)
-                ];
-            }
-            $profile->skills()->sync($skillData);
-        }
-
-        // Sync interests
-        if (!empty($this->selectedInterests)) {
-            $interestData = [];
-            foreach ($this->selectedInterests as $interestId) {
-                $interestData[$interestId] = [
-                    'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low')
-                ];
-            }
-            $profile->interests()->sync($interestData);
-        }
-
-        // Sync contributions
-        if (!empty($this->selectedContributions)) {
-            $contributionData = [];
-            foreach ($this->selectedContributions as $contributionId) {
-                $contributionData[$contributionId] = [
-                    'description' => $this->contributionDescriptions[$contributionId] ?? '',
-                    'date' => $this->contributionDates[$contributionId] ?? now()
-                ];
-            }
-            $profile->contributions()->sync($contributionData);
+        // Check for changes and save if there are any
+        if ($this->checkForChanges()) {
+            $this->saveCurrentStepData();
         }
 
         // Redirect to dashboard
