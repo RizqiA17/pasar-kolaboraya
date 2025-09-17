@@ -7,6 +7,7 @@ use App\Models\Skill;
 use Livewire\Component;
 use App\Models\Interest;
 use App\Models\Contribution;
+use App\Models\Peran;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use App\Services\ProfileService;
@@ -25,6 +26,7 @@ class ProfileSettings extends Component
     public ?string $organization = '';
     public ?string $phone = '';
     public ?string $vision = '';
+    public ?string $selectedRole = '';
 
     // Image Properties
     public $profilePhoto;
@@ -35,6 +37,7 @@ class ProfileSettings extends Component
     public $interests = [];
     public $skills = [];
     public $contributions = [];
+    public $peran = [];
     public $selectedInterests = [];
     public $selectedSkills = [];
     public $newContribution = [
@@ -95,6 +98,7 @@ class ProfileSettings extends Component
         $this->interests = Interest::all();
         $this->skills = Skill::all();
         $this->contributions = Contribution::all();
+        $this->peran = Peran::all();
         $this->tab = request()->get('tab', 'profile');
 
         // Get or create user profile
@@ -111,6 +115,7 @@ class ProfileSettings extends Component
         $this->organization = $profile->organization ?? '';
         $this->phone = $profile->phone ?? '';
         $this->vision = $profile->vision ?? '';
+        $this->selectedRole = $profile->peran_id ?? '';
 
         // Load user's current selections from profile
         $this->selectedInterests = $profile->interests()
@@ -162,6 +167,7 @@ class ProfileSettings extends Component
             'organization' => $this->organization,
             'phone' => $this->phone,
             'vision' => $this->vision,
+            'peran_id' => $this->selectedRole,
         ]);
 
         $this->dispatch('profile-updated');

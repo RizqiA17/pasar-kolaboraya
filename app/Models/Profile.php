@@ -18,6 +18,7 @@ class Profile extends Model
         'vision',
         'profile_photo',
         'banner',
+        'peran_id',
     ];
 
     protected $casts = [
@@ -51,6 +52,11 @@ class Profile extends Model
             ->withPivot('description', 'date')
             ->withTimestamps()
             ->select(['contributions.*', 'user_contributions.description', 'user_contributions.date']);
+    }
+
+    public function peran()
+    {
+        return $this->belongsTo(Peran::class);
     }
 }
 

@@ -15,6 +15,7 @@ use App\Models\Contribution;
 use App\Models\EventCategory;
 use App\Models\SystemSetting;
 use App\Models\PasarKolaboraya;
+use App\Models\Peran;
 use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -42,6 +43,7 @@ class AdminController extends Controller
             'skills' => Skill::count(),
             'contributions' => Contribution::count(),
             'event_categories' => EventCategory::count(),
+            'peran' => Peran::count(),
             'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
             'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
             'ecosystem_builders_rejected' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'rejected')->count(),
@@ -939,5 +941,94 @@ class AdminController extends Controller
         SystemSetting::setValue('user_actions_enabled', $userActionsEnabled);
 
         return redirect()->route('admin.system-settings')->with('success', 'Pengaturan sistem berhasil diperbarui.');
+    }
+
+    /**
+     * Display peran management page
+     */
+    public function peran(Request $request)
+    {
+        $query = Peran::withCount('profiles');
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where('nama', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        }
+
+
+        // Usage filter
+        if ($request->has('usage') && $request->usage) {
+            if ($request->usage === 'used') {
+                $query->having('profiles_count', '>', 0);
+            } elseif ($request->usage === 'unused') {
+                $query->having('profiles_count', '=', 0);
+            }
+        }
+
+        // Time-based filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sort by creation date (newest first by default)
+        $query->orderBy('created_at', 'desc');
+
+        $peran = $query->paginate(15)->appends($request->query());
+        return view('admin.peran.index', compact('peran'));
+    }
+
+    /**
+     * Create peran
+     */
+    public function createPeran(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:peran',
+            'deskripsi' => 'required|string|max:1000',
+        ]);
+
+        Peran::create([
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        return redirect()->route('admin.peran')->with('success', 'Peran berhasil dibuat.');
+    }
+
+    /**
+     * Update peran
+     */
+    public function updatePeran(Request $request, Peran $peran)
+    {
+        $request->validate([
+            'nama' => ['required', 'string', 'max:255', Rule::unique('peran')->ignore($peran->id)],
+            'deskripsi' => 'required|string|max:1000',
+        ]);
+
+        $peran->update([
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        return redirect()->route('admin.peran')->with('success', 'Peran berhasil diperbarui.');
+    }
+
+    /**
+     * Delete peran
+     */
+    public function deletePeran(Peran $peran)
+    {
+        // Check if peran is being used by any profiles
+        if ($peran->profiles()->count() > 0) {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus peran yang sedang digunakan oleh user.');
+        }
+
+        $peran->delete();
+        return redirect()->route('admin.peran')->with('success', 'Peran berhasil dihapus.');
     }
 }

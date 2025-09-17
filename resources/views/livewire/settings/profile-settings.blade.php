@@ -377,6 +377,32 @@
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                <div class="space-y-2">
+                                    <label for="selectedRole"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Peran</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <select wire:model="selectedRole" id="selectedRole"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            <option value="">Pilih peran Anda</option>
+                                            @foreach($peran as $role)
+                                                <option value="{{ $role->id }}">{{ $role->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('selectedRole')
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="space-y-2">

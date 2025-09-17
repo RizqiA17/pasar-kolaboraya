@@ -22,7 +22,7 @@ class ViewProfile extends Component
     public function mount($userId)
     {
         $this->user = User::with([
-            'profile',
+            'profile.peran',
             'ecosystems',
             'acceptedEcosystems',
             'pendingEcosystems',

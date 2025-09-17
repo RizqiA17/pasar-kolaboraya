@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             ContributionSeeder::class,
             EventCategorySeeder::class,
+            PeranSeeder::class,
 
             // User & Relations
             UserSeeder::class,

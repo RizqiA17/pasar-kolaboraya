@@ -177,6 +177,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::put('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'updateEventCategory'])->name('event-categories.update');
     Route::delete('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'deleteEventCategory'])->name('event-categories.delete');
     
+    // Peran management
+    Route::get('/peran', [App\Http\Controllers\AdminController::class, 'peran'])->name('peran');
+    Route::post('/peran', [App\Http\Controllers\AdminController::class, 'createPeran'])->name('peran.create');
+    Route::put('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'updatePeran'])->name('peran.update');
+    Route::delete('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'deletePeran'])->name('peran.delete');
+    
     // System settings management
     Route::get('/system-settings', [App\Http\Controllers\AdminController::class, 'systemSettings'])->name('system-settings');
     Route::put('/system-settings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('system-settings.update');
