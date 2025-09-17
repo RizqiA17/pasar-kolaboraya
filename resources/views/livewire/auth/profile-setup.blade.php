@@ -98,38 +98,78 @@
                     <p class="text-sm text-gray-600 dark:text-slate-400">Pilih keahlian yang Anda miliki</p>
                 </div>
 
-                <div class="space-y-4">
-                    @foreach ($skills as $skill)
-                        <div
-                            class="flex items-center space-x-3 p-3 border border-gray-200 dark:border-slate-600 rounded-lg">
-                            <input type="checkbox" id="skill_{{ $skill->id }}" wire:model="selectedSkills"
-                                value="{{ $skill->id }}"
-                                class="rounded border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
-                            <label for="skill_{{ $skill->id }}"
-                                class="flex-1 text-sm font-medium text-gray-700 dark:text-slate-300">
-                                {{ $skill->name }}
-                            </label>
-
-                            {{-- @if (in_array($skill->id, $selectedSkills))
-                                <div class="flex items-center space-x-2">
-                                    <select wire:model="skillLevels.{{ $skill->id }}"
-                                        class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="beginner">Pemula</option>
-                                        <option value="intermediate">Menengah</option>
-                                        <option value="advanced">Lanjutan</option>
-                                        <option value="expert">Ahli</option>
-                                    </select>
-
-                                    <label class="flex items-center space-x-1">
-                                        <input type="checkbox" wire:model="primarySkills" value="{{ $skill->id }}"
-                                            class="rounded border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
-                                        <span class="text-xs text-gray-600">Utama</span>
-                                    </label>
-                                </div>
-                            @endif --}}
+                <!-- Skills Multi-Select -->
+                <div class="mb-6">
+                    <div class="multi-select-container">
+                        <!-- Main Selector Input -->
+                        <div class="relative">
+                            <input type="text" 
+                                   id="skillsMainInput"
+                                   placeholder="Pilih keahlian Anda..." 
+                                   class="w-full"
+                                   readonly
+                                   onclick="toggleSkillsDropdown()">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
                         </div>
-                    @endforeach
+
+                        <!-- Search Input (Shows when dropdown is open) -->
+                        <div id="skillsSearchInput" class="hidden mt-2">
+                            <input type="text" 
+                                   wire:model.live="skillSearch" 
+                                   placeholder="Cari keahlian..." 
+                                   class="multi-search-input w-full">
+                        </div>
+
+                        <!-- Dropdown List -->
+                        <div id="skillsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
+                            @foreach($this->getFilteredSkills() as $skill)
+                                <div class="multi-option {{ in_array($skill->id, $selectedSkills) ? 'selected' : '' }}"
+                                     wire:click="toggleSkill({{ $skill->id }})"
+                                     onclick="toggleSkillAndUpdate({{ $skill->id }}, '{{ $skill->name }}')">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <input type="checkbox" 
+                                                   id="skill_{{ $skill->id }}" 
+                                                   wire:model="selectedSkills" 
+                                                   value="{{ $skill->id }}"
+                                                   class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 bg-slate-700">
+                                            <span class="font-medium">{{ $skill->name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Selected Skills Display -->
+                @if(count($selectedSkills) > 0)
+                    <div class="mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($selectedSkills as $skillId)
+                                @php
+                                    $skill = $skills->firstWhere('id', $skillId);
+                                @endphp
+                                @if($skill)
+                                    <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700">
+                                        <span>{{ $skill->name }}</span>
+                                        <button type="button" 
+                                                wire:click="removeSkill({{ $skillId }})"
+                                                class="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         @elseif($currentStep === 4)
             <!-- Step 4: Interests & Contributions -->
@@ -147,32 +187,80 @@
                     <p class="text-sm text-gray-600 dark:text-slate-400">Pilih minat Anda</p>
                 </div>
 
-                <!-- Interests -->
+                <!-- Interests Multi-Select -->
                 <div>
                     <h4 class="text-md font-medium text-gray-900 dark:text-slate-100 mb-3">Minat</h4>
-                    <div class="space-y-3">
-                        @foreach ($interests as $interest)
-                            <div
-                                class="flex items-center space-x-3 p-3 border border-gray-200 dark:border-slate-600 rounded-lg">
-                                <input type="checkbox" id="interest_{{ $interest->id }}" wire:model="selectedInterests"
-                                    value="{{ $interest->id }}"
-                                    class="rounded border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
-                                <label for="interest_{{ $interest->id }}"
-                                    class="flex-1 text-sm font-medium text-gray-700 dark:text-slate-300">
-                                    {{ $interest->name }}
-                                </label>
-                                {{-- 
-                                @if (in_array($interest->id, $selectedInterests))
-                                    <select wire:model="interestLevels.{{ $interest->id }}"
-                                        class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="low">Rendah</option>
-                                        <option value="medium">Sedang</option>
-                                        <option value="high">Tinggi</option>
-                                    </select>
-                                @endif --}}
+                    <div class="mb-6">
+                        <div class="multi-select-container">
+                            <!-- Main Selector Input -->
+                            <div class="relative">
+                                <input type="text" 
+                                       id="interestsMainInput"
+                                       placeholder="Pilih minat Anda..." 
+                                       class="w-full"
+                                       readonly
+                                       onclick="toggleInterestsDropdown()">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
                             </div>
-                        @endforeach
+
+                            <!-- Search Input (Shows when dropdown is open) -->
+                            <div id="interestsSearchInput" class="hidden mt-2">
+                                <input type="text" 
+                                       wire:model.live="interestSearch" 
+                                       placeholder="Cari minat..." 
+                                       class="multi-search-input w-full">
+                            </div>
+
+                            <!-- Dropdown List -->
+                            <div id="interestsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
+                                @foreach($this->getFilteredInterests() as $interest)
+                                    <div class="multi-option {{ in_array($interest->id, $selectedInterests) ? 'selected' : '' }}"
+                                         wire:click="toggleInterest({{ $interest->id }})"
+                                         onclick="toggleInterestAndUpdate({{ $interest->id }}, '{{ $interest->name }}')">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <input type="checkbox" 
+                                                       id="interest_{{ $interest->id }}" 
+                                                       wire:model="selectedInterests" 
+                                                       value="{{ $interest->id }}"
+                                                       class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-600 bg-slate-700">
+                                                <span class="font-medium">{{ $interest->name }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Selected Interests Display -->
+                    @if(count($selectedInterests) > 0)
+                        <div class="mb-4">
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($selectedInterests as $interestId)
+                                    @php
+                                        $interest = $interests->firstWhere('id', $interestId);
+                                    @endphp
+                                    @if($interest)
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
+                                            <span>{{ $interest->name }}</span>
+                                            <button type="button" 
+                                                    wire:click="removeInterest({{ $interestId }})"
+                                                    class="ml-2 text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-200">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Contributions -->
@@ -480,21 +568,129 @@
             color: #94a3b8;
         }
 
+        /* Multi-Select Styling */
+        .multi-select-container {
+            position: relative;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .multi-select-container input {
+            background: #1e293b;
+            border: 2px solid #8b5cf6;
+            color: white;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .multi-select-container input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .multi-select-container input::placeholder {
+            color: #94a3b8;
+        }
+
+        .multi-dropdown {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .multi-option {
+            padding: 12px 16px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #334155;
+        }
+
+        .multi-option:hover {
+            background-color: #334155;
+        }
+
+        .multi-option.selected {
+            background-color: #8b5cf6;
+        }
+
+        .multi-option:last-child {
+            border-bottom: none;
+        }
+
+        .multi-search-input {
+            background: #334155;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .multi-search-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+        }
+
+        .multi-search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Selected Items Display */
+        .selected-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            margin: 2px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .selected-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-item button {
+            margin-left: 6px;
+            padding: 2px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .selected-item button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
         /* Scrollbar styling */
-        .role-dropdown::-webkit-scrollbar {
+        .role-dropdown::-webkit-scrollbar,
+        .multi-dropdown::-webkit-scrollbar {
             width: 6px;
         }
 
-        .role-dropdown::-webkit-scrollbar-track {
+        .role-dropdown::-webkit-scrollbar-track,
+        .multi-dropdown::-webkit-scrollbar-track {
             background: #1e293b;
         }
 
-        .role-dropdown::-webkit-scrollbar-thumb {
+        .role-dropdown::-webkit-scrollbar-thumb,
+        .multi-dropdown::-webkit-scrollbar-thumb {
             background: #475569;
             border-radius: 3px;
         }
 
-        .role-dropdown::-webkit-scrollbar-thumb:hover {
+        .role-dropdown::-webkit-scrollbar-thumb:hover,
+        .multi-dropdown::-webkit-scrollbar-thumb:hover {
             background: #64748b;
         }
     </style>
@@ -555,6 +751,107 @@
                 if (roleSelectorContainer && !roleSelectorContainer.contains(event.target)) {
                     document.getElementById('roleDropdown').classList.add('hidden');
                     document.getElementById('roleSearchInput').classList.add('hidden');
+                }
+            }
+        });
+
+        // Skills Multi-Select Functions
+        function toggleSkillsDropdown() {
+            const dropdown = document.getElementById('skillsDropdown');
+            const searchInput = document.getElementById('skillsSearchInput');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                searchInput.classList.remove('hidden');
+                // Focus on search input
+                setTimeout(() => {
+                    searchInput.querySelector('input').focus();
+                }, 100);
+            } else {
+                dropdown.classList.add('hidden');
+                searchInput.classList.add('hidden');
+            }
+        }
+
+        function toggleSkillAndUpdate(skillId, skillName) {
+            // Update the main input to show selected count
+            updateSkillsMainInput();
+        }
+
+        function updateSkillsMainInput() {
+            const selectedCount = document.querySelectorAll('input[name="selectedSkills"]:checked').length;
+            const mainInput = document.getElementById('skillsMainInput');
+            
+            if (selectedCount > 0) {
+                mainInput.value = `${selectedCount} keahlian dipilih`;
+            } else {
+                mainInput.value = '';
+            }
+        }
+
+        // Interests Multi-Select Functions
+        function toggleInterestsDropdown() {
+            const dropdown = document.getElementById('interestsDropdown');
+            const searchInput = document.getElementById('interestsSearchInput');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                searchInput.classList.remove('hidden');
+                // Focus on search input
+                setTimeout(() => {
+                    searchInput.querySelector('input').focus();
+                }, 100);
+            } else {
+                dropdown.classList.add('hidden');
+                searchInput.classList.add('hidden');
+            }
+        }
+
+        function toggleInterestAndUpdate(interestId, interestName) {
+            // Update the main input to show selected count
+            updateInterestsMainInput();
+        }
+
+        function updateInterestsMainInput() {
+            const selectedCount = document.querySelectorAll('input[name="selectedInterests"]:checked').length;
+            const mainInput = document.getElementById('interestsMainInput');
+            
+            if (selectedCount > 0) {
+                mainInput.value = `${selectedCount} minat dipilih`;
+            } else {
+                mainInput.value = '';
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            // Role selector
+            const roleSelector = document.querySelector('input[placeholder="Select value"]');
+            if (roleSelector) {
+                const roleSelectorContainer = roleSelector.closest('.relative');
+                if (roleSelectorContainer && !roleSelectorContainer.contains(event.target)) {
+                    document.getElementById('roleDropdown').classList.add('hidden');
+                    document.getElementById('roleSearchInput').classList.add('hidden');
+                }
+            }
+
+            // Skills selector
+            const skillsSelector = document.querySelector('input[placeholder="Pilih keahlian Anda..."]');
+            if (skillsSelector) {
+                const skillsSelectorContainer = skillsSelector.closest('.multi-select-container');
+                if (skillsSelectorContainer && !skillsSelectorContainer.contains(event.target)) {
+                    document.getElementById('skillsDropdown').classList.add('hidden');
+                    document.getElementById('skillsSearchInput').classList.add('hidden');
+                }
+            }
+
+            // Interests selector
+            const interestsSelector = document.querySelector('input[placeholder="Pilih minat Anda..."]');
+            if (interestsSelector) {
+                const interestsSelectorContainer = interestsSelector.closest('.multi-select-container');
+                if (interestsSelectorContainer && !interestsSelectorContainer.contains(event.target)) {
+                    document.getElementById('interestsDropdown').classList.add('hidden');
+                    document.getElementById('interestsSearchInput').classList.add('hidden');
                 }
             }
         });

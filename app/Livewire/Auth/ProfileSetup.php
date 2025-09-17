@@ -54,6 +54,10 @@ class ProfileSetup extends Component
     public $roleSearch = '';
     public $peran = [];
 
+    // Search properties
+    public $skillSearch = '';
+    public $interestSearch = '';
+
     protected $messages = [
         'organization.max' => 'Nama organisasi maksimal 255 karakter',
         'phone.max' => 'Nomor telepon maksimal 255 karakter',
@@ -171,8 +175,62 @@ class ProfileSetup extends Component
         }
 
         return $this->peran->filter(function ($role) {
-            return stripos($role->nama, $this->roleSearch) !== false || 
+            return stripos($role->nama, $this->roleSearch) !== false ||
                    stripos($role->deskripsi, $this->roleSearch) !== false;
+        });
+    }
+
+    public function getFilteredSkills()
+    {
+        if (empty($this->skillSearch)) {
+            return Skill::all();
+        }
+
+        return Skill::where('name', 'like', '%' . $this->skillSearch . '%')->get();
+    }
+
+    public function getFilteredInterests()
+    {
+        if (empty($this->interestSearch)) {
+            return Interest::all();
+        }
+
+        return Interest::where('name', 'like', '%' . $this->interestSearch . '%')->get();
+    }
+
+    public function toggleSkill($skillId)
+    {
+        if (in_array($skillId, $this->selectedSkills)) {
+            $this->selectedSkills = array_filter($this->selectedSkills, function($id) use ($skillId) {
+                return $id != $skillId;
+            });
+        } else {
+            $this->selectedSkills[] = $skillId;
+        }
+    }
+
+    public function toggleInterest($interestId)
+    {
+        if (in_array($interestId, $this->selectedInterests)) {
+            $this->selectedInterests = array_filter($this->selectedInterests, function($id) use ($interestId) {
+                return $id != $interestId;
+            });
+        } else {
+            $this->selectedInterests[] = $interestId;
+        }
+    }
+
+    public function removeSkill($skillId)
+    {
+        $this->selectedSkills = array_filter($this->selectedSkills, function($id) use ($skillId) {
+            return $id != $skillId;
+        });
+    }
+
+    public function removeInterest($interestId)
+    {
+        $this->selectedInterests = array_filter($this->selectedInterests, function($id) use ($interestId) {
+            return $id != $interestId;
         });
     }
 
