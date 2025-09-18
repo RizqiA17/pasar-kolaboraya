@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'ecosystem.builder.only' => \App\Http\Middleware\EcosystemBuilderOnly::class,
             'read.only.access' => \App\Http\Middleware\ReadOnlyAccess::class,
             'check.active.pasar.kolaboraya' => \App\Http\Middleware\CheckActivePasarKolaboraya::class,
+            'check.user.approval' => \App\Http\Middleware\CheckUserApproval::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes
@@ -30,6 +31,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RefreshCsrfToken::class,
             \App\Http\Middleware\SessionRefresh::class,
             \App\Http\Middleware\CsrfTokenManager::class,
+        ]);
+        
+        // Apply user approval check to authenticated routes
+        $middleware->web(prepend: [
+            \App\Http\Middleware\CheckUserApproval::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

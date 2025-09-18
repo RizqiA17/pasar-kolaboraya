@@ -13,28 +13,30 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        $route = 'profile.setup';
-        if ($request->user()->created_at != $request->user()->updated_at) {
-            $route = 'dashboard';
-        }
-        // dd([
-        //     '$route' => $route,
-        //     'kondisi' =>$request->user()->created_at != $request->user()->updated_at,
-        //     'created_at' => $request->user()->created_at,
-        //     'updated_at' => $request->user()->updated_at,
-        // ]);
-
         if ($request->user()->hasVerifiedEmail()) {
-            return $this->redirect($route);
+            // If already verified, check approval status
+            if ($request->user()->isPendingApproval()) {
+                return redirect()->route('auth.pending-approval');
+            } elseif ($request->user()->isRejected()) {
+                return redirect()->route('auth.rejected');
+            } elseif ($request->user()->isApproved()) {
+                return redirect()->route('dashboard');
+            }
         }
 
         $request->fulfill();
 
-        return $this->redirect($route);
+        // After email verification, check approval status
+        if ($request->user()->isPendingApproval()) {
+            return redirect()->route('auth.pending-approval');
+        } elseif ($request->user()->isRejected()) {
+            return redirect()->route('auth.rejected');
+        } elseif ($request->user()->isApproved()) {
+            return redirect()->route('dashboard');
+        }
+
+        // Default fallback
+        return redirect()->route('auth.pending-approval');
     }
 
-    private function redirect($route)
-    {
-        return redirect()->intended(route($route, absolute: false) . '?verified=1');
-    }
 }

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class User extends Authenticatable // implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
@@ -30,6 +30,13 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email',
         'password',
         'role',
+        'user_type',
+        'registration_key',
+        'approval_status',
+        'assigned_role',
+        'approved_at',
+        'approved_by',
+        'approval_reason',
         'is_ecosystem_builder',
         'ecosystem_builder_status',
         'ecosystem_builder_reason',
@@ -37,6 +44,8 @@ class User extends Authenticatable // implements MustVerifyEmail
         'ecosystem_builder_approved_by',
         'active_pasar_kolaboraya_id',
         'active_container_id',
+        'qr_code',
+        'qr_code_generated_at',
     ];
 
     /**
@@ -59,9 +68,85 @@ class User extends Authenticatable // implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'approved_at' => 'datetime',
             'is_ecosystem_builder' => 'boolean',
             'ecosystem_builder_approved_at' => 'datetime',
+            'qr_code_generated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the admin who approved this user
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Check if user is approved
+     */
+    public function isApproved(): bool
+    {
+        return $this->approval_status === 'approved';
+    }
+
+    /**
+     * Check if user is pending approval
+     */
+    public function isPendingApproval(): bool
+    {
+        return $this->approval_status === 'pending';
+    }
+
+    /**
+     * Check if user is rejected
+     */
+    public function isRejected(): bool
+    {
+        return $this->approval_status === 'rejected';
+    }
+
+    /**
+     * Check if user can access ecosystem and collective actions
+     */
+    public function canAccessEcosystem(): bool
+    {
+        return $this->isApproved() && $this->user_type === 'partisipan';
+    }
+
+    /**
+     * Check if user can only connect (tamu and komunitas)
+     */
+    public function canOnlyConnect(): bool
+    {
+        return $this->isApproved() && in_array($this->user_type, ['tamu', 'komunitas']);
+    }
+
+    /**
+     * Get user type label
+     */
+    public function getUserTypeLabelAttribute(): string
+    {
+        return match($this->user_type) {
+            'partisipan' => 'Partisipan',
+            'tamu' => 'Tamu',
+            'komunitas' => 'Komunitas',
+            default => 'Unknown'
+        };
+    }
+
+    /**
+     * Get approval status label
+     */
+    public function getApprovalStatusLabelAttribute(): string
+    {
+        return match($this->approval_status) {
+            'pending' => 'Menunggu Persetujuan',
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak',
+            default => 'Unknown'
+        };
     }
 
     /**
@@ -874,6 +959,53 @@ public function getConnectionStatus($otherUserId)
     public function clearActiveContainer(): void
     {
         $this->update(['active_container_id' => null]);
+    }
+
+    /**
+     * Generate QR code for user access
+     */
+    public function generateQrCode(): string
+    {
+        $qrCode = 'PK_' . $this->id . '_' . time() . '_' . Str::random(16);
+        
+        $this->update([
+            'qr_code' => $qrCode,
+            'qr_code_generated_at' => now(),
+        ]);
+        
+        return $qrCode;
+    }
+
+    /**
+     * Get QR code data for display
+     */
+    public function getQrCodeData(): array
+    {
+        if (!$this->qr_code) {
+            $this->generateQrCode();
+        }
+        
+        return [
+            'qr_code' => $this->qr_code,
+            'user_id' => $this->id,
+            'user_name' => $this->name,
+            'user_email' => $this->email,
+            'generated_at' => $this->qr_code_generated_at,
+            'expires_at' => $this->qr_code_generated_at ? $this->qr_code_generated_at->addDays(30) : null,
+        ];
+    }
+
+    /**
+     * Check if QR code is valid and not expired
+     */
+    public function isQrCodeValid(): bool
+    {
+        if (!$this->qr_code || !$this->qr_code_generated_at) {
+            return false;
+        }
+        
+        // QR code expires after 30 days
+        return $this->qr_code_generated_at->addDays(30)->isFuture();
     }
 
     /**

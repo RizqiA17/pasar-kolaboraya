@@ -55,6 +55,15 @@ class EcosystemSetup extends Component
 
     public function mount()
     {
+        // Check if user is approved first
+        if (!Auth::user()->isApproved()) {
+            if (Auth::user()->isPendingApproval()) {
+                return redirect()->route('auth.pending-approval');
+            } elseif (Auth::user()->isRejected()) {
+                return redirect()->route('auth.rejected');
+            }
+        }
+
         // Check if user is ecosystem builder
         if (!Auth::user()->is_ecosystem_builder) {
             return redirect()->route('profile.setup');

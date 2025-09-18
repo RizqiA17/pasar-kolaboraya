@@ -14,7 +14,9 @@ test('email verification screen can be rendered', function () {
 });
 
 test('email can be verified', function () {
-    $user = User::factory()->unverified()->create();
+    $user = User::factory()->unverified()->create([
+        'approval_status' => 'pending'
+    ]);
 
     Event::fake();
 
@@ -29,7 +31,7 @@ test('email can be verified', function () {
     Event::assertDispatched(Verified::class);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('auth.pending-approval', absolute: false));
 });
 
 test('email is not verified with invalid hash', function () {

@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Livewire\Auth\ConfirmPassword;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\PendingApproval;
+use App\Livewire\Auth\Rejected;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
@@ -29,6 +31,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('ecosystem-setup', \App\Livewire\Auth\EcosystemSetup::class)->name('ecosystem.setup');
     Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)->name('profile.setup');
+    
+    // New approval system routes
+    Route::get('pending-approval', PendingApproval::class)->name('auth.pending-approval');
+    Route::get('rejected', Rejected::class)->name('auth.rejected');
 });
 
 Route::post('logout', App\Livewire\Actions\Logout::class)

@@ -50,7 +50,7 @@ Route::post('/csrf-token-refresh', function () {
     }
     
     return response()->json(['error' => 'Unauthenticated'], 401);
-})->middleware(['auth', 'check.login.status'])->name('csrf.token.refresh');
+})->middleware(['auth', 'check.login.status', VerifiedEmail::class])->name('csrf.token.refresh');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'check.login.status', VerifiedEmail::class])
@@ -117,14 +117,22 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
 
 });
 
-// Pasar Kolaboraya Routes - These should be accessible without active session check
+    // Pasar Kolaboraya Routes - These should be accessible without active session check
 Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
     Route::get('pasar-kolaboraya/select', \App\Livewire\PasarKolaboraya\SessionSelector::class)->name('pasar-kolaboraya.select');
     Route::get('pasar-kolaboraya/join-request', \App\Livewire\PasarKolaboraya\JoinRequest::class)->name('pasar-kolaboraya.join-request');
 });
 
+// QR Code Routes
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
+    Route::get('qr-code', [App\Http\Controllers\QrCodeController::class, 'show'])->name('qr.show');
+    Route::post('qr-code/generate', [App\Http\Controllers\QrCodeController::class, 'generate'])->name('qr.generate');
+    Route::post('qr-code/validate', [App\Http\Controllers\QrCodeController::class, 'validate'])->name('qr.validate');
+    Route::post('qr-code/grant-access', [App\Http\Controllers\QrCodeController::class, 'grantAccess'])->name('qr.grant-access');
+});
+
 // Admin routes - only accessible by super admin
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status', 'super.admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'super.admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
     
     // Users management
@@ -155,6 +163,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     
     // Ecosystem Builder management
     Route::get('/ecosystem-builders', App\Livewire\Admin\EcosystemBuilderApproval::class)->name('ecosystem-builders');
+    
+    // Registration Keys management
+    Route::get('/registration-keys', App\Livewire\Admin\ManageRegistrationKeys::class)->name('registration-keys');
+    
+    // User Approval management
+    Route::get('/user-approvals', App\Livewire\Admin\UserApprovalManagement::class)->name('user-approvals');
     
     // Master data management
     Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');
@@ -195,6 +209,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/pasar-kolaboraya', \App\Livewire\Admin\PasarKolaborayaManagement::class)->name('pasar-kolaboraya.manage');
     Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
+    
+    // QR Code Scanner for admin
+    Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');
 });
 
 require __DIR__ . '/auth.php';

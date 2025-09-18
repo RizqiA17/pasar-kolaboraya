@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Models\RegistrationKey;
 use App\Models\SystemSetting;
 use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Auth\Events\Registered;
@@ -24,7 +25,7 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
-    public bool $is_ecosystem_builder = false;
+    public string $registration_key = '';
 
     protected $messages = [
         'name.required' => 'Nama wajib diisi',
@@ -39,6 +40,8 @@ class Register extends Component
         'password.required' => 'Kata sandi wajib diisi',
         'password.string' => 'Kata sandi harus berupa teks',
         'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
+        'registration_key.required' => 'Kode registrasi wajib diisi',
+        'registration_key.exists' => 'Kode registrasi tidak valid atau sudah tidak aktif',
     ];
 
     /**
@@ -57,21 +60,35 @@ class Register extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'is_ecosystem_builder' => ['boolean'],
+            'registration_key' => ['required', 'string', 'exists:registration_keys,key'],
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
-        // Set ecosystem builder status to pending if user wants to be ecosystem builder
-        if ($validated['is_ecosystem_builder']) {
-            $validated['ecosystem_builder_status'] = 'pending';
+        // Validate registration key
+        $registrationKey = RegistrationKey::where('key', $validated['registration_key'])->first();
+        
+        if (!$registrationKey || !$registrationKey->canBeUsed()) {
+            throw ValidationException::withMessages([
+                'registration_key' => 'Kode registrasi tidak valid atau sudah tidak aktif.',
+            ]);
         }
 
-        event(new Registered(($user = User::create($validated))));
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['user_type'] = $registrationKey->user_type;
+        $validated['approval_status'] = 'pending';
 
+        // Increment usage count for the registration key
+        $registrationKey->incrementUsage();
+
+        // Create user without triggering Registered event to avoid duplicate emails
+        $user = User::create($validated);
+
+        // Login user temporarily to send verification email
         Auth::login($user);
 
-        Auth::user()->sendEmailVerificationNotification();
+        // Send email verification notification
+        $user->sendEmailVerificationNotification();
+
+        session()->flash('message', 'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi akun. Setelah email diverifikasi, akun Anda akan menunggu persetujuan admin.');
 
         return redirect()->route('verification.notice');
     }

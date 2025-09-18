@@ -7,6 +7,7 @@
         <title>{{ $title }} - {{ config('app.name') }}</title>
     @endif
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @livewireStyles
 </head>
 
 <body
@@ -799,6 +800,7 @@
     {{-- Stack for additional styles and scripts --}}
     @stack('styles')
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>
