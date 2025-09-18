@@ -50,13 +50,13 @@ Route::post('/csrf-token-refresh', function () {
     }
     
     return response()->json(['error' => 'Unauthenticated'], 401);
-})->middleware(['auth', 'check.login.status', VerifiedEmail::class])->name('csrf.token.refresh');
+})->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->name('csrf.token.refresh');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'check.login.status', VerifiedEmail::class])
+    ->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])
     ->name('dashboard');
 
-Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
@@ -118,13 +118,13 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(f
 });
 
     // Pasar Kolaboraya Routes - These should be accessible without active session check
-Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
     Route::get('pasar-kolaboraya/select', \App\Livewire\PasarKolaboraya\SessionSelector::class)->name('pasar-kolaboraya.select');
     Route::get('pasar-kolaboraya/join-request', \App\Livewire\PasarKolaboraya\JoinRequest::class)->name('pasar-kolaboraya.join-request');
 });
 
 // QR Code Routes
-Route::middleware(['auth', 'check.login.status', VerifiedEmail::class])->group(function () {
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
     Route::get('qr-code', [App\Http\Controllers\QrCodeController::class, 'show'])->name('qr.show');
     Route::post('qr-code/generate', [App\Http\Controllers\QrCodeController::class, 'generate'])->name('qr.generate');
     Route::post('qr-code/validate', [App\Http\Controllers\QrCodeController::class, 'validate'])->name('qr.validate');

@@ -3,15 +3,15 @@
     <div class="max-w-2xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">QR Code Saya</h1>
-            <p class="text-gray-600">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">QR Code Saya</h1>
+            <p class="text-gray-600 dark:text-gray-300">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
         </div>
 
         <!-- QR Code Display -->
-        <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
             <!-- QR Code Display -->
             <div class="mb-6">
-                <div class="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
+                <div class="inline-block p-4 bg-white border-2 border-gray-200 dark:border-gray-600 rounded-lg">
                     <!-- Server-side generated QR code -->
                     <div class="w-64 h-64 flex items-center justify-center">
                         {!! $qrCodeSvg !!}
@@ -21,28 +21,28 @@
 
             <!-- User Info -->
             <div class="mb-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $qrCodeData['user_name'] }}</h2>
-                <p class="text-gray-600">{{ $qrCodeData['user_email'] }}</p>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ $qrCodeData['user_name'] }}</h2>
+                <p class="text-gray-600 dark:text-gray-300">{{ $qrCodeData['user_email'] }}</p>
             </div>
 
             <!-- QR Code Info -->
-            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                        <span class="font-medium text-gray-700">QR Code:</span>
-                        <p class="text-gray-600 font-mono text-xs break-all">{{ $qrCodeData['qr_code'] }}</p>
+                        <span class="font-medium text-gray-700 dark:text-gray-300">QR Code:</span>
+                        <p class="text-gray-600 dark:text-gray-400 font-mono text-xs break-all">{{ $qrCodeData['qr_code'] }}</p>
                     </div>
                     <div>
-                        <span class="font-medium text-gray-700">Dibuat:</span>
-                        <p class="text-gray-600">{{ \Carbon\Carbon::parse($qrCodeData['generated_at'])->format('d/m/Y H:i') }}</p>
+                        <span class="font-medium text-gray-700 dark:text-gray-300">Dibuat:</span>
+                        <p class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['generated_at'])->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
-                        <span class="font-medium text-gray-700">Berlaku hingga:</span>
-                        <p class="text-gray-600">{{ \Carbon\Carbon::parse($qrCodeData['expires_at'])->format('d/m/Y H:i') }}</p>
+                        <span class="font-medium text-gray-700 dark:text-gray-300">Berlaku hingga:</span>
+                        <p class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['expires_at'])->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
-                        <span class="font-medium text-gray-700">Status:</span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span class="font-medium text-gray-700 dark:text-gray-300">Status:</span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                             Aktif
                         </span>
                     </div>
@@ -73,9 +73,9 @@
         </div>
 
         <!-- Instructions -->
-        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">Cara Menggunakan QR Code</h3>
-            <ol class="list-decimal list-inside space-y-2 text-blue-800">
+        <div class="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Cara Menggunakan QR Code</h3>
+            <ol class="list-decimal list-inside space-y-2 text-blue-800 dark:text-blue-200">
                 <li>Tunjukkan QR code ini kepada admin Pasar Kolaboraya</li>
                 <li>Admin akan scan QR code menggunakan aplikasi scanner</li>
                 <li>Setelah QR code divalidasi, Anda akan mendapat akses ke Pasar Kolaboraya</li>
@@ -85,16 +85,16 @@
         </div>
 
         <!-- Security Notice -->
-        <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
             <div class="flex">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-yellow-400 dark:text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-sm font-medium text-yellow-800">Peringatan Keamanan</h3>
-                    <div class="mt-2 text-sm text-yellow-700">
+                    <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Peringatan Keamanan</h3>
+                    <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
                         <p>Jangan bagikan QR code ini kepada orang lain. QR code ini adalah kunci akses pribadi Anda ke Pasar Kolaboraya.</p>
                     </div>
                 </div>
@@ -111,8 +111,7 @@ function downloadQR() {
     const qrSvg = @json($qrCodeSvg);
     
     // Create SVG content for download
-    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
-${qrSvg}`;
+    const svgContent = '<' + '?xml version="1.0" encoding="UTF-8"?>\n' + qrSvg;
     
     // Create blob and download
     const blob = new Blob([svgContent], { type: 'image/svg+xml' });
@@ -133,6 +132,31 @@ function printQR() {
     
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>QR Code - Pasar Kolaboraya</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+                .qr-container { margin: 20px 0; }
+                .user-info { margin: 20px 0; }
+                .qr-info { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0; }
+            </style>
+        </head>
+        <body>
+            <h1>QR Code Pasar Kolaboraya</h1>
+            <div class="qr-container">${qrSvg}</div>
+            <div class="user-info">
+                <h2>${qrCodeData.user_name}</h2>
+                <p>${qrCodeData.user_email}</p>
+            </div>
+            <div class="qr-info">
+                <p><strong>QR Code:</strong> ${qrCodeData.qr_code}</p>
+                <p><strong>Dibuat:</strong> ${new Date(qrCodeData.generated_at).toLocaleString('id-ID')}</p>
+                <p><strong>Berlaku hingga:</strong> ${new Date(qrCodeData.expires_at).toLocaleString('id-ID')}</p>
+            </div>
+        </body>
+        </html>
     `);
     
     printWindow.document.close();
