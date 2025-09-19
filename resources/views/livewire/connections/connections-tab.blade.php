@@ -3,9 +3,9 @@
     <div class="grid md:grid-cols-2">
         {{-- Tabs Navigation --}}
         <div class="flex col-span-1 space-x-4 mb-4">
-            <button wire:click="setTab('suggestion')"
-                class="px-4 py-2 font-medium {{ $tab === 'suggestion' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
-                Rekomendasi
+            <button wire:click="setTab('qr-scan')"
+                class="px-4 py-2 font-medium {{ $tab === 'qr-scan' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
+                Scan QR
             </button>
 
             <button wire:click="setTab('list')"
@@ -19,20 +19,11 @@
             </button>
         </div>
 
-        {{-- SearchBar hanya muncul di tab "suggestion" --}}
+        {{-- SearchBar hanya muncul di tab "list" --}}
         <div class="col-span-1 w-full flex justify-end max-md:mb-8">
-            @if ($tab === 'suggestion')
-                <livewire:components.search-bar :placeholder="'Cari Kreator...'" :model="\App\Models\User::class" :fields="['name']"
-                    wire:model="results" searchFocus="suggestion" />
-            @elseif ($tab === 'list')
+            @if ($tab === 'list')
                 <livewire:components.search-bar :placeholder="'Cari Koneksi...'" :model="\App\Models\Connection::class" :fields="['requester.name', 'receiver.name']"
                     wire:model="results" searchFocus="list" />
-
-                {{-- Debug: tampilkan hasil pencarian dari SearchBar --}}
-                {{-- <div class="mt-4">
-            <h3 class="font-bold">Hasil dari Child SearchBar:</h3>
-            <pre>{{ print_r($searchResults, true) }}</pre>
-        </div> --}}
             @endif
         </div>
     </div>
@@ -45,8 +36,8 @@
         </div>
     @endif
 
-    @if ($tab === 'suggestion')
-        <livewire:connections.suggestion />
+    @if ($tab === 'qr-scan')
+        <livewire:connections.qr-scanner />
     @endif
 
     @if ($tab === 'list')

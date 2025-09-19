@@ -7,7 +7,7 @@ use Livewire\Attributes\Layout;
 
 class ConnectionsTab extends Component
 {
-    public $tab = 'suggestion';
+    public $tab = 'qr-scan';
     public $results = [];
     protected $queryString = ['tab'];
     public $searchResults = [];
@@ -23,7 +23,7 @@ class ConnectionsTab extends Component
 
         $titles = [
             'list' => 'Daftar Koneksi',
-            'suggestion' => 'Rekomendasi Koneksi',
+            'qr-scan' => 'Scan QR Koneksi',
             'requests' => 'Permintaan Koneksi',
         ];
 
@@ -34,11 +34,11 @@ class ConnectionsTab extends Component
 
     public function mount()
     {
-        $this->tab = request()->get('tab', 'suggestion');
+        $this->tab = request()->get('tab', 'qr-scan');
     }
 
     public function render()
     {
-        return view('livewire.connections.connections-tab')->layout('components.layouts.app', ['title' => $title ?? 'Rekomendasi Koneksi']);
+        return view('livewire.connections.connections-tab')->layout('components.layouts.app', ['title' => $title ?? 'Scan QR Koneksi']);
     }
 }
