@@ -19,7 +19,10 @@ class QrScanner extends Component
     public $errorMessage = '';
     public $successMessage = '';
 
-    protected $listeners = ['qr-scanned' => 'handleQrScanned'];
+    protected $listeners = [
+        'qr-scanned' => 'handleQrScanned',
+        'check-connection-status' => 'checkConnectionStatus'
+    ];
 
     public function mount()
     {
@@ -129,6 +132,14 @@ class QrScanner extends Component
 
         $this->connectionStatus = 'waiting_for_response';
         $this->successMessage = 'QR berhasil di-scan! Sekarang tunjukkan QR Anda kepada ' . $this->targetUser->name . ' untuk menyelesaikan koneksi.';
+        
+        // Start polling to check when the other party completes the connection
+        // We'll use the QR code as identifier since connection doesn't exist yet
+        $this->dispatch('start-connection-polling', [
+            'qr_code' => $responderQr->qr_code,
+            'target_user_id' => $scannedQr->user_id,
+            'pasar_kolaboraya_id' => $pasarKolaborayaId
+        ]);
     }
 
     private function handleResponderQrScanned($scannedQr)
@@ -151,19 +162,34 @@ class QrScanner extends Component
         $this->connectionStatus = 'connected';
         $this->successMessage = 'Koneksi berhasil! Anda sekarang terhubung dengan ' . $this->targetUser->name;
         
-        // Reset after 3 seconds
+        // Auto-reset after 3 seconds for both parties
         $this->dispatch('connection-completed');
+        
+        // Start polling to check if the other party has also completed the connection
+        $connectionId = $this->getLatestConnectionId($user->id, $scannedQr->user_id, $pasarKolaborayaId);
+        $this->dispatch('start-connection-polling', [
+            'connection_id' => $connectionId
+        ]);
     }
 
     private function createConnection($requesterId, $receiverId, $pasarKolaborayaId)
     {
-        // Check if connection already exists
-        $existingConnection = Connection::where('requester_id', $requesterId)
+        // Check if connection already exists (including soft-deleted ones)
+        $existingConnection = Connection::withTrashed()
+            ->where('requester_id', $requesterId)
             ->where('receiver_id', $receiverId)
             ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
             ->first();
 
-        if (!$existingConnection) {
+        if ($existingConnection) {
+            if ($existingConnection->trashed()) {
+                // Restore the soft-deleted connection and update status
+                $existingConnection->restore();
+                $existingConnection->update(['status' => 'accepted']);
+            }
+            // If connection exists and is not trashed, do nothing
+        } else {
+            // Create new connection
             Connection::create([
                 'requester_id' => $requesterId,
                 'receiver_id' => $receiverId,
@@ -198,5 +224,56 @@ class QrScanner extends Component
     public function refreshQr()
     {
         $this->generateMyQr();
+    }
+
+    private function getLatestConnectionId($requesterId, $receiverId, $pasarKolaborayaId)
+    {
+        $connection = Connection::where('requester_id', $requesterId)
+            ->where('receiver_id', $receiverId)
+            ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
+            ->orWhere(function($query) use ($requesterId, $receiverId, $pasarKolaborayaId) {
+                $query->where('requester_id', $receiverId)
+                      ->where('receiver_id', $requesterId)
+                      ->where('pasar_kolaboraya_id', $pasarKolaborayaId);
+            })
+            ->latest()
+            ->first();
+
+        return $connection ? $connection->id : null;
+    }
+
+    public function checkConnectionStatus($data)
+    {
+        if (is_string($data)) {
+            // Handle old format with just connection ID
+            $connection = Connection::find($data);
+            if ($connection && $connection->status === 'accepted') {
+                $this->resetConnection();
+            }
+            return;
+        }
+
+        if (isset($data['connection_id'])) {
+            // Handle new format with connection ID
+            $connection = Connection::find($data['connection_id']);
+            if ($connection && $connection->status === 'accepted') {
+                $this->resetConnection();
+            }
+        } elseif (isset($data['qr_code'])) {
+            // Handle polling based on QR code (for initiator)
+            $qrCode = $data['qr_code'];
+            $targetUserId = $data['target_user_id'];
+            $pasarKolaborayaId = $data['pasar_kolaboraya_id'];
+            
+            // Check if the responder QR has been used (connection completed)
+            $responderQr = \App\Models\ConnectionQr::where('qr_code', $qrCode)
+                ->where('is_used', true)
+                ->first();
+                
+            if ($responderQr) {
+                // Connection completed, auto-reset
+                $this->resetConnection();
+            }
+        }
     }
 }

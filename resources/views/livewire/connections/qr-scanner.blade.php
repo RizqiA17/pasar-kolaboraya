@@ -52,10 +52,22 @@
                         Tunjukkan QR ini kepada <strong>{{ $targetUser->name ?? 'user' }}</strong> untuk menyelesaikan
                         koneksi
                     </p>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            <span class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
+                            Menunggu konfirmasi dari {{ $targetUser->name ?? 'user' }}...
+                        </p>
+                    </div>
                 @else
                     <p class="text-sm text-green-600 dark:text-green-400 mb-4">
                         Anda berhasil terhubung dengan <strong>{{ $targetUser->name ?? 'user' }}</strong>!
                     </p>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            <span class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
+                            Sistem akan otomatis reset dalam beberapa detik...
+                        </p>
+                    </div>
                 @endif
 
                 <div class="space-y-2">
@@ -64,7 +76,7 @@
                         Buat QR Baru
                     </button>
 
-                    @if ($connectionStatus !== 'idle')
+                    @if ($connectionStatus === 'waiting_for_response')
                         <button wire:click="resetConnection"
                             class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
                             Reset Koneksi
@@ -206,6 +218,27 @@
                 setTimeout(() => {
                     Livewire.dispatch('resetConnection');
                 }, 3000);
+            });
+
+            // Polling mechanism for auto-reset when both parties complete connection
+            let connectionPollingInterval = null;
+
+            Livewire.on('start-connection-polling', (data) => {
+                if (connectionPollingInterval) {
+                    clearInterval(connectionPollingInterval);
+                }
+
+                connectionPollingInterval = setInterval(() => {
+                    Livewire.dispatch('check-connection-status', data);
+                }, 2000); // Check every 2 seconds
+
+                // Stop polling after 30 seconds to avoid infinite polling
+                setTimeout(() => {
+                    if (connectionPollingInterval) {
+                        clearInterval(connectionPollingInterval);
+                        connectionPollingInterval = null;
+                    }
+                }, 30000);
             });
 
             // Auto-refresh QR codes every 50 seconds (before 1-minute expiry)

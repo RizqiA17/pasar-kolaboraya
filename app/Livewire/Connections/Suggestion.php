@@ -21,12 +21,32 @@ class Suggestion extends Component
             return;
         }
 
-        Connection::create([
-            'requester_id' => Auth::id(),
-            'receiver_id' => $userId,
-            'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
-            'status' => 'pending'
-        ]);
+        $user = Auth::user();
+        $pasarKolaborayaId = $user->active_pasar_kolaboraya_id;
+
+        // Check if connection already exists (including soft-deleted ones)
+        $existingConnection = Connection::withTrashed()
+            ->where('requester_id', Auth::id())
+            ->where('receiver_id', $userId)
+            ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
+            ->first();
+
+        if ($existingConnection) {
+            if ($existingConnection->trashed()) {
+                // Restore the soft-deleted connection and update status
+                $existingConnection->restore();
+                $existingConnection->update(['status' => 'pending']);
+            }
+            // If connection exists and is not trashed, do nothing
+        } else {
+            // Create new connection
+            Connection::create([
+                'requester_id' => Auth::id(),
+                'receiver_id' => $userId,
+                'pasar_kolaboraya_id' => $pasarKolaborayaId,
+                'status' => 'pending'
+            ]);
+        }
 
         // Dispatch event untuk update UI tanpa refresh
         $this->dispatch('connection-status-changed', userId: $userId, status: 'pending_sent');
