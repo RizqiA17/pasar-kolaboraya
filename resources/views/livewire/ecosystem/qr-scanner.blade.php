@@ -169,11 +169,6 @@
             stopCamera();
         });
 
-        Livewire.on('redirect-to-join', (data) => {
-            setTimeout(() => {
-                window.location.href = `/ecosystem/${data.ecosystemId}/join`;
-            }, 1500);
-        });
 
         async function startCamera() {
             try {

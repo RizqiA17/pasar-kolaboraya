@@ -100,8 +100,19 @@ class QrScanner extends Component
             $this->ecosystem = $ecosystem;
             $this->successMessage = 'QR code berhasil di-scan! Mengarahkan ke form bergabung...';
             
-            // Redirect to join form after a short delay
-            $this->dispatch('redirect-to-join', ['ecosystemId' => $ecosystem->id]);
+            // Log for debugging
+            Log::info('QR Code redirect triggered', [
+                'ecosystem_id' => $ecosystem->id,
+                'user_id' => Auth::id(),
+            ]);
+            
+            // Use JavaScript to redirect after showing success message
+            $this->js('
+                setTimeout(() => {
+                    console.log("Redirecting to ecosystem join page...");
+                    window.location.href = "/ecosystem/' . $ecosystem->id . '/join";
+                }, 2000);
+            ');
 
         } catch (\Exception $e) {
             Log::error('QR Code Scan Error', [
@@ -119,13 +130,13 @@ class QrScanner extends Component
      */
     private function extractEcosystemIdFromQr($qrCode)
     {
-        // Expected format: /ecosystem/qr/join/{id}
-        if (preg_match('/\/ecosystem\/qr\/join\/(\d+)/', $qrCode, $matches)) {
+        // Expected format: /ecosystem/{id}/join
+        if (preg_match('/\/ecosystem\/(\d+)\/join/', $qrCode, $matches)) {
             return $matches[1];
         }
         
         // Also handle full URLs
-        if (preg_match('/ecosystem\/qr\/join\/(\d+)/', $qrCode, $matches)) {
+        if (preg_match('/ecosystem\/(\d+)\/join/', $qrCode, $matches)) {
             return $matches[1];
         }
         

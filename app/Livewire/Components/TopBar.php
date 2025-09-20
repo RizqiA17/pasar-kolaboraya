@@ -16,7 +16,7 @@ class TopBar extends Component
 
     public function getNotificationsProperty()
     {
-        return auth()->user()
+        return Auth::user()
             ->notifications()
             ->latest()
             ->take(5)
@@ -25,18 +25,18 @@ class TopBar extends Component
 
     public function getUnreadNotificationsProperty()
     {
-        return auth()->user()->unreadNotifications()->count();
+        return Auth::user()->notifications()->where('is_read', false)->count();
     }
 
     public function markAllAsRead()
     {
-        auth()->user()->unreadNotifications->markAsRead();
+        Auth::user()->notifications()->where('is_read', false)->update(['is_read' => true, 'read_at' => now()]);
         $this->dispatch('notifications-read');
     }
 
     public function markAsRead($notificationId)
     {
-        $notification = DatabaseNotification::find($notificationId);
+        $notification = Auth::user()->notifications()->find($notificationId);
         if ($notification) {
             $notification->markAsRead();
             $this->dispatch('notification-read', $notificationId);

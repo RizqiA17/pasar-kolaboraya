@@ -217,22 +217,83 @@
             <x-dark-mode-toggle class="relative z-10" />
 
             <!-- Modern Notification System -->
-            <x-flux::dropdown align="right" width="128" class="relative z-10"
-                x-on:show="Livewire.dispatch('dropdown-shown')" x-on:hide="Livewire.dispatch('dropdown-hidden')">
+            <x-flux::dropdown align="right" width="128" class="relative z-10" x-data="notificationDropdown()" @open="refreshNotifications()">
                 <flux:button icon="bell"
                     class="group relative m-auto text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 dark:border-slate-700/50">
                 </flux:button>
-                {{-- <div
+                <div x-show="unreadCount > 0"
                     class="absolute top-0 right-0 w-3 h-3 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full animate-pulse">
-                </div> --}}
+                </div>
                 <flux:menu
                     class="mt-2 -translate-x-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
                     <div class="p-4 lg:w-128 w-full">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Notifikasi</h3>
+                            <div class="flex items-center space-x-2">
+                                <button @click="refreshNotifications()" 
+                                        class="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                                        title="Refresh notifikasi">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </button>
+                                <span x-show="unreadCount > 0" 
+                                      class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
+                                    <span x-text="unreadCount"></span> baru
+                                </span>
+                                <a href="{{ route('notifications.index') }}" 
+                                   class="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+                                    Lihat semua
+                                </a>
+                            </div>
                         </div>
-                        {{-- Panggil komponen Livewire di dalam dropdown --}}
-                        <livewire:connections.requested-connection wire:key="requested-connection" />
+                        
+                        <!-- Loading state -->
+                        <div x-show="loading" class="text-center py-4">
+                            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Memuat notifikasi...</p>
+                        </div>
+                        
+                        <!-- Notifications list -->
+                        <div x-show="!loading" class="space-y-3 max-h-96 overflow-y-auto">
+                            <template x-for="notification in notifications" :key="notification.id">
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                     :class="{ 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500': !notification.is_read }">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-2">
+                                                <div x-show="!notification.is_read" class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="notification.title || 'Notifikasi'"></h4>
+                                            </div>
+                                            <p class="mt-1 text-xs text-gray-600 dark:text-gray-400" x-text="notification.message"></p>
+                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-500" x-text="notification.time_ago"></p>
+                                        </div>
+                                        <div class="flex items-center space-x-1 ml-2">
+                                            <button x-show="notification.redirect_url" 
+                                                    @click="viewNotification(notification.id)"
+                                                    class="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
+                                                Lihat
+                                            </button>
+                                            <button x-show="!notification.is_read" 
+                                                    @click="markAsRead(notification.id)"
+                                                    class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                                                ✓
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            
+                            <!-- Empty state -->
+                            <div x-show="notifications.length === 0" class="text-center py-8">
+                                <div class="w-12 h-12 mx-auto text-gray-400 mb-2">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 0 0-15 0v5h5l-5 5-5-5h5v-5a7.5 7.5 0 0 1 15 0v5z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</p>
+                            </div>
+                        </div>
                     </div>
                 </flux:menu>
             </x-flux::dropdown>
@@ -796,6 +857,143 @@
 
     {{-- Chart.js for dashboard visualizations --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {{-- Pusher for real-time notifications --}}
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
+    {{-- Notification System JavaScript --}}
+    <script>
+        function notificationDropdown() {
+            return {
+                notifications: [],
+                unreadCount: 0,
+                loading: true,
+                
+                init() {
+                    this.loadNotifications();
+                    this.setupPusher();
+                    
+                    // Refresh notifications every 5 seconds for real-time updates
+                    setInterval(() => {
+                        this.loadNotifications();
+                    }, 5000);
+                    
+                    // Also refresh when page becomes visible (user switches tabs)
+                    document.addEventListener('visibilitychange', () => {
+                        if (!document.hidden) {
+                            this.refreshNotifications();
+                        }
+                    });
+                },
+                
+                async loadNotifications() {
+                    try {
+                        const response = await fetch('/notifications/recent');
+                        const data = await response.json();
+                        this.notifications = data.notifications || [];
+                        this.updateUnreadCount();
+                        this.loading = false;
+                    } catch (error) {
+                        console.error('Error loading notifications:', error);
+                        this.loading = false;
+                    }
+                },
+                
+                // Method to manually refresh notifications
+                refreshNotifications() {
+                    this.loading = true;
+                    this.loadNotifications();
+                },
+                
+                async loadUnreadCount() {
+                    try {
+                        const response = await fetch('/notifications/unread-count');
+                        const data = await response.json();
+                        this.unreadCount = data.unread_count || 0;
+                    } catch (error) {
+                        console.error('Error loading unread count:', error);
+                    }
+                },
+                
+                updateUnreadCount() {
+                    this.unreadCount = this.notifications.filter(n => !n.is_read).length;
+                },
+                
+                async markAsRead(notificationId) {
+                    try {
+                        const response = await fetch(`/notifications/${notificationId}/mark-read`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        
+                        if (response.ok) {
+                            // Update local state
+                            const notification = this.notifications.find(n => n.id === notificationId);
+                            if (notification) {
+                                notification.is_read = true;
+                                this.updateUnreadCount();
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error marking notification as read:', error);
+                    }
+                },
+                
+                viewNotification(notificationId) {
+                    window.location.href = `/notifications/${notificationId}`;
+                },
+                
+                setupPusher() {
+                    // Try to setup Pusher for real-time updates
+                    try {
+                        if (typeof Pusher !== 'undefined' && '{{ config("broadcasting.default") }}' === 'pusher') {
+                            const pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
+                                cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
+                                encrypted: true
+                            });
+                            
+                            const channel = pusher.subscribe('notifications.{{ auth()->id() }}');
+                            
+                            channel.bind('notification.created', (data) => {
+                                this.notifications.unshift(data.notification);
+                                this.updateUnreadCount();
+                                
+                                // Show browser notification if permission is granted
+                                if (Notification.permission === 'granted') {
+                                    new Notification(data.notification.title || 'Notifikasi Baru', {
+                                        body: data.notification.message,
+                                        icon: '/favicon.ico'
+                                    });
+                                }
+                            });
+                            
+                            channel.bind('notification.updated', (data) => {
+                                const index = this.notifications.findIndex(n => n.id === data.notification.id);
+                                if (index !== -1) {
+                                    this.notifications[index] = data.notification;
+                                    this.updateUnreadCount();
+                                }
+                            });
+                            
+                            console.log('Pusher connected for real-time notifications');
+                        } else {
+                            console.log('Pusher not available, using polling fallback');
+                        }
+                    } catch (error) {
+                        console.log('Pusher setup failed, using polling fallback:', error);
+                    }
+                }
+            }
+        }
+        
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    </script>
 
     {{-- Stack for additional styles and scripts --}}
     @stack('styles')

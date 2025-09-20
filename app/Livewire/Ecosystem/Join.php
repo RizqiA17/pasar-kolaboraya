@@ -3,6 +3,7 @@
 namespace App\Livewire\Ecosystem;
 
 use App\Models\Ecosystem;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -53,6 +54,15 @@ class Join extends Component
             'join_reason' => $this->join_reason,
         ]);
 
+        // Send notification to ecosystem owner
+        $notificationService = app(NotificationService::class);
+        $notificationService->createEcosystemJoinRequestNotification(
+            $this->ecosystem->creator,
+            $this->ecosystem,
+            Auth::user(),
+            $this->join_reason
+        );
+
         session()->flash('message', 'Permintaan bergabung berhasil dikirim! Menunggu persetujuan dari pemilik ekosistem.');
 
         return redirect()->route('ecosystem.browse');
@@ -63,3 +73,5 @@ class Join extends Component
         return view('livewire.ecosystem.join');
     }
 }
+
+

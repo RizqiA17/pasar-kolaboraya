@@ -365,7 +365,7 @@ class Ecosystem extends Model
      */
     public function getQrJoinUrl(): string
     {
-        return route('ecosystem.qr.join', $this->id);
+        return route('ecosystem.join', $this);
     }
 
     /**

@@ -26,8 +26,10 @@ class CollaborationNotifications extends Component
     {
         $this->notifications = Auth::user()
             ->notifications()
-            ->where('type', 'App\\Notifications\\CollaborationInvitation')
-            ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate')
+            ->where(function($query) {
+                $query->where('type', 'App\\Notifications\\CollaborationInvitation')
+                      ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate');
+            })
             ->latest()
             ->take(5)
             ->get();
@@ -35,7 +37,7 @@ class CollaborationNotifications extends Component
 
     public function markAsRead($notificationId)
     {
-        $notification = DatabaseNotification::find($notificationId);
+        $notification = Auth::user()->notifications()->find($notificationId);
         if ($notification) {
             $notification->markAsRead();
             $this->loadNotifications();
@@ -45,10 +47,13 @@ class CollaborationNotifications extends Component
 
     public function markAllAsRead()
     {
-        Auth::user()->unreadNotifications()
-            ->where('type', 'App\\Notifications\\CollaborationInvitation')
-            ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate')
-            ->markAsRead();
+        Auth::user()->notifications()
+            ->where('is_read', false)
+            ->where(function($query) {
+                $query->where('type', 'App\\Notifications\\CollaborationInvitation')
+                      ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate');
+            })
+            ->update(['is_read' => true, 'read_at' => now()]);
         
         $this->loadNotifications();
         $this->dispatch('notifications-read');
@@ -67,9 +72,12 @@ class CollaborationNotifications extends Component
 
     public function getUnreadCountProperty()
     {
-        return Auth::user()->unreadNotifications()
-            ->where('type', 'App\\Notifications\\CollaborationInvitation')
-            ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate')
+        return Auth::user()->notifications()
+            ->where('is_read', false)
+            ->where(function($query) {
+                $query->where('type', 'App\\Notifications\\CollaborationInvitation')
+                      ->orWhere('type', 'App\\Notifications\\CollaborationStatusUpdate');
+            })
             ->count();
     }
 

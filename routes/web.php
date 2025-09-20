@@ -26,11 +26,11 @@ if (app()->environment('local', 'development')) {
     Route::get('/test/404', function () {
         abort(404, 'Test 404 page');
     })->name('test.404');
-    
+
     Route::get('/test/500', function () {
         abort(500, 'Test 500 page');
     })->name('test.500');
-    
+
     Route::get('/test/csrf', function () {
         abort(419, 'Test CSRF token mismatch');
     })->name('test.csrf');
@@ -42,13 +42,13 @@ Route::post('/csrf-token-refresh', function () {
         // Regenerate CSRF token
         session()->regenerateToken();
         session()->put('_token_created_at', time());
-        
+
         return response()->json([
             'token' => csrf_token(),
             'timestamp' => time()
         ]);
     }
-    
+
     return response()->json(['error' => 'Unauthenticated'], 401);
 })->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->name('csrf.token.refresh');
 
@@ -90,8 +90,22 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 
     // Survey Routes - protected by active session
     // Route::middleware('check.active.pasar.kolaboraya')->group(function () {
-        Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
+    Route::get('survey/participate', \App\Livewire\Survey\Participate::class)->name('survey.participate');
     // });
+
+    // Notification Routes - Specific routes must come before parameterized routes
+    Route::get('notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/recent', [App\Http\Controllers\NotificationController::class, 'getRecent'])->name('notifications.recent');
+    Route::get('notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::post('notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::delete('notifications/read/all', [App\Http\Controllers\NotificationController::class, 'destroyAllRead'])->name('notifications.destroy-all-read');
+    Route::get('notifications/test', [App\Http\Controllers\NotificationController::class, 'test'])->name('notifications.test');
+
+    // Parameterized routes must come after specific routes
+    Route::get('notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
+    Route::post('notifications/{notification}/mark-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::delete('notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->name('notifications.destroy');
+
 
     // Ecosystem Routes (Protected by ecosystems feature check and active session)
     Route::middleware(['check.feature.access:ecosystems', 'check.active.pasar.kolaboraya'])->group(function () {
@@ -101,16 +115,20 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
         Route::get('ecosystem/{ecosystem}/settings', \App\Livewire\Ecosystem\Settings::class)->name('ecosystem.settings');
         Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
-        
+
         // Ecosystem QR Code routes
         Route::get('ecosystem/{ecosystem}/qr', [App\Http\Controllers\EcosystemQrController::class, 'showQr'])->name('ecosystem.qr.show');
         Route::get('ecosystem/{ecosystem}/qr/generate', [App\Http\Controllers\EcosystemQrController::class, 'generateQr'])->name('ecosystem.qr.generate');
         Route::get('ecosystem/{ecosystem}/qr/data', [App\Http\Controllers\EcosystemQrController::class, 'getQrData'])->name('ecosystem.qr.data');
     });
-    
-    // Public ecosystem QR join route (accessible without active session)
-    Route::get('ecosystem/qr/join/{ecosystem}', [App\Http\Controllers\EcosystemQrController::class, 'handleQrJoin'])->name('ecosystem.qr.join');
-    
+
+    // Public collective action QR join route (accessible without active session)
+    Route::get('collective-actions/qr/join/{collectiveAction}', [App\Http\Controllers\CollectiveActionQrController::class, 'handleQrJoin'])->name('collective-action.qr.join');
+
+    // Collective Action QR Scanner route
+    Route::get('collective-actions/qr-scanner', [App\Http\Controllers\CollectiveActionQrController::class, 'showScanner'])->name('collective-action.qr.scanner');
+    Route::post('collective-actions/qr/process-scan', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
+
     // Ecosystem QR Scanner route
     Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner');
 
@@ -124,23 +142,17 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\MemberManagement::class)->name('collective-action.members');
         Route::get('collective-actions/{collectiveAction}/approvals', \App\Livewire\CollectiveAction\UserApprovals::class)->name('collective-action.user-approvals');
         Route::get('collective-actions/invitations/{invitation}/respond', \App\Livewire\CollectiveAction\RespondInvitation::class)->name('collective-action.respond-invitation')->middleware('ecosystem.builder.only');
-        
+
         // Collective Action QR Code routes
         Route::get('collective-actions/{collectiveAction}/qr', [App\Http\Controllers\CollectiveActionQrController::class, 'showQr'])->name('collective-action.qr.show');
         Route::get('collective-actions/{collectiveAction}/qr/generate', [App\Http\Controllers\CollectiveActionQrController::class, 'generateQr'])->name('collective-action.qr.generate');
         Route::get('collective-actions/{collectiveAction}/qr/data', [App\Http\Controllers\CollectiveActionQrController::class, 'getQrData'])->name('collective-action.qr.data');
     });
-    
-    // Public collective action QR join route (accessible without active session)
-    Route::get('collective-actions/qr/join/{collectiveAction}', [App\Http\Controllers\CollectiveActionQrController::class, 'handleQrJoin'])->name('collective-action.qr.join');
-    
-    // Collective Action QR Scanner route
-    Route::get('collective-actions/qr-scanner', [App\Http\Controllers\CollectiveActionQrController::class, 'showScanner'])->name('collective-action.qr.scanner');
-    Route::post('collective-actions/qr/process-scan', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
+
 
 });
 
-    // Pasar Kolaboraya Routes - These should be accessible without active session check
+// Pasar Kolaboraya Routes - These should be accessible without active session check
 Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
     Route::get('pasar-kolaboraya/select', \App\Livewire\PasarKolaboraya\SessionSelector::class)->name('pasar-kolaboraya.select');
     Route::get('pasar-kolaboraya/join-request', \App\Livewire\PasarKolaboraya\JoinRequest::class)->name('pasar-kolaboraya.join-request');
@@ -157,83 +169,83 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 // Admin routes - only accessible by super admin
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'super.admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
-    
+
     // Users management
     Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
     Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('users.show');
     Route::get('/users/{user}/edit', [App\Http\Controllers\AdminController::class, 'editUser'])->name('users.edit');
     Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
-    
+
     // Ecosystems management
     Route::get('/ecosystems', [App\Http\Controllers\AdminController::class, 'ecosystems'])->name('ecosystems');
     Route::get('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'showEcosystem'])->name('ecosystems.show');
     Route::delete('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'deleteEcosystem'])->name('ecosystems.delete');
-    
+
     // Collective Actions management
     Route::get('/collective-actions', [App\Http\Controllers\AdminController::class, 'collectiveActions'])->name('collective-actions');
     Route::get('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'showCollectiveAction'])->name('collective-actions.show');
     Route::delete('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'deleteCollectiveAction'])->name('collective-actions.delete');
-    
+
     // Connections management
     Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
     Route::get('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'showConnection'])->name('connections.show');
-    
+
     // Market Analysis
     Route::get('/market-analysis', [App\Http\Controllers\AdminController::class, 'marketAnalysis'])->name('market-analysis');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}', [App\Http\Controllers\AdminController::class, 'showMarketAnalysis'])->name('market-analysis.show');
     Route::delete('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'deleteConnection'])->middleware('check.form.feature.access:connections')->name('connections.delete');
-    
+
     // Ecosystem Builder management
     Route::get('/ecosystem-builders', App\Livewire\Admin\EcosystemBuilderApproval::class)->name('ecosystem-builders');
-    
+
     // Registration Keys management
     Route::get('/registration-keys', App\Livewire\Admin\ManageRegistrationKeys::class)->name('registration-keys');
-    
+
     // User Approval management
     Route::get('/user-approvals', App\Livewire\Admin\UserApprovalManagement::class)->name('user-approvals');
-    
+
     // Master data management
     Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');
     Route::post('/interests', [App\Http\Controllers\AdminController::class, 'createInterest'])->name('interests.create');
     Route::put('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'updateInterest'])->name('interests.update');
     Route::delete('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'deleteInterest'])->name('interests.delete');
-    
+
     Route::get('/skills', [App\Http\Controllers\AdminController::class, 'skills'])->name('skills');
     Route::post('/skills', [App\Http\Controllers\AdminController::class, 'createSkill'])->name('skills.create');
     Route::put('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'updateSkill'])->name('skills.update');
     Route::delete('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'deleteSkill'])->name('skills.delete');
-    
+
     Route::get('/contributions', [App\Http\Controllers\AdminController::class, 'contributions'])->name('contributions');
     Route::post('/contributions', [App\Http\Controllers\AdminController::class, 'createContribution'])->name('contributions.create');
     Route::put('/contributions/{contribution}', [App\Http\Controllers\AdminController::class, 'updateContribution'])->name('contributions.update');
     Route::delete('/contributions/{contribution}', [App\Http\Controllers\AdminController::class, 'deleteContribution'])->name('contributions.delete');
-    
+
     Route::get('/event-categories', [App\Http\Controllers\AdminController::class, 'eventCategories'])->name('event-categories');
     Route::post('/event-categories', [App\Http\Controllers\AdminController::class, 'createEventCategory'])->name('event-categories.create');
     Route::put('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'updateEventCategory'])->name('event-categories.update');
     Route::delete('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'deleteEventCategory'])->name('event-categories.delete');
-    
+
     // Peran management
     Route::get('/peran', [App\Http\Controllers\AdminController::class, 'peran'])->name('peran');
     Route::post('/peran', [App\Http\Controllers\AdminController::class, 'createPeran'])->name('peran.create');
     Route::put('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'updatePeran'])->name('peran.update');
     Route::delete('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'deletePeran'])->name('peran.delete');
-    
+
     // System settings management
     Route::get('/system-settings', [App\Http\Controllers\AdminController::class, 'systemSettings'])->name('system-settings');
     Route::put('/system-settings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('system-settings.update');
-    
+
     // Survey management routes
     Route::get('/surveys', \App\Livewire\Admin\Surveys\Index::class)->name('surveys');
     Route::get('/surveys/{surveyId}/results', \App\Livewire\Admin\Surveys\Results::class)->name('surveys.results');
-    
+
     // Pasar Kolaboraya management routes
     Route::get('/pasar-kolaboraya', \App\Livewire\Admin\PasarKolaborayaManagement::class)->name('pasar-kolaboraya.manage');
     Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/qr-scanner', \App\Livewire\Admin\PasarKolaborayaQrScanner::class)->name('pasar-kolaboraya.qr-scanner');
-    
+
     // QR Code Scanner for admin
     Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');
 });

@@ -1020,4 +1020,20 @@ public function getConnectionStatus($otherUserId)
         return $this->activeContainer->activeUsers()
             ->where('users.id', '!=', $this->id);
     }
+
+    /**
+     * Get user's notifications
+     */
+    public function notifications()
+    {
+        return $this->morphMany(\App\Models\Notification::class, 'notifiable');
+    }
+
+    /**
+     * Get unread notifications count
+     */
+    public function getUnreadNotificationsCountAttribute(): int
+    {
+        return $this->notifications()->where('is_read', false)->count();
+    }
 }

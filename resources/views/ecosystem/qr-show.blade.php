@@ -110,7 +110,7 @@
 
         function downloadQR() {
             // Find the QR code SVG specifically by ID
-            const qrContainer = document.getElementById('qr-code-container');
+            const qrContainer = document.getElementById('qr-code-containersalin');
             const svg = qrContainer ? qrContainer.querySelector('svg') : null;
             
             if (!svg) {

@@ -31,7 +31,15 @@ class CheckActivePasarKolaboraya
             'settings.profile-settings',
             'pasar-kolaboraya.select',
             'pasar-kolaboraya.join-request',
-            'logout'
+            'logout',
+            'notifications.index',
+            'notifications.show',
+            'notifications.mark-read',
+            'notifications.mark-all-read',
+            'notifications.unread-count',
+            'notifications.recent',
+            'notifications.destroy',
+            'notifications.destroy-all-read'
         ];
 
         if (in_array($request->route()?->getName(), $exemptRoutes)) {
