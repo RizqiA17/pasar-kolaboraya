@@ -131,6 +131,28 @@
                                     <span class="truncate">Koneksi</span>
                                 </a>
 
+                                <a href="{{ route('admin.registration-keys') }}"
+                                    class="group flex items-center px-2 sm:px-3 py-2 sm:py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.registration-keys*') ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
+                                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                        </path>
+                                    </svg>
+                                    <span class="truncate">Kunci Registrasi</span>
+                                </a>
+
+                                <a href="{{ route('admin.user-approvals') }}"
+                                    class="group flex items-center px-2 sm:px-3 py-2 sm:py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.user-approvals*') ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
+                                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                        </path>
+                                    </svg>
+                                    <span class="truncate">Persetujuan User</span>
+                                </a>
+
                             </div>
                         </div>
 
