@@ -101,7 +101,18 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
         Route::get('ecosystem/{ecosystem}/settings', \App\Livewire\Ecosystem\Settings::class)->name('ecosystem.settings');
         Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
+        
+        // Ecosystem QR Code routes
+        Route::get('ecosystem/{ecosystem}/qr', [App\Http\Controllers\EcosystemQrController::class, 'showQr'])->name('ecosystem.qr.show');
+        Route::get('ecosystem/{ecosystem}/qr/generate', [App\Http\Controllers\EcosystemQrController::class, 'generateQr'])->name('ecosystem.qr.generate');
+        Route::get('ecosystem/{ecosystem}/qr/data', [App\Http\Controllers\EcosystemQrController::class, 'getQrData'])->name('ecosystem.qr.data');
     });
+    
+    // Public ecosystem QR join route (accessible without active session)
+    Route::get('ecosystem/qr/join/{ecosystem}', [App\Http\Controllers\EcosystemQrController::class, 'handleQrJoin'])->name('ecosystem.qr.join');
+    
+    // Ecosystem QR Scanner route
+    Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner');
 
     // Collective Action Routes (Protected by collective_actions feature check and active session)
     Route::middleware(['check.feature.access:collective_actions', 'check.active.pasar.kolaboraya'])->group(function () {

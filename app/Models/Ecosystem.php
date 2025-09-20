@@ -361,6 +361,33 @@ class Ecosystem extends Model
     }
 
     /**
+     * Generate QR code URL for ecosystem joining
+     */
+    public function getQrJoinUrl(): string
+    {
+        return route('ecosystem.qr.join', $this->id);
+    }
+
+    /**
+     * Generate QR code SVG for ecosystem joining
+     */
+    public function getQrCodeSvg(int $size = 300): string
+    {
+        $qrUrl = $this->getQrJoinUrl();
+        return \SimpleSoftwareIO\QrCode\Facades\QrCode::size($size)
+            ->format('svg')
+            ->generate($qrUrl);
+    }
+
+    /**
+     * Check if user can generate QR code (only creator)
+     */
+    public function canGenerateQr(User $user): bool
+    {
+        return $user->id === $this->creator_id;
+    }
+
+    /**
      * Calculate connection quality metrics for radar chart
      * Based on ecosystem member connections and interactions
      */
