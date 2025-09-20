@@ -5,6 +5,7 @@ namespace App\Livewire\Ecosystem;
 use App\Models\Ecosystem;
 use App\Models\Interest;
 use App\Models\Skill;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -39,8 +40,15 @@ class Browse extends Component
         // Get unique regions from existing ecosystems
         // Filter by user's active session
         $user = Auth::user();
-        $this->regions = Ecosystem::where('is_active', true)
-            ->forUserActiveSession($user) // Filter by user's active session
+        $regionsQuery = Ecosystem::where('is_active', true)
+            ->forUserActiveSession($user); // Filter by user's active session
+        
+        // Role-based filtering: Ecosystem builders only see regions from their own ecosystems
+        if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
+            $regionsQuery->where('creator_id', $user->id);
+        }
+        
+        $this->regions = $regionsQuery
             ->distinct()
             ->pluck('work_region')
             ->filter()
@@ -84,6 +92,12 @@ class Browse extends Component
         $query = Ecosystem::with(['creator', 'acceptedUsers'])
             ->where('is_active', true)
             ->forUserActiveSession($user); // Filter by user's active session
+
+        // Role-based filtering: Ecosystem builders only see their own ecosystems
+        if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
+            $query->where('creator_id', $user->id);
+        }
+        // User biasa dan super admin melihat semua ekosistem (tidak ada filter tambahan)
 
         // Search filter
         if ($this->search) {
