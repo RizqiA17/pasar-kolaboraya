@@ -122,12 +122,9 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/qr/data', [App\Http\Controllers\EcosystemQrController::class, 'getQrData'])->name('ecosystem.qr.data');
     });
 
-    // Public collective action QR join route (accessible without active session)
-    Route::get('collective-actions/qr/join/{collectiveAction}', [App\Http\Controllers\CollectiveActionQrController::class, 'handleQrJoin'])->name('collective-action.qr.join');
 
     // Collective Action QR Scanner route
-    Route::get('collective-actions/qr-scanner', [App\Http\Controllers\CollectiveActionQrController::class, 'showScanner'])->name('collective-action.qr.scanner');
-    Route::post('collective-actions/qr/process-scan', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
+    Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner');
 
     // Ecosystem QR Scanner route
     Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner');

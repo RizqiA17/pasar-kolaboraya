@@ -38,6 +38,12 @@ class Join extends Component
     {
         $this->collectiveAction = $collectiveAction;
 
+        // Check if user is logged in
+        if (!Auth::check()) {
+            session()->flash('error', 'Anda harus login terlebih dahulu untuk bergabung dengan aksi kolektif.');
+            return redirect()->route('login');
+        }
+
         // Check if user can join
         if (!$collectiveAction->canUserJoin(Auth::user())) {
             session()->flash('error', 'Anda tidak dapat bergabung dengan aksi kolektif ini.');
