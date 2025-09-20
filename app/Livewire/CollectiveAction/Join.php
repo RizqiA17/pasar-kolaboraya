@@ -42,13 +42,23 @@ class Join extends Component
         // Check if user is logged in
         if (!Auth::check()) {
             session()->flash('error', 'Anda harus login terlebih dahulu untuk bergabung dengan aksi kolektif.');
-            return redirect()->route('login');
+            $this->js('
+                setTimeout(() => {
+                    window.location.href = "' . route('login') . '";
+                }, 1000);
+            ');
+            return;
         }
 
         // Check if user can join
         if (!$collectiveAction->canUserJoin(Auth::user())) {
             session()->flash('error', 'Anda tidak dapat bergabung dengan aksi kolektif ini.');
-            return redirect()->route('collective-action.show', $collectiveAction);
+            $this->js('
+                setTimeout(() => {
+                    window.location.href = "' . route('collective-action.show', $collectiveAction) . '";
+                }, 1000);
+            ');
+            return;
         }
     }
 
@@ -59,7 +69,12 @@ class Join extends Component
         // Double-check user can still join
         if (!$this->collectiveAction->canUserJoin(Auth::user())) {
             session()->flash('error', 'Anda tidak dapat bergabung dengan aksi kolektif ini.');
-            return redirect()->route('collective-action.show', $this->collectiveAction);
+            $this->js('
+                setTimeout(() => {
+                    window.location.href = "' . route('collective-action.show', $this->collectiveAction) . '";
+                }, 1000);
+            ');
+            return;
         }
 
         // Check if user is part of any participating ecosystem
@@ -96,7 +111,13 @@ class Join extends Component
             session()->flash('message', 'Permintaan bergabung berhasil dikirim! Permintaan Anda akan ditinjau oleh admin aksi kolektif.');
         }
 
-        return redirect()->route('collective-action.show', $this->collectiveAction);
+        // Set success message and redirect using JavaScript to avoid multi HTML issue
+        session()->flash('success', 'Berhasil bergabung dengan aksi kolektif!');
+        $this->js('
+            setTimeout(() => {
+                window.location.href = "' . route('collective-action.show', $this->collectiveAction) . '";
+            }, 1000);
+        ');
     }
 
     public function render()

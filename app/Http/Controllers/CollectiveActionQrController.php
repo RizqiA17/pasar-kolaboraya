@@ -54,6 +54,80 @@ class CollectiveActionQrController extends Controller
 
 
     /**
+     * Process scanned QR code and redirect to join form
+     */
+    public function processScan(Request $request)
+    {
+        $request->validate([
+            'qr_data' => 'required|string'
+        ]);
+
+        $qrData = $request->input('qr_data');
+        
+        // Extract collective action ID from QR code URL
+        $collectiveActionId = $this->extractCollectiveActionIdFromQr($qrData);
+        
+        if (!$collectiveActionId) {
+            return redirect()->route('collective-action.qr.scanner')
+                ->with('error', 'QR code tidak valid. Pastikan QR code adalah untuk bergabung aksi kolektif.');
+        }
+
+        // Find collective action
+        $collectiveAction = CollectiveAction::find($collectiveActionId);
+        
+        if (!$collectiveAction) {
+            return redirect()->route('collective-action.qr.scanner')
+                ->with('error', 'Aksi kolektif tidak ditemukan.');
+        }
+
+        // Check if collective action is active
+        if ($collectiveAction->status !== 'active') {
+            return redirect()->route('collective-action.qr.scanner')
+                ->with('error', 'Aksi kolektif tidak aktif.');
+        }
+
+        // Check if user is already a member
+        if (Auth::check()) {
+            $existingMember = $collectiveAction->users()
+                ->where('user_id', Auth::id())
+                ->first();
+            
+            if ($existingMember) {
+                if ($existingMember->pivot->status === 'active') {
+                    return redirect()->route('collective-action.qr.scanner')
+                        ->with('error', 'Anda sudah menjadi anggota aksi kolektif ini.');
+                }
+                
+                if ($existingMember->pivot->status === 'pending') {
+                    return redirect()->route('collective-action.qr.scanner')
+                        ->with('error', 'Permintaan bergabung Anda sedang menunggu persetujuan.');
+                }
+            }
+        }
+
+        // Redirect to join form
+        return redirect()->route('collective-action.join', $collectiveAction);
+    }
+
+    /**
+     * Extract collective action ID from QR code URL
+     */
+    private function extractCollectiveActionIdFromQr($qrCode)
+    {
+        // Expected format: /collective-actions/{id}/join
+        if (preg_match('/\/collective-actions\/(\d+)\/join/', $qrCode, $matches)) {
+            return $matches[1];
+        }
+        
+        // Also handle full URLs
+        if (preg_match('/collective-actions\/(\d+)\/join/', $qrCode, $matches)) {
+            return $matches[1];
+        }
+        
+        return null;
+    }
+
+    /**
      * Get QR code data for API
      */
     public function getQrData(CollectiveAction $collectiveAction)

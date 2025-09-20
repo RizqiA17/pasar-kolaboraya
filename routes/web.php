@@ -125,6 +125,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 
     // Collective Action QR Scanner route
     Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner');
+    Route::post('collective-actions/qr-scanner/process', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
 
     // Ecosystem QR Scanner route
     Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner');
