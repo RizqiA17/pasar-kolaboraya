@@ -7,15 +7,27 @@
                 <p class="text-purple-100">Bergabung dengan gerakan kolaboratif untuk perubahan sosial yang lebih besar
                 </p>
             </div>
-            @if (Auth::user()->isEcosystemBuilder())
-                <flux:button href="{{ route('collective-action.create') }}" variant="primary"
-                    class="bg-white text-purple-600 hover:bg-purple-50">
+            <div class="flex gap-2">
+                <flux:button 
+                    href="{{ route('collective-action.qr.scanner') }}"
+                    variant="outline"
+                    class="bg-white/20 text-white border-white/30 hover:bg-white/30"
+                >
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
                     </svg>
-                    Buat Aksi Kolektif
+                    Scan QR Code
                 </flux:button>
-            @endif
+                @if (Auth::user()->isEcosystemBuilder())
+                    <flux:button href="{{ route('collective-action.create') }}" variant="primary"
+                        class="bg-white text-purple-600 hover:bg-purple-50">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Buat Aksi Kolektif
+                    </flux:button>
+                @endif
+            </div>
         </div>
     </div>
 

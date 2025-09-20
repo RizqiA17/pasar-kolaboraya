@@ -124,7 +124,19 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\MemberManagement::class)->name('collective-action.members');
         Route::get('collective-actions/{collectiveAction}/approvals', \App\Livewire\CollectiveAction\UserApprovals::class)->name('collective-action.user-approvals');
         Route::get('collective-actions/invitations/{invitation}/respond', \App\Livewire\CollectiveAction\RespondInvitation::class)->name('collective-action.respond-invitation')->middleware('ecosystem.builder.only');
+        
+        // Collective Action QR Code routes
+        Route::get('collective-actions/{collectiveAction}/qr', [App\Http\Controllers\CollectiveActionQrController::class, 'showQr'])->name('collective-action.qr.show');
+        Route::get('collective-actions/{collectiveAction}/qr/generate', [App\Http\Controllers\CollectiveActionQrController::class, 'generateQr'])->name('collective-action.qr.generate');
+        Route::get('collective-actions/{collectiveAction}/qr/data', [App\Http\Controllers\CollectiveActionQrController::class, 'getQrData'])->name('collective-action.qr.data');
     });
+    
+    // Public collective action QR join route (accessible without active session)
+    Route::get('collective-actions/qr/join/{collectiveAction}', [App\Http\Controllers\CollectiveActionQrController::class, 'handleQrJoin'])->name('collective-action.qr.join');
+    
+    // Collective Action QR Scanner route
+    Route::get('collective-actions/qr-scanner', [App\Http\Controllers\CollectiveActionQrController::class, 'showScanner'])->name('collective-action.qr.scanner');
+    Route::post('collective-actions/qr/process-scan', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
 
 });
 
