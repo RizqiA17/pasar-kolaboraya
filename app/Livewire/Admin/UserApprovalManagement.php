@@ -55,7 +55,7 @@ class UserApprovalManagement extends Component
 
     public function approveUser($userId)
     {
-        $user = User::findOrFail($userId);
+        $user = User::withTrashed()->findOrFail($userId);
         
         if ($user->approval_status !== 'pending') {
             session()->flash('error', 'User tidak dalam status pending.');
@@ -101,14 +101,20 @@ class UserApprovalManagement extends Component
 
     public function rejectUser($userId)
     {
-        $user = User::findOrFail($userId);
+        $user = User::withTrashed()->findOrFail($userId);
         
         if ($user->approval_status !== 'pending') {
             session()->flash('error', 'User tidak dalam status pending.');
             return;
         }
 
-        // Send rejection notification before deleting
+        // Update status to rejected first
+        $user->update([
+            'approval_status' => 'rejected',
+            'approval_reason' => $this->approvalReason ?: 'Ditolak oleh admin',
+        ]);
+
+        // Send rejection notification
         $user->notify(new UserRejectionNotification($user, $this->approvalReason));
 
         // Delete the rejected user
@@ -120,7 +126,7 @@ class UserApprovalManagement extends Component
 
     public function openApprovalModal($userId)
     {
-        $this->selectedUser = User::findOrFail($userId);
+        $this->selectedUser = User::withTrashed()->findOrFail($userId);
         $this->isApprovalModalOpen = true;
     }
 
@@ -134,7 +140,8 @@ class UserApprovalManagement extends Component
 
     public function getUsersProperty()
     {
-        $query = User::whereNotNull('user_type')
+        $query = User::withTrashed()
+            ->whereNotNull('user_type')
             ->with('approvedBy');
 
         if ($this->search) {

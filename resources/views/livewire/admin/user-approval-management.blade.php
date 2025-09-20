@@ -104,11 +104,18 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="px-2 py-1 text-xs font-medium rounded-full
-                                    {{ $user->approval_status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
-                                       ($user->approval_status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200') }}">
-                                    {{ $user->approval_status_label }}
-                                </span>
+                                <div class="flex flex-col space-y-1">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full
+                                        {{ $user->approval_status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 
+                                           ($user->approval_status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200') }}">
+                                        {{ $user->approval_status_label }}
+                                    </span>
+                                    @if($user->trashed())
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                                            Dihapus
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4">
                                 @if($user->assigned_role)
@@ -142,7 +149,9 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end space-x-2">
-                                    @if($user->approval_status === 'pending')
+                                    @if($user->trashed())
+                                        <span class="text-gray-400 text-sm">Tidak dapat diakses</span>
+                                    @elseif($user->approval_status === 'pending')
                                         <button wire:click="openApprovalModal({{ $user->id }})" 
                                                 class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium">
                                             Kelola
@@ -187,7 +196,9 @@
                 <div class="inline-block bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full">
                     <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                            @if($selectedUser->approval_status === 'pending')
+                            @if($selectedUser->trashed())
+                                Detail User (Dihapus): {{ $selectedUser->name }}
+                            @elseif($selectedUser->approval_status === 'pending')
                                 Kelola User: {{ $selectedUser->name }}
                             @else
                                 Detail User: {{ $selectedUser->name }}
@@ -237,32 +248,56 @@
                             </div>
 
                             @if($selectedUser->approval_status !== 'pending')
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peran</label>
-                                        <div class="flex items-center space-x-2">
-                                            <p class="text-sm text-gray-900 dark:text-white">
-                                                {{ $selectedUser->assigned_role ?: '-' }}
-                                            </p>
-                                            @if($selectedUser->assigned_role === 'Ekosistem Builder')
-                                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                                    Ekosistem Builder
-                                                </span>
-                                            @endif
+                                @if($selectedUser->approval_status === 'rejected')
+                                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+                                                    User Ditolak
+                                                </h3>
+                                                <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+                                                    @if($selectedUser->approval_reason)
+                                                        <p><strong>Alasan Penolakan:</strong> {{ $selectedUser->approval_reason }}</p>
+                                                    @else
+                                                        <p>User ini ditolak dan dihapus dari sistem.</p>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diapprove Oleh</label>
-                                        <p class="text-sm text-gray-900 dark:text-white">
-                                            {{ $selectedUser->approvedBy ? $selectedUser->approvedBy->name : '-' }}
-                                        </p>
+                                @else
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peran</label>
+                                            <div class="flex items-center space-x-2">
+                                                <p class="text-sm text-gray-900 dark:text-white">
+                                                    {{ $selectedUser->assigned_role ?: '-' }}
+                                                </p>
+                                                @if($selectedUser->assigned_role === 'Ekosistem Builder')
+                                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                                        Ekosistem Builder
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diapprove Oleh</label>
+                                            <p class="text-sm text-gray-900 dark:text-white">
+                                                {{ $selectedUser->approvedBy ? $selectedUser->approvedBy->name : '-' }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                @if($selectedUser->approval_reason)
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alasan</label>
-                                        <p class="text-sm text-gray-900 dark:text-white">{{ $selectedUser->approval_reason }}</p>
-                                    </div>
+                                    @if($selectedUser->approval_reason)
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alasan</label>
+                                            <p class="text-sm text-gray-900 dark:text-white">{{ $selectedUser->approval_reason }}</p>
+                                        </div>
+                                    @endif
                                 @endif
                             @endif
 
@@ -296,7 +331,14 @@
                         </div>
 </div>
 
-                    @if($selectedUser->approval_status === 'pending')
+                    @if($selectedUser->trashed())
+                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button wire:click="resetApprovalModal"
+                                    class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                Tutup
+                            </button>
+                        </div>
+                    @elseif($selectedUser->approval_status === 'pending')
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="approveUser({{ $selectedUser->id }})" 
                                     class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
