@@ -178,6 +178,13 @@
                             </flux:button>
                         @endif
 
+                        @if ($pasarKolaboraya->status === 'active')
+                            <flux:button href="{{ route('admin.pasar-kolaboraya.qr-scanner', $pasarKolaboraya) }}"
+                                variant="primary" size="sm" icon="qr-code" >
+                                Buka Scanner
+                            </flux:button>
+                        @endif
+
                         <flux:button href="{{ route('admin.pasar-kolaboraya.users', $pasarKolaboraya) }}"
                             {{-- variant="secondary" --}} size="sm" icon="users" >
                             Kelola User

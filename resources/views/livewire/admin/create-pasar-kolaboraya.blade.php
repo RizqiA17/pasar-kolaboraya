@@ -96,7 +96,6 @@
             <div class="flex justify-end space-x-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                 <flux:button 
                     type="button" 
-                    variant="secondary"
                     wire:click="$dispatch('close-modal')"
                 >
                     Batal

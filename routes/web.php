@@ -232,6 +232,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/pasar-kolaboraya', \App\Livewire\Admin\PasarKolaborayaManagement::class)->name('pasar-kolaboraya.manage');
     Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
+    Route::get('/pasar-kolaboraya/{pasarKolaboraya}/qr-scanner', \App\Livewire\Admin\PasarKolaborayaQrScanner::class)->name('pasar-kolaboraya.qr-scanner');
     
     // QR Code Scanner for admin
     Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');
