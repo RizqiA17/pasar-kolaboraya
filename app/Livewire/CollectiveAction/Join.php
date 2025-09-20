@@ -3,6 +3,7 @@
 namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -77,9 +78,21 @@ class Join extends Component
         // Add user to collective action
         $this->collectiveAction->addUser($user, $this->requested_role, $this->join_reason);
 
+        // Send notifications based on join type
+        $notificationService = app(NotificationService::class);
+        
         if ($isEcosystemMember) {
+            // User is from participating ecosystem - auto-approved
             session()->flash('message', 'Permintaan bergabung berhasil dikirim! Anda sekarang menjadi bagian dari aksi kolektif ini.');
         } else {
+            // User needs approval - notify admins
+            $notificationService->createCollectiveActionJoinRequestNotification(
+                $this->collectiveAction,
+                $user,
+                $this->join_reason,
+                $this->requested_role
+            );
+            
             session()->flash('message', 'Permintaan bergabung berhasil dikirim! Permintaan Anda akan ditinjau oleh admin aksi kolektif.');
         }
 

@@ -6,6 +6,7 @@ use App\Models\CollectiveAction;
 use App\Models\CollectiveActionEcosystemInvitation;
 use App\Models\Contribution;
 use App\Models\Ecosystem;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -26,7 +27,7 @@ class Dashboard extends Component
     public $show_invitation_form = false;
     public $selected_ecosystem_ids = []; // Changed to array for multiple selection
     public $invitation_message = '';
-    public $available_ecosystems = [];
+    public $available_ecosystems;
     public $ecosystem_search = '';
     public $show_ecosystem_dropdown = false;
     public $selected_ecosystems = []; // Array of selected ecosystem objects
@@ -152,6 +153,14 @@ class Dashboard extends Component
         // Create contribution using the new method
         $this->collectiveAction->createContribution(Auth::user(), $contributionData);
 
+        // Send notification to admins about new contribution
+        $notificationService = app(NotificationService::class);
+        $notificationService->createCollectiveActionContributionNotification(
+            $this->collectiveAction,
+            Auth::user(),
+            $contributionData
+        );
+
         session()->flash('message', 'Kontribusi berhasil dikirim! Menunggu persetujuan dari penyelenggara aksi.');
 
         // Reset form and hide it
@@ -170,6 +179,15 @@ class Dashboard extends Component
         if ($success) {
             $contribution = \App\Models\CollectiveActionContribution::find($contributionId);
             $user = $contribution->user;
+            
+            // Send notification to contributor about approval
+            $notificationService = app(NotificationService::class);
+            $notificationService->createCollectiveActionContributionApprovalNotification(
+                $user,
+                $this->collectiveAction,
+                Auth::user()
+            );
+            
             session()->flash('message', "Kontribusi dari {$user->name} berhasil diterima.");
         } else {
             session()->flash('error', 'Gagal menerima kontribusi. Kontribusi mungkin sudah diproses atau tidak ditemukan.');
@@ -188,6 +206,15 @@ class Dashboard extends Component
         if ($success) {
             $contribution = \App\Models\CollectiveActionContribution::find($contributionId);
             $user = $contribution->user;
+            
+            // Send notification to contributor about rejection
+            $notificationService = app(NotificationService::class);
+            $notificationService->createCollectiveActionContributionRejectionNotification(
+                $user,
+                $this->collectiveAction,
+                Auth::user()
+            );
+            
             session()->flash('message', "Kontribusi dari {$user->name} berhasil ditolak.");
         } else {
             session()->flash('error', 'Gagal menolak kontribusi. Kontribusi mungkin sudah diproses atau tidak ditemukan.');
@@ -219,7 +246,17 @@ class Dashboard extends Component
             return;
         }
 
+        $oldStatus = $this->collectiveAction->status;
         $this->collectiveAction->update(['status' => $status]);
+
+        // Send notification to all members about status change
+        $notificationService = app(NotificationService::class);
+        $notificationService->createCollectiveActionStatusUpdateNotification(
+            $this->collectiveAction,
+            $oldStatus,
+            $status,
+            Auth::user()
+        );
 
         $statusLabels = [
             'planning' => 'Perencanaan',
@@ -298,6 +335,15 @@ class Dashboard extends Component
 
             $ecosystem = Ecosystem::find($ecosystemId);
             $ecosystemNames[] = $ecosystem->ecosystem_title;
+            
+            // Send notification to ecosystem members
+            $notificationService = app(NotificationService::class);
+            $notificationService->createCollectiveActionInvitationNotification(
+                $ecosystem,
+                $this->collectiveAction,
+                Auth::user()
+            );
+            
             $successCount++;
         }
 

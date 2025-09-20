@@ -4,6 +4,7 @@ namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -57,6 +58,15 @@ class UserApprovals extends Component
         $adminNotes = $this->selectedUserNotes[$userId] ?? null;
         
         if ($this->collectiveAction->approveUser($user, Auth::user(), $adminNotes)) {
+            // Send notification to the approved user
+            $notificationService = app(NotificationService::class);
+            $notificationService->createCollectiveActionJoinApprovalNotification(
+                $user, 
+                $this->collectiveAction, 
+                Auth::user(), 
+                $adminNotes
+            );
+            
             session()->flash('message', "User {$user->name} berhasil disetujui untuk bergabung.");
             $this->loadPendingUsers();
             unset($this->selectedUserNotes[$userId]);
@@ -76,6 +86,15 @@ class UserApprovals extends Component
         $adminNotes = $this->selectedUserNotes[$userId] ?? null;
         
         if ($this->collectiveAction->rejectUser($user, Auth::user(), $adminNotes)) {
+            // Send notification to the rejected user
+            $notificationService = app(NotificationService::class);
+            $notificationService->createCollectiveActionJoinRejectionNotification(
+                $user, 
+                $this->collectiveAction, 
+                Auth::user(), 
+                $adminNotes
+            );
+            
             session()->flash('message', "Permintaan user {$user->name} berhasil ditolak.");
             $this->loadPendingUsers();
             unset($this->selectedUserNotes[$userId]);
