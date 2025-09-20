@@ -44,10 +44,14 @@
             </ul>
         </div>
 
-        <div style="margin: 30px 0;">
+        <div style="background: linear-gradient(135deg, #6b7280, #4b5563); padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
+            <h3 style="color: white; margin: 0 0 15px 0; font-size: 20px;">🔄 Ingin Mencoba Lagi?</h3>
+            <p style="color: rgba(255, 255, 255, 0.9); margin: 0 0 20px 0; font-size: 16px;">
+                Jika Anda merasa ada kesalahan atau ingin mendaftar kembali, klik tombol di bawah ini
+            </p>
             <a href="{{ route('register') }}" 
-               style="display: inline-block; background: linear-gradient(135deg, #6b7280, #4b5563); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                🔄 Coba Daftar Lagi
+               style="display: inline-block; background: white; color: #4b5563; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                🔄 Daftar Kembali
             </a>
         </div>
 
