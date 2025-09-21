@@ -1,3 +1,3 @@
-<div wire:poll.30s wire:ignore.self>
+<div wire:ignore.self>
     {{ $count }}
 </div>

@@ -1,4 +1,4 @@
-<div class="space-y-4" wire:poll.10s>
+<div class="space-y-4">
     @forelse($activities as $activity)
         <div class="group relative">
             <!-- Timeline Line -->
