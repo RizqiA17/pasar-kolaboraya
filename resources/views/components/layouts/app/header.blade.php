@@ -208,8 +208,8 @@
             @endif
 
             <!-- Peta Ekosistem (Public Access) -->
-            <flux:navbar.item icon="map" :href="route('ecosystem.mapping')"
-                :current="request()->routeIs('ecosystem.mapping')"
+            <flux:navbar.item icon="map" :href="route('public.ecosystem.mapping')"
+                :current="request()->routeIs('public.ecosystem.mapping')"
                 class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
                 wire:navigate>
                 <span class="relative z-10">{{ __('Peta Ekosistem') }}</span>

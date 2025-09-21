@@ -46,6 +46,9 @@ class DatabaseSeeder extends Seeder
             // Ecosystem Contributions (after ecosystems and users)
             EcosystemContributionSeeder::class,
             
+            // Ecosystem Mapping Test Data (after all ecosystem data)
+            EcosystemMappingTestDataSeeder::class,
+            
             // Survey Data
             SurveySeeder::class,
             SurveyResponseSeeder::class,

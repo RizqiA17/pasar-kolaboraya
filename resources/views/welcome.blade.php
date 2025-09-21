@@ -76,7 +76,7 @@
                                 lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span
                                 class="text-coral dark:text-coral-400 font-semibold">memperluas dampak</span>.
                         </p>
-                        <div class="space-x-4">
+                        <div class="space-x-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="{{ route('register') }}"
                                 class="inline-flex items-center px-8 py-4 bg-navy dark:bg-slate-700 text-white rounded-full text-lg font-semibold hover:bg-blue-700 dark:hover:bg-slate-600 transition">
                                 Bergabung Sekarang
@@ -84,6 +84,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
+                            </a>
+                            <a href="{{ route('public.ecosystem.mapping') }}"
+                                class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-lg font-semibold hover:from-cyan-600 hover:to-blue-600 transition">
+                                <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                                </svg>
+                                Lihat Peta Ekosistem
                             </a>
                         </div>
                     </div>

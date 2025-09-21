@@ -241,29 +241,26 @@
                      .attr('flood-color', 'rgba(0,0,0,0.25)');
                  
                  // Calculate dynamic radius based on ecosystem count and container size
-                 const angleStep = (2 * Math.PI) / Math.max(ecosystems.length, 1);
+                 const totalEcosystems = Math.max(ecosystems.length, 1);
+                 const angleStep = (2 * Math.PI) / totalEcosystems;
                  
-                 // Calculate spacing factor based on number of ecosystems
-                 let spacingFactor = 1.0;
-                 if (ecosystems.length > 15) {
-                     spacingFactor = 1.5; // More spacing for many ecosystems
-                 } else if (ecosystems.length > 10) {
-                     spacingFactor = 1.3;
-                 } else if (ecosystems.length > 6) {
-                     spacingFactor = 1.2;
-                 }
+                 // Calculate minimum distance between ecosystem centers to prevent overlap
+                 const minDistanceBetweenEcosystems = (ecosystemRadius * 2) + 80; // 80px minimum gap between bubbles
                  
-                 // Calculate minimum radius needed to fit all ecosystems without overlap
-                 const baseBuffer = 120 * spacingFactor; // Dynamic buffer based on ecosystem count
-                 const minRadius = centralRadius + ecosystemRadius + baseBuffer;
+                 // Calculate the required radius to fit all ecosystems with equal spacing
+                 // Using the formula: circumference = 2 * π * radius
+                 // We need: circumference / totalEcosystems >= minDistanceBetweenEcosystems
+                 // So: radius >= (minDistanceBetweenEcosystems * totalEcosystems) / (2 * π)
+                 const requiredRadius = (minDistanceBetweenEcosystems * totalEcosystems) / (2 * Math.PI);
                  
-                 // Calculate minimum distance between ecosystem centers
-                 const minDistanceBetweenEcosystems = (ecosystemRadius * 2) + 40; // 40px minimum gap
-                 const circumference = 2 * Math.PI * minRadius;
-                 const requiredRadius = circumference / (ecosystems.length * minDistanceBetweenEcosystems / (ecosystemRadius * 2));
+                 // MUCH LARGER padding from the center circle - this is the key to wider spacing
+                 const centerPadding = centralRadius + ecosystemRadius + 200; // Increased from 120 to 200
                  
-                 const maxRadius = Math.min(width, height) * 0.6; // Maximum 60% of container
-                 const radius = Math.max(minRadius, Math.max(requiredRadius, Math.min(maxRadius, Math.min(width, height) * 0.55)));
+                 // Calculate maximum allowed radius (70% of container - increased from 60%)
+                 const maxRadius = Math.min(width, height) * 0.7;
+                 
+                 // Use the larger of required radius or center padding, but not exceeding max radius
+                 const radius = Math.min(Math.max(requiredRadius, centerPadding), maxRadius);
 
                  // FIRST: Draw all lines from center to ecosystems (behind everything)
                  ecosystems.forEach((ecosystem, index) => {
@@ -271,32 +268,17 @@
                      const x = centerX + Math.cos(angle) * radius;
                      const y = centerY + Math.sin(angle) * radius;
 
-                     // Draw line from center to ecosystem with gradient
-                     const lineGradient = defs.append('linearGradient')
-                         .attr('id', `lineGradient${index}`)
-                         .attr('x1', '0%')
-                         .attr('y1', '0%')
-                         .attr('x2', '100%')
-                         .attr('y2', '100%');
-                     
-                     lineGradient.append('stop')
-                         .attr('offset', '0%')
-                         .attr('stop-color', '#3B82F6')
-                         .attr('stop-opacity', 0.8);
-                     
-                     lineGradient.append('stop')
-                         .attr('offset', '100%')
-                         .attr('stop-color', '#10B981')
-                         .attr('stop-opacity', 0.6);
-                     
+                     // Draw line from center to ecosystem with solid color for better visibility
                      g.append('line')
                          .attr('x1', centerX)
                          .attr('y1', centerY)
                          .attr('x2', x)
                          .attr('y2', y)
-                         .attr('stroke', `url(#lineGradient${index})`)
+                         .attr('stroke', '#3B82F6')
                          .attr('stroke-width', 3)
-                         .attr('opacity', 0.7);
+                         .attr('opacity', 1.0)
+                         .attr('class', 'ecosystem-line')
+                         .attr('id', `line-${index}`);
                  });
 
                  // SECOND: Create central Pasar Kolaboraya node (on top of lines)
@@ -330,7 +312,10 @@
                          .text(line);
                  });
 
-                 // Then, draw all ecosystem circles and their content
+                 // Store ecosystem groups for later role creation
+                 const ecosystemGroups = [];
+
+                 // FIRST: Draw all ecosystem circles and their content
                  ecosystems.forEach((ecosystem, index) => {
                      const angle = index * angleStep;
                      const x = centerX + Math.cos(angle) * radius;
@@ -339,6 +324,9 @@
                      const ecosystemGroup = g.append('g')
                          .attr('class', 'ecosystem-group')
                          .attr('transform', `translate(${x}, ${y})`);
+
+                     // Store for later role creation
+                     ecosystemGroups.push({ group: ecosystemGroup, ecosystem: ecosystem, x: x, y: y });
 
                      // Ecosystem circle with gradient and shadow
                      ecosystemGroup.append('circle')
@@ -350,10 +338,15 @@
                          .on('mouseover', function() {
                              d3.select(this).attr('r', ecosystemRadius + 5);
                              showEcosystemTooltip(ecosystem, event);
+                             // Show role containers when ecosystem is hovered
+                             g.selectAll('.role-container').style('opacity', 0);
+                             g.selectAll(`.role-container-${index}`).style('opacity', 1);
                          })
                          .on('mouseout', function() {
                              d3.select(this).attr('r', ecosystemRadius);
                              hideEcosystemTooltip();
+                             // Hide role containers when ecosystem is not hovered
+                             g.selectAll('.role-container').style('opacity', 0);
                          });
 
                      // Ecosystem text with better sizing and wrapping
@@ -379,30 +372,33 @@
                              .attr('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)')
                              .text(line);
                      });
+                 });
 
-                     // Create role nodes around ecosystem
+                 // SECOND: Create all role containers in a separate layer (on top of ecosystem circles)
+                 ecosystemGroups.forEach(({ group: ecosystemGroup, ecosystem }, index) => {
                      const roles = ecosystem.roles;
                      if (roles.length > 0) {
                          const roleAngleStep = (2 * Math.PI) / roles.length;
                          
-                         // Dynamic role radius based on number of roles and ecosystem size
-                         let roleCircleRadius;
-                         if (roles.length <= 2) {
-                             roleCircleRadius = ecosystemRadius * 0.6; // 60% of ecosystem radius
-                         } else if (roles.length <= 4) {
-                             roleCircleRadius = ecosystemRadius * 0.7; // 70% of ecosystem radius
-                         } else if (roles.length <= 6) {
-                             roleCircleRadius = ecosystemRadius * 0.8; // 80% of ecosystem radius
-                         } else {
-                             roleCircleRadius = ecosystemRadius * 0.9; // 90% of ecosystem radius
-                         }
+                         // Calculate role radius - distance from ecosystem center to role centers
+                         // Similar to how ecosystems are positioned around the central blue bubble
+                         const roleDistance = ecosystemRadius + roleRadius + 60; // 60px gap between ecosystem and roles
+
+                         // Create container for all role groups in separate layer
+                         const roleContainer = g.append('g')
+                             .attr('class', `role-container role-container-${index}`)
+                             .style('opacity', 0)
+                             .style('transition', 'opacity 0.3s ease');
 
                          roles.forEach((role, roleIndex) => {
                              const roleAngle = roleIndex * roleAngleStep;
-                             const roleX = Math.cos(roleAngle) * roleCircleRadius;
-                             const roleY = Math.sin(roleAngle) * roleCircleRadius;
+                             const ecosystemTransform = ecosystemGroup.attr('transform');
+                             const ecosystemX = parseFloat(ecosystemTransform.match(/translate\(([^,]+),([^)]+)\)/)[1]);
+                             const ecosystemY = parseFloat(ecosystemTransform.match(/translate\(([^,]+),([^)]+)\)/)[2]);
+                             const roleX = ecosystemX + Math.cos(roleAngle) * roleDistance;
+                             const roleY = ecosystemY + Math.sin(roleAngle) * roleDistance;
 
-                             const roleGroup = ecosystemGroup.append('g')
+                             const roleGroup = roleContainer.append('g')
                                  .attr('class', 'role-group')
                                  .attr('transform', `translate(${roleX}, ${roleY})`);
 
@@ -449,7 +445,7 @@
                              // Role count with better styling
                              roleGroup.append('text')
                                  .attr('text-anchor', 'middle')
-                                 .attr('dy', '1.4em')
+                                 .attr('dy', '2.2em')
                                  .attr('fill', 'white')
                                  .attr('font-size', Math.max(roleTextSize - 2, 6))
                                  .attr('font-weight', 'bold')

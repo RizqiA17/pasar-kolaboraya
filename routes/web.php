@@ -127,6 +127,9 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         return view('ecosystem-mapping');
     })->name('ecosystem.mapping');
 
+    // Public Ecosystem Mapping Route (No Auth Required)
+    Route::get('public/ecosystem-mapping', [App\Http\Controllers\PublicEcosystemMappingController::class, 'index'])->name('public.ecosystem.mapping');
+
 
     // Collective Action QR Scanner route
     Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner');
