@@ -81,8 +81,13 @@ class PublicEcosystemMappingController extends Controller
                     });
 
                 if ($usersWithRole->count() > 0) {
+                    // Get role description from peran table
+                    $peranModel = \App\Models\Peran::where('nama', $role)->first();
+                    $roleDescription = $peranModel ? $peranModel->deskripsi : 'Tidak ada deskripsi tersedia';
+
                     $ecosystemRoles[] = [
                         'role' => $role,
+                        'description' => $roleDescription,
                         'count' => $usersWithRole->count(),
                         'users' => $usersWithRole->map(function($user) {
                             return [
@@ -102,8 +107,11 @@ class PublicEcosystemMappingController extends Controller
                     'name' => $ecosystem->ecosystem_title,
                     'organization' => $ecosystem->organization_name,
                     'description' => $ecosystem->description,
+                    'issues' => $ecosystem->issues_addressed ?? [],
+                    'work_region' => $ecosystem->work_region,
                 ],
                 'roles' => $ecosystemRoles,
+                'needed_roles' => $ecosystem->needed_roles ?? [],
                 'totalUsers' => $ecosystem->users()->wherePivot('status', 'accepted')->count(),
             ];
         }

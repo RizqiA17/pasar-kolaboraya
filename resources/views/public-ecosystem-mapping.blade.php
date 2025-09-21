@@ -196,6 +196,9 @@
         </div>
     </div>
 
+    <!-- Ecosystem Detail Modal -->
+    @include('components.ecosystem-detail-modal')
+
     @if($selectedPasar && $ecosystems->count() > 0)
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -460,6 +463,7 @@
                     .attr('stroke', '#047857')
                     .attr('stroke-width', 3)
                     .attr('filter', 'url(#shadow)')
+                    .style('cursor', 'pointer')
                     .on('mouseover', function() {
                         d3.select(this).attr('r', ecosystemRadius + 5);
                         showEcosystemTooltip(ecosystem, event);
@@ -472,6 +476,12 @@
                         hideEcosystemTooltip();
                         // Hide role containers when ecosystem is not hovered
                         g.selectAll('.role-container').style('opacity', 0);
+                    })
+                    .on('click', function() {
+                        // Show ecosystem details modal
+                        if (typeof showEcosystemDetails === 'function') {
+                            showEcosystemDetails(ecosystem);
+                        }
                     });
 
                 // Ecosystem text with better sizing and wrapping
