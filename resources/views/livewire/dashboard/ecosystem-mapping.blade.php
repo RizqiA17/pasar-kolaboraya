@@ -116,11 +116,6 @@
                  const centerX = width / 2;
                  const centerY = height / 2;
 
-                 // Create central Pasar Kolaboraya node
-                 const centralNode = g.append('g')
-                     .attr('class', 'central-node')
-                     .attr('transform', `translate(${centerX}, ${centerY})`);
-
                  // Create ecosystem nodes
                  const ecosystems = data.ecosystems;
                  
@@ -161,39 +156,181 @@
                      maxRoleTextLength = 6;
                  }
 
-                 // Central circle
-                 centralNode.append('circle')
-                     .attr('r', centralRadius)
-                     .attr('fill', '#3B82F6')
-                     .attr('stroke', '#1E40AF')
-                     .attr('stroke-width', 3)
-                     .style('filter', 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))');
-
-                 // Central text
-                 centralNode.append('text')
-                     .attr('text-anchor', 'middle')
-                     .attr('dy', '-0.3em')
-                     .attr('fill', 'white')
-                     .attr('font-size', ecosystemTextSize)
-                     .attr('font-weight', 'bold')
-                     .text('PASAR');
-
-                 centralNode.append('text')
-                     .attr('text-anchor', 'middle')
-                     .attr('dy', '1em')
-                     .attr('fill', 'white')
-                     .attr('font-size', ecosystemTextSize)
-                     .attr('font-weight', 'bold')
-                     .text('KOLABORAYA');
-
+                 // Helper function for text wrapping
+                 function wrapText(text, maxWidth, fontSize) {
+                     const words = text.split(' ');
+                     const lines = [];
+                     let currentLine = '';
+                     
+                     words.forEach(word => {
+                         const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                         const testWidth = testLine.length * fontSize * 0.6; // Approximate character width
+                         
+                         if (testWidth <= maxWidth) {
+                             currentLine = testLine;
+                         } else {
+                             if (currentLine) lines.push(currentLine);
+                             currentLine = word;
+                         }
+                     });
+                     if (currentLine) lines.push(currentLine);
+                     
+                     return lines;
+                 }
+                 
+                 // Create gradients and filters
+                 const defs = svg.append('defs');
+                 
+                 // Central gradient
+                 const centralGradient = defs.append('radialGradient')
+                     .attr('id', 'centralGradient')
+                     .attr('cx', '30%')
+                     .attr('cy', '30%')
+                     .attr('r', '70%');
+                 
+                 centralGradient.append('stop')
+                     .attr('offset', '0%')
+                     .attr('stop-color', '#60A5FA');
+                 
+                 centralGradient.append('stop')
+                     .attr('offset', '100%')
+                     .attr('stop-color', '#1E40AF');
+                 
+                 // Ecosystem gradient
+                 const ecosystemGradient = defs.append('radialGradient')
+                     .attr('id', 'ecosystemGradient')
+                     .attr('cx', '30%')
+                     .attr('cy', '30%')
+                     .attr('r', '70%');
+                 
+                 ecosystemGradient.append('stop')
+                     .attr('offset', '0%')
+                     .attr('stop-color', '#34D399');
+                 
+                 ecosystemGradient.append('stop')
+                     .attr('offset', '100%')
+                     .attr('stop-color', '#059669');
+                 
+                 // Role gradient
+                 const roleGradient = defs.append('radialGradient')
+                     .attr('id', 'roleGradient')
+                     .attr('cx', '30%')
+                     .attr('cy', '30%')
+                     .attr('r', '70%');
+                 
+                 roleGradient.append('stop')
+                     .attr('offset', '0%')
+                     .attr('stop-color', '#F59E0B');
+                 
+                 roleGradient.append('stop')
+                     .attr('offset', '100%')
+                     .attr('stop-color', '#D97706');
+                 
+                 // Shadow filter
+                 const shadowFilter = defs.append('filter')
+                     .attr('id', 'shadow')
+                     .attr('x', '-50%')
+                     .attr('y', '-50%')
+                     .attr('width', '200%')
+                     .attr('height', '200%');
+                 
+                 shadowFilter.append('feDropShadow')
+                     .attr('dx', 4)
+                     .attr('dy', 4)
+                     .attr('stdDeviation', 4)
+                     .attr('flood-color', 'rgba(0,0,0,0.25)');
+                 
                  // Calculate dynamic radius based on ecosystem count and container size
                  const angleStep = (2 * Math.PI) / Math.max(ecosystems.length, 1);
                  
+                 // Calculate spacing factor based on number of ecosystems
+                 let spacingFactor = 1.0;
+                 if (ecosystems.length > 15) {
+                     spacingFactor = 1.5; // More spacing for many ecosystems
+                 } else if (ecosystems.length > 10) {
+                     spacingFactor = 1.3;
+                 } else if (ecosystems.length > 6) {
+                     spacingFactor = 1.2;
+                 }
+                 
                  // Calculate minimum radius needed to fit all ecosystems without overlap
-                 const minRadius = centralRadius + ecosystemRadius + 80; // 80px buffer for much more space
-                 const maxRadius = Math.min(width, height) * 0.5; // Maximum 50% of container
-                 const radius = Math.max(minRadius, Math.min(maxRadius, Math.min(width, height) * 0.45));
+                 const baseBuffer = 120 * spacingFactor; // Dynamic buffer based on ecosystem count
+                 const minRadius = centralRadius + ecosystemRadius + baseBuffer;
+                 
+                 // Calculate minimum distance between ecosystem centers
+                 const minDistanceBetweenEcosystems = (ecosystemRadius * 2) + 40; // 40px minimum gap
+                 const circumference = 2 * Math.PI * minRadius;
+                 const requiredRadius = circumference / (ecosystems.length * minDistanceBetweenEcosystems / (ecosystemRadius * 2));
+                 
+                 const maxRadius = Math.min(width, height) * 0.6; // Maximum 60% of container
+                 const radius = Math.max(minRadius, Math.max(requiredRadius, Math.min(maxRadius, Math.min(width, height) * 0.55)));
 
+                 // FIRST: Draw all lines from center to ecosystems (behind everything)
+                 ecosystems.forEach((ecosystem, index) => {
+                     const angle = index * angleStep;
+                     const x = centerX + Math.cos(angle) * radius;
+                     const y = centerY + Math.sin(angle) * radius;
+
+                     // Draw line from center to ecosystem with gradient
+                     const lineGradient = defs.append('linearGradient')
+                         .attr('id', `lineGradient${index}`)
+                         .attr('x1', '0%')
+                         .attr('y1', '0%')
+                         .attr('x2', '100%')
+                         .attr('y2', '100%');
+                     
+                     lineGradient.append('stop')
+                         .attr('offset', '0%')
+                         .attr('stop-color', '#3B82F6')
+                         .attr('stop-opacity', 0.8);
+                     
+                     lineGradient.append('stop')
+                         .attr('offset', '100%')
+                         .attr('stop-color', '#10B981')
+                         .attr('stop-opacity', 0.6);
+                     
+                     g.append('line')
+                         .attr('x1', centerX)
+                         .attr('y1', centerY)
+                         .attr('x2', x)
+                         .attr('y2', y)
+                         .attr('stroke', `url(#lineGradient${index})`)
+                         .attr('stroke-width', 3)
+                         .attr('opacity', 0.7);
+                 });
+
+                 // SECOND: Create central Pasar Kolaboraya node (on top of lines)
+                 const centralNode = g.append('g')
+                     .attr('class', 'central-node')
+                     .attr('transform', `translate(${centerX}, ${centerY})`);
+
+                 // Central circle
+                 centralNode.append('circle')
+                     .attr('r', centralRadius)
+                     .attr('fill', 'url(#centralGradient)')
+                     .attr('stroke', '#1E3A8A')
+                     .attr('stroke-width', 4)
+                     .attr('filter', 'url(#shadow)');
+
+                 // Central text with better sizing and wrapping (on top of everything)
+                 const centralTextSize = Math.max(centralRadius * 0.15, 12);
+                 const centralText = 'PASAR KOLABORAYA';
+                 const maxWidth = centralRadius * 1.8; // Leave some padding
+                 const lines = wrapText(centralText, maxWidth, centralTextSize);
+                 
+                 // Create text elements for each line
+                 lines.forEach((line, lineIndex) => {
+                     centralNode.append('text')
+                         .attr('text-anchor', 'middle')
+                         .attr('dy', `${(lineIndex - (lines.length - 1) / 2) * 1.2}em`)
+                         .attr('fill', 'white')
+                         .attr('font-size', centralTextSize)
+                         .attr('font-weight', 'bold')
+                         .attr('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)')
+                         .text(line);
+                 });
+
+                 // Then, draw all ecosystem circles and their content
                  ecosystems.forEach((ecosystem, index) => {
                      const angle = index * angleStep;
                      const x = centerX + Math.cos(angle) * radius;
@@ -203,13 +340,13 @@
                          .attr('class', 'ecosystem-group')
                          .attr('transform', `translate(${x}, ${y})`);
 
-                     // Ecosystem circle
+                     // Ecosystem circle with gradient and shadow
                      ecosystemGroup.append('circle')
                          .attr('r', ecosystemRadius)
-                         .attr('fill', '#10B981')
-                         .attr('stroke', '#059669')
-                         .attr('stroke-width', 2)
-                         .style('filter', 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))')
+                         .attr('fill', 'url(#ecosystemGradient)')
+                         .attr('stroke', '#047857')
+                         .attr('stroke-width', 3)
+                         .attr('filter', 'url(#shadow)')
                          .on('mouseover', function() {
                              d3.select(this).attr('r', ecosystemRadius + 5);
                              showEcosystemTooltip(ecosystem, event);
@@ -219,16 +356,29 @@
                              hideEcosystemTooltip();
                          });
 
-                     // Ecosystem text
-                     ecosystemGroup.append('text')
-                         .attr('text-anchor', 'middle')
-                         .attr('dy', '0.3em')
-                         .attr('fill', 'white')
-                         .attr('font-size', ecosystemTextSize)
-                         .attr('font-weight', 'bold')
-                         .text(ecosystem.ecosystem.name.length > maxEcosystemTextLength ?
-                             ecosystem.ecosystem.name.substring(0, maxEcosystemTextLength) + '...' :
-                             ecosystem.ecosystem.name);
+                     // Ecosystem text with better sizing and wrapping
+                     const ecosystemTextSize = Math.max(ecosystemRadius * 0.2, 10);
+                     const ecosystemText = ecosystem.ecosystem.name;
+                     const maxWidth = ecosystemRadius * 1.8; // Leave some padding
+                     const lines = wrapText(ecosystemText, maxWidth, ecosystemTextSize);
+                     
+                     // Limit to maximum 3 lines
+                     const displayLines = lines.slice(0, 3);
+                     if (lines.length > 3) {
+                         displayLines[2] = displayLines[2].substring(0, displayLines[2].length - 3) + '...';
+                     }
+                     
+                     // Create text elements for each line
+                     displayLines.forEach((line, lineIndex) => {
+                         ecosystemGroup.append('text')
+                             .attr('text-anchor', 'middle')
+                             .attr('dy', `${(lineIndex - (displayLines.length - 1) / 2) * 1.2}em`)
+                             .attr('fill', 'white')
+                             .attr('font-size', ecosystemTextSize)
+                             .attr('font-weight', 'bold')
+                             .attr('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)')
+                             .text(line);
+                     });
 
                      // Create role nodes around ecosystem
                      const roles = ecosystem.roles;
@@ -256,13 +406,13 @@
                                  .attr('class', 'role-group')
                                  .attr('transform', `translate(${roleX}, ${roleY})`);
 
-                             // Role circle
+                             // Role circle with gradient and shadow
                              roleGroup.append('circle')
                                  .attr('r', roleRadius)
-                                 .attr('fill', '#F59E0B')
-                                 .attr('stroke', '#D97706')
-                                 .attr('stroke-width', 1)
-                                 .style('filter', 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))')
+                                 .attr('fill', 'url(#roleGradient)')
+                                 .attr('stroke', '#B45309')
+                                 .attr('stroke-width', 2)
+                                 .attr('filter', 'url(#shadow)')
                                  .on('mouseover', function(event) {
                                      d3.select(this).attr('r', roleRadius + 4);
                                      showRoleTooltip(role, event);
@@ -272,36 +422,41 @@
                                      hideRoleTooltip();
                                  });
 
-                             // Role text
-                             roleGroup.append('text')
-                                 .attr('text-anchor', 'middle')
-                                 .attr('dy', '0.3em')
-                                 .attr('fill', 'white')
-                                 .attr('font-size', roleTextSize)
-                                 .attr('font-weight', 'bold')
-                                 .text(role.role.length > maxRoleTextLength ?
-                                     role.role.substring(0, maxRoleTextLength) + '...' :
-                                     role.role);
+                             // Role text with better sizing and wrapping
+                             const roleTextSize = Math.max(roleRadius * 0.35, 8);
+                             const roleText = role.role;
+                             const maxWidth = roleRadius * 1.8; // Leave some padding
+                             const lines = wrapText(roleText, maxWidth, roleTextSize);
+                             
+                             // Limit to maximum 2 lines for roles
+                             const displayLines = lines.slice(0, 2);
+                             if (lines.length > 2) {
+                                 displayLines[1] = displayLines[1].substring(0, displayLines[1].length - 3) + '...';
+                             }
+                             
+                             // Create text elements for each line
+                             displayLines.forEach((line, lineIndex) => {
+                                 roleGroup.append('text')
+                                     .attr('text-anchor', 'middle')
+                                     .attr('dy', `${(lineIndex - (displayLines.length - 1) / 2) * 1.1}em`)
+                                     .attr('fill', 'white')
+                                     .attr('font-size', roleTextSize)
+                                     .attr('font-weight', 'bold')
+                                     .attr('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)')
+                                     .text(line);
+                             });
 
-                             // Role count
+                             // Role count with better styling
                              roleGroup.append('text')
                                  .attr('text-anchor', 'middle')
                                  .attr('dy', '1.4em')
                                  .attr('fill', 'white')
-                                 .attr('font-size', parseInt(roleTextSize) - 2)
+                                 .attr('font-size', Math.max(roleTextSize - 2, 6))
+                                 .attr('font-weight', 'bold')
+                                 .attr('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)')
                                  .text(role.count);
                          });
                      }
-
-                     // Draw line from center to ecosystem
-                     g.append('line')
-                         .attr('x1', centerX)
-                         .attr('y1', centerY)
-                         .attr('x2', x)
-                         .attr('y2', y)
-                         .attr('stroke', '#94A3B8')
-                         .attr('stroke-width', 2)
-                         .attr('opacity', 0.6);
                  });
 
                  // Tooltip for ecosystem details
@@ -350,10 +505,10 @@
                  // Initial zoom to fit all content with proper spacing
                  setTimeout(() => {
                      const bounds = g.node().getBBox();
-                     const padding = 100; // Increased padding for more breathing room
+                     const padding = 150; // Increased padding for much more breathing room
                      const fullWidth = bounds.width + padding * 2;
                      const fullHeight = bounds.height + padding * 2;
-                     const scale = Math.min(width / fullWidth, height / fullHeight, 0.8); // Reduced scale for more space
+                     const scale = Math.min(width / fullWidth, height / fullHeight, 0.7); // Further reduced scale for more space
                      const translate = [width / 2 - scale * (bounds.x + bounds.width / 2),
                          height / 2 - scale * (bounds.y + bounds.height / 2)
                      ];
