@@ -40,18 +40,22 @@
 
         <!-- Issues Addressed -->
         <div>
-            <flux:field :label="'Isu yang Diperjuangkan'" required>
-                <div class="grid grid-cols-2 gap-3 mt-2">
-                    @foreach ($interests as $interest)
-                        <label
-                            class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                            <input type="checkbox" wire:model="selectedIssues" value="{{ $interest->id }}"
-                                class="mr-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $interest->name }}</span>
-                        </label>
-                    @endforeach
-                </div>
-            </flux:field>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Isu yang Diperjuangkan <span class="text-red-500">*</span>
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+                @foreach ($interests as $interest)
+                    <label
+                        class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                        <input type="checkbox" wire:model="selectedIssues" value="{{ $interest->id }}"
+                            class="mr-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ $interest->name }}</span>
+                    </label>
+                @endforeach
+            </div>
+            @error('selectedIssues')
+                <flux:error>{{ $message }}</flux:error>
+            @enderror
         </div>
 
         <!-- Work Region -->
@@ -63,21 +67,22 @@
 
         <!-- Existing Roles -->
         <div>
-            <flux:field :label="'Peran yang Sudah Ada'" required>
-                <div class="grid grid-cols-2 gap-3 mt-2">
-                    @foreach ($roles as $role)
-                        <label
-                            class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                            <input type="checkbox" wire:model="selectedExistingRoles" value="{{ $role->id }}"
-                                class="mr-3 rounded border-gray-300 text-green-600 focus:ring-green-500">
-                            <div>
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $role->nama }}</span>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $role->deskripsi }}</p>
-                            </div>
-                        </label>
-                    @endforeach
-                </div>
-            </flux:field>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Peran yang Sudah Ada <span class="text-red-500">*</span>
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+                @foreach ($roles as $role)
+                    <label
+                        class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                        <input type="checkbox" wire:model="selectedExistingRoles" value="{{ $role->id }}"
+                            class="mr-3 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <div>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $role->nama }}</span>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ $role->deskripsi }}</p>
+                        </div>
+                    </label>
+                @endforeach
+            </div>
             @error('selectedExistingRoles')
                 <flux:error>{{ $message }}</flux:error>
             @enderror
