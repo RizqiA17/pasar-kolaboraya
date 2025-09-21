@@ -122,6 +122,11 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/qr/data', [App\Http\Controllers\EcosystemQrController::class, 'getQrData'])->name('ecosystem.qr.data');
     });
 
+    // Public Ecosystem Mapping Route
+    Route::get('ecosystem-mapping', function () {
+        return view('ecosystem-mapping');
+    })->name('ecosystem.mapping');
+
 
     // Collective Action QR Scanner route
     Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner');

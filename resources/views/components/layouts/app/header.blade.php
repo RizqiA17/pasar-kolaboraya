@@ -207,6 +207,17 @@
                 </flux:navbar.item>
             @endif
 
+            <!-- Peta Ekosistem (Public Access) -->
+            <flux:navbar.item icon="map" :href="route('ecosystem.mapping')"
+                :current="request()->routeIs('ecosystem.mapping')"
+                class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
+                wire:navigate>
+                <span class="relative z-10">{{ __('Peta Ekosistem') }}</span>
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </div>
+            </flux:navbar.item>
+
             <!-- Note: "Aksi Bersama" functionality is now unified with "Aksi Kolektif" -->
         </flux:navbar>
 
@@ -763,6 +774,20 @@
                     </div>
                 @endif
 
+                <!-- Peta Ekosistem (Public Access) -->
+                <a href="{{ route('ecosystem.mapping') }}"
+                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.mapping') ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 hover:bg-cyan-500/10' }}"
+                    wire:navigate>
+                    <div class="w-6 h-6 mb-1">
+                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium">{{ __('Peta') }}</span>
+                </a>
+
                 <!-- Aksi -->
                 {{-- @if ($userActionsEnabled || $isSuperAdmin)
                     <a href="{{ route('events') }}"
@@ -840,6 +865,10 @@
             @elseif(request()->routeIs('collective-action.*'))
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-purple-500 to-violet-500 rounded-t-full">
+                </div>
+            @elseif(request()->routeIs('ecosystem.mapping'))
+                <div
+                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-t-full">
                 </div>
             @elseif(request()->routeIs('events'))
                 <div
