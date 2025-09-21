@@ -63,14 +63,17 @@
 
         <!-- Existing Roles -->
         <div>
-            <flux:field :label="'Peran/Keahlian yang Sudah Ada'" required>
+            <flux:field :label="'Peran yang Sudah Ada'" required>
                 <div class="grid grid-cols-2 gap-3 mt-2">
-                    @foreach ($skills as $skill)
+                    @foreach ($roles as $role)
                         <label
                             class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                            <input type="checkbox" wire:model="selectedExistingRoles" value="{{ $skill->id }}"
+                            <input type="checkbox" wire:model="selectedExistingRoles" value="{{ $role->id }}"
                                 class="mr-3 rounded border-gray-300 text-green-600 focus:ring-green-500">
-                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $skill->name }}</span>
+                            <div>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $role->nama }}</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $role->deskripsi }}</p>
+                            </div>
                         </label>
                     @endforeach
                 </div>
@@ -80,23 +83,24 @@
             @enderror
         </div>
 
-        <!-- Needed Roles -->
-        <div>
-            <flux:field :label="'Peran/Keahlian yang Dibutuhkan'" required>
-                <div class="grid grid-cols-2 gap-3 mt-2">
-                    @foreach ($skills as $skill)
-                        <label
-                            class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                            <input type="checkbox" wire:model="selectedNeededRoles" value="{{ $skill->id }}"
-                                class="mr-3 rounded border-gray-300 text-orange-600 focus:ring-orange-500">
-                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $skill->name }}</span>
-                        </label>
-                    @endforeach
+        <!-- Required All Roles Info -->
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-lg"></i>
                 </div>
-            </flux:field>
-            @error('selectedNeededRoles')
-                <flux:error>{{ $message }}</flux:error>
-            @enderror
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-green-800 dark:text-green-200">
+                        Ekosistem Memerlukan Semua Peran
+                    </h3>
+                    <p class="text-sm text-green-700 dark:text-green-300 mt-1">
+                        Setiap ekosistem secara otomatis memerlukan semua peran yang tersedia dalam sistem untuk memastikan kolaborasi yang komprehensif dan efektif.
+                    </p>
+                    <p class="text-xs text-green-600 dark:text-green-400 mt-2">
+                        <strong>Total peran yang diperlukan:</strong> {{ $roles->count() }} peran
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Max Users -->

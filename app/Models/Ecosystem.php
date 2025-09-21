@@ -120,123 +120,178 @@ class Ecosystem extends Model
     }
 
     /**
-     * Calculate ecosystem quality based on skills coverage
-     * Formula: (existing skills + member skills) / total available skills
+     * Calculate ecosystem quality based on roles coverage
+     * Formula: (existing roles + member roles) / total available roles
      */
     public function calculateQuality(): array
     {
-        // Get all available skills
-        $allSkills = \App\Models\Skill::pluck('id')->toArray();
-        $totalSkills = count($allSkills);
+        // Get all available roles
+        $allRoles = \App\Models\Peran::pluck('id')->toArray();
+        $totalRoles = count($allRoles);
 
-        if ($totalSkills === 0) {
+        if ($totalRoles === 0) {
             return [
                 'percentage' => 0,
-                'covered_skills' => 0,
-                'total_skills' => 0,
-                'missing_skills' => []
+                'covered_roles' => 0,
+                'total_roles' => 0,
+                'missing_roles' => []
             ];
         }
 
-        // Get existing skills from ecosystem
-        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
+        // Get existing roles from ecosystem
+        $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
 
-        // Get skills from accepted members
-        $memberSkillIds = [];
-        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        // Get roles from accepted members
+        $memberRoleIds = [];
+        $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
         
         foreach ($acceptedMembers as $member) {
-            if ($member->profile) {
-                $memberSkills = $member->profile->skills->pluck('id')->toArray();
-                $memberSkillIds = array_merge($memberSkillIds, $memberSkills);
+            if ($member->profile && $member->profile->peran) {
+                $memberRoleIds[] = $member->profile->peran_id;
             }
         }
 
-        // Combine and get unique skills
-        $coveredSkillIds = array_unique(array_merge($existingSkillIds, $memberSkillIds));
-        $coveredSkillsCount = count($coveredSkillIds);
+        // Combine and get unique roles
+        $coveredRoleIds = array_unique(array_merge($existingRoleIds, $memberRoleIds));
+        $coveredRolesCount = count($coveredRoleIds);
 
         // Calculate percentage
-        $percentage = ($coveredSkillsCount / $totalSkills) * 100;
+        $percentage = ($coveredRolesCount / $totalRoles) * 100;
 
-        // Get missing skills
-        $missingSkillIds = array_diff($allSkills, $coveredSkillIds);
-        $missingSkills = \App\Models\Skill::whereIn('id', $missingSkillIds)->pluck('name')->toArray();
+        // Get missing roles
+        $missingRoleIds = array_diff($allRoles, $coveredRoleIds);
+        $missingRoles = \App\Models\Peran::whereIn('id', $missingRoleIds)->pluck('nama')->toArray();
 
         return [
             'percentage' => round($percentage, 1),
-            'covered_skills' => $coveredSkillsCount,
-            'total_skills' => $totalSkills,
-            'missing_skills' => $missingSkills,
-            'existing_skills_count' => count($existingSkillIds),
-            'member_skills_count' => count(array_unique($memberSkillIds)),
+            'covered_roles' => $coveredRolesCount,
+            'total_roles' => $totalRoles,
+            'missing_roles' => $missingRoles,
+            'existing_roles_count' => count($existingRoleIds),
+            'member_roles_count' => count(array_unique($memberRoleIds)),
         ];
     }
 
     /**
-     * Get skills breakdown for the ecosystem
+     * Get roles breakdown for the ecosystem
      */
-    public function getSkillsBreakdown(): array
+    public function getRolesBreakdown(): array
     {
-        // Get existing skills
-        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
-        $existingSkills = \App\Models\Skill::whereIn('id', $existingSkillIds)->get();
+        // Get existing roles
+        $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
+        $existingRoles = \App\Models\Peran::whereIn('id', $existingRoleIds)->get();
 
-        // Get member skills
-        $memberSkills = collect();
-        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        // Get member roles
+        $memberRoles = collect();
+        $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
         
         foreach ($acceptedMembers as $member) {
-            if ($member->profile) {
-                $memberSkills = $memberSkills->merge($member->profile->skills);
+            if ($member->profile && $member->profile->peran) {
+                $memberRoles->push($member->profile->peran);
             }
         }
 
-        // Group member skills by skill and count users
-        $memberSkillsCounted = $memberSkills->groupBy('id')->map(function ($skills, $skillId) {
+        // Group member roles by role and count users
+        $memberRolesCounted = $memberRoles->groupBy('id')->map(function ($roles, $roleId) {
             return [
-                'skill' => $skills->first(),
-                'user_count' => $skills->count()
+                'role' => $roles->first(),
+                'user_count' => $roles->count()
             ];
         });
 
         return [
-            'existing_skills' => $existingSkills,
-            'member_skills' => $memberSkillsCounted,
+            'existing_roles' => $existingRoles,
+            'member_roles' => $memberRolesCounted,
         ];
     }
 
     /**
-     * Get needed skills that are not yet covered
+     * Get needed roles that are not yet covered
      */
-    public function getNeededSkillsGap(): array
+    public function getNeededRolesGap(): array
     {
-        $neededSkillIds = collect($this->needed_roles ?? [])->toArray();
-        $neededSkills = \App\Models\Skill::whereIn('id', $neededSkillIds)->get();
+        $neededRoleIds = collect($this->needed_roles ?? [])->toArray();
+        $neededRoles = \App\Models\Peran::whereIn('id', $neededRoleIds)->get();
 
-        // Get covered skills
-        $existingSkillIds = collect($this->existing_roles ?? [])->toArray();
-        $memberSkillIds = [];
+        // Get covered roles
+        $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
+        $memberRoleIds = [];
         
-        $acceptedMembers = $this->acceptedUsers()->with('profile.skills')->get();
+        $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
         foreach ($acceptedMembers as $member) {
-            if ($member->profile) {
-                $memberSkills = $member->profile->skills->pluck('id')->toArray();
-                $memberSkillIds = array_merge($memberSkillIds, $memberSkills);
+            if ($member->profile && $member->profile->peran) {
+                $memberRoleIds[] = $member->profile->peran_id;
             }
         }
 
-        $coveredSkillIds = array_unique(array_merge($existingSkillIds, $memberSkillIds));
+        $coveredRoleIds = array_unique(array_merge($existingRoleIds, $memberRoleIds));
 
         // Find gaps
-        $gapSkillIds = array_diff($neededSkillIds, $coveredSkillIds);
-        $gapSkills = \App\Models\Skill::whereIn('id', $gapSkillIds)->get();
+        $gapRoleIds = array_diff($neededRoleIds, $coveredRoleIds);
+        $gapRoles = \App\Models\Peran::whereIn('id', $gapRoleIds)->get();
 
         return [
-            'needed_skills' => $neededSkills,
-            'gap_skills' => $gapSkills,
-            'coverage_percentage' => $neededSkills->count() > 0 
-                ? round(((count($neededSkillIds) - count($gapSkillIds)) / count($neededSkillIds)) * 100, 1)
+            'needed_roles' => $neededRoles,
+            'gap_roles' => $gapRoles,
+            'coverage_percentage' => $neededRoles->count() > 0 
+                ? round(((count($neededRoleIds) - count($gapRoleIds)) / count($neededRoleIds)) * 100, 1)
+                : 100
+        ];
+    }
+
+    /**
+     * Set ecosystem to require all available roles
+     * This method will update the ecosystem to need all roles that exist in the system
+     */
+    public function requireAllRoles(): void
+    {
+        $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+        $this->update(['needed_roles' => $allRoleIds]);
+    }
+
+    /**
+     * Check if ecosystem requires all roles
+     */
+    public function requiresAllRoles(): bool
+    {
+        $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+        $neededRoleIds = collect($this->needed_roles ?? [])->toArray();
+        
+        // Check if needed_roles contains all available roles
+        return count(array_diff($allRoleIds, $neededRoleIds)) === 0;
+    }
+
+    /**
+     * Get roles that are missing from the ecosystem
+     * This considers both existing roles and member roles
+     */
+    public function getMissingRoles(): array
+    {
+        $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+        
+        // Get covered roles
+        $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
+        $memberRoleIds = [];
+        
+        $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
+        foreach ($acceptedMembers as $member) {
+            if ($member->profile && $member->profile->peran) {
+                $memberRoleIds[] = $member->profile->peran_id;
+            }
+        }
+
+        $coveredRoleIds = array_unique(array_merge($existingRoleIds, $memberRoleIds));
+
+        // Find missing roles
+        $missingRoleIds = array_diff($allRoleIds, $coveredRoleIds);
+        $missingRoles = \App\Models\Peran::whereIn('id', $missingRoleIds)->get();
+
+        return [
+            'missing_roles' => $missingRoles,
+            'missing_count' => count($missingRoleIds),
+            'total_roles' => count($allRoleIds),
+            'coverage_percentage' => count($allRoleIds) > 0 
+                ? round((count($coveredRoleIds) / count($allRoleIds)) * 100, 1)
                 : 100
         ];
     }
@@ -564,7 +619,7 @@ class Ecosystem extends Model
 
         $diversityScore = $uniqueTypes > 1 ? (1 - $hhi) / (1 - 1 / $uniqueTypes) * 100 : 0;
 
-        // 5. Role Fit (Kesesuaian Kebutuhan Skill)
+        // 5. Role Fit (Kesesuaian Kebutuhan Peran)
         $existingRoles = collect($this->existing_roles ?? []);
         $neededRoles = collect($this->needed_roles ?? []);
         $coverage = $neededRoles->count() > 0 

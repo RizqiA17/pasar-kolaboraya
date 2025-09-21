@@ -4,7 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Models\Ecosystem;
 use App\Models\Interest;
-use App\Models\Skill;
+use App\Models\Peran;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -25,10 +25,9 @@ class EcosystemSetup extends Component
     public $selectedIssues = [];
     public $interests = [];
 
-    // Roles/Skills
+    // Roles
     public $selectedExistingRoles = [];
-    public $selectedNeededRoles = [];
-    public $skills = [];
+    public $roles = [];
 
     protected $rules = [
         'organization_name' => 'required|string|max:255',
@@ -39,7 +38,6 @@ class EcosystemSetup extends Component
         'description' => 'nullable|string',
         'selectedIssues' => 'required|array|min:1',
         'selectedExistingRoles' => 'required|array|min:1',
-        'selectedNeededRoles' => 'required|array|min:1',
         'auto_join_collective_actions' => 'boolean',
     ];
 
@@ -50,7 +48,6 @@ class EcosystemSetup extends Component
         'terms_conditions.required' => 'Syarat dan ketentuan wajib diisi',
         'selectedIssues.required' => 'Minimal pilih 1 isu yang diperjuangkan',
         'selectedExistingRoles.required' => 'Minimal pilih 1 peran yang sudah ada',
-        'selectedNeededRoles.required' => 'Minimal pilih 1 peran yang dibutuhkan',
     ];
 
     public function mount()
@@ -82,12 +79,16 @@ class EcosystemSetup extends Component
         }
 
         $this->interests = Interest::all();
-        $this->skills = Skill::all();
+        $this->roles = Peran::all();
     }
 
     public function setupEcosystem()
     {
         $this->validate();
+        
+        // Ekosistem WAJIB memerlukan semua peran yang tersedia
+        $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+        
         // Create the ecosystem
         $ecosystem = Ecosystem::create([
             'creator_id' => Auth::id(),
@@ -97,7 +98,7 @@ class EcosystemSetup extends Component
             'issues_addressed' => $this->selectedIssues,
             'work_region' => $this->work_region,
             'existing_roles' => $this->selectedExistingRoles,
-            'needed_roles' => $this->selectedNeededRoles,
+            'needed_roles' => $allRoleIds, // WAJIB semua peran
             'max_users' => $this->max_users ?: null,
             'terms_conditions' => $this->terms_conditions,
             'description' => $this->description,
