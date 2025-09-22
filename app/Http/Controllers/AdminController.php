@@ -61,7 +61,7 @@ class AdminController extends Controller
      */
     public function users(Request $request)
     {
-        $query = User::with('profile');
+        $query = User::with(['profile.peran']);
 
         if ($request->has('search') && $request->search) {
             $query->where(function ($q) use ($request) {
@@ -72,6 +72,16 @@ class AdminController extends Controller
 
         if ($request->has('role') && $request->role) {
             $query->where('role', $request->role);
+        }
+
+        if ($request->has('peran_peserta') && $request->peran_peserta) {
+            if ($request->peran_peserta === 'ecosystem_builder') {
+                $query->where('is_ecosystem_builder', true);
+            } else {
+                $query->whereHas('profile', function ($q) use ($request) {
+                    $q->where('peran_id', $request->peran_peserta);
+                });
+            }
         }
 
         if ($request->has('status') && $request->status) {
@@ -141,12 +151,46 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', new UniqueEmailForActiveUsers($user->id)],
             'role' => 'required|in:user,admin,super_admin',
+            'peran_id' => 'nullable',
         ]);
 
         $user->update($request->only(['name', 'email', 'role']));
 
+        // Handle peran_id and ecosystem builder status
+        $peranId = $request->peran_id;
+        $isEcosystemBuilder = false;
+
+        if ($peranId === 'ecosystem_builder') {
+            $isEcosystemBuilder = true;
+            $peranId = null; // Don't store in peran_id field
+        } elseif ($peranId && $peranId !== 'ecosystem_builder') {
+            // Validate that peran_id exists in peran table
+            $request->validate([
+                'peran_id' => 'exists:peran,id',
+            ]);
+        }
+
+        // Update user ecosystem builder status
+        $user->update([
+            'is_ecosystem_builder' => $isEcosystemBuilder,
+            'ecosystem_builder_status' => $isEcosystemBuilder ? 'approved' : 'inactive',
+            'ecosystem_builder_approved_at' => $isEcosystemBuilder ? now() : null,
+            'ecosystem_builder_approved_by' => $isEcosystemBuilder ? \Illuminate\Support\Facades\Auth::id() : null,
+            'ecosystem_builder_reason' => $isEcosystemBuilder ? 'Disetujui melalui admin panel' : null,
+        ]);
+
+        // Update or create profile with peran_id
+        $user->profile()->updateOrCreate([], [
+            'peran_id' => $peranId ?: null,
+        ]);
+
+        $message = 'User updated successfully.';
+        if ($isEcosystemBuilder) {
+            $message .= ' User telah diaktifkan sebagai Ekosistem Builder.';
+        }
+
         return redirect()->route('admin.users.show', $user)
-            ->with('success', 'User updated successfully.');
+            ->with('success', $message);
     }
 
     /**

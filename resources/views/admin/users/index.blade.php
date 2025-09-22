@@ -27,10 +27,21 @@
                     <!-- Role Filter -->
                         <div>
                         <flux:select name="role" placeholder="Filter berdasarkan peran">
-                            <option value="">Semua Peran</option>
+                            <option value="">Semua Role</option>
                             <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>Pengguna</option>
                             <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                             <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                        </flux:select>
+                    </div>
+                    
+                    <!-- Peran Peserta Filter -->
+                    <div>
+                        <flux:select name="peran_peserta" placeholder="Filter berdasarkan peran peserta">
+                            <option value="">Semua Peran Peserta</option>
+                            <option value="ecosystem_builder" {{ request('peran_peserta') == 'ecosystem_builder' ? 'selected' : '' }}>Ekosistem Builder</option>
+                            @foreach(\App\Models\Peran::get() as $peran)
+                                <option value="{{ $peran->id }}" {{ request('peran_peserta') == $peran->id ? 'selected' : '' }}>{{ $peran->nama }}</option>
+                            @endforeach
                         </flux:select>
                     </div>
                     
@@ -66,19 +77,28 @@
                         </div>
                     </div>
                     
+                    <!-- Filter Row 2 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Empty space for alignment -->
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
                         <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Cari</button>
                     
                     <!-- Clear Filters -->
-                    @if(request('search') || request('role') || request('status') || request('date_from') || request('date_to'))
+                    @if(request('search') || request('role') || request('peran_peserta') || request('status') || request('date_from') || request('date_to'))
                             <a href="{{ route('admin.users') }}" class="w-full sm:w-auto px-4 py-2 text-sm text-center text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Hapus Filter</a>
                     @endif
                     </div>
                 </div>
                 
                 <!-- Active Filters Display -->
-                @if(request('search') || request('role') || request('status') || request('date_from') || request('date_to'))
+                @if(request('search') || request('role') || request('peran_peserta') || request('status') || request('date_from') || request('date_to'))
                     <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
                         <div class="flex flex-wrap gap-2">
                             <span class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 w-full sm:w-auto">Filter aktif:</span>
@@ -90,6 +110,14 @@
                             @if(request('role'))
                                 <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
                                     Peran: {{ ucfirst(str_replace('_', ' ', request('role'))) }}
+                                </span>
+                            @endif
+                            @if(request('peran_peserta'))
+                                @php
+                                    $peranName = request('peran_peserta') === 'ecosystem_builder' ? 'Ekosistem Builder' : (\App\Models\Peran::find(request('peran_peserta')) ? \App\Models\Peran::find(request('peran_peserta'))->nama : 'Tidak Ditemukan');
+                                @endphp
+                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400 rounded-full">
+                                    Peran Peserta: {{ $peranName }}
                                 </span>
                             @endif
                             @if(request('status'))
@@ -152,6 +180,21 @@
                                         </span>
                                     @endif
                                 </div>
+                                <div class="mt-2">
+                                    @if($user->is_ecosystem_builder)
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                            Ekosistem Builder
+                                        </span>
+                                    @elseif($user->profile && $user->profile->peran)
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
+                                            {{ $user->profile->peran->nama }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                                            Belum Dipilih
+                                        </span>
+                                    @endif
+                                </div>
                                 <div class="mt-3 flex items-center space-x-3">
                                     <a href="{{ route('admin.users.show', $user) }}" 
                                        class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
@@ -196,6 +239,7 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pengguna</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peran</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peran Peserta</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bergabung</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
@@ -224,6 +268,21 @@
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $roleColors[$user->role] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
                                         {{ ucfirst(str_replace('_', ' ', $user->role)) }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($user->is_ecosystem_builder)
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                            Ekosistem Builder
+                                        </span>
+                                    @elseif($user->profile && $user->profile->peran)
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
+                                            {{ $user->profile->peran->nama }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                                            Belum Dipilih
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                                     {{ $user->created_at->format('M d, Y') }}
@@ -265,7 +324,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
+                                <td colspan="6" class="px-6 py-12 text-center">
                                     <div class="text-slate-500 dark:text-slate-400">
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>

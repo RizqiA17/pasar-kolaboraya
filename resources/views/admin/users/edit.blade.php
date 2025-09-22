@@ -46,7 +46,7 @@
                     <!-- Peran -->
                     <div>
                         <flux:field>
-                            <flux:label>Peran</flux:label>
+                            <flux:label>Role</flux:label>
                             <flux:select name="role" required>
                                 <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>Pengguna</option>
                                 <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
@@ -55,6 +55,52 @@
                             @error('role')
                                 <flux:error>{{ $message }}</flux:error>
                             @enderror
+                        </flux:field>
+                    </div>
+
+                    <!-- Peran Peserta -->
+                    <div>
+                        <flux:field>
+                            <flux:label>Peran Peserta</flux:label>
+                            <flux:select name="peran_id">
+                                <option value="">Pilih Peran Peserta</option>
+                                <option value="ecosystem_builder" {{ old('peran_id', $user->profile?->peran_id) == 'ecosystem_builder' ? 'selected' : '' }}>
+                                    Ekosistem Builder
+                                </option>
+                                @foreach(\App\Models\Peran::get() as $peran)
+                                    <option value="{{ $peran->id }}" {{ old('peran_id', $user->profile?->peran_id) == $peran->id ? 'selected' : '' }}>
+                                        {{ $peran->nama }}
+                                    </option>
+                                @endforeach
+                            </flux:select>
+                            @error('peran_id')
+                                <flux:error>{{ $message }}</flux:error>
+                            @enderror
+                        </flux:field>
+                    </div>
+
+                    <!-- Status Ekosistem Builder -->
+                    <div>
+                        <flux:field>
+                            <flux:label>Status Ekosistem Builder</flux:label>
+                            <div class="mt-2">
+                                @if($user->is_ecosystem_builder)
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                            Ekosistem Builder Aktif
+                                        </span>
+                                        @if($user->ecosystem_builder_approved_at)
+                                            <span class="text-xs text-slate-500 dark:text-slate-400">
+                                                Disetujui: {{ $user->ecosystem_builder_approved_at->format('M d, Y H:i') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                                        Bukan Ekosistem Builder
+                                    </span>
+                                @endif
+                            </div>
                         </flux:field>
                     </div>
 
