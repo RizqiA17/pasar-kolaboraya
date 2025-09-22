@@ -4,6 +4,7 @@ namespace App\Livewire\Ecosystem;
 
 use App\Models\Ecosystem;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -80,6 +81,14 @@ class Dashboard extends Component
             'joined_at' => now(),
         ]);
 
+        // Send notification to the accepted user
+        $notificationService = app(NotificationService::class);
+        $notificationService->createEcosystemAcceptanceNotification(
+            $user,
+            $this->ecosystem,
+            Auth::user()
+        );
+
         session()->flash('message', "Permintaan dari {$user->name} telah diterima.");
         
         // Refresh the component
@@ -103,6 +112,14 @@ class Dashboard extends Component
             session()->flash('error', 'Permintaan tidak ditemukan atau sudah diproses.');
             return;
         }
+
+        // Send notification to the rejected user before removing them
+        $notificationService = app(NotificationService::class);
+        $notificationService->createEcosystemRejectionNotification(
+            $user,
+            $this->ecosystem,
+            Auth::user()
+        );
 
         // Remove the user from ecosystem
         $this->ecosystem->users()->detach($userId);

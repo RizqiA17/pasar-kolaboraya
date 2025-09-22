@@ -482,7 +482,7 @@ class NotificationService
         $deadline = $deadlineType === 'end_date' ? $collectiveAction->end_date : $collectiveAction->start_date;
         $deadlineLabel = $deadlineType === 'end_date' ? 'berakhir' : 'dimulai';
         
-        if (!$deadline) {
+        if (!$deadline || !($deadline instanceof \Carbon\Carbon)) {
             return [];
         }
         
@@ -499,6 +499,46 @@ class NotificationService
                 'deadline_type' => $deadlineType,
                 'deadline_date' => $deadline->toDateString(),
                 'type' => 'collective_action_deadline_reminder'
+            ]
+        );
+    }
+
+    /**
+     * Create ecosystem acceptance notification for user
+     */
+    public function createEcosystemAcceptanceNotification(User $user, \App\Models\Ecosystem $ecosystem, User $approver): Notification
+    {
+        return $this->createNotification(
+            $user,
+            'Bergabung dengan Ekosistem',
+            "Permintaan bergabung Anda dengan ekosistem '{$ecosystem->ecosystem_title}' telah disetujui oleh {$approver->name}. Selamat bergabung!",
+            route('ecosystem.dashboard', $ecosystem),
+            [
+                'ecosystem_id' => $ecosystem->id,
+                'ecosystem_name' => $ecosystem->ecosystem_title,
+                'approver_id' => $approver->id,
+                'approver_name' => $approver->name,
+                'type' => 'ecosystem_acceptance'
+            ]
+        );
+    }
+
+    /**
+     * Create ecosystem rejection notification for user
+     */
+    public function createEcosystemRejectionNotification(User $user, \App\Models\Ecosystem $ecosystem, User $approver): Notification
+    {
+        return $this->createNotification(
+            $user,
+            'Permintaan Bergabung Ditolak',
+            "Permintaan bergabung Anda dengan ekosistem '{$ecosystem->ecosystem_title}' telah ditolak oleh {$approver->name}.",
+            route('ecosystem.browse'),
+            [
+                'ecosystem_id' => $ecosystem->id,
+                'ecosystem_name' => $ecosystem->ecosystem_title,
+                'approver_id' => $approver->id,
+                'approver_name' => $approver->name,
+                'type' => 'ecosystem_rejection'
             ]
         );
     }
