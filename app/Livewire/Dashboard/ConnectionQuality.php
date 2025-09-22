@@ -60,6 +60,12 @@ class ConnectionQuality extends Component
                 return;
             }
             
+            // Ensure user has an active session
+            if (!$user->active_pasar_kolaboraya_id) {
+                Log::warning('User ' . $user->id . ' has no active pasar kolaboraya session');
+                return;
+            }
+            
             // Use the new Pilar I - Koneksi scoring system
             $koneksiData = Connection::calculateKoneksiScore($user->id);
             
@@ -91,12 +97,13 @@ class ConnectionQuality extends Component
             $this->connectionCountScore = $qualityMetrics['jumlah_koneksi'];
             $this->contentRichnessScore = $qualityMetrics['kekuatan_jejaring'];
             
-            // Get additional data for interests and skills display
+            // Get additional data for interests and skills display - only for current user
             $connections = Connection::where('status', 'accepted')
                 ->where(function ($query) use ($user) {
                     $query->where('requester_id', $user->id)
                         ->orWhere('receiver_id', $user->id);
                 })
+                ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)
                 ->forUserActiveSession($user)
                 ->with(['requester.profile.interests', 'requester.profile.skills', 
                        'receiver.profile.interests', 'receiver.profile.skills'])
@@ -106,6 +113,11 @@ class ConnectionQuality extends Component
         $allSkills = collect();
 
         foreach ($connections as $connection) {
+            // Double-check that this connection belongs to the current user
+            if ($connection->requester_id !== $user->id && $connection->receiver_id !== $user->id) {
+                continue; // Skip if connection doesn't belong to current user
+            }
+            
             $connectedUser = $connection->requester_id == $user->id ? $connection->receiver : $connection->requester;
             
             if ($connectedUser && $connectedUser->profile) {

@@ -24,23 +24,23 @@
                 <div class="flex items-center">
                     @if($qualityLevel === 'Excellent')
                         <span class="inline-flex items-center rounded-full bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 text-sm font-bold text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-200 border border-green-200 dark:border-green-700">
-                            🎉 {{ $qualityLevel }}
+                            Luar Biasa
                         </span>
                     @elseif($qualityLevel === 'Good')
                         <span class="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 text-sm font-bold text-blue-800 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-700">
-                            👍 {{ $qualityLevel }}
+                            Baik
                         </span>
                     @elseif($qualityLevel === 'Fair')
                         <span class="inline-flex items-center rounded-full bg-gradient-to-r from-yellow-100 to-orange-100 px-4 py-2 text-sm font-bold text-yellow-800 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-700">
-                            💪 {{ $qualityLevel }}
+                            Cukup
                         </span>
                     @elseif($qualityLevel === 'Poor')
                         <span class="inline-flex items-center rounded-full bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 text-sm font-bold text-orange-800 dark:from-orange-900/30 dark:to-red-900/30 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
-                            🔥 {{ $qualityLevel }}
+                            Kurang
                         </span>
                     @else
                         <span class="inline-flex items-center rounded-full bg-gradient-to-r from-red-100 to-pink-100 px-4 py-2 text-sm font-bold text-red-800 dark:from-red-900/30 dark:to-pink-900/30 dark:text-red-200 border border-red-200 dark:border-red-700">
-                            ⚡ {{ $qualityLevel }}
+                            Sangat Kurang
                         </span>
                     @endif
                 </div>
@@ -48,16 +48,16 @@
             
             <div class="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl p-4 border border-emerald-100 dark:border-emerald-800">
                 <p class="text-sm text-emerald-700 dark:text-emerald-300 mb-2">
-                    <strong>📊 Pilar I - Koneksi Scoring System (Updated)</strong>
+                    <strong>Pilar I - Sistem Skor Koneksi (Diperbarui)</strong>
                 </p>
                 <p class="text-xs text-emerald-600 dark:text-emerald-400 mb-1">
-                    <strong>🧮 Rumus:</strong> (Friendship Density + Avg Friends + Acceptance Rate + Recency + Diversity) / 5
+                    <strong>Rumus:</strong> (Kepadatan Pertemanan + Rata-rata Teman + Tingkat Penerimaan + Keterkini + Keragaman) / 5
                 </p>
                 <p class="text-xs text-emerald-600 dark:text-emerald-400 mb-1">
-                    <strong>📈 Komponen:</strong> Density (20%) + Avg Friends (20%) + Acceptance (20%) + Recency (20%) + Diversity (20%)
+                    <strong>Komponen:</strong> Kepadatan (20%) + Rata-rata Teman (20%) + Penerimaan (20%) + Keterkini (20%) + Keragaman (20%)
                 </p>
                 <p class="text-xs text-emerald-600 dark:text-emerald-400">
-                    <strong>🕒 Terakhir diperbarui:</strong> {{ $lastUpdated }}
+                    <strong>Terakhir diperbarui:</strong> {{ $lastUpdated }}
                 </p>
             </div>
         </div>
@@ -70,7 +70,7 @@
             </div>
             <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-4 border border-purple-100 dark:border-purple-800 text-center">
                 <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ $connectedUsersCount }}</div>
-                <div class="text-xs font-medium text-purple-700 dark:text-purple-300">User Terhubung</div>
+                <div class="text-xs font-medium text-purple-700 dark:text-purple-300">Pengguna Terhubung</div>
             </div>
             <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-4 border border-green-100 dark:border-green-800 text-center">
                 <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">{{ $recentConnections }}</div>
@@ -78,7 +78,7 @@
             </div>
             <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl p-4 border border-orange-100 dark:border-orange-800 text-center">
                 <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">{{ count($roleCategories) }}</div>
-                <div class="text-xs font-medium text-orange-700 dark:text-orange-300">Kategori Role</div>
+                <div class="text-xs font-medium text-orange-700 dark:text-orange-300">Kategori Peran</div>
             </div>
         </div>
 
@@ -97,7 +97,7 @@
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-medium text-blue-700 dark:text-blue-300" title="Kepadatan jaringan berdasarkan koneksi yang diterima">
-                            🔗 Friendship Density
+                            Kepadatan Pertemanan
                         </span>
                         <span class="text-lg font-bold text-blue-800 dark:text-blue-200">{{ $friendshipDensityScore }}%</span>
                     </div>
@@ -112,7 +112,7 @@
                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 border border-purple-100 dark:border-purple-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-medium text-purple-700 dark:text-purple-300" title="Rata-rata jumlah teman per user">
-                            👥 Average Friends per User
+                            Rata-rata Teman per User
                         </span>
                         <span class="text-lg font-bold text-purple-800 dark:text-purple-200">{{ $avgFriendsScore }}%</span>
                     </div>
@@ -120,14 +120,14 @@
                         <div class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $avgFriendsScore }}%"></div>
                     </div>
                     <div class="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                        Rata-rata {{ $avgDegree }} teman per user (target: 20)
+                        Rata-rata {{ $avgDegree }} teman per pengguna (target: 20)
                     </div>
                 </div>
                 
                 <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-100 dark:border-green-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-medium text-green-700 dark:text-green-300" title="Tingkat penerimaan koneksi">
-                            ✅ Connection Acceptance Rate
+                            Tingkat Penerimaan Koneksi
                         </span>
                         <span class="text-lg font-bold text-green-800 dark:text-green-200">{{ $acceptanceRateScore }}%</span>
                     </div>
@@ -142,7 +142,7 @@
                 <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl p-4 border border-orange-100 dark:border-orange-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-medium text-orange-700 dark:text-orange-300" title="Koneksi yang dibuat dalam 90 hari terakhir">
-                            🕒 Connection Recency
+                            Keterkini Koneksi
                         </span>
                         <span class="text-lg font-bold text-orange-800 dark:text-orange-200">{{ $recencyScore }}%</span>
                     </div>
@@ -157,7 +157,7 @@
                 <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-teal-100 dark:border-teal-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-medium text-teal-700 dark:text-teal-300" title="Keragaman jaringan berdasarkan role user">
-                            🌐 Network Diversity
+                            Keragaman Jaringan
                         </span>
                         <span class="text-lg font-bold text-teal-800 dark:text-teal-200">{{ $diversityScore }}%</span>
                     </div>
@@ -165,7 +165,7 @@
                         <div class="bg-gradient-to-r from-teal-400 to-cyan-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $diversityScore }}%"></div>
                     </div>
                     <div class="text-xs text-teal-600 dark:text-teal-400 mt-1">
-                        {{ count($roleCategories) }} kategori role berbeda
+                        {{ count($roleCategories) }} kategori peran berbeda
                     </div>
                 </div>
             </div>
@@ -174,38 +174,37 @@
         <!-- Recommendations -->
         <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-4 border border-amber-100 dark:border-amber-800">
             <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-3 flex items-center">
-                <span class="text-lg mr-2">💡</span>
                 Rekomendasi Peningkatan Pilar I - Koneksi
             </h4>
             <div class="space-y-2 text-sm text-amber-700 dark:text-amber-300">
                 @if($friendshipDensityScore < 50)
                     <div class="flex items-start">
                         <span class="text-amber-600 mr-2">•</span>
-                        <span>Perluas jaringan koneksi untuk meningkatkan friendship density</span>
+                        <span>Perluas jaringan koneksi untuk meningkatkan kepadatan pertemanan</span>
                     </div>
                 @endif
                 @if($avgFriendsScore < 50)
                     <div class="flex items-start">
                         <span class="text-amber-600 mr-2">•</span>
-                        <span>Bangun lebih banyak koneksi untuk meningkatkan rata-rata teman per user</span>
+                        <span>Bangun lebih banyak koneksi untuk meningkatkan rata-rata teman per pengguna</span>
                     </div>
                 @endif
                 @if($acceptanceRateScore < 50)
                     <div class="flex items-start">
                         <span class="text-amber-600 mr-2">•</span>
-                        <span>Perbaiki kualitas profil untuk meningkatkan acceptance rate koneksi</span>
+                        <span>Perbaiki kualitas profil untuk meningkatkan tingkat penerimaan koneksi</span>
                     </div>
                 @endif
                 @if($recencyScore < 50)
                     <div class="flex items-start">
                         <span class="text-amber-600 mr-2">•</span>
-                        <span>Buat koneksi baru secara rutin untuk meningkatkan recency score</span>
+                        <span>Buat koneksi baru secara rutin untuk meningkatkan skor keterkini</span>
                     </div>
                 @endif
                 @if($diversityScore < 50)
                     <div class="flex items-start">
                         <span class="text-amber-600 mr-2">•</span>
-                        <span>Koneksi dengan user dari berbagai role untuk meningkatkan network diversity</span>
+                        <span>Koneksi dengan pengguna dari berbagai peran untuk meningkatkan keragaman jaringan</span>
                     </div>
                 @endif
                 @if($connectionQuality >= 75)

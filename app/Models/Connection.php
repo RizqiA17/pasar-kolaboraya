@@ -105,17 +105,23 @@ class Connection extends Model
             ];
         }
 
-        // 1. Friendship Density
-        $acceptedConnections = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
+        // 1. Friendship Density - only for user's connections
+        $userConnections = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
             ->where('status', 'accepted')
-            ->count();
+            ->where(function ($query) use ($userId) {
+                $query->where('requester_id', $userId)
+                    ->orWhere('receiver_id', $userId);
+            })
+            ->get();
 
-        // Get unique users with at least one accepted connection
-        $connectedUserIds = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
-            ->where('status', 'accepted')
-            ->get()
-            ->flatMap(function ($connection) {
-                return [$connection->requester_id, $connection->receiver_id];
+        $acceptedConnections = $userConnections->count();
+
+        // Get unique users connected to this specific user
+        $connectedUserIds = $userConnections
+            ->flatMap(function ($connection) use ($userId) {
+                return $connection->requester_id == $userId 
+                    ? [$connection->receiver_id] 
+                    : [$connection->requester_id];
             })
             ->unique()
             ->values();
@@ -131,21 +137,22 @@ class Connection extends Model
         $degreeRef = 20; // Target average friends per user
         $avgFriendsScore = min($avgDegree / $degreeRef, 1) * 100;
 
-        // 3. Connection Acceptance Rate
-        $accepted = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
-            ->where('status', 'accepted')
-            ->count();
+        // 3. Connection Acceptance Rate - only for user's connections
+        $accepted = $userConnections->count();
         
         $rejected = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
             ->where('status', 'rejected')
+            ->where(function ($query) use ($userId) {
+                $query->where('requester_id', $userId)
+                    ->orWhere('receiver_id', $userId);
+            })
             ->count();
 
         $acceptanceRate = ($accepted + $rejected) > 0 ? $accepted / ($accepted + $rejected) : 0;
         $acceptanceRateScore = $acceptanceRate * 100;
 
-        // 4. Connection Recency
-        $recent = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
-            ->where('status', 'accepted')
+        // 4. Connection Recency - only for user's connections
+        $recent = $userConnections
             ->where('created_at', '>=', now()->subDays(90))
             ->count();
 
@@ -153,12 +160,12 @@ class Connection extends Model
         $recencyRate = $total > 0 ? $recent / $total : 0;
         $recencyScore = $recencyRate * 100;
 
-        // 5. Network Diversity (based on user roles)
+        // 5. Network Diversity (based on user roles) - only for user's connected users
         $diversityScore = 0;
         $roleCategories = [];
         
         if ($n > 0) {
-            // Get all connected users with their roles
+            // Get only the user's connected users with their roles
             $connectedUsers = User::whereIn('id', $connectedUserIds)
                 ->with('profile')
                 ->get();
