@@ -9,31 +9,44 @@
         <!-- QR Scanner Interface -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div class="text-center">
-                <!-- Camera Scanner Area -->
-                <div id="scanner-container" class="relative mb-6">
-                    <div id="qr-reader" class="w-full max-w-md mx-auto"></div>
-                    <div class="mt-4 text-sm text-gray-500">
-                        <p>Posisikan QR code dalam area scanner</p>
+                <!-- Manual Input -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Atau masukkan QR code secara manual:
+                    </label>
+                    <div class="flex space-x-2">
+                        <input type="text" wire:model="scannedQrCode" wire:keydown.enter="processScannedQr"
+                            placeholder="Paste QR code di sini..."
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button wire:click="processScannedQr"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            Scan
+                        </button>
                     </div>
                 </div>
 
-                <!-- Manual Input -->
-                <div class="border-t pt-6">
-                    <h3 class="text-lg font-semibold mb-4">Atau masukkan URL QR code secara manual:</h3>
-                    <div class="flex gap-2">
-                        <input 
-                            type="text" 
-                            wire:model="scannedQrCode"
-                            placeholder="Masukkan URL QR code..."
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                        <button 
-                            wire:click="processScannedQr"
-                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        >
-                            Proses
-                        </button>
-                    </div>
+                <!-- Camera Scanner -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8">
+                    @if (!$isScanning)
+                        <div class="text-center">
+                            <div class="text-gray-400 text-4xl mb-4">📷</div>
+                            <p class="text-gray-600 mb-4">
+                                Gunakan kamera untuk scan QR code
+                            </p>
+                            <button wire:click="startScanning"
+                                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                                Buka Kamera
+                            </button>
+                        </div>
+                    @else
+                        <div class="text-center">
+                            <div id="qr-reader" class="w-full"></div>
+                            <button wire:click="stopScanning"
+                                class="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                Tutup Kamera
+                            </button>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -126,94 +139,93 @@
 </div>
 
 @push('scripts')
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-<script>
-let html5QrcodeScanner = null;
-let isScanning = false;
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+        let html5QrcodeScanner = null;
+        let isScanning = false;
 
-document.addEventListener('livewire:init', () => {
-    Livewire.on('start-camera', () => {
-        startCamera();
-    });
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('start-camera', () => {
+                startCamera();
+            });
 
-    Livewire.on('stop-camera', () => {
-        stopCamera();
-    });
-});
-
-async function startCamera() {
-    try {
-        // Check if camera is supported
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            throw new Error('Camera tidak didukung di browser ini');
-        }
-
-        // Check camera permissions
-        const permissionStatus = await navigator.permissions.query({ name: 'camera' });
-        if (permissionStatus.state === 'denied') {
-            throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
-        }
-
-        // Clear existing scanner
-        if (html5QrcodeScanner) {
-            html5QrcodeScanner.clear();
-        }
-
-        // Create new scanner
-        html5QrcodeScanner = new Html5Qrcode("qr-reader");
-
-        const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0
-        };
-
-        // Start camera with proper error handling
-        await html5QrcodeScanner.start(
-            { facingMode: "environment" },
-            config,
-            (decodedText, decodedResult) => {
-                console.log('QR Code detected:', decodedText);
+            Livewire.on('stop-camera', () => {
                 stopCamera();
-                @this.set('scannedQrCode', decodedText);
-                @this.call('processScannedQr');
-            },
-            (errorMessage) => {
-                // Ignore scan errors, keep scanning
-                console.log('QR scan error:', errorMessage);
-            }
-        );
-
-        isScanning = true;
-
-    } catch (err) {
-        console.error('Camera error:', err);
-        alert('Tidak dapat mengakses kamera: ' + err.message);
-    }
-}
-
-function stopCamera() {
-    isScanning = false;
-    if (html5QrcodeScanner) {
-        html5QrcodeScanner.stop().then(() => {
-            html5QrcodeScanner.clear();
-            html5QrcodeScanner = null;
-        }).catch((err) => {
-            console.log('Error stopping scanner:', err);
+            });
         });
-    }
-}
 
-// Cleanup on page unload
-window.addEventListener('beforeunload', () => {
-    stopCamera();
-});
+        async function startCamera() {
+            try {
+                // Check if camera is supported
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error('Camera tidak didukung di browser ini');
+                }
 
-// Handle page visibility change
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && isScanning) {
-        stopCamera();
-    }
-});
-</script>
+                // Check camera permissions
+                const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+                if (permissionStatus.state === 'denied') {
+                    throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
+                }
+
+                // Clear existing scanner
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.clear();
+                }
+
+                // Create new scanner
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+
+                // Start camera with proper error handling
+                await html5QrcodeScanner.start(
+                    { facingMode: "environment" },
+                    config,
+                    (decodedText, decodedResult) => {
+                        console.log('QR Code detected:', decodedText);
+                        stopCamera();
+                        Livewire.dispatch('qr-scanned', { qrCode: decodedText });
+                    },
+                    (errorMessage) => {
+                        // Ignore scan errors, keep scanning
+                        console.log('QR scan error:', errorMessage);
+                    }
+                );
+
+                isScanning = true;
+
+            } catch (err) {
+                console.error('Camera error:', err);
+                alert('Tidak dapat mengakses kamera: ' + err.message);
+            }
+        }
+
+        function stopCamera() {
+            isScanning = false;
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    html5QrcodeScanner.clear();
+                    html5QrcodeScanner = null;
+                }).catch((err) => {
+                    console.log('Error stopping scanner:', err);
+                });
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopCamera();
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isScanning) {
+                stopCamera();
+            }
+        });
+    </script>
 @endpush

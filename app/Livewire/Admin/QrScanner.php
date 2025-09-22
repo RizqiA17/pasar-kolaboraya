@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class QrScanner extends Component
 {
@@ -23,6 +24,10 @@ class QrScanner extends Component
     protected $messages = [
         'scannedQrCode.required' => 'QR code harus diisi',
         'scannedQrCode.min' => 'QR code tidak valid'
+    ];
+
+    protected $listeners = [
+        'qr-scanned' => 'handleQrScanned'
     ];
 
     public function mount()
@@ -138,7 +143,7 @@ class QrScanner extends Component
                 $pasarKolaboraya->users()->attach($user->id, [
                     'status' => 'accepted',
                     'role' => 'member',
-                    'invited_by' => auth()->user()->id,
+                    'invited_by' => Auth::user()->id,
                     'join_reason' => 'QR Code Access Grant',
                     'joined_at' => now(),
                     'responded_at' => now(),
@@ -156,7 +161,7 @@ class QrScanner extends Component
                 'qr_code' => $this->scannedQrCode,
                 'pasar_kolaboraya_id' => $pasarKolaboraya->id,
                 'pasar_kolaboraya_name' => $pasarKolaboraya->name,
-                'granted_by' => auth()->user() ? auth()->user()->name : 'System',
+                'granted_by' => Auth::user() ? Auth::user()->name : 'System',
                 'granted_at' => now(),
             ]);
             
@@ -186,6 +191,13 @@ class QrScanner extends Component
     {
         $this->isScanning = false;
         $this->dispatch('stop-camera');
+    }
+
+    public function handleQrScanned($qrCode)
+    {
+        $this->scannedQrCode = $qrCode;
+        $this->isScanning = false;
+        $this->validateQrCode();
     }
 
     public function onQrScanned($qrCode)

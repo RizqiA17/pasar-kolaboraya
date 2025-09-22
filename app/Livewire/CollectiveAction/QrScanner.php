@@ -12,9 +12,42 @@ use Livewire\Component;
 class QrScanner extends Component
 {
     public $scannedQrCode = '';
+    public $isScanning = false;
     public $errorMessage = '';
     public $successMessage = '';
     public $collectiveAction = null;
+
+    protected $listeners = [
+        'qr-scanned' => 'handleQrScanned',
+        'start-scanning' => 'startScanning',
+        'stop-scanning' => 'stopScanning'
+    ];
+
+    public function mount()
+    {
+        // Set up auto-refresh for QR codes
+        $this->dispatch('start-qr-refresh');
+    }
+
+    public function startScanning()
+    {
+        $this->isScanning = true;
+        $this->errorMessage = '';
+        $this->successMessage = '';
+        $this->dispatch('start-camera');
+    }
+
+    public function stopScanning()
+    {
+        $this->isScanning = false;
+        $this->dispatch('stop-camera');
+    }
+
+    public function handleQrScanned($qrCode)
+    {
+        $this->scannedQrCode = $qrCode;
+        $this->processScannedQr();
+    }
 
     public function processScannedQr()
     {

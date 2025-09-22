@@ -77,19 +77,17 @@
                         </div>
 
                         <!-- Camera Container -->
-                        <div id="camera-container" class="w-full h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-                            @if ($isScanning)
+                        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8">
+                            @if (!$isScanning)
                                 <div class="text-center">
-                                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                                    <p class="text-gray-600 dark:text-gray-300">Mengaktifkan kamera...</p>
+                                    <div class="text-gray-400 text-4xl mb-4">📷</div>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        Gunakan kamera untuk scan QR code
+                                    </p>
                                 </div>
                             @else
-                                <div class="text-center text-gray-500 dark:text-gray-400">
-                                    <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    <p>Klik "Buka Kamera" untuk memulai scan</p>
+                                <div class="text-center">
+                                    <div id="qr-reader" class="w-full"></div>
                                 </div>
                             @endif
                         </div>
@@ -296,7 +294,7 @@
                 }
 
                 // Create new scanner
-                html5QrcodeScanner = new Html5Qrcode("camera-container");
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
 
                 const config = {
                     fps: 10,
@@ -311,7 +309,7 @@
                     (decodedText, decodedResult) => {
                         console.log('QR Code detected:', decodedText);
                         stopCamera();
-                        Livewire.emit('onQrScanned', decodedText);
+                        Livewire.dispatch('qr-scanned', { qrCode: decodedText });
                     },
                     (errorMessage) => {
                         // Ignore scan errors, keep scanning
