@@ -7,9 +7,9 @@
 
             <!-- Sidebar -->
             <div id="mobile-sidebar"
-                class="flex lg:max-h-[100svh_-_158px] mt-14 w-64 flex-col fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-50">
+                class="flex lg:max-h-[100svh_-_56px] mt-14 w-64 flex-col fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-50">
                 <div
-                    class="flex flex-col flex-grow bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-r border-white/20 dark:border-slate-700/50 shadow-xl">
+                    class="flex flex-col flex-grow bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-r border-white/20 dark:border-slate-700/50 shadow-xl lg:max-h-svh max-h-[calc(100svh_-_158px)]">
 
                     <!-- Mobile Close Button -->
                     <div
