@@ -58,17 +58,18 @@
                             </svg>
                             <span class="truncate">Pasar Kecil</span>
                         </a>
-                        
-                        <a href="{{ route('admin.ecosystem-builders') }}"
+
+                        {{-- <a href="{{ route('admin.ecosystem-builders') }}"
                             class="group flex items-center px-2 sm:px-3 py-2 sm:py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.ecosystem-builders*') ? 'bg-teal-100 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
                             <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                <circle cx="12" cy="12" r="3" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"></circle>
                                 <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l-1.414-1.414M6.05 6.05L4.636 4.636">
                                 </path>
                             </svg>
-                            <span class="truncate">Ecosystem Builder</span>
+                            <span class="truncate">Ecosystem Builder</span> --}}
                         </a>
 
                         <a href="{{ route('admin.pasar-kolaboraya.manage') }}"
@@ -81,7 +82,7 @@
                             </svg>
                             <span class="truncate">Pasar Kolaboraya</span>
                         </a>
-                        
+
                         <div class="pt-4">
                             <h3
                                 class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -161,7 +162,7 @@
                                 class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Data Master</h3>
                             <div class="mt-2 space-y-1">
-                                <a href="{{ route('admin.interests') }}"
+                                {{-- <a href="{{ route('admin.interests') }}"
                                     class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.interests*') ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
                                     <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -192,7 +193,7 @@
                                         </path>
                                     </svg>
                                     Kontribusi
-                                </a>
+                                </a> --}}
 
                                 <a href="{{ route('admin.peran') }}"
                                     class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.peran*') ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
@@ -255,7 +256,7 @@
                             </div>
                             <h1 class="text-lg font-bold text-slate-800 dark:text-slate-200">Panel Admin</h1>
                         </div>
-                        <div class="flex items-center space-x-2">                            
+                        <div class="flex items-center space-x-2">
                             <button type="button" id="mobile-menu-button"
                                 class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,7 +351,7 @@
             if (e.key === 'Escape') {
                 const mobileSidebar = document.getElementById('mobile-sidebar');
                 const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
-                
+
                 if (mobileSidebar && mobileSidebarOverlay) {
                     mobileSidebar.classList.add('-translate-x-full');
                     mobileSidebarOverlay.classList.add('hidden');
@@ -364,7 +365,7 @@
             if (window.innerWidth >= 1024) { // lg breakpoint
                 const mobileSidebar = document.getElementById('mobile-sidebar');
                 const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
-                
+
                 if (mobileSidebar && mobileSidebarOverlay) {
                     mobileSidebar.classList.add('-translate-x-full');
                     mobileSidebarOverlay.classList.add('hidden');

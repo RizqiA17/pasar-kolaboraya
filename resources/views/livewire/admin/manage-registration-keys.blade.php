@@ -141,7 +141,7 @@
 
     <!-- Create Modal -->
     @if ($showCreateModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 z-50 overflow-y-auto  lg:max-h-svh max-h-[calc(100svh_-_104px)]">
             <div class="fixed inset-0 z-50 flex items-center justify-center">
                 <div class="fixed inset-0 bg-black/75 transition-opacity -z-10" wire:click="closeModals"></div>
 

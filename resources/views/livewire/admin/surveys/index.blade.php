@@ -223,7 +223,7 @@
 
         <!-- Create Survey Modal -->
         @if($showCreateModal)
-            <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" wire:click="closeCreateModal">
+            <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 lg:max-h-svh max-h-[calc(100svh_-_104px)]" wire:click="closeCreateModal">
                 <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">

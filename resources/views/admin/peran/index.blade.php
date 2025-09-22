@@ -238,7 +238,7 @@
     </div>
 
     <!-- Create Modal -->
-    <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50">
+    <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50 lg:max-h-svh max-h-[calc(100svh_-_104px)]">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Peran Baru</h3>
@@ -277,7 +277,7 @@
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50">
+    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50 lg:max-h-svh max-h-[calc(100svh_-_104px)]">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Peran</h3>

@@ -30,7 +30,7 @@
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
     </div>
-
+{{-- 
     <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
         <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Informasi Pasar Kecil</h4>
         <p class="text-xs text-blue-700 dark:text-blue-300">
@@ -41,7 +41,7 @@
             <li>• <strong>Kolaborasi:</strong> Kualitas kolaborasi, keragaman kolaborator, proyek kolaborasi, sumber daya</li>
             <li>• <strong>Aksi:</strong> Jumlah aksi besar, sedang, dan kecil</li>
         </ul>
-    </div>
+    </div> --}}
 
     <div class="flex justify-end space-x-3 pt-4">
         <button 

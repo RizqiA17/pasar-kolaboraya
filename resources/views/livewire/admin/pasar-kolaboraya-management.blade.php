@@ -221,7 +221,7 @@
 
     <!-- Create Modal -->
     @if ($showCreateModal)
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50">
+        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 lg:max-h-svh max-h-[calc(100svh_-_104px)]">
             <div class="relative top-4 sm:top-8 mx-auto p-4 w-11/12 sm:w-3/4 lg:w-1/2 xl:w-2/5">
                 <div
                     class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-2xl">
