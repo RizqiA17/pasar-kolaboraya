@@ -26,6 +26,7 @@ class CollectiveAction extends Model
         'status',
         'min_ecosystems',
         'collaboration_terms',
+        'qr_code',
     ];
 
     protected $casts = [

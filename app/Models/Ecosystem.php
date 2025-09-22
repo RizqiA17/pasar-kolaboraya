@@ -23,6 +23,7 @@ class Ecosystem extends Model
         'description',
         'is_active',
         'auto_join_collective_actions',
+        'qr_code',
     ];
 
     protected $casts = [
