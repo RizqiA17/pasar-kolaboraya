@@ -832,7 +832,7 @@
                 @endif --}}
 
                 <!-- Profile -->
-                <a href="{{ route('settings.profile') }}"
+                {{-- <a href="{{ route('settings.profile') }}"
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('settings.profile') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
@@ -842,7 +842,7 @@
                         </svg>
                     </div>
                     <span class="text-xs font-medium">{{ __('Profile') }}</span>
-                </a>
+                </a> --}}
             </div>
 
             <!-- Active indicator -->
