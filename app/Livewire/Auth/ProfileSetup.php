@@ -6,7 +6,6 @@ use App\Models\Profile;
 use App\Models\Interest;
 use App\Models\Skill;
 use App\Models\Contribution;
-use App\Models\Peran;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -18,8 +17,8 @@ class ProfileSetup extends Component
     use WithFileUploads;
 
     public $currentStep = 1;
-    public $totalSteps = 5;
-    public $progress = 20;
+    public $totalSteps = 4;
+    public $progress = 25;
 
     // Basic Info
     public $organization = '';
@@ -44,10 +43,6 @@ class ProfileSetup extends Component
     public $contributionDescriptions = [];
     public $contributionDates = [];
 
-    // Role
-    public $selectedRole = '';
-    public $roleSearch = '';
-    public $peran = [];
 
     // Search properties
     public $skillSearch = '';
@@ -74,12 +69,10 @@ class ProfileSetup extends Component
         'contributionDates.*.required' => 'Tanggal kontribusi wajib diisi',
         'contributionDates.*.date' => 'Format tanggal tidak valid',
         'contributionDates.*.before_or_equal' => 'Tanggal tidak boleh lebih dari hari ini',
-        'selectedRole.required' => 'Peran wajib dipilih',
     ];
 
     public function mount()
     {
-        $this->peran = Peran::all();
         $this->loadExistingProfile();
         $this->storeOriginalData();
     }
@@ -138,10 +131,6 @@ class ProfileSetup extends Component
                 }
             }
 
-            // Load role
-            if ($profile->peran) {
-                $this->selectedRole = $profile->peran->id;
-            }
         }
     }
 
@@ -160,7 +149,6 @@ class ProfileSetup extends Component
             'selectedContributions' => $this->selectedContributions,
             'contributionDescriptions' => $this->contributionDescriptions,
             'contributionDates' => $this->contributionDates,
-            'selectedRole' => $this->selectedRole,
         ];
     }
 
@@ -179,7 +167,6 @@ class ProfileSetup extends Component
             'selectedContributions' => $this->selectedContributions,
             'contributionDescriptions' => $this->contributionDescriptions,
             'contributionDates' => $this->contributionDates,
-            'selectedRole' => $this->selectedRole,
         ];
 
         $this->hasChanges = $this->originalData !== $currentData;
@@ -193,12 +180,6 @@ class ProfileSetup extends Component
             $this->saveCurrentStepData();
         }
 
-        // Validate current step before proceeding
-        if ($this->currentStep === 5) {
-            $this->validate([
-                'selectedRole' => 'required|exists:peran,id',
-            ]);
-        }
 
         if ($this->currentStep < $this->totalSteps) {
             $this->currentStep++;
@@ -248,7 +229,6 @@ class ProfileSetup extends Component
                 'phone' => $this->phone,
                 'vision' => $this->vision,
                 'social_media' => $this->formatSocialMediaForSave(),
-                'peran_id' => $this->selectedRole,
             ]
         );
 
@@ -288,23 +268,6 @@ class ProfileSetup extends Component
         }
     }
 
-    public function selectRole($roleId)
-    {
-        $this->selectedRole = $roleId;
-        $this->roleSearch = '';
-    }
-
-    public function getFilteredRoles()
-    {
-        if (empty($this->roleSearch)) {
-            return collect($this->peran);
-        }
-
-        return collect($this->peran)->filter(function ($role) {
-            return stripos($role->nama, $this->roleSearch) !== false ||
-                   stripos($role->deskripsi, $this->roleSearch) !== false;
-        });
-    }
 
     public function getFilteredSkills()
     {
@@ -556,9 +519,6 @@ class ProfileSetup extends Component
         $totalFields += 1;
         if (!empty($this->selectedContributions)) $filledFields++;
 
-        // Role
-        $totalFields += 1;
-        if (!empty($this->selectedRole)) $filledFields++;
 
         return $totalFields > 0 ? round(($filledFields / $totalFields) * 100) : 0;
     }
@@ -568,10 +528,9 @@ class ProfileSetup extends Component
         $interests = Interest::all();
         $skills = Skill::all();
         $contributions = Contribution::all();
-        $peran = Peran::all();
         $completionPercentage = $this->getProfileCompletionPercentage();
 
-        return view('livewire.auth.profile-setup', compact('interests', 'skills', 'contributions', 'peran', 'completionPercentage'));
+        return view('livewire.auth.profile-setup', compact('interests', 'skills', 'contributions', 'completionPercentage'));
     }
 }
 
