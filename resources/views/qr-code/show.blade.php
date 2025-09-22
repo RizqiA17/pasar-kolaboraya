@@ -1,36 +1,37 @@
 <x-layouts.app :title="__('Dashboard')">
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto">
+<div class="container mx-auto px-4 py-6 sm:py-8 w-full overflow-x-hidden">
+    <div class="max-w-2xl mx-auto w-full">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">QR Code Saya</h1>
-            <p class="text-gray-600 dark:text-gray-300">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
+        <div class="text-center mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">QR Code Saya</h1>
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
         </div>
 
         <!-- QR Code Display -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 text-center w-full overflow-hidden">
             <!-- QR Code Display -->
-            <div class="mb-6">
-                <div class="inline-block p-4 bg-white border-2 border-gray-200 dark:border-gray-600 rounded-lg">
-                    <!-- Server-side generated QR code -->
-                    <div id="qr-code-container" class="w-64 h-64 flex items-center justify-center">
-                        {!! $qrCodeSvg !!}
+            <div class="mb-4 sm:mb-6">
+                <div class="flex justify-center mb-3 sm:mb-4">
+                    <div class="bg-white p-2 sm:p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 max-w-[200px] sm:max-w-none">
+                        <div class="w-32 h-32 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
+                            {!! $qrCodeSvg !!}
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- User Info -->
-            <div class="mb-6">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ $qrCodeData['user_name'] }}</h2>
-                <p class="text-gray-600 dark:text-gray-300">{{ $qrCodeData['user_email'] }}</p>
+            <div class="mb-4 sm:mb-6">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ $qrCodeData['user_name'] }}</h2>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300">{{ $qrCodeData['user_email'] }}</p>
             </div>
 
             <!-- QR Code Info -->
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 w-full overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">QR Code:</span>
-                        <p id="qr-code-text" class="text-gray-600 dark:text-gray-400 font-mono text-xs break-all">{{ $qrCodeData['qr_code'] }}</p>
+                        <p id="qr-code-text" class="text-gray-600 dark:text-gray-400 font-mono text-xs break-all px-2">{{ $qrCodeData['qr_code'] }}</p>
                     </div>
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Dibuat:</span>
@@ -50,22 +51,22 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center w-full">
                 <button 
                     onclick="downloadQR()"
-                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm font-medium"
                 >
                     📥 Download QR Code
                 </button>
                 <button 
                     onclick="printQR()"
-                    class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    class="bg-gray-600 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 text-xs sm:text-sm font-medium"
                 >
                     🖨️ Print QR Code
                 </button>
                 <button 
                     onclick="regenerateQR()"
-                    class="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    class="bg-orange-600 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs sm:text-sm font-medium"
                 >
                     🔄 Generate Ulang
                 </button>
@@ -73,9 +74,9 @@
         </div>
 
         <!-- Instructions -->
-        <div class="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Cara Menggunakan QR Code</h3>
-            <ol class="list-decimal list-inside space-y-2 text-blue-800 dark:text-blue-200">
+        <div class="mt-6 sm:mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-6 w-full overflow-hidden">
+            <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3">Cara Menggunakan QR Code</h3>
+            <ol class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-blue-200">
                 <li>Tunjukkan QR code ini kepada admin Pasar Kolaboraya</li>
                 <li>Admin akan scan QR code menggunakan aplikasi scanner</li>
                 <li>Setelah QR code divalidasi, Anda akan mendapat akses ke Pasar Kolaboraya</li>
@@ -85,16 +86,16 @@
         </div>
 
         <!-- Security Notice -->
-        <div class="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+        <div class="mt-4 sm:mt-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 sm:p-4 w-full overflow-hidden">
             <div class="flex">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400 dark:text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 dark:text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Peringatan Keamanan</h3>
-                    <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                    <h3 class="text-xs sm:text-sm font-medium text-yellow-800 dark:text-yellow-200">Peringatan Keamanan</h3>
+                    <div class="mt-1 sm:mt-2 text-xs sm:text-sm text-yellow-700 dark:text-yellow-300">
                         <p>Jangan bagikan QR code ini kepada orang lain. QR code ini adalah kunci akses pribadi Anda ke Pasar Kolaboraya.</p>
                     </div>
                 </div>

@@ -1,26 +1,26 @@
-<section>
+<section class="w-full overflow-x-hidden">
 
-    <div class="grid md:grid-cols-2">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {{-- Tabs Navigation --}}
-        <div class="flex col-span-1 space-x-4 mb-4">
+        <div class="flex flex-wrap col-span-1 space-x-2 sm:space-x-4 mb-4">
             <button wire:click="setTab('qr-scan')"
-                class="px-4 py-2 font-medium {{ $tab === 'qr-scan' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
+                class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base {{ $tab === 'qr-scan' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
                 Scan QR
             </button>
 
             <button wire:click="setTab('list')"
-                class="px-4 py-2 font-medium {{ $tab === 'list' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
+                class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base {{ $tab === 'list' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
                 Koneksi
             </button>
 
             <button wire:click="setTab('requests')"
-                class="px-4 py-2 font-medium relative {{ $tab === 'requests' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
+                class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base relative {{ $tab === 'requests' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
                 Permintaan
             </button>
         </div>
 
         {{-- SearchBar hanya muncul di tab "list" --}}
-        <div class="col-span-1 w-full flex justify-end max-md:mb-8">
+        <div class="col-span-1 w-full flex justify-end lg:justify-end mb-4 lg:mb-0">
             @if ($tab === 'list')
                 <livewire:components.search-bar :placeholder="'Cari Koneksi...'" :model="\App\Models\Connection::class" :fields="['requester.name', 'receiver.name']"
                     wire:model="results" searchFocus="list" />
@@ -30,7 +30,7 @@
     {{-- Content Sections --}}
     @if ($tab === 'requests')
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4">
+            <div class="p-3 sm:p-4">
                 <livewire:connections.requested-connection :isContent="true" />
             </div>
         </div>
@@ -42,8 +42,8 @@
 
     @if ($tab === 'list')
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-neutral-100 dark:border-slate-700">
-                <h2 class="text-lg font-semibold">Semua Koneksi</h2>
+            <div class="p-3 sm:p-4 border-b border-neutral-100 dark:border-slate-700">
+                <h2 class="text-base sm:text-lg font-semibold">Semua Koneksi</h2>
             </div>
             @if ($searchResults)
                 <livewire:connections.list-connection />
