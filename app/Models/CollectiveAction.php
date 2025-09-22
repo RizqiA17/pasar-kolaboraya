@@ -160,7 +160,7 @@ class CollectiveAction extends Model
      */
     public function fundingContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%funding%')->orWhere('name', 'like', '%dana%');
         });
     }
@@ -170,7 +170,7 @@ class CollectiveAction extends Model
      */
     public function volunteerContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%volunteer%')->orWhere('name', 'like', '%relawan%');
         });
     }
@@ -180,7 +180,7 @@ class CollectiveAction extends Model
      */
     public function expertiseContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%expertise%')->orWhere('name', 'like', '%keahlian%');
         });
     }
@@ -190,7 +190,7 @@ class CollectiveAction extends Model
      */
     public function resourceContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%resource%')->orWhere('name', 'like', '%sumber daya%');
         });
     }
@@ -200,7 +200,7 @@ class CollectiveAction extends Model
      */
     public function promotionContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%promotion%')->orWhere('name', 'like', '%promosi%');
         });
     }
@@ -210,7 +210,7 @@ class CollectiveAction extends Model
      */
     public function otherContributions(): HasMany
     {
-        return $this->contributions()->whereHas('contribution', function($q) {
+        return $this->contributions()->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%other%')->orWhere('name', 'like', '%lainnya%');
         });
     }
@@ -256,9 +256,11 @@ class CollectiveAction extends Model
         }
 
         // Check if user has any pending or accepted contributions
-        if ($this->contributions()->where('user_id', $user->id)
-            ->whereIn('status', ['offered', 'accepted'])
-            ->exists()) {
+        if (
+            $this->contributions()->where('user_id', $user->id)
+                ->whereIn('status', ['offered', 'accepted'])
+                ->exists()
+        ) {
             return false;
         }
 
@@ -279,18 +281,20 @@ class CollectiveAction extends Model
     public function includesEcosystem(int $ecosystemId): bool
     {
         // Check if ecosystem has accepted invitation
-        if ($this->acceptedInvitations()
-            ->where('ecosystem_id', $ecosystemId)
-            ->exists()) {
+        if (
+            $this->acceptedInvitations()
+                ->where('ecosystem_id', $ecosystemId)
+                ->exists()
+        ) {
             return true;
         }
-        
+
         // Check if ecosystem creator is a member of this collective action
         $ecosystem = Ecosystem::find($ecosystemId);
         if ($ecosystem && $this->users()->where('users.id', $ecosystem->creator_id)->exists()) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -301,14 +305,14 @@ class CollectiveAction extends Model
     {
         return $query->where(function ($q) use ($ecosystemId) {
             $q->whereHas('acceptedInvitations', function ($subQuery) use ($ecosystemId) {
-                  $subQuery->where('ecosystem_id', $ecosystemId);
-              })
-              ->orWhereHas('users', function ($subQuery) use ($ecosystemId) {
-                  $ecosystem = Ecosystem::find($ecosystemId);
-                  if ($ecosystem) {
-                      $subQuery->where('users.id', $ecosystem->creator_id);
-                  }
-              });
+                $subQuery->where('ecosystem_id', $ecosystemId);
+            })
+                ->orWhereHas('users', function ($subQuery) use ($ecosystemId) {
+                    $ecosystem = Ecosystem::find($ecosystemId);
+                    if ($ecosystem) {
+                        $subQuery->where('users.id', $ecosystem->creator_id);
+                    }
+                });
         });
     }
 
@@ -319,13 +323,13 @@ class CollectiveAction extends Model
     {
         return $query->where(function ($q) use ($ecosystemIds) {
             $q->whereHas('acceptedInvitations', function ($subQuery) use ($ecosystemIds) {
-                  $subQuery->whereIn('ecosystem_id', $ecosystemIds);
-              })
-              ->orWhereHas('users', function ($subQuery) use ($ecosystemIds) {
-                  $ecosystems = Ecosystem::whereIn('id', $ecosystemIds)->get();
-                  $creatorIds = $ecosystems->pluck('creator_id')->toArray();
-                  $subQuery->whereIn('users.id', $creatorIds);
-              });
+                $subQuery->whereIn('ecosystem_id', $ecosystemIds);
+            })
+                ->orWhereHas('users', function ($subQuery) use ($ecosystemIds) {
+                    $ecosystems = Ecosystem::whereIn('id', $ecosystemIds)->get();
+                    $creatorIds = $ecosystems->pluck('creator_id')->toArray();
+                    $subQuery->whereIn('users.id', $creatorIds);
+                });
         });
     }
 
@@ -346,7 +350,7 @@ class CollectiveAction extends Model
         if (!$user->hasActivePasarKolaboraya()) {
             return $query->whereRaw('1 = 0'); // Return empty result
         }
-        
+
         return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
     }
 
@@ -355,7 +359,7 @@ class CollectiveAction extends Model
      */
     public function getScaleLabelAttribute(): string
     {
-        return match($this->scale) {
+        return match ($this->scale) {
             'kecil' => 'Aksi Kecil',
             'sedang' => 'Aksi Sedang',
             'besar' => 'Aksi Besar',
@@ -368,7 +372,7 @@ class CollectiveAction extends Model
      */
     public function getScopeLabelAttribute(): string
     {
-        return match($this->scope) {
+        return match ($this->scope) {
             'local' => 'Lokal',
             'national' => 'Nasional',
             'international' => 'Internasional',
@@ -381,7 +385,7 @@ class CollectiveAction extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'draft' => 'Draft',
             'planning' => 'Perencanaan',
             'active' => 'Aktif',
@@ -519,6 +523,11 @@ class CollectiveAction extends Model
         return $this->users()->where('users.id', $user->id)->exists();
     }
 
+    public function acceptedUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('status', 'active');
+    }
+
     /**
      * Get user status in this collective action
      */
@@ -549,19 +558,19 @@ class CollectiveAction extends Model
     {
         // Get all ecosystem members including the creator
         $ecosystemMembers = $ecosystem->acceptedUsers()->get();
-        
+
         // Also include the ecosystem creator if not already in the list
         $creator = $ecosystem->creator;
         if ($creator && !$ecosystemMembers->contains('id', $creator->id)) {
             $ecosystemMembers->push($creator);
         }
-        
+
         foreach ($ecosystemMembers as $member) {
             // Check if user is already a member
             if (!$this->isUserMember($member) && !$this->isUserAdmin($member) && !$this->isUserContributor($member)) {
                 // Determine status based on ecosystem auto-join setting
                 $status = $ecosystem->auto_join_collective_actions ? 'active' : 'pending_approval';
-                
+
                 $this->users()->attach($member->id, [
                     'ecosystem_id' => $ecosystem->id,
                     'role' => $role,
@@ -587,10 +596,10 @@ class CollectiveAction extends Model
                 $ecosystem = Ecosystem::find($ecosystemId);
                 $isEcosystemMember = $ecosystem && $ecosystem->acceptedUsers()->where('users.id', $user->id)->exists();
             }
-            
+
             // If user is not in an ecosystem, they need approval for direct join
             $status = $isEcosystemMember ? 'active' : 'pending_approval';
-            
+
             $this->users()->attach($user->id, [
                 'ecosystem_id' => $ecosystemId,
                 'role' => $role,
@@ -687,7 +696,7 @@ class CollectiveAction extends Model
     {
         $contributionData['user_id'] = $user->id;
         $contributionData['offered_at'] = now();
-        
+
         return $this->contributions()->create($contributionData);
     }
 
@@ -697,7 +706,7 @@ class CollectiveAction extends Model
     public function acceptContribution(int $contributionId, string $adminNotes = null): bool
     {
         $contribution = $this->contributions()->find($contributionId);
-        
+
         if (!$contribution || $contribution->status !== 'offered') {
             return false;
         }
@@ -717,7 +726,7 @@ class CollectiveAction extends Model
     public function declineContribution(int $contributionId, string $adminNotes = null): bool
     {
         $contribution = $this->contributions()->find($contributionId);
-        
+
         if (!$contribution || $contribution->status !== 'offered') {
             return false;
         }
@@ -736,7 +745,7 @@ class CollectiveAction extends Model
     public function completeContribution(int $contributionId, string $adminNotes = null): bool
     {
         $contribution = $this->contributions()->find($contributionId);
-        
+
         if (!$contribution || $contribution->status !== 'accepted') {
             return false;
         }
@@ -797,11 +806,11 @@ class CollectiveAction extends Model
         // 2. Scale & Scope Impact
         $scaleWeights = ['kecil' => 1, 'sedang' => 2, 'besar' => 3];
         $scopeWeights = ['local' => 1, 'national' => 2, 'international' => 3];
-        
+
         $scaleWeight = $scaleWeights[$this->scale] ?? 1;
         $scopeWeight = $scopeWeights[$this->scope] ?? 1;
         $impactValue = $scaleWeight * $scopeWeight;
-        
+
         // For single action, impact_raw = impact_value
         $impactRaw = $impactValue;
         $impactRef = 300; // Reference maximum value
@@ -847,11 +856,11 @@ class CollectiveAction extends Model
 
         // Calculate final Aksi score as average of all 6 metrics
         $aksiScore = (
-            $activityScore + 
-            $impactScore + 
-            $participationScore + 
-            $engagementScore + 
-            $completionScore + 
+            $activityScore +
+            $impactScore +
+            $participationScore +
+            $engagementScore +
+            $completionScore +
             $diversityScore
         ) / 6;
 

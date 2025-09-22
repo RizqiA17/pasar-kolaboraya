@@ -51,7 +51,7 @@ class Stats extends Component
                         $query->where('user_id', $user->id);
                     })->count(),
                 'collective_actions' => \App\Models\CollectiveAction::forUserActiveSession($user)
-                    ->whereHas('acceptedInvitations', function($query) use ($user) {
+                    ->whereHas('acceptedUsers', function($query) use ($user) {
                         $query->where('user_id', $user->id);
                     })->count(),
                 default => 0
