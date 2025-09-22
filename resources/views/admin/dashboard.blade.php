@@ -134,7 +134,7 @@
             </div>
         </div>
 
-        <!-- QR Scanner Card -->
+        {{-- <!-- QR Scanner Card -->
         <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-4 sm:p-6 shadow-lg">
             <div class="flex items-center justify-between">
                 <div>
@@ -150,7 +150,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Additional Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
