@@ -13,7 +13,7 @@
             <div class="mb-6">
                 <div class="inline-block p-4 bg-white border-2 border-gray-200 dark:border-gray-600 rounded-lg">
                     <!-- Server-side generated QR code -->
-                    <div class="w-64 h-64 flex items-center justify-center">
+                    <div id="qr-code-container" class="w-64 h-64 flex items-center justify-center">
                         {!! $qrCodeSvg !!}
                     </div>
                 </div>
@@ -30,15 +30,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">QR Code:</span>
-                        <p class="text-gray-600 dark:text-gray-400 font-mono text-xs break-all">{{ $qrCodeData['qr_code'] }}</p>
+                        <p id="qr-code-text" class="text-gray-600 dark:text-gray-400 font-mono text-xs break-all">{{ $qrCodeData['qr_code'] }}</p>
                     </div>
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Dibuat:</span>
-                        <p class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['generated_at'])->format('d/m/Y H:i') }}</p>
+                        <p id="qr-generated-date" class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['generated_at'])->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Berlaku hingga:</span>
-                        <p class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['expires_at'])->format('d/m/Y H:i') }}</p>
+                        <p id="qr-expires-date" class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($qrCodeData['expires_at'])->format('d/m/Y H:i') }}</p>
                     </div>
                     <div>
                         <span class="font-medium text-gray-700 dark:text-gray-300">Status:</span>
@@ -172,6 +172,12 @@ function regenerateQR() {
         button.innerHTML = '🔄 Generating...';
         button.disabled = true;
         
+        // Show loading indicator on QR code container
+        const qrContainer = document.querySelector('#qr-code-container');
+        if (qrContainer) {
+            qrContainer.innerHTML = '<div class="flex items-center justify-center h-full"><div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div></div>';
+        }
+        
         // Make AJAX request to regenerate QR code
         fetch('{{ route("qr.generate") }}', {
             method: 'POST',
@@ -190,14 +196,48 @@ function regenerateQR() {
             if (data.success && data.qr_code) {
                 // Update QR code display
                 updateQRCodeDisplay(data);
-                alert('QR code berhasil di-generate ulang!');
+                
+                // Show success message
+                const successDiv = document.createElement('div');
+                successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                successDiv.textContent = 'QR code berhasil di-generate ulang!';
+                document.body.appendChild(successDiv);
+                
+                // Remove success message after 3 seconds
+                setTimeout(() => {
+                    if (successDiv.parentNode) {
+                        successDiv.parentNode.removeChild(successDiv);
+                    }
+                }, 3000);
+                
+                // Force refresh the page after 2 seconds to ensure everything is updated
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
-                alert(data.message || 'Terjadi kesalahan saat membuat QR code baru');
+                throw new Error(data.message || 'Terjadi kesalahan saat membuat QR code baru');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat membuat QR code baru: ' + error.message);
+            
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            errorDiv.textContent = 'Error: ' + error.message;
+            document.body.appendChild(errorDiv);
+            
+            // Remove error message after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.parentNode.removeChild(errorDiv);
+                }
+            }, 5000);
+            
+            // Restore original QR code if available
+            if (qrContainer) {
+                qrContainer.innerHTML = @json($qrCodeSvg);
+            }
         })
         .finally(() => {
             // Restore button state
@@ -210,26 +250,26 @@ function regenerateQR() {
 // Update QR code display with new data
 function updateQRCodeDisplay(data) {
     // Update QR code SVG
-    const qrContainer = document.querySelector('#qr-code-container div');
+    const qrContainer = document.querySelector('#qr-code-container');
     if (qrContainer) {
         qrContainer.innerHTML = data.qr_code_svg;
     }
     
     // Update QR code text
-    const qrCodeText = document.querySelector('.font-mono');
+    const qrCodeText = document.querySelector('#qr-code-text');
     if (qrCodeText) {
         qrCodeText.textContent = data.qr_code;
     }
     
     // Update generated date
-    const generatedDate = document.querySelector('.text-gray-600');
+    const generatedDate = document.querySelector('#qr-generated-date');
     if (generatedDate && data.generated_at) {
         const date = new Date(data.generated_at);
         generatedDate.textContent = date.toLocaleDateString('id-ID') + ' ' + date.toLocaleTimeString('id-ID');
     }
     
     // Update expires date
-    const expiresDate = document.querySelectorAll('.text-gray-600')[1];
+    const expiresDate = document.querySelector('#qr-expires-date');
     if (expiresDate && data.expires_at) {
         const date = new Date(data.expires_at);
         expiresDate.textContent = date.toLocaleDateString('id-ID') + ' ' + date.toLocaleTimeString('id-ID');
