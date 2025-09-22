@@ -30,7 +30,9 @@ Route::middleware('auth')->group(function () {
         ->name('password.confirm');
 
     Route::get('ecosystem-setup', \App\Livewire\Auth\EcosystemSetup::class)->name('ecosystem.setup');
-    Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)->name('profile.setup');
+    Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)
+        ->middleware('check.user.approval')
+        ->name('profile.setup');
     
     // New approval system routes
     Route::get('pending-approval', PendingApproval::class)->name('auth.pending-approval');
