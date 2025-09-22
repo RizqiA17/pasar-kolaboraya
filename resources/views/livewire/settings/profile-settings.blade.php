@@ -378,7 +378,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="space-y-2">
+                                {{-- <div class="space-y-2">
                                     <label for="selectedRole"
                                         class="block text-sm font-medium text-gray-900 dark:text-slate-100">Peran</label>
                                     <div class="relative">
@@ -402,7 +402,7 @@
                                     @error('selectedRole')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="space-y-2">

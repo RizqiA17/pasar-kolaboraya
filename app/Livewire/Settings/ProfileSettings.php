@@ -37,7 +37,7 @@ class ProfileSettings extends Component
     public $interests = [];
     public $skills = [];
     public $contributions = [];
-    public $peran = [];
+    // public $peran = [];
     public $selectedInterests = [];
     public $selectedSkills = [];
     public $newContribution = [
@@ -98,7 +98,7 @@ class ProfileSettings extends Component
         $this->interests = Interest::all();
         $this->skills = Skill::all();
         $this->contributions = Contribution::all();
-        $this->peran = Peran::all();
+        // $this->peran = Peran::all();
         $this->tab = request()->get('tab', 'profile');
 
         // Get or create user profile
@@ -115,7 +115,7 @@ class ProfileSettings extends Component
         $this->organization = $profile->organization ?? '';
         $this->phone = $profile->phone ?? '';
         $this->vision = $profile->vision ?? '';
-        $this->selectedRole = $profile->peran_id ?? '';
+        // $this->selectedRole = $profile->peran_id ?? '';
 
         // Load user's current selections from profile
         $this->selectedInterests = $profile->interests()
@@ -167,7 +167,7 @@ class ProfileSettings extends Component
             'organization' => $this->organization,
             'phone' => $this->phone,
             'vision' => $this->vision,
-            'peran_id' => $this->selectedRole,
+            // 'peran_id' => $this->selectedRole,
         ]);
 
         $this->dispatch('profile-updated');
