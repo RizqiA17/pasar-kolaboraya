@@ -12,7 +12,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('collective_actions', function (Blueprint $table) {
-            $table->string('qr_code', 6)->after('collaboration_terms')->change();
+            $table->string('qr_code', 6)->after('collaboration_terms');
         });
         CollectiveAction::all()->each(function ($ecosystem) {
             $ecosystem->update([
