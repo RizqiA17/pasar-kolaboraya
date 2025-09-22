@@ -33,10 +33,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CsrfTokenManager::class,
         ]);
         
-        // Apply user approval check to authenticated routes
-        $middleware->web(prepend: [
-            \App\Http\Middleware\CheckUserApproval::class,
-        ]);
+        // Note: CheckUserApproval middleware is applied per-route, not globally
+        // to avoid redirect loops with pending-approval and rejected routes
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Report specific exceptions

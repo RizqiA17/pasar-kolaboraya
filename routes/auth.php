@@ -31,10 +31,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('ecosystem-setup', \App\Livewire\Auth\EcosystemSetup::class)->name('ecosystem.setup');
     Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)
-        ->middleware('check.user.approval')
         ->name('profile.setup');
     
-    // New approval system routes
+    // New approval system routes - these should NOT have check.user.approval middleware
+    // to avoid redirect loops
     Route::get('pending-approval', PendingApproval::class)->name('auth.pending-approval');
     Route::get('rejected', Rejected::class)->name('auth.rejected');
 });

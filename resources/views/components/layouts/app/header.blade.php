@@ -208,7 +208,7 @@
             @endif
 
             <!-- Peta Ekosistem (Public Access) -->
-            <flux:navbar.item icon="map" :href="route('public.ecosystem.mapping')"
+            <flux:navbar.item icon="map" :href="route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id"
                 :current="request()->routeIs('public.ecosystem.mapping')"
                 class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
                 wire:navigate>
@@ -775,7 +775,7 @@
                 @endif
 
                 <!-- Peta Ekosistem (Public Access) -->
-                <a href="{{ route('public.ecosystem.mapping') }}"
+                <a href="{{ route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id }}"
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.mapping') ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 hover:bg-cyan-500/10' }}"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">

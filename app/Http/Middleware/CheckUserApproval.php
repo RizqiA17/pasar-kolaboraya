@@ -44,6 +44,10 @@ class CheckUserApproval
             if ($user->isApproved()) {
                 return $next($request);
             }
+
+            // If user has user_type but is not in any of the above states, 
+            // treat as pending for safety
+            return redirect()->route('auth.pending-approval');
         }
 
         // For users without user_type (old system), allow access
