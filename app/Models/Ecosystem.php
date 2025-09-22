@@ -578,95 +578,91 @@ class Ecosystem extends Model
 
     /**
      * Calculate Pilar II - Ekosistem scoring for this ecosystem
-     * Based on the new scoring system requirements
+     * Based ONLY on role diversity: peran yang ada / total seluruh peran di database
      */
     public function calculateEkosistemScore(): array
     {
-        // 1. Membership Activation Rate
-        $accepted = $this->acceptedUsers()->count();
-        $maxUsers = $this->max_users ?? 1; // Prevent division by zero
-        $activationRate = $accepted / $maxUsers;
-        $activationScore = min($activationRate, 1) * 100;
+        // Get all unique roles in this ecosystem
+        $members = $this->acceptedUsers()->with('profile.peran')->get();
+        $existingRoleIds = [];
+        
+        foreach ($members as $member) {
+            if ($member->profile && $member->profile->peran) {
+                $existingRoleIds[] = $member->profile->peran->id;
+            }
+        }
+        
+        $uniqueExistingRoles = array_unique($existingRoleIds);
+        $existingRolesCount = count($uniqueExistingRoles);
+        
+        // Get total roles in database
+        $totalRolesInDatabase = \App\Models\Peran::count();
+        
+        // Calculate ecosystem quality score: peran yang ada / total seluruh peran di database
+        $ekosistemScore = $totalRolesInDatabase > 0 
+            ? ($existingRolesCount / $totalRolesInDatabase) * 100 
+            : 0;
 
-        // 2. Ecosystem Acceptance Rate
-        $rejected = $this->users()->wherePivot('status', 'rejected')->count();
-        $totalDecisions = $accepted + $rejected;
-        $acceptanceRate = $totalDecisions > 0 ? $accepted / $totalDecisions : 0;
-        $acceptanceScore = $acceptanceRate * 100;
+        return [
+            'ekosistem_score' => round($ekosistemScore, 1),
+            'role_diversity_score' => round($ekosistemScore, 1),
+            'details' => [
+                'existing_roles_count' => $existingRolesCount,
+                'total_roles_in_database' => $totalRolesInDatabase,
+                'role_diversity_details' => $this->getRoleDiversityDetails(),
+                'existing_role_names' => $this->getExistingRoleNames($uniqueExistingRoles)
+            ]
+        ];
+    }
 
-        // 3. Ecosystem Contribution Completion Rate
-        $completed = $this->contributions()->where('status', 'completed')->count();
-        $totalContributions = $this->contributions()->count();
-        $completionRate = $totalContributions > 0 ? $completed / $totalContributions : 0;
-        $completionScore = $completionRate * 100;
+    /**
+     * Get names of existing roles in the ecosystem
+     */
+    public function getExistingRoleNames($roleIds): array
+    {
+        if (empty($roleIds)) {
+            return [];
+        }
+        
+        return \App\Models\Peran::whereIn('id', $roleIds)
+            ->pluck('nama')
+            ->toArray();
+    }
 
-        // 4. Ecosystem Contribution Diversity (HHI calculation)
-        $contributionTypes = $this->contributions()
-            ->join('contributions', 'ecosystem_contributions.contribution_id', '=', 'contributions.id')
-            ->selectRaw('contributions.category, COUNT(*) as count')
-            ->groupBy('contributions.category')
-            ->get();
-
-        $totalContributionCount = $contributionTypes->sum('count');
-        $hhi = 0;
-        $uniqueTypes = $contributionTypes->count();
-
-        if ($totalContributionCount > 0) {
-            foreach ($contributionTypes as $type) {
-                $proportion = $type->count / $totalContributionCount;
-                $hhi += pow($proportion, 2);
+    /**
+     * Get detailed information about role diversity
+     */
+    public function getRoleDiversityDetails(): array
+    {
+        $members = $this->acceptedUsers()->with('profile.peran')->get();
+        $roleDistribution = [];
+        $totalMembers = $members->count();
+        
+        foreach ($members as $member) {
+            if ($member->profile && $member->profile->peran) {
+                $roleId = $member->profile->peran->id;
+                $roleName = $member->profile->peran->nama;
+                if (!isset($roleDistribution[$roleId])) {
+                    $roleDistribution[$roleId] = [
+                        'name' => $roleName,
+                        'count' => 0,
+                        'percentage' => 0
+                    ];
+                }
+                $roleDistribution[$roleId]['count']++;
             }
         }
 
-        $diversityScore = $uniqueTypes > 1 ? (1 - $hhi) / (1 - 1 / $uniqueTypes) * 100 : 0;
-
-        // 5. Role Fit (Kesesuaian Kebutuhan Peran)
-        $existingRoles = collect($this->existing_roles ?? []);
-        $neededRoles = collect($this->needed_roles ?? []);
-        $coverage = $neededRoles->count() > 0 
-            ? $existingRoles->intersect($neededRoles)->count() / $neededRoles->count() 
-            : 0;
-        $roleFitScore = $coverage * 100;
-
-        // 6. Ecosystem Engagement in Collective Actions
-        $invited = $this->collectiveActionInvitations()->count();
-        $acceptedInvitations = $this->collectiveActionInvitations()->where('status', 'accepted')->count();
-        $engagementRate = $invited > 0 ? $acceptedInvitations / $invited : 0;
-        $engagementScore = $engagementRate * 100;
-
-        // Calculate final Ekosistem score as average of all 6 metrics
-        $ekosistemScore = (
-            $activationScore + 
-            $acceptanceScore + 
-            $completionScore + 
-            $diversityScore + 
-            $roleFitScore + 
-            $engagementScore
-        ) / 6;
+        // Calculate percentages
+        foreach ($roleDistribution as $roleId => &$data) {
+            $data['percentage'] = $totalMembers > 0 ? round(($data['count'] / $totalMembers) * 100, 1) : 0;
+        }
 
         return [
-            'activation_score' => round($activationScore, 1),
-            'acceptance_score' => round($acceptanceScore, 1),
-            'completion_score' => round($completionScore, 1),
-            'diversity_score' => round($diversityScore, 1),
-            'role_fit_score' => round($roleFitScore, 1),
-            'engagement_score' => round($engagementScore, 1),
-            'ekosistem_score' => round($ekosistemScore, 1),
-            'details' => [
-                'accepted_members' => $accepted,
-                'max_users' => $maxUsers,
-                'rejected_members' => $rejected,
-                'total_decisions' => $totalDecisions,
-                'completed_contributions' => $completed,
-                'total_contributions' => $totalContributions,
-                'contribution_types_count' => $uniqueTypes,
-                'hhi_value' => round($hhi, 4),
-                'existing_roles_count' => $existingRoles->count(),
-                'needed_roles_count' => $neededRoles->count(),
-                'role_coverage_count' => $existingRoles->intersect($neededRoles)->count(),
-                'invited_to_actions' => $invited,
-                'accepted_invitations' => $acceptedInvitations
-            ]
+            'total_members' => $totalMembers,
+            'unique_roles' => count($roleDistribution),
+            'role_distribution' => array_values($roleDistribution),
+            'members_without_roles' => $members->where('profile.peran', null)->count()
         ];
     }
 }
