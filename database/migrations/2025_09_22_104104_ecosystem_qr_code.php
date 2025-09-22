@@ -13,7 +13,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ecosystems', function (Blueprint $table) {
-            $table->dropColumn('qr_code');
             $table->string('qr_code', 6)->after('auto_join_collective_actions');
         });
         Ecosystem::all()->each(function ($ecosystem) {
