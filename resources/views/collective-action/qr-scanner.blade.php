@@ -12,14 +12,14 @@
                 <!-- Camera Preview -->
                 <div class="mb-6">
                     <div id="camera-container" class="relative mx-auto w-80 h-80 bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden border-2 border-gray-300 dark:border-slate-600">
-                        <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+                        <video id="video" autoplay playsinline class="w-full h-full object-cover bg-white dark:bg-slate-800"></video>
                         <canvas id="canvas" class="hidden"></canvas>
-                        <div id="scanner-overlay" class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-48 h-48 border-2 border-blue-500 rounded-lg relative">
-                                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-blue-500"></div>
-                                <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-blue-500"></div>
-                                <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-blue-500"></div>
-                                <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-blue-500"></div>
+                        <div id="scanner-overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-48 h-48 border-2 border-blue-500 dark:border-blue-400 rounded-lg relative">
+                                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-blue-500 dark:border-blue-400"></div>
+                                <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-blue-500 dark:border-blue-400"></div>
+                                <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-blue-500 dark:border-blue-400"></div>
+                                <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-blue-500 dark:border-blue-400"></div>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <input type="url" name="qr_data" placeholder="https://..." required
                             class="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-l-md bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <button type="submit"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-r-md text-sm transition-colors">
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-r-md text-sm transition-colors">
                             Proses
                         </button>
                     </form>
@@ -51,15 +51,15 @@
                 <!-- Controls -->
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button id="start-scan" onclick="startScan()"
-                        class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors">
+                        class="px-6 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-md transition-colors">
                         Mulai Scan
                     </button>
                     <button id="stop-scan" onclick="stopScan()" disabled
-                        class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="px-6 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         Stop Scan
                     </button>
                     <a href="{{ route('collective-action.browse') }}"
-                        class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors">
+                        class="px-6 py-2 bg-gray-600 hover:bg-gray-700 dark:bg-slate-700 dark:hover:bg-slate-800 text-white rounded-md transition-colors">
                         Kembali
                     </a>
                 </div>
@@ -67,16 +67,16 @@
 
             <!-- Flash Messages -->
             @if (session('error'))
-                <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Error</h3>
-                            <div class="mt-2 text-sm text-red-700">
+                            <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Error</h3>
+                            <div class="mt-2 text-sm text-red-700 dark:text-red-300">
                                 <p>{{ session('error') }}</p>
                             </div>
                         </div>
@@ -85,16 +85,16 @@
             @endif
 
             @if (session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                <div class="mb-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg p-4">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-5 w-5 text-green-400 dark:text-green-300" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-green-800">Berhasil</h3>
-                            <div class="mt-2 text-sm text-green-700">
+                            <h3 class="text-sm font-medium text-green-800 dark:text-green-200">Berhasil</h3>
+                            <div class="mt-2 text-sm text-green-700 dark:text-green-300">
                                 <p>{{ session('success') }}</p>
                             </div>
                         </div>
