@@ -10,6 +10,7 @@ use App\Models\Ecosystem;
 use App\Models\User;
 use App\Models\Contribution;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class CollectiveActionSeeder extends Seeder
 {
@@ -398,6 +399,7 @@ class CollectiveActionSeeder extends Seeder
                 'status' => $actionData['status'],
                 'min_ecosystems' => $actionData['min_ecosystems'],
                 'collaboration_terms' => $actionData['collaboration_terms'],
+                'qr_code' => Str::random(6),
                 'pasar_kolaboraya_id' => $pasarKolaboraya?->id,
             ]);
 

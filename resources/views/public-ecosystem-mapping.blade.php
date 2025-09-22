@@ -263,6 +263,7 @@
                 @endif
             </div>
         </div>
+        
 
         <!-- Ecosystem Detail Modal -->
         @include('components.ecosystem-detail-modal')
@@ -305,7 +306,7 @@
                             },
                             ecosystems: @json($roleData),
                         };
-
+                        
                         createEcosystemMapping(data);
                     } catch (error) {
                         console.error('Failed to load D3.js:', error);

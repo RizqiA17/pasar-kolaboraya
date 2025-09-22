@@ -516,6 +516,7 @@ class EcosystemBuilderSeeder extends Seeder
             $ecosystemData = $builderData['ecosystem'];
             $ecosystemData['creator_id'] = $user->id;
             $ecosystemData['pasar_kolaboraya_id'] = $pasarKolaboraya?->id;
+            $ecosystemData['qr_code'] = \Str::random(6);
             
             $ecosystem = Ecosystem::create($ecosystemData);
 

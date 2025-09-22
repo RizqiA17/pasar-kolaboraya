@@ -7,6 +7,7 @@ use App\Models\Ecosystem;
 use App\Models\PasarKolaboraya;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class EcosystemMappingTestDataSeeder extends Seeder
 {
@@ -54,59 +55,59 @@ class EcosystemMappingTestDataSeeder extends Seeder
 
         // Technology & Innovation Users
         $techUsers = [
-            ['name' => 'Alex Chen', 'email' => 'alex.chen@tech.com', 'role' => 'Software Developer', 'user_type' => 'partisipan'],
-            ['name' => 'Sarah Kim', 'email' => 'sarah.kim@tech.com', 'role' => 'Product Manager', 'user_type' => 'partisipan'],
-            ['name' => 'David Rodriguez', 'email' => 'david.rodriguez@tech.com', 'role' => 'UI/UX Designer', 'user_type' => 'partisipan'],
-            ['name' => 'Lisa Wang', 'email' => 'lisa.wang@tech.com', 'role' => 'Data Scientist', 'user_type' => 'partisipan'],
-            ['name' => 'Mike Johnson', 'email' => 'mike.johnson@tech.com', 'role' => 'DevOps Engineer', 'user_type' => 'partisipan'],
-            ['name' => 'Emma Davis', 'email' => 'emma.davis@tech.com', 'role' => 'QA Tester', 'user_type' => 'partisipan'],
+            ['name' => 'Alex Chen', 'email' => 'alex.chen@tech.com', 'role' => 'Arsitek Teknologi', 'user_type' => 'partisipan'],
+            ['name' => 'Sarah Kim', 'email' => 'sarah.kim@tech.com', 'role' => 'Pemimpin Adaptif', 'user_type' => 'partisipan'],
+            ['name' => 'David Rodriguez', 'email' => 'david.rodriguez@tech.com', 'role' => 'Perancang Interaksi Sosial', 'user_type' => 'partisipan'],
+            ['name' => 'Lisa Wang', 'email' => 'lisa.wang@tech.com', 'role' => 'Penyaji Data', 'user_type' => 'partisipan'],
+            ['name' => 'Mike Johnson', 'email' => 'mike.johnson@tech.com', 'role' => 'Pemikir Masa Depan', 'user_type' => 'partisipan'],
+            ['name' => 'Emma Davis', 'email' => 'emma.davis@tech.com', 'role' => 'Pengukur Dampak', 'user_type' => 'partisipan'],
         ];
 
         // Environmental & Sustainability Users
         $envUsers = [
-            ['name' => 'Dr. Green Earth', 'email' => 'green.earth@env.com', 'role' => 'Environmental Scientist', 'user_type' => 'partisipan'],
-            ['name' => 'Maria Santos', 'email' => 'maria.santos@env.com', 'role' => 'Sustainability Consultant', 'user_type' => 'partisipan'],
-            ['name' => 'James Wilson', 'email' => 'james.wilson@env.com', 'role' => 'Renewable Energy Expert', 'user_type' => 'partisipan'],
-            ['name' => 'Anna Petrov', 'email' => 'anna.petrov@env.com', 'role' => 'Climate Researcher', 'user_type' => 'partisipan'],
-            ['name' => 'Tom Brown', 'email' => 'tom.brown@env.com', 'role' => 'Eco Activist', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Green Earth', 'email' => 'green.earth@env.com', 'role' => 'Pemantik Nyala Komunitas', 'user_type' => 'partisipan'],
+            ['name' => 'Maria Santos', 'email' => 'maria.santos@env.com', 'role' => 'Pemantau Tren', 'user_type' => 'partisipan'],
+            ['name' => 'James Wilson', 'email' => 'james.wilson@env.com', 'role' => 'Pelopor Ekonomi Baru', 'user_type' => 'partisipan'],
+            ['name' => 'Anna Petrov', 'email' => 'anna.petrov@env.com', 'role' => 'Penyaji Data', 'user_type' => 'partisipan'],
+            ['name' => 'Tom Brown', 'email' => 'tom.brown@env.com', 'role' => 'Si Siaga Tangguh', 'user_type' => 'partisipan'],
         ];
 
         // Health & Wellness Users
         $healthUsers = [
-            ['name' => 'Dr. Sarah Mitchell', 'email' => 'sarah.mitchell@health.com', 'role' => 'Public Health Specialist', 'user_type' => 'partisipan'],
-            ['name' => 'Dr. Ahmed Hassan', 'email' => 'ahmed.hassan@health.com', 'role' => 'Mental Health Counselor', 'user_type' => 'partisipan'],
-            ['name' => 'Nurse Jennifer', 'email' => 'jennifer.nurse@health.com', 'role' => 'Community Health Nurse', 'user_type' => 'partisipan'],
-            ['name' => 'Dr. Carlos Mendez', 'email' => 'carlos.mendez@health.com', 'role' => 'Epidemiologist', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Sarah Mitchell', 'email' => 'sarah.mitchell@health.com', 'role' => 'Perawat Kesejahteraan', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Ahmed Hassan', 'email' => 'ahmed.hassan@health.com', 'role' => 'Pendorong Potensi', 'user_type' => 'partisipan'],
+            ['name' => 'Nurse Jennifer', 'email' => 'jennifer.nurse@health.com', 'role' => 'Suporter Setia', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Carlos Mendez', 'email' => 'carlos.mendez@health.com', 'role' => 'Penyaji Data', 'user_type' => 'partisipan'],
         ];
 
         // Education & Learning Users
         $eduUsers = [
-            ['name' => 'Prof. Michael Chen', 'email' => 'michael.chen@edu.com', 'role' => 'Educational Technologist', 'user_type' => 'partisipan'],
-            ['name' => 'Dr. Elena Rodriguez', 'email' => 'elena.rodriguez@edu.com', 'role' => 'Curriculum Developer', 'user_type' => 'partisipan'],
-            ['name' => 'Teacher Maria', 'email' => 'maria.teacher@edu.com', 'role' => 'Online Instructor', 'user_type' => 'partisipan'],
-            ['name' => 'Dr. Kenji Tanaka', 'email' => 'kenji.tanaka@edu.com', 'role' => 'Learning Designer', 'user_type' => 'partisipan'],
+            ['name' => 'Prof. Michael Chen', 'email' => 'michael.chen@edu.com', 'role' => 'Pengampu Belajar', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Elena Rodriguez', 'email' => 'elena.rodriguez@edu.com', 'role' => 'Pencipta Ruang Inovasi', 'user_type' => 'partisipan'],
+            ['name' => 'Teacher Maria', 'email' => 'maria.teacher@edu.com', 'role' => 'Pembagi Informasi', 'user_type' => 'partisipan'],
+            ['name' => 'Dr. Kenji Tanaka', 'email' => 'kenji.tanaka@edu.com', 'role' => 'Perancang Interaksi Sosial', 'user_type' => 'partisipan'],
         ];
 
         // Social Impact Users
         $socialUsers = [
-            ['name' => 'Aisha Rahman', 'email' => 'aisha.rahman@social.com', 'role' => 'Social Worker', 'user_type' => 'partisipan'],
-            ['name' => 'Budi Santoso', 'email' => 'budi.santoso@social.com', 'role' => 'Community Organizer', 'user_type' => 'partisipan'],
-            ['name' => 'Fatima Al-Zahra', 'email' => 'fatima.alzahra@social.com', 'role' => 'Youth Advocate', 'user_type' => 'partisipan'],
-            ['name' => 'John Smith', 'email' => 'john.smith@social.com', 'role' => 'Policy Analyst', 'user_type' => 'partisipan'],
+            ['name' => 'Aisha Rahman', 'email' => 'aisha.rahman@social.com', 'role' => 'Pemantik Nyala Komunitas', 'user_type' => 'partisipan'],
+            ['name' => 'Budi Santoso', 'email' => 'budi.santoso@social.com', 'role' => 'Pembangun Jaringan', 'user_type' => 'partisipan'],
+            ['name' => 'Fatima Al-Zahra', 'email' => 'fatima.alzahra@social.com', 'role' => 'Pendorong Potensi', 'user_type' => 'partisipan'],
+            ['name' => 'John Smith', 'email' => 'john.smith@social.com', 'role' => 'Perancang Kebijakan', 'user_type' => 'partisipan'],
         ];
 
         // Arts & Culture Users
         $artsUsers = [
-            ['name' => 'Bambang Sutrisno', 'email' => 'bambang.sutrisno@arts.com', 'role' => 'Cultural Preservationist', 'user_type' => 'partisipan'],
-            ['name' => 'Isabella Martinez', 'email' => 'isabella.martinez@arts.com', 'role' => 'Art Curator', 'user_type' => 'partisipan'],
-            ['name' => 'Yuki Nakamura', 'email' => 'yuki.nakamura@arts.com', 'role' => 'Digital Artist', 'user_type' => 'partisipan'],
+            ['name' => 'Bambang Sutrisno', 'email' => 'bambang.sutrisno@arts.com', 'role' => 'Penjaga Nilai', 'user_type' => 'partisipan'],
+            ['name' => 'Isabella Martinez', 'email' => 'isabella.martinez@arts.com', 'role' => 'Penjahit Kisah', 'user_type' => 'partisipan'],
+            ['name' => 'Yuki Nakamura', 'email' => 'yuki.nakamura@arts.com', 'role' => 'Pembaharu Narasi', 'user_type' => 'partisipan'],
         ];
 
         // Business & Finance Users
         $businessUsers = [
-            ['name' => 'Robert Kim', 'email' => 'robert.kim@business.com', 'role' => 'Business Analyst', 'user_type' => 'partisipan'],
-            ['name' => 'Sophie Anderson', 'email' => 'sophie.anderson@business.com', 'role' => 'Financial Advisor', 'user_type' => 'partisipan'],
-            ['name' => 'Hassan Ali', 'email' => 'hassan.ali@business.com', 'role' => 'Investment Manager', 'user_type' => 'partisipan'],
+            ['name' => 'Robert Kim', 'email' => 'robert.kim@business.com', 'role' => 'Pemetaan Sekutu', 'user_type' => 'partisipan'],
+            ['name' => 'Sophie Anderson', 'email' => 'sophie.anderson@business.com', 'role' => 'Investor Sosial', 'user_type' => 'partisipan'],
+            ['name' => 'Hassan Ali', 'email' => 'hassan.ali@business.com', 'role' => 'Penghubung Sumber Daya', 'user_type' => 'partisipan'],
         ];
 
         $allUsers = array_merge($techUsers, $envUsers, $healthUsers, $eduUsers, $socialUsers, $artsUsers, $businessUsers);
@@ -147,22 +148,23 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Global',
             'existing_roles' => [
-                'Software Developer',
-                'Product Manager',
-                'UI/UX Designer',
-                'Data Scientist',
-                'DevOps Engineer'
+                'Arsitek Teknologi',
+                'Pemimpin Adaptif',
+                'Perancang Interaksi Sosial',
+                'Penyaji Data',
+                'Pemikir Masa Depan'
             ],
             'needed_roles' => [
-                'QA Tester',
-                'System Architect',
-                'Security Specialist',
-                'Technical Writer',
-                'Project Coordinator'
+                'Pengukur Dampak',
+                'Pemetaan Sekutu',
+                'Pemantau Tren',
+                'Pembagi Informasi',
+                'Dirijen Kolaborasi'
             ],
             'max_users' => 50,
             'terms_conditions' => 'Members must have technical expertise and commitment to innovation.',
             'description' => 'A collaborative ecosystem focused on digital transformation and technological innovation.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($techEcosystem);
@@ -182,20 +184,21 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Southeast Asia',
             'existing_roles' => [
-                'Environmental Scientist',
-                'Sustainability Consultant',
-                'Renewable Energy Expert',
-                'Climate Researcher'
+                'Pemantik Nyala Komunitas',
+                'Pemantau Tren',
+                'Pelopor Ekonomi Baru',
+                'Penyaji Data'
             ],
             'needed_roles' => [
-                'Eco Activist',
-                'Policy Maker',
-                'Community Educator',
-                'Green Technology Developer'
+                'Si Siaga Tangguh',
+                'Perancang Kebijakan',
+                'Pengampu Belajar',
+                'Arsitek Teknologi'
             ],
             'max_users' => 40,
             'terms_conditions' => 'Members must commit to sustainable practices and environmental protection.',
             'description' => 'Building sustainable communities through environmental innovation and community engagement.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($envEcosystem);
@@ -215,20 +218,21 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'South Asia',
             'existing_roles' => [
-                'Public Health Specialist',
-                'Mental Health Counselor',
-                'Community Health Nurse',
-                'Epidemiologist'
+                'Perawat Kesejahteraan',
+                'Pendorong Potensi',
+                'Suporter Setia',
+                'Penyaji Data'
             ],
             'needed_roles' => [
-                'Health Educator',
-                'Medical Researcher',
-                'Health Policy Analyst',
-                'Community Outreach Coordinator'
+                'Pengampu Belajar',
+                'Penyaji Data',
+                'Perancang Kebijakan',
+                'Pembangun Jaringan'
             ],
             'max_users' => 35,
             'terms_conditions' => 'Members must maintain professional standards and confidentiality.',
             'description' => 'Improving community health outcomes through education and accessible healthcare.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($healthEcosystem);
@@ -248,20 +252,21 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Asia-Pacific',
             'existing_roles' => [
-                'Educational Technologist',
-                'Curriculum Developer',
-                'Online Instructor',
-                'Learning Designer'
+                'Pengampu Belajar',
+                'Pencipta Ruang Inovasi',
+                'Pembagi Informasi',
+                'Perancang Interaksi Sosial'
             ],
             'needed_roles' => [
-                'Educational Researcher',
-                'Student Counselor',
-                'Technology Trainer',
-                'Assessment Specialist'
+                'Penyaji Data',
+                'Pendorong Potensi',
+                'Arsitek Teknologi',
+                'Pengukur Dampak'
             ],
             'max_users' => 45,
             'terms_conditions' => 'Members should be committed to educational equity and continuous learning.',
             'description' => 'Creating innovative learning solutions and ensuring equal access to quality education.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($eduEcosystem);
@@ -281,20 +286,21 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Global',
             'existing_roles' => [
-                'Social Worker',
-                'Community Organizer',
-                'Youth Advocate',
-                'Policy Analyst'
+                'Pemantik Nyala Komunitas',
+                'Pembangun Jaringan',
+                'Pendorong Potensi',
+                'Perancang Kebijakan'
             ],
             'needed_roles' => [
-                'Grant Writer',
-                'Program Manager',
-                'Community Researcher',
-                'Advocacy Specialist'
+                'Penjelajah Dana Kreatif',
+                'Dirijen Kolaborasi',
+                'Penyaji Data',
+                'Advokat Kebijakan'
             ],
             'max_users' => 30,
             'terms_conditions' => 'Members must demonstrate commitment to social impact and community welfare.',
             'description' => 'Fostering social entrepreneurship and community development through innovative solutions.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($socialEcosystem);
@@ -314,19 +320,20 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Indonesia',
             'existing_roles' => [
-                'Cultural Preservationist',
-                'Art Curator',
-                'Digital Artist'
+                'Penjaga Nilai',
+                'Penjahit Kisah',
+                'Pembaharu Narasi'
             ],
             'needed_roles' => [
-                'Museum Curator',
-                'Cultural Educator',
-                'Tourism Guide',
-                'Digital Archivist'
+                'Penyusun Pesan',
+                'Pengampu Belajar',
+                'Pembagi Informasi',
+                'Penyaji Data'
             ],
             'max_users' => 25,
             'terms_conditions' => 'Members must be passionate about cultural preservation and have relevant expertise.',
             'description' => 'Preserving cultural heritage through education, documentation, and community engagement.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($artsEcosystem);
@@ -346,19 +353,20 @@ class EcosystemMappingTestDataSeeder extends Seeder
             ],
             'work_region' => 'Asia-Pacific',
             'existing_roles' => [
-                'Business Analyst',
-                'Financial Advisor',
-                'Investment Manager'
+                'Pemetaan Sekutu',
+                'Investor Sosial',
+                'Penghubung Sumber Daya'
             ],
             'needed_roles' => [
-                'Startup Mentor',
-                'Market Researcher',
-                'Financial Planner',
-                'Business Consultant'
+                'Pendorong Potensi',
+                'Pemantau Tren',
+                'Pemikir Masa Depan',
+                'Dirijen Kolaborasi'
             ],
             'max_users' => 40,
             'terms_conditions' => 'Members must have business or financial expertise and ethical standards.',
             'description' => 'Supporting entrepreneurship and financial innovation through mentorship and resources.',
+            'qr_code' => Str::random(6),
             'is_active' => true,
         ]);
         $ecosystems->push($businessEcosystem);
@@ -382,7 +390,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($techUsers as $user) {
             $techEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Technical expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian teknis dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 30)),
             ]);
         }
@@ -400,7 +408,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($envUsers as $user) {
             $envEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Environmental expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian lingkungan dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 45)),
             ]);
         }
@@ -417,7 +425,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($healthUsers as $user) {
             $healthEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Health expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian kesehatan dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 60)),
             ]);
         }
@@ -434,7 +442,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($eduUsers as $user) {
             $eduEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Educational expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian pendidikan dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 40)),
             ]);
         }
@@ -451,7 +459,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($socialUsers as $user) {
             $socialEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Social impact expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian dampak sosial dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 50)),
             ]);
         }
@@ -467,7 +475,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($artsUsers as $user) {
             $artsEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Cultural expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian budaya dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 35)),
             ]);
         }
@@ -483,7 +491,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
         foreach ($businessUsers as $user) {
             $businessEcosystem->users()->attach($user->id, [
                 'status' => 'accepted',
-                'join_reason' => 'Business expertise in ' . $user->assigned_role,
+                'join_reason' => 'Keahlian bisnis dalam ' . $user->assigned_role,
                 'joined_at' => now()->subDays(rand(1, 25)),
             ]);
         }
@@ -511,7 +519,7 @@ class EcosystemMappingTestDataSeeder extends Seeder
                     if ($ecosystem && !$ecosystem->users()->where('user_id', $user->id)->exists()) {
                         $ecosystem->users()->attach($user->id, [
                             'status' => 'accepted',
-                            'join_reason' => 'Cross-domain expertise in ' . $user->assigned_role,
+                            'join_reason' => 'Keahlian lintas domain dalam ' . $user->assigned_role,
                             'joined_at' => now()->subDays(rand(1, 20)),
                         ]);
                     }
