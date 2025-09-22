@@ -35,7 +35,7 @@
                     </div>
 
                     <!-- Navigation -->
-                    <nav class="flex-1 p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto">
+                    <nav class="flex-1 p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto max-h-[calc(100svh_-_159px)]">
                         <a href="{{ route('admin.dashboard') }}"
                             class="group flex items-center px-2 sm:px-3 py-2 sm:py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-pink-100 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
                             <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
@@ -235,21 +235,6 @@
                             </div>
                         </div>
                     </nav>
-
-                    <!-- User Info -->
-                    <div class="flex-shrink-0 p-4 border-t border-slate-200 dark:border-slate-700">
-                        <div class="flex items-center space-x-3">
-                            <x-ui.avatar :user="auth()->user()" size="sm" />
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
-                                    {{ auth()->user()->name }}
-                                </p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
-                                    {{ auth()->user()->role }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
