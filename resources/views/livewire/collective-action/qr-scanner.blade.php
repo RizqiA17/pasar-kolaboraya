@@ -128,34 +128,91 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader",
-        { 
-            fps: 10, 
-            qrbox: { width: 250, height: 250 } 
-        },
-        false
-    );
+let html5QrcodeScanner = null;
+let isScanning = false;
 
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+document.addEventListener('livewire:init', () => {
+    Livewire.on('start-camera', () => {
+        startCamera();
+    });
 
-    function onScanSuccess(decodedText, decodedResult) {
-        console.log(`QR Code detected: ${decodedText}`);
-        
-        // Set the scanned QR code in Livewire
-        @this.set('scannedQrCode', decodedText);
-        
-        // Process the QR code
-        @this.call('processScannedQr');
-        
-        // Stop the scanner
-        html5QrcodeScanner.clear();
+    Livewire.on('stop-camera', () => {
+        stopCamera();
+    });
+});
+
+async function startCamera() {
+    try {
+        // Check if camera is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error('Camera tidak didukung di browser ini');
+        }
+
+        // Check camera permissions
+        const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+        if (permissionStatus.state === 'denied') {
+            throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
+        }
+
+        // Clear existing scanner
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear();
+        }
+
+        // Create new scanner
+        html5QrcodeScanner = new Html5Qrcode("qr-reader");
+
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+
+        // Start camera with proper error handling
+        await html5QrcodeScanner.start(
+            { facingMode: "environment" },
+            config,
+            (decodedText, decodedResult) => {
+                console.log('QR Code detected:', decodedText);
+                stopCamera();
+                @this.set('scannedQrCode', decodedText);
+                @this.call('processScannedQr');
+            },
+            (errorMessage) => {
+                // Ignore scan errors, keep scanning
+                console.log('QR scan error:', errorMessage);
+            }
+        );
+
+        isScanning = true;
+
+    } catch (err) {
+        console.error('Camera error:', err);
+        alert('Tidak dapat mengakses kamera: ' + err.message);
     }
+}
 
-    function onScanFailure(error) {
-        // Handle scan failure, usually ignored
-        console.log(`QR Code scan failed: ${error}`);
+function stopCamera() {
+    isScanning = false;
+    if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+            html5QrcodeScanner.clear();
+            html5QrcodeScanner = null;
+        }).catch((err) => {
+            console.log('Error stopping scanner:', err);
+        });
+    }
+}
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+    stopCamera();
+});
+
+// Handle page visibility change
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && isScanning) {
+        stopCamera();
     }
 });
 </script>

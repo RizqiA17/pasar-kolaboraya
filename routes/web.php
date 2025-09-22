@@ -34,6 +34,10 @@ if (app()->environment('local', 'development')) {
     Route::get('/test/csrf', function () {
         abort(419, 'Test CSRF token mismatch');
     })->name('test.csrf');
+
+    Route::get('/test/camera', function () {
+        return view('test-camera');
+    })->name('test.camera');
 }
 
 // CSRF token refresh route

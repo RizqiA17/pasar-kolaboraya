@@ -147,105 +147,44 @@
     </div>
 
     <!-- QR Code Scanner JavaScript -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="{{ asset('js/camera-permission-helper.js') }}"></script>
+    <script src="{{ asset('js/qr-scanner-standard.js') }}"></script>
     <script>
-        let stream = null;
-        let scanning = false;
-        let video = null;
-        let canvas = null;
-        let ctx = null;
+        let qrScanner = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            video = document.getElementById('video');
-            canvas = document.getElementById('canvas');
-            ctx = canvas.getContext('2d');
+        document.addEventListener('livewire:init', () => {
+            // Initialize QR scanner
+            qrScanner = new QRScannerStandard('camera-container', {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0,
+                facingMode: 'environment'
+            });
+
+            // Override the default QR detection behavior
+            document.addEventListener('qr-detected', (event) => {
+                const { decodedText } = event.detail;
+                console.log('QR Code detected:', decodedText);
+                qrScanner.stopCamera();
+                @this.handleQrScanned(decodedText);
+            });
+
+            // Listen for Livewire events
+            Livewire.on('start-camera', () => {
+                qrScanner.startCamera();
+            });
+
+            Livewire.on('stop-camera', () => {
+                qrScanner.stopCamera();
+            });
         });
-
-        // Listen for Livewire events
-        Livewire.on('start-camera', () => {
-            startCamera();
-        });
-
-        Livewire.on('stop-camera', () => {
-            stopCamera();
-        });
-
-
-        async function startCamera() {
-            try {
-                const constraints = {
-                    video: {
-                        facingMode: 'environment', // Use back camera
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
-                    }
-                };
-
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
-                video.srcObject = stream;
-                
-                video.onloadedmetadata = () => {
-                    video.play();
-                    scanning = true;
-                    scanForQR();
-                    hideLoading();
-                };
-
-            } catch (err) {
-                console.error('Error accessing camera:', err);
-                showError();
-            }
-        }
-
-        function stopCamera() {
-            scanning = false;
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
-            video.srcObject = null;
-        }
-
-        function scanForQR() {
-            if (!scanning) return;
-
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                if (code) {
-                    console.log('QR Code detected:', code.data);
-                    scanning = false;
-                    stopCamera();
-                    
-                    // Send to Livewire
-                    @this.handleQrScanned(code.data);
-                }
-            }
-
-            if (scanning) {
-                requestAnimationFrame(scanForQR);
-            }
-        }
-
-        function hideLoading() {
-            document.getElementById('camera-loading').style.display = 'none';
-        }
-
-        function showError() {
-            document.getElementById('camera-loading').style.display = 'none';
-            document.getElementById('camera-error').classList.remove('hidden');
-        }
 
         // Cleanup on page unload
         window.addEventListener('beforeunload', () => {
-            stopCamera();
+            if (qrScanner) {
+                qrScanner.destroy();
+            }
         });
     </script>
-
-    <!-- Include jsQR library -->
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 </div>
