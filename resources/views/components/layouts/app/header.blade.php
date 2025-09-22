@@ -775,7 +775,7 @@
                 @endif
 
                 <!-- Peta Ekosistem (Public Access) -->
-                <a href="{{ route('ecosystem.mapping') }}"
+                <a href="{{ route('public.ecosystem.mapping') }}"
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.mapping') ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 hover:bg-cyan-500/10' }}"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
