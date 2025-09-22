@@ -74,20 +74,56 @@
 
 @if ($pasarKolaboraya && count($ecosystems) > 0)
     @push('scripts')
-        <script src="https://d3js.org/d3.v7.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const data = {
-                    pasarKolaboraya: {
-                        id: @json($pasarKolaboraya->id),
-                        name: @json($pasarKolaboraya->name),
-                        description: @json($pasarKolaboraya->description),
-                    },
-                    ecosystems: @json($roleData),
-                };
+            // Load D3.js dynamically if not already loaded
+            function loadD3() {
+                return new Promise((resolve, reject) => {
+                    if (typeof d3 !== 'undefined') {
+                        resolve();
+                        return;
+                    }
+                    
+                    const script = document.createElement('script');
+                    script.src = 'https://d3js.org/d3.v7.min.js';
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+            }
+        </script>
+        <script>
+            async function initializeEcosystemMapping() {
+                // Check if container exists
+                const container = document.getElementById('ecosystem-mapping-container');
+                if (!container) return;
+                
+                try {
+                    // Ensure D3.js is loaded
+                    await loadD3();
+                    
+                    // Clear any existing content to prevent duplicates
+                    container.innerHTML = '';
+                    
+                    const data = {
+                        pasarKolaboraya: {
+                            id: @json($pasarKolaboraya->id),
+                            name: @json($pasarKolaboraya->name),
+                            description: @json($pasarKolaboraya->description),
+                        },
+                        ecosystems: @json($roleData),
+                    };
 
-                createEcosystemMapping(data);
-            });
+                    createEcosystemMapping(data);
+                } catch (error) {
+                    console.error('Failed to load D3.js:', error);
+                }
+            }
+
+            // Initialize on DOM ready
+            document.addEventListener('DOMContentLoaded', initializeEcosystemMapping);
+            
+            // Re-initialize after Livewire navigation
+            document.addEventListener('livewire:navigated', initializeEcosystemMapping);
 
              function createEcosystemMapping(data) {
                  const container = d3.select('#ecosystem-mapping-container');

@@ -65,7 +65,16 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // Jika intended redirect ke url yang prefix-nya /notifications atau mengandung url app/notifications, alihkan ke dashboard
+        $intended = session()->pull('url.intended');
+        if ($intended && (
+            str_starts_with(trim($intended, '/'), 'notifications') ||
+            str_contains($intended, '/notifications')
+        )) {
+            $this->redirect(route('dashboard', absolute: false), navigate: true);
+        } else {
+            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        }
     }
 
     /**
