@@ -1,15 +1,14 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-xl p-6">
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between items-start max-sm:flex-col">
             <div>
                 <h1 class="text-2xl font-bold mb-2">Jelajahi Ekosistem Kolaborasi</h1>
                 <p class="text-blue-100">Temukan dan bergabung dengan ekosistem yang sesuai dengan minat dan keahlian Anda</p>
             </div>
-            <div class="flex-shrink-0 flex gap-2">
-                <flux:button 
+            <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
+                <flux:button class="max-sm:w-full"
                     :href="route('ecosystem.qr.scanner')"
-                    size="sm"
                     wire:navigate
                 >
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,10 +17,8 @@
                     Scan QR Code
                 </flux:button>
                 @if(auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
-                    <flux:button 
-                        :href="route('ecosystem.create')" 
-                        {{-- variant="white"  --}}
-                        size="sm"
+                    <flux:button class="max-sm:w-full"
+                        :href="route('ecosystem.create')"
                         wire:navigate
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
