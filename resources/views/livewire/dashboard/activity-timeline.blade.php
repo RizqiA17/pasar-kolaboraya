@@ -38,7 +38,7 @@
                 <!-- Enhanced Content -->
                 <div class="ml-6 flex-1">
                     <div class="bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-blue-200 dark:group-hover:border-blue-700 min-h-[140px]">
-                        <div class="flex items-start justify-between h-full">
+                        <div class="flex items-start justify-between h-full max-sm:flex-col">
                             <div class="flex-1 flex flex-col justify-between">
                                 <div>
                                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
@@ -112,7 +112,7 @@
                             </div>
                             
                             <!-- Action Button -->
-                            <div class="ml-4 flex-shrink-0">
+                            <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
                                 @if($activity->type === 'collective_action')
                                     <a href="{{ route('collective-action.show', $activity->id) }}" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-lg transition-colors whitespace-nowrap">
                                         Lihat Aksi Kolektif

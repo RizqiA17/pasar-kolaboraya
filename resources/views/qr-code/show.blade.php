@@ -12,7 +12,7 @@
             <!-- QR Code Display -->
             <div class="mb-4 sm:mb-6">
                 <div class="flex justify-center mb-3 sm:mb-4">
-                    <div class="bg-white p-2 sm:p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 max-w-[200px] sm:max-w-none">
+                    <div class="bg-white p-1 sm:p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 max-w-52 sm:max-w-none">
                         <div class="w-48 h-48 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
                             {!! $qrCodeSvg !!}
                         </div>

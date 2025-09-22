@@ -12,7 +12,7 @@
                 <div class="mb-4 sm:mb-6">
                     <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-slate-200 mb-3 sm:mb-4">Scan QR Code untuk Bergabung</h2>
                     <div class="flex justify-center mb-3 sm:mb-4">
-                        <div class="bg-white p-2 sm:p-4 rounded-lg border-2 border-gray-200 max-w-[200px] sm:max-w-none">
+                        <div class="bg-white p-1 sm:p-4 rounded-lg border-2 border-gray-200 max-w-52 sm:max-w-none">
                             <div class="w-48 h-48 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
                                 {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)->format('svg')->generate($qrUrl) !!}
                             </div>
