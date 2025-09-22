@@ -52,11 +52,7 @@ class Stats extends Component
                     })->count(),
                 'collective_actions' => \App\Models\CollectiveAction::forUserActiveSession($user)
                     ->whereHas('acceptedInvitations', function($query) use ($user) {
-                        $query->whereHas('ecosystem', function($ecosystemQuery) use ($user) {
-                            $ecosystemQuery->whereHas('acceptedUsers', function($userQuery) use ($user) {
-                                $userQuery->where('user_id', $user->id);
-                            });
-                        });
+                        $query->where('user_id', $user->id);
                     })->count(),
                 default => 0
             };
