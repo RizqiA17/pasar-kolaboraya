@@ -47,7 +47,7 @@ class ConnectionQr extends Model
      */
     public static function generateQrCode($userId, $pasarKolaborayaId, $type = 'initiator', $targetQrCode = null): self
     {
-        $qrCode = 'CONN_' . $userId . '_' . time() . '_' . Str::random(12);
+        $qrCode = ''.Str::random(6);
         
         return self::create([
             'user_id' => $userId,
