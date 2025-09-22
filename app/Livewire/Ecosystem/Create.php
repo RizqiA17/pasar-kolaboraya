@@ -33,7 +33,7 @@ class Create extends Component
         'terms_conditions' => 'required|string',
         'description' => 'nullable|string',
         'selectedIssues' => 'required|array|min:1',
-        'selectedExistingRoles' => 'required|array|min:1',
+        'selectedExistingRoles' => 'nullable|array|',
         'auto_join_collective_actions' => 'boolean',
     ];
 
