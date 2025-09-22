@@ -71,6 +71,11 @@ class Create extends Component
         
         // Ekosistem WAJIB memerlukan semua peran yang tersedia
         $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+
+        $qrCode = ''.\Str::random(6);
+        while (Ecosystem::where('qr_code', $qrCode)->exists()) {
+            $qrCode = ''.\Str::random(6);
+        }
         
         // Create the ecosystem
         $ecosystem = Ecosystem::create([
@@ -86,6 +91,7 @@ class Create extends Component
             'terms_conditions' => $this->terms_conditions,
             'description' => $this->description,
             'auto_join_collective_actions' => $this->auto_join_collective_actions,
+            'qr_code'=> $qrCode,
         ]);
         // dd($ecosystem);
 

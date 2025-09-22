@@ -21,7 +21,7 @@ class EcosystemQrController extends Controller
         }
 
         // Generate static QR code URL - redirect to join form
-        $qrUrl = route('ecosystem.join', $ecosystem);
+        $qrUrl = $ecosystem->qr_code;
         
         // Generate QR code as SVG
         $qrSvg = QrCode::size(300)
@@ -46,8 +46,13 @@ class EcosystemQrController extends Controller
             abort(403, 'Hanya pemilik ekosistem yang dapat melihat QR code');
         }
 
-        $qrUrl = route('ecosystem.join', $ecosystem);
-        
+        if($ecosystem->qr_code == ''){
+            $ecosystem->qr_code = \Str::random(6);
+            $ecosystem->save();
+        }
+
+        $qrUrl = $ecosystem->qr_code;
+
         return view('ecosystem.qr-show', compact('ecosystem', 'qrUrl'));
     }
 

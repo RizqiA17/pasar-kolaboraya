@@ -104,6 +104,12 @@ class Create extends Component
             $this->location = "Lokasi belum ditentukan";
         }
 
+        $qrCode = ''.\Str::random(6);
+
+        while (CollectiveAction::where('qr_code', $qrCode)->exists()) {
+            $qrCode = ''.\Str::random(6);
+        }
+
         // Create the collective action
         $action = CollectiveAction::create([
             'title' => $this->title,
@@ -122,6 +128,7 @@ class Create extends Component
             'status' => 'planning',
             'min_ecosystems' => $this->min_ecosystems,
             'collaboration_terms' => $this->collaboration_terms,
+            'qr_code' => $qrCode,
         ]);
 
         // Add creator as admin of the collective action
@@ -152,9 +159,9 @@ class Create extends Component
 
         // Send invitations to selected ecosystems
         foreach ($this->invited_ecosystems as $ecosystemId) {
-            $invitationMessage = $this->invitation_messages[$ecosystemId] ?? 
+            $invitationMessage = $this->invitation_messages[$ecosystemId] ??
                 "Kami mengundang ekosistem Anda untuk berkolaborasi dalam aksi kolektif: {$this->title}";
-            
+
             CollectiveActionEcosystemInvitation::create([
                 'collective_action_id' => $action->id,
                 'ecosystem_id' => $ecosystemId,

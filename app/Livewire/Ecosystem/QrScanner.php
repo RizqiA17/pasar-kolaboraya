@@ -60,7 +60,7 @@ class QrScanner extends Component
 
         try {
             // Parse QR code URL to get ecosystem ID
-            $ecosystemId = $this->extractEcosystemIdFromQr($this->scannedQrCode);
+            $ecosystemId = Ecosystem::where('qr_code', $this->scannedQrCode)->value('id');
             
             if (!$ecosystemId) {
                 $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung ekosistem.';

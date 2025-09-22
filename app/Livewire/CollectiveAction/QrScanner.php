@@ -56,7 +56,7 @@ class QrScanner extends Component
 
         try {
             // Parse QR code URL to get collective action ID
-            $collectiveActionId = $this->extractCollectiveActionIdFromQr($this->scannedQrCode);
+            $collectiveActionId = CollectiveAction::where('qr_code', $this->scannedQrCode)->value('id');
             
             if (!$collectiveActionId) {
                 $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung aksi kolektif.';

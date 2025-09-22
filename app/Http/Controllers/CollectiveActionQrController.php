@@ -22,7 +22,7 @@ class CollectiveActionQrController extends Controller
         }
 
         // Generate static QR code URL - redirect directly to join form
-        $qrUrl = route('collective-action.join', $collectiveAction);
+        $qrUrl = $collectiveAction->qr_code;
         
         // Generate QR code as SVG
         $qrSvg = QrCode::size(300)
@@ -47,7 +47,11 @@ class CollectiveActionQrController extends Controller
             abort(403, 'Hanya pembuat aksi kolektif yang dapat melihat QR code');
         }
 
-        $qrUrl = route('collective-action.join', $collectiveAction);
+        if($collectiveAction->qr_code == ''){
+            $collectiveAction->qr_code = \Str::random(6);
+            $collectiveAction->save();
+        }
+        $qrUrl = $collectiveAction->qr_code;
         
         return view('collective-action.qr-show', compact('collectiveAction', 'qrUrl'));
     }
@@ -65,7 +69,7 @@ class CollectiveActionQrController extends Controller
         $qrData = $request->input('qr_data');
         
         // Extract collective action ID from QR code URL
-        $collectiveActionId = $this->extractCollectiveActionIdFromQr($qrData);
+        $collectiveActionId = CollectiveAction::where('qr_code', $qrData)->value('id');
         
         if (!$collectiveActionId) {
             return redirect()->route('collective-action.qr.scanner')
