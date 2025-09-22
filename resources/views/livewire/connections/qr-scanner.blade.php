@@ -37,7 +37,7 @@
                         @if ($myQrSvg)
                             <div class="flex justify-center mb-3 sm:mb-4">
                                 <div class="bg-white p-2 sm:p-4 rounded-lg border-2 border-gray-200 max-w-[200px] sm:max-w-none">
-                                    <div class="w-32 h-32 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
+                                    <div class="w-48 h-48 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
                                         {!! $myQrSvg !!}
                                     </div>
                                 </div>
