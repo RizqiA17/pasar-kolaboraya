@@ -12,11 +12,6 @@
                 class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base {{ $tab === 'list' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
                 Koneksi
             </button>
-
-            <button wire:click="setTab('requests')"
-                class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base relative {{ $tab === 'requests' ? 'border-b-2 border-sky-500 text-sky-600' : 'text-neutral-600 hover:text-sky-600' }}">
-                Permintaan
-            </button>
         </div>
 
         {{-- SearchBar hanya muncul di tab "list" --}}
