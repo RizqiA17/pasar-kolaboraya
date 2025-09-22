@@ -192,9 +192,6 @@
                     <div class="lg:col-span-2 space-y-6">
                         <livewire:dashboard.profile-progress />
                         
-                        <!-- Ecosystem Mapping Section -->
-                        <livewire:dashboard.ecosystem-mapping />
-                        
                         <!-- Activity Section - Consistent spacing and layout -->
                         <div
                             class="relative overflow-hidden rounded-xl bg-white dark:bg-zinc-800 shadow-lg border border-gray-100 dark:border-gray-700">
