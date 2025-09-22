@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollectiveAction;
-use App\Models\CollectiveActionUser;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CollectiveAction;
+use Illuminate\Support\Facades\Log;
+use App\Models\CollectiveActionUser;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\Log;
 
 class CollectiveActionQrController extends Controller
 {
@@ -48,7 +49,7 @@ class CollectiveActionQrController extends Controller
         }
 
         if($collectiveAction->qr_code == ''){
-            $collectiveAction->qr_code = \Str::random(6);
+            $collectiveAction->qr_code = Str::random(6);
             $collectiveAction->save();
         }
         $qrUrl = $collectiveAction->qr_code;
