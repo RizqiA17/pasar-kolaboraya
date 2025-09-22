@@ -563,13 +563,19 @@
         }
 
         .role-selector input {
-            background: #1e293b;
-            border: 2px solid #8b5cf6;
-            color: white;
+            background: white;
+            border: 2px solid #d1d5db;
+            color: #374151;
             border-radius: 8px;
             padding: 12px 16px;
             font-size: 14px;
             transition: all 0.2s ease;
+        }
+
+        .dark .role-selector input {
+            background: #1e293b;
+            border: 2px solid #8b5cf6;
+            color: white;
         }
 
         .role-selector input:focus {
@@ -579,33 +585,58 @@
         }
 
         .role-selector input::placeholder {
+            color: #9ca3af;
+        }
+
+        .dark .role-selector input::placeholder {
             color: #94a3b8;
         }
 
         .role-dropdown {
-            background: #1e293b;
-            border: 1px solid #475569;
+            background: white;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-height: 240px;
             overflow-y: auto;
             z-index: 1000;
         }
 
+        .dark .role-dropdown {
+            background: #1e293b;
+            border: 1px solid #475569;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
         .role-option {
             padding: 12px 16px;
-            color: white;
+            color: #374151;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dark .role-option {
+            color: white;
             border-bottom: 1px solid #334155;
         }
 
         .role-option:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dark .role-option:hover {
             background-color: #334155;
         }
 
         .role-option.selected {
+            background-color: #ede9fe;
+            color: #8b5cf6;
+        }
+
+        .dark .role-option.selected {
             background-color: #8b5cf6;
+            color: white;
         }
 
         .role-option:last-child {
@@ -613,25 +644,40 @@
         }
 
         .role-info-btn {
-            color: #94a3b8;
+            color: #6b7280;
             padding: 4px;
             border-radius: 50%;
             transition: all 0.2s ease;
         }
 
+        .dark .role-info-btn {
+            color: #94a3b8;
+        }
+
         .role-info-btn:hover {
+            color: #374151;
+            background-color: #f3f4f6;
+        }
+
+        .dark .role-info-btn:hover {
             color: white;
             background-color: #475569;
         }
 
         .role-tooltip {
-            background: #0f172a;
-            border: 1px solid #475569;
+            background: #1f2937;
+            border: 1px solid #374151;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             padding: 16px;
             max-width: 320px;
             z-index: 1001;
+        }
+
+        .dark .role-tooltip {
+            background: #0f172a;
+            border: 1px solid #475569;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .role-tooltip::before {
@@ -643,17 +689,27 @@
             height: 0;
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
+            border-bottom: 8px solid #1f2937;
+        }
+
+        .dark .role-tooltip::before {
             border-bottom: 8px solid #0f172a;
         }
 
         .role-search-input {
-            background: #334155;
-            border: 1px solid #475569;
-            color: white;
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            color: #374151;
             border-radius: 6px;
             padding: 8px 12px;
             font-size: 14px;
             margin-top: 8px;
+        }
+
+        .dark .role-search-input {
+            background: #334155;
+            border: 1px solid #475569;
+            color: white;
         }
 
         .role-search-input:focus {
@@ -663,6 +719,10 @@
         }
 
         .role-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .dark .role-search-input::placeholder {
             color: #94a3b8;
         }
 
@@ -673,13 +733,19 @@
         }
 
         .multi-select-container input {
-            background: #1e293b;
-            border: 2px solid #8b5cf6;
-            color: white;
+            background: white;
+            border: 2px solid #d1d5db;
+            color: #374151;
             border-radius: 8px;
             padding: 12px 16px;
             font-size: 14px;
             transition: all 0.2s ease;
+        }
+
+        .dark .multi-select-container input {
+            background: #1e293b;
+            border: 2px solid #8b5cf6;
+            color: white;
         }
 
         .multi-select-container input:focus {
@@ -689,33 +755,58 @@
         }
 
         .multi-select-container input::placeholder {
+            color: #9ca3af;
+        }
+
+        .dark .multi-select-container input::placeholder {
             color: #94a3b8;
         }
 
         .multi-dropdown {
-            background: #1e293b;
-            border: 1px solid #475569;
+            background: white;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-height: 240px;
             overflow-y: auto;
             z-index: 1000;
         }
 
+        .dark .multi-dropdown {
+            background: #1e293b;
+            border: 1px solid #475569;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
         .multi-option {
             padding: 12px 16px;
-            color: white;
+            color: #374151;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dark .multi-option {
+            color: white;
             border-bottom: 1px solid #334155;
         }
 
         .multi-option:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dark .multi-option:hover {
             background-color: #334155;
         }
 
         .multi-option.selected {
+            background-color: #ede9fe;
+            color: #8b5cf6;
+        }
+
+        .dark .multi-option.selected {
             background-color: #8b5cf6;
+            color: white;
         }
 
         .multi-option:last-child {
@@ -723,13 +814,19 @@
         }
 
         .multi-search-input {
-            background: #334155;
-            border: 1px solid #475569;
-            color: white;
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            color: #374151;
             border-radius: 6px;
             padding: 8px 12px;
             font-size: 14px;
             margin-top: 8px;
+        }
+
+        .dark .multi-search-input {
+            background: #334155;
+            border: 1px solid #475569;
+            color: white;
         }
 
         .multi-search-input:focus {
@@ -739,6 +836,10 @@
         }
 
         .multi-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .dark .multi-search-input::placeholder {
             color: #94a3b8;
         }
 
@@ -778,17 +879,32 @@
 
         .role-dropdown::-webkit-scrollbar-track,
         .multi-dropdown::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .dark .role-dropdown::-webkit-scrollbar-track,
+        .dark .multi-dropdown::-webkit-scrollbar-track {
             background: #1e293b;
         }
 
         .role-dropdown::-webkit-scrollbar-thumb,
         .multi-dropdown::-webkit-scrollbar-thumb {
-            background: #475569;
+            background: #cbd5e1;
             border-radius: 3px;
+        }
+
+        .dark .role-dropdown::-webkit-scrollbar-thumb,
+        .dark .multi-dropdown::-webkit-scrollbar-thumb {
+            background: #475569;
         }
 
         .role-dropdown::-webkit-scrollbar-thumb:hover,
         .multi-dropdown::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark .role-dropdown::-webkit-scrollbar-thumb:hover,
+        .dark .multi-dropdown::-webkit-scrollbar-thumb:hover {
             background: #64748b;
         }
 
