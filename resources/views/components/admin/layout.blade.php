@@ -292,11 +292,15 @@
 
     <!-- Mobile Sidebar JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        function initializeMobileSidebar() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileSidebar = document.getElementById('mobile-sidebar');
             const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
             const mobileSidebarClose = document.getElementById('mobile-sidebar-close');
+
+            if (!mobileMenuButton || !mobileSidebar || !mobileSidebarOverlay || !mobileSidebarClose) {
+                return; // Elements not found, skip initialization
+            }
 
             function toggleMobileSidebar() {
                 const isOpen = !mobileSidebar.classList.contains('-translate-x-full');
@@ -320,27 +324,24 @@
                 document.body.classList.remove('overflow-hidden');
             }
 
+            // Remove existing event listeners to prevent duplicates
+            const newMobileMenuButton = mobileMenuButton.cloneNode(true);
+            mobileMenuButton.parentNode.replaceChild(newMobileMenuButton, mobileMenuButton);
+
+            const newMobileSidebarClose = mobileSidebarClose.cloneNode(true);
+            mobileSidebarClose.parentNode.replaceChild(newMobileSidebarClose, mobileSidebarClose);
+
+            const newMobileSidebarOverlay = mobileSidebarOverlay.cloneNode(true);
+            mobileSidebarOverlay.parentNode.replaceChild(newMobileSidebarOverlay, mobileSidebarOverlay);
+
             // Toggle sidebar on button click
-            if (mobileMenuButton) {
-                mobileMenuButton.addEventListener('click', toggleMobileSidebar);
-            }
+            newMobileMenuButton.addEventListener('click', toggleMobileSidebar);
 
             // Close sidebar on close button click
-            if (mobileSidebarClose) {
-                mobileSidebarClose.addEventListener('click', closeMobileSidebar);
-            }
+            newMobileSidebarClose.addEventListener('click', closeMobileSidebar);
 
             // Close sidebar on overlay click
-            if (mobileSidebarOverlay) {
-                mobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
-            }
-
-            // Close sidebar on escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeMobileSidebar();
-                }
-            });
+            newMobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
 
             // Close sidebar when clicking on navigation links (mobile only)
             const navLinks = mobileSidebar.querySelectorAll('a');
@@ -351,13 +352,40 @@
                     }
                 });
             });
+        }
 
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth >= 1024) { // lg breakpoint
-                    closeMobileSidebar();
+        // Initialize on DOM content loaded
+        document.addEventListener('DOMContentLoaded', initializeMobileSidebar);
+
+        // Re-initialize after Livewire navigation
+        document.addEventListener('livewire:navigated', initializeMobileSidebar);
+
+        // Close sidebar on escape key (global listener)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+                
+                if (mobileSidebar && mobileSidebarOverlay) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    mobileSidebarOverlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
                 }
-            });
+            }
+        });
+
+        // Handle window resize (global listener)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) { // lg breakpoint
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+                
+                if (mobileSidebar && mobileSidebarOverlay) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    mobileSidebarOverlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            }
         });
     </script>
 </x-layouts.app.header>
