@@ -7,6 +7,7 @@ use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use App\Events\UserQrScannedSuccessfully;
 
 #[Layout('components.admin.layout', ['title' => 'Scanner QR Pasar Kolaboraya'])]
 class PasarKolaborayaQrScanner extends Component
@@ -145,6 +146,13 @@ class PasarKolaborayaQrScanner extends Component
             
             // Update member count
             $this->updateMemberCount();
+            
+            // Broadcast event to notify user's browser to redirect to dashboard
+            broadcast(new UserQrScannedSuccessfully(
+                $user->id,
+                $this->pasarKolaboraya->name,
+                route('dashboard')
+            ));
             
             // Reset form for next scan
             $this->reset(['scannedQrCode']);

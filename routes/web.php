@@ -63,6 +63,24 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
+    // Broadcasting auth route
+    Route::post('/broadcasting/auth', function () {
+        return response()->json(['status' => 'success']);
+    })->name('broadcasting.auth');
+    
+    // QR status check route (for polling fallback)
+    Route::get('/qr/status', function () {
+        $user = Auth::user();
+        $activePasarKolaboraya = $user->activePasarKolaboraya;
+        
+        return response()->json([
+            'success' => true,
+            'has_active_pasar_kolaboraya' => $activePasarKolaboraya ? true : false,
+            'pasar_kolaboraya_name' => $activePasarKolaboraya ? $activePasarKolaboraya->name : null,
+            'user_id' => $user->id
+        ]);
+    })->name('qr.status');
+    
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');

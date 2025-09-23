@@ -104,7 +104,183 @@
     </div>
 </div>
 
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
+
+// Initialize Pusher (with fallback to polling)
+let pusher = null;
+let channel = null;
+let pollingInterval = null;
+const userId = {{ auth()->id() }};
+
+// Try to initialize Pusher
+try {
+    const pusherKey = '{{ config("broadcasting.connections.pusher.key") }}';
+    const pusherCluster = '{{ config("broadcasting.connections.pusher.options.cluster") }}';
+    
+    if (pusherKey && pusherKey !== '' && pusherCluster && pusherCluster !== '') {
+        pusher = new Pusher(pusherKey, {
+            cluster: pusherCluster,
+            encrypted: true,
+            authEndpoint: '{{ route("broadcasting.auth") }}',
+            auth: {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }
+        });
+
+        // Subscribe to user's private channel
+        channel = pusher.subscribe('private-user.' + userId);
+        console.log('Pusher initialized successfully');
+    } else {
+        console.log('Pusher not configured, using polling fallback');
+        startPolling();
+    }
+} catch (error) {
+    console.error('Pusher initialization failed:', error);
+    console.log('Falling back to polling');
+    startPolling();
+}
+
+// Function to handle QR scan success
+function handleQrScanSuccess(data) {
+    console.log('QR Code successfully scanned by admin:', data);
+    
+    // Show success notification
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
+    successDiv.innerHTML = `
+        <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+                <p class="font-semibold">Berhasil bergabung!</p>
+                <p class="text-sm">Anda telah bergabung ke ${data.pasar_kolaboraya_name}</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(successDiv);
+    
+    // Show redirect notification after 2 seconds
+    // setTimeout(() => {
+    //     const redirectDiv = document.createElement('div');
+    //     redirectDiv.className = 'fixed top-20 right-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
+    //     redirectDiv.innerHTML = `
+    //         <div class="flex items-center space-x-2">
+    //             <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+    //                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    //                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    //             </svg>
+    //             <div>
+    //                 <p class="font-semibold">Mengarahkan ke beranda...</p>
+    //                 <p class="text-sm">Anda akan diarahkan ke dashboard dalam beberapa detik</p>
+    //             </div>
+    //         </div>
+    //     `;
+    //     document.body.appendChild(redirectDiv);
+        
+    //     // Redirect to dashboard after 3 seconds
+    //     setTimeout(() => {
+    //         window.location.href = data.redirect_url;
+    //     }, 3000);
+    // }, 2000);
+    
+        setTimeout(() => {
+            window.location.href = data.redirect_url;
+        }, 10);
+    // Remove notifications after 8 seconds
+    setTimeout(() => {
+        if (successDiv.parentNode) {
+            successDiv.parentNode.removeChild(successDiv);
+        }
+        const redirectDiv = document.querySelector('.fixed.top-20.right-4');
+        if (redirectDiv && redirectDiv.parentNode) {
+            redirectDiv.parentNode.removeChild(redirectDiv);
+        }
+    }, 8000);
+}
+
+// Listen for QR scan success event (Pusher)
+if (channel) {
+    channel.bind('qr-scanned-successfully', handleQrScanSuccess);
+    
+    // Handle Pusher connection events
+    pusher.connection.bind('connected', function() {
+        console.log('Pusher connected successfully');
+    });
+
+    pusher.connection.bind('disconnected', function() {
+        console.log('Pusher disconnected');
+        // Fallback to polling if Pusher disconnects
+        startPolling();
+    });
+
+    pusher.connection.bind('error', function(err) {
+        console.error('Pusher connection error:', err);
+        // Fallback to polling on error
+        startPolling();
+    });
+}
+
+// Polling fallback function
+function startPolling() {
+    if (pollingInterval) return; // Already polling
+    
+    console.log('Starting polling for QR scan status...');
+    
+    pollingInterval = setInterval(async () => {
+        try {
+            const response = await fetch('{{ route("qr.status") }}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            });
+            
+            if (!response.ok) {
+                console.error('Failed to check QR status:', response.status);
+                return;
+            }
+            
+            const data = await response.json();
+            
+            if (data.success && data.has_active_pasar_kolaboraya) {
+                console.log('User has been added to Pasar Kolaboraya via polling:', data);
+                stopPolling();
+                handleQrScanSuccess({
+                    pasar_kolaboraya_name: data.pasar_kolaboraya_name || 'Pasar Kolaboraya',
+                    redirect_url: '{{ route("dashboard") }}'
+                });
+            }
+        } catch (error) {
+            console.error('Error checking QR status:', error);
+        }
+    }, 3000); // Check every 3 seconds
+}
+
+function stopPolling() {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+        console.log('Stopped polling');
+    }
+}
+
+// Start polling as fallback if Pusher is not available
+if (!pusher || !channel) {
+    startPolling();
+}
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+    stopPolling();
+    if (pusher) {
+        pusher.disconnect();
+    }
+});
 
 // Download QR Code
 function downloadQR() {
