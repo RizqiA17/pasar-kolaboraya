@@ -130,7 +130,7 @@
             @endif --}}
 
             <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
-            @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession)
+            @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession && $user->canAccessEcosystem())
             {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
                 <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')"
                     :current="request()->routeIs('ecosystem.*')"
@@ -157,6 +157,8 @@
                         <span>
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
+                            @elseif($user->canOnlyConnect())
+                                Fitur ekosistem tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur ekosistem.
                             @else
                                 Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat
                                 mengakses.
@@ -170,7 +172,7 @@
             @endif
 
             <!-- Aksi Kolektif (follows user actions setting) -->
-            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin && $user->canAccessEcosystem())
                 <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')"
                     :current="request()->routeIs('collective-action.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
@@ -196,6 +198,8 @@
                         <span>
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
+                            @elseif($user->canOnlyConnect())
+                                Fitur aksi kolektif tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur aksi kolektif.
                             @else
                                 Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.
                             @endif
@@ -677,7 +681,7 @@
                 @endif --}}
 
                 <!-- Ekosistem -->
-                @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession)
+                @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession && $user->canAccessEcosystem())
                     <a href="{{ route('ecosystem.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
                         wire:navigate>
@@ -714,6 +718,8 @@
                             <span>
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
+                                @elseif($user->canOnlyConnect())
+                                    Fitur ekosistem tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}
                                 @else
                                     Fitur ekosistem dinonaktifkan untuk user biasa
                                 @endif
@@ -726,7 +732,7 @@
                 @endif
 
                 <!-- Aksi Kolektif -->
-                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin && $user->canAccessEcosystem())
                     <a href="{{ route('collective-action.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
                         wire:navigate>
@@ -763,6 +769,8 @@
                             <span>
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
+                                @elseif($user->canOnlyConnect())
+                                    Fitur aksi kolektif tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}
                                 @else
                                     Fitur aksi kolektif dinonaktifkan
                                 @endif

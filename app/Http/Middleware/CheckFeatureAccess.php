@@ -19,7 +19,9 @@ class CheckFeatureAccess
     public function handle(Request $request, Closure $next, string $feature): Response
     {
         // Super admin selalu bisa mengakses semua fitur
-        if (Auth::check() && Auth::user()->isSuperAdmin()) {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if (Auth::check() && $user && $user->isSuperAdmin()) {
             return $next($request);
         }
 
@@ -38,9 +40,17 @@ class CheckFeatureAccess
                 break;
                 
             case 'ecosystems':
-                if (!SystemSetting::isEcosystemsEnabled(Auth::user())) {
-                    $user = Auth::user();
-                    if ($user && $user->isEcosystemBuilder()) {
+                if (!$user) {
+                    return redirect()->route('login');
+                }
+                
+                // Check if user can only connect (tamu and komunitas)
+                if ($user->canOnlyConnect()) {
+                    return redirect()->back()->with('error', 'Fitur ekosistem tidak tersedia untuk user tipe ' . $user->getUserTypeLabelAttribute() . '. Hanya partisipan yang dapat mengakses fitur ekosistem.');
+                }
+                
+                if (!SystemSetting::isEcosystemsEnabled($user)) {
+                    if ($user->isEcosystemBuilder()) {
                         // Ecosystem builder should always have access - this shouldn't happen
                         break;
                     }
@@ -55,7 +65,16 @@ class CheckFeatureAccess
                 break;
                 
             case 'collective_actions':
-                if (!SystemSetting::isCollectiveActionsEnabled()) {
+                if (!$user) {
+                    return redirect()->route('login');
+                }
+                
+                // Check if user can only connect (tamu and komunitas)
+                if ($user->canOnlyConnect()) {
+                    return redirect()->back()->with('error', 'Fitur aksi kolektif tidak tersedia untuk user tipe ' . $user->getUserTypeLabelAttribute() . '. Hanya partisipan yang dapat mengakses fitur aksi kolektif.');
+                }
+                
+                if (!SystemSetting::isCollectiveActionsEnabled($user)) {
                     return redirect()->back()->with('error', 'Fitur aksi kolektif sedang dinonaktifkan oleh administrator. Aktifkan fitur aksi pengguna untuk menggunakan aksi kolektif.');
                 }
                 break;

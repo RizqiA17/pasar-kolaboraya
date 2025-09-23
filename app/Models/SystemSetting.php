@@ -118,12 +118,18 @@ class SystemSetting extends Model
     /**
      * Check if ecosystems are enabled (follows collaboration setting)
      * Ecosystem builders always have access regardless of collaboration setting
+     * Tamu and komunitas users cannot access ecosystems
      */
     public static function isEcosystemsEnabled($user = null)
     {
         // If no user provided, use authenticated user
         if (!$user && \Illuminate\Support\Facades\Auth::check()) {
             $user = \Illuminate\Support\Facades\Auth::user();
+        }
+        
+        // Check if user can only connect (tamu and komunitas)
+        if ($user && $user->canOnlyConnect()) {
+            return false;
         }
         
         // Ecosystem builders always have access
@@ -137,9 +143,20 @@ class SystemSetting extends Model
 
     /**
      * Check if collective actions are enabled (follows user actions setting)
+     * Tamu and komunitas users cannot access collective actions
      */
-    public static function isCollectiveActionsEnabled()
+    public static function isCollectiveActionsEnabled($user = null)
     {
+        // If no user provided, use authenticated user
+        if (!$user && \Illuminate\Support\Facades\Auth::check()) {
+            $user = \Illuminate\Support\Facades\Auth::user();
+        }
+        
+        // Check if user can only connect (tamu and komunitas)
+        if ($user && $user->canOnlyConnect()) {
+            return false;
+        }
+        
         return static::isUserActionsEnabled();
     }
 
