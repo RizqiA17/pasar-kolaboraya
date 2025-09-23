@@ -99,17 +99,47 @@ class EcosystemMapping extends Component
                 }
             }
 
+            // Get needed roles that are not yet covered
+            $neededRoleIds = collect($ecosystem->needed_roles ?? [])->toArray();
+            $existingRoleIds = collect($ecosystem->existing_roles ?? [])->toArray();
+            $memberRoleIds = [];
+            
+            $acceptedMembers = $ecosystem->acceptedUsers()->with('profile.peran')->get();
+            foreach ($acceptedMembers as $member) {
+                if ($member->profile && $member->profile->peran) {
+                    $memberRoleIds[] = $member->profile->peran_id;
+                }
+            }
+            
+            $coveredRoleIds = array_unique(array_merge($existingRoleIds, $memberRoleIds));
+            $gapRoleIds = array_diff($neededRoleIds, $coveredRoleIds);
+            $gapRoles = \App\Models\Peran::whereIn('id', $gapRoleIds)->pluck('nama')->toArray();
+
+            // Get issues - check if they are IDs or names
+            $issues = $ecosystem->issues_addressed ?? [];
+            $issueNames = [];
+            if (!empty($issues)) {
+                // Check if first item is numeric (ID) or string (name)
+                if (is_numeric($issues[0])) {
+                    // If numeric, treat as IDs
+                    $issueNames = \App\Models\Interest::whereIn('id', $issues)->pluck('name')->toArray();
+                } else {
+                    // If string, treat as names directly
+                    $issueNames = $issues;
+                }
+            }
+
             $this->roleData[] = [
                 'ecosystem' => [
                     'id' => $ecosystem->id,
                     'name' => $ecosystem->ecosystem_title,
                     'organization' => $ecosystem->organization_name,
                     'description' => $ecosystem->description,
-                    'issues' => $ecosystem->issues_addressed ?? [],
+                    'issues' => $issueNames, // Convert IDs to names
                     'work_region' => $ecosystem->work_region,
                 ],
                 'roles' => $ecosystemRoles,
-                'needed_roles' => $ecosystem->needed_roles ?? [],
+                'needed_roles' => $gapRoles, // Only show roles that are still needed
                 'totalUsers' => $ecosystem->users()->wherePivot('status', 'accepted')->count(),
             ];
 
