@@ -233,6 +233,98 @@
             });
         });
 
+        // Handle wire:navigate - reinitialize camera functionality after navigation
+        document.addEventListener('livewire:navigated', () => {
+            console.log('Livewire navigated - reinitializing camera functionality');
+            
+            // Clean up any existing camera instances
+            if (html5QrcodeScanner) {
+                stopCamera();
+            }
+            
+            // Reset scanning state
+            isScanning = false;
+            
+            // Re-register Livewire event listeners after navigation
+            if (typeof Livewire !== 'undefined') {
+                Livewire.on('start-camera', () => {
+                    startCamera();
+                });
+
+                Livewire.on('stop-camera', () => {
+                    stopCamera();
+                });
+
+                Livewire.on('connection-completed', () => {
+                    setTimeout(() => {
+                        Livewire.dispatch('resetConnection');
+                    }, 3000);
+                });
+
+                // Re-register polling mechanism
+                let connectionPollingInterval = null;
+
+                Livewire.on('start-connection-polling', (data) => {
+                    if (connectionPollingInterval) {
+                        clearInterval(connectionPollingInterval);
+                    }
+
+                    connectionPollingInterval = setInterval(() => {
+                        Livewire.dispatch('check-connection-status', data);
+                    }, 2000);
+
+                    setTimeout(() => {
+                        if (connectionPollingInterval) {
+                            clearInterval(connectionPollingInterval);
+                            connectionPollingInterval = null;
+                        }
+                    }, 30000);
+                });
+
+                // Re-register QR refresh mechanism
+                let qrRefreshInterval = null;
+
+                Livewire.on('start-qr-refresh', () => {
+                    if (qrRefreshInterval) {
+                        clearInterval(qrRefreshInterval);
+                    }
+
+                    qrRefreshInterval = setInterval(() => {
+                        const component = document.querySelector('[wire\\:id]');
+                        if (component) {
+                            const wireId = component.getAttribute('wire:id');
+                            const livewireComponent = Livewire.find(wireId);
+                            if (livewireComponent && livewireComponent.connectionStatus === 'idle') {
+                                livewireComponent.refreshQr();
+                            }
+                        }
+                    }, 50000);
+                });
+            }
+        });
+
+        // Additional fallback for wire:navigate - ensure camera works even if livewire:navigated doesn't fire
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if we're on the QR scanner page and reinitialize if needed
+            if (document.querySelector('#qr-reader')) {
+                console.log('QR scanner page detected - ensuring camera functionality is ready');
+                
+                // Add a small delay to ensure Livewire is fully loaded
+                setTimeout(() => {
+                    if (typeof Livewire !== 'undefined') {
+                        // Re-register event listeners as fallback
+                        Livewire.on('start-camera', () => {
+                            startCamera();
+                        });
+
+                        Livewire.on('stop-camera', () => {
+                            stopCamera();
+                        });
+                    }
+                }, 500);
+            }
+        });
+
         async function startCamera() {
             try {
                 // Check if camera is supported
@@ -240,10 +332,15 @@
                     throw new Error('Camera tidak didukung di browser ini');
                 }
 
-                // Check camera permissions
-                const permissionStatus = await navigator.permissions.query({ name: 'camera' });
-                if (permissionStatus.state === 'denied') {
-                    throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
+                // Check camera permissions - but don't block if permission query fails
+                try {
+                    const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+                    if (permissionStatus.state === 'denied') {
+                        throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
+                    }
+                } catch (permissionError) {
+                    console.log('Permission query failed, proceeding anyway:', permissionError);
+                    // Continue anyway as some browsers don't support permission query
                 }
 
                 // Clear existing scanner
@@ -279,7 +376,16 @@
 
             } catch (err) {
                 console.error('Camera error:', err);
-                alert('Tidak dapat mengakses kamera: ' + err.message);
+                // Show more specific error message
+                if (err.name === 'NotAllowedError') {
+                    alert('Izin kamera ditolak. Silakan klik "Allow" ketika browser meminta izin kamera, atau aktifkan izin kamera di pengaturan browser.');
+                } else if (err.name === 'NotFoundError') {
+                    alert('Kamera tidak ditemukan. Pastikan perangkat memiliki kamera yang berfungsi.');
+                } else if (err.name === 'NotReadableError') {
+                    alert('Kamera sedang digunakan oleh aplikasi lain. Tutup aplikasi lain yang menggunakan kamera dan coba lagi.');
+                } else {
+                    alert('Tidak dapat mengakses kamera: ' + err.message + '. Silakan refresh halaman dan coba lagi.');
+                }
             }
         }
 
