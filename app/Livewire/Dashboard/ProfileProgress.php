@@ -42,22 +42,24 @@ class ProfileProgress extends Component
             }
         }
 
-        // Social media fields
-        $socialFields = [
-            'linkedin' => 'LinkedIn',
-            'twitter' => 'Twitter/X',
-            'instagram' => 'Instagram',
-            'facebook' => 'Facebook',
-            'website' => 'Website Pribadi'
-        ];
-
-        foreach ($socialFields as $field => $label) {
-            $this->totalFields++;
-            if ($profile && !empty($profile->social_media[$field] ?? null)) {
-                $this->filledFields++;
-            } else {
-                $this->missingFields[] = $label;
+        // Social media (dijadikan 1 field)
+        $this->totalFields++;
+        $hasSocialMedia = false;
+        if ($profile && !empty($profile->social_media)) {
+            $socialMedia = $profile->social_media;
+            $socialFields = ['linkedin', 'twitter', 'instagram', 'facebook', 'website'];
+            foreach ($socialFields as $field) {
+                if (!empty($socialMedia[$field])) {
+                    $hasSocialMedia = true;
+                    break;
+                }
             }
+        }
+        
+        if ($hasSocialMedia) {
+            $this->filledFields++;
+        } else {
+            $this->missingFields[] = 'Media Sosial';
         }
 
         // Skills
@@ -76,13 +78,6 @@ class ProfileProgress extends Component
             $this->missingFields[] = 'Minat';
         }
 
-        // Contributions
-        $this->totalFields++;
-        if ($profile && $profile->contributions && $profile->contributions->count() > 0) {
-            $this->filledFields++;
-        } else {
-            $this->missingFields[] = 'Kontribusi';
-        }
 
         $this->completionPercentage = $this->totalFields > 0 ? round(($this->filledFields / $this->totalFields) * 100) : 0;
     }
