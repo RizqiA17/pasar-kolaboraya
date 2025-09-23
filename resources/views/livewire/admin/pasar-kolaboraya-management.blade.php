@@ -221,10 +221,30 @@
 
     <!-- Create Modal -->
     @if ($showCreateModal)
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 lg:max-h-svh max-h-[calc(100svh_-_104px)]">
-            <div class="relative top-4 sm:top-8 mx-auto p-4 w-11/12 sm:w-3/4 lg:w-1/2 xl:w-2/5">
+        <div 
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 lg:max-h-svh max-h-[calc(100svh_-_104px)]"
+            wire:click="closeCreateModal"
+            x-data
+            x-on:keydown.escape.window="closeCreateModal"
+        >
+            <div 
+                class="relative top-4 sm:top-8 mx-auto p-4 w-11/12 sm:w-3/4 lg:w-1/2 xl:w-2/5"
+                wire:click.stop
+            >
                 <div
                     class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-2xl">
+                    <!-- Modal Header with Close Button -->
+                    <div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
+                        <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">
+                            Buat Pasar Kolaboraya Baru
+                        </h2>
+                        <button 
+                            wire:click="closeCreateModal"
+                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                        >
+                            <flux:icon.x-mark class="w-6 h-6" />
+                        </button>
+                    </div>
                     <livewire:admin.create-pasar-kolaboraya />
                 </div>
             </div>

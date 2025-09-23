@@ -43,6 +43,8 @@ class PasarKolaborayaManagement extends Component
         $this->showCreateModal = false;
     }
 
+    protected $listeners = ['close-modal' => 'closeCreateModal'];
+
     public function deletePasarKolaboraya($id)
     {
         try {
