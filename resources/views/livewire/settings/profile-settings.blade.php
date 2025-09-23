@@ -91,42 +91,44 @@
         <div class="absolute bottom-0 left-0 -mb-4 -ml-4 h-24 w-24 rounded-full bg-white/5"></div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
         <!-- Sidebar Navigation -->
         <div class="lg:col-span-1">
             <div class="sticky top-16">
                 <div
-                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Menu Pengaturan</h3>
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-4 sm:p-6">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Menu Pengaturan</h3>
                     <nav class="space-y-2">
                         <button wire:click="setTab('profile')"
-                            class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl 
+                            class="flex items-center px-3 sm:px-4 w-full py-2.5 sm:py-3 text-xs sm:text-sm font-medium rounded-xl 
                             @if ($tab === 'profile') bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-600 shadow-sm 
                             @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/30 dark:hover:to-indigo-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:border hover:border-blue-200 dark:hover:border-blue-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'profile') bg-blue-100 dark:bg-blue-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3">
-                                <svg class="h-4 w-4  @if ($tab === 'profile') text-blue-600 dark:text-blue-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                                class="h-6 w-6 sm:h-8 sm:w-8 rounded-lg @if ($tab === 'profile') bg-blue-100 dark:bg-blue-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-2 sm:mr-3">
+                                <svg class="h-3 w-3 sm:h-4 sm:w-4  @if ($tab === 'profile') text-blue-600 dark:text-blue-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-blue-600 dark:group-hover:text-blue-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
                             </div>
-                            Informasi Profil
+                            <span class="hidden sm:inline">Informasi Profil</span>
+                            <span class="sm:hidden">Profil</span>
                         </button>
                         <button wire:click="setTab('interests')"
-                            class="flex items-center px-4 w-full py-3 text-sm text-left font-medium rounded-xl 
+                            class="flex items-center px-3 sm:px-4 w-full py-2.5 sm:py-3 text-xs sm:text-sm text-left font-medium rounded-xl 
                             @if ($tab === 'interests') bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-600 shadow-sm 
                             @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 hover:text-purple-700 dark:hover:text-purple-300 hover:border hover:border-purple-200 dark:hover:border-purple-600 transition-all duration-200 @endif">
                             <div
-                                class="h-8 w-8 rounded-lg @if ($tab === 'interests') bg-purple-100 dark:bg-purple-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-3 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50">
-                                <svg class="h-4 w-4 @if ($tab === 'interests') text-purple-600 dark:text-purple-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                                class="h-6 w-6 sm:h-8 sm:w-8 rounded-lg @if ($tab === 'interests') bg-purple-100 dark:bg-purple-900/50 @else bg-gray-100 dark:bg-slate-700 @endif flex items-center justify-center mr-2 sm:mr-3 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50">
+                                <svg class="h-3 w-3 sm:h-4 sm:w-4 @if ($tab === 'interests') text-purple-600 dark:text-purple-400 @else text-gray-600 dark:text-slate-400 @endif group-hover:text-purple-600 dark:group-hover:text-purple-400"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                     </path>
                                 </svg>
                             </div>
-                            Minat & Ketertarikan
+                            <span class="hidden sm:inline">Minat & Ketertarikan</span>
+                            <span class="sm:hidden">Minat</span>
                         </button>
                         <button wire:click="setTab('skills')"
                             class="flex items-center px-4 w-full py-3 text-sm font-medium rounded-xl @if ($tab === 'skills') bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-600 shadow-sm @else text-gray-700 dark:text-slate-300 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 hover:text-green-700 dark:hover:text-green-300 hover:border hover:border-green-200 dark:hover:border-green-600 transition-all duration-200 @endif">

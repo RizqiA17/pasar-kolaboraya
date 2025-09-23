@@ -72,7 +72,7 @@
                                     </button>
                                 @endif --}}
 
-                                @if($connectionsEnabled || $isSuperAdmin)
+                                {{-- @if($connectionsEnabled || $isSuperAdmin)
                                     <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
                                         class="px-4 py-2 w-full bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@
                                         </svg>
                                         Fitur Dinonaktifkan
                                     </button>
-                                @endif
+                                @endif --}}
                             </div>
                     </div>
 
@@ -140,7 +140,7 @@
                                 Lihat Profile Lengkap
                             </a>
 
-                            <div class="flex items-center justify-center gap-4 text-gray-600 dark:text-slate-400 text-sm mb-6">
+                            {{-- <div class="flex items-center justify-center gap-4 text-gray-600 dark:text-slate-400 text-sm mb-6">
                                 <div class="text-center">
                                     <div class="font-semibold">{{ $friend['connections_count'] }}</div>
                                     <div>Koneksi</div>
@@ -153,10 +153,10 @@
                                     <div class="font-semibold">{{ $friend['events_count'] }}</div>
                                     <div>Organisasi</div>
                                 </div>
-                            </div>
+                            </div> --}}
 
-                            <div class="flex items-center flex-wrap gap-3 w-full">
-                                {{-- @if($collaborationsEnabled || $isSuperAdmin)
+                            {{-- <div class="flex items-center flex-wrap gap-3 w-full">
+                                @if($collaborationsEnabled || $isSuperAdmin)
                                     <flux:modal.trigger name="create-collaboration-{{ $friend['id'] }}" class="flex-1">
                                         <flux:button variant="primary" size="sm" icon="plus"
                                             class="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm hover:shadow transition-all duration-150 px-3 py-2 rounded-lg">
@@ -170,7 +170,7 @@
                                         class="flex-1 px-3 py-2 w-full bg-gray-400 dark:bg-slate-600 text-white text-sm font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5">
                                         <span class="font-medium">Kolaborasi Dinonaktifkan</span>
                                     </button>
-                                @endif --}}
+                                @endif
 
                                 @if($connectionsEnabled || $isSuperAdmin)
                                     <button onclick="handleDisconnectWithValidation({{ $friend['id'] }})"
@@ -190,7 +190,7 @@
                                         Fitur Dinonaktifkan
                                     </button>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
