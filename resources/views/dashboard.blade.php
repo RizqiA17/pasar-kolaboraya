@@ -20,9 +20,9 @@
                                     </p>
                                 </div>
 
-                                @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
+                                {{-- @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
                                     <div class="flex-shrink-0">
-                                        <flux:button :href="route('ecosystem.create')" {{-- variant="white"  --}}
+                                        <flux:button :href="route('ecosystem.create')"
                                             size="sm" wire:navigate>
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
                                             Buat Ekosistem
                                         </flux:button>
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 <!-- Floating SVG Backgrounds -->
                                 <div class="absolute inset-0 pointer-events-none">
