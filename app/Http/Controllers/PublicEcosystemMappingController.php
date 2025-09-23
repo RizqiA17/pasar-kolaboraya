@@ -61,32 +61,34 @@ class PublicEcosystemMappingController extends Controller
         foreach ($ecosystems as $ecosystem) {
             $ecosystemRoles = [];
 
-            // Get all unique roles from existing_roles and needed_roles
-            $allRoles = collect($ecosystem->existing_roles ?? [])
+            // Get all unique roles from existing_roles and needed_roles (these are peran IDs)
+            $allRoleIds = collect($ecosystem->existing_roles ?? [])
                 ->merge($ecosystem->needed_roles ?? [])
                 ->unique()
                 ->values()
                 ->toArray();
 
-            foreach ($allRoles as $role) {
-                // Find users who have this role in this ecosystem
+            // Get peran details for these IDs
+            $peranList = \App\Models\Peran::whereIn('id', $allRoleIds)->get();
+
+            foreach ($peranList as $peran) {
+                // Find users who have this role in this ecosystem through profile.peran relationship
                 $usersWithRole = $ecosystem->users()
                     ->wherePivot('status', 'accepted')
+                    ->with('profile.peran')
                     ->get()
-                    ->filter(function($user) use ($role) {
-                        // Check if user has this role in their profile or ecosystem membership
-                        return $user->assigned_role === $role || 
-                               $user->user_type === $role ||
-                               $user->role === $role;
+                    ->filter(function($user) use ($peran) {
+                        // Check if user has this role in their profile.peran relationship
+                        return $user->profile && 
+                               $user->profile->peran && 
+                               $user->profile->peran->id === $peran->id;
                     });
 
                 if ($usersWithRole->count() > 0) {
-                    // Get role description from peran table
-                    $peranModel = \App\Models\Peran::where('nama', $role)->first();
-                    $roleDescription = $peranModel ? $peranModel->deskripsi : 'Tidak ada deskripsi tersedia';
+                    $roleDescription = $peran->deskripsi;
 
                     $ecosystemRoles[] = [
-                        'role' => $role,
+                        'role' => $peran->nama,
                         'description' => $roleDescription,
                         'count' => $usersWithRole->count(),
                         'users' => $usersWithRole->map(function($user) {

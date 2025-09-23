@@ -582,7 +582,7 @@ class Ecosystem extends Model
      */
     public function calculateEkosistemScore(): array
     {
-        // Get all unique roles in this ecosystem
+        // Get all unique roles in this ecosystem from profile.peran relationship
         $members = $this->acceptedUsers()->with('profile.peran')->get();
         $existingRoleIds = [];
         
