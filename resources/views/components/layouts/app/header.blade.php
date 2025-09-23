@@ -130,7 +130,7 @@
             @endif --}}
 
             <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
-            @if (($ecosystemsEnabled || $isSuperAdmin || $isEcosystemBuilder) && $hasActiveMarketSession && $user->canAccessEcosystem())
+            @if (($ecosystemsEnabled  || $isEcosystemBuilder) && $hasActiveMarketSession && ($user->canAccessEcosystem()|| $isSuperAdmin))
             {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
                 <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')"
                     :current="request()->routeIs('ecosystem.*')"
