@@ -14,14 +14,14 @@
 
     <!-- Header -->
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
-        <div class="flex items-start justify-between">
+        <div class="flex max-md:flex-col-reverse max-md:items-start items-start justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">Berkontribusi pada Ekosistem</h1>
                 <p class="text-gray-600 dark:text-slate-300 mt-1">{{ $ecosystem->ecosystem_title }}</p>
                 <p class="text-sm text-gray-500 dark:text-slate-400 mt-1">{{ $ecosystem->organization_name }}</p>
             </div>
             <a href="{{ route('ecosystem.dashboard', $ecosystem) }}" 
-               class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+               class="inline-flex max-md:mb-4 items-center px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>

@@ -20,6 +20,19 @@
                 border-color: #3b82f6;
                 background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             }
+            
+            .market-card.selected h3,
+            .market-card.selected p,
+            .market-card.selected .text-white,
+            .market-card.selected .text-white\/90,
+            .market-card.selected .text-white\/70,
+            .market-card.selected .text-white\/80 {
+                color: #1e40af !important;
+            }
+            
+            .market-card.selected .bg-white\/20 {
+                background-color: rgba(30, 64, 175, 0.2) !important;
+            }
         </style>
         <!-- Header -->
         <div class="market-selector text-white py-8">
@@ -38,24 +51,145 @@
                 @if ($pasarKolaborayaList->count() > 1)
                     <div class="max-w-6xl mx-auto">
                         <h2 class="text-2xl font-semibold mb-6 text-center">Pilih Pasar Kolaboraya</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach ($pasarKolaborayaList as $pasar)
+                        
+                        <!-- Search and Filter -->
+                        <div class="mb-6">
+                            <div class="relative max-w-md mx-auto">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" id="marketSearch" 
+                                    class="block w-full pl-10 pr-3 py-3 border border-white/30 rounded-lg bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                    placeholder="Cari pasar kolaboraya...">
+                            </div>
+                        </div>
+
+                        <!-- Market Cards with Improved Layout -->
+                        <div id="marketContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            @foreach ($pasarKolaborayaList as $index => $pasar)
+                                @php
+                                    $colors = [
+                                        'from-blue-500 to-purple-600',
+                                        'from-green-500 to-teal-600', 
+                                        'from-orange-500 to-red-600',
+                                        'from-pink-500 to-rose-600',
+                                        'from-indigo-500 to-blue-600',
+                                        'from-emerald-500 to-green-600',
+                                        'from-amber-500 to-orange-600',
+                                        'from-violet-500 to-purple-600'
+                                    ];
+                                    $colorClass = $colors[$index % count($colors)];
+                                    $icons = ['Building', 'Rocket', 'Lightbulb', 'Palette', 'Factory', 'Leaf', 'Briefcase', 'Microscope'];
+                                    $icon = $icons[$index % count($icons)];
+                                @endphp
                                 <a href="{{ route('public.ecosystem.mapping', ['pasar_id' => $pasar->id]) }}"
-                                    class="market-card block p-6 bg-white/10 backdrop-blur-sm rounded-xl border-2 border-white/20 {{ $selectedPasar && $selectedPasar->id === $pasar->id ? 'selected' : '' }}">
-                                    <h3 class="text-xl font-semibold mb-2">{{ $pasar->name }}</h3>
-                                    <p class="text-sm opacity-80">{{ Str::limit($pasar->description, 100) }}</p>
+                                    class="market-card block p-6 bg-white/10 backdrop-blur-sm rounded-xl border-2 border-white/20 hover:border-white/40 transition-all duration-300 {{ $selectedPasar && $selectedPasar->id === $pasar->id ? 'selected border-blue-400 bg-white/20' : '' }}"
+                                    data-market-name="{{ strtolower($pasar->name) }}"
+                                    data-market-description="{{ strtolower($pasar->description) }}">
+                                    
+                                    <!-- Header with Icon and Status -->
+                                    <div class="flex items-start justify-between mb-3">
+                                        <div class="w-12 h-12 bg-gradient-to-br {{ $colorClass }} rounded-lg flex items-center justify-center shadow-lg">
+                                            @if($icon === 'Building')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                                </svg>
+                                            @elseif($icon === 'Rocket')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                                </svg>
+                                            @elseif($icon === 'Lightbulb')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M11 3a1 1 0 10-2 0v1a1 1 0 10-2 0V3a3 3 0 016 0v1a1 1 0 10-2 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 011-1H5a1 1 0 000 2h1a1 1 0 01-1-1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.477.859h4z"></path>
+                                                </svg>
+                                            @elseif($icon === 'Palette')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @elseif($icon === 'Factory')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-2zm6 4a2 2 0 100 4 2 2 0 000-4z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @elseif($icon === 'Leaf')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @elseif($icon === 'Briefcase')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @elseif($icon === 'Microscope')
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @else
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            @endif
+                                        </div>
                                     @if ($selectedPasar && $selectedPasar->id === $pasar->id)
-                                        <div class="mt-3 flex items-center text-sm">
-                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                    clip-rule="evenodd"></path>
+                                            <div class="flex items-center text-sm text-blue-300">
+                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                             </svg>
-                                            Sedang Dipilih
+                                                Aktif
                                         </div>
                                     @endif
+                                    </div>
+
+                                    <!-- Content -->
+                                    <h3 class="text-lg font-semibold mb-2 text-white">{{ $pasar->name }}</h3>
+                                    <p class="text-sm opacity-80 text-white/90 leading-relaxed">{{ Str::limit($pasar->description, 80) }}</p>
+                                    
+                                    <!-- Stats or Badge -->
+                                    <div class="mt-4 flex items-center justify-between">
+                                        <div class="flex items-center text-xs text-white/70">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            Pasar Aktif
+                                        </div>
+                                        <div class="px-2 py-1 bg-white/20 rounded-full text-xs text-white/80">
+                                            {{ $index + 1 }}/{{ $pasarKolaborayaList->count() }}
+                                        </div>
+                                    </div>
                                 </a>
                             @endforeach
+                        </div>
+
+                        <!-- No Results Message -->
+                        <div id="noResults" class="hidden text-center py-8">
+                            <div class="text-white/60 text-lg mb-2">Tidak ada pasar yang ditemukan</div>
+                            <div class="text-white/40 text-sm">Coba kata kunci yang berbeda</div>
+                        </div>
+
+                        <!-- Pagination Controls -->
+                        <div id="paginationControls" class="mt-8 flex justify-center items-center space-x-2 {{ $pasarKolaborayaList->count() <= 8 ? 'hidden' : '' }}">
+                            <button id="prevPage" class="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                Sebelumnya
+                            </button>
+                            
+                            <div id="pageNumbers" class="flex space-x-1">
+                                <!-- Page numbers will be generated by JavaScript -->
+                            </div>
+                            
+                            <button id="nextPage" class="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Selanjutnya
+                                <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Market Count Info -->
+                        <div class="mt-4 text-center text-white/60 text-sm">
+                            Menampilkan <span id="showingCount">{{ min(8, $pasarKolaborayaList->count()) }}</span> dari <span id="totalCount">{{ $pasarKolaborayaList->count() }}</span> pasar kolaboraya
                         </div>
                     </div>
                 @endif
@@ -933,6 +1067,144 @@
                         console.log('Ecosystem mapping visualization completed successfully');
                     }, 100);
                 }
+
+                // Market search and pagination functionality
+                let currentPage = 1;
+                const itemsPerPage = 8;
+                let allMarketCards = [];
+                let filteredCards = [];
+
+                function initializeMarketSearch() {
+                    const searchInput = document.getElementById('marketSearch');
+                    const marketContainer = document.getElementById('marketContainer');
+                    const noResults = document.getElementById('noResults');
+                    const paginationControls = document.getElementById('paginationControls');
+                    const showingCount = document.getElementById('showingCount');
+                    const totalCount = document.getElementById('totalCount');
+
+                    if (!searchInput || !marketContainer) return;
+
+                    // Store all market cards
+                    allMarketCards = Array.from(marketContainer.querySelectorAll('.market-card'));
+                    filteredCards = [...allMarketCards];
+
+                    // Initialize pagination
+                    updatePagination();
+                    updateMarketCount();
+
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase().trim();
+                        
+                        // Filter cards based on search term
+                        filteredCards = allMarketCards.filter(card => {
+                            const marketName = card.getAttribute('data-market-name') || '';
+                            const marketDescription = card.getAttribute('data-market-description') || '';
+                            return marketName.includes(searchTerm) || marketDescription.includes(searchTerm);
+                        });
+
+                        // Reset to first page when searching
+                        currentPage = 1;
+                        
+                        // Update display
+                        updateMarketDisplay();
+                        updatePagination();
+                        updateMarketCount();
+
+                        // Show/hide no results message
+                        if (filteredCards.length === 0 && searchTerm !== '') {
+                            noResults.classList.remove('hidden');
+                            paginationControls.classList.add('hidden');
+                        } else {
+                            noResults.classList.add('hidden');
+                            paginationControls.classList.toggle('hidden', filteredCards.length <= itemsPerPage);
+                        }
+                    });
+
+                    // Pagination event listeners
+                    document.getElementById('prevPage').addEventListener('click', () => {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            updateMarketDisplay();
+                            updatePagination();
+                            updateMarketCount();
+                        }
+                    });
+
+                    document.getElementById('nextPage').addEventListener('click', () => {
+                        const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            updateMarketDisplay();
+                            updatePagination();
+                            updateMarketCount();
+                        }
+                    });
+                }
+
+                function updateMarketDisplay() {
+                    // Hide all cards first
+                    allMarketCards.forEach(card => card.style.display = 'none');
+                    
+                    // Show cards for current page
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    const cardsToShow = filteredCards.slice(startIndex, endIndex);
+                    
+                    cardsToShow.forEach(card => card.style.display = 'block');
+                }
+
+                function updatePagination() {
+                    const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
+                    const pageNumbers = document.getElementById('pageNumbers');
+                    const prevBtn = document.getElementById('prevPage');
+                    const nextBtn = document.getElementById('nextPage');
+
+                    // Update button states
+                    prevBtn.disabled = currentPage === 1;
+                    nextBtn.disabled = currentPage === totalPages;
+
+                    // Generate page numbers
+                    pageNumbers.innerHTML = '';
+                    const maxVisiblePages = 5;
+                    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                    if (endPage - startPage + 1 < maxVisiblePages) {
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        const pageBtn = document.createElement('button');
+                        pageBtn.textContent = i;
+                        pageBtn.className = `px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                            i === currentPage 
+                                ? 'bg-white/20 text-white border border-white/40' 
+                                : 'bg-white/10 text-white/80 hover:bg-white/15'
+                        }`;
+                        pageBtn.addEventListener('click', () => {
+                            currentPage = i;
+                            updateMarketDisplay();
+                            updatePagination();
+                            updateMarketCount();
+                        });
+                        pageNumbers.appendChild(pageBtn);
+                    }
+                }
+
+                function updateMarketCount() {
+                    const showingCount = document.getElementById('showingCount');
+                    const totalCount = document.getElementById('totalCount');
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    const endIndex = Math.min(startIndex + itemsPerPage, filteredCards.length);
+                    
+                    showingCount.textContent = endIndex - startIndex;
+                    totalCount.textContent = filteredCards.length;
+                }
+
+                // Initialize search when DOM is loaded
+                document.addEventListener('DOMContentLoaded', function() {
+                    initializeMarketSearch();
+                });
             </script>
         @endif
     </x-layouts.app>
@@ -971,6 +1243,19 @@
                 border-color: #3b82f6;
                 background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             }
+            
+            .market-card.selected h3,
+            .market-card.selected p,
+            .market-card.selected .text-white,
+            .market-card.selected .text-white\/90,
+            .market-card.selected .text-white\/70,
+            .market-card.selected .text-white\/80 {
+                color: #1e40af !important;
+            }
+            
+            .market-card.selected .bg-white\/20 {
+                background-color: rgba(30, 64, 175, 0.2) !important;
+            }
         </style>
     </head>
 
@@ -1005,24 +1290,109 @@
                     @if ($pasarKolaborayaList->count() > 1)
                         <div class="max-w-6xl mx-auto">
                             <h2 class="text-2xl font-semibold mb-6 text-center">Pilih Pasar Kolaboraya</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                @foreach ($pasarKolaborayaList as $pasar)
+                            
+                            <!-- Search and Filter -->
+                            <div class="mb-6">
+                                <div class="relative max-w-md mx-auto">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <input type="text" id="marketSearchGuest" 
+                                        class="block w-full pl-10 pr-3 py-3 border border-white/30 rounded-lg bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                        placeholder="Cari pasar kolaboraya...">
+                                </div>
+                            </div>
+
+                            <!-- Market Cards with Improved Layout -->
+                            <div id="marketContainerGuest" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                @foreach ($pasarKolaborayaList as $index => $pasar)
+                                    @php
+                                        $colors = [
+                                            'from-blue-500 to-purple-600',
+                                            'from-green-500 to-teal-600', 
+                                            'from-orange-500 to-red-600',
+                                            'from-pink-500 to-rose-600',
+                                            'from-indigo-500 to-blue-600',
+                                            'from-emerald-500 to-green-600',
+                                            'from-amber-500 to-orange-600',
+                                            'from-violet-500 to-purple-600'
+                                        ];
+                                        $colorClass = $colors[$index % count($colors)];
+                                        $icons = ['Building', 'Rocket', 'Lightbulb', 'Palette', 'Factory', 'Leaf', 'Briefcase', 'Microscope'];
+                                        $icon = $icons[$index % count($icons)];
+                                    @endphp
                                     <a href="{{ route('public.ecosystem.mapping', ['pasar_id' => $pasar->id]) }}"
-                                        class="market-card block p-6 bg-white/10 backdrop-blur-sm rounded-xl border-2 border-white/20 {{ $selectedPasar && $selectedPasar->id === $pasar->id ? 'selected' : '' }}">
-                                        <h3 class="text-xl font-semibold mb-2">{{ $pasar->name }}</h3>
-                                        <p class="text-sm opacity-80">{{ Str::limit($pasar->description, 100) }}</p>
+                                        class="market-card block p-6 bg-white/10 backdrop-blur-sm rounded-xl border-2 border-white/20 hover:border-white/40 transition-all duration-300 {{ $selectedPasar && $selectedPasar->id === $pasar->id ? 'selected border-blue-400 bg-white/20' : '' }}"
+                                        data-market-name="{{ strtolower($pasar->name) }}"
+                                        data-market-description="{{ strtolower($pasar->description) }}">
+                                        
+                                        <!-- Header with Icon and Status -->
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div class="w-12 h-12 bg-gradient-to-br {{ $colorClass }} rounded-lg flex items-center justify-center text-2xl shadow-lg">
+                                                {{ $icon }}
+                                            </div>
                                         @if ($selectedPasar && $selectedPasar->id === $pasar->id)
-                                            <div class="mt-3 flex items-center text-sm">
-                                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                        clip-rule="evenodd"></path>
+                                                <div class="flex items-center text-sm text-blue-300">
+                                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                 </svg>
-                                                Sedang Dipilih
+                                                    Aktif
                                             </div>
                                         @endif
+                                        </div>
+
+                                        <!-- Content -->
+                                        <h3 class="text-lg font-semibold mb-2 text-white">{{ $pasar->name }}</h3>
+                                        <p class="text-sm opacity-80 text-white/90 leading-relaxed">{{ Str::limit($pasar->description, 80) }}</p>
+                                        
+                                        <!-- Stats or Badge -->
+                                        <div class="mt-4 flex items-center justify-between">
+                                            <div class="flex items-center text-xs text-white/70">
+                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Pasar Aktif
+                                            </div>
+                                            <div class="px-2 py-1 bg-white/20 rounded-full text-xs text-white/80">
+                                                {{ $index + 1 }}/{{ $pasarKolaborayaList->count() }}
+                                            </div>
+                                        </div>
                                     </a>
                                 @endforeach
+                            </div>
+
+                            <!-- No Results Message -->
+                            <div id="noResultsGuest" class="hidden text-center py-8">
+                                <div class="text-white/60 text-lg mb-2">Tidak ada pasar yang ditemukan</div>
+                                <div class="text-white/40 text-sm">Coba kata kunci yang berbeda</div>
+                            </div>
+
+                            <!-- Pagination Controls -->
+                            <div id="paginationControlsGuest" class="mt-8 flex justify-center items-center space-x-2 {{ $pasarKolaborayaList->count() <= 8 ? 'hidden' : '' }}">
+                                <button id="prevPageGuest" class="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                    Sebelumnya
+                                </button>
+                                
+                                <div id="pageNumbersGuest" class="flex space-x-1">
+                                    <!-- Page numbers will be generated by JavaScript -->
+                                </div>
+                                
+                                <button id="nextPageGuest" class="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    Selanjutnya
+                                    <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Market Count Info -->
+                            <div class="mt-4 text-center text-white/60 text-sm">
+                                Menampilkan <span id="showingCountGuest">{{ min(8, $pasarKolaborayaList->count()) }}</span> dari <span id="totalCountGuest">{{ $pasarKolaborayaList->count() }}</span> pasar kolaboraya
                             </div>
                         </div>
                     @endif
@@ -1902,6 +2272,144 @@
                             console.log('Ecosystem mapping visualization completed successfully');
                         }, 100);
                     }
+
+                    // Market search and pagination functionality for guest
+                    let currentPageGuest = 1;
+                    const itemsPerPageGuest = 8;
+                    let allMarketCardsGuest = [];
+                    let filteredCardsGuest = [];
+
+                    function initializeMarketSearchGuest() {
+                        const searchInput = document.getElementById('marketSearchGuest');
+                        const marketContainer = document.getElementById('marketContainerGuest');
+                        const noResults = document.getElementById('noResultsGuest');
+                        const paginationControls = document.getElementById('paginationControlsGuest');
+                        const showingCount = document.getElementById('showingCountGuest');
+                        const totalCount = document.getElementById('totalCountGuest');
+
+                        if (!searchInput || !marketContainer) return;
+
+                        // Store all market cards
+                        allMarketCardsGuest = Array.from(marketContainer.querySelectorAll('.market-card'));
+                        filteredCardsGuest = [...allMarketCardsGuest];
+
+                        // Initialize pagination
+                        updatePaginationGuest();
+                        updateMarketCountGuest();
+
+                        searchInput.addEventListener('input', function() {
+                            const searchTerm = this.value.toLowerCase().trim();
+                            
+                            // Filter cards based on search term
+                            filteredCardsGuest = allMarketCardsGuest.filter(card => {
+                                const marketName = card.getAttribute('data-market-name') || '';
+                                const marketDescription = card.getAttribute('data-market-description') || '';
+                                return marketName.includes(searchTerm) || marketDescription.includes(searchTerm);
+                            });
+
+                            // Reset to first page when searching
+                            currentPageGuest = 1;
+                            
+                            // Update display
+                            updateMarketDisplayGuest();
+                            updatePaginationGuest();
+                            updateMarketCountGuest();
+
+                            // Show/hide no results message
+                            if (filteredCardsGuest.length === 0 && searchTerm !== '') {
+                                noResults.classList.remove('hidden');
+                                paginationControls.classList.add('hidden');
+                            } else {
+                                noResults.classList.add('hidden');
+                                paginationControls.classList.toggle('hidden', filteredCardsGuest.length <= itemsPerPageGuest);
+                            }
+                        });
+
+                        // Pagination event listeners
+                        document.getElementById('prevPageGuest').addEventListener('click', () => {
+                            if (currentPageGuest > 1) {
+                                currentPageGuest--;
+                                updateMarketDisplayGuest();
+                                updatePaginationGuest();
+                                updateMarketCountGuest();
+                            }
+                        });
+
+                        document.getElementById('nextPageGuest').addEventListener('click', () => {
+                            const totalPages = Math.ceil(filteredCardsGuest.length / itemsPerPageGuest);
+                            if (currentPageGuest < totalPages) {
+                                currentPageGuest++;
+                                updateMarketDisplayGuest();
+                                updatePaginationGuest();
+                                updateMarketCountGuest();
+                            }
+                        });
+                    }
+
+                    function updateMarketDisplayGuest() {
+                        // Hide all cards first
+                        allMarketCardsGuest.forEach(card => card.style.display = 'none');
+                        
+                        // Show cards for current page
+                        const startIndex = (currentPageGuest - 1) * itemsPerPageGuest;
+                        const endIndex = startIndex + itemsPerPageGuest;
+                        const cardsToShow = filteredCardsGuest.slice(startIndex, endIndex);
+                        
+                        cardsToShow.forEach(card => card.style.display = 'block');
+                    }
+
+                    function updatePaginationGuest() {
+                        const totalPages = Math.ceil(filteredCardsGuest.length / itemsPerPageGuest);
+                        const pageNumbers = document.getElementById('pageNumbersGuest');
+                        const prevBtn = document.getElementById('prevPageGuest');
+                        const nextBtn = document.getElementById('nextPageGuest');
+
+                        // Update button states
+                        prevBtn.disabled = currentPageGuest === 1;
+                        nextBtn.disabled = currentPageGuest === totalPages;
+
+                        // Generate page numbers
+                        pageNumbers.innerHTML = '';
+                        const maxVisiblePages = 5;
+                        let startPage = Math.max(1, currentPageGuest - Math.floor(maxVisiblePages / 2));
+                        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                        if (endPage - startPage + 1 < maxVisiblePages) {
+                            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                        }
+
+                        for (let i = startPage; i <= endPage; i++) {
+                            const pageBtn = document.createElement('button');
+                            pageBtn.textContent = i;
+                            pageBtn.className = `px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                                i === currentPageGuest 
+                                    ? 'bg-white/20 text-white border border-white/40' 
+                                    : 'bg-white/10 text-white/80 hover:bg-white/15'
+                            }`;
+                            pageBtn.addEventListener('click', () => {
+                                currentPageGuest = i;
+                                updateMarketDisplayGuest();
+                                updatePaginationGuest();
+                                updateMarketCountGuest();
+                            });
+                            pageNumbers.appendChild(pageBtn);
+                        }
+                    }
+
+                    function updateMarketCountGuest() {
+                        const showingCount = document.getElementById('showingCountGuest');
+                        const totalCount = document.getElementById('totalCountGuest');
+                        const startIndex = (currentPageGuest - 1) * itemsPerPageGuest;
+                        const endIndex = Math.min(startIndex + itemsPerPageGuest, filteredCardsGuest.length);
+                        
+                        showingCount.textContent = endIndex - startIndex;
+                        totalCount.textContent = filteredCardsGuest.length;
+                    }
+
+                    // Initialize search when DOM is loaded
+                    document.addEventListener('DOMContentLoaded', function() {
+                        initializeMarketSearchGuest();
+                    });
                 </script>
             @endif
         </div>

@@ -279,13 +279,13 @@
                         <div class="p-6">
                             @if ($isOwner)
                                 @if ($ecosystem->canUserContribute(Auth::user()))
-                                    <div class="flex items-center justify-between text-blue-600 dark:text-blue-400 mb-4">
+                                    <div class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-blue-600 dark:text-blue-400 mb-4">
                                         <div class="flex items-center">
                                             <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
                                             <span>Anda adalah pemilik ekosistem dan dapat berkontribusi</span>
                                         </div>
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 max-md:mb-4 py-1 rounded text-sm font-medium transition-colors">
                                             <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
@@ -617,35 +617,6 @@
                             @endif
                         </div>
 
-                    </div>
-
-                    <!-- Charts Section -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Role Distribution Chart -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
-                            <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Distribusi Peran</h3>
-                                <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Perbandingan peran yang ada vs total peran</p>
-                            </div>
-                            <div class="p-6">
-                                <div class="relative" style="height: 400px;">
-                                    <canvas id="roleDistributionChart" wire:key="role-chart-{{ $activeTab }}" wire:ignore></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Role Progress Chart -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
-                            <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Progress Keragaman Peran</h3>
-                                <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi pencapaian keragaman peran</p>
-                            </div>
-                            <div class="p-6">
-                                <div class="relative" style="height: 400px;">
-                                    <canvas id="roleProgressChart" wire:key="progress-chart-{{ $activeTab }}" wire:ignore></canvas>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Progress Bars Section -->
@@ -1349,20 +1320,34 @@
         let ecosystemBarChart = null;
 
         function initializeEcosystemCharts() {
+            console.log('Initializing ecosystem charts...');
+            
             // Destroy existing charts
             if (ecosystemRadarChart) {
+                console.log('Destroying existing radar chart...');
                 ecosystemRadarChart.destroy();
+                ecosystemRadarChart = null;
             }
             if (ecosystemBarChart) {
+                console.log('Destroying existing bar chart...');
                 ecosystemBarChart.destroy();
+                ecosystemBarChart = null;
             }
+
+            // Get current theme
+            const isDark = document.documentElement.classList.contains('dark') || 
+                          localStorage.getItem('theme') === 'dark' ||
+                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            console.log('Current theme is dark:', isDark);
+            
+            const textColor = isDark ? '#e2e8f0' : '#374151';
+            const gridColor = isDark ? '#475569' : '#e5e7eb';
 
             // Initialize Radar Chart
             const radarCtx = document.getElementById('ecosystemRadarChart');
             if (radarCtx) {
-                const isDark = document.documentElement.classList.contains('dark');
-                const textColor = isDark ? '#e2e8f0' : '#374151';
-                const gridColor = isDark ? '#475569' : '#e5e7eb';
+                console.log('Creating radar chart...');
                 
                 ecosystemRadarChart = new Chart(radarCtx, {
                     type: 'radar',
@@ -1413,7 +1398,7 @@
                                     color: textColor,
                                     font: {
                                         size: 12
-                                    }
+                                    },
                                 }
                             }
                         }
@@ -1424,9 +1409,7 @@
             // Initialize Bar Chart
             const barCtx = document.getElementById('ecosystemBarChart');
             if (barCtx) {
-                const isDark = document.documentElement.classList.contains('dark');
-                const textColor = isDark ? '#e2e8f0' : '#374151';
-                const gridColor = isDark ? '#475569' : '#e5e7eb';
+                console.log('Creating bar chart...');
                 
                 ecosystemBarChart = new Chart(barCtx, {
                     type: 'bar',
@@ -1494,6 +1477,7 @@
         function checkEcosystemCharts() {
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
             if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                console.log('Quality tab is active, initializing ecosystem charts...');
                 setTimeout(initializeEcosystemCharts, 200);
             }
         }
@@ -1503,9 +1487,131 @@
             checkEcosystemCharts();
         });
 
+        // Listen for Livewire updates
+        document.addEventListener('livewire:updated', function() {
+            console.log('Livewire updated, checking for ecosystem charts...');
+            setTimeout(checkEcosystemCharts, 200);
+        });
+
+        // Listen for tab clicks
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('quality')") {
+                console.log('Quality tab clicked, initializing charts...');
+                setTimeout(initializeEcosystemCharts, 300);
+            }
+        });
+
+        // Listen for Livewire tab changes
+        document.addEventListener('livewire:updated', function() {
+            console.log('Livewire updated, checking for quality tab...');
+            setTimeout(function() {
+                const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+                if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                    console.log('Quality tab is active after update, initializing charts...');
+                    initializeEcosystemCharts();
+                }
+            }, 200);
+        });
+
         // Check on page load
         document.addEventListener('DOMContentLoaded', function() {
             checkEcosystemCharts();
         });
+
+        // Also try to initialize when the page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(checkEcosystemCharts, 200);
+        });
+
+        // Function to update existing charts with new theme
+        function updateChartsTheme() {
+            console.log('Updating charts theme...');
+            
+            // Get current theme
+            const isDark = document.documentElement.classList.contains('dark') || 
+                          localStorage.getItem('theme') === 'dark' ||
+                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            const textColor = isDark ? '#e2e8f0' : '#374151';
+            const gridColor = isDark ? '#475569' : '#e5e7eb';
+
+            // Update connection quality radar chart if it exists
+            if (connectionQualityRadarChart) {
+                console.log('Updating connection quality chart theme...');
+                connectionQualityRadarChart.options.plugins.legend.labels.color = textColor;
+                connectionQualityRadarChart.options.scales.r.ticks.color = textColor;
+                connectionQualityRadarChart.options.scales.r.grid.color = gridColor;
+                connectionQualityRadarChart.options.scales.r.pointLabels.color = textColor;
+                connectionQualityRadarChart.update();
+            }
+
+            // Update radar chart if it exists
+            if (ecosystemRadarChart) {
+                console.log('Updating radar chart theme...');
+                ecosystemRadarChart.options.plugins.legend.labels.color = textColor;
+                ecosystemRadarChart.options.scales.r.ticks.color = textColor;
+                ecosystemRadarChart.options.scales.r.grid.color = gridColor;
+                ecosystemRadarChart.options.scales.r.pointLabels.color = textColor;
+                ecosystemRadarChart.update();
+            }
+
+            // Update bar chart if it exists
+            if (ecosystemBarChart) {
+                console.log('Updating bar chart theme...');
+                ecosystemBarChart.options.scales.y.ticks.color = textColor;
+                ecosystemBarChart.options.scales.y.grid.color = gridColor;
+                ecosystemBarChart.options.scales.x.ticks.color = textColor;
+                ecosystemBarChart.update();
+            }
+        }
+
+        // Theme change listener
+        function setupThemeListener() {
+            // Listen for theme changes via localStorage
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'theme') {
+                    console.log('Theme changed to:', e.newValue);
+                    // Update charts when theme changes
+                    setTimeout(updateChartsTheme, 100);
+                }
+            });
+
+            // Listen for theme changes via class changes on document element
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        console.log('Document class changed, updating charts...');
+                        setTimeout(updateChartsTheme, 100);
+                    }
+                });
+            });
+
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            // Also listen for clicks on theme toggle buttons
+            document.addEventListener('click', function(e) {
+                if (e.target && (
+                    e.target.closest('[data-theme-toggle]') ||
+                    e.target.closest('button[wire\\:click*="toggleTheme"]') ||
+                    e.target.closest('.theme-toggle') ||
+                    e.target.closest('button[wire\\:click*="setTheme"]')
+                )) {
+                    console.log('Theme toggle clicked, updating charts...');
+                    setTimeout(updateChartsTheme, 200);
+                }
+            });
+
+            // Listen for custom theme change events
+            document.addEventListener('themeChanged', function() {
+                console.log('Custom theme change event detected');
+                setTimeout(updateChartsTheme, 100);
+            });
+        }
+
+        // Initialize theme listener
+        setupThemeListener();
     </script>
 @endpush
