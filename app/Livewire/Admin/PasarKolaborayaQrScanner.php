@@ -86,12 +86,12 @@ class PasarKolaborayaQrScanner extends Component
             
             if ($existingMembership) {
                 if ($existingMembership->pivot->status === 'accepted') {
-                    $this->validationResult = [
-                        'valid' => false,
-                        'message' => 'User sudah menjadi anggota Pasar Kolaboraya ini'
-                    ];
-                    session()->flash('error', 'User sudah menjadi anggota Pasar Kolaboraya ini');
-                    $this->addToScanHistory($user, false);
+                    // $this->validationResult = [
+                    //     'valid' => false,
+                    //     'message' => 'User sudah menjadi anggota Pasar Kolaboraya ini'
+                    // ];
+                    // session()->flash('error', 'User sudah menjadi anggota Pasar Kolaboraya ini');
+                    // $this->addToScanHistory($user, false);
                     return;
                 } else {
                     // Update existing pending membership to accepted
