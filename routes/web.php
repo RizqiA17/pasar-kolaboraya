@@ -20,6 +20,8 @@ Route::get('/', function () {
 })->name('home');
 
 
+// Public Ecosystem Mapping Route (No Auth Required)
+Route::get('public/ecosystem-mapping', [App\Http\Controllers\PublicEcosystemMappingController::class, 'index'])->name('public.ecosystem.mapping');
 
 // Test routes for error pages (remove in production)
 if (app()->environment('local', 'development')) {
@@ -130,9 +132,6 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
     Route::get('ecosystem-mapping', function () {
         return view('ecosystem-mapping');
     })->name('ecosystem.mapping');
-
-    // Public Ecosystem Mapping Route (No Auth Required)
-    Route::get('public/ecosystem-mapping', [App\Http\Controllers\PublicEcosystemMappingController::class, 'index'])->name('public.ecosystem.mapping');
 
 
     // Collective Action QR Scanner route
