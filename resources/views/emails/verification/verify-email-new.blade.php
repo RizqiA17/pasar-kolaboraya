@@ -43,24 +43,35 @@
         Setelah verifikasi, Anda akan dapat:
     </div>
     
-    <div class="info-grid">
-        <div class="info-item">
-            <div class="info-label">Kolaborasi</div>
-            <div class="info-value">Buat & Bergabung</div>
+    @if(in_array($user->user_type, ['tamu', 'komunitas']))
+        {{-- Hanya tampilkan bagian koneksi untuk tamu dan komunitas --}}
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Koneksi</div>
+                <div class="info-value">Jaringan Profesional</div>
+            </div>
         </div>
-        <div class="info-item">
-            <div class="info-label">Koneksi</div>
-            <div class="info-value">Jaringan Profesional</div>
+    @else
+        {{-- Tampilkan semua fitur untuk partisipan --}}
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Kolaborasi</div>
+                <div class="info-value">Bergabung ke Ekosistem</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Koneksi</div>
+                <div class="info-value">Jaringan Profesional</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Aksi</div>
+                <div class="info-value">Ikuti Aksi Kolektif</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Skill</div>
+                <div class="info-value">Tampilkan Keahlian</div>
+            </div>
         </div>
-        <div class="info-item">
-            <div class="info-label">Event</div>
-            <div class="info-value">Ikuti & Buat Event</div>
-        </div>
-        <div class="info-item">
-            <div class="info-label">Skill</div>
-            <div class="info-value">Tampilkan Keahlian</div>
-        </div>
-    </div>
+    @endif
     
     <div class="message">
         Jika Anda tidak membuat akun di Pasar Kolaboraya, Anda dapat mengabaikan email ini dengan aman.
