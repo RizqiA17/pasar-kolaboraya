@@ -743,7 +743,7 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{ __('Aksi Kolektif') }}</span>
+                        <span class="text-xs font-medium text-center">{{ __('Aksi Kolektif') }}</span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
@@ -756,7 +756,7 @@
                             </svg>
                         </div>
                         <span
-                            class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('Aksi Kolektif') }}</span>
+                            class="text-xs font-medium text-slate-400 dark:text-slate-500 text-center">{{ __('Aksi Kolektif') }}</span>
 
                         <!-- Tooltip -->
                         <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"

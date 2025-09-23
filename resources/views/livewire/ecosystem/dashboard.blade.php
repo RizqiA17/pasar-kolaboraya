@@ -15,55 +15,56 @@
     @endif
 
     <!-- Header -->
-    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
-        <div class="flex items-start justify-between">
-            <div>
-                <div class="flex items-center gap-3 mb-2">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-slate-100">{{ $ecosystem->ecosystem_title }}
-                    </h1>
-                    @if ($isOwner)
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Pemilik
-                        </span>
-                    @elseif($isEcosystemBuilder)
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                            Ecosystem Builder
-                        </span>
-                    @else
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                            Pengunjung
-                        </span>
-                    @endif
-                    @if ($isReadOnly)
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            Mode Lihat Saja
-                        </span>
-                    @endif
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
+            <div class="flex-1">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 break-words">{{ $ecosystem->ecosystem_title }}</h1>
+                    <div class="flex flex-wrap gap-2">
+                        @if ($isOwner)
+                            <span
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Pemilik
+                            </span>
+                        @elseif($isEcosystemBuilder)
+                            <span
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                Ecosystem Builder
+                            </span>
+                        @else
+                            <span
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Pengunjung
+                            </span>
+                        @endif
+                        @if ($isReadOnly)
+                            <span
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                Mode Lihat Saja
+                            </span>
+                        @endif
+                    </div>
                 </div>
-                <p class="text-gray-600 dark:text-slate-300 mt-1">{{ $ecosystem->organization_name }}</p>
-                <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">{{ $ecosystem->organization_name }}</p>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
                     <span>📍 {{ $ecosystem->work_region }}</span>
                     <span>👥 {{ $ecosystem->acceptedUsers()->count() }} anggota</span>
                     @if ($ecosystem->max_users)
@@ -71,21 +72,21 @@
                     @endif
                 </div>
             </div>
-            <div class="text-right">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+            <div class="flex flex-col sm:text-right">
+                <div class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
                     {{ $ecosystemQuality['ekosistem_score'] }}%</div>
                 <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
                 @if ($isOwner)
-                    <div class="mt-3 flex gap-2">
+                    <div class="mt-3 flex flex-col sm:flex-row gap-2">
                         <a href="{{ route('ecosystem.qr.show', $ecosystem) }}" 
-                           class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                           class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
                             </svg>
                             QR Code
                         </a>
                         <a href="{{ route('ecosystem.settings', $ecosystem) }}" 
-                           class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                           class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -101,85 +102,93 @@
     <!-- Navigation Tabs -->
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="border-b border-gray-200 dark:border-slate-700">
-            <nav class="flex space-x-8 px-6" aria-label="Tabs">
-                <button wire:click="setActiveTab('overview')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'overview' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                    Ringkasan
-                </button>
-                @if ($isOwner || $isEcosystemBuilder)
-                    <button wire:click="setActiveTab('members')"
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'members' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                        Anggota
-                        @if ($pendingRequests->count() > 0)
-                            <span
-                                class="ml-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-1 px-2 rounded-full text-xs">{{ $pendingRequests->count() }}</span>
-                        @endif
+            <div class="overflow-x-auto">
+                <nav class="flex space-x-2 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
+                    <button wire:click="setActiveTab('overview')"
+                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'overview' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        Ringkasan
                     </button>
-                    @if ($isOwner)
-                        <button wire:click="setActiveTab('invitations')"
-                            class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'invitations' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                            Undangan Aksi
-                            @if ($pendingInvitations->count() > 0)
-                                <span
-                                    class="ml-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 py-1 px-2 rounded-full text-xs">{{ $pendingInvitations->count() }}</span>
-                            @endif
+                    @if ($isOwner || $isEcosystemBuilder)
+                        <button wire:click="setActiveTab('members')"
+                            class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'members' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                            <span class="flex items-center">
+                                Anggota
+                                @if ($pendingRequests->count() > 0)
+                                    <span
+                                        class="ml-1 sm:ml-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-0.5 px-1.5 sm:py-1 sm:px-2 rounded-full text-xs">{{ $pendingRequests->count() }}</span>
+                                @endif
+                            </span>
                         </button>
+                        @if ($isOwner)
+                            <button wire:click="setActiveTab('invitations')"
+                                class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'invitations' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                                <span class="flex items-center">
+                                    Undangan Aksi
+                                    @if ($pendingInvitations->count() > 0)
+                                        <span
+                                            class="ml-1 sm:ml-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 py-0.5 px-1.5 sm:py-1 sm:px-2 rounded-full text-xs">{{ $pendingInvitations->count() }}</span>
+                                    @endif
+                                </span>
+                            </button>
+                        @endif
                     @endif
-                @endif
-                <button wire:click="setActiveTab('quality')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'quality' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                    Kualitas & Keahlian
-                </button>
-                <button wire:click="setActiveTab('actions')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'actions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                    Aksi Kolektif
-                </button>
-                <button wire:click="setActiveTab('contributions')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'contributions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
-                    Kontribusi
-                    @if ($pendingContributions->count() > 0)
-                        <span
-                            class="ml-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 py-1 px-2 rounded-full text-xs">{{ $pendingContributions->count() }}</span>
-                    @endif
-                </button>
-            </nav>
+                    <button wire:click="setActiveTab('quality')"
+                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'quality' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        Kualitas & Keahlian
+                    </button>
+                    <button wire:click="setActiveTab('actions')"
+                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'actions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        Aksi Kolektif
+                    </button>
+                    <button wire:click="setActiveTab('contributions')"
+                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'contributions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        <span class="flex items-center">
+                            Kontribusi
+                            @if ($pendingContributions->count() > 0)
+                                <span
+                                    class="ml-1 sm:ml-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 py-0.5 px-1.5 sm:py-1 sm:px-2 rounded-full text-xs">{{ $pendingContributions->count() }}</span>
+                            @endif
+                        </span>
+                    </button>
+                </nav>
+            </div>
         </div>
 
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             <!-- Overview Tab -->
             @if ($activeTab === 'overview')
                 <div class="space-y-6">
                     <!-- Quality Overview -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         <!-- Overall Ekosistem Score -->
                         <div
-                            class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-6 border border-green-200 dark:border-green-800">
+                            class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 sm:p-6 border border-green-200 dark:border-green-800">
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-green-700 dark:text-green-400">
+                                <div class="text-2xl sm:text-3xl font-bold text-green-700 dark:text-green-400">
                                     {{ $ecosystemQuality['ekosistem_score'] }}%</div>
-                                <div class="text-sm text-green-600 dark:text-green-300 mt-1">Kualitas Ekosistem</div>
+                                <div class="text-xs sm:text-sm text-green-600 dark:text-green-300 mt-1">Kualitas Ekosistem</div>
                                 <div class="text-xs text-green-500 dark:text-green-400 mt-1">Berdasarkan Keragaman Peran</div>
                             </div>
                         </div>
 
                         <!-- Role Diversity Score -->
                         <div
-                            class="bg-gradient-to-r from-cyan-50 to-cyan-100 dark:from-cyan-900/20 dark:to-cyan-800/20 rounded-lg p-6 border border-cyan-200 dark:border-cyan-800">
+                            class="bg-gradient-to-r from-cyan-50 to-cyan-100 dark:from-cyan-900/20 dark:to-cyan-800/20 rounded-lg p-4 sm:p-6 border border-cyan-200 dark:border-cyan-800">
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-cyan-700 dark:text-cyan-400">
+                                <div class="text-2xl sm:text-3xl font-bold text-cyan-700 dark:text-cyan-400">
                                     {{ $ecosystemQuality['role_diversity_score'] }}%</div>
-                                <div class="text-sm text-cyan-600 dark:text-cyan-300 mt-1">Keragaman Peran</div>
+                                <div class="text-xs sm:text-sm text-cyan-600 dark:text-cyan-300 mt-1">Keragaman Peran</div>
                                 <div class="text-xs text-cyan-500 dark:text-cyan-400 mt-1">Peran Ada / Total Peran</div>
                             </div>
                         </div>
 
                         <!-- Role Statistics -->
                         <div
-                            class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                            class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 sm:p-6 border border-blue-200 dark:border-blue-800 sm:col-span-2 lg:col-span-1">
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-blue-700 dark:text-blue-400">
+                                <div class="text-2xl sm:text-3xl font-bold text-blue-700 dark:text-blue-400">
                                     {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}</div>
-                                <div class="text-sm text-blue-600 dark:text-blue-300 mt-1">Peran Tersedia</div>
+                                <div class="text-xs sm:text-sm text-blue-600 dark:text-blue-300 mt-1">Peran Tersedia</div>
                                 <div class="text-xs text-blue-500 dark:text-blue-400 mt-1">Dari Total Database</div>
                             </div>
                         </div>
@@ -187,10 +196,10 @@
 
                     <!-- Description -->
                     <div
-                        class="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-6 border border-gray-200 dark:border-slate-600">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-3">Deskripsi Ekosistem
+                        class="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-slate-600">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100 mb-3">Deskripsi Ekosistem
                         </h3>
-                        <p class="text-gray-700 dark:text-slate-300">
+                        <p class="text-sm sm:text-base text-gray-700 dark:text-slate-300">
                             {{ $ecosystem->description ?: 'Belum ada deskripsi.' }}</p>
                     </div>
 
@@ -202,21 +211,21 @@
                         @endphp
 
                         <div
-                            class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-                            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status Anda</h3>
+                            class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-6">
+                            <h3 class="text-base sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status Anda</h3>
 
                             @if ($userStatus === 'accepted')
-                                <div class="flex items-center justify-between">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                                     <div class="flex items-center text-green-700 dark:text-green-300">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span class="font-medium">Anda adalah anggota aktif dari ekosistem ini</span>
+                                        <span class="font-medium text-sm sm:text-base">Anda adalah anggota aktif dari ekosistem ini</span>
                                     </div>
                                     @if ($ecosystem->canUserContribute(Auth::user()))
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
                                             <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
@@ -226,37 +235,37 @@
                                 </div>
                             @elseif($userStatus === 'pending')
                                 <div class="flex items-center text-amber-700 dark:text-amber-300">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span class="font-medium">Permintaan bergabung Anda sedang menunggu
+                                    <span class="font-medium text-sm sm:text-base">Permintaan bergabung Anda sedang menunggu
                                         persetujuan</span>
                                 </div>
                             @elseif($canJoin)
-                                <div class="flex items-center justify-between">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                                     <div class="flex items-center text-blue-700 dark:text-blue-300">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                         </svg>
-                                        <span class="font-medium">Anda dapat bergabung dengan ekosistem ini</span>
+                                        <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan ekosistem ini</span>
                                     </div>
                                     <a href="{{ route('ecosystem.join', $ecosystem) }}"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
                                         Bergabung Sekarang
                                     </a>
                                 </div>
                             @else
                                 <div class="flex items-center text-gray-700 dark:text-gray-300">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span class="font-medium">Anda tidak dapat bergabung dengan ekosistem ini</span>
+                                    <span class="font-medium text-sm sm:text-base">Anda tidak dapat bergabung dengan ekosistem ini</span>
                                 </div>
                             @endif
                         </div>
@@ -908,13 +917,13 @@
                 <div class="space-y-6">
                     <!-- Contribution Actions -->
                     @if ($isOwner || $isEcosystemBuilder)
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Kelola Kontribusi</h3>
-                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Terima, tolak, atau selesaikan kontribusi dari anggota</p>
+                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4 sm:p-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                                <div class="flex-1">
+                                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">Kelola Kontribusi</h3>
+                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">Terima, tolak, atau selesaikan kontribusi dari anggota</p>
                                 </div>
-                                <div class="text-sm text-gray-500 dark:text-slate-400">
+                                <div class="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                                     {{ $contributions->total() }} total kontribusi
                                 </div>
                             </div>
@@ -1004,65 +1013,66 @@
 
                     <!-- All Contributions -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
-                        <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Semua Kontribusi</h3>
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-slate-700">
+                            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">Semua Kontribusi</h3>
                         </div>
                         @if ($contributions->count() > 0)
                             <div class="divide-y divide-gray-200 dark:divide-slate-700">
                                 @foreach ($contributions as $contribution)
-                                    <div class="p-6">
-                                        <div class="flex items-start justify-between">
-                                            <div class="flex-1">
-                                                <div class="flex items-center space-x-3 mb-3">
-                                                    <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
-                                                        @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
-                                                            <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
-                                                                alt="{{ $contribution->user->name }}"
-                                                                class="w-10 h-10 rounded-full object-cover">
-                                                        @else
-                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
-                                                        @endif
-                                                    </div>
-                                                    <div>
-                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->user->name }}</h4>
-                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->user->email }}</p>
-                                                    </div>
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
-                                                        {{ $contribution->status_label }}
-                                                    </span>
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                                                        {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
-                                                    </span>
+                                    <div class="p-4 sm:p-6">
+                                        <div class="space-y-3">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                                    @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
+                                                        <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
+                                                            alt="{{ $contribution->user->name }}"
+                                                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover">
+                                                    @else
+                                                        <span class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                                    @endif
                                                 </div>
-                                                
-                                                <div class="mb-3">
-                                                    <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Deskripsi:</strong></p>
-                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->contribution_description }}</p>
-                                                </div>
-
-                                                @if ($contribution->contribution_amount)
-                                                    <div class="mb-3">
-                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
-                                                    </div>
-                                                @endif
-
-                                                <div class="text-xs text-gray-500 dark:text-slate-400">
-                                                    @if ($contribution->offered_at)
-                                                        Diajukan {{ $contribution->offered_at->diffForHumans() }}
-                                                    @endif
-                                                    @if ($contribution->accepted_at)
-                                                        • Diterima {{ $contribution->accepted_at->diffForHumans() }}
-                                                    @endif
-                                                    @if ($contribution->completed_at)
-                                                        • Selesai {{ $contribution->completed_at->diffForHumans() }}
-                                                    @endif
+                                                <div class="flex-1 min-w-0">
+                                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm sm:text-base truncate">{{ $contribution->user->name }}</h4>
+                                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300 truncate">{{ $contribution->user->email }}</p>
                                                 </div>
                                             </div>
                                             
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
+                                                    {{ $contribution->status_label }}
+                                                </span>
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                    {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
+                                                </span>
+                                            </div>
+                                            
+                                            <div>
+                                                <p class="text-xs sm:text-sm text-gray-700 dark:text-slate-300 font-medium">Deskripsi:</p>
+                                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">{{ Str::limit($contribution->contribution_description, 100) }}</p>
+                                            </div>
+
+                                            @if ($contribution->contribution_amount)
+                                                <div>
+                                                    <p class="text-xs sm:text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
+                                                </div>
+                                            @endif
+
+                                            <div class="text-xs text-gray-500 dark:text-slate-400">
+                                                @if ($contribution->offered_at)
+                                                    Diajukan {{ $contribution->offered_at->diffForHumans() }}
+                                                @endif
+                                                @if ($contribution->accepted_at)
+                                                    • Diterima {{ $contribution->accepted_at->diffForHumans() }}
+                                                @endif
+                                                @if ($contribution->completed_at)
+                                                    • Selesai {{ $contribution->completed_at->diffForHumans() }}
+                                                @endif
+                                            </div>
+                                            
                                             @if ($isOwner && $contribution->status === 'accepted')
-                                                <div class="ml-4">
+                                                <div class="pt-2">
                                                     <button wire:click="completeContribution({{ $contribution->id }})"
-                                                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Tandai Selesai
                                                     </button>
                                                 </div>
@@ -1071,13 +1081,13 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="p-6 border-t border-gray-200 dark:border-slate-700">
+                            <div class="p-4 sm:p-6 border-t border-gray-200 dark:border-slate-700">
                                 {{ $contributions->links() }}
                             </div>
                         @else
                             <div class="p-6 text-center text-gray-500 dark:text-slate-400">
-                                <div class="text-4xl mb-2">🤝</div>
-                                <p>Belum ada kontribusi yang diajukan.</p>
+                                <div class="text-3xl sm:text-4xl mb-2">🤝</div>
+                                <p class="text-sm sm:text-base">Belum ada kontribusi yang diajukan.</p>
                                 @if ($ecosystem->canUserContribute(Auth::user()))
                                     <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
                                         class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
