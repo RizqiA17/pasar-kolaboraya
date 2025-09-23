@@ -287,13 +287,22 @@
                 }
                 
                 async function initializeEcosystemMapping() {
+                    console.log('Initializing ecosystem mapping...');
+                    
                     // Check if container exists
                     const container = document.getElementById('ecosystem-mapping-container');
-                    if (!container) return;
+                    if (!container) {
+                        console.log('Container not found, retrying in 200ms...');
+                        setTimeout(initializeEcosystemMapping, 200);
+                        return;
+                    }
+                    
+                    console.log('Container found, proceeding with initialization...');
                     
                     try {
                         // Ensure D3.js is loaded
                         await loadD3();
+                        console.log('D3.js loaded successfully');
                         
                         // Clear any existing content to prevent duplicates
                         container.innerHTML = '';
@@ -307,9 +316,13 @@
                             ecosystems: @json($roleData),
                         };
                         
+                        console.log('Data prepared, creating mapping...', data);
                         createEcosystemMapping(data);
+                        console.log('Ecosystem mapping created successfully');
                     } catch (error) {
-                        console.error('Failed to load D3.js:', error);
+                        console.error('Failed to initialize ecosystem mapping:', error);
+                        // Retry after a delay
+                        setTimeout(initializeEcosystemMapping, 500);
                     }
                 }
 
@@ -317,12 +330,193 @@
                 document.addEventListener('DOMContentLoaded', initializeEcosystemMapping);
                 
                 // Re-initialize after Livewire navigation
-                document.addEventListener('livewire:navigated', initializeEcosystemMapping);
+                document.addEventListener('livewire:navigated', function() {
+                    console.log('Livewire navigated event triggered');
+                    // Add a small delay to ensure DOM is fully updated
+                    setTimeout(initializeEcosystemMapping, 100);
+                });
+                
+                // Also listen for wire:navigate specifically
+                document.addEventListener('livewire:load', function() {
+                    console.log('Livewire load event triggered');
+                    initializeEcosystemMapping();
+                });
+                
+                // Additional event listener for wire:navigate
+                document.addEventListener('livewire:update', function() {
+                    console.log('Livewire update event triggered');
+                    setTimeout(initializeEcosystemMapping, 200);
+                });
+                
+                // Listen for when Livewire finishes updating the DOM
+                document.addEventListener('livewire:updated', function() {
+                    console.log('Livewire updated event triggered');
+                    setTimeout(initializeEcosystemMapping, 300);
+                });
+                
+                // Force initialization after a delay to ensure everything is loaded
+                setTimeout(function() {
+                    console.log('Force initialization after delay');
+                    initializeEcosystemMapping();
+                }, 1000);
+                
+                // Initialize modal event listeners
+                function initializeModalListeners() {
+                    console.log('Initializing modal listeners...');
+                    
+                    const modal = document.getElementById('ecosystem-detail-modal');
+                    const closeBtn = document.getElementById('close-ecosystem-modal');
+                    const closeBtnFooter = document.getElementById('close-ecosystem-modal-btn');
+
+                    if (!modal || !closeBtn || !closeBtnFooter) {
+                        console.log('Modal elements not found, retrying in 200ms...');
+                        setTimeout(initializeModalListeners, 200);
+                        return;
+                    }
+
+                    // Remove existing event listeners to prevent duplicates
+                    const newCloseBtn = closeBtn.cloneNode(true);
+                    const newCloseBtnFooter = closeBtnFooter.cloneNode(true);
+                    closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+                    closeBtnFooter.parentNode.replaceChild(newCloseBtnFooter, closeBtnFooter);
+
+                    // Close modal functions
+                    function closeModal() {
+                        console.log('Closing modal...');
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+
+                    newCloseBtn.addEventListener('click', closeModal);
+                    newCloseBtnFooter.addEventListener('click', closeModal);
+
+                    // Close modal when clicking outside
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === modal) {
+                            closeModal();
+                        }
+                    });
+
+                    // Close modal with Escape key
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                            closeModal();
+                        }
+                    });
+
+                    // Function to show ecosystem details
+                    window.showEcosystemDetails = function(ecosystemData) {
+                        console.log('showEcosystemDetails called with:', ecosystemData);
+                        
+                        // Populate general information
+                        document.getElementById('ecosystem-name').textContent = ecosystemData.ecosystem.name || 'N/A';
+                        document.getElementById('ecosystem-organization').textContent = ecosystemData.ecosystem.organization || 'N/A';
+                        document.getElementById('ecosystem-description').textContent = ecosystemData.ecosystem.description || 'Tidak ada deskripsi tersedia';
+                        document.getElementById('ecosystem-work-region').textContent = ecosystemData.ecosystem.work_region || 'N/A';
+                        document.getElementById('ecosystem-member-count').textContent = ecosystemData.totalUsers || 0;
+
+                        // Populate issues
+                        const issuesContainer = document.getElementById('ecosystem-issues');
+                        issuesContainer.innerHTML = '';
+                        if (ecosystemData.ecosystem.issues && ecosystemData.ecosystem.issues.length > 0) {
+                            ecosystemData.ecosystem.issues.forEach(issue => {
+                                const issueTag = document.createElement('span');
+                                issueTag.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800';
+                                issueTag.textContent = issue;
+                                issuesContainer.appendChild(issueTag);
+                            });
+                        } else {
+                            const noIssues = document.createElement('span');
+                            noIssues.className = 'text-gray-500 italic';
+                            noIssues.textContent = 'Tidak ada isu yang didefinisikan';
+                            issuesContainer.appendChild(noIssues);
+                        }
+
+                        // Populate existing roles
+                        const existingRolesContainer = document.getElementById('existing-roles');
+                        existingRolesContainer.innerHTML = '';
+                        if (ecosystemData.roles && ecosystemData.roles.length > 0) {
+                            ecosystemData.roles.forEach(role => {
+                                const roleCard = document.createElement('div');
+                                roleCard.className = 'bg-white border border-gray-200 rounded-lg p-4 shadow-sm';
+                                roleCard.innerHTML = `
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h6 class="font-medium text-gray-900">${role.role}</h6>
+                                        <span class="text-sm text-gray-500">${role.count} orang</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">${role.description || 'Tidak ada deskripsi tersedia'}</p>
+                                `;
+                                existingRolesContainer.appendChild(roleCard);
+                            });
+                        } else {
+                            const noRoles = document.createElement('div');
+                            noRoles.className = 'col-span-2 text-center text-gray-500 italic py-8';
+                            noRoles.textContent = 'Belum ada peran yang terdefinisi';
+                            existingRolesContainer.appendChild(noRoles);
+                        }
+
+                        // Populate needed roles
+                        const neededRolesContainer = document.getElementById('needed-roles');
+                        neededRolesContainer.innerHTML = '';
+                        if (ecosystemData.needed_roles && ecosystemData.needed_roles.length > 0) {
+                            ecosystemData.needed_roles.forEach(role => {
+                                const roleCard = document.createElement('div');
+                                roleCard.className = 'bg-orange-50 border border-orange-200 rounded-lg p-4 shadow-sm';
+                                roleCard.innerHTML = `
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h6 class="font-medium text-gray-900">${role}</h6>
+                                        <span class="text-sm text-orange-600 font-medium">Dibutuhkan</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Peran ini masih dibutuhkan dalam ekosistem</p>
+                                `;
+                                neededRolesContainer.appendChild(roleCard);
+                            });
+                        } else {
+                            const noNeededRoles = document.createElement('div');
+                            noNeededRoles.className = 'col-span-2 text-center text-gray-500 italic py-8';
+                            noNeededRoles.textContent = 'Semua peran sudah terpenuhi';
+                            neededRolesContainer.appendChild(noNeededRoles);
+                        }
+
+                        // Show modal
+                        console.log('Showing modal...');
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+                    };
+                    
+                    console.log('Modal listeners initialized successfully');
+                }
+                
+                // Initialize modal listeners on DOM ready
+                document.addEventListener('DOMContentLoaded', initializeModalListeners);
+                
+                // Re-initialize modal listeners after Livewire navigation
+                document.addEventListener('livewire:navigated', function() {
+                    console.log('Re-initializing modal listeners after navigation...');
+                    setTimeout(initializeModalListeners, 100);
+                });
+                
+                document.addEventListener('livewire:load', initializeModalListeners);
+                document.addEventListener('livewire:update', function() {
+                    setTimeout(initializeModalListeners, 200);
+                });
+                document.addEventListener('livewire:updated', function() {
+                    setTimeout(initializeModalListeners, 300);
+                });
 
                 function createEcosystemMapping(data) {
+                    console.log('Creating ecosystem mapping with data:', data);
+                    
                     const container = d3.select('#ecosystem-mapping-container');
+                    if (container.empty()) {
+                        console.error('Container not found in createEcosystemMapping');
+                        return;
+                    }
+                    
                     const width = container.node().offsetWidth;
                     const height = container.node().offsetHeight;
+                    
+                    console.log('Container dimensions:', width, 'x', height);
 
                     // Clear previous content
                     container.selectAll('*').remove();
@@ -337,10 +531,14 @@
                     const zoom = d3.zoom()
                         .scaleExtent([0.1, 4])
                         .on('zoom', (event) => {
+                            console.log('Zoom event triggered');
                             g.attr('transform', event.transform);
                         });
 
                     svg.call(zoom);
+                    
+                    // Ensure zoom is properly attached
+                    console.log('Zoom behavior attached to SVG');
 
                     // Main group for all elements
                     const g = svg.append('g');
@@ -575,20 +773,23 @@
                             .attr('stroke-width', 3)
                             .attr('filter', 'url(#shadow)')
                             .style('cursor', 'pointer')
-                            .on('mouseover', function() {
+                            .on('mouseover', function(event) {
+                                console.log('Ecosystem hovered:', ecosystem.ecosystem.name);
                                 d3.select(this).attr('r', ecosystemRadius + 5);
                                 showEcosystemTooltip(ecosystem, event);
                                 // Show role containers when ecosystem is hovered
                                 g.selectAll('.role-container').style('opacity', 0);
                                 g.selectAll(`.role-container-${index}`).style('opacity', 1);
                             })
-                            .on('mouseout', function() {
+                            .on('mouseout', function(event) {
+                                console.log('Ecosystem mouse out:', ecosystem.ecosystem.name);
                                 d3.select(this).attr('r', ecosystemRadius);
                                 hideEcosystemTooltip();
                                 // Hide role containers when ecosystem is not hovered
                                 g.selectAll('.role-container').style('opacity', 0);
                             })
-                            .on('click', function() {
+                            .on('click', function(event) {
+                                console.log('Ecosystem clicked:', ecosystem.ecosystem.name);
                                 // Show ecosystem details modal
                                 if (typeof showEcosystemDetails === 'function') {
                                     showEcosystemDetails(ecosystem);
@@ -661,10 +862,12 @@
                                     .attr('stroke-width', 2)
                                     .attr('filter', 'url(#shadow)')
                                     .on('mouseover', function(event) {
+                                        console.log('Role hovered:', role.role);
                                         d3.select(this).attr('r', roleRadius + 4);
                                         showRoleTooltip(role, event);
                                     })
-                                    .on('mouseout', function() {
+                                    .on('mouseout', function(event) {
+                                        console.log('Role mouse out:', role.role);
                                         d3.select(this).attr('r', roleRadius);
                                         hideRoleTooltip();
                                     });
@@ -715,6 +918,7 @@
                         .style('opacity', 0);
 
                     function showEcosystemTooltip(ecosystem, event) {
+                        console.log('Showing ecosystem tooltip for:', ecosystem.ecosystem.name);
                         ecosystemTooltip
                             .html(`
                         <div class="font-bold mb-2">${ecosystem.ecosystem.name}</div>
@@ -737,6 +941,7 @@
                         .style('opacity', 0);
 
                     function showRoleTooltip(role, event) {
+                        console.log('Showing role tooltip for:', role.role);
                         const users = role.users.map(user => user.name).join(', ');
                         roleTooltip
                             .html(`
@@ -766,6 +971,8 @@
                         ];
 
                         svg.call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+                        
+                        console.log('Ecosystem mapping visualization completed successfully');
                     }, 100);
                 }
             </script>
