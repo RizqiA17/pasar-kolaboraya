@@ -233,7 +233,7 @@
 
                         <!-- Mapping Container -->
                         <div class="relative z-10 p-6">
-                            <div class="w-full h-[800px] bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
+                            <div class="w-full h-auto aspect-square bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
                                 <div id="ecosystem-mapping-container" class="w-full h-full"></div>
                             </div>
 
@@ -784,7 +784,7 @@
                     const maxRadius = Math.min(width, height) * 0.7;
 
                     // Use the larger of required radius or center padding, but not exceeding max radius
-                    const radius = Math.min(Math.max(requiredRadius, centerPadding), maxRadius);
+                    const radius = Math.max(requiredRadius, centerPadding);
 
                     // FIRST: Draw all lines from center to ecosystems (behind everything)
                     ecosystems.forEach((ecosystem, index) => {
@@ -1989,7 +1989,7 @@
                         const maxRadius = Math.min(width, height) * 0.7;
 
                         // Use the larger of required radius or center padding, but not exceeding max radius
-                        const radius = Math.min(Math.max(requiredRadius, centerPadding), maxRadius);
+                        const radius = Math.max(requiredRadius, centerPadding);
 
                         // FIRST: Draw all lines from center to ecosystems (behind everything)
                         ecosystems.forEach((ecosystem, index) => {
