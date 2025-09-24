@@ -20,7 +20,7 @@ class Browse extends Component
     public $selectedRegion = '';
     public $selectedIssue = '';
     public $selectedNeededRole = '';
-    
+    public $hasEcosystem = false;
     public $interests = [];
     public $skills = [];
     public $regions = [];
@@ -93,10 +93,12 @@ class Browse extends Component
             ->where('is_active', true)
             ->forUserActiveSession($user); // Filter by user's active session
 
-        // Role-based filtering: Ecosystem builders only see their own ecosystems
-        if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
-            $query->where('creator_id', $user->id);
-        }
+        $this->hasEcosystem = Ecosystem::where('creator_id', $user->id)->where('is_active', true)->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)->exists();
+
+        // // Role-based filtering: Ecosystem builders only see their own ecosystems
+        // if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
+        //     $query->where('creator_id', $user->id);
+        // }
         // User biasa dan super admin melihat semua ekosistem (tidak ada filter tambahan)
 
         // Search filter

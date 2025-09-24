@@ -9,17 +9,15 @@
             </div>
             <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
                 @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
-                    @if ($ecosystems)
-                        @if ($ecosystems->count() <= 0)
-                            <flux:button class="max-sm:w-full" :href="route('ecosystem.create')" wire:navigate>
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4">
-                                    </path>
-                                </svg>
-                                Buat Ekosistem
-                            </flux:button>
-                        @endif
+                    @if (!$hasEcosystem)
+                        <flux:button class="max-sm:w-full" :href="route('ecosystem.create')" wire:navigate>
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4">
+                                </path>
+                            </svg>
+                            Buat Ekosistem
+                        </flux:button>
                     @endif
                 @else
                     <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
