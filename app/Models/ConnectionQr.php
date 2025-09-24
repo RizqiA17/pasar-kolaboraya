@@ -55,7 +55,7 @@ class ConnectionQr extends Model
             'type' => $type,
             'target_qr_code' => $targetQrCode,
             'pasar_kolaboraya_id' => $pasarKolaborayaId,
-            'expires_at' => now()->addMinute(5), // 5 minute expiry
+            'expires_at' => now()->addMinutes(5), // 5 minute expiry
         ]);
     }
 
