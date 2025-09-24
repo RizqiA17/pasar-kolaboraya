@@ -162,7 +162,7 @@
                                 class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Data Master</h3>
                             <div class="mt-2 space-y-1">
-                                {{-- <a href="{{ route('admin.interests') }}"
+                                <a href="{{ route('admin.interests') }}"
                                     class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.interests*') ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
                                     <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -182,7 +182,7 @@
                                         </path>
                                     </svg>
                                     Keahlian
-                                </a> --}}
+                                </a>
 
                                 <a href="{{ route('admin.contributions') }}"
                                     class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.contributions*') ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200' }}">
