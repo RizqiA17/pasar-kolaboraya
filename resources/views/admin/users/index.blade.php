@@ -185,9 +185,9 @@
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
                                             Ekosistem Builder
                                         </span>
-                                    @elseif($user->profile && $user->profile->peran)
+                                    @elseif($user->assigned_role)
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
-                                            {{ $user->profile->peran->nama }}
+                                            {{ $user->assigned_role }}
                                         </span>
                                     @else
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
@@ -274,9 +274,9 @@
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
                                             Ekosistem Builder
                                         </span>
-                                    @elseif($user->profile && $user->profile->peran)
+                                    @elseif($user->assigned_role != '')
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
-                                            {{ $user->profile->peran->nama }}
+                                            {{ $user->assigned_role }}
                                         </span>
                                     @else
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
