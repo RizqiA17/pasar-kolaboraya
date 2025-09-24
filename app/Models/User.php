@@ -1036,4 +1036,59 @@ public function getConnectionStatus($otherUserId)
     {
         return $this->notifications()->where('is_read', false)->count();
     }
+
+    /**
+     * Get assigned role label
+     */
+    public function getAssignedRoleLabelAttribute(): string
+    {
+        if ($this->is_ecosystem_builder) {
+            return 'Ekosistem Builder';
+        }
+        
+        if ($this->assigned_role) {
+            return $this->assigned_role;
+        }
+        
+        return 'Belum Dipilih';
+    }
+
+    /**
+     * Check if user has assigned role
+     */
+    public function hasAssignedRole(): bool
+    {
+        return $this->is_ecosystem_builder || !empty($this->assigned_role);
+    }
+
+    /**
+     * Get role display information
+     */
+    public function getRoleDisplayInfo(): array
+    {
+        if ($this->is_ecosystem_builder) {
+            return [
+                'type' => 'ecosystem_builder',
+                'label' => 'Ekosistem Builder',
+                'color' => 'purple',
+                'approved_at' => $this->ecosystem_builder_approved_at,
+            ];
+        }
+        
+        if ($this->assigned_role) {
+            return [
+                'type' => 'assigned_role',
+                'label' => $this->assigned_role,
+                'color' => 'indigo',
+                'approved_at' => null,
+            ];
+        }
+        
+        return [
+            'type' => 'none',
+            'label' => 'Belum Dipilih',
+            'color' => 'gray',
+            'approved_at' => null,
+        ];
+    }
 }

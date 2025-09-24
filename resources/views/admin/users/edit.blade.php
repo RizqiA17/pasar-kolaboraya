@@ -62,18 +62,18 @@
                     <div>
                         <flux:field>
                             <flux:label>Peran Peserta</flux:label>
-                            <flux:select name="peran_id">
+                            <flux:select name="assigned_role">
                                 <option value="">Pilih Peran Peserta</option>
-                                <option value="ecosystem_builder" {{ old('peran_id', $user->profile?->peran_id) == 'ecosystem_builder' ? 'selected' : '' }}>
+                                <option value="Ekosistem Builder" {{ old('assigned_role', $user->is_ecosystem_builder ? 'Ekosistem Builder' : $user->assigned_role) == 'Ekosistem Builder' ? 'selected' : '' }}>
                                     Ekosistem Builder
                                 </option>
                                 @foreach(\App\Models\Peran::get() as $peran)
-                                    <option value="{{ $peran->id }}" {{ old('peran_id', $user->profile?->peran_id) == $peran->id ? 'selected' : '' }}>
+                                    <option value="{{ $peran->nama }}" {{ old('assigned_role', $user->assigned_role) == $peran->nama ? 'selected' : '' }}>
                                         {{ $peran->nama }}
                                     </option>
                                 @endforeach
                             </flux:select>
-                            @error('peran_id')
+                            @error('assigned_role')
                                 <flux:error>{{ $message }}</flux:error>
                             @enderror
                         </flux:field>

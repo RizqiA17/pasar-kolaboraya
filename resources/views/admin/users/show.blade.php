@@ -48,26 +48,24 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Peran Peserta</label>
-                            @if($user->is_ecosystem_builder)
-                                <div class="flex items-center space-x-2">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
-                                        Ekosistem Builder
+                            @php
+                                $roleInfo = $user->getRoleDisplayInfo();
+                                $colorClasses = [
+                                    'purple' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
+                                    'indigo' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400',
+                                    'gray' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                                ];
+                            @endphp
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $colorClasses[$roleInfo['color']] }}">
+                                    {{ $roleInfo['label'] }}
+                                </span>
+                                @if($roleInfo['approved_at'])
+                                    <span class="text-xs text-slate-500 dark:text-slate-400">
+                                        Disetujui: {{ $roleInfo['approved_at']->format('M d, Y H:i') }}
                                     </span>
-                                    @if($user->ecosystem_builder_approved_at)
-                                        <span class="text-xs text-slate-500 dark:text-slate-400">
-                                            Disetujui: {{ $user->ecosystem_builder_approved_at->format('M d, Y H:i') }}
-                                        </span>
-                                    @endif
-                                </div>
-                            @elseif($user->assigned_role != '')
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
-                                    {{ $user->assigned_role }}
-                                </span>
-                            @else
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
-                                    Belum Dipilih
-                                </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Email Terverifikasi</label>

@@ -40,7 +40,7 @@
                             <option value="">Semua Peran Peserta</option>
                             <option value="ecosystem_builder" {{ request('peran_peserta') == 'ecosystem_builder' ? 'selected' : '' }}>Ekosistem Builder</option>
                             @foreach(\App\Models\Peran::get() as $peran)
-                                <option value="{{ $peran->id }}" {{ request('peran_peserta') == $peran->id ? 'selected' : '' }}>{{ $peran->nama }}</option>
+                                <option value="{{ $peran->nama }}" {{ request('peran_peserta') == $peran->nama ? 'selected' : '' }}>{{ $peran->nama }}</option>
                             @endforeach
                         </flux:select>
                     </div>
@@ -114,7 +114,7 @@
                             @endif
                             @if(request('peran_peserta'))
                                 @php
-                                    $peranName = request('peran_peserta') === 'ecosystem_builder' ? 'Ekosistem Builder' : (\App\Models\Peran::find(request('peran_peserta')) ? \App\Models\Peran::find(request('peran_peserta'))->nama : 'Tidak Ditemukan');
+                                    $peranName = request('peran_peserta') === 'ecosystem_builder' ? 'Ekosistem Builder' : request('peran_peserta');
                                 @endphp
                                 <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400 rounded-full">
                                     Peran Peserta: {{ $peranName }}
