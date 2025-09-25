@@ -192,7 +192,7 @@
         let html5QrcodeScanner = null;
         let isScanning = false;
 
-        document.addEventListener('livewire:init', () => {
+        document.addEventListener('livewire:navigated', () => {
             // Livewire.on('start-camera', () => {
             //     startCamera();
             // });
@@ -259,7 +259,7 @@
 
             } catch (err) {
                 console.error('Camera error:', err);
-                alert('Tidak dapat mengakses kamera: ' + err.message);
+                // alert('Tidak dapat mengakses kamera: ' + err.message);
             }
         }
 
@@ -285,6 +285,10 @@
             if (document.hidden && isScanning) {
                 stopCamera();
             }
+        });
+
+        document.addEventListener('livewire:navigating', () => {
+            stopCamera();
         });
     </script>
 @endpush
