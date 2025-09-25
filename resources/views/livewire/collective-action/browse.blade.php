@@ -19,7 +19,7 @@
                     </svg>
                     Scan QR Code
                 </flux:button>
-                @if (Auth::user()->isEcosystemBuilder())
+                @if (Auth::user()->isEcosystemBuilder() && $hasCollectiveAction)
                     <flux:button href="{{ route('collective-action.create') }}" variant="primary"
                         class="bg-white text-purple-600 hover:bg-purple-50 max-sm:w-full">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

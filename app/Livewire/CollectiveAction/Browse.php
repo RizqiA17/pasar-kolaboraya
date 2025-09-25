@@ -2,11 +2,12 @@
 
 namespace App\Livewire\CollectiveAction;
 
+use Livewire\Component;
+use App\Models\Ecosystem;
+use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 use App\Models\CollectiveAction;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
-use Livewire\Component;
-use Livewire\WithPagination;
 
 #[Layout('components.layouts.app', ['title' => 'Aksi Kolektif'])]
 class Browse extends Component
@@ -17,6 +18,7 @@ class Browse extends Component
     public $selectedScale = '';
     public $selectedScope = '';
     public $selectedStatus = '';
+    public $hasCollectiveAction = false;
     
     protected $queryString = [
         'search' => ['except' => ''],
@@ -61,6 +63,8 @@ class Browse extends Component
         $query = CollectiveAction::with(['creator'])
             ->where('status', '!=', 'draft')
             ->forUserActiveSession($user); // Filter by user's active session
+
+            $this->hasCollectiveAction = Ecosystem::where('creator_id', $user->id)->where('is_active', true)->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)->exists();
 
         // Search filter
         if ($this->search) {
