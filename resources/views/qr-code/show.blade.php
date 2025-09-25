@@ -247,14 +247,14 @@ function startPolling() {
             
             const data = await response.json();
             
-            if (data.success && data.has_active_pasar_kolaboraya) {
-                console.log('User has been added to Pasar Kolaboraya via polling:', data);
-                stopPolling();
-                handleQrScanSuccess({
-                    pasar_kolaboraya_name: data.pasar_kolaboraya_name || 'Pasar Kolaboraya',
-                    redirect_url: '{{ route("dashboard") }}'
-                });
-            }
+            // if (data.success && data.has_active_pasar_kolaboraya) {
+            //     console.log('User has been added to Pasar Kolaboraya via polling:', data);
+            //     stopPolling();
+            //     handleQrScanSuccess({
+            //         pasar_kolaboraya_name: data.pasar_kolaboraya_name || 'Pasar Kolaboraya',
+            //         redirect_url: '{{ route("dashboard") }}'
+            //     });
+            // }
         } catch (error) {
             console.error('Error checking QR status:', error);
         }

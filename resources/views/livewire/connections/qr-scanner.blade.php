@@ -4,18 +4,22 @@
             {{-- Header --}}
             <div class="text-center mb-6 sm:mb-8">
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Koneksi QR</h1>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Scan QR code untuk terhubung dengan user lain</p>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Scan QR code untuk terhubung dengan user
+                    lain</p>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Refresh jika kamera tidak muncul</p>
             </div>
 
             {{-- Status Messages --}}
             @if ($errorMessage)
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
+                <div
+                    class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
                     {{ $errorMessage }}
                 </div>
             @endif
 
             @if ($successMessage)
-                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
+                <div
+                    class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
                     {{ $successMessage }}
                 </div>
             @endif
@@ -36,13 +40,16 @@
 
                         @if ($myQrSvg)
                             <div class="flex justify-center mb-3 sm:mb-4">
-                                <div class="bg-white p-1 sm:p-4 rounded-lg border-2 border-gray-200 max-w-52 sm:max-w-none">
-                                    <div class="w-48 h-48 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
+                                <div
+                                    class="bg-white p-1 sm:p-4 rounded-lg border-2 border-gray-200 max-w-52 sm:max-w-none">
+                                    <div
+                                        class="w-48 h-48 sm:w-48 sm:h-48 mx-auto overflow-hidden flex items-center justify-center">
                                         {!! $myQrSvg !!}
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 break-all px-2 text-center">
+                            <p
+                                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 break-all px-2 text-center">
                                 {{ $myQrCode }}
                             </p>
                         @endif
@@ -53,12 +60,15 @@
                             </p>
                         @elseif($connectionStatus === 'waiting_for_response')
                             <p class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 mb-3 sm:mb-4">
-                                Tunjukkan QR ini kepada <strong>{{ $targetUser->name ?? 'user' }}</strong> untuk menyelesaikan
+                                Tunjukkan QR ini kepada <strong>{{ $targetUser->name ?? 'user' }}</strong> untuk
+                                menyelesaikan
                                 koneksi
                             </p>
-                            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3 sm:mb-4">
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3 sm:mb-4">
                                 <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
-                                    <span class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
+                                    <span
+                                        class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
                                     Menunggu konfirmasi dari {{ $targetUser->name ?? 'user' }}...
                                 </p>
                             </div>
@@ -66,9 +76,11 @@
                             <p class="text-xs sm:text-sm text-green-600 dark:text-green-400 mb-3 sm:mb-4">
                                 Anda berhasil terhubung dengan <strong>{{ $targetUser->name ?? 'user' }}</strong>!
                             </p>
-                            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3 sm:mb-4">
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3 sm:mb-4">
                                 <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
-                                    <span class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
+                                    <span
+                                        class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
                                     Sistem akan otomatis reset dalam beberapa detik...
                                 </p>
                             </div>
@@ -97,23 +109,25 @@
                             Scan QR Code
                         </h2>
 
-                        @if ($connectionStatus === 'connected')
+                        {{-- @if ($connectionStatus === 'connected')
                             <div class="text-center py-6 sm:py-8">
                                 <div class="text-green-600 text-4xl sm:text-6xl mb-3 sm:mb-4">✓</div>
                                 <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400">
                                     Koneksi berhasil!
                                 </p>
                             </div>
-                        @else
+                            <div class="space-y-3 sm:space-y-4 w-full hidden">
+                        @else --}}
                             <div class="space-y-3 sm:space-y-4 w-full">
                                 {{-- Manual Input --}}
                                 <div>
-                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    <label
+                                        class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Atau masukkan QR code secara manual:
                                     </label>
                                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full">
-                                        <input type="text" wire:model="scannedQrCode" wire:keydown.enter="processScannedQr"
-                                            placeholder="Paste QR code di sini..."
+                                        <input type="text" wire:model="scannedQrCode"
+                                            wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
                                             class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
                                         <button wire:click="processScannedQr"
                                             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium whitespace-nowrap">
@@ -123,38 +137,40 @@
                                 </div>
 
                                 {{-- Camera Scanner --}}
-                                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
-                                    @if (!$isScanning)
-                                        <div class="text-center w-full">
-                                            <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📷</div>
-                                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-                                                Gunakan kamera untuk scan QR code
-                                            </p>
-                                            <button wire:click="startScanning"
-                                                class="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
-                                                Buka Kamera
-                                            </button>
+                                <div
+                                    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
+                                    {{-- <div wire:ignore id="openCam" class="text-center w-full">
+                                        <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📷</div>
+                                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
+                                            Gunakan kamera untuk scan QR code
+                                        </p>
+                                        <button wire:click="startScanning"
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
+                                            Buka Kamera
+                                        </button>
+                                    </div> --}}
+                                    <div wire:ignore id="closeCam" class="text-center w-full">
+                                        <div wire:ignore id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden">
                                         </div>
-                                    @else
-                                        <div class="text-center w-full">
-                                            <div id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden"></div>
-                                            <button wire:click="stopScanning"
-                                                class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
-                                                Tutup Kamera
-                                            </button>
-                                        </div>
-                                    @endif
+                                        {{-- <button wire:click="stopScanning"
+                                            class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
+                                            Tutup Kamera
+                                        </button> --}}
+                                    </div>
                                 </div>
                             </div>
-                        @endif
+                        {{-- @endif --}}
                     </div>
                 </div>
             </div>
 
             {{-- Instructions --}}
-            <div class="mt-6 sm:mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
-                <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3">Cara Menggunakan:</h3>
-                <ol class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-blue-200">
+            <div
+                class="mt-6 sm:mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
+                <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3">Cara
+                    Menggunakan:</h3>
+                <ol
+                    class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-blue-200">
                     <li>User A menampilkan QR code mereka</li>
                     <li>User B scan QR code User A</li>
                     <li>User B akan mendapat QR code baru untuk ditunjukkan kepada User A</li>
@@ -170,159 +186,25 @@
 </div>
 
 @push('scripts')
+    <!-- QR Scanner Script -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
         let html5QrcodeScanner = null;
         let isScanning = false;
 
         document.addEventListener('livewire:init', () => {
-            Livewire.on('start-camera', () => {
+            // Livewire.on('start-camera', () => {
+            //     startCamera();
+            // });
+
+            // Livewire.on('stop-camera', () => {
+            //     stopCamera();
+            // });
+
+            // Auto-start camera when page loads
+            setTimeout(() => {
                 startCamera();
-            });
-
-            Livewire.on('stop-camera', () => {
-                stopCamera();
-            });
-
-            Livewire.on('connection-completed', () => {
-                setTimeout(() => {
-                    Livewire.dispatch('resetConnection');
-                }, 3000);
-            });
-
-            // Polling mechanism for auto-reset when both parties complete connection
-            let connectionPollingInterval = null;
-
-            Livewire.on('start-connection-polling', (data) => {
-                if (connectionPollingInterval) {
-                    clearInterval(connectionPollingInterval);
-                }
-
-                connectionPollingInterval = setInterval(() => {
-                    Livewire.dispatch('check-connection-status', data);
-                }, 2000); // Check every 2 seconds
-
-                // Stop polling after 30 seconds to avoid infinite polling
-                setTimeout(() => {
-                    if (connectionPollingInterval) {
-                        clearInterval(connectionPollingInterval);
-                        connectionPollingInterval = null;
-                    }
-                }, 30000);
-            });
-
-            // Auto-refresh QR codes every 50 seconds (before 1-minute expiry)
-            let qrRefreshInterval = null;
-
-            Livewire.on('start-qr-refresh', () => {
-                if (qrRefreshInterval) {
-                    clearInterval(qrRefreshInterval);
-                }
-
-                qrRefreshInterval = setInterval(() => {
-                    // Only refresh if we're in idle state
-                    const component = document.querySelector('[wire\\:id]');
-                    if (component) {
-                        const wireId = component.getAttribute('wire:id');
-                        const livewireComponent = Livewire.find(wireId);
-                        if (livewireComponent && livewireComponent.connectionStatus === 'idle') {
-                            livewireComponent.refreshQr();
-                        }
-                    }
-                }, 50000); // 50 seconds
-            });
-        });
-
-        // Handle wire:navigate - reinitialize camera functionality after navigation
-        document.addEventListener('livewire:navigated', () => {
-            console.log('Livewire navigated - reinitializing camera functionality');
-            
-            // Clean up any existing camera instances
-            if (html5QrcodeScanner) {
-                stopCamera();
-            }
-            
-            // Reset scanning state
-            isScanning = false;
-            
-            // Re-register Livewire event listeners after navigation
-            if (typeof Livewire !== 'undefined') {
-                Livewire.on('start-camera', () => {
-                    startCamera();
-                });
-
-                Livewire.on('stop-camera', () => {
-                    stopCamera();
-                });
-
-                Livewire.on('connection-completed', () => {
-                    setTimeout(() => {
-                        Livewire.dispatch('resetConnection');
-                    }, 3000);
-                });
-
-                // Re-register polling mechanism
-                let connectionPollingInterval = null;
-
-                Livewire.on('start-connection-polling', (data) => {
-                    if (connectionPollingInterval) {
-                        clearInterval(connectionPollingInterval);
-                    }
-
-                    connectionPollingInterval = setInterval(() => {
-                        Livewire.dispatch('check-connection-status', data);
-                    }, 2000);
-
-                    setTimeout(() => {
-                        if (connectionPollingInterval) {
-                            clearInterval(connectionPollingInterval);
-                            connectionPollingInterval = null;
-                        }
-                    }, 30000);
-                });
-
-                // Re-register QR refresh mechanism
-                let qrRefreshInterval = null;
-
-                Livewire.on('start-qr-refresh', () => {
-                    if (qrRefreshInterval) {
-                        clearInterval(qrRefreshInterval);
-                    }
-
-                    qrRefreshInterval = setInterval(() => {
-                        const component = document.querySelector('[wire\\:id]');
-                        if (component) {
-                            const wireId = component.getAttribute('wire:id');
-                            const livewireComponent = Livewire.find(wireId);
-                            if (livewireComponent && livewireComponent.connectionStatus === 'idle') {
-                                livewireComponent.refreshQr();
-                            }
-                        }
-                    }, 50000);
-                });
-            }
-        });
-
-        // Additional fallback for wire:navigate - ensure camera works even if livewire:navigated doesn't fire
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if we're on the QR scanner page and reinitialize if needed
-            if (document.querySelector('#qr-reader')) {
-                console.log('QR scanner page detected - ensuring camera functionality is ready');
-                
-                // Add a small delay to ensure Livewire is fully loaded
-                setTimeout(() => {
-                    if (typeof Livewire !== 'undefined') {
-                        // Re-register event listeners as fallback
-                        Livewire.on('start-camera', () => {
-                            startCamera();
-                        });
-
-                        Livewire.on('stop-camera', () => {
-                            stopCamera();
-                        });
-                    }
-                }, 500);
-            }
+            }, 1000);
         });
 
         async function startCamera() {
@@ -332,15 +214,12 @@
                     throw new Error('Camera tidak didukung di browser ini');
                 }
 
-                // Check camera permissions - but don't block if permission query fails
-                try {
-                    const permissionStatus = await navigator.permissions.query({ name: 'camera' });
-                    if (permissionStatus.state === 'denied') {
-                        throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
-                    }
-                } catch (permissionError) {
-                    console.log('Permission query failed, proceeding anyway:', permissionError);
-                    // Continue anyway as some browsers don't support permission query
+                // Check camera permissions
+                const permissionStatus = await navigator.permissions.query({
+                    name: 'camera'
+                });
+                if (permissionStatus.state === 'denied') {
+                    throw new Error('Izin kamera ditolak. Silakan aktifkan izin kamera di pengaturan browser.');
                 }
 
                 // Clear existing scanner
@@ -353,18 +232,22 @@
 
                 const config = {
                     fps: 10,
-                    qrbox: { width: 250, height: 250 },
+                    qrbox: {
+                        width: 250,
+                        height: 250
+                    },
                     aspectRatio: 1.0
                 };
 
                 // Start camera with proper error handling
-                await html5QrcodeScanner.start(
-                    { facingMode: "environment" },
+                await html5QrcodeScanner.start({
+                        facingMode: "environment"
+                    },
                     config,
                     (decodedText, decodedResult) => {
                         console.log('QR Code detected:', decodedText);
-                        stopCamera();
-                        Livewire.dispatch('qr-scanned', { qrCode: decodedText });
+                        @this.call('onQrScanned', decodedText);
+                        // Don't stop scanner, keep it running for next scan
                     },
                     (errorMessage) => {
                         // Ignore scan errors, keep scanning
@@ -376,16 +259,7 @@
 
             } catch (err) {
                 console.error('Camera error:', err);
-                // Show more specific error message
-                if (err.name === 'NotAllowedError') {
-                    alert('Izin kamera ditolak. Silakan klik "Allow" ketika browser meminta izin kamera, atau aktifkan izin kamera di pengaturan browser.');
-                } else if (err.name === 'NotFoundError') {
-                    alert('Kamera tidak ditemukan. Pastikan perangkat memiliki kamera yang berfungsi.');
-                } else if (err.name === 'NotReadableError') {
-                    alert('Kamera sedang digunakan oleh aplikasi lain. Tutup aplikasi lain yang menggunakan kamera dan coba lagi.');
-                } else {
-                    alert('Tidak dapat mengakses kamera: ' + err.message + '. Silakan refresh halaman dan coba lagi.');
-                }
+                alert('Tidak dapat mengakses kamera: ' + err.message);
             }
         }
 
@@ -401,7 +275,7 @@
             }
         }
 
-        // Cleanup on page unload
+        // Clean up on page unload
         window.addEventListener('beforeunload', () => {
             stopCamera();
         });

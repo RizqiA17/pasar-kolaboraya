@@ -38,7 +38,7 @@
 
         <!-- Camera Section -->
         <div class="mb-6">
-            <div id="qr-reader" class="w-full max-w-md mx-auto"></div>
+            <div id="qr-reader" wire:ignore class="w-full max-w-md mx-auto"></div>
             
             @if (!$isScanning)
                 <div class="text-center mt-4">
