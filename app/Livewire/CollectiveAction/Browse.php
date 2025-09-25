@@ -19,7 +19,7 @@ class Browse extends Component
     public $selectedScope = '';
     public $selectedStatus = '';
     public $hasCollectiveAction = false;
-    
+
     protected $queryString = [
         'search' => ['except' => ''],
         'selectedScale' => ['except' => ''],
@@ -59,19 +59,19 @@ class Browse extends Component
     public function getCollectiveActionsProperty()
     {
         $user = Auth::user();
-        
+
         $query = CollectiveAction::with(['creator'])
             ->where('status', '!=', 'draft')
             ->forUserActiveSession($user); // Filter by user's active session
 
-            $this->hasCollectiveAction = Ecosystem::where('creator_id', $user->id)->where('is_active', true)->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)->exists();
+        $this->hasCollectiveAction = Ecosystem::where('creator_id', $user->id)->where('is_active', true)->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)->exists();
 
         // Search filter
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('title', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('goals', 'like', '%' . $this->search . '%');
+                    ->orWhere('description', 'like', '%' . $this->search . '%')
+                    ->orWhere('goals', 'like', '%' . $this->search . '%');
             });
         }
 
