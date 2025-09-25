@@ -19,6 +19,13 @@
                        class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg text-sm font-medium transition-colors">
                         Kelola Anggota
                     </a>
+                    <a href="{{ route('collective-action.edit', $collectiveAction) }}" 
+                       class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg text-sm font-medium transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit
+                    </a>
                     <a href="{{ route('collective-action.qr.show', $collectiveAction) }}" 
                        class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg text-sm font-medium transition-colors flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -957,6 +964,9 @@
                                 <p class="text-xs text-gray-600 dark:text-gray-400">
                                     {{ $ecosystem->organization_name }}
                                 </p>
+                                <a href="{{ route('ecosystem.dashboard', $ecosystem) }}" class="text-xs text-blue-600 dark:text-blue-400">
+                                    Lihat Ekosistem
+                                </a>
                             </div>
                         </div>
                     @endforeach
