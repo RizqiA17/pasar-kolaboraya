@@ -85,6 +85,8 @@ class Register extends Component
         // Login user temporarily to send verification email
         Auth::login($user);
 
+        $user->generateQrCode();
+        
         // Send email verification notification
         $user->sendEmailVerificationNotification();
 

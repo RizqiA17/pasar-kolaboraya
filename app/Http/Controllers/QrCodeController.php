@@ -22,7 +22,7 @@ class QrCodeController extends Controller
         }
         
         // Generate new QR code
-        $newQrCode = $user->generateQrCode();
+        // $newQrCode = $user->generateQrCode();
         $qrCodeData = $user->getQrCodeData();
         
         // Generate QR code as SVG
