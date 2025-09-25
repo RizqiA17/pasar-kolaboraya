@@ -136,7 +136,7 @@
                     :current="request()->routeIs('ecosystem.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
                     wire:navigate>
-                    <span class="relative z-10">{{ $isEcosystemBuilder ? __('Ekosistem') : __('Kolaborasi') }}</span>
+                    <span class="relative z-10">{{  __('Kolaborasi') }}</span>
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
@@ -348,6 +348,22 @@
                             </div>
                         </div>
                     </flux:menu.radio.group>
+                    
+                    <div class="flex items-center gap-3 px-4 py-3">
+                    @if($user->is_ecosystem_builder)
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                        Ekosistem Builder
+                    </span>
+                @elseif($user->assigned_role)
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
+                        {{ $user->assigned_role }}
+                    </span>
+                @else
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                        Belum Dipilih
+                    </span>
+                @endif
+                </div>
 
                     <!-- Active Session Information -->
                     @if (auth()->user()->hasActivePasarKolaboraya())
@@ -692,7 +708,7 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{ $isEcosystemBuilder ? __('Ekosistem') : __('Kolaborasi') }}</span>
+                        <span class="text-xs font-medium">{{__('Kolaborasi') }}</span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"

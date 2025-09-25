@@ -152,7 +152,7 @@
                         <div class="mb-4">
                             <h4
                                 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                                Keahlian Dibutuhkan
+                                Keahlian Anggota
                             </h4>
                             <div class="flex flex-wrap gap-1">
                                 @foreach (collect($ecosystem->needed_roles)->take(3) as $roleId)
