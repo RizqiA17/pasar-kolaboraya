@@ -145,7 +145,7 @@ class Ecosystem extends Model
         // Get roles from accepted members
         $memberRoleIds = [];
         $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
-        
+
         foreach ($acceptedMembers as $member) {
             if ($member->profile && $member->profile->peran) {
                 $memberRoleIds[] = $member->profile->peran_id;
@@ -185,7 +185,7 @@ class Ecosystem extends Model
         // Get member roles
         $memberRoles = collect();
         $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
-        
+
         foreach ($acceptedMembers as $member) {
             if ($member->profile && $member->profile->peran) {
                 $memberRoles->push($member->profile->peran);
@@ -217,7 +217,7 @@ class Ecosystem extends Model
         // Get covered roles
         $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
         $memberRoleIds = [];
-        
+
         $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
         foreach ($acceptedMembers as $member) {
             if ($member->profile && $member->profile->peran) {
@@ -234,7 +234,7 @@ class Ecosystem extends Model
         return [
             'needed_roles' => $neededRoles,
             'gap_roles' => $gapRoles,
-            'coverage_percentage' => $neededRoles->count() > 0 
+            'coverage_percentage' => $neededRoles->count() > 0
                 ? round(((count($neededRoleIds) - count($gapRoleIds)) / count($neededRoleIds)) * 100, 1)
                 : 100
         ];
@@ -257,7 +257,7 @@ class Ecosystem extends Model
     {
         $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
         $neededRoleIds = collect($this->needed_roles ?? [])->toArray();
-        
+
         // Check if needed_roles contains all available roles
         return count(array_diff($allRoleIds, $neededRoleIds)) === 0;
     }
@@ -269,11 +269,11 @@ class Ecosystem extends Model
     public function getMissingRoles(): array
     {
         $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
-        
+
         // Get covered roles
         $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
         $memberRoleIds = [];
-        
+
         $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
         foreach ($acceptedMembers as $member) {
             if ($member->profile && $member->profile->peran) {
@@ -291,7 +291,7 @@ class Ecosystem extends Model
             'missing_roles' => $missingRoles,
             'missing_count' => count($missingRoleIds),
             'total_roles' => count($allRoleIds),
-            'coverage_percentage' => count($allRoleIds) > 0 
+            'coverage_percentage' => count($allRoleIds) > 0
                 ? round((count($coveredRoleIds) / count($allRoleIds)) * 100, 1)
                 : 100
         ];
@@ -412,7 +412,7 @@ class Ecosystem extends Model
         if (!$user->hasActivePasarKolaboraya()) {
             return $query->whereRaw('1 = 0'); // Return empty result
         }
-        
+
         return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
     }
 
@@ -450,7 +450,7 @@ class Ecosystem extends Model
     public function getConnectionQualityMetrics(): array
     {
         $acceptedMembers = $this->acceptedUsers()->with(['profile.skills', 'connections'])->get();
-        
+
         if ($acceptedMembers->isEmpty()) {
             return [
                 'jumlah_koneksi' => 0,
@@ -473,16 +473,16 @@ class Ecosystem extends Model
             // Count connections for this member
             $memberConnections = $member->connections()->count();
             $totalConnections += $memberConnections;
-            
+
             // Collect skills
             if ($member->profile && $member->profile->skills) {
                 $allSkills = $allSkills->merge($member->profile->skills->pluck('name'));
             }
-            
+
             // Calculate connection quality for this member (simplified)
             $memberQuality = min(5, max(1, $memberConnections / 2)); // Scale 1-5
             $connectionQualityScores[] = $memberQuality;
-            
+
             // Network breadth (unique organizations/regions)
             if ($member->profile) {
                 $networkBreadth += 1; // Each member adds to breadth
@@ -491,17 +491,17 @@ class Ecosystem extends Model
 
         // Calculate averages and metrics
         $avgConnections = $totalConnections / $acceptedMembers->count();
-        $avgConnectionQuality = count($connectionQualityScores) > 0 
-            ? array_sum($connectionQualityScores) / count($connectionQualityScores) 
+        $avgConnectionQuality = count($connectionQualityScores) > 0
+            ? array_sum($connectionQualityScores) / count($connectionQualityScores)
             : 0;
-        
+
         // Network breadth (unique skills diversity)
         $uniqueSkills = $allSkills->unique()->count();
         $skillDiversity = min(5, $uniqueSkills / 5); // Scale to 1-5
-        
+
         // Interaction level (based on member count and connections)
         $interactionLevel = min(5, ($acceptedMembers->count() + $avgConnections) / 3);
-        
+
         // Network strength (combination of connections and quality)
         $networkStrength = min(5, ($avgConnections + $avgConnectionQuality) / 2);
 
@@ -522,7 +522,7 @@ class Ecosystem extends Model
     public function calculateKoneksiScore(): array
     {
         $acceptedMembers = $this->acceptedUsers()->get();
-        
+
         if ($acceptedMembers->isEmpty()) {
             return [
                 'accepted_score' => 0,
@@ -543,7 +543,7 @@ class Ecosystem extends Model
 
         foreach ($acceptedMembers as $member) {
             $memberKoneksiData = Connection::calculateKoneksiScore($member->id, $this->pasar_kolaboraya_id);
-            
+
             $totalAcceptedScore += $memberKoneksiData['accepted_score'];
             $totalRecencyScore += $memberKoneksiData['recency_score'];
             $totalActivationScore += $memberKoneksiData['activation_score'];
@@ -583,24 +583,29 @@ class Ecosystem extends Model
     public function calculateEkosistemScore(): array
     {
         // Get all unique roles in this ecosystem from profile.peran relationship
-        $members = $this->acceptedUsers()->with('profile.peran')->get();
-        $existingRoleIds = [];
-        
+        $members = $this->acceptedUsers()->get();
+        $existingRole = [];
+
         foreach ($members as $member) {
-            if ($member->profile && $member->profile->peran) {
-                $existingRoleIds[] = $member->profile->peran->id;
+            if ($member->assigned_role) {
+                $existingRole[] = $member->assigned_role;
             }
         }
+
+        $exclude = ['Ekosistem Builder', 'Tamu', 'Komunitas'];
+
+        $uniqueExistingRoles = array_values(array_unique(
+            array_diff($existingRole, $exclude)
+        ));
         
-        $uniqueExistingRoles = array_unique($existingRoleIds);
         $existingRolesCount = count($uniqueExistingRoles);
-        
+
         // Get total roles in database
         $totalRolesInDatabase = \App\Models\Peran::count();
-        
+
         // Calculate ecosystem quality score: peran yang ada / total seluruh peran di database
-        $ekosistemScore = $totalRolesInDatabase > 0 
-            ? ($existingRolesCount / $totalRolesInDatabase) * 100 
+        $ekosistemScore = $totalRolesInDatabase > 0
+            ? ($existingRolesCount / $totalRolesInDatabase) * 100
             : 0;
 
         return [
@@ -610,7 +615,7 @@ class Ecosystem extends Model
                 'existing_roles_count' => $existingRolesCount,
                 'total_roles_in_database' => $totalRolesInDatabase,
                 'role_diversity_details' => $this->getRoleDiversityDetails(),
-                'existing_role_names' => $this->getExistingRoleNames($uniqueExistingRoles)
+                'existing_role_names' => $uniqueExistingRoles
             ]
         ];
     }
@@ -623,7 +628,7 @@ class Ecosystem extends Model
         if (empty($roleIds)) {
             return [];
         }
-        
+
         return \App\Models\Peran::whereIn('id', $roleIds)
             ->pluck('nama')
             ->toArray();
@@ -637,7 +642,7 @@ class Ecosystem extends Model
         $members = $this->acceptedUsers()->with('profile.peran')->get();
         $roleDistribution = [];
         $totalMembers = $members->count();
-        
+
         foreach ($members as $member) {
             if ($member->profile && $member->profile->peran) {
                 $roleId = $member->profile->peran->id;
