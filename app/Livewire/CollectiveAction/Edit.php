@@ -18,6 +18,7 @@ class Edit extends Component
     public $scope = '';
     public $goals = '';
     public $required_resources = [];
+    public $custom_resources = [];
     public $start_date = '';
     public $end_date = '';
     public $location = '';
@@ -79,9 +80,22 @@ class Edit extends Component
         $this->scale = $collectiveAction->scale;
         $this->scope = $collectiveAction->scope;
         $this->goals = $collectiveAction->goals;
-        $this->required_resources = $collectiveAction->required_resources;
-        $this->start_date = $collectiveAction->start_date->format('Y-m-d');
-        $this->end_date = $collectiveAction->end_date->format('Y-m-d');
+        
+        // Separate predefined and custom resources
+        $existingResources = $collectiveAction->required_resources ?? [];
+        $this->required_resources = [];
+        $this->custom_resources = [];
+        
+        foreach ($existingResources as $resource) {
+            if (array_key_exists($resource, $this->resourceTypes)) {
+                $this->required_resources[] = $resource;
+            } else {
+                $this->custom_resources[] = $resource;
+            }
+        }
+        
+        $this->start_date = $collectiveAction->start_date ? $collectiveAction->start_date->format('Y-m-d') : '';
+        $this->end_date = $collectiveAction->end_date ? $collectiveAction->end_date->format('Y-m-d') : '';
         $this->location = $collectiveAction->location;
         $this->latitude = $collectiveAction->latitude;
         $this->longitude = $collectiveAction->longitude;
@@ -92,6 +106,17 @@ class Edit extends Component
     public function updateAction()
     {
         $this->validate();
+        
+        // Custom validation: at least one resource must be selected
+        $allResources = array_merge(
+            $this->required_resources,
+            array_filter($this->custom_resources) // Remove empty custom resources
+        );
+        
+        if (empty($allResources)) {
+            $this->addError('required_resources', 'Minimal pilih 1 jenis sumber daya yang dibutuhkan');
+            return;
+        }
 
         // Set default location if not provided
         if (empty($this->location)) {
@@ -105,7 +130,7 @@ class Edit extends Component
             'scale' => $this->scale,
             'scope' => $this->scope,
             'goals' => $this->goals,
-            'required_resources' => $this->required_resources,
+            'required_resources' => $allResources,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,
@@ -129,6 +154,17 @@ class Edit extends Component
     public function setLocation($data)
     {
         $this->location = $data['location'];
+    }
+
+    public function addCustomResource()
+    {
+        $this->custom_resources[] = '';
+    }
+
+    public function removeCustomResource($index)
+    {
+        unset($this->custom_resources[$index]);
+        $this->custom_resources = array_values($this->custom_resources); // Re-index array
     }
 
     public function render()

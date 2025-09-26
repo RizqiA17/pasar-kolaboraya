@@ -19,6 +19,7 @@ class Create extends Component
     public $scope = 'local';
     public $goals = '';
     public $required_resources = [];
+    public $custom_resources = [];
     public $invited_ecosystems = [];
     public $invitation_messages = [];
     public $start_date = '';
@@ -53,7 +54,8 @@ class Create extends Component
         'location' => 'nullable|string|max:255',
         'min_ecosystems' => 'required|integer|min:3',
         'collaboration_terms' => 'required|string',
-        'required_resources' => 'required|array|min:1',
+        'required_resources' => 'array',
+        'custom_resources' => 'array',
     ];
 
     protected $messages = [
@@ -87,7 +89,6 @@ class Create extends Component
         $userEcosystemIds = $user->acceptedEcosystems->pluck('id')->toArray();
         $this->availableEcosystems = Ecosystem::where('is_active', true)
             ->forUserActiveSession($user) // Filter by user's active session
-            ->whereNotIn('id', $userEcosystemIds)
             ->where('creator_id', '!=', Auth::id())
             ->get();
 
@@ -100,6 +101,17 @@ class Create extends Component
     {
         // dd($creatorEcosystem = Auth::user()->acceptedEcosystems->first());
         $this->validate();
+        
+        // Custom validation: at least one resource must be selected
+        $allResources = array_merge(
+            $this->required_resources,
+            array_filter($this->custom_resources)
+        );
+        
+        if (empty($allResources)) {
+            $this->addError('required_resources', 'Minimal pilih 1 jenis sumber daya yang dibutuhkan');
+            return;
+        }
 
         // Set default location if not provided
         if (empty($this->location)) {
@@ -112,6 +124,12 @@ class Create extends Component
             $qrCode = '' . Str::random(6);
         }
 
+        // Merge predefined resources with custom resources
+        $allResources = array_merge(
+            $this->required_resources,
+            array_filter($this->custom_resources) // Remove empty custom resources
+        );
+
         // Create the collective action
         $action = CollectiveAction::create([
             'title' => $this->title,
@@ -119,7 +137,7 @@ class Create extends Component
             'scale' => $this->scale,
             'scope' => $this->scope,
             'goals' => $this->goals,
-            'required_resources' => $this->required_resources,
+            'required_resources' => $allResources,
             'created_by' => Auth::id(),
             'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'start_date' => $this->start_date,
@@ -219,6 +237,17 @@ class Create extends Component
     public function setLocation($data)
     {
         $this->location = $data['location'];
+    }
+
+    public function addCustomResource()
+    {
+        $this->custom_resources[] = '';
+    }
+
+    public function removeCustomResource($index)
+    {
+        unset($this->custom_resources[$index]);
+        $this->custom_resources = array_values($this->custom_resources); // Re-index array
     }
 
     public function render()

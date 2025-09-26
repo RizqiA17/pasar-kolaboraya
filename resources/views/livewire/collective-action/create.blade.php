@@ -417,18 +417,69 @@
                 Sumber Daya yang Dibutuhkan
             </h2>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                @foreach($resourceTypes as $key => $label)
-                    <label class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            wire:model="required_resources" 
-                            value="{{ $key }}" 
-                            class="mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                        >
-                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
-                    </label>
-                @endforeach
+            <!-- Predefined Resources -->
+            <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Pilih dari daftar berikut:</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    @foreach($resourceTypes as $key => $label)
+                        <label class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                            <input 
+                                type="checkbox" 
+                                wire:model="required_resources" 
+                                value="{{ $key }}" 
+                                class="mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                            >
+                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Custom Resources -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Atau tambahkan sumber daya custom:</h3>
+                    <flux:button 
+                        type="button" 
+                        wire:click="addCustomResource"
+                        variant="outline" 
+                        size="sm"
+                    >
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Custom
+                    </flux:button>
+                </div>
+                
+                @if(count($custom_resources) > 0)
+                    <div class="space-y-3">
+                        @foreach($custom_resources as $index => $customResource)
+                            <div class="flex items-center gap-3">
+                                <flux:input
+                                    wire:model="custom_resources.{{ $index }}"
+                                    :placeholder="'Masukkan sumber daya custom...'"
+                                    class="flex-1"
+                                />
+                                <flux:button 
+                                    type="button" 
+                                    wire:click="removeCustomResource({{ $index }})"
+                                    variant="outline" 
+                                    size="sm"
+                                    class="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </flux:button>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                        Klik "Tambah Custom" untuk menambahkan sumber daya yang tidak ada dalam daftar
+                    </p>
+                @endif
             </div>
         </div>
 
