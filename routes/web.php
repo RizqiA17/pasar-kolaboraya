@@ -138,6 +138,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
         Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
         Route::get('ecosystem/{ecosystem}/settings', \App\Livewire\Ecosystem\Settings::class)->name('ecosystem.settings');
+        Route::get('ecosystem/{ecosystem}/edit', \App\Livewire\Ecosystem\Edit::class)->name('ecosystem.edit');
         Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
 
         // Ecosystem QR Code routes
@@ -164,6 +165,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions', \App\Livewire\CollectiveAction\Browse::class)->name('collective-action.browse');
         Route::get('collective-actions/create', \App\Livewire\CollectiveAction\Create::class)->name('collective-action.create')->middleware('ecosystem.builder.only');
         Route::get('collective-actions/{collectiveAction}', \App\Livewire\CollectiveAction\Dashboard::class)->name('collective-action.show');
+        Route::get('collective-actions/{collectiveAction}/edit', \App\Livewire\CollectiveAction\Edit::class)->name('collective-action.edit')->middleware('ecosystem.builder.only');
         Route::get('collective-actions/{collectiveAction}/join', \App\Livewire\CollectiveAction\Join::class)->name('collective-action.join');
         Route::get('collective-actions/{collectiveAction}/contribute', \App\Livewire\CollectiveAction\Contribute::class)->name('collective-action.contribute');
         Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\MemberManagement::class)->name('collective-action.members');
@@ -276,5 +278,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // QR Code Scanner for admin
     Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');
 });
+
+// Route::get('/test', function () {
+//     return view('test');
+// });
 
 require __DIR__ . '/auth.php';

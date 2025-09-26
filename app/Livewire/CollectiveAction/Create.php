@@ -2,12 +2,13 @@
 
 namespace App\Livewire\CollectiveAction;
 
-use App\Models\CollectiveAction;
-use App\Models\CollectiveActionEcosystemInvitation;
-use App\Models\Ecosystem;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Ecosystem;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Layout;
+use App\Models\CollectiveAction;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CollectiveActionEcosystemInvitation;
 
 #[Layout('components.layouts.app', ['title' => 'Buat Aksi Kolektif'])]
 class Create extends Component
@@ -97,6 +98,7 @@ class Create extends Component
 
     public function createAction()
     {
+        // dd($creatorEcosystem = Auth::user()->acceptedEcosystems->first());
         $this->validate();
 
         // Set default location if not provided
@@ -104,10 +106,10 @@ class Create extends Component
             $this->location = "Lokasi belum ditentukan";
         }
 
-        $qrCode = ''.\Str::random(6);
+        $qrCode = '' . Str::random(6);
 
         while (CollectiveAction::where('qr_code', $qrCode)->exists()) {
-            $qrCode = ''.\Str::random(6);
+            $qrCode = '' . Str::random(6);
         }
 
         // Create the collective action
@@ -133,15 +135,14 @@ class Create extends Component
 
         // Add creator as admin of the collective action
         // Get creator's ecosystem to associate with the collective action
-        $creatorEcosystem = Auth::user()->acceptedEcosystems->first();
-        $creatorEcosystemId = $creatorEcosystem ? $creatorEcosystem->id : null;
-        $action->addUser(Auth::user(), 'admin', 'Creator of collective action', $creatorEcosystemId);
+        $creatorEcosystem = Auth::user()->createdEcosystems->first();
+        $action->addUser(Auth::user(), 'admin', 'Creator of collective action', $creatorEcosystem->id);
 
         // Create invitation record for creator's ecosystem (auto-accepted)
-        if ($creatorEcosystemId) {
+        if ($creatorEcosystem) {
             CollectiveActionEcosystemInvitation::create([
                 'collective_action_id' => $action->id,
-                'ecosystem_id' => $creatorEcosystemId,
+                'ecosystem_id' => $creatorEcosystem->id,
                 'invited_by' => Auth::id(),
                 'status' => 'accepted', // Auto-accepted for creator
                 'role' => 'admin',
@@ -151,25 +152,48 @@ class Create extends Component
             ]);
         }
 
-        $ecosystemsMembers = $creatorEcosystem->acceptedUsers()->get();
+        // Auto-join ecosystems members if auto-join is enabled
+        if ($creatorEcosystem->auto_join_collective_actions == 1) {
+            $ecosystemsMembers = $creatorEcosystem->acceptedUsers()->get();
 
-        foreach ($ecosystemsMembers as $member) {
-            $action->addUser($member, 'member', 'Member of collective action', $creatorEcosystemId);
+            $insertData = [];
+            foreach ($ecosystemsMembers as $member) {
+                // Hindari duplikasi jika user sudah terdaftar
+                if (!$action->isUserMember($member) && !$action->isUserAdmin($member) && !$action->isUserContributor($member)) {
+                    $insertData[$member->id] = [
+                        'ecosystem_id' => $creatorEcosystem->id,
+                        'role' => 'member',
+                        'status' => $creatorEcosystem->auto_join_collective_actions ? 'active' : 'pending_approval',
+                        'join_type' => 'ecosystem',
+                        'join_reason' => 'Member of collective action',
+                        'joined_at' => $creatorEcosystem->auto_join_collective_actions ? now() : null,
+                        'approval_requested_at' => $creatorEcosystem->auto_join_collective_actions ? null : now(),
+                    ];
+                }
+            }
+            if (!empty($insertData)) {
+                $action->users()->attach($insertData);
+            }
         }
 
         // Send invitations to selected ecosystems
+        $invitations = [];
         foreach ($this->invited_ecosystems as $ecosystemId) {
-            $invitationMessage = $this->invitation_messages[$ecosystemId] ??
-                "Kami mengundang ekosistem Anda untuk berkolaborasi dalam aksi kolektif: {$this->title}";
+            $invitationMessage = $this->invitation_messages[$ecosystemId] ?? "Kami mengundang ekosistem Anda untuk berkolaborasi dalam aksi kolektif: {$this->title}";
 
-            CollectiveActionEcosystemInvitation::create([
+            $invitations[] = [
                 'collective_action_id' => $action->id,
                 'ecosystem_id' => $ecosystemId,
                 'invited_by' => Auth::id(),
                 'status' => 'pending',
                 'role' => 'admin', // Ecosystem builders become admins
                 'invitation_message' => $invitationMessage,
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        if (!empty($invitations)) {
+            CollectiveActionEcosystemInvitation::insert($invitations);
         }
 
         session()->flash('message', 'Aksi kolektif berhasil dibuat dan undangan telah dikirim! Status: Perencanaan');
