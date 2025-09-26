@@ -115,7 +115,7 @@ class Edit extends Component
             'collaboration_terms' => $this->collaboration_terms,
         ]);
 
-        session()->flash('message', 'Aksi kolektif berhasil diperbarui!');
+        // session()->flash('message', 'Aksi kolektif berhasil diperbarui!');
 
         return redirect()->route('collective-action.show', $this->collectiveAction);
     }
