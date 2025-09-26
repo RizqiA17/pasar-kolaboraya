@@ -352,6 +352,53 @@
                 </div>
             @endif
 
+            <!-- Contribution Analytics Charts -->
+            @if ($activeTab === 'overview')
+                @php
+                    $analyticsData = $analyticsData ?? $ecosystem->getEcosystemAnalytics();
+                @endphp
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Kontribusi Ekosistem</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Contribution Types Chart -->
+                        <div>
+                            <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Jenis Kontribusi</h3>
+                            <div class="relative" style="height: 300px;">
+                                <canvas id="ecosystemContributionTypesChart" wire:ignore></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Contribution Status Chart -->
+                        <div>
+                            <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Status Kontribusi</h3>
+                            <div class="relative" style="height: 300px;">
+                                <canvas id="ecosystemContributionStatusChart" wire:ignore></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                        <!-- Member Status Chart -->
+                        <div>
+                            <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Status Anggota</h3>
+                            <div class="relative" style="height: 300px;">
+                                <canvas id="ecosystemMemberStatusChart" wire:ignore></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Role Diversity Chart -->
+                        <div>
+                            <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Keragaman Peran</h3>
+                            <div class="relative" style="height: 300px;">
+                                <canvas id="ecosystemRoleDiversityChart" wire:ignore></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Members Tab -->
             @if ($activeTab === 'members')
                 <div class="space-y-6">
@@ -1570,6 +1617,42 @@
                 ecosystemBarChart.options.scales.x.ticks.color = textColor;
                 ecosystemBarChart.update();
             }
+
+            // Update contribution types chart
+            if (ecosystemContributionTypesChart) {
+                console.log('Updating contribution types chart theme...');
+                ecosystemContributionTypesChart.options.plugins.legend.labels.color = textColor;
+                ecosystemContributionTypesChart.update();
+            }
+
+            // Update contribution status chart
+            if (ecosystemContributionStatusChart) {
+                console.log('Updating contribution status chart theme...');
+                ecosystemContributionStatusChart.options.plugins.legend.labels.color = textColor;
+                ecosystemContributionStatusChart.options.scales.x.ticks.color = textColor;
+                ecosystemContributionStatusChart.options.scales.y.ticks.color = textColor;
+                ecosystemContributionStatusChart.options.scales.x.grid.color = gridColor;
+                ecosystemContributionStatusChart.options.scales.y.grid.color = gridColor;
+                ecosystemContributionStatusChart.update();
+            }
+
+            // Update member status chart
+            if (ecosystemMemberStatusChart) {
+                console.log('Updating member status chart theme...');
+                ecosystemMemberStatusChart.options.plugins.legend.labels.color = textColor;
+                ecosystemMemberStatusChart.update();
+            }
+
+            // Update role diversity chart
+            if (ecosystemRoleDiversityChart) {
+                console.log('Updating role diversity chart theme...');
+                ecosystemRoleDiversityChart.options.plugins.legend.labels.color = textColor;
+                ecosystemRoleDiversityChart.options.scales.x.ticks.color = textColor;
+                ecosystemRoleDiversityChart.options.scales.y.ticks.color = textColor;
+                ecosystemRoleDiversityChart.options.scales.x.grid.color = gridColor;
+                ecosystemRoleDiversityChart.options.scales.y.grid.color = gridColor;
+                ecosystemRoleDiversityChart.update();
+            }
         }
 
         // Theme change listener
@@ -1617,6 +1700,292 @@
                 setTimeout(updateChartsTheme, 100);
             });
         }
+
+        // Ecosystem Contribution Charts
+        let ecosystemContributionTypesChart = null;
+        let ecosystemContributionStatusChart = null;
+        let ecosystemMemberStatusChart = null;
+        let ecosystemRoleDiversityChart = null;
+
+        function initializeEcosystemContributionCharts() {
+            console.log('Initializing ecosystem contribution charts...');
+            
+            // Destroy existing charts
+            if (ecosystemContributionTypesChart) {
+                ecosystemContributionTypesChart.destroy();
+                ecosystemContributionTypesChart = null;
+            }
+            if (ecosystemContributionStatusChart) {
+                ecosystemContributionStatusChart.destroy();
+                ecosystemContributionStatusChart = null;
+            }
+            if (ecosystemMemberStatusChart) {
+                ecosystemMemberStatusChart.destroy();
+                ecosystemMemberStatusChart = null;
+            }
+            if (ecosystemRoleDiversityChart) {
+                ecosystemRoleDiversityChart.destroy();
+                ecosystemRoleDiversityChart = null;
+            }
+
+            // Get current theme
+            const isDark = document.documentElement.classList.contains('dark') || 
+                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            const textColor = isDark ? '#e2e8f0' : '#374151';
+            const gridColor = isDark ? '#475569' : '#e5e7eb';
+
+            // Get analytics data
+            const analyticsData = @json($analyticsData);
+
+            // Initialize Contribution Types Chart
+            const contributionTypesCtx = document.getElementById('ecosystemContributionTypesChart');
+            if (contributionTypesCtx) {
+                const contributionTypes = analyticsData.contribution_types;
+                const labels = ['Relawan', 'Dana', 'Keahlian', 'Sumber Daya', 'Promosi', 'Lainnya'];
+                const data = [
+                    contributionTypes.volunteer || 0,
+                    contributionTypes.funding || 0,
+                    contributionTypes.expertise || 0,
+                    contributionTypes.resources || 0,
+                    contributionTypes.promotion || 0,
+                    contributionTypes.other || 0
+                ];
+
+                const colors = [
+                    'rgba(34, 197, 94, 0.8)',   // Green
+                    'rgba(59, 130, 246, 0.8)',  // Blue
+                    'rgba(168, 85, 247, 0.8)',  // Purple
+                    'rgba(245, 158, 11, 0.8)',  // Yellow
+                    'rgba(239, 68, 68, 0.8)',   // Red
+                    'rgba(156, 163, 175, 0.8)'  // Gray
+                ];
+
+                ecosystemContributionTypesChart = new Chart(contributionTypesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: textColor,
+                                    padding: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize Contribution Status Chart
+            const contributionStatusCtx = document.getElementById('ecosystemContributionStatusChart');
+            if (contributionStatusCtx) {
+                const contributionStatus = analyticsData.contribution_status;
+                const labels = ['Ditawarkan', 'Diterima', 'Selesai', 'Ditolak'];
+                const data = [
+                    contributionStatus.offered || 0,
+                    contributionStatus.accepted || 0,
+                    contributionStatus.completed || 0,
+                    contributionStatus.declined || 0
+                ];
+
+                const colors = [
+                    'rgba(245, 158, 11, 0.8)',  // Yellow
+                    'rgba(34, 197, 94, 0.8)',   // Green
+                    'rgba(59, 130, 246, 0.8)',  // Blue
+                    'rgba(239, 68, 68, 0.8)'    // Red
+                ];
+
+                ecosystemContributionStatusChart = new Chart(contributionStatusCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah Kontribusi',
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: textColor
+                                },
+                                grid: {
+                                    color: gridColor
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: textColor
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize Member Status Chart
+            const memberStatusCtx = document.getElementById('ecosystemMemberStatusChart');
+            if (memberStatusCtx) {
+                const memberStatus = analyticsData.member_status;
+                const labels = ['Diterima', 'Menunggu', 'Ditolak'];
+                const data = [
+                    memberStatus.accepted || 0,
+                    memberStatus.pending || 0,
+                    memberStatus.rejected || 0
+                ];
+
+                const colors = [
+                    'rgba(34, 197, 94, 0.8)',  // Green
+                    'rgba(245, 158, 11, 0.8)', // Yellow
+                    'rgba(239, 68, 68, 0.8)'   // Red
+                ];
+
+                ecosystemMemberStatusChart = new Chart(memberStatusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: textColor,
+                                    padding: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize Role Diversity Chart
+            const roleDiversityCtx = document.getElementById('ecosystemRoleDiversityChart');
+            if (roleDiversityCtx) {
+                const roleDiversity = analyticsData.role_diversity;
+                const labels = roleDiversity.role_distribution.map(role => role.name);
+                const data = roleDiversity.role_distribution.map(role => role.count);
+
+                const colors = [
+                    'rgba(59, 130, 246, 0.8)',  // Blue
+                    'rgba(34, 197, 94, 0.8)',   // Green
+                    'rgba(168, 85, 247, 0.8)',  // Purple
+                    'rgba(245, 158, 11, 0.8)',  // Yellow
+                    'rgba(239, 68, 68, 0.8)',   // Red
+                    'rgba(156, 163, 175, 0.8)'  // Gray
+                ];
+
+                ecosystemRoleDiversityChart = new Chart(roleDiversityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah Anggota',
+                            data: data,
+                            backgroundColor: colors.slice(0, labels.length),
+                            borderColor: colors.slice(0, labels.length).map(color => color.replace('0.8', '1')),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: textColor
+                                },
+                                grid: {
+                                    color: gridColor
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: textColor
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize contribution charts when overview tab is active
+        function checkEcosystemContributionCharts() {
+            const overviewTab = document.querySelector('button[wire\\:click="setActiveTab(\'overview\')"]');
+            if (overviewTab && overviewTab.classList.contains('border-blue-500')) {
+                console.log('Overview tab is active, initializing contribution charts...');
+                setTimeout(initializeEcosystemContributionCharts, 200);
+            }
+        }
+
+        // Listen for tab changes
+        document.addEventListener('livewire:navigated', function() {
+            checkEcosystemContributionCharts();
+        });
+
+        // Listen for Livewire updates
+        document.addEventListener('livewire:updated', function() {
+            console.log('Livewire updated, checking for contribution charts...');
+            setTimeout(checkEcosystemContributionCharts, 200);
+        });
+
+        // Listen for tab clicks
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('overview')") {
+                console.log('Overview tab clicked, initializing contribution charts...');
+                setTimeout(initializeEcosystemContributionCharts, 300);
+            }
+        });
+
+        // Check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkEcosystemContributionCharts();
+        });
 
         // Initialize theme listener
         setupThemeListener();

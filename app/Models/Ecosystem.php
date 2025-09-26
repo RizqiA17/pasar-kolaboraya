@@ -670,4 +670,59 @@ class Ecosystem extends Model
             'members_without_roles' => $members->where('profile.peran', null)->count()
         ];
     }
+
+    /**
+     * Get analytics data for charts
+     */
+    public function getEcosystemAnalytics(): array
+    {
+        // Contribution types distribution
+        $contributionTypes = [
+            'volunteer' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->where('name', 'like', '%relawan%')->orWhere('name', 'like', '%volunteer%');
+            })->count(),
+            'funding' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->where('name', 'like', '%dana%')->orWhere('name', 'like', '%funding%');
+            })->count(),
+            'expertise' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->where('name', 'like', '%keahlian%')->orWhere('name', 'like', '%expertise%');
+            })->count(),
+            'resources' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->where('name', 'like', '%sumber%')->orWhere('name', 'like', '%resource%');
+            })->count(),
+            'promotion' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->where('name', 'like', '%promosi%')->orWhere('name', 'like', '%promotion%');
+            })->count(),
+            'other' => $this->contributions()->whereHas('contribution', function($query) {
+                $query->whereNotIn('name', ['Relawan', 'Dana', 'Keahlian', 'Sumber Daya', 'Promosi']);
+            })->count(),
+        ];
+
+        // Contribution status distribution
+        $contributionStatus = [
+            'offered' => $this->contributions()->where('status', 'offered')->count(),
+            'accepted' => $this->contributions()->where('status', 'accepted')->count(),
+            'completed' => $this->contributions()->where('status', 'completed')->count(),
+            'declined' => $this->contributions()->where('status', 'declined')->count(),
+        ];
+
+        // Member status distribution
+        $memberStatus = [
+            'accepted' => $this->acceptedUsers()->count(),
+            'pending' => $this->pendingUsers()->count(),
+        ];
+
+        // Role diversity (from existing method)
+        $roleDiversity = $this->getRoleDiversityDetails();
+
+        return [
+            'contribution_types' => $contributionTypes,
+            'contribution_status' => $contributionStatus,
+            'member_status' => $memberStatus,
+            'role_diversity' => $roleDiversity,
+            'total_contributions' => $this->contributions()->count(),
+            'total_members' => $this->users()->count(),
+            'ecosystem_quality' => $this->calculateEkosistemScore(),
+        ];
+    }
 }

@@ -344,6 +344,7 @@ class Dashboard extends Component
             'contributions' => $this->contributions,
             'pendingContributions' => $this->pendingContributions,
             'acceptedContributions' => $this->acceptedContributions,
+            'analyticsData' => $this->ecosystem->getEcosystemAnalytics(),
         ]);
     }
 }
