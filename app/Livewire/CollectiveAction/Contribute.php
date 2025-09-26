@@ -64,7 +64,7 @@ class Contribute extends Component
         $this->collectiveAction = $collectiveAction;
 
         // Load contribution types from database
-        $this->contributionTypes = Contribution::orderBy('name')->pluck('name', 'id')->toArray();
+        $this->contributionTypes = Contribution::all();
 
         // Check if user can contribute
         if (!$collectiveAction->canUserContribute(Auth::user())) {

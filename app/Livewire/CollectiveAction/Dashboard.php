@@ -91,7 +91,7 @@ class Dashboard extends Component
         $this->loadAvailableEcosystems();
         
         // Load contribution types from database
-        $this->contributionTypes = Contribution::orderBy('name')->pluck('name', 'id')->toArray();
+        $this->contributionTypes = Contribution::pluck('name', 'id')->toArray();
     }
 
     public function loadAvailableEcosystems()
