@@ -154,26 +154,35 @@ class Create extends Component
 
         // Auto-join ecosystems members if auto-join is enabled
         if ($creatorEcosystem->auto_join_collective_actions == 1) {
-            $ecosystemsMembers = $creatorEcosystem->acceptedUsers()->get();
+            // Get all members from creator's ecosystem
+            $ecosystemMembers = $creatorEcosystem->acceptedUsers()->get();
 
+            // Get all users that already registered in collective action
+            $existingUserIds = $action->users()->pluck('user_id')->toArray();
+
+            // Prepare data for batch insert
             $insertData = [];
-            foreach ($ecosystemsMembers as $member) {
-                // Hindari duplikasi jika user sudah terdaftar
-                if (!$action->isUserMember($member) && !$action->isUserAdmin($member) && !$action->isUserContributor($member)) {
+
+            foreach ($ecosystemMembers as $member) {
+                // Check if user already registered (member/admin/contributor) in batch
+                if (!in_array($member->id, $existingUserIds)) {
                     $insertData[$member->id] = [
                         'ecosystem_id' => $creatorEcosystem->id,
                         'role' => 'member',
-                        'status' => $creatorEcosystem->auto_join_collective_actions ? 'active' : 'pending_approval',
+                        'status' => 'active',
                         'join_type' => 'ecosystem',
                         'join_reason' => 'Member of collective action',
-                        'joined_at' => $creatorEcosystem->auto_join_collective_actions ? now() : null,
-                        'approval_requested_at' => $creatorEcosystem->auto_join_collective_actions ? null : now(),
+                        'joined_at' => now(),
+                        'approval_requested_at' => null,
                     ];
                 }
             }
+
+            // Batch insert if there is data
             if (!empty($insertData)) {
                 $action->users()->attach($insertData);
             }
+
         }
 
         // Send invitations to selected ecosystems
