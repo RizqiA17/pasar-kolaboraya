@@ -171,7 +171,7 @@ class Create extends Component
                         'role' => 'member',
                         'status' => 'active',
                         'join_type' => 'ecosystem',
-                        'join_reason' => 'Member of collective action',
+                        'join_reason' => 'Member of ecosystem',
                         'joined_at' => now(),
                         'approval_requested_at' => null,
                     ];
