@@ -18,11 +18,24 @@ class QrScanner extends Component
     public $targetUser = null;
     public $errorMessage = '';
     public $successMessage = '';
+    public $currentConnectionId = null; // ID koneksi yang sedang berlangsung
 
     protected $listeners = [
         'qr-scanned' => 'handleQrScanned',
-        'check-connection-status' => 'checkConnectionStatus'
+        'check-connection-status' => 'checkConnectionStatus',
+        'stop-connection-polling' => 'stopConnectionPolling'
     ];
+
+    public function onQrScanned($qrCode)
+    {
+        $this->handleQrScanned($qrCode);
+    }
+
+    public function stopConnectionPolling()
+    {
+        // Method ini dipanggil ketika user menghentikan proses koneksi
+        // Tidak perlu melakukan apa-apa karena polling sudah dihentikan di frontend
+    }
 
     public function mount()
     {
@@ -57,6 +70,7 @@ class QrScanner extends Component
         ->generate($this->myQrCode).'';
         
         $this->connectionStatus = 'idle';
+        $this->currentConnectionId = null;
         $this->errorMessage = '';
         $this->successMessage = 'QR Code berhasil dibuat. Tunjukkan QR ini kepada user lain untuk di-scan.';
     }
@@ -133,6 +147,9 @@ class QrScanner extends Component
         $this->connectionStatus = 'waiting_for_response';
         $this->successMessage = 'QR berhasil di-scan! Sekarang tunjukkan QR Anda kepada ' . $this->targetUser->name . ' untuk menyelesaikan koneksi.';
         
+        // Simpan state koneksi yang sedang berlangsung
+        $this->currentConnectionId = $responderQr->id;
+        
         // Start polling to check when the other party completes the connection
         // We'll use the QR code as identifier since connection doesn't exist yet
         $this->dispatch('start-connection-polling', [
@@ -161,6 +178,7 @@ class QrScanner extends Component
 
         $this->connectionStatus = 'connected';
         $this->successMessage = 'Koneksi berhasil! Anda sekarang terhubung dengan ' . $this->targetUser->name;
+        $this->currentConnectionId = null; // Reset connection ID karena koneksi sudah selesai
         
         // Auto-reset after 3 seconds for both parties
         $this->dispatch('connection-completed');
@@ -213,17 +231,103 @@ class QrScanner extends Component
 
     public function resetConnection()
     {
+        // Hentikan proses koneksi yang sedang berlangsung
+        if ($this->connectionStatus === 'waiting_for_response') {
+            $user = Auth::user();
+            $pasarKolaborayaId = $user->active_pasar_kolaboraya_id;
+            
+            // Mark semua QR code yang terkait sebagai expired
+            if ($pasarKolaborayaId) {
+                ConnectionQr::where('user_id', $user->id)
+                    ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
+                    ->where('type', 'responder')
+                    ->where('is_used', false)
+                    ->update(['expires_at' => now()->subMinute()]);
+            }
+        }
+        
+        // Reset semua state
         $this->connectionStatus = 'idle';
         $this->targetUser = null;
         $this->scannedQrCode = '';
         $this->errorMessage = '';
         $this->successMessage = '';
+        $this->currentConnectionId = null;
+        
+        // Generate QR code baru
         $this->generateMyQr();
+        
+        // Dispatch event untuk menghentikan polling
+        $this->dispatch('stop-connection-polling');
     }
 
     public function refreshQr()
     {
-        $this->generateMyQr();
+        // Jika sedang dalam proses koneksi (waiting_for_response), 
+        // generate ulang QR response untuk melanjutkan proses
+        if ($this->connectionStatus === 'waiting_for_response' && $this->targetUser) {
+            $this->generateResponseQr();
+        } else {
+            // Jika idle atau connected, generate QR baru biasa
+            $this->generateMyQr();
+        }
+    }
+
+    private function generateResponseQr()
+    {
+        $user = Auth::user();
+        $pasarKolaborayaId = $user->active_pasar_kolaboraya_id;
+
+        if (!$pasarKolaborayaId) {
+            $this->errorMessage = 'Anda harus bergabung dengan Pasar Kolaboraya terlebih dahulu';
+            return;
+        }
+
+        // Cari QR code yang sedang digunakan untuk koneksi ini
+        $currentQr = null;
+        if ($this->currentConnectionId) {
+            $currentQr = ConnectionQr::find($this->currentConnectionId);
+        }
+        
+        if (!$currentQr || $currentQr->is_used || $currentQr->expires_at <= now()) {
+            $currentQr = ConnectionQr::where('user_id', $user->id)
+                ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
+                ->where('type', 'responder')
+                ->where('is_used', false)
+                ->where('expires_at', '>', now())
+                ->first();
+        }
+
+        if ($currentQr) {
+            // Refresh QR yang sudah ada
+            $connectionQr = ConnectionQr::createOrRefreshQr(
+                $user->id, 
+                $pasarKolaborayaId, 
+                'responder', 
+                $currentQr->target_qr_code
+            );
+        } else {
+            // Buat QR baru jika tidak ada yang valid
+            $connectionQr = ConnectionQr::createOrRefreshQr(
+                $user->id, 
+                $pasarKolaborayaId, 
+                'responder'
+            );
+        }
+
+        $this->myQrCode = $connectionQr->qr_code;
+        
+        // Generate SVG
+        $this->myQrSvg = ''.QrCode::size(200)
+            ->format('svg')
+            ->generate($this->myQrCode).'';
+        
+        // Update current connection ID
+        $this->currentConnectionId = $connectionQr->id;
+        
+        $this->connectionStatus = 'waiting_for_response';
+        $this->errorMessage = '';
+        $this->successMessage = 'QR Response berhasil diperbarui. Tunjukkan QR ini kepada ' . $this->targetUser->name . ' untuk melanjutkan koneksi.';
     }
 
     private function getLatestConnectionId($requesterId, $receiverId, $pasarKolaborayaId)
@@ -248,6 +352,7 @@ class QrScanner extends Component
             // Handle old format with just connection ID
             $connection = Connection::find($data);
             if ($connection && $connection->status === 'accepted') {
+                $this->currentConnectionId = null;
                 $this->resetConnection();
             }
             return;
@@ -257,6 +362,7 @@ class QrScanner extends Component
             // Handle new format with connection ID
             $connection = Connection::find($data['connection_id']);
             if ($connection && $connection->status === 'accepted') {
+                $this->currentConnectionId = null;
                 $this->resetConnection();
             }
         } elseif (isset($data['qr_code'])) {
@@ -272,6 +378,7 @@ class QrScanner extends Component
                 
             if ($responderQr) {
                 // Connection completed, auto-reset
+                $this->currentConnectionId = null;
                 $this->resetConnection();
             }
         }

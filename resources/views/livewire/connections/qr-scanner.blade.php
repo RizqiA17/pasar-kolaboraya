@@ -72,6 +72,13 @@
                                     Menunggu konfirmasi dari {{ $targetUser->name ?? 'user' }}...
                                 </p>
                             </div>
+                            <div
+                                class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-3 sm:mb-4">
+                                <p class="text-xs sm:text-sm text-yellow-700 dark:text-yellow-300">
+                                    <span class="inline-block w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
+                                    <strong>Tips:</strong> Jika QR code tidak terbaca, tekan tombol "Buat QR Baru" untuk membuat QR baru.
+                                </p>
+                            </div>
                         @else
                             <p class="text-xs sm:text-sm text-green-600 dark:text-green-400 mb-3 sm:mb-4">
                                 Anda berhasil terhubung dengan <strong>{{ $targetUser->name ?? 'user' }}</strong>!
@@ -87,15 +94,24 @@
                         @endif
 
                         <div class="space-y-2 w-full">
-                            <button wire:click="refreshQr"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
-                                Buat QR Baru
-                            </button>
-
-                            @if ($connectionStatus === 'waiting_for_response')
+                            @if ($connectionStatus === 'idle')
+                                <button wire:click="refreshQr"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                    Buat QR Baru
+                                </button>
+                            @elseif($connectionStatus === 'waiting_for_response')
+                                <button wire:click="refreshQr"
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                    Buat QR Baru
+                                </button>
                                 <button wire:click="resetConnection"
-                                    class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
-                                    Reset Koneksi
+                                    class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                    Hentikan Koneksi
+                                </button>
+                            @elseif($connectionStatus === 'connected')
+                                <button wire:click="refreshQr"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                    Buat QR Baru
                                 </button>
                             @endif
                         </div>
@@ -278,6 +294,13 @@
         // Clean up on page unload
         window.addEventListener('beforeunload', () => {
             stopCamera();
+            // Clear all intervals
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+            }
+            if (window.qrRefreshInterval) {
+                clearInterval(window.qrRefreshInterval);
+            }
         });
 
         // Handle page visibility change
@@ -285,10 +308,87 @@
             if (document.hidden && isScanning) {
                 stopCamera();
             }
+            // Clear intervals when page is hidden
+            if (document.hidden) {
+                if (window.connectionPollingInterval) {
+                    clearInterval(window.connectionPollingInterval);
+                }
+                if (window.qrRefreshInterval) {
+                    clearInterval(window.qrRefreshInterval);
+                }
+            }
         });
 
         document.addEventListener('livewire:navigating', () => {
             stopCamera();
+            // Clear all intervals
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+            }
+            if (window.qrRefreshInterval) {
+                clearInterval(window.qrRefreshInterval);
+            }
+        });
+
+        // Handle stop connection polling event
+        Livewire.on('stop-connection-polling', () => {
+            // Stop any ongoing polling or timers
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
+            }
+        });
+
+        // Handle start connection polling event
+        Livewire.on('start-connection-polling', (data) => {
+            // Stop any existing polling
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+            }
+            
+            // Start new polling
+            window.connectionPollingInterval = setInterval(() => {
+                @this.call('checkConnectionStatus', data);
+            }, 2000); // Check every 2 seconds
+        });
+
+        // Handle connection completed event
+        Livewire.on('connection-completed', () => {
+            // Stop polling when connection is completed
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
+            }
+        });
+
+        // Handle start QR refresh event
+        Livewire.on('start-qr-refresh', () => {
+            // Auto-refresh QR codes every 50 seconds (before 1 minute expiry)
+            if (window.qrRefreshInterval) {
+                clearInterval(window.qrRefreshInterval);
+            }
+            
+            window.qrRefreshInterval = setInterval(() => {
+                @this.call('refreshQr');
+            }, 50000); // Refresh every 50 seconds
+        });
+
+        // Clean up intervals when component is destroyed
+        document.addEventListener('livewire:destroyed', () => {
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+            }
+            if (window.qrRefreshInterval) {
+                clearInterval(window.qrRefreshInterval);
+            }
+        });
+
+        // Clean up intervals when component is updated
+        document.addEventListener('livewire:updated', () => {
+            // Re-initialize QR refresh if needed
+            if (!window.qrRefreshInterval) {
+                @this.call('refreshQr');
+            }
         });
     </script>
 @endpush
