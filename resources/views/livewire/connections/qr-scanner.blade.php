@@ -204,11 +204,98 @@
 @push('scripts')
     <!-- QR Scanner Script -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
         let html5QrcodeScanner = null;
         let isScanning = false;
+        let pusher = null;
+        let connectionChannel = null;
+        let autoIdleTimeout = null;
+
+        // Initialize Pusher for real-time connection notifications
+        function initializePusher() {
+            try {
+                if (typeof Pusher !== 'undefined' && '{{ config("broadcasting.default") }}' === 'pusher') {
+                    pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
+                        cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
+                        encrypted: true,
+                        authEndpoint: '/broadcasting/auth',
+                        auth: {
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        }
+                    });
+
+                    // Subscribe to user's private channel
+                    const userId = {{ auth()->id() }};
+                    connectionChannel = pusher.subscribe('private-user.' + userId);
+
+                    // Listen for connection success events
+                    connectionChannel.bind('connection.success', function(data) {
+                        console.log('Connection success received:', data);
+                        
+                        // Show success notification
+                        showConnectionSuccessNotification(data);
+                        
+                        // Auto-reset to idle after 5 seconds
+                        scheduleAutoIdle();
+                    });
+
+                    console.log('Pusher initialized for connection notifications');
+                } else {
+                    console.log('Pusher not available, using polling fallback');
+                }
+            } catch (error) {
+                console.error('Pusher initialization failed:', error);
+            }
+        }
+
+        // Show connection success notification
+        function showConnectionSuccessNotification(data) {
+            // Update Livewire component state
+            @this.set('connectionStatus', 'connected');
+            @this.set('successMessage', data.message);
+            @this.set('targetUser', { name: data.user2.name });
+            
+            // Show browser notification if permission granted
+            if (Notification.permission === 'granted') {
+                new Notification('Koneksi Berhasil!', {
+                    body: data.message,
+                    icon: '/favicon.ico'
+                });
+            }
+        }
+
+        // Schedule auto-idle after 5 seconds
+        function scheduleAutoIdle() {
+            // Clear any existing timeout
+            if (autoIdleTimeout) {
+                clearTimeout(autoIdleTimeout);
+            }
+            
+            // Set new timeout for 5 seconds
+            autoIdleTimeout = setTimeout(() => {
+                console.log('Auto-resetting to idle state');
+                @this.call('resetConnection');
+            }, 5000);
+        }
+
+        // Request notification permission
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(function(permission) {
+                    console.log('Notification permission:', permission);
+                });
+            }
+        }
 
         document.addEventListener('livewire:navigated', () => {
+            // Initialize Pusher
+            initializePusher();
+            
+            // Request notification permission
+            requestNotificationPermission();
             // Livewire.on('start-camera', () => {
             //     startCamera();
             // });
@@ -301,6 +388,14 @@
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
             }
+            // Clear auto-idle timeout
+            if (autoIdleTimeout) {
+                clearTimeout(autoIdleTimeout);
+            }
+            // Disconnect Pusher
+            if (pusher) {
+                pusher.disconnect();
+            }
         });
 
         // Handle page visibility change
@@ -365,6 +460,11 @@
             }
         });
 
+        // Handle schedule auto-idle event
+        Livewire.on('schedule-auto-idle', () => {
+            scheduleAutoIdle();
+        });
+
         // Handle start QR refresh event
         Livewire.on('start-qr-refresh', () => {
             // Auto-refresh QR codes every 50 seconds (before 1 minute expiry)
@@ -384,6 +484,14 @@
             }
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
+            }
+            // Clear auto-idle timeout
+            if (autoIdleTimeout) {
+                clearTimeout(autoIdleTimeout);
+            }
+            // Disconnect Pusher
+            if (pusher) {
+                pusher.disconnect();
             }
         });
 

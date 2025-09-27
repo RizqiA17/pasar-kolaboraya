@@ -7,6 +7,8 @@ use App\Models\Connection;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Events\ConnectionSuccess;
+use App\Services\NotificationService;
 
 class QrScanner extends Component
 {
@@ -143,6 +145,9 @@ class QrScanner extends Component
             $this->targetUser = $scannedQr->user;
             $this->connectionStatus = 'connected';
             $this->successMessage = 'Anda sudah terhubung dengan <strong>' . $scannedQr->user->name . '</strong>!';
+            
+            // Schedule auto-idle for already connected users
+            $this->dispatch('schedule-auto-idle');
             return;
         }
 
@@ -166,6 +171,9 @@ class QrScanner extends Component
         if ($this->areUsersAlreadyConnected($user->id, $scannedQr->user_id, $pasarKolaborayaId)) {
             $this->connectionStatus = 'connected';
             $this->successMessage = 'Anda sudah terhubung dengan <strong>' . $scannedQr->user->name . '</strong>!';
+            
+            // Schedule auto-idle for already connected users
+            $this->dispatch('schedule-auto-idle');
             return;
         }
 
@@ -210,6 +218,9 @@ class QrScanner extends Component
         if ($this->areUsersAlreadyConnected($user->id, $scannedQr->user_id, $pasarKolaborayaId)) {
             $this->connectionStatus = 'connected';
             $this->successMessage = 'Anda sudah terhubung dengan <strong>' . $scannedQr->user->name . '</strong>!';
+            
+            // Schedule auto-idle for already connected users
+            $this->dispatch('schedule-auto-idle');
             return;
         }
 
@@ -253,21 +264,52 @@ class QrScanner extends Component
             })
             ->first();
 
+        $connection = null;
         if ($existingConnection) {
             if ($existingConnection->trashed()) {
                 // Restore the soft-deleted connection and update status
                 $existingConnection->restore();
                 $existingConnection->update(['status' => 'accepted']);
+                $connection = $existingConnection;
+            } else {
+                $connection = $existingConnection;
             }
-            // If connection exists and is not trashed, do nothing
         } else {
             // Create new connection
-            Connection::create([
+            $connection = Connection::create([
                 'requester_id' => $requesterId,
                 'receiver_id' => $receiverId,
                 'pasar_kolaboraya_id' => $pasarKolaborayaId,
                 'status' => 'accepted',
             ]);
+        }
+
+        // Get user models for broadcasting
+        $requester = \App\Models\User::find($requesterId);
+        $receiver = \App\Models\User::find($receiverId);
+
+        if ($connection && $requester && $receiver) {
+            // Broadcast connection success event
+            broadcast(new ConnectionSuccess($requester, $receiver, $pasarKolaborayaId, $connection->id));
+
+            // Send notifications to both users
+            $notificationService = app(NotificationService::class);
+            
+            $notificationService->createNotification(
+                $requester,
+                'Koneksi Berhasil!',
+                'Anda berhasil terhubung dengan ' . $receiver->name,
+                null,
+                ['connection_id' => $connection->id, 'connected_user' => $receiver->name]
+            );
+
+            $notificationService->createNotification(
+                $receiver,
+                'Koneksi Berhasil!',
+                'Anda berhasil terhubung dengan ' . $requester->name,
+                null,
+                ['connection_id' => $connection->id, 'connected_user' => $requester->name]
+            );
         }
     }
 
