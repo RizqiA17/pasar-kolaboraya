@@ -41,7 +41,11 @@ class Dashboard extends Component
     {
         $this->activeTab = $tab;
         $this->resetPage();
-        $this->dispatch('tabChanged', $tab);
+
+        // Debug: Log the dispatch
+        \Log::info('Dispatching tabChanged event with tab: ' . $tab);
+
+        $this->dispatch('tabChanged', tab: $tab);
     }
 
     public function getPendingInvitationsProperty()
@@ -66,10 +70,10 @@ class Dashboard extends Component
         }
 
         $user = User::findOrFail($userId);
-        
+
         // Check if user has pending request
         $pivotData = $this->ecosystem->users()->where('users.id', $userId)->first();
-        
+
         if (!$pivotData || $pivotData->pivot->status !== 'pending') {
             session()->flash('error', 'Permintaan tidak ditemukan atau sudah diproses.');
             return;
@@ -90,7 +94,7 @@ class Dashboard extends Component
         );
 
         session()->flash('message', "Permintaan dari {$user->name} telah diterima.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }
@@ -104,10 +108,10 @@ class Dashboard extends Component
         }
 
         $user = User::findOrFail($userId);
-        
+
         // Check if user has pending request
         $pivotData = $this->ecosystem->users()->where('users.id', $userId)->first();
-        
+
         if (!$pivotData || $pivotData->pivot->status !== 'pending') {
             session()->flash('error', 'Permintaan tidak ditemukan atau sudah diproses.');
             return;
@@ -125,7 +129,7 @@ class Dashboard extends Component
         $this->ecosystem->users()->detach($userId);
 
         session()->flash('message', "Permintaan dari {$user->name} telah ditolak.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }
@@ -139,10 +143,10 @@ class Dashboard extends Component
         }
 
         $user = User::findOrFail($userId);
-        
+
         // Check if user is accepted member
         $pivotData = $this->ecosystem->users()->where('users.id', $userId)->first();
-        
+
         if (!$pivotData || $pivotData->pivot->status !== 'accepted') {
             session()->flash('error', 'Anggota tidak ditemukan.');
             return;
@@ -152,7 +156,7 @@ class Dashboard extends Component
         $this->ecosystem->users()->detach($userId);
 
         session()->flash('message', "{$user->name} telah dikeluarkan dari ekosistem.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }
@@ -190,7 +194,7 @@ class Dashboard extends Component
     //         session()->flash('error', 'Akses ditolak. User biasa hanya dapat melihat data, tidak dapat melakukan perubahan.');
     //         return;
     //     }
-        
+
     //     // Existing logic for accepting members
     //     $this->ecosystem->users()->updateExistingPivot($userId, [
     //         'status' => 'accepted',
@@ -206,7 +210,7 @@ class Dashboard extends Component
     //         session()->flash('error', 'Akses ditolak. User biasa hanya dapat melihat data, tidak dapat melakukan perubahan.');
     //         return;
     //     }
-        
+
     //     // Existing logic for rejecting members
     //     $this->ecosystem->users()->updateExistingPivot($userId, [
     //         'status' => 'rejected',
@@ -248,7 +252,7 @@ class Dashboard extends Component
     public function getAcceptedContributionsProperty()
     {
         return $this->ecosystem->contributions()
-            ->where('status', 'accepted')
+            ->whereIn('status', ['accepted', 'completed'])
             ->with(['user.profile', 'contribution'])
             ->get();
     }
@@ -262,7 +266,7 @@ class Dashboard extends Component
         }
 
         $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
-        
+
         if ($contribution->status !== 'offered') {
             session()->flash('error', 'Kontribusi tidak dapat diproses.');
             return;
@@ -274,7 +278,7 @@ class Dashboard extends Component
         ]);
 
         session()->flash('message', "Kontribusi dari {$contribution->user->name} telah diterima.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }
@@ -288,7 +292,7 @@ class Dashboard extends Component
         }
 
         $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
-        
+
         if ($contribution->status !== 'offered') {
             session()->flash('error', 'Kontribusi tidak dapat diproses.');
             return;
@@ -299,7 +303,7 @@ class Dashboard extends Component
         ]);
 
         session()->flash('message', "Kontribusi dari {$contribution->user->name} telah ditolak.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }
@@ -313,7 +317,7 @@ class Dashboard extends Component
         }
 
         $contribution = \App\Models\EcosystemContribution::findOrFail($contributionId);
-        
+
         if ($contribution->status !== 'accepted') {
             session()->flash('error', 'Kontribusi harus diterima terlebih dahulu.');
             return;
@@ -325,7 +329,7 @@ class Dashboard extends Component
         ]);
 
         session()->flash('message', "Kontribusi dari {$contribution->user->name} telah diselesaikan.");
-        
+
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
     }

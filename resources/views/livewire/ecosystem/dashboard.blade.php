@@ -1,4 +1,5 @@
 <div class="space-y-6">
+    {{-- {{dd(['contributions' => $contributions,'pendingContributions' => $pendingContributions, 'acceptedContributions' =>  $acceptedContributions])}} --}}
     <!-- Flash Messages -->
     @if (session()->has('message'))
         <div
@@ -19,7 +20,8 @@
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
             <div class="flex-1">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 break-words">{{ $ecosystem->ecosystem_title }}</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 break-words">
+                        {{ $ecosystem->ecosystem_title }}</h1>
                     <div class="flex flex-wrap gap-2">
                         @if ($isOwner)
                             <span
@@ -63,8 +65,10 @@
                         @endif
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">{{ $ecosystem->organization_name }}</p>
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">
+                    {{ $ecosystem->organization_name }}</p>
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
                     <span>📍 {{ $ecosystem->work_region }}</span>
                     <span>👥 {{ $ecosystem->acceptedUsers()->count() }} anggota</span>
                     @if ($ecosystem->max_users)
@@ -78,25 +82,32 @@
                 <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
                 @if ($isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
-                        <a href="{{ route('ecosystem.qr.show', $ecosystem) }}" 
-                           class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                        <a href="{{ route('ecosystem.qr.show', $ecosystem) }}"
+                            class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                                </path>
                             </svg>
                             QR Code
                         </a>
-                        <a href="{{ route('ecosystem.edit', $ecosystem) }}" 
-                           class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                        <a href="{{ route('ecosystem.edit', $ecosystem) }}"
+                            class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
                             </svg>
                             Edit
                         </a>
-                        <a href="{{ route('ecosystem.settings', $ecosystem) }}" 
-                           class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                        <a href="{{ route('ecosystem.settings', $ecosystem) }}"
+                            class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             Pengaturan
                         </a>
@@ -173,8 +184,10 @@
                             <div class="text-center">
                                 <div class="text-2xl sm:text-3xl font-bold text-green-700 dark:text-green-400">
                                     {{ $ecosystemQuality['ekosistem_score'] }}%</div>
-                                <div class="text-xs sm:text-sm text-green-600 dark:text-green-300 mt-1">Kualitas Ekosistem</div>
-                                <div class="text-xs text-green-500 dark:text-green-400 mt-1">Berdasarkan Keragaman Peran</div>
+                                <div class="text-xs sm:text-sm text-green-600 dark:text-green-300 mt-1">Kualitas
+                                    Ekosistem</div>
+                                <div class="text-xs text-green-500 dark:text-green-400 mt-1">Berdasarkan Keragaman
+                                    Peran</div>
                             </div>
                         </div>
 
@@ -184,8 +197,10 @@
                             <div class="text-center">
                                 <div class="text-2xl sm:text-3xl font-bold text-cyan-700 dark:text-cyan-400">
                                     {{ $ecosystemQuality['role_diversity_score'] }}%</div>
-                                <div class="text-xs sm:text-sm text-cyan-600 dark:text-cyan-300 mt-1">Keragaman Peran</div>
-                                <div class="text-xs text-cyan-500 dark:text-cyan-400 mt-1">Peran Ada / Total Peran</div>
+                                <div class="text-xs sm:text-sm text-cyan-600 dark:text-cyan-300 mt-1">Keragaman Peran
+                                </div>
+                                <div class="text-xs text-cyan-500 dark:text-cyan-400 mt-1">Peran Ada / Total Peran
+                                </div>
                             </div>
                         </div>
 
@@ -194,8 +209,10 @@
                             class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 sm:p-6 border border-blue-200 dark:border-blue-800 sm:col-span-2 lg:col-span-1">
                             <div class="text-center">
                                 <div class="text-2xl sm:text-3xl font-bold text-blue-700 dark:text-blue-400">
-                                    {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}</div>
-                                <div class="text-xs sm:text-sm text-blue-600 dark:text-blue-300 mt-1">Peran Tersedia</div>
+                                    {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}
+                                </div>
+                                <div class="text-xs sm:text-sm text-blue-600 dark:text-blue-300 mt-1">Peran Tersedia
+                                </div>
                                 <div class="text-xs text-blue-500 dark:text-blue-400 mt-1">Dari Total Database</div>
                             </div>
                         </div>
@@ -204,7 +221,8 @@
                     <!-- Description -->
                     <div
                         class="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-slate-600">
-                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100 mb-3">Deskripsi Ekosistem
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100 mb-3">Deskripsi
+                            Ekosistem
                         </h3>
                         <p class="text-sm sm:text-base text-gray-700 dark:text-slate-300">
                             {{ $ecosystem->description ?: 'Belum ada deskripsi.' }}</p>
@@ -219,22 +237,28 @@
 
                         <div
                             class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-6">
-                            <h3 class="text-base sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status Anda</h3>
+                            <h3 class="text-base sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status
+                                Anda</h3>
 
                             @if ($userStatus === 'accepted')
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                                     <div class="flex items-center text-green-700 dark:text-green-300">
-                                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span class="font-medium text-sm sm:text-base">Anda adalah anggota aktif dari ekosistem ini</span>
+                                        <span class="font-medium text-sm sm:text-base">Anda adalah anggota aktif dari
+                                            ekosistem ini</span>
                                     </div>
                                     @if ($ecosystem->canUserContribute(Auth::user()))
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
-                                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
+                                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
                                             Berkontribusi
                                         </a>
@@ -247,18 +271,21 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span class="font-medium text-sm sm:text-base">Permintaan bergabung Anda sedang menunggu
+                                    <span class="font-medium text-sm sm:text-base">Permintaan bergabung Anda sedang
+                                        menunggu
                                         persetujuan</span>
                                 </div>
                             @elseif($canJoin)
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                                     <div class="flex items-center text-blue-700 dark:text-blue-300">
                                         <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                         </svg>
-                                        <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan ekosistem ini</span>
+                                        <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan
+                                            ekosistem ini</span>
                                     </div>
                                     <a href="{{ route('ecosystem.join', $ecosystem) }}"
                                         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
@@ -272,7 +299,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span class="font-medium text-sm sm:text-base">Anda tidak dapat bergabung dengan ekosistem ini</span>
+                                    <span class="font-medium text-sm sm:text-base">Anda tidak dapat bergabung dengan
+                                        ekosistem ini</span>
                                 </div>
                             @endif
                         </div>
@@ -286,15 +314,18 @@
                         <div class="p-6">
                             @if ($isOwner)
                                 @if ($ecosystem->canUserContribute(Auth::user()))
-                                    <div class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-blue-600 dark:text-blue-400 mb-4">
+                                    <div
+                                        class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-blue-600 dark:text-blue-400 mb-4">
                                         <div class="flex items-center">
                                             <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
                                             <span>Anda adalah pemilik ekosistem dan dapat berkontribusi</span>
                                         </div>
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 max-md:mb-4 py-1 rounded text-sm font-medium transition-colors">
-                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 max-md:mb-4 py-1 rounded text-sm font-medium transition-colors">
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
                                             Berkontribusi
                                         </a>
@@ -357,10 +388,11 @@
                 @php
                     $analyticsData = $analyticsData ?? $ecosystem->getEcosystemAnalytics();
                 @endphp
-                
+
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Kontribusi Ekosistem</h2>
-                    
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Kontribusi Ekosistem
+                    </h2>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Contribution Types Chart -->
                         <div>
@@ -369,7 +401,7 @@
                                 <canvas id="ecosystemContributionTypesChart" wire:ignore></canvas>
                             </div>
                         </div>
-                        
+
                         <!-- Contribution Status Chart -->
                         <div>
                             <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Status Kontribusi</h3>
@@ -378,8 +410,8 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+
+                    {{-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                         <!-- Member Status Chart -->
                         <div>
                             <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Status Anggota</h3>
@@ -387,7 +419,7 @@
                                 <canvas id="ecosystemMemberStatusChart" wire:ignore></canvas>
                             </div>
                         </div>
-                        
+
                         <!-- Role Diversity Chart -->
                         <div>
                             <h3 class="text-md font-medium text-gray-900 dark:text-white mb-4">Keragaman Peran</h3>
@@ -395,7 +427,7 @@
                                 <canvas id="ecosystemRoleDiversityChart" wire:ignore></canvas>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             @endif
 
@@ -583,7 +615,8 @@
             @if ($activeTab === 'quality')
                 <div class="space-y-6" wire:key="quality-tab-{{ $activeTab }}">
                     <!-- Overall Score -->
-                    <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-8 border border-green-200 dark:border-green-800 text-center">
+                    <div
+                        class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-8 border border-green-200 dark:border-green-800 text-center">
                         <div class="text-6xl font-bold text-green-700 dark:text-green-400 mb-2">
                             {{ $ecosystemQuality['ekosistem_score'] }}%
                         </div>
@@ -596,11 +629,14 @@
                     <!-- Detailed Metrics -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Role Diversity Score -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
-                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keragaman Peran</div>
-                                    <div class="text-sm text-gray-500 dark:text-slate-400">Peran Ada / Total Peran</div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keragaman
+                                        Peran</div>
+                                    <div class="text-sm text-gray-500 dark:text-slate-400">Peran Ada / Total Peran
+                                    </div>
                                 </div>
                                 <div class="text-3xl font-bold text-cyan-600 dark:text-cyan-400">
                                     {{ $ecosystemQuality['role_diversity_score'] }}%
@@ -609,24 +645,29 @@
                             <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
                                 <div class="flex justify-between">
                                     <span>Peran yang ada:</span>
-                                    <span class="font-medium text-cyan-600">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                    <span
+                                        class="font-medium text-cyan-600">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Total peran database:</span>
-                                    <span class="font-medium">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
+                                    <span
+                                        class="font-medium">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Persentase:</span>
-                                    <span class="font-medium text-green-600">{{ $ecosystemQuality['ekosistem_score'] }}%</span>
+                                    <span
+                                        class="font-medium text-green-600">{{ $ecosystemQuality['ekosistem_score'] }}%</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Role Statistics -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
-                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Statistik Peran</div>
+                                    <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Statistik
+                                        Peran</div>
                                     <div class="text-sm text-gray-500 dark:text-slate-400">Detail Peran</div>
                                 </div>
                                 <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
@@ -636,32 +677,37 @@
                             <div class="space-y-2 text-sm text-gray-600 dark:text-slate-400">
                                 <div class="flex justify-between">
                                     <span>Peran tersedia:</span>
-                                    <span class="font-medium text-blue-600">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                    <span
+                                        class="font-medium text-blue-600">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Total peran:</span>
-                                    <span class="font-medium">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
+                                    <span
+                                        class="font-medium">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Peran tersisa:</span>
-                                    <span class="font-medium text-orange-600">{{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                    <span
+                                        class="font-medium text-orange-600">{{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Existing Roles List -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
                             <div class="mb-4">
-                                <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Peran yang Ada</div>
+                                <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">Peran yang Ada
+                                </div>
                                 <div class="text-sm text-gray-500 dark:text-slate-400">Daftar Peran di Ekosistem</div>
                             </div>
-                            @if(!empty($ecosystemQuality['details']['existing_role_names']))
+                            @if (!empty($ecosystemQuality['details']['existing_role_names']))
                                 <div class="space-y-2">
-                                    @foreach($ecosystemQuality['details']['existing_role_names'] as $roleName)
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                        <span class="text-gray-700 dark:text-slate-300">{{ $roleName }}</span>
-                                    </div>
+                                    @foreach ($ecosystemQuality['details']['existing_role_names'] as $roleName)
+                                        <div class="flex items-center gap-2 text-sm">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                            <span class="text-gray-700 dark:text-slate-300">{{ $roleName }}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                             @else
@@ -676,8 +722,10 @@
                     <!-- Progress Bars Section -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                         <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Progress Keragaman Peran</h3>
-                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi pencapaian keragaman peran ekosistem</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Progress Keragaman
+                                Peran</h3>
+                            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">Visualisasi pencapaian keragaman
+                                peran ekosistem</p>
                         </div>
                         <div class="p-6 space-y-6">
                             <!-- Main Role Diversity Progress -->
@@ -689,11 +737,12 @@
                                     </span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-3">
-                                    <div class="bg-cyan-500 h-3 rounded-full transition-all duration-1000 ease-out" 
-                                         style="width: {{ $ecosystemQuality['role_diversity_score'] }}%"></div>
+                                    <div class="bg-cyan-500 h-3 rounded-full transition-all duration-1000 ease-out"
+                                        style="width: {{ $ecosystemQuality['role_diversity_score'] }}%"></div>
                                 </div>
                                 <div class="text-sm text-gray-600 dark:text-slate-400">
-                                    {{ $ecosystemQuality['details']['existing_roles_count'] }} dari {{ $ecosystemQuality['details']['total_roles_in_database'] }} peran tersedia
+                                    {{ $ecosystemQuality['details']['existing_roles_count'] }} dari
+                                    {{ $ecosystemQuality['details']['total_roles_in_database'] }} peran tersedia
                                 </div>
                             </div>
 
@@ -706,11 +755,12 @@
                                     </span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000 ease-out" 
-                                         style="width: {{ $ecosystemQuality['role_diversity_score'] }}%"></div>
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                                        style="width: {{ $ecosystemQuality['role_diversity_score'] }}%"></div>
                                 </div>
                                 <div class="text-sm text-gray-600 dark:text-slate-400">
-                                    {{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }} peran tersisa untuk dicapai
+                                    {{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }}
+                                    peran tersisa untuk dicapai
                                 </div>
                             </div>
                         </div>
@@ -719,45 +769,62 @@
                     <!-- Summary Information -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Role Diversity Summary -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                             <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Ringkasan Keragaman Peran</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Ringkasan Keragaman
+                                    Peran</h3>
                             </div>
                             <div class="p-6 space-y-4">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Peran yang Ada:</span>
-                                    <span class="font-semibold text-cyan-600 dark:text-cyan-400">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                    <span
+                                        class="font-semibold text-cyan-600 dark:text-cyan-400">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Total Peran Database:</span>
-                                    <span class="font-semibold text-gray-900 dark:text-slate-100">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
+                                    <span
+                                        class="font-semibold text-gray-900 dark:text-slate-100">{{ $ecosystemQuality['details']['total_roles_in_database'] }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Peran Tersisa:</span>
-                                    <span class="font-semibold text-orange-600 dark:text-orange-400">{{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                    <span
+                                        class="font-semibold text-orange-600 dark:text-orange-400">{{ $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Kualitas Ekosistem:</span>
-                                    <span class="px-2 py-1 rounded-full text-xs font-medium {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') }}">
-                                        {{ $ecosystemQuality['ekosistem_score'] }}% - {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'Sangat Baik' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'Baik' : 'Perlu Ditingkatkan') }}
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') }}">
+                                        {{ $ecosystemQuality['ekosistem_score'] }}% -
+                                        {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'Sangat Baik' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'Baik' : 'Perlu Ditingkatkan') }}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Role Diversity Insights -->
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                             <div class="p-6 border-b border-gray-200 dark:border-slate-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Insight Keragaman Peran</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Insight Keragaman
+                                    Peran</h3>
                             </div>
                             <div class="p-6 space-y-4">
                                 @php
-                                    $rolePercentage = $ecosystemQuality['details']['total_roles_in_database'] > 0 
-                                        ? round(($ecosystemQuality['details']['existing_roles_count'] / $ecosystemQuality['details']['total_roles_in_database']) * 100, 1)
-                                        : 0;
-                                    
-                                    $remainingRoles = $ecosystemQuality['details']['total_roles_in_database'] - $ecosystemQuality['details']['existing_roles_count'];
-                                    
+                                    $rolePercentage =
+                                        $ecosystemQuality['details']['total_roles_in_database'] > 0
+                                            ? round(
+                                                ($ecosystemQuality['details']['existing_roles_count'] /
+                                                    $ecosystemQuality['details']['total_roles_in_database']) *
+                                                    100,
+                                                1,
+                                            )
+                                            : 0;
+
+                                    $remainingRoles =
+                                        $ecosystemQuality['details']['total_roles_in_database'] -
+                                        $ecosystemQuality['details']['existing_roles_count'];
+
                                     $status = '';
                                     $statusColor = '';
                                     if ($rolePercentage >= 80) {
@@ -774,7 +841,7 @@
                                         $statusColor = 'text-red-600 dark:text-red-400';
                                     }
                                 @endphp
-                                
+
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Persentase Pencapaian:</span>
                                     <span class="font-semibold {{ $statusColor }}">{{ $rolePercentage }}%</span>
@@ -785,11 +852,14 @@
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Peran Tersisa:</span>
-                                    <span class="font-semibold text-orange-600 dark:text-orange-400">{{ $remainingRoles }} peran</span>
+                                    <span
+                                        class="font-semibold text-orange-600 dark:text-orange-400">{{ $remainingRoles }}
+                                        peran</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Potensi Peningkatan:</span>
-                                    <span class="font-semibold text-blue-600 dark:text-blue-400">{{ 100 - $rolePercentage }}%</span>
+                                    <span
+                                        class="font-semibold text-blue-600 dark:text-blue-400">{{ 100 - $rolePercentage }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -942,11 +1012,15 @@
                 <div class="space-y-6">
                     <!-- Contribution Actions -->
                     @if ($isOwner || $isEcosystemBuilder)
-                        <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4 sm:p-6">
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                        <div
+                            class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4 sm:p-6">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                                 <div class="flex-1">
-                                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">Kelola Kontribusi</h3>
-                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">Terima, tolak, atau selesaikan kontribusi dari anggota</p>
+                                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">
+                                        Kelola Kontribusi</h3>
+                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">Terima, tolak,
+                                        atau selesaikan kontribusi dari anggota</p>
                                 </div>
                                 <div class="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                                     {{ $contributions->total() }} total kontribusi
@@ -957,9 +1031,11 @@
 
                     <!-- Pending Contributions -->
                     @if ($pendingContributions->count() > 0)
-                        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                        <div
+                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                             <div class="p-6 border-b border-amber-200 dark:border-amber-800">
-                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
+                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Kontribusi
+                                    Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
                             </div>
                             <div class="divide-y divide-amber-200 dark:divide-amber-800">
                                 @foreach ($pendingContributions as $contribution)
@@ -967,42 +1043,54 @@
                                         <div class="flex items-start justify-between">
                                             <div class="flex-1">
                                                 <div class="flex items-center space-x-3 mb-3">
-                                                    <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
+                                                    <div
+                                                        class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
                                                         @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
                                                             <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
                                                                 alt="{{ $contribution->user->name }}"
                                                                 class="w-10 h-10 rounded-full object-cover">
                                                         @else
-                                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                                            <span
+                                                                class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
                                                         @endif
                                                     </div>
                                                     <div>
-                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">{{ $contribution->user->name }}</h4>
-                                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $contribution->user->email }}</p>
+                                                        <h4 class="font-semibold text-gray-900 dark:text-slate-100">
+                                                            {{ $contribution->user->name }}</h4>
+                                                        <p class="text-sm text-gray-600 dark:text-slate-300">
+                                                            {{ $contribution->user->email }}</p>
                                                     </div>
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
                                                         {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div class="mb-3">
-                                                    <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Deskripsi:</strong></p>
-                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">{{ $contribution->contribution_description }}</p>
+                                                    <p class="text-sm text-gray-700 dark:text-slate-300">
+                                                        <strong>Deskripsi:</strong></p>
+                                                    <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                                                        {{ $contribution->contribution_description }}</p>
                                                 </div>
 
                                                 @if ($contribution->contribution_amount)
                                                     <div class="mb-3">
-                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300">
+                                                            <strong>Jumlah:</strong> Rp
+                                                            {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                        </p>
                                                     </div>
                                                 @endif
 
                                                 @if ($contribution->contribution_details)
                                                     <div class="mb-3">
-                                                        <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Detail Tambahan:</strong></p>
+                                                        <p class="text-sm text-gray-700 dark:text-slate-300">
+                                                            <strong>Detail Tambahan:</strong></p>
                                                         <div class="mt-1 space-y-1">
                                                             @foreach ($contribution->contribution_details as $detail)
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
-                                                                    • {{ $detail['type'] ?? 'N/A' }}: {{ $detail['description'] ?? 'N/A' }}
+                                                                    • {{ $detail['type'] ?? 'N/A' }}:
+                                                                    {{ $detail['description'] ?? 'N/A' }}
                                                                     @if (isset($detail['quantity']) && $detail['quantity'])
                                                                         ({{ $detail['quantity'] }})
                                                                     @endif
@@ -1013,10 +1101,11 @@
                                                 @endif
 
                                                 <div class="text-xs text-gray-500 dark:text-slate-400">
-                                                    Diajukan {{ $contribution->offered_at ? $contribution->offered_at->diffForHumans() : 'N/A' }}
+                                                    Diajukan
+                                                    {{ $contribution->offered_at ? $contribution->offered_at->diffForHumans() : 'N/A' }}
                                                 </div>
                                             </div>
-                                            
+
                                             @if ($isOwner)
                                                 <div class="ml-4 flex space-x-2">
                                                     <button wire:click="acceptContribution({{ $contribution->id }})"
@@ -1039,7 +1128,8 @@
                     <!-- All Contributions -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                         <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-slate-700">
-                            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">Semua Kontribusi</h3>
+                            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-slate-100">Semua
+                                Kontribusi</h3>
                         </div>
                         @if ($contributions->count() > 0)
                             <div class="divide-y divide-gray-200 dark:divide-slate-700">
@@ -1047,38 +1137,52 @@
                                     <div class="p-4 sm:p-6">
                                         <div class="space-y-3">
                                             <div class="flex items-start space-x-3">
-                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <div
+                                                    class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
                                                     @if ($contribution->user->profile && $contribution->user->profile->profile_photo)
                                                         <img src="{{ asset('storage/' . $contribution->user->profile->profile_photo) }}"
                                                             alt="{{ $contribution->user->name }}"
                                                             class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover">
                                                     @else
-                                                        <span class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                                        <span
+                                                            class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm sm:text-base truncate">{{ $contribution->user->name }}</h4>
-                                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300 truncate">{{ $contribution->user->email }}</p>
+                                                    <h4
+                                                        class="font-semibold text-gray-900 dark:text-slate-100 text-sm sm:text-base truncate">
+                                                        {{ $contribution->user->name }}</h4>
+                                                    <p
+                                                        class="text-xs sm:text-sm text-gray-600 dark:text-slate-300 truncate">
+                                                        {{ $contribution->user->email }}</p>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
                                                     {{ $contribution->status_label }}
                                                 </span>
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                                                     {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
                                                 </span>
                                             </div>
-                                            
+
                                             <div>
-                                                <p class="text-xs sm:text-sm text-gray-700 dark:text-slate-300 font-medium">Deskripsi:</p>
-                                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">{{ Str::limit($contribution->contribution_description, 100) }}</p>
+                                                <p
+                                                    class="text-xs sm:text-sm text-gray-700 dark:text-slate-300 font-medium">
+                                                    Deskripsi:</p>
+                                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mt-1">
+                                                    {{ Str::limit($contribution->contribution_description, 100) }}</p>
                                             </div>
 
                                             @if ($contribution->contribution_amount)
                                                 <div>
-                                                    <p class="text-xs sm:text-sm text-gray-700 dark:text-slate-300"><strong>Jumlah:</strong> Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}</p>
+                                                    <p class="text-xs sm:text-sm text-gray-700 dark:text-slate-300">
+                                                        <strong>Jumlah:</strong> Rp
+                                                        {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                    </p>
                                                 </div>
                                             @endif
 
@@ -1093,10 +1197,11 @@
                                                     • Selesai {{ $contribution->completed_at->diffForHumans() }}
                                                 @endif
                                             </div>
-                                            
+
                                             @if ($isOwner && $contribution->status === 'accepted')
                                                 <div class="pt-2">
-                                                    <button wire:click="completeContribution({{ $contribution->id }})"
+                                                    <button
+                                                        wire:click="completeContribution({{ $contribution->id }})"
                                                         class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Tandai Selesai
                                                     </button>
@@ -1136,7 +1241,7 @@
         function initializeConnectionQualityChart() {
             console.log('Initializing connection quality chart...');
             const canvas = document.getElementById('connectionQualityRadarChart');
-            
+
             if (!canvas) {
                 console.log('Canvas not found');
                 return;
@@ -1160,19 +1265,22 @@
             }
 
             // Check if all required data properties exist
-            const requiredProps = ['jumlah_koneksi', 'kualitas_koneksi', 'keluasan_jejaring', 'keragaman_keahlian', 'tingkat_interaksi', 'kekuatan_jejaring'];
+            const requiredProps = ['jumlah_koneksi', 'kualitas_koneksi', 'keluasan_jejaring', 'keragaman_keahlian',
+                'tingkat_interaksi', 'kekuatan_jejaring'
+            ];
             const hasAllProps = requiredProps.every(prop => connectionData.hasOwnProperty(prop));
-            
+
             if (!hasAllProps) {
-                console.error('Missing required data properties:', requiredProps.filter(prop => !connectionData.hasOwnProperty(prop)));
+                console.error('Missing required data properties:', requiredProps.filter(prop => !connectionData
+                    .hasOwnProperty(prop)));
                 return;
             }
 
             // Get theme-aware colors
             function getThemeColors() {
-                const isDark = localStorage.getItem('theme') === 'dark' || 
-                              (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                
+                const isDark = localStorage.getItem('theme') === 'dark' ||
+                    (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
                 return {
                     isDark: isDark,
                     gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
@@ -1197,75 +1305,75 @@
             const themeColors = getThemeColors();
 
             try {
-            connectionQualityRadarChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: [
-                        'Jumlah Koneksi',
-                        'Kualitas Koneksi',
-                        'Keluasan Jejaring',
-                        'Keragaman Keahlian',
-                        'Tingkat Interaksi',
-                        'Kekuatan Jejaring'
-                    ],
-                    datasets: [{
-                        label: 'Kualitas Koneksi Ekosistem',
-                        data: [
-                            connectionData.jumlah_koneksi,
-                            connectionData.kualitas_koneksi,
-                            connectionData.keluasan_jejaring,
-                            connectionData.keragaman_keahlian,
-                            connectionData.tingkat_interaksi,
-                            connectionData.kekuatan_jejaring
+                connectionQualityRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Jumlah Koneksi',
+                            'Kualitas Koneksi',
+                            'Keluasan Jejaring',
+                            'Keragaman Keahlian',
+                            'Tingkat Interaksi',
+                            'Kekuatan Jejaring'
                         ],
-                        backgroundColor: themeColors.connection.bg,
-                        borderColor: themeColors.connection.border,
-                        borderWidth: 2,
-                        pointBackgroundColor: themeColors.connection.point,
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6,
-                        pointHoverRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 5,
-                            min: 0,
-                            ticks: {
-                                stepSize: 1,
-                                backdropColor: 'transparent'
-                            },
-                            grid: {
-                                color: themeColors.gridColor,
-                                circular: true
-                            },
-                            angleLines: {
-                                color: themeColors.angleLinesColor
+                        datasets: [{
+                            label: 'Kualitas Koneksi Ekosistem',
+                            data: [
+                                connectionData.jumlah_koneksi,
+                                connectionData.kualitas_koneksi,
+                                connectionData.keluasan_jejaring,
+                                connectionData.keragaman_keahlian,
+                                connectionData.tingkat_interaksi,
+                                connectionData.kekuatan_jejaring
+                            ],
+                            backgroundColor: themeColors.connection.bg,
+                            borderColor: themeColors.connection.border,
+                            borderWidth: 2,
+                            pointBackgroundColor: themeColors.connection.point,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 5,
+                                min: 0,
+                                ticks: {
+                                    stepSize: 1,
+                                    backdropColor: 'transparent'
+                                },
+                                grid: {
+                                    color: themeColors.gridColor,
+                                    circular: true
+                                },
+                                angleLines: {
+                                    color: themeColors.angleLinesColor
+                                }
                             }
-                        }
-                    },
-                    elements: {
-                        line: {
-                            tension: 0.0
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
-                                color: themeColors.textColor,
+                        },
+                        elements: {
+                            line: {
+                                tension: 0.0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    color: themeColors.textColor,
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
             } catch (error) {
                 console.error('Error creating chart:', error);
                 connectionQualityRadarChart = null;
@@ -1303,11 +1411,11 @@
 
         // Initialize chart when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, checking for quality tab...');
+            // console.log('DOM loaded, checking for quality tab...');
             // Check if quality tab is already active
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
             if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
-                console.log('Quality tab is active, initializing chart...');
+                // console.log('Quality tab is active, initializing chart...');
                 setTimeout(initializeConnectionQualityChart, 200);
             }
             setupThemeListener();
@@ -1315,11 +1423,11 @@
 
         // Re-initialize chart when Livewire updates
         document.addEventListener('livewire:navigated', function() {
-                    setTimeout(function() {
-                        if (document.getElementById('connectionQualityRadarChart')) {
-                            initializeConnectionQualityChart();
-                        }
-                    }, 200);
+            setTimeout(function() {
+                if (document.getElementById('connectionQualityRadarChart')) {
+                    initializeConnectionQualityChart();
+                }
+            }, 200);
             setupThemeListener();
         });
 
@@ -1327,11 +1435,49 @@
         function checkForChartInitialization() {
             const canvas = document.getElementById('connectionQualityRadarChart');
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
-            
+
             if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500') && !connectionQualityRadarChart) {
-                console.log('Initializing chart...');
+                // console.log('Initializing chart...');
                 initializeConnectionQualityChart();
             }
+        }
+
+        // Method 1: Using livewire:init event
+        document.addEventListener('livewire:init', () => {
+            // console.log('Livewire initialized, registering tabChanged listener');
+            Livewire.on('tabChanged', (event) => {
+                // console.log('Tab changed to:', event.tab);
+                if (event.tab === 'overview') {
+                    initializeConnectionQualityChart();
+                }
+            });
+        });
+
+        // Method 2: Fallback - Direct event listener registration
+        if (typeof Livewire !== 'undefined') {
+            // console.log('Livewire available, registering fallback tabChanged listener');
+            Livewire.on('tabChanged', (event) => {
+                // console.log('Tab changed to (fallback):', event.tab);
+                if (event.tab === 'overview') {
+                    initializeConnectionQualityChart();
+                }
+            });
+        } else {
+            // console.log('Livewire not available yet, will retry...');
+            // Retry after a short delay
+            setTimeout(() => {
+                if (typeof Livewire !== 'undefined') {
+                    // console.log('Livewire now available, registering tabChanged listener');
+                    Livewire.on('tabChanged', (event) => {
+                        // console.log('Tab changed to (delayed):', event.tab);
+                        if (event.tab == 'overview') {
+                            console.log('Overview tab is active, initializing chart...');
+                            // setTimeout(initializeEcosystemContributionCharts, 5000);
+                            setTimeout(initializeEcosystemContributionCharts, 200);
+                        }
+                    });
+                }
+            }, 1000);
         }
 
         // Check every 500ms
@@ -1339,13 +1485,14 @@
 
         // Listen for Livewire updates
         document.addEventListener('livewire:updated', function() {
-            console.log('Livewire updated, checking for chart...');
+            // console.log('Livewire updated, checking for chart...');
             setTimeout(function() {
                 const canvas = document.getElementById('connectionQualityRadarChart');
-                const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
-                
+                const qualityTab = document.querySelector(
+                    'button[wire\\:click="setActiveTab(\'quality\')"]');
+
                 if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500')) {
-                    console.log('Quality tab is active, initializing chart...');
+                    // console.log('Quality tab is active, initializing chart...');
                     initializeConnectionQualityChart();
                 }
             }, 200);
@@ -1355,8 +1502,9 @@
         document.addEventListener('click', function(e) {
             if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('quality')") {
                 setTimeout(function() {
-                    if (document.getElementById('connectionQualityRadarChart') && !connectionQualityRadarChart) {
-                        console.log('Quality tab clicked, initializing chart...');
+                    if (document.getElementById('connectionQualityRadarChart') && !
+                        connectionQualityRadarChart) {
+                        // console.log('Quality tab clicked, initializing chart...');
                         initializeConnectionQualityChart();
                     }
                 }, 300);
@@ -1374,35 +1522,35 @@
         let ecosystemBarChart = null;
 
         function initializeEcosystemCharts() {
-            console.log('Initializing ecosystem charts...');
-            
+            // console.log('Initializing ecosystem charts...');
+
             // Destroy existing charts
             if (ecosystemRadarChart) {
-                console.log('Destroying existing radar chart...');
+                // console.log('Destroying existing radar chart...');
                 ecosystemRadarChart.destroy();
                 ecosystemRadarChart = null;
             }
             if (ecosystemBarChart) {
-                console.log('Destroying existing bar chart...');
+                // console.log('Destroying existing bar chart...');
                 ecosystemBarChart.destroy();
                 ecosystemBarChart = null;
             }
 
             // Get current theme
-            const isDark = document.documentElement.classList.contains('dark') || 
-                          localStorage.getItem('theme') === 'dark' ||
-                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
-            console.log('Current theme is dark:', isDark);
-            
+            const isDark = document.documentElement.classList.contains('dark') ||
+                localStorage.getItem('theme') === 'dark' ||
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+            // console.log('Current theme is dark:', isDark);
+
             const textColor = isDark ? '#e2e8f0' : '#374151';
             const gridColor = isDark ? '#475569' : '#e5e7eb';
 
             // Initialize Radar Chart
             const radarCtx = document.getElementById('ecosystemRadarChart');
             if (radarCtx) {
-                console.log('Creating radar chart...');
-                
+                // console.log('Creating radar chart...');
+
                 ecosystemRadarChart = new Chart(radarCtx, {
                     type: 'radar',
                     data: {
@@ -1463,8 +1611,8 @@
             // Initialize Bar Chart
             const barCtx = document.getElementById('ecosystemBarChart');
             if (barCtx) {
-                console.log('Creating bar chart...');
-                
+                // console.log('Creating bar chart...');
+
                 ecosystemBarChart = new Chart(barCtx, {
                     type: 'bar',
                     data: {
@@ -1481,9 +1629,9 @@
                                 {{ $ecosystemQuality['details']['total_roles_in_database'] }}
                             ],
                             backgroundColor: [
-                                'rgba(6, 182, 212, 0.8)',   // cyan
-                                'rgba(59, 130, 246, 0.8)',   // blue
-                                'rgba(107, 114, 128, 0.8)'   // gray
+                                'rgba(6, 182, 212, 0.8)', // cyan
+                                'rgba(59, 130, 246, 0.8)', // blue
+                                'rgba(107, 114, 128, 0.8)' // gray
                             ],
                             borderColor: [
                                 'rgba(6, 182, 212, 1)',
@@ -1531,7 +1679,7 @@
         function checkEcosystemCharts() {
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
             if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
-                console.log('Quality tab is active, initializing ecosystem charts...');
+                // console.log('Quality tab is active, initializing ecosystem charts...');
                 setTimeout(initializeEcosystemCharts, 200);
             }
         }
@@ -1543,25 +1691,26 @@
 
         // Listen for Livewire updates
         document.addEventListener('livewire:updated', function() {
-            console.log('Livewire updated, checking for ecosystem charts...');
+            // console.log('Livewire updated, checking for ecosystem charts...');
             setTimeout(checkEcosystemCharts, 200);
         });
 
         // Listen for tab clicks
         document.addEventListener('click', function(e) {
             if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('quality')") {
-                console.log('Quality tab clicked, initializing charts...');
+                // console.log('Quality tab clicked, initializing charts...');
                 setTimeout(initializeEcosystemCharts, 300);
             }
         });
 
         // Listen for Livewire tab changes
         document.addEventListener('livewire:updated', function() {
-            console.log('Livewire updated, checking for quality tab...');
+            // console.log('Livewire updated, checking for quality tab...');
             setTimeout(function() {
-                const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
+                const qualityTab = document.querySelector(
+                    'button[wire\\:click="setActiveTab(\'quality\')"]');
                 if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
-                    console.log('Quality tab is active after update, initializing charts...');
+                    // console.log('Quality tab is active after update, initializing charts...');
                     initializeEcosystemCharts();
                 }
             }, 200);
@@ -1579,19 +1728,19 @@
 
         // Function to update existing charts with new theme
         function updateChartsTheme() {
-            console.log('Updating charts theme...');
-            
+            // console.log('Updating charts theme...');
+
             // Get current theme
-            const isDark = document.documentElement.classList.contains('dark') || 
-                          localStorage.getItem('theme') === 'dark' ||
-                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
+            const isDark = document.documentElement.classList.contains('dark') ||
+                localStorage.getItem('theme') === 'dark' ||
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
             const textColor = isDark ? '#e2e8f0' : '#374151';
             const gridColor = isDark ? '#475569' : '#e5e7eb';
 
             // Update connection quality radar chart if it exists
             if (connectionQualityRadarChart) {
-                console.log('Updating connection quality chart theme...');
+                // console.log('Updating connection quality chart theme...');
                 connectionQualityRadarChart.options.plugins.legend.labels.color = textColor;
                 connectionQualityRadarChart.options.scales.r.ticks.color = textColor;
                 connectionQualityRadarChart.options.scales.r.grid.color = gridColor;
@@ -1601,7 +1750,7 @@
 
             // Update radar chart if it exists
             if (ecosystemRadarChart) {
-                console.log('Updating radar chart theme...');
+                // console.log('Updating radar chart theme...');
                 ecosystemRadarChart.options.plugins.legend.labels.color = textColor;
                 ecosystemRadarChart.options.scales.r.ticks.color = textColor;
                 ecosystemRadarChart.options.scales.r.grid.color = gridColor;
@@ -1611,7 +1760,7 @@
 
             // Update bar chart if it exists
             if (ecosystemBarChart) {
-                console.log('Updating bar chart theme...');
+                // console.log('Updating bar chart theme...');
                 ecosystemBarChart.options.scales.y.ticks.color = textColor;
                 ecosystemBarChart.options.scales.y.grid.color = gridColor;
                 ecosystemBarChart.options.scales.x.ticks.color = textColor;
@@ -1620,14 +1769,14 @@
 
             // Update contribution types chart
             if (ecosystemContributionTypesChart) {
-                console.log('Updating contribution types chart theme...');
+                // console.log('Updating contribution types chart theme...');
                 ecosystemContributionTypesChart.options.plugins.legend.labels.color = textColor;
                 ecosystemContributionTypesChart.update();
             }
 
             // Update contribution status chart
             if (ecosystemContributionStatusChart) {
-                console.log('Updating contribution status chart theme...');
+                // console.log('Updating contribution status chart theme...');
                 ecosystemContributionStatusChart.options.plugins.legend.labels.color = textColor;
                 ecosystemContributionStatusChart.options.scales.x.ticks.color = textColor;
                 ecosystemContributionStatusChart.options.scales.y.ticks.color = textColor;
@@ -1638,14 +1787,14 @@
 
             // Update member status chart
             if (ecosystemMemberStatusChart) {
-                console.log('Updating member status chart theme...');
+                // console.log('Updating member status chart theme...');
                 ecosystemMemberStatusChart.options.plugins.legend.labels.color = textColor;
                 ecosystemMemberStatusChart.update();
             }
 
             // Update role diversity chart
             if (ecosystemRoleDiversityChart) {
-                console.log('Updating role diversity chart theme...');
+                // console.log('Updating role diversity chart theme...');
                 ecosystemRoleDiversityChart.options.plugins.legend.labels.color = textColor;
                 ecosystemRoleDiversityChart.options.scales.x.ticks.color = textColor;
                 ecosystemRoleDiversityChart.options.scales.y.ticks.color = textColor;
@@ -1660,7 +1809,7 @@
             // Listen for theme changes via localStorage
             window.addEventListener('storage', function(e) {
                 if (e.key === 'theme') {
-                    console.log('Theme changed to:', e.newValue);
+                    // console.log('Theme changed to:', e.newValue);
                     // Update charts when theme changes
                     setTimeout(updateChartsTheme, 100);
                 }
@@ -1670,7 +1819,7 @@
             const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                        console.log('Document class changed, updating charts...');
+                        // console.log('Document class changed, updating charts...');
                         setTimeout(updateChartsTheme, 100);
                     }
                 });
@@ -1684,19 +1833,19 @@
             // Also listen for clicks on theme toggle buttons
             document.addEventListener('click', function(e) {
                 if (e.target && (
-                    e.target.closest('[data-theme-toggle]') ||
-                    e.target.closest('button[wire\\:click*="toggleTheme"]') ||
-                    e.target.closest('.theme-toggle') ||
-                    e.target.closest('button[wire\\:click*="setTheme"]')
-                )) {
-                    console.log('Theme toggle clicked, updating charts...');
+                        e.target.closest('[data-theme-toggle]') ||
+                        e.target.closest('button[wire\\:click*="toggleTheme"]') ||
+                        e.target.closest('.theme-toggle') ||
+                        e.target.closest('button[wire\\:click*="setTheme"]')
+                    )) {
+                    // console.log('Theme toggle clicked, updating charts...');
                     setTimeout(updateChartsTheme, 200);
                 }
             });
 
             // Listen for custom theme change events
             document.addEventListener('themeChanged', function() {
-                console.log('Custom theme change event detected');
+                // console.log('Custom theme change event detected');
                 setTimeout(updateChartsTheme, 100);
             });
         }
@@ -1709,7 +1858,7 @@
 
         function initializeEcosystemContributionCharts() {
             console.log('Initializing ecosystem contribution charts...');
-            
+
             // Destroy existing charts
             if (ecosystemContributionTypesChart) {
                 ecosystemContributionTypesChart.destroy();
@@ -1729,36 +1878,91 @@
             }
 
             // Get current theme
-            const isDark = document.documentElement.classList.contains('dark') || 
-                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
+            const isDark = document.documentElement.classList.contains('dark') ||
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
             const textColor = isDark ? '#e2e8f0' : '#374151';
             const gridColor = isDark ? '#475569' : '#e5e7eb';
 
-            // Get analytics data
-            const analyticsData = @json($analyticsData);
+            // === Ambil data dari backend ===
+            const rawData = @json($acceptedContributions);
 
-            // Initialize Contribution Types Chart
+            // --- 1. Hitung kontribusi berdasarkan kategori ---
+            const contributionTypes = {
+                volunteer: 0,
+                funding: 0,
+                expertise: 0,
+                resources: 0,
+                promotion: 0,
+                other: 0
+            };
+
+            rawData.forEach(item => {
+                const name = item.contribution?.name?.toLowerCase() || '';
+                if (name.includes('relawan')) contributionTypes.volunteer++;
+                else if (name.includes('dana')) contributionTypes.funding++;
+                else if (name.includes('keahlian')) contributionTypes.expertise++;
+                else if (name.includes('sumber')) contributionTypes.resources++;
+                else if (name.includes('promosi')) contributionTypes.promotion++;
+                else contributionTypes.other++;
+            });
+
+            // --- 2. Hitung status kontribusi ---
+            const contributionStatus = {
+                offered: 0,
+                accepted: 0,
+                completed: 0,
+                declined: 0
+            };
+
+            rawData.forEach(item => {
+                if (item.status === 'offered') contributionStatus.offered++;
+                else if (item.status === 'accepted') contributionStatus.accepted++;
+                else if (item.status === 'completed') contributionStatus.completed++;
+                else if (item.status === 'declined') contributionStatus.declined++;
+            });
+
+            // --- 3. (Opsional) Hitung status anggota ---
+            // Kalau mau: bisa hitung dari item.user.status (jika ada)
+            const memberStatus = {
+                accepted: 0,
+                pending: 0,
+                rejected: 0
+            };
+            rawData.forEach(item => {
+                if (item.user?.status === 'accepted') memberStatus.accepted++;
+                else if (item.user?.status === 'pending') memberStatus.pending++;
+                else if (item.user?.status === 'rejected') memberStatus.rejected++;
+            });
+
+            // --- 4. (Opsional) Role diversity ---
+            const roleDiversity = {};
+            rawData.forEach(item => {
+                const role = item.user?.role || 'Lainnya';
+                roleDiversity[role] = (roleDiversity[role] || 0) + 1;
+            });
+
+            // === Buat chart ===
+
+            // Contribution Types Chart
             const contributionTypesCtx = document.getElementById('ecosystemContributionTypesChart');
             if (contributionTypesCtx) {
-                const contributionTypes = analyticsData.contribution_types;
                 const labels = ['Relawan', 'Dana', 'Keahlian', 'Sumber Daya', 'Promosi', 'Lainnya'];
                 const data = [
-                    contributionTypes.volunteer || 0,
-                    contributionTypes.funding || 0,
-                    contributionTypes.expertise || 0,
-                    contributionTypes.resources || 0,
-                    contributionTypes.promotion || 0,
-                    contributionTypes.other || 0
+                    contributionTypes.volunteer,
+                    contributionTypes.funding,
+                    contributionTypes.expertise,
+                    contributionTypes.resources,
+                    contributionTypes.promotion,
+                    contributionTypes.other
                 ];
 
                 const colors = [
-                    'rgba(34, 197, 94, 0.8)',   // Green
-                    'rgba(59, 130, 246, 0.8)',  // Blue
-                    'rgba(168, 85, 247, 0.8)',  // Purple
-                    'rgba(245, 158, 11, 0.8)',  // Yellow
-                    'rgba(239, 68, 68, 0.8)',   // Red
-                    'rgba(156, 163, 175, 0.8)'  // Gray
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(168, 85, 247, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(156, 163, 175, 0.8)'
                 ];
 
                 ecosystemContributionTypesChart = new Chart(contributionTypesCtx, {
@@ -1768,7 +1972,7 @@
                         datasets: [{
                             data: data,
                             backgroundColor: colors,
-                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderColor: colors.map(c => c.replace('0.8', '1')),
                             borderWidth: 2
                         }]
                     },
@@ -1788,23 +1992,22 @@
                 });
             }
 
-            // Initialize Contribution Status Chart
+            // Contribution Status Chart
             const contributionStatusCtx = document.getElementById('ecosystemContributionStatusChart');
             if (contributionStatusCtx) {
-                const contributionStatus = analyticsData.contribution_status;
                 const labels = ['Ditawarkan', 'Diterima', 'Selesai', 'Ditolak'];
                 const data = [
-                    contributionStatus.offered || 0,
-                    contributionStatus.accepted || 0,
-                    contributionStatus.completed || 0,
-                    contributionStatus.declined || 0
+                    contributionStatus.offered,
+                    contributionStatus.accepted,
+                    contributionStatus.completed,
+                    contributionStatus.declined
                 ];
 
                 const colors = [
-                    'rgba(245, 158, 11, 0.8)',  // Yellow
-                    'rgba(34, 197, 94, 0.8)',   // Green
-                    'rgba(59, 130, 246, 0.8)',  // Blue
-                    'rgba(239, 68, 68, 0.8)'    // Red
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
                 ];
 
                 ecosystemContributionStatusChart = new Chart(contributionStatusCtx, {
@@ -1815,7 +2018,7 @@
                             label: 'Jumlah Kontribusi',
                             data: data,
                             backgroundColor: colors,
-                            borderColor: colors.map(color => color.replace('0.8', '1')),
+                            borderColor: colors.map(c => c.replace('0.8', '1')),
                             borderWidth: 2
                         }]
                     },
@@ -1850,115 +2053,113 @@
                 });
             }
 
-            // Initialize Member Status Chart
-            const memberStatusCtx = document.getElementById('ecosystemMemberStatusChart');
-            if (memberStatusCtx) {
-                const memberStatus = analyticsData.member_status;
-                const labels = ['Diterima', 'Menunggu', 'Ditolak'];
-                const data = [
-                    memberStatus.accepted || 0,
-                    memberStatus.pending || 0,
-                    memberStatus.rejected || 0
-                ];
+            // Member Status Chart
+            // const memberStatusCtx = document.getElementById('ecosystemMemberStatusChart');
+            // if (memberStatusCtx) {
+            //     const labels = ['Diterima', 'Menunggu', 'Ditolak'];
+            //     const data = [
+            //         memberStatus.accepted,
+            //         memberStatus.pending,
+            //         memberStatus.rejected
+            //     ];
 
-                const colors = [
-                    'rgba(34, 197, 94, 0.8)',  // Green
-                    'rgba(245, 158, 11, 0.8)', // Yellow
-                    'rgba(239, 68, 68, 0.8)'   // Red
-                ];
+            //     const colors = [
+            //         'rgba(34, 197, 94, 0.8)',
+            //         'rgba(245, 158, 11, 0.8)',
+            //         'rgba(239, 68, 68, 0.8)'
+            //     ];
 
-                ecosystemMemberStatusChart = new Chart(memberStatusCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: data,
-                            backgroundColor: colors,
-                            borderColor: colors.map(color => color.replace('0.8', '1')),
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: textColor,
-                                    padding: 20
-                                }
-                            }
-                        }
-                    }
-                });
-            }
+            //     ecosystemMemberStatusChart = new Chart(memberStatusCtx, {
+            //         type: 'doughnut',
+            //         data: {
+            //             labels: labels,
+            //             datasets: [{
+            //                 data: data,
+            //                 backgroundColor: colors,
+            //                 borderColor: colors.map(c => c.replace('0.8', '1')),
+            //                 borderWidth: 2
+            //             }]
+            //         },
+            //         options: {
+            //             responsive: true,
+            //             maintainAspectRatio: false,
+            //             plugins: {
+            //                 legend: {
+            //                     position: 'bottom',
+            //                     labels: {
+            //                         color: textColor,
+            //                         padding: 20
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
 
-            // Initialize Role Diversity Chart
-            const roleDiversityCtx = document.getElementById('ecosystemRoleDiversityChart');
-            if (roleDiversityCtx) {
-                const roleDiversity = analyticsData.role_diversity;
-                const labels = roleDiversity.role_distribution.map(role => role.name);
-                const data = roleDiversity.role_distribution.map(role => role.count);
+            // Role Diversity Chart
+            // const roleDiversityCtx = document.getElementById('ecosystemRoleDiversityChart');
+            // if (roleDiversityCtx) {
+            //     const labels = Object.keys(roleDiversity);
+            //     const data = Object.values(roleDiversity);
 
-                const colors = [
-                    'rgba(59, 130, 246, 0.8)',  // Blue
-                    'rgba(34, 197, 94, 0.8)',   // Green
-                    'rgba(168, 85, 247, 0.8)',  // Purple
-                    'rgba(245, 158, 11, 0.8)',  // Yellow
-                    'rgba(239, 68, 68, 0.8)',   // Red
-                    'rgba(156, 163, 175, 0.8)'  // Gray
-                ];
+            //     const colors = [
+            //         'rgba(59, 130, 246, 0.8)',
+            //         'rgba(34, 197, 94, 0.8)',
+            //         'rgba(168, 85, 247, 0.8)',
+            //         'rgba(245, 158, 11, 0.8)',
+            //         'rgba(239, 68, 68, 0.8)',
+            //         'rgba(156, 163, 175, 0.8)'
+            //     ];
 
-                ecosystemRoleDiversityChart = new Chart(roleDiversityCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Jumlah Anggota',
-                            data: data,
-                            backgroundColor: colors.slice(0, labels.length),
-                            borderColor: colors.slice(0, labels.length).map(color => color.replace('0.8', '1')),
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    color: textColor
-                                },
-                                grid: {
-                                    color: gridColor
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: textColor
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
-            }
+            //     ecosystemRoleDiversityChart = new Chart(roleDiversityCtx, {
+            //         type: 'bar',
+            //         data: {
+            //             labels: labels,
+            //             datasets: [{
+            //                 label: 'Jumlah Anggota',
+            //                 data: data,
+            //                 backgroundColor: colors.slice(0, labels.length),
+            //                 borderColor: colors.slice(0, labels.length).map(c => c.replace('0.8', '1')),
+            //                 borderWidth: 2
+            //             }]
+            //         },
+            //         options: {
+            //             responsive: true,
+            //             maintainAspectRatio: false,
+            //             plugins: {
+            //                 legend: {
+            //                     display: false
+            //                 }
+            //             },
+            //             scales: {
+            //                 y: {
+            //                     beginAtZero: true,
+            //                     ticks: {
+            //                         color: textColor
+            //                     },
+            //                     grid: {
+            //                         color: gridColor
+            //                     }
+            //                 },
+            //                 x: {
+            //                     ticks: {
+            //                         color: textColor
+            //                     },
+            //                     grid: {
+            //                         display: false
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
         }
 
         // Initialize contribution charts when overview tab is active
         function checkEcosystemContributionCharts() {
             const overviewTab = document.querySelector('button[wire\\:click="setActiveTab(\'overview\')"]');
             if (overviewTab && overviewTab.classList.contains('border-blue-500')) {
-                console.log('Overview tab is active, initializing contribution charts...');
+                // console.log('Overview tab is active, initializing contribution charts...');
                 setTimeout(initializeEcosystemContributionCharts, 200);
             }
         }
@@ -1970,14 +2171,14 @@
 
         // Listen for Livewire updates
         document.addEventListener('livewire:updated', function() {
-            console.log('Livewire updated, checking for contribution charts...');
+            // console.log('Livewire updated, checking for contribution charts...');
             setTimeout(checkEcosystemContributionCharts, 200);
         });
 
         // Listen for tab clicks
         document.addEventListener('click', function(e) {
             if (e.target && e.target.getAttribute('wire:click') === "setActiveTab('overview')") {
-                console.log('Overview tab clicked, initializing contribution charts...');
+                // console.log('Overview tab clicked, initializing contribution charts...');
                 setTimeout(initializeEcosystemContributionCharts, 300);
             }
         });
@@ -1989,5 +2190,7 @@
 
         // Initialize theme listener
         setupThemeListener();
+        const test = @json($acceptedContributions);
+        console.log(test)
     </script>
 @endpush
