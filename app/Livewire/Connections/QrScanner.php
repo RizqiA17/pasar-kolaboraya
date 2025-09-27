@@ -57,21 +57,18 @@ class QrScanner extends Component
             })
             ->with(['requester', 'receiver'])
             ->get();
-
-        if ($activeConnections->count() > 0) {
-            $this->successMessage = 'Anda memiliki ' . $activeConnections->count() . ' koneksi aktif.';
-        }
     }
 
     public function mount()
     {
         $this->generateMyQr();
         
+        $this->successMessage = '';
         // Set up auto-refresh for QR codes
         $this->dispatch('start-qr-refresh');
         
         // Check if there are any existing connections that need to be displayed
-        $this->checkExistingConnections();
+        // $this->checkExistingConnections();
     }
 
     public function render()
