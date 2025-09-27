@@ -13,14 +13,14 @@
             @if ($errorMessage)
                 <div
                     class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
-                    {{ $errorMessage }}
+                    {!! $errorMessage !!}
                 </div>
             @endif
 
             @if ($successMessage)
                 <div
                     class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
-                    {{ $successMessage }}
+                    {!! $successMessage !!}
                 </div>
             @endif
 
@@ -81,7 +81,7 @@
                             </div>
                         @else
                             <p class="text-xs sm:text-sm text-green-600 dark:text-green-400 mb-3 sm:mb-4">
-                                Anda berhasil terhubung dengan <strong>{{ $targetUser->name ?? 'user' }}</strong>!
+                                {!! $successMessage !!}
                             </p>
                             <div
                                 class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-3 sm:mb-4">
