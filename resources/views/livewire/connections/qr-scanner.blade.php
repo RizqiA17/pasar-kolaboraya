@@ -317,6 +317,10 @@
                     clearInterval(window.qrRefreshInterval);
                 }
             }
+
+            if(!document.hidden) {
+                startCamera();
+            }
         });
 
         document.addEventListener('livewire:navigating', () => {
