@@ -76,7 +76,8 @@
                                 class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-3 sm:mb-4">
                                 <p class="text-xs sm:text-sm text-yellow-700 dark:text-yellow-300">
                                     <span class="inline-block w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-                                    <strong>Tips:</strong> Jika QR code tidak terbaca, tekan tombol "Buat QR Baru" untuk membuat QR baru.
+                                    <strong>Tips:</strong> Jika QR code tidak terbaca, tekan tombol "Buat QR Baru" untuk
+                                    membuat QR baru.
                                 </p>
                             </div>
                         @else
@@ -88,7 +89,7 @@
                                 <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                                     <span
                                         class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
-                                    Sistem akan otomatis reset dalam beberapa detik...
+                                    Koneksi berhasil! Anda dapat membuat koneksi baru dengan menekan tombol "Buat QR Baru".
                                 </p>
                             </div>
                         @endif
@@ -134,28 +135,28 @@
                             </div>
                             <div class="space-y-3 sm:space-y-4 w-full hidden">
                         @else --}}
-                            <div class="space-y-3 sm:space-y-4 w-full">
-                                {{-- Manual Input --}}
-                                <div>
-                                    <label
-                                        class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Atau masukkan QR code secara manual:
-                                    </label>
-                                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full">
-                                        <input type="text" wire:model="scannedQrCode"
-                                            wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
-                                            class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
-                                        <button wire:click="processScannedQr"
-                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium whitespace-nowrap">
-                                            Scan
-                                        </button>
-                                    </div>
+                        <div class="space-y-3 sm:space-y-4 w-full">
+                            {{-- Manual Input --}}
+                            <div>
+                                <label
+                                    class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Atau masukkan QR code secara manual:
+                                </label>
+                                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full">
+                                    <input type="text" wire:model="scannedQrCode"
+                                        wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
+                                        class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
+                                    <button wire:click="processScannedQr"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium whitespace-nowrap">
+                                        Scan
+                                    </button>
                                 </div>
+                            </div>
 
-                                {{-- Camera Scanner --}}
-                                <div
-                                    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
-                                    {{-- <div wire:ignore id="openCam" class="text-center w-full">
+                            {{-- Camera Scanner --}}
+                            <div
+                                class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
+                                {{-- <div wire:ignore id="openCam" class="text-center w-full">
                                         <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📷</div>
                                         <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
                                             Gunakan kamera untuk scan QR code
@@ -165,16 +166,16 @@
                                             Buka Kamera
                                         </button>
                                     </div> --}}
-                                    <div wire:ignore id="closeCam" class="text-center w-full">
-                                        <div wire:ignore id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden">
-                                        </div>
-                                        {{-- <button wire:click="stopScanning"
+                                <div wire:ignore id="closeCam" class="text-center w-full">
+                                    <div wire:ignore id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden">
+                                    </div>
+                                    {{-- <button wire:click="stopScanning"
                                             class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
                                             Tutup Kamera
                                         </button> --}}
-                                    </div>
                                 </div>
                             </div>
+                        </div>
                         {{-- @endif --}}
                     </div>
                 </div>
@@ -215,9 +216,9 @@
         // Initialize Pusher for real-time connection notifications
         function initializePusher() {
             try {
-                if (typeof Pusher !== 'undefined' && '{{ config("broadcasting.default") }}' === 'pusher') {
-                    pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
-                        cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
+                if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
+                    pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                        cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
                         encrypted: true,
                         authEndpoint: '/broadcasting/auth',
                         auth: {
@@ -234,10 +235,10 @@
                     // Listen for connection success events
                     connectionChannel.bind('connection.success', function(data) {
                         console.log('Connection success received:', data);
-                        
+
                         // Show success notification
                         showConnectionSuccessNotification(data);
-                        
+
                         // Auto-reset to idle after 5 seconds
                         scheduleAutoIdle();
                     });
@@ -256,8 +257,10 @@
             // Update Livewire component state
             @this.set('connectionStatus', 'connected');
             @this.set('successMessage', data.message);
-            @this.set('targetUser', { name: data.user2.name });
-            
+            @this.set('targetUser', {
+                name: data.user2.name
+            });
+
             // Show browser notification if permission granted
             if (Notification.permission === 'granted') {
                 new Notification('Koneksi Berhasil!', {
@@ -273,7 +276,7 @@
             if (autoIdleTimeout) {
                 clearTimeout(autoIdleTimeout);
             }
-            
+
             // Set new timeout for 5 seconds
             autoIdleTimeout = setTimeout(() => {
                 console.log('Auto-resetting to idle state');
@@ -290,10 +293,48 @@
             }
         }
 
+        function startConnectionPolling() {
+            // kalau sudah ada polling jalan, hentikan dulu
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+            }
+
+            // jalankan polling tiap 3 detik
+            window.connectionPollingInterval = setInterval(() => {
+                console.log('Polling for connection status...');
+                Livewire.dispatch('check-connection');
+            }, 3000);
+
+            console.log('✅ Polling started...');
+        }
+
+        // Tangkap event dari backend kalau sudah connected
+        Livewire.on('connected', () => {
+            console.log('🎉 Koneksi berhasil!');
+
+            // stop polling setelah sukses
+            if (window.connectionPollingInterval) {
+                clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
+            }
+
+            // tampilkan notifikasi browser
+            if (Notification.permission === 'granted') {
+                new Notification('Koneksi Berhasil!', {
+                    body: 'Anda sudah terhubung.',
+                    icon: '/favicon.ico'
+                });
+            }
+        });
+
+        Livewire.on('start-connection-polling', () => {
+            startConnectionPolling();
+        });
+        
         document.addEventListener('livewire:navigated', () => {
             // Initialize Pusher
             initializePusher();
-            
+
             // Request notification permission
             requestNotificationPermission();
             // Livewire.on('start-camera', () => {
@@ -306,6 +347,7 @@
 
             // Auto-start camera when page loads
             setTimeout(() => {
+                console.log('Auto-starting camera...');
                 startCamera();
             }, 1000);
         });
@@ -413,7 +455,7 @@
                 }
             }
 
-            if(!document.hidden) {
+            if (!document.hidden) {
                 startCamera();
             }
         });
@@ -444,7 +486,7 @@
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
             }
-            
+
             // Start new polling
             window.connectionPollingInterval = setInterval(() => {
                 @this.call('checkConnectionStatus', data);
@@ -462,6 +504,7 @@
 
         // Handle schedule auto-idle event
         Livewire.on('schedule-auto-idle', () => {
+            console.log('Scheduling auto-idle...');
             scheduleAutoIdle();
         });
 
@@ -471,10 +514,10 @@
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
             }
-            
+
             window.qrRefreshInterval = setInterval(() => {
                 @this.call('refreshQr');
-            }, 50000); // Refresh every 50 seconds
+            }, 275000); // Refresh every 5 minutes
         });
 
         // Clean up intervals when component is destroyed
