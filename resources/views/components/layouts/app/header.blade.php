@@ -1079,58 +1079,84 @@
     </script>
 
     <script>
-        async function refreshCsrfToken() {
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute('content');
+        // async function refreshCsrfToken() {
+        //     const csrfToken = document
+        //         .querySelector('meta[name="csrf-token"]')
+        //         .getAttribute('content');
 
-            try {
-                const response = await fetch('/csrf-token-refresh', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        action: 'refresh'
-                    })
-                });
+        //     try {
+        //         const response = await fetch('/csrf-token-refresh', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-CSRF-TOKEN': csrfToken
+        //             },
+        //             body: JSON.stringify({
+        //                 action: 'refresh'
+        //             })
+        //         });
 
-                if (!response.ok) {
-                    throw new Error(`Gagal refresh CSRF: ${response.statusText}`);
-                }
+        //         if (!response.ok) {
+        //             throw new Error(`Gagal refresh CSRF: ${response.statusText}`);
+        //         }
 
-                const result = await response.json();
+        //         const result = await response.json();
 
-                // update <meta> csrf token
-                document
-                    .querySelector('meta[name="csrf-token"]')
-                    .setAttribute('content', result.token);
+        //         // update <meta> csrf token
+        //         document
+        //             .querySelector('meta[name="csrf-token"]')
+        //             .setAttribute('content', result.token);
 
-                // update Livewire internal token
-                if (window.Livewire) {
-                    window.Livewire.csrfToken = result.token;
-                }
+        //         // update Livewire internal token
+        //         if (window.Livewire) {
+        //             window.Livewire.csrfToken = result.token;
+        //         }
 
-                // update default AJAX headers (jaga2 kalau pakai axios/jQuery)
-                if (window.axios) {
-                    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = result.token;
-                }
-                if (window.jQuery) {
-                    window.jQuery.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': result.token
-                        }
-                    });
-                }
+        //         // update default AJAX headers
+        //         if (window.axios) {
+        //             window.axios.defaults.headers.common['X-CSRF-TOKEN'] = result.token;
+        //         }
+        //         if (window.jQuery) {
+        //             window.jQuery.ajaxSetup({
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': result.token
+        //                 }
+        //             });
+        //         }
 
-                console.log('CSRF token diperbarui:', result.token);
-            } catch (error) {
-                console.error('Kesalahan saat refresh CSRF:', error.message);
-            }
-        }
+        //         // === Hitung jadwal refresh berdasarkan session_expired_at ===
+        //         const clientTimeMs = Date.now();
 
-        setInterval(refreshCsrfToken, 500000);
+        //         if (result.session_expired_at) {
+        //             const expiredAtMs = result.session_expired_at * 1000;
+        //             let delayMs = expiredAtMs - clientTimeMs - (60 * 1000); // 1 menit sebelum expired
+
+        //             if (delayMs < 5000) delayMs = 5000; // minimal 5 detik supaya aman
+
+        //             console.log({
+        //                 serverTime: new Date(result.timestamp * 1000).toISOString(),
+        //                 clientTime: new Date(clientTimeMs).toISOString(),
+        //                 nextRefreshAt: new Date(clientTimeMs + delayMs).toISOString(),
+        //                 Token: result.token,
+        //                 previousToken: result.previous_token,
+        //                 sessionExpiredAt: new Date(expiredAtMs).toISOString(),
+        //                 delaySeconds: Math.round(delayMs / 1000)
+        //             });
+
+        //             setTimeout(refreshCsrfToken, delayMs);
+        //         } else {
+        //             console.warn("⚠️ session_expired_at tidak ada di response, fallback 10 menit");
+        //             setTimeout(refreshCsrfToken, 10 * 60 * 1000);
+        //         }
+
+        //     } catch (error) {
+        //         console.error("Kesalahan saat refresh CSRF:", error.message);
+        //         setTimeout(refreshCsrfToken, 60000); // retry setelah 1 menit
+        //     }
+        // }
+
+        // mulai pertama kali
+        // refreshCsrfToken();
 
         document.addEventListener('livewire:init', () => {
             Livewire.hook('request', ({
@@ -1142,7 +1168,7 @@
                 }) => {
                     if (status === 419) {
                         alert('Maaf, coba lagi')
-                        
+
                         preventDefault()
                     }
                 })

@@ -46,12 +46,15 @@ if (app()->environment('local', 'development')) {
 Route::post('/csrf-token-refresh', function () {
     if (Auth::check()) {
         // Regenerate CSRF token
+        session()->put('_previous_token', csrf_token());
         session()->regenerateToken();
         session()->put('_token_created_at', time());
 
         return response()->json([
             'token' => csrf_token(),
-            'timestamp' => time()
+            'timestamp' => time(),
+            'session_expired_at' => time() + (config('session.lifetime') * 60),
+            'previous_token' => session()->get('_previous_token'),
         ]);
     }
 

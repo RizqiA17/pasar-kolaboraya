@@ -446,15 +446,6 @@
             if (document.hidden && isScanning) {
                 stopCamera();
             }
-            // Clear intervals when page is hidden
-            if (document.hidden) {
-                if (window.connectionPollingInterval) {
-                    clearInterval(window.connectionPollingInterval);
-                }
-                if (window.qrRefreshInterval) {
-                    clearInterval(window.qrRefreshInterval);
-                }
-            }
 
             if (!document.hidden) {
                 startCamera();
@@ -517,8 +508,21 @@
             }
 
             window.qrRefreshInterval = setInterval(() => {
+                console.log('refresh Qr')
                 @this.call('refreshQr');
-            }, 275000); // Refresh every 5 minutes
+            }, 4.5 * 60 * 1000); // Refresh every 5 minutes
+        });
+
+        Livewire.on('reset-interval-qr-refresh', () => {
+            // Reset QR refresh interval
+            if (window.qrRefreshInterval) {
+                clearInterval(window.qrRefreshInterval);
+            }
+
+            window.qrRefreshInterval = setInterval(() => {
+                console.log('refresh Qr')
+                @this.call('refreshQr');
+            }, 4.5 * 60 * 1000); // Refresh every 5 minutes
         });
 
         // Clean up intervals when component is destroyed

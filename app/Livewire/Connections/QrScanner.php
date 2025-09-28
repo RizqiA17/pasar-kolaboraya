@@ -370,6 +370,7 @@ class QrScanner extends Component
             // Jika idle atau connected, generate QR baru biasa
             $this->generateMyQr();
         }
+        $this->dispatch('reset-interval-qr-refresh');
     }
 
     private function generateResponseQr()

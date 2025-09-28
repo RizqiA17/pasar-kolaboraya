@@ -28,9 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // Apply CSRF refresh middleware to web routes
         $middleware->web(append: [
-            \App\Http\Middleware\RefreshCsrfToken::class,
-            \App\Http\Middleware\SessionRefresh::class,
-            \App\Http\Middleware\CsrfTokenManager::class,
+            // \App\Http\Middleware\RefreshCsrfToken::class,
+            // \App\Http\Middleware\SessionRefresh::class,
+            // \App\Http\Middleware\CsrfTokenManager::class,
         ]);
         
         // Note: CheckUserApproval middleware is applied per-route, not globally
