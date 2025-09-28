@@ -89,7 +89,8 @@
                                 <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                                     <span
                                         class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
-                                    Koneksi berhasil! Anda dapat membuat koneksi baru dengan menekan tombol "Buat QR Baru".
+                                    Koneksi berhasil! Anda dapat membuat koneksi baru dengan menekan tombol "Buat QR
+                                    Baru".
                                 </p>
                             </div>
                         @endif
@@ -330,7 +331,7 @@
         Livewire.on('start-connection-polling', () => {
             startConnectionPolling();
         });
-        
+
         document.addEventListener('livewire:navigated', () => {
             // Initialize Pusher
             initializePusher();
@@ -543,6 +544,18 @@
             // Re-initialize QR refresh if needed
             if (!window.qrRefreshInterval) {
                 @this.call('refreshQr');
+            }
+        });
+
+        // Nonaktifkan alert/confirmation reload Livewire saat 419
+        Livewire.hook('message.failed', (message, component, response) => {
+            if (response.status === 419) {
+                console.warn('CSRF expired detected, suppressing Livewire default alert');
+
+                // Opsional: refresh token otomatis di background
+                // refreshCsrfToken(); 
+
+                return false; // <== penting, mencegah Livewire default alert/confirmation
             }
         });
     </script>

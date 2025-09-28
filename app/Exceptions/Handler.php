@@ -2,12 +2,13 @@
 
 namespace App\Exceptions;
 
+use Throwable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -33,6 +34,14 @@ class Handler extends ExceptionHandler
 
         // Handle CSRF token mismatch
         $this->renderable(function (TokenMismatchException $e, $request) {
+            Log::info('TokenMismatchException caught', [
+                'url' => $request->url(),
+                'livewire' => $request->header('X-Livewire')
+            ]);
+            if ($request->header('X-Livewire')) {
+                // Livewire request → kembalikan response JSON tanpa trigger alert
+                return response()->json(['message' => 'CSRF expired'], 419);
+            }
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => 'CSRF token mismatch. Please refresh the page and try again.',
@@ -80,11 +89,11 @@ class Handler extends ExceptionHandler
             }
 
             $statusCode = $e->getStatusCode();
-            
+
             if ($statusCode === 404) {
                 return response()->view('errors.404', [], 404);
             }
-            
+
             if ($statusCode >= 500) {
                 return response()->view('errors.500', [], 500);
             }

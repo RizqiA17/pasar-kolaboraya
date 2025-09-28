@@ -23,7 +23,7 @@ class RefreshCsrfToken
             // Check if token is about to expire (older than 30 minutes instead of 1 hour)
             $tokenAge = time() - Session::get('_token_created_at', 0);
             
-            if ($tokenAge > 1800) { // 30 minutes in seconds
+            if ($tokenAge > 500) { // 30 minutes in seconds
                 try {
                     // Regenerate CSRF token
                     Session::regenerateToken();

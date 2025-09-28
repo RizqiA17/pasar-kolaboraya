@@ -131,13 +131,16 @@
             @endif --}}
 
             <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
-            @if (($ecosystemsEnabled  || $isEcosystemBuilder) && $hasActiveMarketSession && ($user->canAccessEcosystem()|| $isSuperAdmin))
-            {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
+            @if (
+                ($ecosystemsEnabled || $isEcosystemBuilder) &&
+                    $hasActiveMarketSession &&
+                    ($user->canAccessEcosystem() || $isSuperAdmin))
+                {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
                 <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')"
                     :current="request()->routeIs('ecosystem.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-green-600 dark:text-slate-200 dark:hover:text-green-400 transition-all duration-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl mx-1"
                     wire:navigate>
-                    <span class="relative z-10">{{  __('Kolaborasi') }}</span>
+                    <span class="relative z-10">{{ __('Kolaborasi') }}</span>
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
@@ -159,7 +162,9 @@
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
                             @elseif($user->canOnlyConnect())
-                                Fitur ekosistem tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur ekosistem.
+                                Fitur ekosistem tidak tersedia untuk user tipe
+                                {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur
+                                ekosistem.
                             @else
                                 Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat
                                 mengakses.
@@ -173,7 +178,7 @@
             @endif
 
             <!-- Aksi Kolektif (follows user actions setting) -->
-            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin && $user->canAccessEcosystem())
+            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || ($isSuperAdmin && $user->canAccessEcosystem()))
                 <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')"
                     :current="request()->routeIs('collective-action.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
@@ -200,7 +205,9 @@
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
                             @elseif($user->canOnlyConnect())
-                                Fitur aksi kolektif tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur aksi kolektif.
+                                Fitur aksi kolektif tidak tersedia untuk user tipe
+                                {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur
+                                aksi kolektif.
                             @else
                                 Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.
                             @endif
@@ -213,7 +220,8 @@
             @endif
 
             <!-- Peta Ekosistem (Public Access) -->
-            <flux:navbar.item icon="map" :href="route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id"
+            <flux:navbar.item icon="map"
+                :href="route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id"
                 :current="request()->routeIs('public.ecosystem.mapping')"
                 class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
                 wire:navigate>
@@ -233,7 +241,8 @@
             <x-dark-mode-toggle class="relative z-10" />
 
             <!-- Modern Notification System -->
-            <x-flux::dropdown align="right" width="128" class="relative z-10" x-data="notificationDropdown()" @open="refreshNotifications()">
+            <x-flux::dropdown align="right" width="128" class="relative z-10" x-data="notificationDropdown()"
+                @open="refreshNotifications()">
                 <flux:button icon="bell"
                     class="group relative m-auto text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 bg-white/60 hover:bg-white/80 dark:bg-slate-800/60 dark:hover:bg-slate-800/80 backdrop-blur-sm rounded-full size-10 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 dark:border-slate-700/50">
                 </flux:button>
@@ -246,65 +255,76 @@
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Notifikasi</h3>
                             <div class="flex items-center space-x-2">
-                                <button @click="refreshNotifications()" 
-                                        class="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-                                        title="Refresh notifikasi">
+                                <button @click="refreshNotifications()"
+                                    class="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                                    title="Refresh notifikasi">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                        </path>
                                     </svg>
                                 </button>
-                                <span x-show="unreadCount > 0" 
-                                      class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
+                                <span x-show="unreadCount > 0"
+                                    class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
                                     <span x-text="unreadCount"></span> baru
                                 </span>
-                                <a href="{{ route('notifications.index') }}" 
-                                   class="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+                                <a href="{{ route('notifications.index') }}"
+                                    class="text-xs text-blue-600 dark:text-blue-400 hover:underline">
                                     Lihat semua
                                 </a>
                             </div>
                         </div>
-                        
+
                         <!-- Loading state -->
                         <div x-show="loading" class="text-center py-4">
-                            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600">
+                            </div>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Memuat notifikasi...</p>
                         </div>
-                        
+
                         <!-- Notifications list -->
                         <div x-show="!loading" class="space-y-3 max-h-96 overflow-y-auto">
                             <template x-for="notification in notifications" :key="notification.id">
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                                     :class="{ 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500': !notification.is_read }">
+                                    :class="{
+                                        'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500': !notification
+                                            .is_read
+                                    }">
                                     <div class="flex items-start justify-between">
                                         <div class="flex-1">
                                             <div class="flex items-center space-x-2">
-                                                <div x-show="!notification.is_read" class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                                <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="notification.title || 'Notifikasi'"></h4>
+                                                <div x-show="!notification.is_read"
+                                                    class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100"
+                                                    x-text="notification.title || 'Notifikasi'"></h4>
                                             </div>
-                                            <p class="mt-1 text-xs text-gray-600 dark:text-gray-400" x-text="notification.message"></p>
-                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-500" x-text="notification.time_ago"></p>
+                                            <p class="mt-1 text-xs text-gray-600 dark:text-gray-400"
+                                                x-text="notification.message"></p>
+                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-500"
+                                                x-text="notification.time_ago"></p>
                                         </div>
                                         <div class="flex items-center space-x-1 ml-2">
-                                            <button x-show="notification.redirect_url" 
-                                                    @click="viewNotification(notification.id)"
-                                                    class="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
+                                            <button x-show="notification.redirect_url"
+                                                @click="viewNotification(notification.id)"
+                                                class="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
                                                 Lihat
                                             </button>
-                                            <button x-show="!notification.is_read" 
-                                                    @click="markAsRead(notification.id)"
-                                                    class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                                            <button x-show="!notification.is_read"
+                                                @click="markAsRead(notification.id)"
+                                                class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
                                                 ✓
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </template>
-                            
+
                             <!-- Empty state -->
                             <div x-show="notifications.length === 0" class="text-center py-8">
                                 <div class="w-12 h-12 mx-auto text-gray-400 mb-2">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 0 0-15 0v5h5l-5 5-5-5h5v-5a7.5 7.5 0 0 1 15 0v5z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 0 0-15 0v5h5l-5 5-5-5h5v-5a7.5 7.5 0 0 1 15 0v5z" />
                                     </svg>
                                 </div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</p>
@@ -349,22 +369,25 @@
                             </div>
                         </div>
                     </flux:menu.radio.group>
-                    
+
                     <div class="flex items-center gap-3 px-4 py-3">
-                    @if($user->is_ecosystem_builder)
-                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
-                        Ekosistem Builder
-                    </span>
-                @elseif($user->assigned_role)
-                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
-                        {{ $user->assigned_role }}
-                    </span>
-                @else
-                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
-                        Belum Dipilih
-                    </span>
-                @endif
-                </div>
+                        @if ($user->is_ecosystem_builder)
+                            <span
+                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                Ekosistem Builder
+                            </span>
+                        @elseif($user->assigned_role)
+                            <span
+                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
+                                {{ $user->assigned_role }}
+                            </span>
+                        @else
+                            <span
+                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                                Belum Dipilih
+                            </span>
+                        @endif
+                    </div>
 
                     <!-- Active Session Information -->
                     @if (auth()->user()->hasActivePasarKolaboraya())
@@ -698,7 +721,10 @@
                 @endif --}}
 
                 <!-- Ekosistem -->
-                @if (($ecosystemsEnabled || $isEcosystemBuilder) && $hasActiveMarketSession && ($user->canAccessEcosystem() || $isSuperAdmin))
+                @if (
+                    ($ecosystemsEnabled || $isEcosystemBuilder) &&
+                        $hasActiveMarketSession &&
+                        ($user->canAccessEcosystem() || $isSuperAdmin))
                     <a href="{{ route('ecosystem.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
                         wire:navigate>
@@ -709,7 +735,7 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{__('Kolaborasi') }}</span>
+                        <span class="text-xs font-medium">{{ __('Kolaborasi') }}</span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
@@ -736,7 +762,8 @@
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
                                 @elseif($user->canOnlyConnect())
-                                    Fitur ekosistem tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}
+                                    Fitur ekosistem tidak tersedia untuk user tipe
+                                    {{ $user->getUserTypeLabelAttribute() }}
                                 @else
                                     Fitur ekosistem dinonaktifkan untuk user biasa
                                 @endif
@@ -749,7 +776,7 @@
                 @endif
 
                 <!-- Aksi Kolektif -->
-                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || $isSuperAdmin && $user->canAccessEcosystem())
+                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || ($isSuperAdmin && $user->canAccessEcosystem()))
                     <a href="{{ route('collective-action.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
                         wire:navigate>
@@ -787,7 +814,8 @@
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
                                 @elseif($user->canOnlyConnect())
-                                    Fitur aksi kolektif tidak tersedia untuk user tipe {{ $user->getUserTypeLabelAttribute() }}
+                                    Fitur aksi kolektif tidak tersedia untuk user tipe
+                                    {{ $user->getUserTypeLabelAttribute() }}
                                 @else
                                     Fitur aksi kolektif dinonaktifkan
                                 @endif
@@ -800,7 +828,7 @@
                 @endif
 
                 <!-- Peta Ekosistem (Public Access) -->
-                <a href="{{ route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id }}"
+                <a href="{{ route('public.ecosystem.mapping') . '?pasar_id=' . auth()->user()->active_pasar_kolaboraya_id }}"
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.mapping') ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 hover:bg-cyan-500/10' }}"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
@@ -922,16 +950,16 @@
                 notifications: [],
                 unreadCount: 0,
                 loading: true,
-                
+
                 init() {
                     this.loadNotifications();
                     this.setupPusher();
-                    
+
                     // Refresh notifications every 5 seconds for real-time updates
                     setInterval(() => {
                         this.loadNotifications();
                     }, 5000);
-                    
+
                     // Also refresh when page becomes visible (user switches tabs)
                     document.addEventListener('visibilitychange', () => {
                         if (!document.hidden) {
@@ -939,7 +967,7 @@
                         }
                     });
                 },
-                
+
                 async loadNotifications() {
                     try {
                         const response = await fetch('/notifications/recent');
@@ -952,13 +980,13 @@
                         this.loading = false;
                     }
                 },
-                
+
                 // Method to manually refresh notifications
                 refreshNotifications() {
                     this.loading = true;
                     this.loadNotifications();
                 },
-                
+
                 async loadUnreadCount() {
                     try {
                         const response = await fetch('/notifications/unread-count');
@@ -968,21 +996,22 @@
                         console.error('Error loading unread count:', error);
                     }
                 },
-                
+
                 updateUnreadCount() {
                     this.unreadCount = this.notifications.filter(n => !n.is_read).length;
                 },
-                
+
                 async markAsRead(notificationId) {
                     try {
                         const response = await fetch(`/notifications/${notificationId}/mark-read`, {
                             method: 'POST',
                             headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    'content'),
                                 'Content-Type': 'application/json',
                             },
                         });
-                        
+
                         if (response.ok) {
                             // Update local state
                             const notification = this.notifications.find(n => n.id === notificationId);
@@ -995,26 +1024,26 @@
                         console.error('Error marking notification as read:', error);
                     }
                 },
-                
+
                 viewNotification(notificationId) {
                     window.location.href = `/notifications/${notificationId}`;
                 },
-                
+
                 setupPusher() {
                     // Try to setup Pusher for real-time updates
                     try {
-                        if (typeof Pusher !== 'undefined' && '{{ config("broadcasting.default") }}' === 'pusher') {
-                            const pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
-                                cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
+                        if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
+                            const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                                cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
                                 encrypted: true
                             });
-                            
+
                             const channel = pusher.subscribe('notifications.{{ auth()->id() }}');
-                            
+
                             channel.bind('notification.created', (data) => {
                                 this.notifications.unshift(data.notification);
                                 this.updateUnreadCount();
-                                
+
                                 // Show browser notification if permission is granted
                                 if (Notification.permission === 'granted') {
                                     new Notification(data.notification.title || 'Notifikasi Baru', {
@@ -1023,7 +1052,7 @@
                                     });
                                 }
                             });
-                            
+
                             channel.bind('notification.updated', (data) => {
                                 const index = this.notifications.findIndex(n => n.id === data.notification.id);
                                 if (index !== -1) {
@@ -1031,7 +1060,7 @@
                                     this.updateUnreadCount();
                                 }
                             });
-                            
+
                             console.log('Pusher connected for real-time notifications');
                         } else {
                             console.log('Pusher not available, using polling fallback');
@@ -1042,11 +1071,83 @@
                 }
             }
         }
-        
+
         // Request notification permission
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
+    </script>
+
+    <script>
+        async function refreshCsrfToken() {
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute('content');
+
+            try {
+                const response = await fetch('/csrf-token-refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        action: 'refresh'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Gagal refresh CSRF: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                // update <meta> csrf token
+                document
+                    .querySelector('meta[name="csrf-token"]')
+                    .setAttribute('content', result.token);
+
+                // update Livewire internal token
+                if (window.Livewire) {
+                    window.Livewire.csrfToken = result.token;
+                }
+
+                // update default AJAX headers (jaga2 kalau pakai axios/jQuery)
+                if (window.axios) {
+                    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = result.token;
+                }
+                if (window.jQuery) {
+                    window.jQuery.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': result.token
+                        }
+                    });
+                }
+
+                console.log('CSRF token diperbarui:', result.token);
+            } catch (error) {
+                console.error('Kesalahan saat refresh CSRF:', error.message);
+            }
+        }
+
+        setInterval(refreshCsrfToken, 500000);
+
+        document.addEventListener('livewire:init', () => {
+            Livewire.hook('request', ({
+                fail
+            }) => {
+                fail(({
+                    status,
+                    preventDefault
+                }) => {
+                    if (status === 419) {
+                        alert('Maaf, coba lagi')
+                        
+                        preventDefault()
+                    }
+                })
+            })
+        })
     </script>
 
     {{-- Stack for additional styles and scripts --}}

@@ -47,7 +47,7 @@ class CsrfTokenManager
             $tokenAge = $currentTime - Session::get('_token_created_at', 0);
             
             // Refresh token if it's older than 20 minutes
-            if ($tokenAge > 1200) { // 20 minutes
+            if ($tokenAge > 500) { // 20 minutes
                 $oldToken = Session::token();
                 
                 // Regenerate token

@@ -30,7 +30,7 @@ class SessionRefresh
                 
                 // Also refresh CSRF token if needed
                 $tokenAge = $currentTime - Session::get('_token_created_at', 0);
-                if ($tokenAge > 1800) { // 30 minutes
+                if ($tokenAge > 500) { // 30 minutes
                     Session::regenerateToken();
                     Session::put('_token_created_at', $currentTime);
                 }
