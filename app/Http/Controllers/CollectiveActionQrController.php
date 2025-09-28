@@ -18,8 +18,8 @@ class CollectiveActionQrController extends Controller
     public function generateQr(CollectiveAction $collectiveAction)
     {
         // Check if user is the creator of the collective action
-        if (Auth::id() !== $collectiveAction->created_by) {
-            abort(403, 'Hanya pembuat aksi kolektif yang dapat membuat QR code');
+        if (!$collectiveAction->canUserManage(Auth::user())) {
+            abort(404);
         }
 
         // Generate static QR code URL - redirect directly to join form
@@ -44,8 +44,8 @@ class CollectiveActionQrController extends Controller
     public function showQr(CollectiveAction $collectiveAction)
     {
         // Check if user is the creator of the collective action
-        if (Auth::id() !== $collectiveAction->created_by) {
-            abort(403, 'Hanya pembuat aksi kolektif yang dapat melihat QR code');
+        if (!$collectiveAction->canUserManage(Auth::user())) {
+            abort(404);
         }
 
         if($collectiveAction->qr_code == ''){

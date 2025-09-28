@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PasarKolaboraya;
+use App\Models\PasarKolaborayaUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,20 +18,20 @@ class QrCodeController extends Controller
     public function generate()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
-        
+
         // Generate new QR code
         // $newQrCode = $user->generateQrCode();
         $qrCodeData = $user->getQrCodeData();
-        
+
         // Generate QR code as SVG
         $qrCodeSvg = QrCode::size(300)
             ->format('svg')
             ->generate($qrCodeData['qr_code']);
-        
+
         return response()->json([
             'success' => true,
             'qr_code' => $qrCodeData['qr_code'],
@@ -41,7 +43,7 @@ class QrCodeController extends Controller
             'message' => 'QR code berhasil di-generate ulang'
         ]);
     }
-    
+
     /**
      * Display QR code page for user
      */
@@ -49,15 +51,15 @@ class QrCodeController extends Controller
     {
         $user = Auth::user();
         $qrCodeData = $user->getQrCodeData();
-        
+
         // Generate QR code SVG server-side
         $qrCodeSvg = QrCode::size(256)
             ->format('svg')
             ->generate($qrCodeData['qr_code']);
-        
+
         return view('qr-code.show', compact('qrCodeData', 'qrCodeSvg'));
     }
-    
+
     /**
      * Validate QR code (for admin scanner)
      */
@@ -66,19 +68,19 @@ class QrCodeController extends Controller
         $request->validate([
             'qr_code' => 'required|string'
         ]);
-        
+
         $qrCode = $request->qr_code;
-        
+
         // Find user by QR code
         $user = User::where('qr_code', $qrCode)->first();
-        
+
         if (!$user) {
             return response()->json([
                 'valid' => false,
                 'message' => 'QR code tidak valid atau tidak ditemukan'
             ], 404);
         }
-        
+
         // Check if QR code is still valid (not expired)
         if (!$user->isQrCodeValid()) {
             return response()->json([
@@ -86,7 +88,7 @@ class QrCodeController extends Controller
                 'message' => 'QR code sudah expired. Silakan generate ulang.'
             ], 410);
         }
-        
+
         return response()->json([
             'valid' => true,
             'user' => [
@@ -99,7 +101,51 @@ class QrCodeController extends Controller
             'message' => 'QR code valid. User dapat masuk ke Pasar Kolaboraya.'
         ]);
     }
-    
+
+    public function checkStatus()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        $pasar = PasarKolaborayaUser::join('pasar_kolaborayas as pk', 'pk.id', '=', 'pasar_kolaboraya_users.pasar_kolaboraya_id')
+            ->where('pasar_kolaboraya_users.user_id', $user->id)
+            ->where('pasar_kolaboraya_users.joined_at', '>', now()->subMinutes(5))
+            ->select('pk.id as pasar_kolaboraya_id', 'pk.name as pasar_kolaboraya_name')
+            ->first();
+
+        return response()->json([
+            'success' => true,
+            'pasar_kolaboraya_name' => $pasar?->pasar_kolaboraya_name,
+            'pasar_kolaboraya_id' => $pasar?->pasar_kolaboraya_id,
+            'user_id' => $user->id,
+        ]);
+
+
+    }
+
+    public function setPasar(Request $request)
+    {
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        if (PasarKolaborayaUser::where('pasar_kolaboraya_id', $request['pasar'])->where('user_id', $userId)->exists()) {
+            User::where('id', $userId)->update(['active_pasar_kolaboraya_id' => $request['pasar']]);
+            return response()->json([
+                'redirect' => route('dashboard')
+            ]);
+        }
+
+        return response()->json(['message' => 'pasar tidak ditemukan'], 404);
+
+
+    }
+
     /**
      * Grant access to Pasar Kolaboraya after QR validation
      */
@@ -109,38 +155,38 @@ class QrCodeController extends Controller
             'qr_code' => 'required|string',
             'pasar_kolaboraya_id' => 'required|exists:pasar_kolaborayas,id'
         ]);
-        
+
         $qrCode = $request->qr_code;
         $pasarKolaborayaId = $request->pasar_kolaboraya_id;
-        
+
         // Find user by QR code
         $user = User::where('qr_code', $qrCode)->first();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'QR code tidak valid atau tidak ditemukan'
             ], 404);
         }
-        
+
         // Check if QR code is still valid
         if (!$user->isQrCodeValid()) {
             return response()->json([
                 'success' => false,
                 'message' => 'QR code sudah expired. Silakan generate ulang.'
-            ], 410);
+            ], status: 410);
         }
-        
+
         // Find Pasar Kolaboraya
         $pasarKolaboraya = \App\Models\PasarKolaboraya::find($pasarKolaborayaId);
-        
+
         if (!$pasarKolaboraya) {
             return response()->json([
                 'success' => false,
                 'message' => 'Pasar Kolaboraya tidak ditemukan'
             ], 404);
         }
-        
+
         // Check if Pasar Kolaboraya is active
         if ($pasarKolaboraya->status !== 'active') {
             return response()->json([
@@ -148,10 +194,10 @@ class QrCodeController extends Controller
                 'message' => 'Pasar Kolaboraya tidak aktif'
             ], 400);
         }
-        
+
         // Check if user is already a member of this Pasar Kolaboraya
         $existingMembership = $pasarKolaboraya->users()->where('user_id', $user->id)->first();
-        
+
         if ($existingMembership) {
             if ($existingMembership->pivot->status === 'accepted') {
                 return response()->json([
@@ -177,10 +223,10 @@ class QrCodeController extends Controller
                 'responded_at' => now(),
             ]);
         }
-        
+
         // Set as active Pasar Kolaboraya for user
         $user->setActivePasarKolaboraya($pasarKolaboraya);
-        
+
         // Log the access grant
         Log::info('QR Code Access Granted', [
             'user_id' => $user->id,
@@ -192,7 +238,7 @@ class QrCodeController extends Controller
             'granted_by' => Auth::user()->name ?? 'System',
             'granted_at' => now(),
         ]);
-        
+
         return response()->json([
             'success' => true,
             'user' => [

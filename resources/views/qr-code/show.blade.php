@@ -118,18 +118,20 @@
 
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
-        // Initialize Pusher (with fallback to polling)
+        // ==========================
+        // Pusher Initialization (with fallback to polling)
+        // ==========================
         let pusher = null;
         let channel = null;
         let pollingInterval = null;
+
         const userId = {{ auth()->id() }};
 
-        // Try to initialize Pusher
         try {
             const pusherKey = '{{ config('broadcasting.connections.pusher.key') }}';
             const pusherCluster = '{{ config('broadcasting.connections.pusher.options.cluster') }}';
 
-            if (pusherKey && pusherKey !== '' && pusherCluster && pusherCluster !== '') {
+            if (pusherKey && pusherCluster) {
                 pusher = new Pusher(pusherKey, {
                     cluster: pusherCluster,
                     encrypted: true,
@@ -142,7 +144,7 @@
                     }
                 });
 
-                // Subscribe to user's private channel
+                // Subscribe private channel
                 channel = pusher.subscribe('private-user.' + userId);
                 console.log('Pusher initialized successfully');
             } else {
@@ -151,22 +153,27 @@
             }
         } catch (error) {
             console.error('Pusher initialization failed:', error);
-            console.log('Falling back to polling');
             startPolling();
         }
 
-        // Function to handle QR scan success
+        // ==========================
+        // Handle QR Scan Success
+        // ==========================
         function handleQrScanSuccess(data) {
             console.log('QR Code successfully scanned by admin:', data);
 
-            // Show success notification
+            // Success notification
             const successDiv = document.createElement('div');
             successDiv.className =
                 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
             successDiv.innerHTML = `
         <div class="flex items-center space-x-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" 
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 
+                       7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 
+                       001.414 0l4-4z" clip-rule="evenodd">
+                </path>
             </svg>
             <div>
                 <p class="font-semibold">Berhasil bergabung!</p>
@@ -176,70 +183,41 @@
     `;
             document.body.appendChild(successDiv);
 
-            // Show redirect notification after 2 seconds
-            // setTimeout(() => {
-            //     const redirectDiv = document.createElement('div');
-            //     redirectDiv.className = 'fixed top-20 right-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
-            //     redirectDiv.innerHTML = `
-        //         <div class="flex items-center space-x-2">
-        //             <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-        //                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        //                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        //             </svg>
-        //             <div>
-        //                 <p class="font-semibold">Mengarahkan ke beranda...</p>
-        //                 <p class="text-sm">Anda akan diarahkan ke dashboard dalam beberapa detik</p>
-        //             </div>
-        //         </div>
-        //     `;
-            //     document.body.appendChild(redirectDiv);
+            // Set active pasar
+            setActivePasar(data.pasar_kolaboraya_id);
 
-            //     // Redirect to dashboard after 3 seconds
-            //     setTimeout(() => {
-            //         window.location.href = data.redirect_url;
-            //     }, 3000);
-            // }, 2000);
-
+            // Auto-remove notification
             setTimeout(() => {
-                window.location.href = data.redirect_url;
-            }, 10);
-            // Remove notifications after 8 seconds
-            setTimeout(() => {
-                if (successDiv.parentNode) {
-                    successDiv.parentNode.removeChild(successDiv);
-                }
-                const redirectDiv = document.querySelector('.fixed.top-20.right-4');
-                if (redirectDiv && redirectDiv.parentNode) {
-                    redirectDiv.parentNode.removeChild(redirectDiv);
-                }
+                if (successDiv.parentNode) successDiv.parentNode.removeChild(successDiv);
             }, 8000);
         }
 
-        // Listen for QR scan success event (Pusher)
+        // ==========================
+        // Pusher Event Listeners
+        // ==========================
         if (channel) {
             channel.bind('qr-scanned-successfully', handleQrScanSuccess);
 
-            // Handle Pusher connection events
-            pusher.connection.bind('connected', function() {
+            pusher.connection.bind('connected', () => {
                 console.log('Pusher connected successfully');
             });
 
-            pusher.connection.bind('disconnected', function() {
-                console.log('Pusher disconnected');
-                // Fallback to polling if Pusher disconnects
+            pusher.connection.bind('disconnected', () => {
+                console.log('Pusher disconnected, fallback to polling');
                 startPolling();
             });
 
-            pusher.connection.bind('error', function(err) {
+            pusher.connection.bind('error', (err) => {
                 console.error('Pusher connection error:', err);
-                // Fallback to polling on error
                 startPolling();
             });
         }
 
-        // Polling fallback function
+        // ==========================
+        // Polling Fallback
+        // ==========================
         function startPolling() {
-            if (pollingInterval) return; // Already polling
+            if (pollingInterval) return; // prevent duplicate
 
             console.log('Starting polling for QR scan status...');
 
@@ -260,19 +238,18 @@
                     }
 
                     const data = await response.json();
-
-                    // if (data.success && data.has_active_pasar_kolaboraya) {
-                    //     console.log('User has been added to Pasar Kolaboraya via polling:', data);
-                    //     stopPolling();
-                    //     handleQrScanSuccess({
-                    //         pasar_kolaboraya_name: data.pasar_kolaboraya_name || 'Pasar Kolaboraya',
-                    //         redirect_url: '{{ route('dashboard') }}'
-                    //     });
-                    // }
+                    if (data.success) {
+                        console.log('User added via polling:', data);
+                        stopPolling();
+                        handleQrScanSuccess({
+                            pasar_kolaboraya_name: data.pasar_kolaboraya_name || 'Pasar Kolaboraya',
+                            pasar_kolaboraya_id: data.pasar_kolaboraya_id,
+                        });
+                    }
                 } catch (error) {
                     console.error('Error checking QR status:', error);
                 }
-            }, 3000); // Check every 3 seconds
+            }, 3000);
         }
 
         function stopPolling() {
@@ -283,47 +260,72 @@
             }
         }
 
-        // Start polling as fallback if Pusher is not available
-        if (!pusher || !channel) {
-            startPolling();
+        // ==========================
+        // Set Active Pasar
+        // ==========================
+        async function setActivePasar(pasarId) {
+            try {
+                const response = await fetch('{{ route('set.pasar') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        pasar: pasarId
+                    })
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to set active pasar:', response.status);
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) console.log('Masuk ke pasar');
+                if (data.redirect) {
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 3000); // redirect setelah 3 detik
+                }
+
+            } catch (error) {
+                console.error('Error setting active pasar:', error);
+            }
         }
 
-        // Clean up on page unload
+        // ==========================
+        // Cleanup
+        // ==========================
+        if (!pusher || !channel) startPolling();
+
         window.addEventListener('beforeunload', () => {
             stopPolling();
-            if (pusher) {
-                pusher.disconnect();
-            }
+            if (pusher) pusher.disconnect();
         });
 
+        // ==========================
         // Download QR Code
+        // ==========================
         function downloadQR() {
             const qrSvg = `{!! $qrCodeSvg !!}`;
-
-            // Buat Blob dari SVG
             const svgBlob = new Blob([qrSvg], {
                 type: 'image/svg+xml;charset=utf-8'
             });
             const url = URL.createObjectURL(svgBlob);
-
             const img = new Image();
+
             img.onload = function() {
-                // Ambil ukuran gambar dari SVG atau default 300x300
                 const width = img.width || 300;
                 const height = img.height || 300;
 
-                console.log(img);
-
-                // Buat canvas
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
-
-                // Gambar image ke canvas
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Konversi canvas ke JPG
                 canvas.toBlob(function(blob) {
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
@@ -333,17 +335,16 @@
                     document.body.removeChild(a);
                 }, 'image/jpeg', 1.0);
 
-                // Bersihkan URL
                 URL.revokeObjectURL(url);
             };
 
-            // Supaya cross-origin aman
             img.crossOrigin = 'anonymous';
             img.src = url;
         }
 
-
+        // ==========================
         // Print QR Code
+        // ==========================
         function printQR() {
             const qrCodeData = @json($qrCodeData);
             const qrSvg = @json($qrCodeSvg);
@@ -370,131 +371,99 @@
             </div>
             <div class="qr-info">
                 <p><strong>QR Code:</strong> ${qrCodeData.qr_code}</p>
-                <!-- <p><strong>Dibuat:</strong> ${new Date(qrCodeData.generated_at).toLocaleString('id-ID')}</p> -->
-                <!-- <p><strong>Berlaku hingga:</strong> ${new Date(qrCodeData.expires_at).toLocaleString('id-ID')}</p> -->
             </div>
         </body>
         </html>
     `);
-
             printWindow.document.close();
             printWindow.print();
         }
 
+        // ==========================
         // Regenerate QR Code
-        function regenerateQR() {
-            if (confirm('Apakah Anda yakin ingin membuat QR code baru? QR code lama akan tidak berlaku lagi.')) {
-                // Show loading state
-                const button = event.target;
-                const originalText = button.innerHTML;
-                button.innerHTML = '🔄 Generating...';
-                button.disabled = true;
+        // ==========================
+        function regenerateQR(event) {
+            if (!confirm('Apakah Anda yakin ingin membuat QR code baru? QR code lama akan tidak berlaku lagi.')) return;
 
-                // Show loading indicator on QR code container
-                const qrContainer = document.querySelector('#qr-code-container');
-                if (qrContainer) {
-                    qrContainer.innerHTML =
-                        '<div class="flex items-center justify-center h-full"><div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div></div>';
-                }
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '🔄 Generating...';
+            button.disabled = true;
 
-                // Make AJAX request to regenerate QR code
-                fetch('{{ route('qr.generate') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success && data.qr_code) {
-                            // Update QR code display
-                            updateQRCodeDisplay(data);
-
-                            // Show success message
-                            const successDiv = document.createElement('div');
-                            successDiv.className =
-                                'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-                            successDiv.textContent = 'QR code berhasil di-generate ulang!';
-                            document.body.appendChild(successDiv);
-
-                            // Remove success message after 3 seconds
-                            setTimeout(() => {
-                                if (successDiv.parentNode) {
-                                    successDiv.parentNode.removeChild(successDiv);
-                                }
-                            }, 3000);
-
-                            // Force refresh the page after 2 seconds to ensure everything is updated
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000);
-                        } else {
-                            throw new Error(data.message || 'Terjadi kesalahan saat membuat QR code baru');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-
-                        // Show error message
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className =
-                            'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-                        errorDiv.textContent = 'Error: ' + error.message;
-                        document.body.appendChild(errorDiv);
-
-                        // Remove error message after 5 seconds
-                        setTimeout(() => {
-                            if (errorDiv.parentNode) {
-                                errorDiv.parentNode.removeChild(errorDiv);
-                            }
-                        }, 5000);
-
-                        // Restore original QR code if available
-                        if (qrContainer) {
-                            qrContainer.innerHTML = @json($qrCodeSvg);
-                        }
-                    })
-                    .finally(() => {
-                        // Restore button state
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-                    });
-            }
-        }
-
-        // Update QR code display with new data
-        function updateQRCodeDisplay(data) {
-            // Update QR code SVG
             const qrContainer = document.querySelector('#qr-code-container');
             if (qrContainer) {
-                qrContainer.innerHTML = data.qr_code_svg;
+                qrContainer.innerHTML = `
+            <div class="flex items-center justify-center h-full">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+            </div>`;
             }
 
-            // Update QR code text
+            fetch('{{ route('qr.generate') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.qr_code) {
+                        updateQRCodeDisplay(data);
+
+                        const successDiv = document.createElement('div');
+                        successDiv.className =
+                            'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                        successDiv.textContent = 'QR code berhasil di-generate ulang!';
+                        document.body.appendChild(successDiv);
+
+                        setTimeout(() => successDiv.remove(), 3000);
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        throw new Error(data.message || 'Terjadi kesalahan saat membuat QR code baru');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className =
+                        'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                    errorDiv.textContent = 'Error: ' + error.message;
+                    document.body.appendChild(errorDiv);
+
+                    setTimeout(() => errorDiv.remove(), 5000);
+                    if (qrContainer) qrContainer.innerHTML = @json($qrCodeSvg);
+                })
+                .finally(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        // ==========================
+        // Update QR Display
+        // ==========================
+        function updateQRCodeDisplay(data) {
+            const qrContainer = document.querySelector('#qr-code-container');
+            if (qrContainer) qrContainer.innerHTML = data.qr_code_svg;
+
             const qrCodeText = document.querySelector('#qr-code-text');
-            if (qrCodeText) {
-                qrCodeText.textContent = data.qr_code;
-            }
+            if (qrCodeText) qrCodeText.textContent = data.qr_code;
 
-            // Update generated date
             const generatedDate = document.querySelector('#qr-generated-date');
             if (generatedDate && data.generated_at) {
-                const date = new Date(data.generated_at);
-                generatedDate.textContent = date.toLocaleDateString('id-ID') + ' ' + date.toLocaleTimeString('id-ID');
+                generatedDate.textContent = new Date(data.generated_at).toLocaleString('id-ID');
             }
 
-            // Update expires date
             const expiresDate = document.querySelector('#qr-expires-date');
             if (expiresDate && data.expires_at) {
-                const date = new Date(data.expires_at);
-                expiresDate.textContent = date.toLocaleDateString('id-ID') + ' ' + date.toLocaleTimeString('id-ID');
+                expiresDate.textContent = new Date(data.expires_at).toLocaleString('id-ID');
             }
         }
+
+        window.downloadQR = downloadQR;
     </script>
 </x-layouts.app>

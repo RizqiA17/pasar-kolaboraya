@@ -3,17 +3,18 @@
 use App\Models\Connection;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
+use Illuminate\Support\Facades\Auth;
 use App\Livewire\Settings\Appearance;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifiedEmail;
 use App\Livewire\Collaborations\Create;
 use App\Livewire\Connections\Suggestion;
+use App\Http\Controllers\QrCodeController;
 use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Connections\ConnectionsTab;
 use App\Livewire\Connections\ListConnection;
 use App\Livewire\Collaborations\NewCollaboration;
 use App\Livewire\Collaborations\ListCollaboration;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,17 +73,9 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
     })->name('broadcasting.auth');
     
     // QR status check route (for polling fallback)
-    Route::get('/qr/status', function () {
-        $user = Auth::user();
-        $activePasarKolaboraya = $user->activePasarKolaboraya;
-        
-        return response()->json([
-            'success' => true,
-            'has_active_pasar_kolaboraya' => $activePasarKolaboraya ? true : false,
-            'pasar_kolaboraya_name' => $activePasarKolaboraya ? $activePasarKolaboraya->name : null,
-            'user_id' => $user->id
-        ]);
-    })->name('qr.status');
+    Route::get('/qr/status', [QrCodeController::class, 'checkStatus'])->name('qr.status');
+
+    Route::post('/set-pasar', [QrCodeController::class, 'setPasar'])->name('set.pasar');
     
     Route::redirect('settings', 'settings/profile');
 
@@ -177,7 +170,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 
         // Collective Action QR Code routes
         Route::get('collective-actions/{collectiveAction}/qr', [App\Http\Controllers\CollectiveActionQrController::class, 'showQr'])->name('collective-action.qr.show');
-        Route::get('collective-actions/{collectiveAction}/qr/generate', [App\Http\Controllers\CollectiveActionQrController::class, 'generateQr'])->name('collective-action.qr.generate');
+        // Route::get('collective-actions/{collectiveAction}/qr/generate', [App\Http\Controllers\CollectiveActionQrController::class, 'generateQr'])->name('collective-action.qr.generate');
         Route::get('collective-actions/{collectiveAction}/qr/data', [App\Http\Controllers\CollectiveActionQrController::class, 'getQrData'])->name('collective-action.qr.data');
     });
 

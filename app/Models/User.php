@@ -1005,7 +1005,7 @@ public function getConnectionStatus($otherUserId)
         }
         
         // QR code expires after 30 days
-        return $this->qr_code_generated_at->addDays(30)->isFuture();
+        return true;
     }
 
     /**
