@@ -150,6 +150,7 @@ class AdminController extends Controller
             'email' => ['required', 'email', new UniqueEmailForActiveUsers($user->id)],
             'role' => 'required|in:user,admin,super_admin',
             'assigned_role' => 'nullable|string|max:255',
+            'user_type' => 'required|in:partisipan,tamu,komunitas',
         ]);
 
         // Handle assigned_role and ecosystem builder status
@@ -161,6 +162,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'user_type' => $request->user_type,
             'assigned_role' => $assignedRole,
             'is_ecosystem_builder' => $isEcosystemBuilder,
             'ecosystem_builder_status' => $isEcosystemBuilder ? 'approved' : null,

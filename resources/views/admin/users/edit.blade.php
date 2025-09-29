@@ -93,8 +93,29 @@
                         </flux:field>
                     </div>
 
-                    <!-- Status Ekosistem Builder -->
+                    <!-- Jenis Pengguna -->
                     <div>
+                        <flux:field>
+                            <flux:label>Jenis Pengguna</flux:label>
+                            <flux:select name="user_type" id="userTypeSelect" required>
+                                <option value="partisipan"
+                                    {{ old('user_type', $user->user_type) === 'partisipan' ? 'selected' : '' }}>
+                                    Partisipan</option>
+                                <option value="tamu"
+                                    {{ old('user_type', $user->user_type) === 'tamu' ? 'selected' : '' }}>
+                                    Tamu</option>
+                                <option value="komunitas"
+                                    {{ old('user_type', $user->user_type) === 'komunitas' ? 'selected' : '' }}>
+                                    Komunitas</option>
+                            </flux:select>
+                            @error('user_type')
+                                <flux:error>{{ $message }}</flux:error>
+                            @enderror
+                        </flux:field>
+                    </div>
+
+                    <!-- Status Ekosistem Builder -->
+                    {{-- <div>
                         <flux:field>
                             <flux:label>Status Ekosistem Builder</flux:label>
                             <div class="mt-2">
@@ -119,7 +140,7 @@
                                 @endif
                             </div>
                         </flux:field>
-                    </div>
+                    </div> --}}
 
                     <!-- Email Verified Status -->
                     <div>
@@ -195,4 +216,60 @@
             </div>
         @endif
     </div>
+    <script>
+        let oldRole = '{{ old('assigned_role') }}';
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectEl = document.getElementById("userTypeSelect");
+            gantiPeran(selectEl.value); // inisialisasi saat load
+
+            selectEl.addEventListener("change", function(e) {
+                gantiPeran(e.target.value);
+            });
+        });
+
+        function gantiPeran(value) {
+            const roleSelect = document.querySelector('select[name="assigned_role"]');
+
+            // simpan role lama kalau bukan tamu/komunitas
+            if (roleSelect.value !== "Tamu" && roleSelect.value !== "Komunitas") {
+                oldRole = roleSelect.value || oldRole;
+            }
+
+            // helper: tambahkan option kalau belum ada
+            function ensureOption(text, val) {
+                let existing = Array.from(roleSelect.options).find(opt => opt.value === val);
+                if (!existing) {
+                    let newOpt = new Option(text, val, false, false);
+                    roleSelect.add(newOpt);
+                    return newOpt;
+                }
+                return existing;
+            }
+
+            if (value === "tamu") {
+                ensureOption("Tamu", "Tamu");
+                roleSelect.value = "Tamu";
+
+            } else if (value === "komunitas") {
+                ensureOption("Komunitas", "Komunitas");
+                roleSelect.value = "Komunitas";
+
+            } else {
+                ensureOption("Ekosistem Builder", "Ekosistem Builder");
+
+                if (!oldRole || oldRole === "Tamu" || oldRole === "Komunitas") {
+                    // Tambahkan placeholder kalau belum ada
+                    let placeholder = Array.from(roleSelect.options).find(opt => opt.value === "");
+                    if (!placeholder) {
+                        roleSelect.add(new Option("-- Pilih Peran --", ""), roleSelect.options[0]);
+                    }
+                    roleSelect.value = ""; // reset ke kosong
+                } else {
+                    roleSelect.value = oldRole;
+                }
+            }
+
+        }
+    </script>
 </x-admin.layout>
