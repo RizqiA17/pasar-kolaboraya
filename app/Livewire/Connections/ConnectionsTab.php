@@ -30,6 +30,7 @@ class ConnectionsTab extends Component
         $title = $titles[$this->tab] ?? 'Koneksi';
 
         $this->dispatch('update-page-title', title: $title);
+        $this->dispatch('change-tab', tab: $this->tab);
     }
 
     public function mount()

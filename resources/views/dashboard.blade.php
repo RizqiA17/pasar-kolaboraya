@@ -12,8 +12,8 @@
                             <div class="mx-auto max-w-7xl flex justify-between">
                                 <div class="text-left mb-6">
                                     <h1
-                                        class="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                                        Selamat Datang! 🎉
+                                        class="text-xl md:text-3xl font-bold bg-primary-blue dark:bg-secondary-green bg-clip-text text-transparent mb-2">
+                                        Selamat Datang!
                                     </h1>
                                     <p class="text-sm text-gray-600 dark:text-gray-300 max-w-2xl">
                                         Mari jelajahi dunia kolaborasi dan koneksi yang menakjubkan
@@ -71,14 +71,14 @@
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Koneksi</h3>
                                 <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Jaringan profesional yang
                                     terhubung</p>
-                                <a href="{{ route('connections') . '?tab=list' }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
+                                <flux:link href="{{ route('connections') . '?tab=list' }}" wire:navigate
+                                    class="inline-flex items-center text-xs font-medium transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5l7 7-7 7"></path>
                                     </svg>
-                                </a>
+                                </flux:link>
                             </div>
                         </div>
 
@@ -109,14 +109,14 @@
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Ekosistem</h3>
                                 <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Ekosistem yang diikuti
                                 </p>
-                                <a href="{{ route('ecosystem.browse') }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
+                                <flux:link wire:navigate href="{{ route('ecosystem.browse') }}"
+                                    class="inline-flex items-center text-xs font-medium transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5l7 7-7 7"></path>
                                     </svg>
-                                </a>
+                                </flux:link>
                             </div>
                         </div>
                         @endif
@@ -148,14 +148,14 @@
                                 <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Aksi Kolektif</h3>
                                 <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Aksi kolektif yang diikuti
                                 </p>
-                                <a href="{{ route('collective-action.browse') }}"
-                                    class="inline-flex items-center text-xs font-medium text-gray-900 dark:text-slate-200 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
+                                <flux:link wire:navigate href="{{ route('collective-action.browse') }}"
+                                    class="inline-flex items-center text-xs font-medium transition-colors">
                                     Lihat Semua
                                     <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5l7 7-7 7"></path>
                                     </svg>
-                                </a>
+                                </flux:link>
                             </div>
                         </div>
                         @endif

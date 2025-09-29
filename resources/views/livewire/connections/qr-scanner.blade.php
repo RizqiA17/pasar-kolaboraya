@@ -353,6 +353,26 @@
             }, 1000);
         });
 
+        document.addEventListener("livewire:load", () => { // Initialize Pusher
+            initializePusher();
+
+            // Request notification permission
+            requestNotificationPermission();
+            // Livewire.on('start-camera', () => {
+            //     startCamera();
+            // });
+
+            // Livewire.on('stop-camera', () => {
+            //     stopCamera();
+            // });
+
+            // Auto-start camera when page loads
+            setTimeout(() => {
+                console.log('Auto-starting camera...');
+                startCamera();
+            }, 1000);
+        });
+
         async function startCamera() {
             try {
                 // Check if camera is supported
@@ -449,6 +469,14 @@
 
             if (!document.hidden) {
                 startCamera();
+            }
+        });
+
+        Livewire.on("change-tab", (data) => {
+            if (data.tab === 'qr-scan') {
+                startCamera();
+            } else {
+                stopCamera();
             }
         });
 
