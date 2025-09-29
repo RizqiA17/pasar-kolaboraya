@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Livewire\Auth\ConfirmPassword;
-use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
-use App\Livewire\Auth\PendingApproval;
-use App\Livewire\Auth\Rejected;
 use App\Livewire\Auth\Register;
-use App\Livewire\Auth\ResetPassword;
+use App\Livewire\Auth\Rejected;
 use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Auth\ResetPassword;
+use App\Livewire\Auth\ForgotPassword;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifiedEmail;
+use App\Livewire\Auth\ConfirmPassword;
+use App\Livewire\Auth\PendingApproval;
+use App\Http\Controllers\Auth\VerifyEmailController;
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');
@@ -31,7 +32,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('ecosystem-setup', \App\Livewire\Auth\EcosystemSetup::class)->name('ecosystem.setup');
     Route::get('profile-setup', \App\Livewire\Auth\ProfileSetup::class)
-        ->name('profile.setup');
+        ->name('profile.setup')->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval']);
     
     // New approval system routes - these should NOT have check.user.approval middleware
     // to avoid redirect loops

@@ -29,7 +29,8 @@
     --color-accent-orange: #F0673D;
     --color-accent-red: #E33A37;
 
-    --color-cream: #FFFBF5;
+    --color-cream: #f0f6ff;
+    /* --color-cream: #FFFBF5; */
     --color-navy: #1E64C8;
     --color-coral: #FF6B6B;
     --color-sky: #4ECDC4;
@@ -58,8 +59,8 @@
 {
     .dark
     {
-        --color-accent: var(--color-sky);
-        --color-accent-content: var(--color-sky);
+        --color-accent: var(--color-secondary-green);
+        --color-accent-content: var(--color-secondary-green);
         --color-accent-foreground: var(--color-navy);
         /* Dark mode color overrides */
         --color-cream: #0f172a;
@@ -176,4 +177,8 @@ select:focus[data-flux-control]
     {
         opacity: 0.5;
     }
+}
+
+button{
+    cursor: pointer;
 }

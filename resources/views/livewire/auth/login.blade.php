@@ -50,7 +50,7 @@
         @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-slate-400">
             <span>{{ 'Belum punya akun?' }}</span>
-            <flux:link :href="route('register')" wire:navigate class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">{{ 'Daftar' }}</flux:link>
+            <flux:link :href="route('register')" wire:navigate class="">{{ 'Daftar' }}</flux:link>
         </div>
     @endif
 </div>

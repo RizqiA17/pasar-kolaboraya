@@ -3,7 +3,7 @@
     <x-svg-accent position="top-left" size="w-16 h-16" opacity="opacity-10" />
     <x-svg-accent position="center-right" size="w-12 h-12" opacity="opacity-10" />
     <x-svg-accent position="bottom-right" size="w-14 h-14" opacity="opacity-10" />
-    
+
     <x-auth-header :title="'Lengkapi Profil Anda'" :description="'Bantu kami mengenal Anda lebih baik untuk pengalaman yang lebih personal'" />
 
     <!-- Progress Bar -->
@@ -14,7 +14,7 @@
             <span class="text-sm font-medium text-gray-700 dark:text-slate-300">{{ $progress }}%</span>
         </div>
         <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-            <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
+            <div class="bg-primary-blue dark:bg-neutral-green h-2 rounded-full transition-all duration-300"
                 style="width: {{ $progress }}%">
             </div>
         </div>
@@ -25,14 +25,15 @@
         class="bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/50 border border-gray-200 dark:border-slate-700 p-6 relative">
         <!-- SVG Accent for Step Content -->
         <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
-        
+
         <!-- Data Saved Indicator -->
-        @if($hasChanges)
-            <div class="absolute top-4 right-4 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-xs font-medium">
+        @if ($hasChanges)
+            <div
+                class="absolute top-4 right-4 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-xs font-medium">
                 Ada perubahan data
             </div>
         @endif
-        
+
         @if ($currentStep === 1)
             <!-- Step 1: Basic Information -->
             <div class="space-y-6">
@@ -55,7 +56,7 @@
                 <flux:input wire:model="phone" :label="'Nomor Telepon'" type="tel"
                     :placeholder="'0812-3456-7890'" />
 
-                <flux:textarea wire:model="vision" rows="2" :label="'Visi/Misi'"
+                <flux:textarea wire:model="vision" rows="4" :label="'Visi/Misi'"
                     :placeholder="'Ceritakan visi dan misi Anda'" />
             </div>
         @elseif($currentStep === 2)
@@ -77,106 +78,131 @@
                 <!-- Social Media List -->
                 <div class="space-y-4">
                     <div class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Media Sosial</div>
-                    
+
                     <!-- Existing Social Media Items -->
-                    @foreach($socialMediaItems as $index => $item)
-                        <div class="social-media-item relative flex items-center space-x-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+                    @foreach ($socialMediaItems as $index => $item)
+                        <div
+                            class="social-media-item relative flex items-center space-x-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
                             <!-- Platform Icon -->
                             <div class="absolute left-2 flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                                @if($item['type'] === 'linkedin')
+                                @if ($item['type'] === 'linkedin')
                                     <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                        <path
+                                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
                                 @elseif($item['type'] === 'twitter')
                                     <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                        <path
+                                            d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
                                     </svg>
                                 @elseif($item['type'] === 'instagram')
-                                <svg class="w-5 h-5 text-pink-500" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint0_radial_87_7153)"/>
-                                    <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint1_radial_87_7153)"/>
-                                    <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint2_radial_87_7153)"/>
-                                    <path d="M23 10.5C23 11.3284 22.3284 12 21.5 12C20.6716 12 20 11.3284 20 10.5C20 9.67157 20.6716 9 21.5 9C22.3284 9 23 9.67157 23 10.5Z" fill="white"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 21C18.7614 21 21 18.7614 21 16C21 13.2386 18.7614 11 16 11C13.2386 11 11 13.2386 11 16C11 18.7614 13.2386 21 16 21ZM16 19C17.6569 19 19 17.6569 19 16C19 14.3431 17.6569 13 16 13C14.3431 13 13 14.3431 13 16C13 17.6569 14.3431 19 16 19Z" fill="white"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6 15.6C6 12.2397 6 10.5595 6.65396 9.27606C7.2292 8.14708 8.14708 7.2292 9.27606 6.65396C10.5595 6 12.2397 6 15.6 6H16.4C19.7603 6 21.4405 6 22.7239 6.65396C23.8529 7.2292 24.7708 8.14708 25.346 9.27606C26 10.5595 26 12.2397 26 15.6V16.4C26 19.7603 26 21.4405 25.346 22.7239C24.7708 23.8529 23.8529 24.7708 22.7239 25.346C21.4405 26 19.7603 26 16.4 26H15.6C12.2397 26 10.5595 26 9.27606 25.346C8.14708 24.7708 7.2292 23.8529 6.65396 22.7239C6 21.4405 6 19.7603 6 16.4V15.6ZM15.6 8H16.4C18.1132 8 19.2777 8.00156 20.1779 8.0751C21.0548 8.14674 21.5032 8.27659 21.816 8.43597C22.5686 8.81947 23.1805 9.43139 23.564 10.184C23.7234 10.4968 23.8533 10.9452 23.9249 11.8221C23.9984 12.7223 24 13.8868 24 15.6V16.4C24 18.1132 23.9984 19.2777 23.9249 20.1779C23.8533 21.0548 23.7234 21.5032 23.564 21.816C23.1805 22.5686 22.5686 23.1805 21.816 23.564C21.5032 23.7234 21.0548 23.8533 20.1779 23.9249C19.2777 23.9984 18.1132 24 16.4 24H15.6C13.8868 24 12.7223 23.9984 11.8221 23.9249C10.9452 23.8533 10.4968 23.7234 10.184 23.564C9.43139 23.1805 8.81947 22.5686 8.43597 21.816C8.27659 21.5032 8.14674 21.0548 8.0751 20.1779C8.00156 19.2777 8 18.1132 8 16.4V15.6C8 13.8868 8.00156 12.7223 8.0751 11.8221C8.14674 10.9452 8.27659 10.4968 8.43597 10.184C8.81947 9.43139 9.43139 8.81947 10.184 8.43597C10.4968 8.27659 10.9452 8.14674 11.8221 8.0751C12.7223 8.00156 13.8868 8 15.6 8Z" fill="white"/>
-                                    <defs>
-                                    <radialGradient id="paint0_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 23) rotate(-55.3758) scale(25.5196)">
-                                    <stop stop-color="#B13589"/>
-                                    <stop offset="0.79309" stop-color="#C62F94"/>
-                                    <stop offset="1" stop-color="#8A3AC8"/>
-                                    </radialGradient>
-                                    <radialGradient id="paint1_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(11 31) rotate(-65.1363) scale(22.5942)">
-                                    <stop stop-color="#E0E8B7"/>
-                                    <stop offset="0.444662" stop-color="#FB8A2E"/>
-                                    <stop offset="0.71474" stop-color="#E2425C"/>
-                                    <stop offset="1" stop-color="#E2425C" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <radialGradient id="paint2_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500002 3) rotate(-8.1301) scale(38.8909 8.31836)">
-                                    <stop offset="0.156701" stop-color="#406ADC"/>
-                                    <stop offset="0.467799" stop-color="#6A45BE"/>
-                                    <stop offset="1" stop-color="#6A45BE" stop-opacity="0"/>
-                                    </radialGradient>
-                                    </defs>
+                                    <svg class="w-5 h-5 text-pink-500" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#a)" />
+                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#b)" />
+                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#c)" />
+                                        <path d="M23 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" fill="#fff" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M16 21a5 5 0 1 0 0-10 5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+                                            fill="#fff" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M6 15.6c0-3.36 0-5.04.654-6.324a6 6 0 0 1 2.622-2.622C10.56 6 12.24 6 15.6 6h.8c3.36 0 5.04 0 6.324.654a6 6 0 0 1 2.622 2.622C26 10.56 26 12.24 26 15.6v.8c0 3.36 0 5.04-.654 6.324a6 6 0 0 1-2.622 2.622C21.44 26 19.76 26 16.4 26h-.8c-3.36 0-5.04 0-6.324-.654a6 6 0 0 1-2.622-2.622C6 21.44 6 19.76 6 16.4zM15.6 8h.8c1.713 0 2.878.002 3.778.075.877.072 1.325.202 1.638.361a4 4 0 0 1 1.748 1.748c.16.313.29.761.36 1.638.074.9.076 2.065.076 3.778v.8c0 1.713-.002 2.878-.075 3.778-.072.877-.202 1.325-.361 1.638a4 4 0 0 1-1.748 1.748c-.313.16-.761.29-1.638.36-.9.074-2.065.076-3.778.076h-.8c-1.713 0-2.878-.002-3.778-.075-.877-.072-1.325-.202-1.638-.361a4 4 0 0 1-1.748-1.748c-.16-.313-.29-.761-.36-1.638C8.001 19.278 8 18.113 8 16.4v-.8c0-1.713.002-2.878.075-3.778.072-.877.202-1.325.361-1.638a4 4 0 0 1 1.748-1.748c.313-.16.761-.29 1.638-.36.9-.074 2.065-.076 3.778-.076"
+                                            fill="#fff" />
+                                        <defs>
+                                            <radialGradient id="a" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="rotate(-55.376 27.916 .066)scale(25.5196)">
+                                                <stop stop-color="#B13589" />
+                                                <stop offset=".793" stop-color="#C62F94" />
+                                                <stop offset="1" stop-color="#8A3AC8" />
+                                            </radialGradient>
+                                            <radialGradient id="b" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="rotate(-65.136 29.766 6.89)scale(22.5942)">
+                                                <stop stop-color="#E0E8B7" />
+                                                <stop offset=".445" stop-color="#FB8A2E" />
+                                                <stop offset=".715" stop-color="#E2425C" />
+                                                <stop offset="1" stop-color="#E2425C" stop-opacity="0" />
+                                            </radialGradient>
+                                            <radialGradient id="c" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="matrix(38.50003 -5.5 1.1764 8.23476 .5 3)">
+                                                <stop offset=".157" stop-color="#406ADC" />
+                                                <stop offset=".468" stop-color="#6A45BE" />
+                                                <stop offset="1" stop-color="#6A45BE" stop-opacity="0" />
+                                            </radialGradient>
+                                        </defs>
                                     </svg>
                                 @elseif($item['type'] === 'facebook')
                                     <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        <path
+                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                                     </svg>
                                 @elseif($item['type'] === 'youtube')
                                     <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                        <path
+                                            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                     </svg>
                                 @elseif($item['type'] === 'tiktok')
-                                    <svg class="w-5 h-5 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.08-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                                    <svg class="w-5 h-5 text-black dark:text-white" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.08-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
                                     </svg>
                                 @elseif($item['type'] === 'github')
-                                    <svg class="w-5 h-5 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    <svg class="w-5 h-5 text-gray-800 dark:text-white" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                     </svg>
                                 @elseif($item['type'] === 'website')
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                                     </svg>
                                 @else
-                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                     </svg>
                                 @endif
                             </div>
-                            
+
                             <!-- URL Input -->
-                                <input type="url" 
-                                       wire:model="socialMediaItems.{{ $index }}.url"
-                                       placeholder="{{ $this->getPlaceholderForPlatform($item['type']) }}"
-                                       class="w-full px-12 py-4 m-0 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            
+                            <input type="url" wire:model="socialMediaItems.{{ $index }}.url"
+                                placeholder="{{ $this->getPlaceholderForPlatform($item['type']) }}"
+                                class="w-full px-12 py-4 m-0 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+
                             <!-- Remove Button -->
-                            <button type="button" 
-                                    wire:click="removeSocialMedia({{ $index }})"
-                                    class="p-2 absolute right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors">
+                            <button type="button" wire:click="removeSocialMedia({{ $index }})"
+                                class="p-2 absolute right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>
                         </div>
                     @endforeach
-                    
+
                     <!-- Platform Selection Dropdown -->
-                    @if($showPlatformModal)
+                    @if ($showPlatformModal)
                         <div class="relative platform-selection-container">
-                            <div class="absolute top-0 left-0 right-0 z-10 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg mt-2">
+                            <div
+                                class="absolute top-0 left-0 right-0 z-10 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg mt-2">
                                 <div class="p-4">
                                     <h3 class="text-sm font-semibold text-gray-900 dark:text-slate-100 mb-3">Pilih Platform Media Sosial</h3>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        @foreach($this->getAvailablePlatforms() as $platform)
-                                            <button type="button" 
-                                                    wire:click="selectPlatform('{{ $platform['value'] }}')"
-                                                    class="platform-option flex items-center space-x-2 p-2 text-left border border-slate-200 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                                    <div class="grid min-[416px]:grid-cols-2 gap-2">
+                                        @foreach ($this->getAvailablePlatforms() as $platform)
+                                            <button type="button"
+                                                wire:click="selectPlatform('{{ $platform['value'] }}')"
+                                                class="platform-option flex items-center space-x-2 p-2 text-left border border-slate-200 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
                                                 <div class="w-4 h-4 flex items-center justify-center">
                                                     {!! $platform['icon'] !!}
                                                 </div>
-                                                <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ $platform['label'] }}</span>
+                                                <span
+                                                    class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ $platform['label'] }}</span>
                                             </button>
                                         @endforeach
                                     </div>
@@ -184,15 +210,16 @@
                             </div>
                         </div>
                     @endif
-                    
+
                     <!-- Add Social Media Button -->
-                    <button type="button" 
-                            wire:click="showPlatformSelection"
-                            class="add-social-media-btn w-full flex items-center justify-center space-x-2 px-4 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors">
+                    <button type="button" wire:click="showPlatformSelection"
+                        class="add-social-media-btn w-full flex items-center justify-center space-x-2 px-4 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        <span class="font-medium">Tambah Media Sosial</span>
+                        <span class="font-medium max-md:hidden">Tambah Media Sosial</span>
+                        <span class="font-medium md:hidden">Tambah Medsos</span>
                     </button>
                 </div>
             </div>
@@ -217,40 +244,34 @@
                     <div class="multi-select-container">
                         <!-- Main Selector Input -->
                         <div class="relative">
-                            <input type="text" 
-                                   id="skillsMainInput"
-                                   placeholder="Pilih keahlian Anda..." 
-                                   class="w-full"
-                                   readonly
-                                   onclick="toggleSkillsDropdown()">
+                            <input type="text" id="skillsMainInput" placeholder="Pilih keahlian Anda..."
+                                class="w-full" readonly onclick="toggleSkillsDropdown()">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
                         </div>
 
                         <!-- Search Input (Shows when dropdown is open) -->
                         <div id="skillsSearchInput" class="hidden mt-2">
-                            <input type="text" 
-                                   wire:model.live="skillSearch" 
-                                   placeholder="Cari keahlian..." 
-                                   class="multi-search-input w-full">
+                            <input type="text" wire:model.live="skillSearch" placeholder="Cari keahlian..."
+                                class="multi-search-input w-full">
                         </div>
 
                         <!-- Dropdown List -->
                         <div id="skillsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
-                            @foreach($this->getFilteredSkills() as $skill)
+                            @foreach ($this->getFilteredSkills() as $skill)
                                 <div class="multi-option {{ in_array($skill->id, $selectedSkills) ? 'selected' : '' }}"
-                                     wire:click="toggleSkill({{ $skill->id }})"
-                                     onclick="toggleSkillAndUpdate({{ $skill->id }}, '{{ $skill->name }}')">
+                                    wire:click="toggleSkill({{ $skill->id }})"
+                                    onclick="toggleSkillAndUpdate({{ $skill->id }}, '{{ $skill->name }}')">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
-                                            <input type="checkbox" 
-                                                   id="skill_{{ $skill->id }}" 
-                                                   wire:model="selectedSkills" 
-                                value="{{ $skill->id }}"
-                                                   class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 bg-slate-700">
+                                            <input type="checkbox" id="skill_{{ $skill->id }}"
+                                                wire:model="selectedSkills" value="{{ $skill->id }}"
+                                                class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 bg-slate-700">
                                             <span class="font-medium">{{ $skill->name }}</span>
                                         </div>
                                     </div>
@@ -261,21 +282,23 @@
                 </div>
 
                 <!-- Selected Skills Display -->
-                @if(count($selectedSkills) > 0)
+                @if (count($selectedSkills) > 0)
                     <div class="mb-4">
                         <div class="flex flex-wrap gap-2">
-                            @foreach($selectedSkills as $skillId)
+                            @foreach ($selectedSkills as $skillId)
                                 @php
                                     $skill = $skills->firstWhere('id', $skillId);
                                 @endphp
-                                @if($skill)
-                                    <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700">
+                                @if ($skill)
+                                    <div
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700">
                                         <span>{{ $skill->name }}</span>
-                                        <button type="button" 
-                                                wire:click="removeSkill({{ $skillId }})"
-                                                class="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        <button type="button" wire:click="removeSkill({{ $skillId }})"
+                                            class="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12"></path>
                                             </svg>
                                         </button>
                                     </div>
@@ -308,65 +331,61 @@
                         <div class="multi-select-container">
                             <!-- Main Selector Input -->
                             <div class="relative">
-                                <input type="text" 
-                                       id="interestsMainInput"
-                                       placeholder="Pilih minat Anda..." 
-                                       class="w-full"
-                                       readonly
-                                       onclick="toggleInterestsDropdown()">
+                                <input type="text" id="interestsMainInput" placeholder="Pilih minat Anda..."
+                                    class="w-full" readonly onclick="toggleInterestsDropdown()">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                             </div>
 
                             <!-- Search Input (Shows when dropdown is open) -->
                             <div id="interestsSearchInput" class="hidden mt-2">
-                                <input type="text" 
-                                       wire:model.live="interestSearch" 
-                                       placeholder="Cari minat..." 
-                                       class="multi-search-input w-full">
+                                <input type="text" wire:model.live="interestSearch" placeholder="Cari minat..."
+                                    class="multi-search-input w-full">
                             </div>
 
                             <!-- Dropdown List -->
                             <div id="interestsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
-                                @foreach($this->getFilteredInterests() as $interest)
+                                @foreach ($this->getFilteredInterests() as $interest)
                                     <div class="multi-option {{ in_array($interest->id, $selectedInterests) ? 'selected' : '' }}"
-                                         wire:click="toggleInterest({{ $interest->id }})"
-                                         onclick="toggleInterestAndUpdate({{ $interest->id }}, '{{ $interest->name }}')">
+                                        wire:click="toggleInterest({{ $interest->id }})"
+                                        onclick="toggleInterestAndUpdate({{ $interest->id }}, '{{ $interest->name }}')">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-3">
-                                                <input type="checkbox" 
-                                                       id="interest_{{ $interest->id }}" 
-                                                       wire:model="selectedInterests" 
-                                                       value="{{ $interest->id }}"
-                                                       class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-600 bg-slate-700">
+                                                <input type="checkbox" id="interest_{{ $interest->id }}"
+                                                    wire:model="selectedInterests" value="{{ $interest->id }}"
+                                                    class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-600 bg-slate-700">
                                                 <span class="font-medium">{{ $interest->name }}</span>
                                             </div>
                                         </div>
-                            </div>
-                        @endforeach
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
 
                     <!-- Selected Interests Display -->
-                    @if(count($selectedInterests) > 0)
+                    @if (count($selectedInterests) > 0)
                         <div class="mb-4">
                             <div class="flex flex-wrap gap-2">
-                                @foreach($selectedInterests as $interestId)
+                                @foreach ($selectedInterests as $interestId)
                                     @php
                                         $interest = $interests->firstWhere('id', $interestId);
                                     @endphp
-                                    @if($interest)
-                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
+                                    @if ($interest)
+                                        <div
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
                                             <span>{{ $interest->name }}</span>
-                                            <button type="button" 
-                                                    wire:click="removeInterest({{ $interestId }})"
-                                                    class="ml-2 text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-200">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            <button type="button" wire:click="removeInterest({{ $interestId }})"
+                                                class="ml-2 text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-200">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
                                         </div>
@@ -391,7 +410,7 @@
                                     {{ $contribution->name }}
                                 </label> --}}
 
-                                {{-- @if (in_array($contribution->id, $selectedContributions))
+                {{-- @if (in_array($contribution->id, $selectedContributions))
                                     <div class="flex flex-col space-y-2">
                                         <input type="text"
                                             wire:model="contributionDescriptions.{{ $contribution->id }}"
@@ -401,7 +420,7 @@
                                             class="text-xs border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                 @endif --}}
-                            {{-- </div>
+                {{-- </div>
                         @endforeach
                     </div>
                 </div> --}}
@@ -410,39 +429,39 @@
 
         <!-- Navigation Buttons -->
         <div
-            class="grid grid-cols-3 items-center justify-between mt-8 pt-6 border-t border-gray-200 dark:border-slate-600">
-            <div class="col-span-1 px-1">
+            class="grid grid-cols-3 items-center gap-2 justify-between mt-8 pt-6 border-t border-gray-200 dark:border-slate-600">
+            <div class="col-span-1 px-1 w-full">
                 @if ($currentStep > 1)
-                    <flux:button wire:click="previousStep" variant="subtle" icon="chevron-left">
+                    <flux:button wire:click="previousStep" class="w-full" variant="subtle" icon="chevron-left">
                         <p class="max-md:hidden">Kembali</p>
                     </flux:button>
                 @endif
             </div>
 
 
-            <div class="grid grid-cols-2 col-span-2 items-center space-x-3">
+            <div class="grid grid-cols-2 col-span-2 items-center gap-2 space-x-3">
                 @if ($currentStep < $totalSteps)
-                    <flux:button wire:click="skipStep" variant="subtle" class="col-span-1">
+                    <flux:button wire:click="skipStep" variant="subtle" class="col-span-1 w-full">
                         Skip
                     </flux:button>
 
                     <flux:button wire:click="nextStep" variant="primary" icon:trailing="chevron-right"
-                        class="col-span-1">
+                        class="col-span-1 w-full">
                         <p class="max-md:hidden">Lanjut</p>
                     </flux:button>
                 @else
-                    <div class="col-span-1"></div>
-                        <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto col-span-1"
-                            icon:trailing="chevron-right">
-                            <p class="max-md:hidden">Selesai</p>
-                        </flux:button>
+                    <flux:button wire:click="saveProfile" variant="primary" class="w-full sm:w-auto col-span-2"
+                        icon:trailing="check">
+                        <p class="">Selesai</p>
+                    </flux:button>
                 @endif
             </div>
         </div>
-        
+
         <div class="w-full mt-4">
-            <flux:button wire:click="skipAllSteps" variant="subtle" class="w-full text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">
-                <p class="max-md:hidden">Lengkapi Nanti</p>
+            <flux:button wire:click="skipAllSteps" variant="subtle"
+                class="w-full text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">
+                <p class="">Lengkapi Nanti</p>
             </flux:button>
         </div>
     </div>
@@ -467,7 +486,6 @@
     </div>
 
     <style>
-
         /* Multi-Select Styling */
         .multi-select-container {
             position: relative;
@@ -712,6 +730,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -734,12 +753,11 @@
     </style>
 
     <script>
-
         // Skills Multi-Select Functions
         function toggleSkillsDropdown() {
             const dropdown = document.getElementById('skillsDropdown');
             const searchInput = document.getElementById('skillsSearchInput');
-            
+
             if (dropdown.classList.contains('hidden')) {
                 dropdown.classList.remove('hidden');
                 searchInput.classList.remove('hidden');
@@ -761,7 +779,7 @@
         function updateSkillsMainInput() {
             const selectedCount = document.querySelectorAll('input[name="selectedSkills"]:checked').length;
             const mainInput = document.getElementById('skillsMainInput');
-            
+
             if (selectedCount > 0) {
                 mainInput.value = `${selectedCount} keahlian dipilih`;
             } else {
@@ -773,7 +791,7 @@
         function toggleInterestsDropdown() {
             const dropdown = document.getElementById('interestsDropdown');
             const searchInput = document.getElementById('interestsSearchInput');
-            
+
             if (dropdown.classList.contains('hidden')) {
                 dropdown.classList.remove('hidden');
                 searchInput.classList.remove('hidden');
@@ -795,7 +813,7 @@
         function updateInterestsMainInput() {
             const selectedCount = document.querySelectorAll('input[name="selectedInterests"]:checked').length;
             const mainInput = document.getElementById('interestsMainInput');
-            
+
             if (selectedCount > 0) {
                 mainInput.value = `${selectedCount} minat dipilih`;
             } else {

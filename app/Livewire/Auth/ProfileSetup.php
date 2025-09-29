@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('components.layouts.auth', ['title' => 'Lengkapi Profil'])]
+#[Layout('components.layouts.sign-auth', ['title' => 'Lengkapi Profil'])]
 class ProfileSetup extends Component
 {
     use WithFileUploads;

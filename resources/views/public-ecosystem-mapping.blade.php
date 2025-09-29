@@ -18,8 +18,24 @@
             }
 
             .market-card.selected {
-                border-color: #3b82f6;
-                background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                border-color: hsl(217, 91%, 60%);
+                background: linear-gradient(135deg, hsl(214, 95%, 93%) 0%, hsl(213, 97%, 87%) 100%);
+            }
+
+            .dark {
+                .market-card.selected {
+                    border-color: hsl(124, 41%, 60%);
+                    background: linear-gradient(135deg, hsl(124, 45%, 43%) 0%, hsl(124, 47%, 37%) 100%);
+                }
+
+                .market-card.selected h3,
+                .market-card.selected p,
+                .market-card.selected .text-white,
+                .market-card.selected .text-white\/90,
+                .market-card.selected .text-white\/70,
+                .market-card.selected .text-white\/80 {
+                    color: oklch(97% 0 0) !important;
+                }
             }
 
             .market-card.selected h3,
@@ -28,7 +44,7 @@
             .market-card.selected .text-white\/90,
             .market-card.selected .text-white\/70,
             .market-card.selected .text-white\/80 {
-                color: #1e40af !important;
+                color: #1E64C8 !important;
             }
 
             .market-card.selected .bg-white\/20 {
@@ -51,7 +67,7 @@
                     </div> --}}
 
                 <div class="text-center mb-8">
-                    <h1 class="text-4xl font-bold mb-4 dark:text-neutral-100 text-neutral-950">
+                    <h1 class="text-4xl font-extrabold mb-4 dark:text-neutral-100 text-primary-blue">
                         Peta Ekosistem Kolaboraya
                     </h1>
                     <p class="text-lg opacity-90 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-300">
@@ -69,33 +85,31 @@
 
                         <!-- Search and Filter -->
                         {{-- <div class="mb-6">
-                            <div class="relative max-w-md mx-auto">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400 dark:text-white/60" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
+                                <div class="relative max-w-md mx-auto">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 dark:text-white/60" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <input type="text" id="marketSearch"
+                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-white/30 rounded-lg bg-white dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                        placeholder="Cari pasar kolaboraya...">
                                 </div>
-                                <input type="text" id="marketSearch"
-                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-white/30 rounded-lg bg-white dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                                    placeholder="Cari pasar kolaboraya...">
-                            </div>
-                        </div> --}}
+                            </div> --}}
 
                         <!-- Market Cards with Improved Layout -->
                         <div id="marketContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             @foreach ($pasarKolaborayaList as $index => $pasar)
                                 @php
                                     $colors = [
-                                        'from-blue-500 to-purple-600',
-                                        'from-green-500 to-teal-600',
-                                        'from-orange-500 to-red-600',
-                                        'from-pink-500 to-rose-600',
-                                        'from-indigo-500 to-blue-600',
-                                        'from-emerald-500 to-green-600',
-                                        'from-amber-500 to-orange-600',
-                                        'from-violet-500 to-purple-600',
+                                        'bg-neutral-purple',
+                                        'bg-neutral-green',
+                                        'bg-accent-orange',
+                                        'bg-anccent-red',
+                                        'bg-primary-blue',
+                                        'bg-secondary-green',
                                     ];
                                     $colorClass = $colors[$index % count($colors)];
                                     $icons = [
@@ -124,55 +138,55 @@
                                         <div
                                             class="w-12 h-12 bg-gradient-to-br {{ $colorClass }} rounded-lg flex items-center justify-center shadow-lg">
                                             @if ($icon === 'Building')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path
                                                         d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
                                                     </path>
                                                 </svg>
                                             @elseif($icon === 'Rocket')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path
                                                         d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
                                                     </path>
                                                 </svg>
                                             @elseif($icon === 'Lightbulb')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path
                                                         d="M11 3a1 1 0 10-2 0v1a1 1 0 10-2 0V3a3 3 0 016 0v1a1 1 0 10-2 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 011-1H5a1 1 0 000 2h1a1 1 0 01-1-1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.477.859h4z">
                                                     </path>
                                                 </svg>
                                             @elseif($icon === 'Palette')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             @elseif($icon === 'Factory')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-2zm6 4a2 2 0 100 4 2 2 0 000-4z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             @elseif($icon === 'Leaf')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             @elseif($icon === 'Briefcase')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             @elseif($icon === 'Microscope')
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             @else
-                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                                         clip-rule="evenodd"></path>
@@ -180,11 +194,11 @@
                                             @endif
                                         </div>
                                         @if ($selectedPasar && $selectedPasar->id === $pasar->id)
-                                            <div class="flex items-center text-sm text-blue-600">
+                                            <div class="flex items-center text-sm text-primary-blue dark:text-neutral-100">
                                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586
-                                                                                       7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                                                                                                               7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                                 Aktif
@@ -193,8 +207,8 @@
                                     </div>
 
                                     <!-- Content -->
-                                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ $pasar->name }}
-                                    </h3>
+                                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                                        {{ $pasar->name }}</h3>
                                     <p class="text-sm leading-relaxed text-gray-700 dark:text-white/90">
                                         {{ Str::limit($pasar->description, 80) }}
                                     </p>
@@ -202,14 +216,14 @@
                                     <!-- Stats or Badge -->
                                     @if ($selectedPasar && $selectedPasar->id === $pasar->id)
                                         <div class="mt-4 flex items-center justify-between">
-                                            <div class="flex items-center text-xs text-gray-600">
+                                            <div class="flex items-center text-xs text-gray-600 dark:text-neutral-100">
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                                 Pasar Aktif
                                             </div>
                                             <div
-                                                class="px-2 py-1 bg-gray-200 dark:bg-white/20 rounded-full text-xs text-gray-700">
+                                                class="px-2 py-1 bg-gray-200 dark:bg-white/20 rounded-full text-xs text-gray-700 dark:text-neutral-200">
                                                 {{ $index + 1 }}/{{ $pasarKolaborayaList->count() }}
                                             </div>
                                         </div>
@@ -233,7 +247,8 @@
 
                         <!-- No Results Message -->
                         <div id="noResults" class="hidden text-center py-8">
-                            <div class="text-gray-500 dark:text-white/60 text-lg mb-2">Tidak ada pasar yang ditemukan</div>
+                            <div class="text-gray-500 dark:text-white/60 text-lg mb-2">Tidak ada pasar yang ditemukan
+                            </div>
                             <div class="text-gray-400 dark:text-white/40 text-sm">Coba kata kunci yang berbeda</div>
                         </div>
 
@@ -308,7 +323,7 @@
                                     </p>
                                 </div>
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+                                    class="w-12 h-12 bg-neutral-green rounded-lg flex items-center justify-center shadow-lg">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -422,6 +437,18 @@
                 </div>
             @endif
         </div>
+
+        @push('footer')
+            <!-- Footer -->
+            <footer class="mt-32 pb-8 z-1 relative">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div
+                        class="border-t border-gray-200 dark:border-slate-700 pt-8 text-center text-gray-500 dark:text-slate-400">
+                        <p>&copy; 2025 Pasar Kolaboraya. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        @endpush
 
         <!-- Ecosystem Detail Modal -->
         @include('components.ecosystem-detail-modal')
@@ -1302,6 +1329,10 @@
         <script src="https://d3js.org/d3.v7.min.js"></script>
 
         <style>
+            /* .market-selector {
+                                                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                                                        } */
+
             .market-card {
                 transition: all 0.3s ease;
             }
@@ -1312,8 +1343,26 @@
             }
 
             .market-card.selected {
-                border-color: #3b82f6;
-                background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                border-color: hsl(217, 91%, 60%);
+                background: linear-gradient(135deg, hsl(214, 95%, 93%) 0%, hsl(213, 97%, 87%) 100%);
+            }
+
+
+
+            .dark {
+                .market-card.selected {
+                    border-color: hsl(124, 41%, 60%);
+                    background: linear-gradient(135deg, hsl(124, 45%, 43%) 0%, hsl(124, 47%, 37%) 100%);
+                }
+
+                .market-card.selected h3,
+                .market-card.selected p,
+                .market-card.selected .text-white,
+                .market-card.selected .text-white\/90,
+                .market-card.selected .text-white\/70,
+                .market-card.selected .text-white\/80 {
+                    color: oklch(97% 0 0) !important;
+                }
             }
 
             .market-card.selected h3,
@@ -1322,7 +1371,7 @@
             .market-card.selected .text-white\/90,
             .market-card.selected .text-white\/70,
             .market-card.selected .text-white\/80 {
-                color: #1e40af !important;
+                color: #1E64C8 !important;
             }
 
             .market-card.selected .bg-white\/20 {
@@ -1336,10 +1385,10 @@
 
             <nav class="fixed backdrop-blur-xs top-0 w-full z-50 p-6">
                 <div class="max-w-7xl mx-auto flex justify-between items-center">
-                    <a href="{{ url('/') }}" class="text-navy dark:text-slate-200 text-2xl font-bold">
+                    <div class="text-navy dark:text-slate-200 text-2xl font-bold">
                         <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo"
                             class="h-10">
-                    </a>
+                    </div>
                     <div class="flex items-center space-x-4">
                         <!-- Dark Mode Toggle -->
                         <x-dark-mode-toggle />
@@ -1348,13 +1397,13 @@
                             <div class="space-x-4 flex">
                                 @auth
                                     <a href="{{ url('/dashboard') }}"
-                                        class="px-4 py-2 bg-navy dark:bg-slate-700 text-white rounded-full hover:bg-sky-700 dark:hover:bg-slate-600 transition">Beranda</a>
+                                        class="px-4 py-2 bg-navy dark:bg-secondary-green text-white rounded-full hover:bg-sky-700 dark:hover:bg-teal-600 transition">Beranda</a>
                                 @else
                                     <a href="{{ route('login') }}"
-                                        class="px-4 py-2 text-navy dark:text-slate-200 hover:text-sky-700 dark:hover:text-blue-400 transition">Masuk</a>
+                                        class="px-4 py-2 text-navy dark:text-slate-200 hover:text-sky-700 dark:hover:text-secondary-green transition">Masuk</a>
                                     @if (Route::has('register'))
                                         <a href="{{ route('register') }}"
-                                            class="px-4 py-2 bg-navy dark:bg-slate-700 text-white rounded-full hover:bg-sky-700 dark:hover:bg-slate-600 transition">Daftar</a>
+                                            class="px-4 py-2 bg-navy dark:bg-secondary-green text-white rounded-full hover:bg-sky-700 dark:hover:bg-teal-600 transition">Daftar</a>
                                     @endif
                                 @endauth
                             </div>
@@ -1362,6 +1411,37 @@
                     </div>
                 </div>
             </nav>
+
+            <div
+                class="absolute top-0 max-md:-translate-x-1/2 max-md:translate-y-1/2 left-0 w-80 h-80 opacity-70 animate-float">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/1.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
+            <div
+                class="absolute top-10 max-md:translate-x-1/2 max-md:translate-y-1/2 right-0 w-96 h-96 opacity-60 animate-float-delay-2">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
+            <div
+                class="absolute top-0  right-0 translate-x-1/4 -translate-y-1/4 w-72 h-72 opacity-50 animate-float-delay-3">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/8.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
+            <div
+                class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 right-5 w-80 h-80 opacity-60 animate-float">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/5.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
+            <div
+                class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 left-5 w-64 h-64 opacity-50 animate-float-delay-1">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/6.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
+            <div
+                class="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-72 h-72 opacity-60 animate-float-delay-2">
+                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/3.webp') }}" alt=""
+                    class="w-full h-full object-contain">
+            </div>
 
             <!-- Header -->
             <div class="market-selector text-white py-8 mt-16">
@@ -1378,7 +1458,7 @@
                     </div> --}}
 
                     <div class="text-center mb-8">
-                        <h1 class="text-4xl font-bold mb-4 dark:text-neutral-100 text-neutral-950">
+                        <h1 class="text-4xl font-extrabold mb-4 dark:text-neutral-100 text-primary-blue">
                             Peta Ekosistem Kolaboraya
                         </h1>
                         <p class="text-lg opacity-90 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-300">
@@ -1416,14 +1496,12 @@
                                 @foreach ($pasarKolaborayaList as $index => $pasar)
                                     @php
                                         $colors = [
-                                            'from-blue-500 to-purple-600',
-                                            'from-green-500 to-teal-600',
-                                            'from-orange-500 to-red-600',
-                                            'from-pink-500 to-rose-600',
-                                            'from-indigo-500 to-blue-600',
-                                            'from-emerald-500 to-green-600',
-                                            'from-amber-500 to-orange-600',
-                                            'from-violet-500 to-purple-600',
+                                            'bg-neutral-purple',
+                                            'bg-neutral-green',
+                                            'bg-accent-orange',
+                                            'bg-anccent-red',
+                                            'bg-primary-blue',
+                                            'bg-secondary-green',
                                         ];
                                         $colorClass = $colors[$index % count($colors)];
                                         $icons = [
@@ -1452,64 +1530,55 @@
                                             <div
                                                 class="w-12 h-12 bg-gradient-to-br {{ $colorClass }} rounded-lg flex items-center justify-center shadow-lg">
                                                 @if ($icon === 'Building')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path
                                                             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
                                                         </path>
                                                     </svg>
                                                 @elseif($icon === 'Rocket')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path
                                                             d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
                                                         </path>
                                                     </svg>
                                                 @elseif($icon === 'Lightbulb')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path
                                                             d="M11 3a1 1 0 10-2 0v1a1 1 0 10-2 0V3a3 3 0 016 0v1a1 1 0 10-2 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 011-1H5a1 1 0 000 2h1a1 1 0 01-1-1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.477.859h4z">
                                                         </path>
                                                     </svg>
                                                 @elseif($icon === 'Palette')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 @elseif($icon === 'Factory')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-2zm6 4a2 2 0 100 4 2 2 0 000-4z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 @elseif($icon === 'Leaf')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 @elseif($icon === 'Briefcase')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 @elseif($icon === 'Microscope')
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                 @else
-                                                    <svg class="w-6 h-6 text-white" fill="currentColor"
-                                                        viewBox="0 0 20 20">
+                                                    <svg class="w-6 h-6 text-white" fill="white" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                                             clip-rule="evenodd"></path>
@@ -1517,11 +1586,12 @@
                                                 @endif
                                             </div>
                                             @if ($selectedPasar && $selectedPasar->id === $pasar->id)
-                                                <div class="flex items-center text-sm text-blue-600">
+                                                <div
+                                                    class="flex items-center text-sm text-primary-blue dark:text-neutral-100">
                                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586
-                                                                                           7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                                                                                                               7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                     Aktif
@@ -1539,14 +1609,14 @@
                                         <!-- Stats or Badge -->
                                         @if ($selectedPasar && $selectedPasar->id === $pasar->id)
                                             <div class="mt-4 flex items-center justify-between">
-                                                <div class="flex items-center text-xs text-gray-600">
+                                                <div class="flex items-center text-xs text-gray-600 dark:text-neutral-100">
                                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                     Pasar Aktif
                                                 </div>
                                                 <div
-                                                    class="px-2 py-1 bg-gray-200 dark:bg-white/20 rounded-full text-xs text-gray-700">
+                                                    class="px-2 py-1 bg-gray-200 dark:bg-white/20 rounded-full text-xs text-gray-700 dark:text-neutral-200">
                                                     {{ $index + 1 }}/{{ $pasarKolaborayaList->count() }}
                                                 </div>
                                             </div>
@@ -1648,7 +1718,7 @@
                                         </p>
                                     </div>
                                     <div
-                                        class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+                                        class="w-12 h-12 bg-neutral-green rounded-lg flex items-center justify-center shadow-lg">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1764,6 +1834,16 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Footer -->
+            <footer class="mt-32 pb-8 z-1 relative">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div
+                        class="border-t border-gray-200 dark:border-slate-700 pt-8 text-center text-gray-500 dark:text-slate-400">
+                        <p>&copy; 2025 Pasar Kolaboraya. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
 
             <!-- Ecosystem Detail Modal -->
             @include('components.ecosystem-detail-modal')

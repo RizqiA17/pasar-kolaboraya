@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[Layout('components.layouts.auth', ['title' => 'Menunggu Persetujuan'])]
+#[Layout('components.layouts.sign-auth', ['title' => 'Menunggu Persetujuan'])]
 class PendingApproval extends Component
 {
     public function mount()
@@ -21,6 +21,13 @@ class PendingApproval extends Component
     {
         Auth::logout();
         return redirect()->route('login');
+    }
+
+    public function checkStatus(){
+        $user = Auth::user();
+        if ($user->isApproved()) {
+            return redirect()->route('profile.setup');
+        }
     }
 
     public function render()
