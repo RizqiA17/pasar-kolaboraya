@@ -2,7 +2,7 @@
     <!-- Hero Section -->
     <div class="relative min-h-screen bg-primary-light-blue dark:bg-slate-900 overflow-hidden">
         <!-- Navigation -->
-        <nav class="absolute top-0 w-full z-50 p-6">
+        <nav class="fixed backdrop-blur-xs top-0 w-full z-50 p-6">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="text-navy dark:text-slate-200 text-2xl font-bold">
                     <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo" class="h-10">
