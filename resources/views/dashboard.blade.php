@@ -36,9 +36,9 @@
 
                                 <!-- Floating SVG Backgrounds -->
                                 <div class="absolute inset-0 pointer-events-none">
-                                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/1.svg') }}" alt=""
+                                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/1.webp') }}" alt=""
                                         class="absolute top-8 left-4 w-16 h-16 opacity-20 animate-float-slow">
-                                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/15.svg') }}" alt=""
+                                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/15.webp') }}" alt=""
                                         class="absolute top-12 right-8 w-12 h-12 opacity-15 animate-float">
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                 class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
                             </div>
                             <div class="absolute top-0 right-0 w-16 h-16 opacity-20">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
                                     class="w-full h-full object-contain">
                             </div>
                             <div class="relative z-10">
@@ -90,7 +90,7 @@
                                 class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
                             </div>
                             <div class="absolute top-0 left-0 w-16 h-16 opacity-20">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/2.svg') }}" alt=""
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/2.webp') }}" alt=""
                                     class="w-full h-full object-contain">
                             </div>
                             <div class="relative z-10">
@@ -129,7 +129,7 @@
                                 class="absolute inset-0 bg-gradient-to-r from-white/10 dark:from-slate-700/10 to-transparent">
                             </div>
                             <div class="absolute bottom-0 right-0 w-16 h-16 opacity-20">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/11.svg') }}" alt=""
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/11.webp') }}" alt=""
                                     class="w-full h-full object-contain">
                             </div>
                             <div class="relative z-10">
@@ -164,7 +164,7 @@
                             class="col-span-1 lg:hidden w-full h-full relative shadow-lg border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-zinc-900 dark:via-blue-950/30 dark:to-purple-900/30">
                             <div class="absolute inset-0 pointer-events-none">
                                 <div class="absolute top-0 right-0 w-20 h-20 opacity-20 rotate-12">
-                                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
+                                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
                                         class="w-full h-full object-contain">
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                         datang...</span>
                                 </div>
                                 {{-- <div class="flex-1 flex items-center justify-center p-6">
-                                    <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="Kolaboraya AI"
+                                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt="Kolaboraya AI"
                                         class="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
                                 </div> --}}
                             </div>
@@ -193,7 +193,7 @@
                         class="col-span-1 w-full h-full hidden lg:block relative shadow-lg border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-zinc-900 dark:via-blue-950/30 dark:to-purple-900/30">
                         <div class="absolute inset-0 pointer-events-none">
                             <div class="absolute top-0 right-0 w-20 h-20 opacity-20 rotate-12">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt=""
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
                                     class="w-full h-full object-contain">
                             </div>
                         </div>
@@ -213,7 +213,7 @@
                             </div>
                             <div class="flex-1 flex items-center justify-center p-6">
                                 <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="Kolaboraya AI"
-                                    class="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
+                                    class="w-40 h-40 md:w-56 md:h-56 object-contain animate-pulse drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
                             </div>
                         </div>
                     </div>
@@ -232,7 +232,7 @@
                                 class="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10">
                             </div>
                             <div class="absolute top-0 left-0 w-20 h-20 opacity-10">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/4.svg') }}" alt=""
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/4.webp') }}" alt=""
                                     class="w-full h-full object-contain">
                             </div>
 
@@ -264,7 +264,7 @@
                         <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-gray-100 dark:border-slate-700">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10"></div>
                             <div class="absolute top-0 right-0 w-16 h-16 opacity-10">
-                                <img src="{{ Storage::url('web/ASET VISUAL/SVG/7.svg') }}" alt="" class="w-full h-full object-contain">
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt="" class="w-full h-full object-contain">
                             </div>
                             <div class="relative z-10 p-6">
                                 <div class="flex items-center justify-between mb-4">

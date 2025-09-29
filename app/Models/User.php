@@ -112,7 +112,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessEcosystem(): bool
     {
-        return $this->isApproved() && $this->user_type === 'partisipan';
+        return $this->user_type === 'partisipan';
     }
 
     /**
