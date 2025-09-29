@@ -12,10 +12,25 @@
 {
     /* Typography */
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-
     /* Brand Colors */
+    --color-neutral-green: #2C6B52;
+    --color-neutral-purple: #71305F;
+    --color-neutral-orange: #F8A71C;
+    --color-neutral-light-green: #6DA581;
+
+    --color-secondary-green: #2FB89B;
+    --color-secondary-yellow: #D9D332;
+
+    --color-primary-blue: #1E64C8;
+
+    --color-primary-light-blue: #f0f6ff;
+
+
+    --color-accent-orange: #F0673D;
+    --color-accent-red: #E33A37;
+
     --color-cream: #FFFBF5;
-    --color-navy: #1E365C;
+    --color-navy: #1E64C8;
     --color-coral: #FF6B6B;
     --color-sky: #4ECDC4;
     --color-purple: #9C6BFF;
@@ -46,14 +61,13 @@
         --color-accent: var(--color-sky);
         --color-accent-content: var(--color-sky);
         --color-accent-foreground: var(--color-navy);
-        
         /* Dark mode color overrides */
         --color-cream: #0f172a;
         --color-navy: #f1f5f9;
         --color-coral: #ff8a8a;
         --color-sky: #38bdf8;
         --color-purple: #a855f7;
-        
+
         /* Dark mode background colors */
         --color-background: #0f172a;
         --color-surface: #1e293b;
@@ -62,7 +76,7 @@
         --color-text-primary: #f1f5f9;
         --color-text-secondary: #cbd5e1;
         --color-text-muted: #94a3b8;
-        
+
         /* Flux compatibility colors */
         --flux-background: var(--color-background);
         --flux-surface: var(--color-surface);
@@ -139,19 +153,27 @@ select:focus[data-flux-control]
 } */
 
 /* Profile and Notification Enhancements */
-.profile-status-indicator {
+.profile-status-indicator
+{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.notification-badge {
+.notification-badge
+{
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes pulse {
-    0%, 100% {
+@keyframes pulse
+{
+
+    0%,
+    100%
+    {
         opacity: 1;
     }
-    50% {
+
+    50%
+    {
         opacity: 0.5;
     }
 }
