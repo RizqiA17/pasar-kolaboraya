@@ -16,7 +16,7 @@
             <div class="relative z-10 p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                        class="w-12 h-12 bg-secondary-green hover:bg-teal-600 transition-colors rounded-lg flex items-center justify-center">
                         <flux:icon.clipboard-document-list class="size-6 text-white" />
                     </div>
                     @if ($hasResponded)
@@ -41,7 +41,7 @@
 
                 @if (!$hasResponded)
                     <a href="{{ route('survey.participate') }}"
-                        class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl inline-block text-center">
+                        class="w-full bg-secondary-green text-white px-4 py-2 rounded-lg font-medium hover:bg-teal-600 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl inline-block text-center">
                         Isi Survey
                     </a>
                 @else

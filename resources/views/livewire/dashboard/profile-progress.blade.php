@@ -71,7 +71,7 @@
         <div class="mb-8">
             @if($completionPercentage >= 100)
                 <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-2xl">
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mr-4">
+                    <div class="w-12 h-12 bg-secondary-green hover:bg-teal-600 transition-colors rounded-full flex items-center justify-center mr-4">
                         <span class="text-2xl">🎉</span>
                     </div>
                     <div>

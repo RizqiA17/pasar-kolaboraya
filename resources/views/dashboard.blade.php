@@ -272,19 +272,19 @@
                                         <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code Saya</h3>
                                         <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg">
+                                    <div class="w-12 h-12 bg-secondary-green hover:bg-teal-600 transition-colors rounded-lg flex items-center justify-center shadow-lg">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
                                         </svg>
                                     </div>
                                 </div>
                                 <p class="text-gray-600 dark:text-slate-400 text-sm mb-4">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
-                                <a href="{{ route('qr.show') }}" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                                <flux:link wire:navigate href="{{ route('qr.show') }}" class="inline-flex items-center text-sm font-medium transition-colors">
                                     Lihat QR Code
                                     <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
-                                </a>
+                                </flux:link>
                             </div>
                         </div>
                         
@@ -314,7 +314,7 @@
                     <div
                         class="group bg-white dark:bg-zinc-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-gray-700">
                         <div
-                            class="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center mb-3">
+                            class="w-8 h-8 bg-secondary-green rounded-lg flex items-center justify-center mb-3">
                             <flux:icon.chat-bubble-left-right class="size-4 text-white" />
                         </div>
                         <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">Pesan</h4>
