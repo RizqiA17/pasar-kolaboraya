@@ -24,6 +24,8 @@ class Create extends Component
 
     public $interests = [];
     public $roles = [];
+    public $issueSearch = '';
+    public $roleSearch = '';
 
     protected $rules = [
         'organization_name' => 'required|string|max:255',
@@ -105,7 +107,66 @@ class Create extends Component
         session()->flash('message', 'Ekosistem berhasil dibuat!');
 
         // Redirect to the new ecosystem dashboard
-        return redirect()->route('ecosystem.dashboard', $ecosystem);
+        return $this->redirectRoute('ecosystem.dashboard', $ecosystem, navigate: true);
+    }
+
+    public function getFilteredInterests()
+    {
+        if (empty($this->issueSearch)) {
+            return $this->interests;
+        }
+
+        return collect($this->interests)->filter(function($interest) {
+            return str_contains(strtolower($interest->name), strtolower($this->issueSearch));
+        })->values();
+    }
+
+    public function getFilteredRoles()
+    {
+        if (empty($this->roleSearch)) {
+            return $this->roles;
+        }
+
+        return collect($this->roles)->filter(function($role) {
+            return str_contains(strtolower($role->nama), strtolower($this->roleSearch)) ||
+                   str_contains(strtolower($role->deskripsi), strtolower($this->roleSearch));
+        })->values();
+    }
+
+    public function toggleIssue($issueId)
+    {
+        if (in_array($issueId, $this->selectedIssues)) {
+            $this->selectedIssues = array_filter($this->selectedIssues, function($id) use ($issueId) {
+                return $id != $issueId;
+            });
+        } else {
+            $this->selectedIssues[] = $issueId;
+        }
+    }
+
+    public function toggleRole($roleId)
+    {
+        if (in_array($roleId, $this->selectedExistingRoles)) {
+            $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function($id) use ($roleId) {
+                return $id != $roleId;
+            });
+        } else {
+            $this->selectedExistingRoles[] = $roleId;
+        }
+    }
+
+    public function removeIssue($issueId)
+    {
+        $this->selectedIssues = array_filter($this->selectedIssues, function($id) use ($issueId) {
+            return $id != $issueId;
+        });
+    }
+
+    public function removeRole($roleId)
+    {
+        $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function($id) use ($roleId) {
+            return $id != $roleId;
+        });
     }
 
     public function render()
