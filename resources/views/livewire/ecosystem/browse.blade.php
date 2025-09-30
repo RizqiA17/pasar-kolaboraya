@@ -8,27 +8,23 @@
                     Anda</p>
             </div>
             <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
-                @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder())
-                    @if (!$hasEcosystem)
-                        <flux:button class="max-sm:w-full" :href="route('ecosystem.create')" wire:navigate>
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4">
-                                </path>
-                            </svg>
-                            Buat Ekosistem
-                        </flux:button>
-                    @endif
-                @else
-                    <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
+                @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder() && !$hasEcosystem)
+                    <flux:button class="max-sm:w-full" :href="route('ecosystem.create')" wire:navigate>
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>
-                        Scan QR Code
+                        Buat Ekosistem
                     </flux:button>
                 @endif
+                <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                        </path>
+                    </svg>
+                    Scan QR Code
+                </flux:button>
             </div>
         </div>
     </div>
@@ -80,7 +76,8 @@
 
     <!-- Flash Messages -->
     @if (session('error'))
-        <div class="bg-accent-red/10 dark:bg-accent-red/20 border border-accent-red/20 dark:border-accent-red/30 rounded-xl p-4">
+        <div
+            class="bg-accent-red/10 dark:bg-accent-red/20 border border-accent-red/20 dark:border-accent-red/30 rounded-xl p-4">
             <p class="text-accent-red dark:text-accent-red">{{ session('error') }}</p>
         </div>
     @endif
