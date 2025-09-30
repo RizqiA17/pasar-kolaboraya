@@ -6,47 +6,101 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 @endpush
 
-<div class="max-w-4xl mx-auto space-y-6">
-    <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
-        <div class="flex items-center mb-4">
-            <a href="{{ route('collective-action.browse') }}" class="mr-4 text-white/80 hover:text-white">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-            </a>
-            <h1 class="text-2xl font-bold">Buat Aksi Kolektif</h1>
+<div class="flex flex-col gap-6 relative">
+    <!-- Header Section with Illustration -->
+    <div class="relative">
+        <!-- SVG Accent Elements with enhanced positioning and animation -->
+        <div class="absolute top-0 right-0 -mt-8 -mr-8 transform rotate-12 transition-transform duration-500 hover:rotate-45">
+            <x-svg-accent position="top-right" size="w-24 h-24" opacity="opacity-20" />
         </div>
-        <p class="text-blue-100">
-            Ajak ecosystem builders lain untuk berkolaborasi dalam gerakan perubahan sosial yang lebih besar
-        </p>
+        <div class="absolute bottom-0 left-0 -mb-8 -ml-8 transform -rotate-12 transition-transform duration-500 hover:-rotate-45">
+            <x-svg-accent position="bottom-left" size="w-20 h-20" opacity="opacity-20" />
+        </div>
+
+        <!-- Enhanced Header Content -->
+        <div class="text-center relative z-10 py-8">
+            <div class="inline-block mb-4">
+                <svg class="w-16 h-16 mx-auto text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">Buat Aksi Kolektif</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Ajak ecosystem builders lain untuk berkolaborasi dalam gerakan perubahan sosial yang lebih besar
+            </p>
+        </div>
     </div>
 
+    <!-- Session Status -->
+    @if (session('message'))
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center">
+            <p class="text-green-700 dark:text-green-300">{{ session('message') }}</p>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-center">
+            <p class="text-red-700 dark:text-red-300">{{ session('error') }}</p>
+        </div>
+    @endif
+
     <!-- Info Box -->
-    <div class="bg-primary-light-blue/10 dark:bg-primary-blue/20 border border-primary-light-blue/20 dark:border-primary-blue/30 rounded-xl p-4">
-        <div class="flex items-start">
-            <svg class="w-5 h-5 text-primary-blue mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <div>
-                <h3 class="font-semibold text-primary-blue dark:text-primary-light-blue">Flow Aksi Kolektif</h3>
-                <p class="text-sm text-primary-blue/80 dark:text-primary-light-blue/80 mt-1">
-                    1. Anda membuat aksi kolektif dan mengundang ecosystem builders lain<br>
-                    2. Mereka menerima/menolak undangan untuk berkolaborasi<br>
-                    3. Setelah minimal 3 ekosistem bergabung, aksi dapat dimulai<br>
-                    4. User biasa dapat berkontribusi pada aksi yang aktif
+    <div class="bg-gradient-to-br max-w-6xl mx-auto w-full from-blue-50 to-blue-50/50 dark:from-blue-900/30 dark:to-blue-900/20 border border-blue-200/70 dark:border-blue-800 rounded-xl p-6 shadow-sm backdrop-blur-sm">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-base font-semibold text-blue-800 dark:text-blue-200">
+                    Flow Aksi Kolektif
+                </h3>
+            </div>
+        </div>
+        <div class="mt-4 space-y-3">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">1</span>
+                </div>
+                <p class="ml-3 text-sm text-blue-700 dark:text-blue-300">
+                    Anda membuat aksi kolektif dan mengundang ecosystem builders lain
+                </p>
+            </div>
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">2</span>
+                </div>
+                <p class="ml-3 text-sm text-blue-700 dark:text-blue-300">
+                    Mereka menerima/menolak undangan untuk berkolaborasi
+                </p>
+            </div>
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">3</span>
+                </div>
+                <p class="ml-3 text-sm text-blue-700 dark:text-blue-300">
+                    Setelah minimal 3 ekosistem bergabung, aksi dapat dimulai
+                </p>
+            </div>
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">4</span>
+                </div>
+                <p class="ml-3 text-sm text-blue-700 dark:text-blue-300">
+                    User biasa dapat berkontribusi pada aksi yang aktif
                 </p>
             </div>
         </div>
     </div>
 
-    <form wire:submit="createAction" class="space-y-6">
-        <!-- Basic Information -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Informasi Dasar
-            </h2>
-            
+    <form wire:submit="createAction" class="flex flex-col gap-6 w-full max-w-6xl mx-auto">
+        <!-- Form Section: Informasi Dasar -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 w-full shadow-sm border border-gray-100 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Dasar</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Title -->
                 <div class="md:col-span-2">
@@ -56,22 +110,43 @@
                         type="text"
                         required
                         :placeholder="'Contoh: Gerakan Bersih-Bersih Lingkungan Nasional'"
+                        icon="presentation-chart-line"
                     />
                 </div>
 
                 <!-- Scale -->
-                <flux:select wire:model="scale" :label="'Skala Aksi'" required>
-                    <option value="kecil">Aksi Kecil</option>
-                    <option value="sedang">Aksi Sedang</option>
-                    <option value="besar">Aksi Besar</option>
-                </flux:select>
+                <div class="relative">
+                    <flux:select 
+                        wire:model="scale" 
+                        :label="'Skala Aksi'" 
+                        required
+                        icon="chart-bar"
+                    >
+                        <option value="kecil">Aksi Kecil</option>
+                        <option value="sedang">Aksi Sedang</option>
+                        <option value="besar">Aksi Besar</option>
+                    </flux:select>
+                    @error('scale')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
+                </div>
 
                 <!-- Scope -->
-                <flux:select wire:model="scope" :label="'Jangkauan'" required>
-                    <option value="local">Lokal</option>
-                    <option value="national">Nasional</option>
-                    <option value="international">Internasional</option>
-                </flux:select>
+                <div class="relative">
+                    <flux:select 
+                        wire:model="scope" 
+                        :label="'Jangkauan'" 
+                        required
+                        icon="globe"
+                    >
+                        <option value="local">Lokal</option>
+                        <option value="national">Nasional</option>
+                        <option value="international">Internasional</option>
+                    </flux:select>
+                    @error('scope')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
+                </div>
 
                 <!-- Description -->
                 <div class="md:col-span-2">
@@ -81,7 +156,11 @@
                         required
                         :placeholder="'Jelaskan detail aksi kolektif yang akan dilakukan...'"
                         rows="4"
+                        icon="document-text"
                     />
+                    @error('description')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
                 </div>
 
                 <!-- Goals -->
@@ -92,13 +171,17 @@
                         required
                         :placeholder="'Apa yang ingin dicapai dari aksi kolektif ini?'"
                         rows="3"
+                        icon="flag"
                     />
+                    @error('goals')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
                 </div>
             </div>
         </div>
 
-        <!-- Timeline & Location -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm"
+        <!-- Form Section: Waktu dan Tempat -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700"
             x-data="{
                 map: null,
                 marker: null,
@@ -316,83 +399,100 @@
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <flux:input
-                    wire:model="start_date"
-                    :label="'Tanggal Mulai'"
-                    type="date"
-                    required
-                />
+                <!-- Start Date -->
+                <div class="relative">
+                    <flux:input
+                        wire:model="start_date"
+                        :label="'Tanggal Mulai'"
+                        type="date"
+                        required
+                        icon="calendar"
+                    />
+                    @error('start_date')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
+                </div>
 
-                <flux:input
-                    wire:model="end_date"
-                    :label="'Tanggal Selesai'"
-                    type="date"
-                    required
-                />
+                <!-- End Date -->
+                <div class="relative">
+                    <flux:input
+                        wire:model="end_date"
+                        :label="'Tanggal Selesai'"
+                        type="date"
+                        required
+                        icon="calendar"
+                    />
+                    @error('end_date')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
+                </div>
 
+                <!-- Location -->
                 <div class="md:col-span-2">
                     <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Lokasi (Opsional)
                     </label>
                     <div class="relative">
-                        <input 
-                            type="text" 
-                            id="location" 
-                            name="location" 
-                            wire:model="location" 
-                            x-model="location"
-                            @input.debounce.500ms="searchLocation($event.target.value)"
-                            @focus="if(searchResults.length > 0) showSuggestions = true"
-                            @blur="setTimeout(() => showSuggestions = false, 200)"
-                            placeholder="Contoh: Jakarta, Bandung, atau Online - ketik untuk mencari"
-                            class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                        >
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <div x-show="isSearching" class="animate-spin">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="location" 
+                                name="location" 
+                                wire:model="location" 
+                                x-model="location"
+                                @input.debounce.500ms="searchLocation($event.target.value)"
+                                @focus="if(searchResults.length > 0) showSuggestions = true"
+                                @blur="setTimeout(() => showSuggestions = false, 200)"
+                                placeholder="Contoh: Jakarta, Bandung, atau Online - ketik untuk mencari"
+                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
+                            >
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                             </div>
-                            <svg x-show="!isSearching" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <div x-show="isSearching" class="animate-spin">
+                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <svg x-show="!isSearching" class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
                         </div>
 
                         <!-- Search Results Dropdown -->
                         <div x-show="showSuggestions && searchResults.length > 0" 
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                            <template x-for="(result, index) in searchResults" :key="index">
-                                <div @click="selectLocation(result)" 
-                                     class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"
-                                     :class="{'text-gray-400 cursor-not-allowed': !result.lat}">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        </svg>
-                                        <span class="text-sm text-gray-900 dark:text-white truncate" x-text="result.name"></span>
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             class="absolute left-0 right-0 z-10 mt-2">
+                            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                <template x-for="(result, index) in searchResults" :key="index">
+                                    <div @click="selectLocation(result)" 
+                                         class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
+                                         :class="{'text-gray-400 cursor-not-allowed': !result.lat}">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            </svg>
+                                            <span class="text-sm text-gray-900 dark:text-white truncate" x-text="result.name"></span>
+                                        </div>
                                     </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         Ketik nama tempat untuk mencari lokasi, atau gunakan map di bawah untuk memilih lokasi yang tepat (opsional)
                     </p>
                     @error('location') 
-                        <span class="text-red-500 text-sm flex items-center mt-1">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </span> 
+                        <flux:error>{{ $message }}</flux:error>
                     @enderror
                 </div>
 
@@ -401,18 +501,18 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Pilih Lokasi di Map (Opsional)
                     </label>
-                    <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden" wire:ignore>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm" wire:ignore>
                         <div x-ref="map" style="height: 300px; width: 100%;"></div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         Klik atau drag marker pada map untuk menentukan lokasi yang lebih spesifik
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Required Resources -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <!-- Form Section: Sumber Daya yang Dibutuhkan -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Sumber Daya yang Dibutuhkan
             </h2>
@@ -573,10 +673,8 @@
                             variant="outline" 
                             size="sm"
                             class="text-primary-blue hover:bg-primary-blue/10"
+                            icon="plus"
                         >
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
                             Tambah Custom
                         </flux:button>
                     </div>
@@ -612,8 +710,8 @@
                 </div>
             </div>
 
-            <!-- Invite Ecosystems -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <!-- Form Section: Undang Ekosistem -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-5 mb-6 shadow-sm border border-gray-100 dark:border-gray-700">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Undang Ekosistem untuk Berkolaborasi
                 </h2>
@@ -806,20 +904,26 @@
                 @endif
             </div>
 
-            <!-- Collaboration Terms -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <!-- Form Section: Syarat Kolaborasi -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Syarat Kolaborasi
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <flux:input
-                        wire:model="min_ecosystems"
-                        :label="'Minimal Ekosistem yang Diperlukan'"
-                        type="number"
-                        min="3"
-                        required
-                    />
+                    <div class="relative">
+                        <flux:input
+                            wire:model="min_ecosystems"
+                            :label="'Minimal Ekosistem yang Diperlukan'"
+                            type="number"
+                            min="3"
+                            required
+                            icon="user-group"
+                        />
+                        @error('min_ecosystems')
+                            <flux:error>{{ $message }}</flux:error>
+                        @enderror
+                    </div>
                     
                     <div></div>
                     
@@ -830,40 +934,59 @@
                             required
                             :placeholder="'Tuliskan syarat dan ketentuan untuk berkolaborasi dalam aksi ini...'"
                             rows="4"
+                            icon="document-check"
                         />
+                        @error('collaboration_terms')
+                            <flux:error>{{ $message }}</flux:error>
+                        @enderror
                     </div>
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="flex gap-3">
+            <!-- Action Buttons -->
+            <div class="flex gap-4 mt-4 flex-col sm:flex-row-reverse">
                 @if($availableEcosystems->count() >= 2)
                     <flux:button 
                         type="submit" 
-                        variant="primary" 
-                        class="flex-1 bg-primary-blue hover:bg-primary-blue/90"
-                        {{-- :loading="$wire.loading" --}}
+                        variant="primary"
+                        class="w-full cursor-pointer py-3 text-base font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
                     >
-                        Buat Aksi dan Kirim Undangan
+                        <div class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <span>Buat Aksi dan Kirim Undangan</span>
+                        </div>
                     </flux:button>
                 @else
                     <flux:button 
                         type="button" 
-                        variant="outline" 
-                        class="flex-1 text-gray-400 dark:text-gray-500"
+                        variant="outline"
+                        class="w-full cursor-not-allowed py-3 text-base font-medium text-gray-400 dark:text-gray-500"
                         disabled
                     >
-                        Perlu Minimal 2 Ekosistem Lain
+                        <div class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m0 0v2m0-2h2m-2 0H9" />
+                            </svg>
+                            <span>Perlu Minimal 2 Ekosistem Lain</span>
+                        </div>
                     </flux:button>
                 @endif
                 
                 <flux:button 
                     type="button" 
                     variant="outline"
-                    onclick="window.history.back()"
+                    class="w-full cursor-pointer py-3 text-base font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                    href="{{ route('collective-action.browse') }}"
                 >
-                    Batal
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        <span>Batal</span>
+                    </div>
                 </flux:button>
             </div>
-    </form>
-</div>
+        </form>
+    </div>

@@ -228,7 +228,7 @@ class Create extends Component
 
         session()->flash('message', 'Aksi kolektif berhasil dibuat dan undangan telah dikirim! Status: Perencanaan');
 
-        return redirect()->route('collective-action.browse');
+        return $this->redirectRoute('collective-action.browse', navigate: true);
     }
 
     public function setCoordinates($data)
