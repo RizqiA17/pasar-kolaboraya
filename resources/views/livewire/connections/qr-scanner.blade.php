@@ -97,17 +97,14 @@
 
                         <div class="space-y-2 w-full">
                             @if ($connectionStatus === 'idle')
-                                <flux:button variant="primary" wire:click="refreshQr"
-                                    class="w-full">
+                                <flux:button variant="primary" wire:click="refreshQr" class="w-full">
                                     Buat QR Baru
                                 </flux:button>
                             @elseif($connectionStatus === 'waiting_for_response')
-                                <flux:button variant="primary" color="green" wire:click="refreshQr"
-                                    class="w-full">
+                                <flux:button variant="primary" color="green" wire:click="refreshQr" class="w-full">
                                     Buat QR Baru
                                 </flux:button>
-                                <flux:button variant="danger" wire:click="resetConnection"
-                                    class="w-full">
+                                <flux:button variant="danger" wire:click="resetConnection" class="w-full">
                                     Hentikan Koneksi
                                 </flux:button>
                             @elseif($connectionStatus === 'connected')
@@ -147,8 +144,7 @@
                                     <input type="text" wire:model="scannedQrCode"
                                         wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
                                         class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
-                                    <flux:button variant="primary" wire:click="processScannedQr"
-                                        class="">
+                                    <flux:button variant="primary" wire:click="processScannedQr" class="">
                                         Scan
                                     </flux:button>
                                 </div>
@@ -346,12 +342,15 @@
             // Livewire.on('stop-camera', () => {
             //     stopCamera();
             // });
+            const url = window.location.href;
 
             // Auto-start camera when page loads
-            setTimeout(() => {
-                console.log('Auto-starting camera...');
-                startCamera();
-            }, 1000);
+            if (url.includes("qr-scanner") || url.includes("connections")) {
+                setTimeout(() => {
+                    console.log('Auto-starting camera...');
+                    startCamera();
+                }, 1000);
+            }
         });
 
         document.addEventListener("livewire:load", () => { // Initialize Pusher

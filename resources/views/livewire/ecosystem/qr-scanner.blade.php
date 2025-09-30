@@ -86,26 +86,9 @@
                 <!-- Camera Scanner -->
                 <div
                     class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
-                    @if (!$isScanning)
-                        <div class="text-center w-full">
-                            <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📷</div>
-                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-                                Gunakan kamera untuk scan QR code
-                            </p>
-                            <flux:button variant="primary" wire:click="startScanning"
-                                class="">
-                                Buka Kamera
-                            </flux:button>
-                        </div>
-                    @else
-                        <div class="text-center w-full">
-                            <div id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden"></div>
-                            <button wire:click="stopScanning"
-                                class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
-                                Tutup Kamera
-                            </button>
-                        </div>
-                    @endif
+                    <div wire:ignore class="text-center w-full">
+                        <div id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden"></div>
+                    </div>
                 </div>
 
             </div>
@@ -119,27 +102,27 @@
                     <div class="flex items-start">
                         <span
                             class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-200 dark:bg-green-700 text-blue-800 dark:text-blue-100 rounded-full flex items-center justify-center text-xs font-semibold mr-2 sm:mr-3 mt-0.5">1</span>
-                        <p>Klik tombol "Buka Kamera" untuk mengaktifkan kamera</p>
+                        <p>Izinkan akses kamera saat browser meminta izin</p>
                     </div>
                     <div class="flex items-start">
                         <span
                             class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-200 dark:bg-green-700 text-blue-800 dark:text-blue-100 rounded-full flex items-center justify-center text-xs font-semibold mr-2 sm:mr-3 mt-0.5">2</span>
-                        <p>Arahkan kamera ke QR code ekosistem</p>
+                        <p>Arahkan kamera ke QR code ekosistem yang ingin di-scan</p>
                     </div>
                     <div class="flex items-start">
                         <span
                             class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-200 dark:bg-green-700 text-blue-800 dark:text-blue-100 rounded-full flex items-center justify-center text-xs font-semibold mr-2 sm:mr-3 mt-0.5">3</span>
-                        <p>QR code akan otomatis terdeteksi dan diproses</p>
+                        <p>Scanner akan otomatis mendeteksi dan memproses QR code</p>
                     </div>
                     <div class="flex items-start">
                         <span
                             class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-200 dark:bg-green-700 text-blue-800 dark:text-blue-100 rounded-full flex items-center justify-center text-xs font-semibold mr-2 sm:mr-3 mt-0.5">4</span>
-                        <p>Anda akan diarahkan ke form bergabung ekosistem</p>
+                        <p>Setelah QR terdeteksi, Anda akan diarahkan ke form bergabung ekosistem</p>
                     </div>
                     <div class="flex items-start">
                         <span
                             class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-200 dark:bg-green-700 text-blue-800 dark:text-blue-100 rounded-full flex items-center justify-center text-xs font-semibold mr-2 sm:mr-3 mt-0.5">5</span>
-                        <p>Atau gunakan input manual jika QR code tidak dapat di-scan</p>
+                        <p>Jika kamera tidak berfungsi, gunakan input manual di atas untuk memasukkan kode QR</p>
                     </div>
                 </div>
             </div>
@@ -152,60 +135,26 @@
         let html5QrcodeScanner = null;
         let isScanning = false;
 
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('start-camera', () => {
-                startCamera();
-            });
-
-            Livewire.on('stop-camera', () => {
-                stopCamera();
-            });
-        });
-
-        // Handle wire:navigate - reinitialize camera functionality after navigation
         document.addEventListener('livewire:navigated', () => {
-            console.log('Livewire navigated - reinitializing ecosystem camera functionality');
-
-            // Clean up any existing camera instances
-            if (html5QrcodeScanner) {
-                stopCamera();
-            }
-
-            // Reset scanning state
-            isScanning = false;
-
-            // Re-register Livewire event listeners after navigation
-            if (typeof Livewire !== 'undefined') {
-                Livewire.on('start-camera', () => {
-                    startCamera();
-                });
-
-                Livewire.on('stop-camera', () => {
-                    stopCamera();
-                });
-            }
+            // Auto-start camera when page loads
+            const url = window.location.href;
+            if(url.includes("qr-scanner")){
+            setTimeout(() => {
+                console.log('Auto-starting camera...');
+                startCamera();
+            }, 1000);}
         });
 
-        // Additional fallback for wire:navigate - ensure camera works even if livewire:navigated doesn't fire
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if we're on the ecosystem QR scanner page and reinitialize if needed
-            if (document.querySelector('#qr-reader')) {
-                console.log('Ecosystem QR scanner page detected - ensuring camera functionality is ready');
+        document.addEventListener('livewire:navigating', () => {
+            stopCamera()
+        });
 
-                // Add a small delay to ensure Livewire is fully loaded
-                setTimeout(() => {
-                    if (typeof Livewire !== 'undefined') {
-                        // Re-register event listeners as fallback
-                        Livewire.on('start-camera', () => {
-                            startCamera();
-                        });
-
-                        Livewire.on('stop-camera', () => {
-                            stopCamera();
-                        });
-                    }
-                }, 500);
-            }
+        document.addEventListener("livewire:load", () => {
+            // Auto-start camera when page loads
+            setTimeout(() => {
+                console.log('Auto-starting camera...');
+                startCamera();
+            }, 1000);
         });
 
         async function startCamera() {
@@ -252,10 +201,8 @@
                     config,
                     (decodedText, decodedResult) => {
                         console.log('QR Code detected:', decodedText);
-                        stopCamera();
-                        Livewire.dispatch('qr-scanned', {
-                            qrCode: decodedText
-                        });
+                        @this.call('onQrScanned', decodedText);
+                        // Don't stop scanner, keep it running for next scan
                     },
                     (errorMessage) => {
                         // Ignore scan errors, keep scanning
@@ -303,6 +250,10 @@
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && isScanning) {
                 stopCamera();
+            }
+
+            if (!document.hidden) {
+                startCamera();
             }
         });
     </script>
