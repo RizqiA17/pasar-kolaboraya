@@ -16,7 +16,7 @@
             <div class="relative z-10 p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div
-                        class="w-12 h-12 bg-secondary-green hover:bg-teal-600 transition-colors rounded-lg flex items-center justify-center">
+                        class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center">
                         <flux:icon.clipboard-document-list class="size-6 text-white" />
                     </div>
                     @if ($hasResponded)

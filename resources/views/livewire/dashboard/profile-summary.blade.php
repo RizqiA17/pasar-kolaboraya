@@ -13,7 +13,7 @@
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Ringkasan Profil</h3>
                 <p class="text-gray-600 dark:text-gray-400">Informasi lengkap tentang Anda</p>
             </div>
-            <flux:button href="{{ route(name: 'settings.profile-settings') }}" variant="subtle" size="sm" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white! hover:from-purple-600 hover:to-pink-600 border-purple-200">
+            <flux:button href="{{ route(name: 'settings.profile-settings') }}" variant="subtle" size="sm" class="bg-accent-red! text-white! hover:bg-accent-red/90! border-purple-200">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -27,7 +27,7 @@
             <div class="space-y-4 mb-8">
                 @if ($profile->organization)
                     <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center mr-4">
+                        <div class="w-10 h-10 bg-primary-blue rounded-xl flex items-center justify-center mr-4">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -42,7 +42,7 @@
 
                 @if ($profile->phone)
                     <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-100 dark:border-green-800">
-                        <div class="w-10 h-10 bg-secondary-green hover:bg-teal-600 transition-colors rounded-xl flex items-center justify-center mr-4">
+                        <div class="w-10 h-10 bg-secondary-green rounded-xl flex items-center justify-center mr-4">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -56,16 +56,16 @@
                 @endif
 
                 @if ($profile->vision)
-                    <div class="flex items-start p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-100 dark:border-purple-800">
-                        <div class="min-w-10! h-10! bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-4 mt-1">
+                    <div class="flex items-start p-4 bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-800">
+                        <div class="min-w-10! h-10! bg-accent-red rounded-xl flex items-center justify-center mr-4 mt-1">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
                         </div>
                         <div>
-                            <div class="text-sm font-medium text-purple-700 dark:text-purple-300">Visi</div>
-                            <div class="text-base text-purple-900 dark:text-purple-100">{{ Str::limit($profile->vision, 100) }}</div>
+                            <div class="text-sm font-medium text-red-700 dark:text-red-300">Visi</div>
+                            <div class="text-base text-red-900 dark:text-red-100">{{ Str::limit($profile->vision, 100) }}</div>
                         </div>
                     </div>
                 @endif
@@ -75,7 +75,7 @@
             @if ($skills && $skills->count() > 0)
                 <div class="mb-8">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 bg-primary-blue transition-colors rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                             </svg>
@@ -108,7 +108,7 @@
             @if ($interests && $interests->count() > 0)
                 <div class="mb-8">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <div class="w-8 h-8 bg-secondary-green hover:bg-teal-600 transition-colors rounded-lg flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 bg-secondary-green rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                             </svg>
@@ -134,7 +134,7 @@
             @if ($profile->social_media && is_array($profile->social_media) && count($profile->social_media) > 0)
                 <div class="mb-6">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <div class="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 bg-accent-red transition-colors rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
                             </svg>
@@ -144,13 +144,13 @@
                     <div class="flex flex-wrap gap-3">
                         @foreach ($profile->social_media as $platform => $username)
                             @if ($username && !empty($username))
-                                <div class="flex items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-100 dark:border-purple-800">
-                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+                                <div class="flex items-center p-3 bg-red-100 dark:bg-red-900/50 rounded-xl border border-red-100 dark:border-red-800">
+                                    <div class="w-8 h-8 bg-accent-red transition-colors rounded-lg flex items-center justify-center mr-3">
                                         <span class="text-white text-sm font-bold">{{ strtoupper(substr($platform, 0, 1)) }}</span>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-medium text-purple-600 dark:text-purple-400">{{ ucfirst($platform) }}</div>
-                                        <div class="text-sm font-semibold text-purple-900 dark:text-purple-100">{{ $username }}</div>
+                                        <div class="text-xs font-medium text-red-600 dark:text-red-200">{{ ucfirst($platform) }}</div>
+                                        <div class="text-sm font-semibold text-red-900 dark:text-red-100">{{ $username }}</div>
                                     </div>
                                 </div>
                             @endif

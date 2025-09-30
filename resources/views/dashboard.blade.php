@@ -173,7 +173,7 @@
                                     <div class="flex items-center mb-3">
                                         <h3 class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                                             Kolaboraya <span
-                                                class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-pink-500 to-yellow-400">AI</span>
+                                                class="text-transparent bg-clip-text bg-gradient-to-r from-primary-blue via-accent-red to-yellow-400">AI</span>
                                         </h3>
                                     </div>
                                     <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Fitur AI-powered untuk
@@ -202,7 +202,7 @@
                                 <div class="flex items-center mb-3">
                                     <h3 class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                                         Kolaboraya <span
-                                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-pink-500 to-yellow-400">AI</span>
+                                            class="text-transparent bg-clip-text bg-gradient-to-r from-primary-blue via-accent-red to-yellow-400">AI</span>
                                     </h3>
                                 </div>
                                 <p class="text-gray-700 dark:text-gray-300 text-base mb-4">Fitur AI-powered untuk
@@ -245,7 +245,7 @@
                                             komunitas Anda</p>
                                     </div>
                                     <div
-                                        class="w-12 h-12 bg-gradient-to-br from-sky-500 to-purple-500 dark:from-sky-400 dark:to-purple-400 rounded-lg flex items-center justify-center shadow-lg">
+                                        class="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center shadow-lg">
                                         <flux:icon.clock class="size-6 text-white dark:text-slate-900" />
                                     </div>
                                 </div>
@@ -272,7 +272,7 @@
                                         <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code Saya</h3>
                                         <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-secondary-green hover:bg-teal-600 transition-colors rounded-lg flex items-center justify-center shadow-lg">
+                                    <div class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center shadow-lg">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
                                         </svg>

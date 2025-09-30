@@ -10,8 +10,8 @@
                     <div @class([
                         'flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 group-hover:scale-110',
                         'bg-secondary-green' => $activity->type === 'collective_action',
-                        'bg-gradient-to-br from-purple-400 to-pink-500' => $activity->type === 'ecosystem',
-                        'bg-gradient-to-br from-blue-400 to-cyan-500' => $activity->type === 'ecosystem_contribution',
+                        'bg-accent-red' => $activity->type === 'ecosystem',
+                        'bg-primary-blue' => $activity->type === 'ecosystem_contribution',
                         'bg-gradient-to-br from-orange-400 to-red-500' => $activity->type === 'collective_action_contribution',
                     ])>
                         @if($activity->type === 'collective_action')
@@ -29,8 +29,8 @@
                     <div @class([
                         'absolute inset-0 rounded-2xl animate-ping opacity-20',
                         'bg-secondary-green' => $activity->type === 'collective_action',
-                        'bg-gradient-to-br from-purple-400 to-pink-500' => $activity->type === 'ecosystem',
-                        'bg-gradient-to-br from-blue-400 to-cyan-500' => $activity->type === 'ecosystem_contribution',
+                        'bg-accent-red' => $activity->type === 'ecosystem',
+                        'bg-primary-blue' => $activity->type === 'ecosystem_contribution',
                         'bg-gradient-to-br from-orange-400 to-red-500' => $activity->type === 'collective_action_contribution',
                     ])></div>
                 </div>
