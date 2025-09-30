@@ -1,18 +1,18 @@
 @if($hasActiveSession)
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+    <div class="bg-blue-50 dark:bg-green-700/20 rounded-xl p-4 border border-blue-200 dark:border-green-400/50">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
-                    <flux:icon.cube class="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                <div class="w-10 h-10 bg-blue-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                    <flux:icon.cube class="w-5 h-5 text-blue-600 dark:text-green-300" />
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                    <h3 class="text-sm font-semibold text-blue-800 dark:text-green-200">
                         Sesi Aktif
                     </h3>
-                    <p class="text-xs text-blue-600 dark:text-blue-300 font-medium">
+                    <p class="text-xs text-blue-700 dark:text-green-100 font-medium">
                         {{ $activePasarKolaboraya->name }}
                     </p>
-                    <p class="text-xs text-blue-500 dark:text-blue-400">
+                    <p class="text-xs text-blue-600 dark:text-green-200">
                         {{ $memberCount }} anggota aktif
                     </p>
                 </div>
@@ -20,8 +20,8 @@
             <flux:button 
                 wire:click="switchSession"
                 size="xs"
-                {{-- variant="secondary" --}}
-                class="text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800"
+                variant="primary"
+                class=""
             >
                 Ganti Sesi
             </flux:button>

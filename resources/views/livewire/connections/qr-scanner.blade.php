@@ -12,14 +12,14 @@
             {{-- Status Messages --}}
             @if ($errorMessage)
                 <div
-                    class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
+                    class="bg-red-50 dark:bg-red-900/50 border border-red-100 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
                     {!! $errorMessage !!}
                 </div>
             @endif
 
             @if ($successMessage)
                 <div
-                    class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
+                    class="bg-green-50 dark:bg-green-900/50 border border-green-100 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg mb-4 sm:mb-6 text-sm sm:text-base">
                     {!! $successMessage !!}
                 </div>
             @endif
@@ -97,24 +97,24 @@
 
                         <div class="space-y-2 w-full">
                             @if ($connectionStatus === 'idle')
-                                <button wire:click="refreshQr"
-                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                <flux:button variant="primary" wire:click="refreshQr"
+                                    class="w-full">
                                     Buat QR Baru
-                                </button>
+                                </flux:button>
                             @elseif($connectionStatus === 'waiting_for_response')
-                                <button wire:click="refreshQr"
-                                    class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                <flux:button variant="primary" color="green" wire:click="refreshQr"
+                                    class="w-full">
                                     Buat QR Baru
-                                </button>
-                                <button wire:click="resetConnection"
-                                    class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                </flux:button>
+                                <flux:button variant="danger" wire:click="resetConnection"
+                                    class="w-full">
                                     Hentikan Koneksi
-                                </button>
+                                </flux:button>
                             @elseif($connectionStatus === 'connected')
-                                <button wire:click="refreshQr"
-                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                                <flux:button wire:click="refreshQr"
+                                    class="w-full bg-primary-blue hover:bg-sky-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
                                     Buat QR Baru
-                                </button>
+                                </flux:button>
                             @endif
                         </div>
                     </div>
@@ -147,10 +147,10 @@
                                     <input type="text" wire:model="scannedQrCode"
                                         wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
                                         class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
-                                    <button wire:click="processScannedQr"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium whitespace-nowrap">
+                                    <flux:button variant="primary" wire:click="processScannedQr"
+                                        class="">
                                         Scan
-                                    </button>
+                                    </flux:button>
                                 </div>
                             </div>
 
@@ -162,18 +162,18 @@
                                         <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
                                             Gunakan kamera untuk scan QR code
                                         </p>
-                                        <button wire:click="startScanning"
+                                        <flux:button wire:click="startScanning"
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
                                             Buka Kamera
-                                        </button>
+                                        </flux:button>
                                     </div> --}}
                                 <div wire:ignore id="closeCam" class="text-center w-full">
                                     <div wire:ignore id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden">
                                     </div>
-                                    {{-- <button wire:click="stopScanning"
+                                    {{-- <flux:button wire:click="stopScanning"
                                             class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
                                             Tutup Kamera
-                                        </button> --}}
+                                        </flux:button> --}}
                                 </div>
                             </div>
                         </div>
@@ -184,19 +184,20 @@
 
             {{-- Instructions --}}
             <div
-                class="mt-6 sm:mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
-                <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3">Cara
-                    Menggunakan:</h3>
+                class="mt-6 sm:mt-8 bg-blue-50 dark:bg-green-900/20 border border-blue-200 dark:border-green-800/30 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
+                <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-secondary-green mb-2 sm:mb-3">
+                    Cara Menggunakan:
+                </h3>
                 <ol
-                    class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-blue-200">
+                    class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
                     <li>User A menampilkan QR code mereka</li>
                     <li>User B scan QR code User A</li>
                     <li>User B akan mendapat QR code baru untuk ditunjukkan kepada User A</li>
                     <li>User A scan QR code User B</li>
                     <li>Koneksi berhasil dibuat!</li>
                 </ol>
-                <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300 mt-2 sm:mt-3">
-                    <strong>Catatan:</strong> QR code berlaku selama 1 menit dan akan otomatis diperbarui.
+                <p class="text-xs sm:text-sm text-blue-700 dark:text-teal-300 mt-2 sm:mt-3">
+                    <strong>Catatan:</strong> QR code berlaku selama 5 menit dan akan otomatis diperbarui.
                 </p>
             </div>
         </div>

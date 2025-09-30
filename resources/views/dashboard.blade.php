@@ -246,7 +246,7 @@
                                     </div>
                                     <div
                                         class="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center shadow-lg">
-                                        <flux:icon.clock class="size-6 text-white dark:text-slate-900" />
+                                        <flux:icon.clock class="size-6 text-white" />
                                     </div>
                                 </div>
 
