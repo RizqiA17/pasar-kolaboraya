@@ -419,20 +419,148 @@
             
             <!-- Predefined Resources -->
             <div class="mb-6">
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Pilih dari daftar berikut:</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    @foreach($resourceTypes as $key => $label)
-                        <label class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                                <input 
-                                    type="checkbox" 
-                                    wire:model="required_resources" 
-                                    value="{{ $key }}" 
-                                    class="mr-3 rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
-                                >
-                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
-                            </label>
-                        @endforeach
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Sumber Daya yang Diperlukan <span class="text-red-500">*</span>
+                </label>
+                <div class="mb-6">
+                    <div x-data="{
+                        open: false,
+                        search: '',
+                        selectedItems: @entangle('required_resources').live,
+                        mainInput: '',
+                        isProcessing: false,
+                        updateMainInput() {
+                            this.mainInput = this.selectedItems.map(id =>
+                                document.getElementById('resource_label_' + id)?.textContent || ''
+                            ).filter(Boolean).join(', ');
+                        },
+                        async toggleItem(id) {
+                            if (this.isProcessing) return;
+                            this.isProcessing = true;
+                            try {
+                                await $wire.toggleResource(id);
+                                this.updateMainInput();
+                            } finally {
+                                this.isProcessing = false;
+                            }
+                        }
+                    }" x-init="updateMainInput()" @click.away="open = false"
+                        class="multi-select-container relative">
+                        <!-- Main Selector Input -->
+                        <div class="relative">
+                            <input type="text" x-model="mainInput" placeholder="Pilih sumber daya yang diperlukan..."
+                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all duration-200"
+                                readonly @click="open = !open">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Dropdown Panel -->
+                        <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 transform -translate-y-2"
+                            x-transition:enter-end="opacity-100 transform translate-y-0"
+                            class="absolute left-0 right-0 z-10 mt-2">
+                            <!-- Search Input -->
+                            <div class="relative">
+                                <input type="text" wire:model.live="resourceSearch" placeholder="Cari sumber daya..."
+                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm"
+                                    @click.stop>
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Dropdown List -->
+                            <div
+                                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                @foreach ($this->getFilteredResources() as $key => $label)
+                                    <div class="multi-option {{ in_array($key, is_array($required_resources) ? $required_resources : []) ? 'bg-blue-50 dark:bg-blue-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
+                                        @click.stop="toggleItem('{{ $key }}')">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="flex items-center justify-center w-5 h-5">
+                                                    <input type="checkbox" id="resource_{{ $key }}"
+                                                        :checked="selectedItems.includes('{{ $key }}')"
+                                                        @click.stop="toggleItem('{{ $key }}')"
+                                                        class="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                </div>
+                                                <div>
+                                                    <span id="resource_label_{{ $key }}"
+                                                        class="font-medium text-gray-700 dark:text-gray-300">{{ $label }}</span>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                                        Pilih untuk menambahkan ke daftar sumber daya</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center"
+                                                x-show="selectedItems.includes('{{ $key }}')">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                    Terpilih
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if ($this->getFilteredResources()->isEmpty())
+                                    <div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                        Tidak ada hasil yang ditemukan
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Selected Resources Display -->
+                    @if (count($required_resources) > 0)
+                        <div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
+                            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Sumber Daya yang Dipilih:
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($required_resources as $key)
+                                    @if (isset($resourceTypes[$key]))
+                                        <div
+                                            class="group inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-700 transition-all duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                                            <svg class="w-4 h-4 mr-1.5 text-blue-500 dark:text-blue-400"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="1.5"
+                                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                            </svg>
+                                            <span>{{ $resourceTypes[$key] }}</span>
+                                            <button type="button" wire:click="removeResource('{{ $key }}')"
+                                                class="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    @error('required_resources')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
                 </div>
 
                 <!-- Custom Resources -->
@@ -489,51 +617,173 @@
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Undang Ekosistem untuk Berkolaborasi
                 </h2>
-                
+
                 @if($availableEcosystems->count() > 0)
-                    <div class="space-y-4">
-                        @foreach($availableEcosystems as $ecosystem)
-                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                                <div class="flex items-start">
-                                    <input 
-                                        type="checkbox" 
-                                        wire:model="invited_ecosystems" 
-                                        value="{{ $ecosystem->id }}" 
-                                        class="mr-3 mt-1 rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
-                                        id="ecosystem-{{ $ecosystem->id }}"
-                                    >
-                                    <div class="flex-1">
-                                        <label for="ecosystem-{{ $ecosystem->id }}" class="cursor-pointer">
-                                            <h3 class="font-semibold text-gray-900 dark:text-white">
-                                                {{ $ecosystem->ecosystem_title }}
-                                            </h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                {{ $ecosystem->organization_name }} • {{ $ecosystem->work_region }}
-                                            </p>
-                                            @if($ecosystem->description)
-                                                <p class="text-sm text-gray-700 dark:text-gray-300 mt-1 line-clamp-2">
-                                                    {{ $ecosystem->description }}
-                                                </p>
-                                            @endif
-                                        </label>
-                                        
-                                        <!-- Custom invitation message -->
-                                        @if(in_array($ecosystem->id, $invited_ecosystems))
-                                            <div class="mt-3">
-                                                <flux:textarea
-                                                    wire:model="invitation_messages.{{ $ecosystem->id }}"
-                                                    :label="'Pesan Undangan (Opsional)'"
-                                                    :placeholder="'Tulis pesan personal untuk mengundang ekosistem ini...'"
-                                                    rows="2"
-                                                />
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Pilih Ekosistem <span class="text-red-500">*</span>
+                        </label>
+                        <div class="mb-6">
+                            <div x-data="{
+                                open: false,
+                                search: '',
+                                selectedItems: @entangle('invited_ecosystems').live,
+                                mainInput: '',
+                                isProcessing: false,
+                                updateMainInput() {
+                                    this.mainInput = this.selectedItems.map(id =>
+                                        document.getElementById('ecosystem_label_' + id)?.textContent || ''
+                                    ).filter(Boolean).join(', ');
+                                },
+                                async toggleItem(id) {
+                                    if (this.isProcessing) return;
+                                    this.isProcessing = true;
+                                    try {
+                                        await $wire.toggleEcosystem(id);
+                                        this.updateMainInput();
+                                    } finally {
+                                        this.isProcessing = false;
+                                    }
+                                }
+                            }" x-init="updateMainInput()" @click.away="open = false"
+                                class="multi-select-container relative">
+                                <!-- Main Selector Input -->
+                                <div class="relative">
+                                    <input type="text" x-model="mainInput" placeholder="Pilih ekosistem untuk diundang..."
+                                        class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 cursor-pointer transition-all duration-200"
+                                        readonly @click="open = !open">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown Panel -->
+                                <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                                    class="absolute left-0 right-0 z-10 mt-2">
+                                    <!-- Search Input -->
+                                    <div class="relative">
+                                        <input type="text" wire:model.live="ecosystemSearch" placeholder="Cari ekosistem..."
+                                            class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 shadow-sm"
+                                            @click.stop>
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dropdown List -->
+                                    <div
+                                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        @foreach ($this->getFilteredEcosystems() as $ecosystem)
+                                            <div class="multi-option {{ in_array($ecosystem->id, is_array($invited_ecosystems) ? $invited_ecosystems : []) ? 'bg-green-50 dark:bg-green-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
+                                                @click.stop="toggleItem({{ $ecosystem->id }})">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="flex items-center justify-center w-5 h-5">
+                                                            <input type="checkbox" id="ecosystem_{{ $ecosystem->id }}"
+                                                                :checked="selectedItems.includes({{ $ecosystem->id }})"
+                                                                @click.stop="toggleItem({{ $ecosystem->id }})"
+                                                                class="h-4 w-4 text-green-600 focus:ring-2 focus:ring-green-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                        </div>
+                                                        <div>
+                                                            <span id="ecosystem_label_{{ $ecosystem->id }}"
+                                                                class="font-medium text-gray-700 dark:text-gray-300">{{ $ecosystem->ecosystem_title }}</span>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                                {{ $ecosystem->organization_name }} • {{ $ecosystem->work_region }}
+                                                            </p>
+                                                            @if($ecosystem->description)
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                                                    {{ $ecosystem->description }}
+                                                                </p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center"
+                                                        x-show="selectedItems.includes({{ $ecosystem->id }})">
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                                            Terpilih
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        @if ($this->getFilteredEcosystems()->isEmpty())
+                                            <div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                                Tidak ada hasil yang ditemukan
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+
+                            <!-- Selected Ecosystems Display -->
+                            @if (count($invited_ecosystems) > 0)
+                                <div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
+                                    <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Ekosistem yang Dipilih:
+                                    </h3>
+                                    <div class="space-y-4">
+                                        @foreach ($invited_ecosystems as $ecosystemId)
+                                            @php
+                                                $ecosystem = $availableEcosystems->firstWhere('id', $ecosystemId);
+                                            @endphp
+                                            @if ($ecosystem)
+                                                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                                    <div class="flex items-start justify-between">
+                                                        <div class="flex-1">
+                                                            <h4 class="font-semibold text-gray-900 dark:text-white">
+                                                                {{ $ecosystem->ecosystem_title }}
+                                                            </h4>
+                                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                                {{ $ecosystem->organization_name }} • {{ $ecosystem->work_region }}
+                                                            </p>
+                                                        </div>
+                                                        <button type="button" wire:click="removeEcosystem({{ $ecosystemId }})"
+                                                            class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="mt-3">
+                                                        <flux:textarea
+                                                            wire:model="invitation_messages.{{ $ecosystemId }}"
+                                                            :label="'Pesan Undangan (Opsional)'"
+                                                            :placeholder="'Tulis pesan personal untuk mengundang ekosistem ini...'"
+                                                            rows="2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @error('invited_ecosystems')
+                                <flux:error>{{ $message }}</flux:error>
+                            @enderror
+                        </div>
                     </div>
-                    
+
                     @if($availableEcosystems->count() < 2)
                         <div class="mt-4 p-4 bg-neutral-orange/10 dark:bg-neutral-orange/20 border border-neutral-orange/20 dark:border-neutral-orange/30 rounded-lg">
                             <p class="text-neutral-orange dark:text-neutral-orange text-sm">

@@ -42,6 +42,9 @@ class Create extends Component
         'relasi' => 'Relasi/Networking',
     ];
 
+    public $resourceSearch = '';
+    public $ecosystemSearch = '';
+
     protected $rules = [
         'title' => 'required|string|max:255',
         'description' => 'required|string',
@@ -248,6 +251,69 @@ class Create extends Component
     {
         unset($this->custom_resources[$index]);
         $this->custom_resources = array_values($this->custom_resources); // Re-index array
+    }
+
+    public function getFilteredResources()
+    {
+        $resources = collect($this->resourceTypes);
+
+        if ($this->resourceSearch) {
+            $search = strtolower($this->resourceSearch);
+            $resources = $resources->filter(function ($label, $key) use ($search) {
+                return str_contains(strtolower($label), $search) || str_contains(strtolower($key), $search);
+            });
+        }
+
+        return $resources;
+    }
+
+    public function toggleResource($key)
+    {
+        if (in_array($key, $this->required_resources)) {
+            $this->removeResource($key);
+        } else {
+            $this->required_resources[] = $key;
+        }
+    }
+
+    public function removeResource($key)
+    {
+        $this->required_resources = array_values(array_filter($this->required_resources, function ($item) use ($key) {
+            return $item !== $key;
+        }));
+    }
+
+    public function getFilteredEcosystems()
+    {
+        $ecosystems = collect($this->availableEcosystems);
+
+        if ($this->ecosystemSearch) {
+            $search = strtolower($this->ecosystemSearch);
+            $ecosystems = $ecosystems->filter(function ($ecosystem) use ($search) {
+                return str_contains(strtolower($ecosystem->ecosystem_title), $search) ||
+                    str_contains(strtolower($ecosystem->organization_name), $search) ||
+                    str_contains(strtolower($ecosystem->work_region), $search);
+            });
+        }
+
+        return $ecosystems;
+    }
+
+    public function toggleEcosystem($id)
+    {
+        if (in_array($id, $this->invited_ecosystems)) {
+            $this->removeEcosystem($id);
+        } else {
+            $this->invited_ecosystems[] = $id;
+        }
+    }
+
+    public function removeEcosystem($id)
+    {
+        $this->invited_ecosystems = array_values(array_filter($this->invited_ecosystems, function ($item) use ($id) {
+            return $item !== $id;
+        }));
+        unset($this->invitation_messages[$id]);
     }
 
     public function render()
