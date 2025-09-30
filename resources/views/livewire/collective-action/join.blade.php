@@ -1,7 +1,7 @@
 <div class="max-w-2xl mx-auto space-y-6">
     {{-- {{dd($collectiveAction)}} --}}
     <!-- Header -->
-    <div class="bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl p-6">
+    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex items-center mb-4">
             <a href="{{ route('collective-action.show', $collectiveAction) }}"
                 class="mr-4 text-white/80 hover:text-white">
@@ -12,7 +12,7 @@
             </a>
             <h1 class="text-2xl font-bold">Bergabung dengan Aksi Kolektif</h1>
         </div>
-        <p class="text-green-100">
+        <p class="text-blue-100">
             Bergabung dengan: <strong>{{ $collectiveAction->title }}</strong>
         </p>
     </div>
@@ -75,7 +75,7 @@
             <div class="mb-6">
                 <label class="flex items-start">
                     <input type="checkbox" wire:model="agreed_to_terms"
-                        class="mt-1 mr-3 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        class="mt-1 mr-3 rounded border-gray-300 text-primary-blue focus:ring-primary-blue">
                     <span class="text-sm text-gray-700 dark:text-gray-300">
                         Saya menyetujui syarat dan ketentuan aksi kolektif ini dan siap berpartisipasi sesuai dengan
                         peran yang diminta.
@@ -98,22 +98,24 @@
                 Bergabung dengan Aksi Kolektif
             </flux:button>
 
-            <flux:button type="button" variant="outline" onclick="window.history.back()">
+            <flux:button type="button" wire:navigate variant="outline"
+                href="{{ url()->previous() == url()->current() ? route('collective-action.browse') : url()->previous() }}">
                 Batal
             </flux:button>
         </div>
     </form>
 
     <!-- Info Box -->
-    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+    <div
+        class="bg-primary-light-blue/10 dark:bg-primary-blue/20 border border-primary-light-blue/20 dark:border-primary-blue/30 rounded-xl p-4">
         <div class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-primary-blue mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-                <h3 class="font-semibold text-blue-900 dark:text-blue-200 mb-2">Informasi Bergabung</h3>
-                <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                <h3 class="font-semibold text-primary-blue dark:text-primary-light-blue mb-2">Informasi Bergabung</h3>
+                <ul class="text-sm text-primary-blue/80 dark:text-primary-light-blue/80 space-y-1">
                     <li>• Setelah bergabung, Anda akan menjadi bagian dari aksi kolektif</li>
                     <li>• Admin dapat mengubah role Anda sesuai kebutuhan</li>
                     <li>• Anda dapat berkontribusi sesuai dengan kemampuan dan keahlian</li>
@@ -127,7 +129,7 @@
 <!-- Success/Error Messages -->
 @if (session()->has('message'))
     <div class="fixed top-4 right-4 z-50">
-        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <div class="bg-secondary-green text-white px-6 py-3 rounded-lg shadow-lg">
             {{ session('message') }}
         </div>
     </div>
@@ -135,7 +137,7 @@
 
 @if (session()->has('error'))
     <div class="fixed top-4 right-4 z-50">
-        <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <div class="bg-accent-red text-white px-6 py-3 rounded-lg shadow-lg">
             {{ session('error') }}
         </div>
     </div>

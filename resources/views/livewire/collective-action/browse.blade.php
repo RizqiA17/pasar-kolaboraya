@@ -1,18 +1,17 @@
 <div class="space-y-6">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-6">
+    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex justify-between items-start max-sm:flex-col">
             <div>
                 <h1 class="text-2xl font-bold mb-2">Aksi Kolektif</h1>
-                <p class="text-purple-100">Bergabung dengan gerakan kolaboratif untuk perubahan sosial yang lebih besar
-                </p>
+                <p class="text-blue-100">Bergabung dengan gerakan kolaboratif untuk perubahan sosial yang lebih besar</p>
             </div>
             <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
                 <flux:button 
                     wire:navigate
                     href="{{ route('collective-action.qr.scanner') }}"
                     variant="primary"
-                    class="bg-white text-black hover:bg-purple-50 max-sm:w-full"
+                    class="bg-white text-primary-blue hover:bg-gray-50 max-sm:w-full"
                 >
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
@@ -21,7 +20,7 @@
                 </flux:button>
                 @if (Auth::user()->isEcosystemBuilder() && $hasCollectiveAction)
                     <flux:button href="{{ route('collective-action.create') }}" variant="primary"
-                        class="bg-white text-purple-600 hover:bg-purple-50 max-sm:w-full">
+                        class="bg-white text-primary-blue hover:bg-gray-50 max-sm:w-full">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -99,21 +98,21 @@
                             <div class="flex items-center gap-3 mb-3">
                                 <span
                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs 
-                                    @if ($action->scale === 'kecil') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                                    @elseif($action->scale === 'sedang') bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200
-                                    @else bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 @endif">
+                                    @if ($action->scale === 'kecil') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                                    @elseif($action->scale === 'sedang') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
+                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
                                     {{ $action->scale_label }}
                                 </span>
                                 <span
-                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-sky-600">
                                     {{ $action->scope_label }}
                                 </span>
                                 <span
                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs
-                                    @if ($action->status === 'planning') bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200
-                                    @elseif($action->status === 'active') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                                    @elseif($action->status === 'completed') bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200
-                                    @else bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 @endif">
+                                    @if ($action->status === 'planning') bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange
+                                    @elseif($action->status === 'active') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                                    @elseif($action->status === 'completed') bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400
+                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
                                     {{ $action->status_label }}
                                 </span>
                             </div>
@@ -144,13 +143,13 @@
                             <div class="flex flex-wrap gap-1">
                                 @foreach (collect($action->required_resources)->take(4) as $resource)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange">
                                         {{ ucfirst($resource) }}
                                     </span>
                                 @endforeach
                                 @if (count($action->required_resources) > 4)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
                                         +{{ count($action->required_resources) - 4 }} lainnya
                                     </span>
                                 @endif
@@ -216,7 +215,7 @@
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0 mr-3">
                             <div
-                                class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium">
                                 {{ $action->creator->initials() }}
                             </div>
                         </div>
@@ -248,7 +247,7 @@
                         @if ($userStatus === 'active')
                             <div class="flex space-x-2">
                                 <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -263,7 +262,7 @@
                             </div>
                         @elseif($userStatus === 'pending_approval')
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -272,7 +271,7 @@
                             </span>
                         @elseif($userStatus === 'rejected')
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12" />
@@ -281,7 +280,7 @@
                             </span>
                         @elseif($userStatus === 'inactive')
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
@@ -292,7 +291,7 @@
                     @elseif($canJoin)
                         <div class="flex space-x-2">
                             <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary"
-                                size="sm" class="flex-1">
+                                size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -308,10 +307,10 @@
                         @php $status = $userContribution->status; @endphp
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                            @if ($status === 'accepted') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                            @elseif($status === 'offered') bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200
-                            @elseif($status === 'completed') bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200
-                            @else bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 @endif">
+                            @if ($status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                            @elseif($status === 'offered') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
+                            @elseif($status === 'completed') bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-primary-blue
+                            @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 @if ($status === 'accepted')
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

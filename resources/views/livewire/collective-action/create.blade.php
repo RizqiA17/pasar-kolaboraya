@@ -8,7 +8,7 @@
 
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-6">
+    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex items-center mb-4">
             <a href="{{ route('collective-action.browse') }}" class="mr-4 text-white/80 hover:text-white">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,20 +17,20 @@
             </a>
             <h1 class="text-2xl font-bold">Buat Aksi Kolektif</h1>
         </div>
-        <p class="text-purple-100">
+        <p class="text-blue-100">
             Ajak ecosystem builders lain untuk berkolaborasi dalam gerakan perubahan sosial yang lebih besar
         </p>
     </div>
 
     <!-- Info Box -->
-    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+    <div class="bg-primary-light-blue/10 dark:bg-primary-blue/20 border border-primary-light-blue/20 dark:border-primary-blue/30 rounded-xl p-4">
         <div class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-primary-blue mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <div>
-                <h3 class="font-semibold text-blue-900 dark:text-blue-200">Flow Aksi Kolektif</h3>
-                <p class="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                <h3 class="font-semibold text-primary-blue dark:text-primary-light-blue">Flow Aksi Kolektif</h3>
+                <p class="text-sm text-primary-blue/80 dark:text-primary-light-blue/80 mt-1">
                     1. Anda membuat aksi kolektif dan mengundang ecosystem builders lain<br>
                     2. Mereka menerima/menolak undangan untuk berkolaborasi<br>
                     3. Setelah minimal 3 ekosistem bergabung, aksi dapat dimulai<br>
@@ -423,196 +423,197 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     @foreach($resourceTypes as $key => $label)
                         <label class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
-                            <input 
-                                type="checkbox" 
-                                wire:model="required_resources" 
-                                value="{{ $key }}" 
-                                class="mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                            >
-                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
-                        </label>
-                    @endforeach
+                                <input 
+                                    type="checkbox" 
+                                    wire:model="required_resources" 
+                                    value="{{ $key }}" 
+                                    class="mr-3 rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
+                                >
+                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Custom Resources -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Atau tambahkan sumber daya custom:</h3>
+                        <flux:button 
+                            type="button" 
+                            wire:click="addCustomResource"
+                            variant="outline" 
+                            size="sm"
+                            class="text-primary-blue hover:bg-primary-blue/10"
+                        >
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Tambah Custom
+                        </flux:button>
+                    </div>
+                    
+                    @if(count($custom_resources) > 0)
+                        <div class="space-y-3">
+                            @foreach($custom_resources as $index => $customResource)
+                                <div class="flex items-center gap-3">
+                                    <flux:input
+                                        wire:model="custom_resources.{{ $index }}"
+                                        :placeholder="'Masukkan sumber daya custom...'"
+                                        class="flex-1"
+                                    />
+                                    <flux:button 
+                                        type="button" 
+                                        wire:click="removeCustomResource({{ $index }})"
+                                        variant="outline" 
+                                        size="sm"
+                                        class="text-accent-red hover:bg-accent-red/10"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </flux:button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                            Klik "Tambah Custom" untuk menambahkan sumber daya yang tidak ada dalam daftar
+                        </p>
+                    @endif
                 </div>
             </div>
 
-            <!-- Custom Resources -->
-            <div>
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Atau tambahkan sumber daya custom:</h3>
-                    <flux:button 
-                        type="button" 
-                        wire:click="addCustomResource"
-                        variant="outline" 
-                        size="sm"
-                    >
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Tambah Custom
-                    </flux:button>
-                </div>
+            <!-- Invite Ecosystems -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Undang Ekosistem untuk Berkolaborasi
+                </h2>
                 
-                @if(count($custom_resources) > 0)
-                    <div class="space-y-3">
-                        @foreach($custom_resources as $index => $customResource)
-                            <div class="flex items-center gap-3">
-                                <flux:input
-                                    wire:model="custom_resources.{{ $index }}"
-                                    :placeholder="'Masukkan sumber daya custom...'"
-                                    class="flex-1"
-                                />
-                                <flux:button 
-                                    type="button" 
-                                    wire:click="removeCustomResource({{ $index }})"
-                                    variant="outline" 
-                                    size="sm"
-                                    class="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                >
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </flux:button>
+                @if($availableEcosystems->count() > 0)
+                    <div class="space-y-4">
+                        @foreach($availableEcosystems as $ecosystem)
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <input 
+                                        type="checkbox" 
+                                        wire:model="invited_ecosystems" 
+                                        value="{{ $ecosystem->id }}" 
+                                        class="mr-3 mt-1 rounded border-gray-300 text-primary-blue focus:ring-primary-blue"
+                                        id="ecosystem-{{ $ecosystem->id }}"
+                                    >
+                                    <div class="flex-1">
+                                        <label for="ecosystem-{{ $ecosystem->id }}" class="cursor-pointer">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                {{ $ecosystem->ecosystem_title }}
+                                            </h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                {{ $ecosystem->organization_name }} • {{ $ecosystem->work_region }}
+                                            </p>
+                                            @if($ecosystem->description)
+                                                <p class="text-sm text-gray-700 dark:text-gray-300 mt-1 line-clamp-2">
+                                                    {{ $ecosystem->description }}
+                                                </p>
+                                            @endif
+                                        </label>
+                                        
+                                        <!-- Custom invitation message -->
+                                        @if(in_array($ecosystem->id, $invited_ecosystems))
+                                            <div class="mt-3">
+                                                <flux:textarea
+                                                    wire:model="invitation_messages.{{ $ecosystem->id }}"
+                                                    :label="'Pesan Undangan (Opsional)'"
+                                                    :placeholder="'Tulis pesan personal untuk mengundang ekosistem ini...'"
+                                                    rows="2"
+                                                />
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         @endforeach
                     </div>
-                @else
-                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">
-                        Klik "Tambah Custom" untuk menambahkan sumber daya yang tidak ada dalam daftar
-                    </p>
-                @endif
-            </div>
-        </div>
-
-        <!-- Invite Ecosystems -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Undang Ekosistem untuk Berkolaborasi
-            </h2>
-            
-            @if($availableEcosystems->count() > 0)
-                <div class="space-y-4">
-                    @foreach($availableEcosystems as $ecosystem)
-                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                            <div class="flex items-start">
-                                <input 
-                                    type="checkbox" 
-                                    wire:model="invited_ecosystems" 
-                                    value="{{ $ecosystem->id }}" 
-                                    class="mr-3 mt-1 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                                    id="ecosystem-{{ $ecosystem->id }}"
-                                >
-                                <div class="flex-1">
-                                    <label for="ecosystem-{{ $ecosystem->id }}" class="cursor-pointer">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">
-                                            {{ $ecosystem->ecosystem_title }}
-                                        </h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            {{ $ecosystem->organization_name }} • {{ $ecosystem->work_region }}
-                                        </p>
-                                        @if($ecosystem->description)
-                                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-1 line-clamp-2">
-                                                {{ $ecosystem->description }}
-                                            </p>
-                                        @endif
-                                    </label>
-                                    
-                                    <!-- Custom invitation message -->
-                                    @if(in_array($ecosystem->id, $invited_ecosystems))
-                                        <div class="mt-3">
-                                            <flux:textarea
-                                                wire:model="invitation_messages.{{ $ecosystem->id }}"
-                                                :label="'Pesan Undangan (Opsional)'"
-                                                :placeholder="'Tulis pesan personal untuk mengundang ekosistem ini...'"
-                                                rows="2"
-                                            />
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
+                    
+                    @if($availableEcosystems->count() < 2)
+                        <div class="mt-4 p-4 bg-neutral-orange/10 dark:bg-neutral-orange/20 border border-neutral-orange/20 dark:border-neutral-orange/30 rounded-lg">
+                            <p class="text-neutral-orange dark:text-neutral-orange text-sm">
+                                Tersedia {{ $availableEcosystems->count() }} ekosistem untuk diundang. Anda memerlukan minimal 2 ekosistem lain untuk berkolaborasi.
+                            </p>
                         </div>
-                    @endforeach
-                </div>
-                
-                @if($availableEcosystems->count() < 2)
-                    <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                        <p class="text-yellow-800 dark:text-yellow-200 text-sm">
-                            Tersedia {{ $availableEcosystems->count() }} ekosistem untuk diundang. Anda memerlukan minimal 2 ekosistem lain untuk berkolaborasi.
+                    @endif
+                @else
+                    <div class="text-center py-6">
+                        <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            Belum Ada Ekosistem Tersedia
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Saat ini belum ada ekosistem lain yang dapat diundang untuk berkolaborasi.
                         </p>
                     </div>
                 @endif
-            @else
-                <div class="text-center py-6">
-                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                        Belum Ada Ekosistem Tersedia
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-400">
-                        Saat ini belum ada ekosistem lain yang dapat diundang untuk berkolaborasi.
-                    </p>
-                </div>
-            @endif
-        </div>
+            </div>
 
-        <!-- Collaboration Terms -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Syarat Kolaborasi
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <flux:input
-                    wire:model="min_ecosystems"
-                    :label="'Minimal Ekosistem yang Diperlukan'"
-                    type="number"
-                    min="3"
-                    required
-                />
+            <!-- Collaboration Terms -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Syarat Kolaborasi
+                </h2>
                 
-                <div></div>
-                
-                <div class="md:col-span-2">
-                    <flux:textarea
-                        wire:model="collaboration_terms"
-                        :label="'Syarat dan Ketentuan Kolaborasi'"
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <flux:input
+                        wire:model="min_ecosystems"
+                        :label="'Minimal Ekosistem yang Diperlukan'"
+                        type="number"
+                        min="3"
                         required
-                        :placeholder="'Tuliskan syarat dan ketentuan untuk berkolaborasi dalam aksi ini...'"
-                        rows="4"
                     />
+                    
+                    <div></div>
+                    
+                    <div class="md:col-span-2">
+                        <flux:textarea
+                            wire:model="collaboration_terms"
+                            :label="'Syarat dan Ketentuan Kolaborasi'"
+                            required
+                            :placeholder="'Tuliskan syarat dan ketentuan untuk berkolaborasi dalam aksi ini...'"
+                            rows="4"
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Submit Button -->
-        <div class="flex gap-3">
-            @if($availableEcosystems->count() >= 2)
-                <flux:button 
-                    type="submit" 
-                    variant="primary" 
-                    class="flex-1"
-                    {{-- :loading="$wire.loading" --}}
-                >
-                    Buat Aksi dan Kirim Undangan
-                </flux:button>
-            @else
+            <!-- Submit Button -->
+            <div class="flex gap-3">
+                @if($availableEcosystems->count() >= 2)
+                    <flux:button 
+                        type="submit" 
+                        variant="primary" 
+                        class="flex-1 bg-primary-blue hover:bg-primary-blue/90"
+                        {{-- :loading="$wire.loading" --}}
+                    >
+                        Buat Aksi dan Kirim Undangan
+                    </flux:button>
+                @else
+                    <flux:button 
+                        type="button" 
+                        variant="outline" 
+                        class="flex-1 text-gray-400 dark:text-gray-500"
+                        disabled
+                    >
+                        Perlu Minimal 2 Ekosistem Lain
+                    </flux:button>
+                @endif
+                
                 <flux:button 
                     type="button" 
-                    variant="outline" 
-                    class="flex-1"
-                    disabled
+                    variant="outline"
+                    onclick="window.history.back()"
                 >
-                    Perlu Minimal 2 Ekosistem Lain
+                    Batal
                 </flux:button>
-            @endif
-            
-            <flux:button 
-                type="button" 
-                variant="outline"
-                onclick="window.history.back()"
-            >
-                Batal
-            </flux:button>
-        </div>
+            </div>
     </form>
 </div>
