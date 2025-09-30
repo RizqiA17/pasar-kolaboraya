@@ -59,7 +59,7 @@ class Create extends Component
             } else {
                 session()->flash('error', 'Anda belum disetujui sebagai Ecosystem Builder. Silakan hubungi admin untuk informasi lebih lanjut.');
             }
-            return redirect()->route('ecosystem.browse');
+            return ilat()->route('ecosystem.browse');
         }
 
         $this->interests = Interest::all();
