@@ -857,12 +857,12 @@ class CollectiveAction extends Model
         // Calculate final Aksi score as average of all 6 metrics
         $aksiScore = (
             $activityScore +
-            $impactScore +
+            // $impactScore +
             $participationScore +
             $engagementScore +
             $completionScore +
             $diversityScore
-        ) / 6;
+        ) / 5;
 
         return [
             'activity_score' => round($activityScore, 1),
