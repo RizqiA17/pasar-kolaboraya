@@ -26,7 +26,9 @@
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 w-full">
                         <input type="text" value="{{ $qrUrl }}" readonly
                             class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-slate-600 rounded-l-md sm:rounded-r-none bg-gray-50 dark:bg-slate-700 text-gray-900 dark:text-slate-100 text-xs sm:text-sm min-w-0">
-                        <button onclick="copyToClipboard('{{ $qrUrl }}')"
+                        <button 
+                            onclick="copyToClipboard('{{ $qrUrl }}', event)"
+                            data-copy-button
                             class="px-4 py-2.5 sm:py-2 bg-primary-blue hover:bg-primary-blue/90 text-white rounded-r-md sm:rounded-l-none text-xs sm:text-sm transition-colors whitespace-nowrap">
                             Copy
                         </button>
@@ -92,11 +94,18 @@
     </div>
 
     <script>
-        function copyToClipboard(text) {
+        function copyToClipboard(text, event) {
+            // Get the button element directly
+            const button = document.querySelector('[data-copy-button]');
+            if (!button) {
+                console.error('Copy button not found');
+                return;
+            }
+
+            const originalText = button.textContent;
+            
             navigator.clipboard.writeText(text).then(function() {
                 // Show success message
-                const button = event.target;
-                const originalText = button.textContent;
                 button.textContent = 'Copied!';
                 button.classList.add('bg-secondary-green');
                 button.classList.remove('bg-primary-blue');
@@ -109,6 +118,8 @@
             }).catch(function(err) {
                 console.error('Could not copy text: ', err);
                 alert('Gagal menyalin URL');
+                // Reset button state in case of error
+                button.textContent = originalText;
             });
         }
 
