@@ -82,7 +82,7 @@
                 <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
                 @if ($isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
-                        <a href="{{ route('ecosystem.qr.show', $ecosystem) }}"
+                        <a href="{{ route('ecosystem.qr.show', $ecosystem) }}" wire:navigate
                             class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -91,7 +91,7 @@
                             </svg>
                             QR Code
                         </a>
-                        <a href="{{ route('ecosystem.edit', $ecosystem) }}"
+                        <a href="{{ route('ecosystem.edit', $ecosystem) }}" wire:navigate
                             class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -100,7 +100,7 @@
                             </svg>
                             Edit
                         </a>
-                        <a href="{{ route('ecosystem.settings', $ecosystem) }}"
+                        <a href="{{ route('ecosystem.settings', $ecosystem) }}" wire:navigate
                             class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -229,9 +229,11 @@
                                 <div class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">
                                     {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}
                                 </div>
-                                <div class="text-xs sm:text-sm text-primary-blue dark:text-primary-blue mt-1">Peran Tersedia
+                                <div class="text-xs sm:text-sm text-primary-blue dark:text-primary-blue mt-1">Peran
+                                    Tersedia
                                 </div>
-                                <div class="text-xs text-primary-blue dark:text-primary-blue mt-1">Dari Total Database</div>
+                                <div class="text-xs text-primary-blue dark:text-primary-blue mt-1">Dari Total Database
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,7 +257,9 @@
 
                         <div
                             class="bg-primary-light-blue dark:bg-primary-blue/20 border border-primary-blue/20 dark:border-primary-blue/30 rounded-lg p-4 sm:p-6">
-                            <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-primary-blue mb-3">Status
+                            <h3
+                                class="text-base sm:text-lg font-semibold text-primary-blue dark:text-primary-blue mb-3">
+                                Status
                                 Anda</h3>
 
                             @if ($userStatus === 'accepted')
@@ -271,7 +275,7 @@
                                             ekosistem ini</span>
                                     </div>
                                     @if ($ecosystem->canUserContribute(Auth::user()))
-                                        <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
+                                        <a href="{{ route('ecosystem.contribute', $ecosystem) }}" wire:navigate
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
                                             <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -305,7 +309,7 @@
                                         <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan
                                             ekosistem ini</span>
                                     </div>
-                                    <a href="{{ route('ecosystem.join', $ecosystem) }}"
+                                    <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
                                         class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
                                         Bergabung Sekarang
                                     </a>
@@ -335,7 +339,9 @@
                                     <div
                                         class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-primary-blue dark:text-primary-blue mb-4">
                                         <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3"></div>
+                                            <div
+                                                class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3">
+                                            </div>
                                             <span>Anda adalah pemilik ekosistem dan dapat berkontribusi</span>
                                         </div>
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
@@ -386,7 +392,8 @@
                                     </div>
                                 @else
                                     <div class="flex items-center text-primary-blue dark:text-primary-blue mb-4">
-                                        <div class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3"></div>
+                                        <div class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3">
+                                        </div>
                                         <span>Anda dapat bergabung dengan ekosistem ini</span>
                                     </div>
                                 @endif
@@ -899,7 +906,8 @@
                                     @foreach ($ecosystem->collectiveActions as $action)
                                         <div
                                             class="border border-gray-200 dark:border-slate-700 rounded-lg p-4 bg-gray-50 dark:bg-slate-700/50">
-                                            <a href="{{ route('collective-action.show', $action) }}" class="font-semibold hover:text-primary-blue dark:hover:text-secondary-green text-gray-900 dark:text-slate-100">
+                                            <a href="{{ route('collective-action.show', $action) }}"
+                                                class="font-semibold hover:text-primary-blue dark:hover:text-secondary-green text-gray-900 dark:text-slate-100">
                                                 {{ $action->title }}</a>
                                             <p class="text-sm text-gray-600 dark:text-slate-300 mt-1">
                                                 {{ $action->description }}</p>
@@ -976,7 +984,8 @@
                                                         {{ Str::limit($invitation->collectiveAction->description, 150) }}
                                                     </p>
                                                     @if ($invitation->invitation_message)
-                                                        <div class="mt-3 p-3 bg-gray-100 dark:bg-slate-800/60 rounded-lg">
+                                                        <div
+                                                            class="mt-3 p-3 bg-gray-100 dark:bg-slate-800/60 rounded-lg">
                                                             <p class="text-sm text-gray-700 dark:text-slate-300">
                                                                 <strong>Pesan:</strong>
                                                                 {{ $invitation->invitation_message }}
@@ -1086,7 +1095,8 @@
 
                                                 <div class="mb-3">
                                                     <p class="text-sm text-gray-700 dark:text-slate-300">
-                                                        <strong>Deskripsi:</strong></p>
+                                                        <strong>Deskripsi:</strong>
+                                                    </p>
                                                     <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
                                                         {{ $contribution->contribution_description }}</p>
                                                 </div>
@@ -1103,7 +1113,8 @@
                                                 @if ($contribution->contribution_details)
                                                     <div class="mb-3">
                                                         <p class="text-sm text-gray-700 dark:text-slate-300">
-                                                            <strong>Detail Tambahan:</strong></p>
+                                                            <strong>Detail Tambahan:</strong>
+                                                        </p>
                                                         <div class="mt-1 space-y-1">
                                                             @foreach ($contribution->contribution_details as $detail)
                                                                 <div class="text-sm text-gray-600 dark:text-slate-400">
@@ -1401,7 +1412,7 @@
         // Function to update chart colors when theme changes
         function updateConnectionChartColors() {
             if (connectionQualityRadarChart) {
-                initializeConnectionQualityChart();
+                setTimeout(initializeConnectionQualityChart, 200);
             }
         }
 
@@ -1447,6 +1458,7 @@
                 }
             }, 200);
             setupThemeListener();
+            setTimeout(initializeEcosystemContributionCharts, 200);
         });
 
         // Simple approach - just check periodically if chart needs to be initialized
@@ -1454,7 +1466,8 @@
             const canvas = document.getElementById('connectionQualityRadarChart');
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
 
-            if (canvas && qualityTab && qualityTab.classList.contains('border-primary-blue') && !connectionQualityRadarChart) {
+            if (canvas && qualityTab && qualityTab.classList.contains('border-primary-blue') && !
+                connectionQualityRadarChart) {
                 // console.log('Initializing chart...');
                 initializeConnectionQualityChart();
             }
@@ -1466,7 +1479,7 @@
             Livewire.on('tabChanged', (event) => {
                 // console.log('Tab changed to:', event.tab);
                 if (event.tab === 'overview') {
-                    initializeConnectionQualityChart();
+                    setTimeout(initializeEcosystemContributionCharts, 200);
                 }
             });
         });
@@ -1477,7 +1490,7 @@
             Livewire.on('tabChanged', (event) => {
                 // console.log('Tab changed to (fallback):', event.tab);
                 if (event.tab === 'overview') {
-                    initializeConnectionQualityChart();
+                    setTimeout(initializeEcosystemContributionCharts, 200);
                 }
             });
         } else {

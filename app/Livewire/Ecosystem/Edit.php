@@ -25,6 +25,8 @@ class Edit extends Component
 
     public $interests = [];
     public $roles = [];
+    public $issueSearch = '';
+    public $roleSearch = '';
 
     protected $rules = [
         'organization_name' => 'required|string|max:255',
@@ -56,7 +58,7 @@ class Edit extends Component
         }
 
         $this->ecosystem = $ecosystem;
-        
+
         // Load existing data
         $this->organization_name = $ecosystem->organization_name;
         $this->ecosystem_title = $ecosystem->ecosystem_title;
@@ -77,6 +79,9 @@ class Edit extends Component
     {
         $this->validate();
 
+        // Ekosistem WAJIB memerlukan semua peran yang tersedia
+        $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+
         // Update the ecosystem
         $this->ecosystem->update([
             'organization_name' => $this->organization_name,
@@ -84,6 +89,7 @@ class Edit extends Component
             'issues_addressed' => $this->selectedIssues,
             'work_region' => $this->work_region,
             'existing_roles' => $this->selectedExistingRoles,
+            'needed_roles' => $allRoleIds, // WAJIB semua peran
             'max_users' => $this->max_users ?: null,
             'terms_conditions' => $this->terms_conditions,
             'description' => $this->description,
@@ -93,7 +99,66 @@ class Edit extends Component
         session()->flash('message', 'Ekosistem berhasil diperbarui!');
 
         // Redirect to the ecosystem dashboard
-        return redirect()->route('ecosystem.dashboard', $this->ecosystem);
+        return $this->redirectRoute('ecosystem.dashboard', $this->ecosystem, navigate: true);
+    }
+
+    public function getFilteredInterests()
+    {
+        if (empty($this->issueSearch)) {
+            return $this->interests;
+        }
+
+        return collect($this->interests)->filter(function ($interest) {
+            return str_contains(strtolower($interest->name), strtolower($this->issueSearch));
+        })->values();
+    }
+
+    public function getFilteredRoles()
+    {
+        if (empty($this->roleSearch)) {
+            return $this->roles;
+        }
+
+        return collect($this->roles)->filter(function ($role) {
+            return str_contains(strtolower($role->nama), strtolower($this->roleSearch)) ||
+                str_contains(strtolower($role->deskripsi), strtolower($this->roleSearch));
+        })->values();
+    }
+
+    public function toggleIssue($issueId)
+    {
+        if (in_array($issueId, $this->selectedIssues)) {
+            $this->selectedIssues = array_filter($this->selectedIssues, function ($id) use ($issueId) {
+                return $id != $issueId;
+            });
+        } else {
+            $this->selectedIssues[] = $issueId;
+        }
+    }
+
+    public function toggleRole($roleId)
+    {
+        if (in_array($roleId, $this->selectedExistingRoles)) {
+            $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function ($id) use ($roleId) {
+                return $id != $roleId;
+            });
+        } else {
+            $this->selectedExistingRoles[] = $roleId;
+        }
+    }
+
+    public function removeIssue($issueId)
+    {
+        $this->selectedIssues = array_filter($this->selectedIssues, function ($id) use ($issueId) {
+            return $id != $issueId;
+        });
+    }
+
+    public function removeRole($roleId)
+    {
+        $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function ($id) use ($roleId) {
+            return $id != $roleId;
+        });
     }
 
     public function render()
