@@ -19,7 +19,7 @@
                     Scan QR Code
                 </flux:button>
                 @if (Auth::user()->isEcosystemBuilder() && $hasCollectiveAction)
-                    <flux:button href="{{ route('collective-action.create') }}" variant="primary"
+                    <flux:button href="{{ route('collective-action.create') }}" variant="primary" wire:navigate
                         class="bg-white text-primary-blue hover:bg-gray-50 max-sm:w-full">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -255,7 +255,7 @@
                                     </svg>
                                     Sudah Bergabung
                                 </span>
-                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
+                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline" wire:navigate
                                     size="sm" class="flex-1">
                                     Lihat Detail
                                 </flux:button>
@@ -290,7 +290,7 @@
                         @endif
                     @elseif($canJoin)
                         <div class="flex space-x-2">
-                            <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary"
+                            <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary" wire:navigate
                                 size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
