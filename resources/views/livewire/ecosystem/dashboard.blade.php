@@ -25,7 +25,7 @@
                     <div class="flex flex-wrap gap-2">
                         @if ($isOwner)
                             <span
-                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue text-primary-blue dark:text-primary-light-blue">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -123,12 +123,18 @@
             <div class="overflow-x-auto">
                 <nav class="flex space-x-2 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
                     <button wire:click="setActiveTab('overview')"
-                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'overview' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                            {{ $activeTab === 'overview'
+                                ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         Ringkasan
                     </button>
                     @if ($isOwner || $isEcosystemBuilder)
                         <button wire:click="setActiveTab('members')"
-                            class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'members' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                            class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                                {{ $activeTab === 'members'
+                                    ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                    : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                             <span class="flex items-center">
                                 Anggota
                                 @if ($pendingRequests->count() > 0)
@@ -139,7 +145,10 @@
                         </button>
                         @if ($isOwner)
                             <button wire:click="setActiveTab('invitations')"
-                                class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'invitations' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                                class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                                    {{ $activeTab === 'invitations'
+                                        ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                        : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                                 <span class="flex items-center">
                                     Undangan Aksi
                                     @if ($pendingInvitations->count() > 0)
@@ -151,15 +160,24 @@
                         @endif
                     @endif
                     <button wire:click="setActiveTab('quality')"
-                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'quality' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                            {{ $activeTab === 'quality'
+                                ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         Kualitas & Keahlian
                     </button>
                     <button wire:click="setActiveTab('actions')"
-                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'actions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                            {{ $activeTab === 'actions'
+                                ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         Aksi Kolektif
                     </button>
                     <button wire:click="setActiveTab('contributions')"
-                        class="py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap {{ $activeTab === 'contributions' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600' }}">
+                        class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
+                            {{ $activeTab === 'contributions'
+                                ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
+                                : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         <span class="flex items-center">
                             Kontribusi
                             @if ($pendingContributions->count() > 0)
@@ -208,12 +226,12 @@
                         <div
                             class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 sm:p-6 border border-blue-200 dark:border-blue-800 sm:col-span-2 lg:col-span-1">
                             <div class="text-center">
-                                <div class="text-2xl sm:text-3xl font-bold text-blue-700 dark:text-blue-400">
+                                <div class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">
                                     {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}
                                 </div>
-                                <div class="text-xs sm:text-sm text-blue-600 dark:text-blue-300 mt-1">Peran Tersedia
+                                <div class="text-xs sm:text-sm text-primary-blue dark:text-primary-blue mt-1">Peran Tersedia
                                 </div>
-                                <div class="text-xs text-blue-500 dark:text-blue-400 mt-1">Dari Total Database</div>
+                                <div class="text-xs text-primary-blue dark:text-primary-blue mt-1">Dari Total Database</div>
                             </div>
                         </div>
                     </div>
@@ -236,8 +254,8 @@
                         @endphp
 
                         <div
-                            class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-6">
-                            <h3 class="text-base sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Status
+                            class="bg-primary-light-blue dark:bg-primary-blue/20 border border-primary-blue/20 dark:border-primary-blue/30 rounded-lg p-4 sm:p-6">
+                            <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-primary-blue mb-3">Status
                                 Anda</h3>
 
                             @if ($userStatus === 'accepted')
@@ -278,7 +296,7 @@
                             @elseif($canJoin)
                                 <div
                                     class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                                    <div class="flex items-center text-blue-700 dark:text-blue-300">
+                                    <div class="flex items-center text-primary-blue dark:text-primary-blue">
                                         <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -288,7 +306,7 @@
                                             ekosistem ini</span>
                                     </div>
                                     <a href="{{ route('ecosystem.join', $ecosystem) }}"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
+                                        class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
                                         Bergabung Sekarang
                                     </a>
                                 </div>
@@ -315,13 +333,13 @@
                             @if ($isOwner)
                                 @if ($ecosystem->canUserContribute(Auth::user()))
                                     <div
-                                        class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-blue-600 dark:text-blue-400 mb-4">
+                                        class="flex items-center max-md:flex-col-reverse max-md:items-start justify-between text-primary-blue dark:text-primary-blue mb-4">
                                         <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
+                                            <div class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3"></div>
                                             <span>Anda adalah pemilik ekosistem dan dapat berkontribusi</span>
                                         </div>
                                         <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 max-md:mb-4 py-1 rounded text-sm font-medium transition-colors">
+                                            class="bg-primary-blue hover:bg-primary-blue/90 text-white px-3 max-md:mb-4 py-1 rounded text-sm font-medium transition-colors">
                                             <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -367,8 +385,8 @@
                                         <span>Permintaan bergabung Anda sedang menunggu persetujuan</span>
                                     </div>
                                 @else
-                                    <div class="flex items-center text-blue-600 dark:text-blue-400 mb-4">
-                                        <div class="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full mr-3"></div>
+                                    <div class="flex items-center text-primary-blue dark:text-primary-blue mb-4">
+                                        <div class="w-3 h-3 bg-primary-blue dark:bg-primary-blue rounded-full mr-3"></div>
                                         <span>Anda dapat bergabung dengan ekosistem ini</span>
                                     </div>
                                 @endif
@@ -496,7 +514,7 @@
                                                         <div class="flex flex-wrap gap-1">
                                                             @foreach ($request->profile->skills->take(5) as $skill)
                                                                 <span
-                                                                    class="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
+                                                                    class="inline-block bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
                                                             @endforeach
                                                             @if ($request->profile->skills->count() > 5)
                                                                 <span
@@ -571,7 +589,7 @@
                                                         <div class="flex flex-wrap gap-1">
                                                             @foreach ($member->profile->skills->take(5) as $skill)
                                                                 <span
-                                                                    class="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
+                                                                    class="inline-block bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
                                                             @endforeach
                                                             @if ($member->profile->skills->count() > 5)
                                                                 <span
@@ -670,7 +688,7 @@
                                         Peran</div>
                                     <div class="text-sm text-gray-500 dark:text-slate-400">Detail Peran</div>
                                 </div>
-                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                                <div class="text-3xl font-bold text-primary-blue dark:text-primary-blue">
                                     {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}
                                 </div>
                             </div>
@@ -678,7 +696,7 @@
                                 <div class="flex justify-between">
                                     <span>Peran tersedia:</span>
                                     <span
-                                        class="font-medium text-blue-600">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
+                                        class="font-medium text-primary-blue">{{ $ecosystemQuality['details']['existing_roles_count'] }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Total peran:</span>
@@ -750,12 +768,12 @@
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
                                     <span class="font-medium text-gray-900 dark:text-slate-100">Cakupan Peran</span>
-                                    <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    <span class="text-lg font-bold text-primary-blue dark:text-primary-blue">
                                         {{ $ecosystemQuality['details']['existing_roles_count'] }}/{{ $ecosystemQuality['details']['total_roles_in_database'] }}
                                     </span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                                    <div class="bg-primary-blue h-2 rounded-full transition-all duration-1000 ease-out"
                                         style="width: {{ $ecosystemQuality['role_diversity_score'] }}%"></div>
                                 </div>
                                 <div class="text-sm text-gray-600 dark:text-slate-400">
@@ -859,7 +877,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Potensi Peningkatan:</span>
                                     <span
-                                        class="font-semibold text-blue-600 dark:text-blue-400">{{ 100 - $rolePercentage }}%</span>
+                                        class="font-semibold text-primary-blue dark:text-primary-blue">{{ 100 - $rolePercentage }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -881,8 +899,8 @@
                                     @foreach ($ecosystem->collectiveActions as $action)
                                         <div
                                             class="border border-gray-200 dark:border-slate-700 rounded-lg p-4 bg-gray-50 dark:bg-slate-700/50">
-                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100">
-                                                {{ $action->title }}</h4>
+                                            <a href="{{ route('collective-action.show', $action) }}" class="font-semibold hover:text-primary-blue dark:hover:text-secondary-green text-gray-900 dark:text-slate-100">
+                                                {{ $action->title }}</a>
                                             <p class="text-sm text-gray-600 dark:text-slate-300 mt-1">
                                                 {{ $action->description }}</p>
                                             <div
@@ -904,7 +922,7 @@
                                     <p>Belum ada aksi kolektif yang dibuat.</p>
                                     @if ($isOwner || $isEcosystemBuilder)
                                         <a href="{{ route('collective-action.create') }}"
-                                            class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                            class="inline-block mt-4 bg-primary-blue hover:bg-primary-blue/90 dark:bg-primary-blue dark:hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                             Buat Aksi Kolektif
                                         </a>
                                     @endif
@@ -931,7 +949,7 @@
                                 <div class="space-y-4">
                                     @foreach ($pendingInvitations as $invitation)
                                         <div
-                                            class="border border-orange-200 dark:border-orange-800 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/20">
+                                            class="border border-orange-200 dark:border-orange-900 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/10">
                                             <div class="flex items-start justify-between">
                                                 <div class="flex-1">
                                                     <h4 class="font-semibold text-gray-900 dark:text-slate-100">
@@ -940,13 +958,13 @@
                                                     <div class="flex items-center gap-3 mt-2">
                                                         <span
                                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs 
-                                                            @if ($invitation->collectiveAction->scale === 'kecil') bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                                                            @elseif($invitation->collectiveAction->scale === 'sedang') bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200
-                                                            @else bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 @endif">
+                                                            @if ($invitation->collectiveAction->scale === 'kecil') bg-green-100 dark:bg-green-800/60 text-green-800 dark:text-green-200
+                                                            @elseif($invitation->collectiveAction->scale === 'sedang') bg-yellow-100 dark:bg-yellow-800/60 text-yellow-800 dark:text-yellow-200
+                                                            @else bg-red-100 dark:bg-red-800/60 text-red-800 dark:text-red-200 @endif">
                                                             {{ $invitation->collectiveAction->scale_label }}
                                                         </span>
                                                         <span
-                                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue/30 text-primary-blue dark:text-primary-light-blue">
                                                             {{ $invitation->collectiveAction->scope_label }}
                                                         </span>
                                                         <span class="text-xs text-gray-500 dark:text-slate-400">
@@ -958,7 +976,7 @@
                                                         {{ Str::limit($invitation->collectiveAction->description, 150) }}
                                                     </p>
                                                     @if ($invitation->invitation_message)
-                                                        <div class="mt-3 p-3 bg-gray-100 dark:bg-slate-700 rounded-lg">
+                                                        <div class="mt-3 p-3 bg-gray-100 dark:bg-slate-800/60 rounded-lg">
                                                             <p class="text-sm text-gray-700 dark:text-slate-300">
                                                                 <strong>Pesan:</strong>
                                                                 {{ $invitation->invitation_message }}
@@ -1032,12 +1050,12 @@
                     <!-- Pending Contributions -->
                     @if ($pendingContributions->count() > 0)
                         <div
-                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                            <div class="p-6 border-b border-amber-200 dark:border-amber-800">
-                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Kontribusi
+                            class="border border-orange-200 dark:border-orange-900 rounded-lg bg-orange-50 dark:bg-orange-900/10">
+                            <div class="p-6 border-b border-orange-200 dark:border-orange-900">
+                                <h3 class="text-lg font-semibold text-orange-800 dark:text-orange-200">Kontribusi
                                     Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
                             </div>
-                            <div class="divide-y divide-amber-200 dark:divide-amber-800">
+                            <div class="divide-y divide-orange-200 dark:divide-orange-900">
                                 @foreach ($pendingContributions as $contribution)
                                     <div class="p-6">
                                         <div class="flex items-start justify-between">
@@ -1164,7 +1182,7 @@
                                                     {{ $contribution->status_label }}
                                                 </span>
                                                 <span
-                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue text-primary-blue dark:text-primary-light-blue">
                                                     {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
                                                 </span>
                                             </div>
@@ -1202,7 +1220,7 @@
                                                 <div class="pt-2">
                                                     <button
                                                         wire:click="completeContribution({{ $contribution->id }})"
-                                                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        class="w-full sm:w-auto bg-primary-blue hover:bg-primary-blue/90 dark:bg-primary-blue dark:hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Tandai Selesai
                                                     </button>
                                                 </div>
@@ -1220,7 +1238,7 @@
                                 <p class="text-sm sm:text-base">Belum ada kontribusi yang diajukan.</p>
                                 @if ($ecosystem->canUserContribute(Auth::user()))
                                     <a href="{{ route('ecosystem.contribute', $ecosystem) }}"
-                                        class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        class="inline-block mt-4 bg-primary-blue hover:bg-primary-blue/90 dark:bg-primary-blue dark:hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                         Ajukan Kontribusi
                                     </a>
                                 @endif
@@ -1414,7 +1432,7 @@
             // console.log('DOM loaded, checking for quality tab...');
             // Check if quality tab is already active
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
-            if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+            if (qualityTab && qualityTab.classList.contains('border-primary-blue')) {
                 // console.log('Quality tab is active, initializing chart...');
                 setTimeout(initializeConnectionQualityChart, 200);
             }
@@ -1436,7 +1454,7 @@
             const canvas = document.getElementById('connectionQualityRadarChart');
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
 
-            if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500') && !connectionQualityRadarChart) {
+            if (canvas && qualityTab && qualityTab.classList.contains('border-primary-blue') && !connectionQualityRadarChart) {
                 // console.log('Initializing chart...');
                 initializeConnectionQualityChart();
             }
@@ -1491,7 +1509,7 @@
                 const qualityTab = document.querySelector(
                     'button[wire\\:click="setActiveTab(\'quality\')"]');
 
-                if (canvas && qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                if (canvas && qualityTab && qualityTab.classList.contains('border-primary-blue')) {
                     // console.log('Quality tab is active, initializing chart...');
                     initializeConnectionQualityChart();
                 }
@@ -1678,7 +1696,7 @@
         // Initialize ecosystem charts when quality tab is active
         function checkEcosystemCharts() {
             const qualityTab = document.querySelector('button[wire\\:click="setActiveTab(\'quality\')"]');
-            if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+            if (qualityTab && qualityTab.classList.contains('border-primary-blue')) {
                 // console.log('Quality tab is active, initializing ecosystem charts...');
                 setTimeout(initializeEcosystemCharts, 200);
             }
@@ -1709,7 +1727,7 @@
             setTimeout(function() {
                 const qualityTab = document.querySelector(
                     'button[wire\\:click="setActiveTab(\'quality\')"]');
-                if (qualityTab && qualityTab.classList.contains('border-blue-500')) {
+                if (qualityTab && qualityTab.classList.contains('border-primary-blue')) {
                     // console.log('Quality tab is active after update, initializing charts...');
                     initializeEcosystemCharts();
                 }
@@ -2158,7 +2176,7 @@
         // Initialize contribution charts when overview tab is active
         function checkEcosystemContributionCharts() {
             const overviewTab = document.querySelector('button[wire\\:click="setActiveTab(\'overview\')"]');
-            if (overviewTab && overviewTab.classList.contains('border-blue-500')) {
+            if (overviewTab && overviewTab.classList.contains('border-primary-blue')) {
                 // console.log('Overview tab is active, initializing contribution charts...');
                 setTimeout(initializeEcosystemContributionCharts, 200);
             }

@@ -1,6 +1,6 @@
 <div class="space-y-6">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-xl p-6">
+    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex justify-between items-start max-sm:flex-col">
             <div>
                 <h1 class="text-2xl font-bold mb-2">Jelajahi Ekosistem Kolaborasi</h1>
@@ -80,8 +80,8 @@
 
     <!-- Flash Messages -->
     @if (session('error'))
-        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
-            <p class="text-red-700 dark:text-red-300">{{ session('error') }}</p>
+        <div class="bg-accent-red/10 dark:bg-accent-red/20 border border-accent-red/20 dark:border-accent-red/30 rounded-xl p-4">
+            <p class="text-accent-red dark:text-accent-red">{{ session('error') }}</p>
         </div>
     @endif
 
@@ -132,7 +132,7 @@
                                     @endphp
                                     @if ($interest)
                                         <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue text-primary-blue dark:text-primary-light-blue">
                                             {{ $interest->name }}
                                         </span>
                                     @endif
@@ -161,7 +161,7 @@
                                     @endphp
                                     @if ($skill)
                                         <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange">
                                             {{ $skill->name }}
                                         </span>
                                     @endif
@@ -196,7 +196,7 @@
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0 mr-3">
                             <div
-                                class="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium">
                                 {{ $ecosystem->creator->initials() }}
                             </div>
                         </div>
@@ -220,7 +220,7 @@
 
                     @if ($userStatus === 'accepted')
                         <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7" />
@@ -229,7 +229,7 @@
                         </span>
                     @elseif($userStatus === 'pending')
                         <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700    dark:text-secondary-yellow">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -255,7 +255,7 @@
                     @if (Auth::user())
                         <div class="mt-2">
                             <a href="{{ route('ecosystem.dashboard', $ecosystem) }}"
-                                class="w-full inline-flex items-center justify-center px-3 py-2 rounded-lg text-sm {{ $ecosystem->creator_id === Auth::id() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-700' }} text-white font-medium transition-colors duration-200"
+                                class="w-full inline-flex items-center justify-center px-3 py-2 rounded-lg text-sm {{ $ecosystem->creator_id === Auth::id() ? 'bg-primary-blue hover:bg-primary-blue/90' : 'bg-gray-600 hover:bg-gray-700' }} text-white font-medium transition-colors duration-200"
                                 wire:navigate>
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
