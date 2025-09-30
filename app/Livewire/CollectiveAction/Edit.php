@@ -38,6 +38,9 @@ class Edit extends Component
         'relasi' => 'Relasi/Networking',
     ];
 
+    public $resourceSearch = '';
+    public $ecosystemSearch = '';
+
     protected $rules = [
         'title' => 'required|string|max:255',
         'description' => 'required|string',
@@ -94,8 +97,8 @@ class Edit extends Component
             }
         }
         
-        $this->start_date = $collectiveAction->start_date ? $collectiveAction->start_date->format('Y-m-d') : '';
-        $this->end_date = $collectiveAction->end_date ? $collectiveAction->end_date->format('Y-m-d') : '';
+        $this->start_date = $collectiveAction->start_date ? date('Y-m-d', strtotime($collectiveAction->start_date)) : '';
+        $this->end_date = $collectiveAction->end_date ? date('Y-m-d', strtotime($collectiveAction->end_date)) : '';
         $this->location = $collectiveAction->location;
         $this->latitude = $collectiveAction->latitude;
         $this->longitude = $collectiveAction->longitude;
@@ -165,6 +168,36 @@ class Edit extends Component
     {
         unset($this->custom_resources[$index]);
         $this->custom_resources = array_values($this->custom_resources); // Re-index array
+    }
+
+    public function getFilteredResources()
+    {
+        $resources = collect($this->resourceTypes);
+
+        if ($this->resourceSearch) {
+            $search = strtolower($this->resourceSearch);
+            $resources = $resources->filter(function ($label, $key) use ($search) {
+                return str_contains(strtolower($label), $search) || str_contains(strtolower($key), $search);
+            });
+        }
+
+        return $resources;
+    }
+
+    public function toggleResource($key)
+    {
+        if (in_array($key, $this->required_resources)) {
+            $this->removeResource($key);
+        } else {
+            $this->required_resources[] = $key;
+        }
+    }
+
+    public function removeResource($key)
+    {
+        $this->required_resources = array_values(array_filter($this->required_resources, function ($item) use ($key) {
+            return $item !== $key;
+        }));
     }
 
     public function render()
