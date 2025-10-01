@@ -4,17 +4,17 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <div class="flex items-center space-x-2 mb-2">
-                    <a href="{{ route('admin.surveys') }}" class="text-blue-600 hover:text-blue-800">
+                    <a href="{{ route('admin.surveys') }}" class="text-primary-blue hover:text-sky-800 dark:text-secondary-green dark:hover:text-teal-400">
                         <flux:icon.arrow-left class="size-5" />
                     </a>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Hasil Survey</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">Hasil Survey</h1>
                 </div>
-                <h2 class="text-lg font-semibold text-slate-700 dark:text-slate-300">{{ $survey->name }}</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm">{{ $survey->description }}</p>
+                <h2 class="text-lg font-semibold text-primary-blue dark:text-secondary-green">{{ $survey->name }}</h2>
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm">{{ $survey->description }}</p>
             </div>
             <div class="text-right">
-                <div class="text-2xl font-bold text-blue-600">{{ $totalResponses }}</div>
-                <div class="text-sm text-slate-500 dark:text-slate-400">Total Respon</div>
+                <div class="text-2xl font-bold text-primary-blue dark:text-secondary-green">{{ $totalResponses }}</div>
+                <div class="text-sm text-gray-600 dark:text-slate-300">Total Respon</div>
             </div>
         </div>
     
@@ -23,27 +23,27 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="text-center">
-                    <div class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    <div class="text-lg font-semibold text-primary-blue dark:text-secondary-green">
                         @if ($survey->is_active)
-                            <span class="text-green-600">Aktif</span>
+                            <span class="text-secondary-green dark:text-sky-400">Aktif</span>
                         @else
-                            <span class="text-gray-600">Tidak Aktif</span>
+                            <span class="text-gray-600 dark:text-slate-300">Tidak Aktif</span>
                         @endif
                     </div>
-                    <div class="text-sm text-slate-500 dark:text-slate-400">Status Survey</div>
+                    <div class="text-sm text-gray-600 dark:text-slate-300">Status Survey</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    <div class="text-lg font-semibold text-primary-blue dark:text-secondary-green">
                         {{ $survey->created_at->format('d M Y') }}</div>
-                    <div class="text-sm text-slate-500 dark:text-slate-400">Tanggal Dibuat</div>
+                    <div class="text-sm text-gray-600 dark:text-slate-300">Tanggal Dibuat</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ $survey->creator->name }}</div>
-                    <div class="text-sm text-slate-500 dark:text-slate-400">Dibuat Oleh</div>
+                    <div class="text-lg font-semibold text-primary-blue dark:text-secondary-green">{{ $survey->creator->name }}</div>
+                    <div class="text-sm text-gray-600 dark:text-slate-300">Dibuat Oleh</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ $totalResponses }}</div>
-                    <div class="text-sm text-slate-500 dark:text-slate-400">Total Respon</div>
+                    <div class="text-lg font-semibold text-primary-blue dark:text-secondary-green">{{ $totalResponses }}</div>
+                    <div class="text-sm text-gray-600 dark:text-slate-300">Total Respon</div>
                 </div>
             </div>
         </div>
@@ -74,40 +74,40 @@
                         <!-- Overview Tab -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <!-- Kategori Koneksi -->
-                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4 flex items-center">
+                            <div class="bg-primary-blue/5 dark:bg-primary-blue/10 rounded-lg p-4 border border-primary-blue/20 dark:border-primary-blue/30">
+                                <h3 class="text-lg font-semibold text-sky-600 mb-4 flex items-center">
                                     <flux:icon.users class="size-5 mr-2" />
                                     Koneksi
                                 </h3>
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-blue-700 dark:text-blue-300">Rata-rata Jumlah
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Jumlah
                                             Koneksi:</span>
                                         <span
-                                            class="font-semibold text-blue-800 dark:text-blue-200">{{ $averageScores['koneksi']['jumlah_koneksi'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['koneksi']['jumlah_koneksi'] ?? 0 }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-blue-700 dark:text-blue-300">Rata-rata Kualitas
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Kualitas
                                             Koneksi:</span>
                                         <span
-                                            class="font-semibold text-blue-800 dark:text-blue-200">{{ $averageScores['koneksi']['rata_kualitas_koneksi'] ?? 0 }}/5</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['koneksi']['rata_kualitas_koneksi'] ?? 0 }}/5</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-blue-700 dark:text-blue-300">Rata-rata Keluasan
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Keluasan
                                             Jejaring:</span>
                                         <span
-                                            class="font-semibold text-blue-800 dark:text-blue-200">{{ number_format($averageScores['koneksi']['keluasan_jejaring'] ?? 0, 1) }}/5</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ number_format($averageScores['koneksi']['keluasan_jejaring'] ?? 0, 1) }}/5</span>
                                     </div>
                                     <div class="mt-2">
-                                        <div class="text-xs text-blue-600 dark:text-blue-400 mb-1">Distribusi Keluasan Jejaring:</div>
+                                        <div class="text-xs text-gray-600 dark:text-slate-300 mb-1">Distribusi Keluasan Jejaring:</div>
                                         <div class="space-y-1">
                                             @php
                                                 $labels = [1 => 'Lokal', 2 => 'Kabupaten', 3 => 'Provinsi', 4 => 'Nasional', 5 => 'Internasional'];
                                             @endphp
                                             @foreach($keluasanJejaringDistribution as $value => $count)
                                                 <div class="flex justify-between text-xs">
-                                                    <span class="text-blue-600 dark:text-blue-400">{{ $labels[$value] }}:</span>
-                                                    <span class="text-blue-800 dark:text-blue-200">{{ $count }} respon</span>
+                                                    <span class="text-gray-600 dark:text-slate-300">{{ $labels[$value] }}:</span>
+                                                    <span class="text-gray-900 dark:text-slate-100">{{ $count }} respon</span>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -116,60 +116,60 @@
                             </div>
     
                             <!-- Kategori Kolaborasi -->
-                            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-                                <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
+                            <div class="bg-secondary-green/5 dark:bg-secondary-green/10 rounded-lg p-4 border border-secondary-green/20 dark:border-secondary-green/30">
+                                <h3 class="text-lg font-semibold text-secondary-green mb-4 flex items-center">
                                     <flux:icon.user-group class="size-5 mr-2" />
                                     Kolaborasi
                                 </h3>
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-green-700 dark:text-green-300">Rata-rata Kualitas:</span>
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Kualitas:</span>
                                         <span
-                                            class="font-semibold text-green-800 dark:text-green-200">{{ $averageScores['kolaborasi']['kualitas_kolaborasi'] ?? 0 }}/5</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['kolaborasi']['kualitas_kolaborasi'] ?? 0 }}/5</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-green-700 dark:text-green-300">Rata-rata Keragaman:</span>
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Keragaman:</span>
                                         <span
-                                            class="font-semibold text-green-800 dark:text-green-200">{{ $averageScores['kolaborasi']['keragaman_kolaborator'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['kolaborasi']['keragaman_kolaborator'] ?? 0 }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-green-700 dark:text-green-300">Rata-rata Proyek:</span>
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Proyek:</span>
                                         <span
-                                            class="font-semibold text-green-800 dark:text-green-200">{{ $averageScores['kolaborasi']['jumlah_proyek_kolaborasi'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['kolaborasi']['jumlah_proyek_kolaborasi'] ?? 0 }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-green-700 dark:text-green-300">Rata-rata Tingkat:</span>
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Tingkat:</span>
                                         <span
-                                            class="font-semibold text-green-800 dark:text-green-200">{{ $averageScores['kolaborasi']['tingkat_kolaborasi'] ?? 0 }}/5</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['kolaborasi']['tingkat_kolaborasi'] ?? 0 }}/5</span>
                                     </div>
                                 </div>
                             </div>
     
                             <!-- Kategori Aksi -->
-                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                            <div class="bg-accent-orange/5 dark:bg-accent-orange/10 rounded-lg p-4 border border-accent-orange/20 dark:border-accent-orange/30">
                                 <h3
-                                    class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-4 flex items-center">
+                                    class="text-lg font-semibold text-accent-orange dark:text-accent-orange-400 mb-4 flex items-center">
                                     <flux:icon.bolt class="size-5 mr-2" />
                                     Aksi
                                 </h3>
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-purple-700 dark:text-purple-300">Rata-rata Aksi
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Aksi
                                             Besar:</span>
                                         <span
-                                            class="font-semibold text-purple-800 dark:text-purple-200">{{ $averageScores['aksi']['jumlah_aksi_besar'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['aksi']['jumlah_aksi_besar'] ?? 0 }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-purple-700 dark:text-purple-300">Rata-rata Aksi
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Aksi
                                             Sedang:</span>
                                         <span
-                                            class="font-semibold text-purple-800 dark:text-purple-200">{{ $averageScores['aksi']['jumlah_aksi_sedang'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['aksi']['jumlah_aksi_sedang'] ?? 0 }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-purple-700 dark:text-purple-300">Rata-rata Aksi
+                                        <span class="text-sm text-gray-600 dark:text-slate-300">Rata-rata Aksi
                                             Kecil:</span>
                                         <span
-                                            class="font-semibold text-purple-800 dark:text-purple-200">{{ $averageScores['aksi']['jumlah_aksi_kecil'] ?? 0 }}</span>
+                                            class="font-semibold text-gray-900 dark:text-slate-100">{{ $averageScores['aksi']['jumlah_aksi_kecil'] ?? 0 }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -177,7 +177,7 @@
                     {{-- @elseif($activeTab === 'chart') --}}
                         <!-- Chart Tab -->
                         <div class="max-w-4xl mt-4 mx-auto">
-                            <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6 text-center">Radar
+                            <h3 class="text-xl font-semibold text-primary-blue dark:text-secondary-green mb-6 text-center">Radar
                                 Chart Hasil Survey</h3>
                             <div class="rounded-lg p-6">
                                 <div class="relative" style="height: 500px;">
@@ -196,13 +196,13 @@
                         <div class="space-y-6">
                             <!-- Kategori Koneksi -->
                             <div>
-                                <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4 flex items-center">
+                                <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4 flex items-center">
                                     <flux:icon.users class="size-5 mr-2" />
                                     Alasan - Kategori Koneksi
                                 </h3>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Jumlah Koneksi</h4>
+                                        <h4 class="font-medium text-primary-blue dark:text-secondary-green mb-2">Jumlah Koneksi</h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['koneksi']['jumlah_koneksi'] as $index => $reason)
                                                 <div class="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
@@ -217,7 +217,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Kualitas Koneksi
+                                        <h4 class="font-medium text-primary-blue dark:text-secondary-green mb-2">Kualitas Koneksi
                                         </h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['koneksi']['rata_kualitas_koneksi'] as $index => $reason)
@@ -233,7 +233,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Keluasan Jejaring
+                                        <h4 class="font-medium text-primary-blue dark:text-secondary-green mb-2">Keluasan Jejaring
                                         </h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['koneksi']['keluasan_jejaring'] as $index => $reason)
@@ -254,13 +254,13 @@
                             <!-- Kategori Kolaborasi -->
                             <div>
                                 <h3
-                                    class="text-lg font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
+                                    class="text-lg font-semibold text-secondary-green dark:text-sky-400 mb-4 flex items-center">
                                     <flux:icon.user-group class="size-5 mr-2" />
                                     Alasan - Kategori Kolaborasi
                                 </h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Kualitas Kolaborasi
+                                        <h4 class="font-medium text-secondary-green dark:text-sky-400 mb-2">Kualitas Kolaborasi
                                         </h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['kolaborasi']['kualitas_kolaborasi'] as $index => $reason)
@@ -276,7 +276,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Keragaman
+                                        <h4 class="font-medium text-secondary-green dark:text-sky-400 mb-2">Keragaman
                                             Kolaborator</h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['kolaborasi']['keragaman_kolaborator'] as $index => $reason)
@@ -292,7 +292,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Proyek Kolaborasi
+                                        <h4 class="font-medium text-secondary-green dark:text-sky-400 mb-2">Proyek Kolaborasi
                                         </h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['kolaborasi']['jumlah_proyek_kolaborasi'] as $index => $reason)
@@ -313,13 +313,13 @@
                             <!-- Kategori Aksi -->
                             <div>
                                 <h3
-                                    class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-4 flex items-center">
+                                    class="text-lg font-semibold text-accent-orange dark:text-accent-orange-400 mb-4 flex items-center">
                                     <flux:icon.bolt class="size-5 mr-2" />
                                     Alasan - Kategori Aksi
                                 </h3>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Aksi Besar</h4>
+                                        <h4 class="font-medium text-accent-orange dark:text-accent-orange-400 mb-2">Aksi Besar</h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['aksi']['jumlah_aksi_besar'] as $index => $reason)
                                                 <div class="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
@@ -334,7 +334,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Aksi Sedang</h4>
+                                        <h4 class="font-medium text-accent-orange dark:text-accent-orange-400 mb-2">Aksi Sedang</h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['aksi']['jumlah_aksi_sedang'] as $index => $reason)
                                                 <div class="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
@@ -349,7 +349,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="font-medium text-slate-700 dark:text-slate-300 mb-2">Aksi Kecil</h4>
+                                        <h4 class="font-medium text-accent-orange dark:text-accent-orange-400 mb-2">Aksi Kecil</h4>
                                         <div class="space-y-2 max-h-40 overflow-y-auto">
                                             @forelse($anonymousReasons['aksi']['jumlah_aksi_kecil'] as $index => $reason)
                                                 <div class="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
@@ -374,8 +374,8 @@
             <div
                 class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-white/20 dark:border-slate-700/50 shadow-lg text-center">
                 <flux:icon.chart-bar class="size-16 text-gray-400 mx-auto mb-4" />
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Belum Ada Respon</h3>
-                <p class="text-gray-500 dark:text-gray-400">Survey ini belum memiliki respon dari peserta.</p>
+                <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-2">Belum Ada Respon</h3>
+                <p class="text-gray-600 dark:text-slate-300">Survey ini belum memiliki respon dari peserta.</p>
             </div>
         @endif
     </div>
