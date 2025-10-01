@@ -1,33 +1,33 @@
 <form wire:submit.prevent="save" class="space-y-4">
     <div>
-        <label for="name" class="block text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70 mb-2">
+        <label for="name" class="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
             Nama Pasar Kecil
         </label>
         <input 
             type="text" 
             id="name"
             wire:model="name"
-            class="w-full px-3 py-2 border border-primary-blue/30 dark:border-primary-blue/40 rounded-lg focus:ring-2 focus:ring-primary-blue dark:bg-slate-700 dark:text-white"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-slate-900 dark:focus:slate-100-green dark:bg-slate-700 dark:text-white"
             placeholder="Masukkan nama Pasar Kecil..."
         >
         @error('name') 
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-accent-red text-xs mt-1">{{ $message }}</p>
         @enderror
     </div>
 
     <div>
-        <label for="description" class="block text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70 mb-2">
+        <label for="description" class="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
             Deskripsi Pasar Kecil
         </label>
         <textarea 
             id="description"
             wire:model="description"
             rows="4"
-            class="w-full px-3 py-2 border border-primary-blue/30 dark:border-primary-blue/40 rounded-lg focus:ring-2 focus:ring-primary-blue dark:bg-slate-700 dark:text-white"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-slate-900 dark:focus:slate-100-green dark:bg-slate-700 dark:text-white"
             placeholder="Masukkan deskripsi Pasar Kecil..."
         ></textarea>
         @error('description') 
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-accent-red text-xs mt-1">{{ $message }}</p>
         @enderror
     </div>
 {{-- 
@@ -47,13 +47,13 @@
         <button 
             type="button"
             wire:click="$dispatch('closeModal')"
-            class="px-4 py-2 border border-primary-blue/30 dark:border-primary-blue/40 text-primary-blue/70 dark:text-primary-blue/70 rounded-lg hover:bg-primary-blue/5 dark:hover:bg-primary-blue/20 transition-colors"
+            class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
         >
             Batal
         </button>
         <button 
             type="submit"
-            class="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors"
+            class="px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors"
             wire:loading.attr="disabled"
             wire:loading.class="opacity-50"
         >
