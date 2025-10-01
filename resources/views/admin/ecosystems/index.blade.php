@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Ekosistem</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua ekosistem dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">Manajemen Ekosistem</h1>
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">Kelola semua ekosistem dalam sistem</p>
             </div>
         </div>
 
@@ -54,35 +54,35 @@
                     </div>
                     
                     <!-- Filter Button -->
-                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Cari</button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors">Cari</button>
                     
                     <!-- Clear Filters -->
                     @if(request('search') || request('status') || request('date_from') || request('date_to'))
-                        <a href="{{ route('admin.ecosystems') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                        <a href="{{ route('admin.ecosystems') }}" class="px-4 py-2 text-sm text-gray-600 dark:text-slate-300 hover:text-gray-800 dark:hover:text-slate-200">Hapus</a>
                     @endif
                 </div>
                 
                 <!-- Active Filters Display -->
                 @if(request('search') || request('status') || request('date_from') || request('date_to'))
                     <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
+                        <span class="text-sm text-gray-600 dark:text-slate-300">Filter aktif:</span>
                         @if(request('search'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
                                 Pencarian: "{{ request('search') }}"
                             </span>
                         @endif
                         @if(request('status'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full">
                                 Status: {{ ucfirst(request('status')) }}
                             </span>
                         @endif
                         @if(request('date_from'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                                 Dari: {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
                             </span>
                         @endif
                         @if(request('date_to'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                                 Sampai: {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
                             </span>
                         @endif
@@ -99,15 +99,15 @@
                     <div class="p-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0">
                         <div class="space-y-3">
                             <div>
-                                <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $ecosystem->ecosystem_title }}</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ Str::limit($ecosystem->description, 80) }}</div>
+                                <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $ecosystem->ecosystem_title }}</div>
+                                <div class="text-xs text-gray-600 dark:text-slate-300 mt-1">{{ Str::limit($ecosystem->description, 80) }}</div>
                             </div>
                             
                             <div class="flex items-center space-x-3">
                                 <x-ui.avatar :user="$ecosystem->creator" size="sm" />
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $ecosystem->creator->name }}</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $ecosystem->creator->email }}</div>
+                                    <div class="text-xs font-medium text-primary-blue dark:text-secondary-green">{{ $ecosystem->creator->name }}</div>
+                                    <div class="text-xs text-gray-600 dark:text-slate-300">{{ $ecosystem->creator->email }}</div>
                                 </div>
                             </div>
                             
@@ -115,23 +115,23 @@
                                 <div class="flex items-center space-x-2">
                                     @php
                                         $statusColors = [
-                                            'active' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-                                            'inactive' => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                                        'active' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                        'inactive' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                                         ];
                                         $status = $ecosystem->is_active ? 'active' : 'inactive';
                                     @endphp
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' }}">
                                         {{ $ecosystem->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                     </span>
                                 </div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                <div class="text-xs text-gray-600 dark:text-slate-300">
                                     {{ $ecosystem->created_at->format('M d, Y') }}
                                 </div>
                             </div>
                             
                             <div class="flex items-center space-x-3 pt-2">
                                 <a href="{{ route('admin.ecosystems.show', $ecosystem) }}" 
-                                   class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
+                                   class="text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 text-xs font-medium">
                                     Lihat
                                 </a>
                                 <form method="POST" action="{{ route('admin.ecosystems.delete', $ecosystem) }}" class="inline" 
@@ -139,7 +139,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                            class="text-accent-red hover:text-red-700 dark:text-accent-red-400 dark:hover:text-red-400 text-xs font-medium">
                                         Hapus
                                     </button>
                                 </form>
@@ -148,13 +148,9 @@
                     </div>
                 @empty
                     <div class="p-8 text-center">
-                        <div class="text-slate-500 dark:text-slate-400">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                            <p class="text-lg font-medium">Tidak ada ekosistem ditemukan</p>
-                            <p class="text-sm">Coba sesuaikan kriteria pencarian Anda</p>
-                        </div>
+                        <flux:icon.clipboard-document-list class="size-16 text-gray-400 mx-auto mb-4" />
+                        <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-2">Tidak ada ekosistem ditemukan</h3>
+                        <p class="text-gray-600 dark:text-slate-300 mb-4">Coba sesuaikan kriteria pencarian Anda</p>
                     </div>
                 @endforelse
             </div>
@@ -164,11 +160,11 @@
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ekosistem</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pembuat</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dibuat</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Ekosistem</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Pembuat</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Dibuat</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -176,38 +172,38 @@
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                                 <td class="px-6 py-4">
                                     <div>
-                                        <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $ecosystem->ecosystem_title }}</div>
-                                        <div class="text-sm text-slate-500 dark:text-slate-400 truncate max-w-xs">{{ Str::limit($ecosystem->description, 60) }}</div>
+                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $ecosystem->ecosystem_title }}</div>
+                                        <div class="text-sm text-gray-600 dark:text-slate-300 truncate max-w-xs">{{ Str::limit($ecosystem->description, 60) }}</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center space-x-3">
                                         <x-ui.avatar :user="$ecosystem->creator" size="sm" />
                                         <div>
-                                            <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $ecosystem->creator->name }}</div>
-                                            <div class="text-sm text-slate-500 dark:text-slate-400">{{ $ecosystem->creator->email }}</div>
+                                            <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $ecosystem->creator->name }}</div>
+                                            <div class="text-sm text-gray-600 dark:text-slate-300">{{ $ecosystem->creator->email }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
                                         $statusColors = [
-                                            'active' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-                                            'inactive' => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                                        'active' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                        'inactive' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                                         ];
                                         $status = $ecosystem->is_active ? 'active' : 'inactive';
                                     @endphp
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' }}">
                                         {{ $ecosystem->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                <td class="px-6 py-4 text-sm text-primary-blue dark:text-secondary-green">
                                     {{ $ecosystem->created_at->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end space-x-2">
                                         <a href="{{ route('admin.ecosystems.show', $ecosystem) }}" 
-                                           class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
+                                           class="text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 text-sm font-medium">
                                             Lihat
                                         </a>
                                         <form method="POST" action="{{ route('admin.ecosystems.delete', $ecosystem) }}" class="inline" 
@@ -215,7 +211,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
+                                                    class="text-accent-red hover:text-red-700 dark:text-accent-red-400 dark:hover:text-red-400 text-sm font-medium">
                                                 Hapus
                                             </button>
                                         </form>
@@ -225,13 +221,9 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-12 text-center">
-                                    <div class="text-slate-500 dark:text-slate-400">
-                                        <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                        <p class="text-lg font-medium">Tidak ada ekosistem ditemukan</p>
-                                        <p class="text-sm">Coba sesuaikan kriteria pencarian Anda</p>
-                                    </div>
+                                    <flux:icon.clipboard-document-list class="size-16 text-gray-400 mx-auto mb-4" />
+                                    <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-2">Tidak ada ekosistem ditemukan</h3>
+                                    <p class="text-gray-600 dark:text-slate-300">Coba sesuaikan kriteria pencarian Anda</p>
                                 </td>
                             </tr>
                         @endforelse
