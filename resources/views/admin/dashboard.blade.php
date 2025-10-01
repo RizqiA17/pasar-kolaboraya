@@ -18,16 +18,16 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Total Peserta</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">{{ number_format($stats['users']) }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-blue-400">{{ number_format($stats['users']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                         </svg>
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 font-medium">
+                    <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-primary-blue dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                         Lihat semua Peserta →
                     </a>
                 </div>
@@ -38,7 +38,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Ekosistem</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">{{ number_format($stats['ecosystems']) }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{{ number_format($stats['ecosystems']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 font-medium">
+                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
                         Lihat semua ekosistem →
                     </a>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Aksi Kolektif</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">{{ number_format($stats['collective_actions']) }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-pink-600 dark:text-pink-400">{{ number_format($stats['collective_actions']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 dark:bg-pink-900/20 rounded-xl flex items-center justify-center">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 font-medium">
+                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium">
                         Lihat semua aksi kolektif →
                     </a>
                 </div>
@@ -78,16 +78,16 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Koneksi</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">{{ number_format($stats['connections']) }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-indigo-400">{{ number_format($stats['connections']) }}</p>
                     </div>
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                         </svg>
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-4">
-                    <a href="{{ route('admin.connections') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 font-medium">
+                    <a href="{{ route('admin.connections') }}" class="text-xs sm:text-sm text-blue-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
                         Lihat semua koneksi →
                     </a>
                 </div>
@@ -207,15 +207,15 @@
             <!-- Recent Users -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green">Peserta Terbaru</h3>
-                    <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">Lihat semua</a>
+                    <h3 class="text-base sm:text-lg font-semibold text-blue-600 dark:text-blue-400">Peserta Terbaru</h3>
+                    <a href="{{ route('admin.users') }}" class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentUsers as $user)
                         <div class="flex items-center space-x-3">
                             <x-ui.avatar :user="$user" size="sm" />
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-primary-blue dark:text-secondary-green truncate">{{ $user->name }}</p>
+                                <p class="text-sm font-medium text-blue-600 dark:text-blue-400 truncate">{{ $user->name }}</p>
                                 <p class="text-xs text-gray-600 dark:text-slate-300">{{ $user->email }}</p>
                             </div>
                             <div class="text-xs text-gray-500 dark:text-slate-400">
@@ -231,8 +231,8 @@
             <!-- Recent Ecosystems -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green">Ekosistem Terbaru</h3>
-                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">Lihat semua</a>
+                    <h3 class="text-base sm:text-lg font-semibold text-purple-600 dark:text-purple-400">Ekosistem Terbaru</h3>
+                    <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentEcosystems as $ecosystem)
@@ -243,7 +243,7 @@
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-primary-blue dark:text-secondary-green truncate">{{ $ecosystem->ecosystem_title }}</p>
+                                <p class="text-sm font-medium text-purple-600 dark:text-purple-400 truncate">{{ $ecosystem->ecosystem_title }}</p>
                                 <p class="text-xs text-gray-600 dark:text-slate-300">by {{ $ecosystem->creator->name }}</p>
                             </div>
                             <div class="text-xs text-gray-500 dark:text-slate-400">
@@ -259,8 +259,8 @@
             <!-- Recent Collective Actions -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green">Aksi Kolektif Terbaru</h3>
-                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">Lihat semua</a>
+                    <h3 class="text-base sm:text-lg font-semibold text-pink-600 dark:text-pink-400">Aksi Kolektif Terbaru</h3>
+                    <a href="{{ route('admin.collective-actions') }}" class="text-xs sm:text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300">Lihat semua</a>
                 </div>
                 <div class="space-y-3">
                     @forelse($recentCollectiveActions as $collectiveAction)
@@ -271,7 +271,7 @@
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-primary-blue dark:text-secondary-green truncate">{{ $collectiveAction->title }}</p>
+                                <p class="text-sm font-medium text-pink-600 dark:text-pink-400 truncate">{{ $collectiveAction->title }}</p>
                                 <p class="text-xs text-gray-600 dark:text-slate-300">by {{ $collectiveAction->creator->name }}</p>
                             </div>
                             <div class="text-xs text-gray-500 dark:text-slate-400">
