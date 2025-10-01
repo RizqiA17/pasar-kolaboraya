@@ -171,7 +171,7 @@
                                         <span class="text-gray-400 text-sm">Tidak dapat diakses</span>
                                     @elseif($user->approval_status === 'pending')
                                         <button wire:click="openApprovalModal({{ $user->id }})"
-                                            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium">
+                                            class="text-primary-blue hover:text-primary-blue/80 dark:text-primary-blue dark:hover:text-primary-blue/80 text-sm font-medium">
                                             Kelola
                                         </button>
                                     @else
@@ -400,15 +400,15 @@
                     @elseif($selectedUser->approval_status === 'pending')
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="approveUser({{ $selectedUser->id }})"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-secondary-green text-base font-medium text-white hover:bg-secondary-green/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-green sm:ml-3 sm:w-auto sm:text-sm">
                                 Setujui
                             </button>
                             <button wire:click="rejectUser({{ $selectedUser->id }})"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-accent-red text-base font-medium text-white hover:bg-accent-red/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-red sm:ml-3 sm:w-auto sm:text-sm">
                                 Tolak
                             </button>
                             <button wire:click="resetApprovalModal"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Batal
                             </button>
                         </div>

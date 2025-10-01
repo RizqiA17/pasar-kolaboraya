@@ -2,12 +2,12 @@
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Pasar Kolaboraya</h1>
-            <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua sesi Pasar Kolaboraya
+            <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">Manajemen Pasar Kolaboraya</h1>
+            <p class="text-primary-blue/70 dark:text-primary-blue/70 mt-1 text-sm sm:text-base">Kelola semua sesi Pasar Kolaboraya
                 dan pengguna yang terlibat di dalamnya.</p>
         </div>
         <div class="flex items-center gap-3">
-            <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            <div class="text-xs sm:text-sm text-primary-blue/60 dark:text-primary-blue/60">
                 Total: {{ $pasarKolaborayas->total() }} sesi
             </div>
             <flux:button wire:click="showCreateForm" variant="primary" size="sm" icon="plus">
@@ -23,13 +23,13 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Sesi Aktif</p>
-                    <p class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
+                    <p class="text-xs sm:text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70">Sesi Aktif</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-secondary-green dark:text-secondary-green">
                         {{ $pasarKolaborayas->where('status', 'active')->count() }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/20 rounded-xl flex items-center justify-center">
-                    <flux:icon.check-circle class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" />
+                    <flux:icon.check-circle class="w-5 h-5 sm:w-6 sm:h-6 text-secondary-green dark:text-secondary-green" />
                 </div>
             </div>
         </div>
@@ -39,13 +39,13 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Tidak Aktif</p>
-                    <p class="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400">
+                    <p class="text-xs sm:text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70">Tidak Aktif</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-neutral-orange dark:text-neutral-orange">
                         {{ $pasarKolaborayas->where('status', 'inactive')->count() }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl flex items-center justify-center">
-                    <flux:icon.pause-circle class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600 dark:text-yellow-400" />
+                    <flux:icon.pause-circle class="w-5 h-5 sm:w-6 sm:h-6 text-neutral-orange dark:text-neutral-orange" />
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Diarsipkan</p>
+                    <p class="text-xs sm:text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70">Diarsipkan</p>
                     <p class="text-2xl sm:text-3xl font-bold text-gray-600 dark:text-gray-400">
                         {{ $pasarKolaborayas->where('status', 'archived')->count() }}</p>
                 </div>
@@ -71,13 +71,13 @@
             class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Anggota</p>
-                    <p class="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
+                    <p class="text-xs sm:text-sm font-medium text-primary-blue/70 dark:text-primary-blue/70">Total Anggota</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">
                         {{ $pasarKolaborayas->sum(function ($pk) {return $pk->acceptedUsers->count();}) }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
-                    <flux:icon.users class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
+                    <flux:icon.users class="w-5 h-5 sm:w-6 sm:h-6 text-primary-blue dark:text-primary-blue" />
                 </div>
             </div>
         </div>
@@ -116,10 +116,10 @@
                                     <flux:icon.cube class="w-5 h-5 text-white" />
                                 </div>
                                 <div>
-                                    <a href="{{ route('admin.market-analysis.show', $pasarKolaboraya->id) }}"  class="text-lg font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
+                                    <a href="{{ route('admin.market-analysis.show', $pasarKolaboraya->id) }}"  class="text-lg font-semibold text-primary-blue dark:text-primary-blue hover:text-blue-600 dark:hover:text-blue-400">
                                         {{ $pasarKolaboraya->name }}
                                     </a>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                                    <p class="text-sm text-primary-blue/60 dark:text-primary-blue/60">
                                         Dibuat oleh {{ $pasarKolaboraya->creator->name }}
                                     </p>
                                 </div>
@@ -134,12 +134,12 @@
                         </div>
 
                         @if ($pasarKolaboraya->description)
-                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                            <p class="text-primary-blue/70 dark:text-primary-blue/70 mb-4 text-sm leading-relaxed">
                                 {{ $pasarKolaboraya->description }}
                             </p>
                         @endif
 
-                        <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                        <div class="flex flex-wrap items-center gap-4 text-sm text-primary-blue/60 dark:text-primary-blue/60">
                             <div class="flex items-center">
                                 <flux:icon.users class="w-4 h-4 mr-2" />
                                 <span class="font-medium">{{ $pasarKolaboraya->acceptedUsers->count() }}</span> anggota
@@ -197,12 +197,12 @@
                 class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-8 sm:p-12 border border-white/20 dark:border-slate-700/50 shadow-lg text-center">
                 <div
                     class="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <flux:icon.cube class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    <flux:icon.cube class="w-8 h-8 text-primary-blue dark:text-primary-blue" />
                 </div>
-                <h3 class="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                <h3 class="text-xl font-semibold text-primary-blue dark:text-primary-blue mb-2">
                     Belum ada Pasar Kolaboraya
                 </h3>
-                <p class="text-slate-600 dark:text-slate-400 mb-6 max-w-md mx-auto">
+                <p class="text-primary-blue/70 dark:text-primary-blue/70 mb-6 max-w-md mx-auto">
                     Mulai dengan membuat Pasar Kolaboraya pertama Anda untuk mengelola sesi kolaborasi pengguna.
                 </p>
                 <flux:button wire:click="showCreateForm" variant="primary" size="sm" icon="plus" >
@@ -235,7 +235,7 @@
                     class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/50 shadow-2xl">
                     <!-- Modal Header with Close Button -->
                     <div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-                        <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">
+                        <h2 class="text-xl font-semibold text-primary-blue dark:text-primary-blue">
                             Buat Pasar Kolaboraya Baru
                         </h2>
                         <button 

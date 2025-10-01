@@ -113,7 +113,7 @@
                             </div>
                             
                             <div class="flex items-center justify-between">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-blue/10 text-primary-blue dark:bg-primary-blue/20 dark:text-primary-blue">
                                     {{ $interest->profiles_count }} pengguna
                                 </span>
                                 <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -176,7 +176,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-blue/10 text-primary-blue dark:bg-primary-blue/20 dark:text-primary-blue">
                                         {{ $interest->profiles_count }} pengguna
                                     </span>
                                 </td>

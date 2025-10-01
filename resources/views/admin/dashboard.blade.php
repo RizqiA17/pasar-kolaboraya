@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Dashboard Admin</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-slate-200">Dashboard Admin</h1>
                 <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Selamat datang kembali, {{ auth()->user()->name }}! Berikut adalah aktivitas terbaru di sistem Anda.</p>
             </div>
             <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">

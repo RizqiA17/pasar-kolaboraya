@@ -143,7 +143,7 @@
                                         <div class="text-xs text-slate-500 dark:text-slate-400">{{ $ecosystem->organization_name }}</div>
                                     </div>
                                 </div>
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-secondary-green/10 text-secondary-green dark:bg-secondary-green/20 dark:text-secondary-green">
                                     Berpartisipasi
                                 </span>
                             </div>

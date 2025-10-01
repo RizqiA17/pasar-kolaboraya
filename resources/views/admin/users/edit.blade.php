@@ -122,7 +122,7 @@
                                 @if ($user->is_ecosystem_builder)
                                     <div class="flex items-center space-x-2">
                                         <span
-                                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-neutral-purple/10 text-neutral-purple dark:bg-neutral-purple/20 dark:text-neutral-purple">
                                             Ekosistem Builder Aktif
                                         </span>
                                         @if ($user->ecosystem_builder_approved_at)
@@ -134,7 +134,7 @@
                                     </div>
                                 @else
                                     <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400">
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-800 dark:bg-slate-900/20 dark:text-slate-400">
                                         Bukan Ekosistem Builder
                                     </span>
                                 @endif
@@ -149,12 +149,12 @@
                             <div class="mt-2">
                                 @if ($user->email_verified_at)
                                     <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-secondary-green/10 text-secondary-green dark:bg-secondary-green/20 dark:text-secondary-green">
                                         Terverifikasi pada {{ $user->email_verified_at->format('M d, Y H:i') }}
                                     </span>
                                 @else
                                     <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-neutral-orange/10 text-neutral-orange dark:bg-neutral-orange/20 dark:text-neutral-orange">
                                         Belum Terverifikasi
                                     </span>
                                 @endif
@@ -190,7 +190,7 @@
                         Batal
                     </a>
                     <button type="submit"
-                        class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        class="w-full sm:w-auto px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors">
                         Perbarui Pengguna
                     </button>
                 </div>

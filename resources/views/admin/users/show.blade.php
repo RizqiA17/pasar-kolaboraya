@@ -8,7 +8,7 @@
             </div>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <a href="{{ route('admin.users.edit', $user) }}" 
-                   class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center">
+                   class="w-full sm:w-auto px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors text-center">
                     Edit Pengguna
                 </a>
                 <a href="{{ route('admin.users') }}" 
@@ -120,7 +120,7 @@
                     <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Koneksi</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->sentConnections ? $user->sentConnections->where('status', 'accepted')->count() : 0 }}</div>
+                            <div class="text-2xl font-bold text-primary-blue dark:text-blue-400">{{ $user->sentConnections ? $user->sentConnections->where('status', 'accepted')->count() : 0 }}</div>
                             <div class="text-sm text-slate-600 dark:text-slate-400">Accepted Koneksi</div>
                         </div>
                         <div class="text-center">
@@ -160,12 +160,12 @@
                     <div class="mb-6">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-md font-medium text-slate-700 dark:text-slate-300">Skor Keterlibatan</h4>
-                            <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            <span class="text-2xl font-bold text-primary-blue dark:text-blue-400">
                                 {{ min(100, max(0, round((($user->sentConnections ? $user->sentConnections->where('status', 'accepted')->count() : 0) * 10 + ($user->ecosystems ? $user->ecosystems->count() : 0) * 15 + ($user->activeCollectiveActions ? $user->activeCollectiveActions->count() : 0) * 20) / 2))) }}
                             </span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full" 
+                            <div class="bg-gradient-to-r from-blue-500 to-primary-blue h-3 rounded-full" 
                                  style="width: {{ min(100, max(0, round((($user->sentConnections ? $user->sentConnections->where('status', 'accepted')->count() : 0) * 10 + ($user->ecosystems ? $user->ecosystems->count() : 0) * 15 + ($user->activeCollectiveActions ? $user->activeCollectiveActions->count() : 0) * 20) / 2))) }}%"></div>
                         </div>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan koneksi, ekosistem, dan aksi kolektif</p>
@@ -309,7 +309,7 @@
 
                     <!-- Overall Score -->
                     <div class="text-center mb-8">
-                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-blue-600 rounded-full mb-4">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-primary-blue rounded-full mb-4">
                             <span class="text-xl font-bold text-white">{{ $participantQuality }}%</span>
                         </div>
                         <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Skor Kualitas Peserta</h4>
@@ -322,7 +322,7 @@
                         <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
                             <div class="flex items-center justify-between mb-2">
                                 <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Kelengkapan Profil</h5>
-                                <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ $profileCompleteness }}%</span>
+                                <span class="text-lg font-bold text-primary-blue dark:text-blue-400">{{ $profileCompleteness }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $profileCompleteness }}%"></div>
@@ -477,7 +477,7 @@
                     <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Aksi Cepat</h3>
                     <div class="space-y-3">
                         <a href="{{ route('admin.users.edit', $user) }}" 
-                           class="block w-full px-4 py-2 text-center bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                           class="block w-full px-4 py-2 text-center bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors">
                             Edit Pengguna
                         </a>
                         @if(!$user->isSuperAdmin() || \App\Models\User::where('role', 'super_admin')->count() > 1)

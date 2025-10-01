@@ -3,12 +3,12 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Pasar Kecil</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola pasar kecil untuk mengukur kolaborasi dalam komunitas</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">Manajemen Pasar Kecil</h1>
+                <p class="text-primary-blue/70 dark:text-primary-blue/70 mt-1 text-sm sm:text-base">Kelola pasar kecil untuk mengukur kolaborasi dalam komunitas</p>
             </div>
             <button 
                 wire:click="openCreateModal"
-                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                class="inline-flex items-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors"
             >
                 <flux:icon.plus class="size-4 mr-2" />
                 Buat Pasar Kecil Baru
@@ -40,11 +40,11 @@
                     <table class="w-full">
                         <thead class="bg-slate-50 dark:bg-slate-700/50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Survey</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Respon</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Dibuat</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Survey</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Respon</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Dibuat</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -52,7 +52,7 @@
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                                     <td class="px-6 py-4">
                                         <div>
-                                            <div class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ $survey->name }}</div>
+                                            <div class="text-sm font-medium text-primary-blue dark:text-primary-blue">{{ $survey->name }}</div>
                                             <div class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{{ $survey->description }}</div>
                                         </div>
                                     </td>
@@ -70,15 +70,15 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="text-sm text-slate-900 dark:text-slate-100">{{ $survey->responses->count() }} respon</div>
+                                        <div class="text-sm text-primary-blue dark:text-primary-blue">{{ $survey->responses->count() }} respon</div>
                                         @if($survey->responses->count() > 0)
-                                            <a href="{{ route('admin.surveys.results', $survey->id) }}" class="text-blue-600 hover:text-blue-800 text-xs">
+                                            <a href="{{ route('admin.surveys.results', $survey->id) }}" class="text-primary-blue hover:text-blue-800 text-xs">
                                                 Lihat hasil →
                                             </a>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="text-sm text-slate-900 dark:text-slate-100">{{ $survey->created_at->format('d M Y') }}</div>
+                                        <div class="text-sm text-primary-blue dark:text-primary-blue">{{ $survey->created_at->format('d M Y') }}</div>
                                         <div class="text-xs text-slate-500 dark:text-slate-400">oleh {{ $survey->creator->name }}</div>
                                     </td>
                                     <td class="px-6 py-4">
@@ -87,7 +87,7 @@
                                                 <button 
                                                     wire:click="deactivateSurvey({{ $survey->id }})"
                                                     wire:confirm="Apakah Anda yakin ingin menonaktifkan survey ini?"
-                                                    class="text-yellow-600 hover:text-yellow-800 text-sm"
+                                                    class="text-neutral-orange hover:text-neutral-orange/80 text-sm"
                                                 >
                                                     Nonaktifkan
                                                 </button>
@@ -95,14 +95,14 @@
                                                 <button 
                                                     wire:click="activateSurvey({{ $survey->id }})"
                                                     wire:confirm="Apakah Anda yakin ingin mengaktifkan survey ini? Survey yang sedang aktif akan dinonaktifkan."
-                                                    class="text-green-600 hover:text-green-800 text-sm"
+                                                    class="text-secondary-green hover:text-secondary-green/80 text-sm"
                                                 >
                                                     Aktifkan
                                                 </button>
                                             @endif
                                             
                                             @if($survey->responses->count() > 0)
-                                                <a href="{{ route('admin.surveys.results', $survey->id) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                                                <a href="{{ route('admin.surveys.results', $survey->id) }}" class="text-primary-blue hover:text-blue-800 text-sm">
                                                     Hasil
                                                 </a>
                                             @endif
@@ -110,7 +110,7 @@
                                             <button 
                                                 wire:click="deleteSurvey({{ $survey->id }})"
                                                 wire:confirm="Apakah Anda yakin ingin menghapus survey ini? Semua data respon akan ikut terhapus."
-                                                class="text-red-600 hover:text-red-800 text-sm"
+                                                class="text-accent-red hover:text-accent-red/80 text-sm"
                                             >
                                                 Hapus
                                             </button>
@@ -129,7 +129,7 @@
                             <div class="bg-white dark:bg-slate-700/50 rounded-xl p-4 border border-slate-200 dark:border-slate-600 shadow-sm">
                                 <div class="flex items-start justify-between mb-3">
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{{ $survey->name }}</h3>
+                                        <h3 class="text-sm font-semibold text-primary-blue dark:text-primary-blue truncate">{{ $survey->name }}</h3>
                                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{{ $survey->description }}</p>
                                     </div>
                                     <div class="ml-3 flex-shrink-0">
@@ -150,11 +150,11 @@
                                 <div class="grid grid-cols-2 gap-3 mb-3 text-xs">
                                     <div>
                                         <span class="text-slate-500 dark:text-slate-400">Respon:</span>
-                                        <span class="font-medium text-slate-900 dark:text-slate-100 ml-1">{{ $survey->responses->count() }}</span>
+                                        <span class="font-medium text-primary-blue dark:text-primary-blue ml-1">{{ $survey->responses->count() }}</span>
                                     </div>
                                     <div>
                                         <span class="text-slate-500 dark:text-slate-400">Dibuat:</span>
-                                        <span class="font-medium text-slate-900 dark:text-slate-100 ml-1">{{ $survey->created_at->format('d M Y') }}</span>
+                                        <span class="font-medium text-primary-blue dark:text-primary-blue ml-1">{{ $survey->created_at->format('d M Y') }}</span>
                                     </div>
                                 </div>
                                 
@@ -183,7 +183,7 @@
                                     
                                     @if($survey->responses->count() > 0)
                                         <a href="{{ route('admin.surveys.results', $survey->id) }}" 
-                                           class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/30 transition-colors">
+                                           class="px-3 py-1.5 text-xs font-medium text-sky-700 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/30 transition-colors">
                                             Lihat Hasil
                                         </a>
                                     @endif
@@ -208,11 +208,11 @@
             @else
                 <div class="p-8 text-center">
                     <flux:icon.clipboard-document-list class="size-16 text-gray-400 mx-auto mb-4" />
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Belum Ada Survey</h3>
-                    <p class="text-gray-500 dark:text-gray-400 mb-4">Mulai dengan membuat survey pertama untuk komunitas Anda.</p>
+                    <h3 class="text-lg font-medium text-primary-blue dark:text-primary-blue mb-2">Belum Ada Survey</h3>
+                    <p class="text-primary-blue/60 dark:text-primary-blue/60 mb-4">Mulai dengan membuat survey pertama untuk komunitas Anda.</p>
                     <button 
                         wire:click="openCreateModal"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        class="inline-flex items-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors"
                     >
                         <flux:icon.plus class="size-4 mr-2" />
                         Buat Pasar Kecil Baru
@@ -228,7 +228,7 @@
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Buat Pasar Kecil Baru</h3>
-                            <button wire:click="closeCreateModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <button wire:click="closeCreateModal" class="text-primary-blue/40 hover:text-primary-blue/60 dark:hover:text-primary-blue/60">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>

@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Analisis Sesi Pasar</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kesehatan dan performa ekosistem kolaborasi</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">Analisis Sesi Pasar</h1>
+                <p class="text-primary-blue/70 dark:text-primary-blue/70 mt-1 text-sm sm:text-base">Kesehatan dan performa ekosistem kolaborasi</p>
             </div>
         </div>
 
@@ -41,10 +41,10 @@
                 </div>
                 
                 <div class="md:col-span-2 lg:col-span-4 flex gap-2">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button type="submit" class="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors">
                         Filter
                     </button>
-                    <a href="{{ route('admin.market-analysis') }}" class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
+                    <a href="{{ route('admin.market-analysis') }}" class="px-4 py-2 bg-primary-blue/60 text-white rounded-lg hover:bg-primary-blue/70 transition-colors">
                         Reset
                     </a>
                 </div>
@@ -58,10 +58,10 @@
                     <!-- Session Header -->
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                            <h3 class="text-lg font-semibold text-primary-blue dark:text-primary-blue mb-1">
                                 {{ $session->name }}
                             </h3>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                            <p class="text-sm text-primary-blue/70 dark:text-primary-blue/70">
                                 Dibuat oleh {{ $session->creator->name }}
                             </p>
                         </div>
@@ -76,7 +76,7 @@
 
                     <!-- Session Description -->
                     @if($session->description)
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">
+                        <p class="text-sm text-primary-blue/70 dark:text-primary-blue/70 mb-4 line-clamp-2">
                             {{ $session->description }}
                         </p>
                     @endif
@@ -84,25 +84,25 @@
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            <div class="text-2xl font-bold text-primary-blue dark:text-primary-blue">
                                 {{ $session->acceptedUsers->count() }}
                             </div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Pengguna</div>
+                            <div class="text-xs text-primary-blue/70 dark:text-primary-blue/70">Pengguna</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                            <div class="text-2xl font-bold text-neutral-purple dark:text-neutral-purple">
                                 {{ $session->ecosystems->count() }}
                             </div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Ekosistem</div>
+                            <div class="text-xs text-primary-blue/70 dark:text-primary-blue/70">Ekosistem</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">
+                            <div class="text-2xl font-bold text-accent-red dark:text-accent-red">
                                 {{ $session->collectiveActions->count() }}
                             </div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">Aksi Kolektif</div>
+                            <div class="text-xs text-primary-blue/70 dark:text-primary-blue/70">Aksi Kolektif</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+                            <div class="text-2xl font-bold text-secondary-green dark:text-secondary-green">
                                 @php
                                     $daysSinceStart = $session->created_at->diffInDays(now());
                                 @endphp
@@ -116,7 +116,7 @@
                                     {{ round($daysSinceStart / 30, 1) }} bulan
                                 @endif
                             </div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400">
+                            <div class="text-xs text-primary-blue/70 dark:text-primary-blue/70">
                                 @if($daysSinceStart < 1)
                                     Aktif
                                 @else
@@ -127,7 +127,7 @@
                     </div>
 
                     <!-- Session Dates -->
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                    <div class="text-xs text-primary-blue/60 dark:text-primary-blue/60 mb-4">
                         <div>Dibuat: {{ $session->created_at->format('d M Y H:i') }}</div>
                         @if($session->started_at)
                             <div>Dimulai: {{ $session->started_at->format('d M Y H:i') }}</div>
@@ -150,7 +150,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-slate-600 dark:text-slate-400 mb-2">Tidak ada sesi pasar</h3>
+                    <h3 class="text-lg font-medium text-primary-blue/70 dark:text-primary-blue/70 mb-2">Tidak ada sesi pasar</h3>
                     <p class="text-slate-500 dark:text-slate-500">Belum ada sesi pasar yang tersedia untuk dianalisis.</p>
                 </div>
             @endforelse

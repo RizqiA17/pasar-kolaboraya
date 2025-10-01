@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Koneksi</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua koneksi pengguna dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-primary-blue">Manajemen Koneksi</h1>
+                <p class="text-primary-blue/70 dark:text-primary-blue/70 mt-1 text-sm sm:text-base">Kelola semua koneksi pengguna dalam sistem</p>
             </div>
         </div>
 
@@ -45,18 +45,18 @@
                     </div>
                     
                     <!-- Filter Button -->
-                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Filter</button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-sky-700 transition-colors">Filter</button>
                     
                     <!-- Clear Filters -->
                     @if(request('status') || request('date_from') || request('date_to'))
-                        <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                        <a href="{{ route('admin.connections') }}" class="px-4 py-2 text-sm text-primary-blue/70 dark:text-primary-blue/70 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
                     @endif
                 </div>
                 
                 <!-- Active Filters Display -->
                 @if(request('status') || request('date_from') || request('date_to'))
                     <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
+                        <span class="text-sm text-primary-blue/70 dark:text-primary-blue/70">Filter aktif:</span>
                         @if(request('status'))
                             <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
                                 Status: {{ ucfirst(request('status')) }}
@@ -87,16 +87,16 @@
                             <div class="flex items-center space-x-3">
                                 <x-ui.avatar :user="$connection->requester" size="sm" />
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $connection->requester->name }}</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $connection->requester->email }}</div>
+                                    <div class="text-xs font-medium text-primary-blue dark:text-primary-blue">{{ $connection->requester->name }}</div>
+                                    <div class="text-xs text-primary-blue/60 dark:text-primary-blue/60">{{ $connection->requester->email }}</div>
                                 </div>
                             </div>
                             
                             <div class="flex items-center space-x-3">
                                 <x-ui.avatar :user="$connection->receiver" size="sm" />
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $connection->receiver->name }}</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $connection->receiver->email }}</div>
+                                    <div class="text-xs font-medium text-primary-blue dark:text-primary-blue">{{ $connection->receiver->name }}</div>
+                                    <div class="text-xs text-primary-blue/60 dark:text-primary-blue/60">{{ $connection->receiver->email }}</div>
                                 </div>
                             </div>
                             
@@ -113,14 +113,14 @@
                                         {{ ucfirst($connection->status) }}
                                     </span>
                                 </div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                <div class="text-xs text-primary-blue/60 dark:text-primary-blue/60">
                                     {{ $connection->created_at->format('M d, Y H:i') }}
                                 </div>
                             </div>
                             
                             <div class="flex items-center space-x-3 pt-2">
                                 <a href="{{ route('admin.connections.show', $connection) }}" 
-                                   class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
+                                   class="text-primary-blue dark:text-primary-blue hover:text-blue-700 dark:hover:text-blue-300 text-xs font-medium">
                                     Lihat
                                 </a>
                                 <form method="POST" action="{{ route('admin.connections.delete', $connection) }}" class="inline" 
@@ -128,7 +128,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                            class="text-accent-red dark:text-accent-red hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
                                         Hapus
                                     </button>
                                 </form>
@@ -137,7 +137,7 @@
                     </div>
                 @empty
                     <div class="p-8 text-center">
-                        <div class="text-slate-500 dark:text-slate-400">
+                        <div class="text-primary-blue/60 dark:text-primary-blue/60">
                             <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                             </svg>
@@ -153,11 +153,11 @@
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peminta</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Penerima</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Diminta</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Peminta</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Penerima</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Diminta</th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-primary-blue/60 dark:text-primary-blue/60 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -167,8 +167,8 @@
                                     <div class="flex items-center space-x-3">
                                         <x-ui.avatar :user="$connection->requester" size="sm" />
                                         <div>
-                                            <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $connection->requester->name }}</div>
-                                            <div class="text-sm text-slate-500 dark:text-slate-400">{{ $connection->requester->email }}</div>
+                                            <div class="text-sm font-medium text-primary-blue dark:text-primary-blue">{{ $connection->requester->name }}</div>
+                                            <div class="text-sm text-primary-blue/60 dark:text-primary-blue/60">{{ $connection->requester->email }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -176,8 +176,8 @@
                                     <div class="flex items-center space-x-3">
                                         <x-ui.avatar :user="$connection->receiver" size="sm" />
                                         <div>
-                                            <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $connection->receiver->name }}</div>
-                                            <div class="text-sm text-slate-500 dark:text-slate-400">{{ $connection->receiver->email }}</div>
+                                            <div class="text-sm font-medium text-primary-blue dark:text-primary-blue">{{ $connection->receiver->name }}</div>
+                                            <div class="text-sm text-primary-blue/60 dark:text-primary-blue/60">{{ $connection->receiver->email }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -193,13 +193,13 @@
                                         {{ ucfirst($connection->status) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                <td class="px-6 py-4 text-sm text-primary-blue/60 dark:text-primary-blue/60">
                                     {{ $connection->created_at->format('M d, Y H:i') }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end space-x-2">
                                         <a href="{{ route('admin.connections.show', $connection) }}" 
-                                           class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
+                                           class="text-primary-blue dark:text-primary-blue hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
                                             Lihat
                                         </a>
                                         <form method="POST" action="{{ route('admin.connections.delete', $connection) }}" class="inline" 
@@ -207,7 +207,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
+                                                    class="text-accent-red dark:text-accent-red hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
                                                 Hapus
                                             </button>
                                         </form>
@@ -217,7 +217,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-12 text-center">
-                                    <div class="text-slate-500 dark:text-slate-400">
+                                    <div class="text-primary-blue/60 dark:text-primary-blue/60">
                                         <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                         </svg>
