@@ -1,26 +1,26 @@
 <div>
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Kelola Persetujuan User</h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Kelola persetujuan dan penolakan user yang mendaftar</p>
+        <h1 class="text-3xl font-bold text-primary-blue dark:text-secondary-green">Kelola Persetujuan User</h1>
+        <p class="mt-2 text-gray-600 dark:text-slate-300">Kelola persetujuan dan penolakan user yang mendaftar</p>
     </div>
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Total User</div>
-            <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $stats['total'] }}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Total User</div>
+            <div class="text-2xl font-semibold text-primary-blue dark:text-secondary-green">{{ $stats['total'] }}</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Menunggu</div>
-            <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $stats['pending'] }}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Menunggu</div>
+            <div class="text-2xl font-semibold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Disetujui</div>
-            <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $stats['approved'] }}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Disetujui</div>
+            <div class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ $stats['approved'] }}</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Ditolak</div>
-            <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $stats['rejected'] }}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Ditolak</div>
+            <div class="text-2xl font-semibold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
         </div>
     </div>
 
@@ -29,12 +29,12 @@
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cari User</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Cari User</label>
                     <input type="text" wire:model.live="search" placeholder="Cari berdasarkan nama atau email..."
                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Status</label>
                     <select wire:model.live="status"
                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                         <option value="">Semua Status</option>
@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipe User</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Tipe User</label>
                     <select wire:model.live="userType"
                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                         <option value="">Semua Tipe</option>
@@ -60,26 +60,26 @@
     <!-- Users List -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Daftar User</h3>
+            <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green">Daftar User</h3>
         </div>
 
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             User</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Tipe</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Peran</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Tanggal Daftar</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Diapprove Oleh</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-6 py-3 text-right text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
                             Aksi</th>
                     </tr>
                 </thead>
@@ -97,9 +97,9 @@
                                         </div>
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">
                                             {{ $user->name }}</div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ $user->email }}</div>
+                                        <div class="text-sm text-gray-600 dark:text-slate-300">{{ $user->email }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -149,34 +149,34 @@
                                         </span>
                                     @endif
                                 @else
-                                    <span class="text-gray-400 text-sm">-</span>
+                                    <span class="text-gray-500 dark:text-slate-400 text-sm">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                 {{ $user->created_at->format('d M Y H:i') }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                 @if ($user->approvedBy)
                                     {{ $user->approvedBy->name }}
-                                    <div class="text-xs text-gray-400">
+                                    <div class="text-xs text-gray-500 dark:text-slate-400">
                                         {{ $user->approved_at ? $user->approved_at->format('d M Y H:i') : '' }}
                                     </div>
                                 @else
-                                    <span class="text-gray-400">-</span>
+                                    <span class="text-gray-500 dark:text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end space-x-2">
                                     @if ($user->trashed())
-                                        <span class="text-gray-400 text-sm">Tidak dapat diakses</span>
+                                        <span class="text-gray-500 dark:text-slate-400 text-sm">Tidak dapat diakses</span>
                                     @elseif($user->approval_status === 'pending')
                                         <button wire:click="openApprovalModal({{ $user->id }})"
-                                            class="text-primary-blue hover:text-primary-blue/80 dark:text-primary-blue dark:hover:text-primary-blue/80 text-sm font-medium">
+                                            class="text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 text-sm font-medium">
                                             Kelola
                                         </button>
                                     @else
                                         <button wire:click="openApprovalModal({{ $user->id }})"
-                                            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium">
+                                            class="text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green text-sm font-medium">
                                             Lihat Detail
                                         </button>
                                     @endif
@@ -185,15 +185,15 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-600 dark:text-slate-300">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
                                     </path>
                                 </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Tidak ada user</h3>
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Belum ada user yang mendaftar.
+                                <h3 class="mt-2 text-sm font-medium text-primary-blue dark:text-secondary-green">Tidak ada user</h3>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-slate-300">Belum ada user yang mendaftar.
                                 </p>
                             </td>
                         </tr>
@@ -218,7 +218,7 @@
                 <div
                     class="inline-block bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full">
                     <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                        <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-4">
                             @if ($selectedUser->trashed())
                                 Detail User (Dihapus): {{ $selectedUser->name }}
                             @elseif($selectedUser->approval_status === 'pending')
@@ -241,9 +241,9 @@
                                         </div>
                                     </div>
                                     <div class="flex-1">
-                                        <h4 class="text-lg font-medium text-gray-900 dark:text-white">
+                                        <h4 class="text-lg font-medium text-primary-blue dark:text-secondary-green">
                                             {{ $selectedUser->name }}</h4>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $selectedUser->email }}
+                                        <p class="text-sm text-gray-600 dark:text-slate-300">{{ $selectedUser->email }}
                                         </p>
                                         <div class="mt-2 flex space-x-2">
                                             <span
@@ -273,15 +273,15 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal
+                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Tanggal
                                         Daftar</label>
-                                    <p class="text-sm text-gray-900 dark:text-white">
+                                    <p class="text-sm text-primary-blue dark:text-secondary-green">
                                         {{ $selectedUser->created_at->format('d M Y H:i') }}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kode
+                                    <label class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Kode
                                         Registrasi</label>
-                                    <p class="text-sm text-gray-900 dark:text-white font-mono">
+                                    <p class="text-sm text-primary-blue dark:text-secondary-green font-mono">
                                         {{ $selectedUser->registration_key ?: '-' }}</p>
                                 </div>
                             </div>
@@ -318,9 +318,9 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peran</label>
+                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Peran</label>
                                             <div class="flex items-center space-x-2">
-                                                <p class="text-sm text-gray-900 dark:text-white">
+                                                <p class="text-sm text-primary-blue dark:text-secondary-green">
                                                     {{ $selectedUser->assigned_role ?: '-' }}
                                                 </p>
                                                 @if ($selectedUser->assigned_role === 'Ekosistem Builder')
@@ -333,9 +333,9 @@
                                         </div>
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diapprove
+                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Diapprove
                                                 Oleh</label>
-                                            <p class="text-sm text-gray-900 dark:text-white">
+                                            <p class="text-sm text-primary-blue dark:text-secondary-green">
                                                 {{ $selectedUser->approvedBy ? $selectedUser->approvedBy->name : '-' }}
                                             </p>
                                         </div>
@@ -343,8 +343,8 @@
                                     @if ($selectedUser->approval_reason)
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alasan</label>
-                                            <p class="text-sm text-gray-900 dark:text-white">
+                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Alasan</label>
+                                            <p class="text-sm text-gray-600 dark:text-slate-300">
                                                 {{ $selectedUser->approval_reason }}</p>
                                         </div>
                                     @endif
@@ -354,7 +354,7 @@
                             @if ($selectedUser->approval_status === 'pending')
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Peran
+                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Peran
                                         yang Akan Diberikan</label>
                                     <select wire:model="assignedPeran"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
@@ -377,7 +377,7 @@
 
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alasan
+                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Alasan
                                         (Opsional)</label>
                                     <textarea wire:model="approvalReason" rows="3"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"

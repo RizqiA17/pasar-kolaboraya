@@ -87,7 +87,18 @@
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                         <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Isu yang Ditangani</h3>
                         <div class="flex flex-wrap gap-2">
-                            @foreach($ecosystem->issues_addressed as $issue)
+                            @php
+                                $issues = $ecosystem->issues_addressed ?? [];
+                                $issueNames = [];
+                                if (!empty($issues)) {
+                                    if (is_numeric($issues[0])) {
+                                        $issueNames = \App\Models\Interest::whereIn('id', $issues)->pluck('name')->toArray();
+                                    } else {
+                                        $issueNames = $issues;
+                                    }
+                                }
+                            @endphp
+                            @foreach($issueNames as $issue)
                                 <span class="inline-flex px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
                                     {{ $issue }}
                                 </span>
@@ -101,7 +112,18 @@
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                         <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Peran yang Sudah Ada</h3>
                         <div class="flex flex-wrap gap-2">
-                            @foreach($ecosystem->existing_roles as $role)
+                            @php
+                                $existingRoles = $ecosystem->existing_roles ?? [];
+                                $existingRoleNames = [];
+                                if (!empty($existingRoles)) {
+                                    if (is_numeric($existingRoles[0])) {
+                                        $existingRoleNames = \App\Models\Peran::whereIn('id', $existingRoles)->pluck('nama')->toArray();
+                                    } else {
+                                        $existingRoleNames = $existingRoles;
+                                    }
+                                }
+                            @endphp
+                            @foreach($existingRoleNames as $role)
                                 <span class="inline-flex px-3 py-1 text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                                     {{ $role }}
                                 </span>
@@ -115,7 +137,18 @@
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                         <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Peran yang Dibutuhkan</h3>
                         <div class="flex flex-wrap gap-2">
-                            @foreach($ecosystem->needed_roles as $role)
+                            @php
+                                $neededRoles = $ecosystem->needed_roles ?? [];
+                                $neededRoleNames = [];
+                                if (!empty($neededRoles)) {
+                                    if (is_numeric($neededRoles[0])) {
+                                        $neededRoleNames = \App\Models\Peran::whereIn('id', $neededRoles)->pluck('nama')->toArray();
+                                    } else {
+                                        $neededRoleNames = $neededRoles;
+                                    }
+                                }
+                            @endphp
+                            @foreach($neededRoleNames as $role)
                                 <span class="inline-flex px-3 py-1 text-sm font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
                                     {{ $role }}
                                 </span>
@@ -288,99 +321,153 @@
                     </div>
 
                     <!-- Metrics Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                         <!-- Membership Activation Rate -->
-                        <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Tingkat Aktivasi Keanggotaan</h5>
-                                <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ $ekosistemQuality['activation_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Tingkat Aktivasi Keanggotaan</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{{ $ekosistemQuality['activation_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['activation_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['activation_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['max_users'] }} anggota
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['max_users'] }} anggota
-                            </p>
                         </div>
 
                         <!-- Ecosystem Acceptance Rate -->
-                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Tingkat Penerimaan Ekosistem</h5>
-                                <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ $ekosistemQuality['acceptance_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Tingkat Penerimaan Ekosistem</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $ekosistemQuality['acceptance_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['acceptance_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['acceptance_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['total_decisions'] }} keputusan
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['accepted_members'] }} dari {{ $ekosistemQuality['details']['total_decisions'] }} keputusan
-                            </p>
                         </div>
 
                         <!-- Ecosystem Contribution Completion Rate -->
-                        <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Penyelesaian Kontribusi</h5>
-                                <span class="text-lg font-bold text-purple-600 dark:text-purple-400">{{ $ekosistemQuality['completion_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Penyelesaian Kontribusi</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{{ $ekosistemQuality['completion_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['completion_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['completion_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['completed_contributions'] }} dari {{ $ekosistemQuality['details']['total_contributions'] }} kontribusi
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['completed_contributions'] }} dari {{ $ekosistemQuality['details']['total_contributions'] }} kontribusi
-                            </p>
                         </div>
 
                         <!-- Ecosystem Contribution Diversity -->
-                        <div class="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Keragaman Kontribusi</h5>
-                                <span class="text-lg font-bold text-orange-600 dark:text-orange-400">{{ $ekosistemQuality['diversity_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Keragaman Kontribusi</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400">{{ $ekosistemQuality['diversity_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 dark:bg-orange-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['diversity_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['diversity_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['contribution_types_count'] }} jenis (HHI: {{ $ekosistemQuality['details']['hhi_value'] }})
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['contribution_types_count'] }} jenis (HHI: {{ $ekosistemQuality['details']['hhi_value'] }})
-                            </p>
                         </div>
 
                         <!-- Role Fit -->
-                        <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 rounded-lg p-4 border border-indigo-200 dark:border-indigo-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Kesesuaian Kebutuhan Skill</h5>
-                                <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ $ekosistemQuality['role_fit_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Kesesuaian Kebutuhan Skill</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $ekosistemQuality['role_fit_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 dark:bg-indigo-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['role_fit_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['role_fit_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['role_coverage_count'] }} dari {{ $ekosistemQuality['details']['needed_roles_count'] }} peran
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['role_coverage_count'] }} dari {{ $ekosistemQuality['details']['needed_roles_count'] }} peran
-                            </p>
                         </div>
 
                         <!-- Ecosystem Engagement in Collective Actions -->
-                        <div class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg p-4 border border-pink-200 dark:border-pink-800">
-                            <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Keterlibatan Aksi Kolektif</h5>
-                                <span class="text-lg font-bold text-pink-600 dark:text-pink-400">{{ $ekosistemQuality['engagement_score'] }}%</span>
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Keterlibatan Aksi Kolektif</p>
+                                    <p class="text-2xl sm:text-3xl font-bold text-pink-600 dark:text-pink-400">{{ $ekosistemQuality['engagement_score'] }}%</p>
+                                </div>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 dark:bg-pink-900/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
-                                <div class="bg-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['engagement_score'] }}%"></div>
+                            <div class="mt-3 sm:mt-4">
+                                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                                    <div class="bg-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $ekosistemQuality['engagement_score'] }}%"></div>
+                                </div>
+                                <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300">
+                                    {{ $ekosistemQuality['details']['accepted_invitations'] }} dari {{ $ekosistemQuality['details']['invited_to_actions'] }} undangan
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 dark:text-slate-300">
-                                {{ $ekosistemQuality['details']['accepted_invitations'] }} dari {{ $ekosistemQuality['details']['invited_to_actions'] }} undangan
-                            </p>
                         </div>
                     </div>
 
                     <!-- Performance Insights -->
-                    <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <h4 class="font-medium text-primary-blue dark:text-secondary-green mb-3">Insight Performa</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <span class="text-gray-600 dark:text-slate-300">Kekuatan Utama:</span>
-                                <span class="font-medium text-green-600 dark:text-green-400">
+                    <div class="mt-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                        <h4 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green mb-3 sm:mb-4">Insight Performa</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="text-center">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Kekuatan Utama</p>
+                                <p class="text-lg sm:text-xl font-bold text-green-600 dark:text-green-400">
                                     @php
                                         $bestMetric = '';
                                         $bestScore = 0;
@@ -399,12 +486,13 @@
                                             }
                                         }
                                     @endphp
-                                    {{ $bestMetric }} ({{ $bestScore }}%)
-                                </span>
+                                    {{ $bestMetric }}
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-slate-300">{{ $bestScore }}%</p>
                             </div>
-                            <div>
-                                <span class="text-gray-600 dark:text-slate-300">Area Perbaikan:</span>
-                                <span class="font-medium text-orange-600 dark:text-orange-400">
+                            <div class="text-center">
+                                <p class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400">Area Perbaikan</p>
+                                <p class="text-lg sm:text-xl font-bold text-orange-600 dark:text-orange-400">
                                     @php
                                         $worstMetric = '';
                                         $worstScore = 100;
@@ -415,8 +503,9 @@
                                             }
                                         }
                                     @endphp
-                                    {{ $worstMetric }} ({{ $worstScore }}%)
-                                </span>
+                                    {{ $worstMetric }}
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-slate-300">{{ $worstScore }}%</p>
                             </div>
                         </div>
                     </div>

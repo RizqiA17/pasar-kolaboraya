@@ -3,10 +3,10 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Pengaturan Sistem</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola pengaturan global sistem untuk mengontrol akses dan fitur.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">Pengaturan Sistem</h1>
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">Kelola pengaturan global sistem untuk mengontrol akses dan fitur.</p>
             </div>
-            <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            <div class="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                 Terakhir diperbarui: {{ now()->format('d M Y H:i') }}
             </div>
         </div>
@@ -31,7 +31,7 @@
                                 <input type="checkbox" name="login_enabled" value="1" 
                                        {{ (isset($settings['login_enabled']) && $settings['login_enabled']->value === '1') ? 'checked' : '' }}
                                        class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-blue"></div>
                             </label>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                                 <input type="checkbox" name="registration_enabled" value="1" 
                                        {{ (isset($settings['registration_enabled']) && $settings['registration_enabled']->value === '1') ? 'checked' : '' }}
                                        class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-secondary-green"></div>
                             </label>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                                 <input type="checkbox" name="connections_enabled" value="1" 
                                        {{ (isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1') ? 'checked' : '' }}
                                        class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-blue"></div>
                             </label>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                                 <input type="checkbox" name="collaborations_enabled" value="1" 
                                        {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'checked' : '' }}
                                        class="sr-only peer" id="collaborations-toggle">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-neutral-purple"></div>
                             </label>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 <input type="checkbox" name="user_actions_enabled" value="1" 
                                        {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'checked' : '' }}
                                        class="sr-only peer" id="collective-actions-toggle">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-neutral-orange"></div>
                             </label>
                         </div>
                     </div>
@@ -157,11 +157,11 @@
                 <!-- Submit Button -->
                 <div class="flex flex-col sm:flex-row items-center justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                     <a href="{{ route('admin.dashboard') }}" 
-                       class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors text-center">
+                       class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors text-center">
                         Batal
                     </a>
                     <button type="submit" 
-                            class="w-full sm:w-auto px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                            class="w-full sm:w-auto px-6 py-2 text-sm font-medium text-white bg-primary-blue dark:bg-secondary-green hover:bg-sky-800 dark:hover:bg-teal-600 rounded-lg transition-colors">
                         Simpan Pengaturan
                     </button>
                 </div>
@@ -170,7 +170,7 @@
 
         <!-- Current Status -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Status Saat Ini</h3>
+            <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Status Saat Ini</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <div class="text-center p-3 sm:p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
                     <div class="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 rounded-full flex items-center justify-center {{ (isset($settings['login_enabled']) && $settings['login_enabled']->value === '1') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
@@ -184,8 +184,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Login</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Login</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['login_enabled']) && $settings['login_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>
@@ -202,8 +202,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Maintenance</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Maintenance</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['maintenance_mode']) && $settings['maintenance_mode']->value === '1') ? 'Aktif' : 'Tidak Aktif' }}
                     </p>
                 </div>
@@ -220,8 +220,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Registrasi</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Registrasi</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['registration_enabled']) && $settings['registration_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>
@@ -238,8 +238,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Koneksi</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Koneksi</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['connections_enabled']) && $settings['connections_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>
@@ -256,8 +256,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Kolaborasi & Ekosistem</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Kolaborasi & Ekosistem</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['collaborations_enabled']) && $settings['collaborations_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>
@@ -274,8 +274,8 @@
                             </svg>
                         @endif
                     </div>
-                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Aksi Kolektif & Bersama</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p class="text-sm font-medium text-primary-blue dark:text-secondary-green">Aksi Kolektif & Bersama</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">
                         {{ (isset($settings['user_actions_enabled']) && $settings['user_actions_enabled']->value === '1') ? 'Diaktifkan' : 'Dinonaktifkan' }}
                     </p>
                 </div>

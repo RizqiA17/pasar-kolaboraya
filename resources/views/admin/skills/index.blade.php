@@ -3,10 +3,10 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Manajemen Keahlian</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">Kelola semua keahlian dalam sistem</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">Manajemen Keahlian</h1>
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">Kelola semua keahlian dalam sistem</p>
             </div>
-            <button onclick="openCreateModal()" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button onclick="openCreateModal()" class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors">
                 Tambah Keahlian Baru
             </button>
         </div>
@@ -57,35 +57,35 @@
                     </div>
                     
                     <!-- Filter Button -->
-                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Cari</button>
+                    <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors">Cari</button>
                     
                     <!-- Clear Filters -->
                     @if(request('search') || request('status') || request('date_from') || request('date_to'))
-                        <a href="{{ route('admin.skills') }}" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Hapus</a>
+                        <a href="{{ route('admin.skills') }}" class="px-4 py-2 text-sm text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green">Hapus</a>
                     @endif
                 </div>
                 
                 <!-- Active Filters Display -->
                 @if(request('search') || request('status') || request('date_from') || request('date_to'))
                     <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Filter aktif:</span>
+                        <span class="text-sm text-gray-600 dark:text-slate-300">Filter aktif:</span>
                         @if(request('search'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
                                 Pencarian: "{{ request('search') }}"
                             </span>
                         @endif
                         @if(request('status'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
                                 Status: {{ request('status') === 'used' ? 'Digunakan' : 'Tidak Digunakan' }}
                             </span>
                         @endif
                         @if(request('date_from'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                                 Dari: {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
                             </span>
                         @endif
                         @if(request('date_to'))
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 rounded-full">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                                 Sampai: {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
                             </span>
                         @endif
@@ -108,22 +108,22 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $skill->name }}</div>
+                                    <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $skill->name }}</div>
                                 </div>
                             </div>
                             
                             <div class="flex items-center justify-between">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-blue/10 text-primary-blue dark:bg-primary-blue/20 dark:text-primary-blue">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                     {{ $skill->profiles_count }} pengguna
                                 </span>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                <div class="text-xs text-gray-500 dark:text-slate-400">
                                     {{ $skill->created_at->format('M d, Y') }}
                                 </div>
                             </div>
                             
                             <div class="flex items-center space-x-3 pt-2">
                                 <button onclick="openEditModal({{ $skill->id }}, '{{ $skill->name }}')" 
-                                        class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 text-xs font-medium">
+                                        class="text-accent-orange hover:text-orange-700 dark:text-accent-orange-400 dark:hover:text-orange-400 text-xs font-medium">
                                     Edit
                                 </button>
                                 <form method="POST" action="{{ route('admin.skills.delete', $skill) }}" class="inline" 
@@ -131,7 +131,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium">
+                                            class="text-accent-red hover:text-red-700 dark:text-accent-red-400 dark:hover:text-red-400 text-xs font-medium">
                                         Hapus
                                     </button>
                                 </form>
@@ -140,11 +140,11 @@
                     </div>
                 @empty
                     <div class="p-8 text-center">
-                        <div class="text-slate-500 dark:text-slate-400">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="text-gray-600 dark:text-slate-300">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                             </svg>
-                            <p class="text-lg font-medium">Tidak ada keahlian ditemukan</p>
+                            <p class="text-lg font-medium text-primary-blue dark:text-secondary-green">Tidak ada keahlian ditemukan</p>
                             <p class="text-sm">Tambah keahlian pertama Anda untuk memulai</p>
                         </div>
                     </div>
@@ -156,10 +156,10 @@
                 <table class="w-full">
                     <thead class="bg-slate-50 dark:bg-slate-700/50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Keahlian</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Jumlah Pengguna</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dibuat</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Keahlian</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Jumlah Pengguna</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Dibuat</th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -172,21 +172,21 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                                             </svg>
                                         </div>
-                                        <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $skill->name }}</div>
+                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $skill->name }}</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-blue/10 text-primary-blue dark:bg-primary-blue/20 dark:text-primary-blue">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                         {{ $skill->profiles_count }} pengguna
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                     {{ $skill->created_at->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end space-x-2">
                                         <button onclick="openEditModal({{ $skill->id }}, '{{ $skill->name }}')" 
-                                                class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 text-sm font-medium">
+                                                class="text-accent-orange hover:text-orange-700 dark:text-accent-orange-400 dark:hover:text-orange-400 text-sm font-medium">
                                             Edit
                                         </button>
                                         <form method="POST" action="{{ route('admin.skills.delete', $skill) }}" class="inline" 
@@ -194,7 +194,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium">
+                                                    class="text-accent-red hover:text-red-700 dark:text-accent-red-400 dark:hover:text-red-400 text-sm font-medium">
                                                 Hapus
                                             </button>
                                         </form>
@@ -204,11 +204,11 @@
                         @empty
                             <tr>
                                 <td colspan="4" class="px-6 py-12 text-center">
-                                    <div class="text-slate-500 dark:text-slate-400">
-                                        <svg class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="text-gray-600 dark:text-slate-300">
+                                        <svg class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                                         </svg>
-                                        <p class="text-lg font-medium">Tidak ada keahlian ditemukan</p>
+                                        <p class="text-lg font-medium text-primary-blue dark:text-secondary-green">Tidak ada keahlian ditemukan</p>
                                         <p class="text-sm">Tambah keahlian pertama Anda untuk memulai</p>
                                     </div>
                                 </td>
@@ -231,7 +231,7 @@
     <div id="createModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Tambah Keahlian Baru</h3>
+                <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Tambah Keahlian Baru</h3>
                 <form method="POST" action="{{ route('admin.skills.create') }}">
                     @csrf
                     <div class="mb-4">
@@ -245,10 +245,10 @@
                     </div>
                     <div class="flex items-center justify-end space-x-3">
                         <button type="button" onclick="closeCreateModal()" 
-                                class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+                                class="px-4 py-2 text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green transition-colors">
                             Batal
                         </button>
-                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors">
                             Create Keahlian
                         </button>
                     </div>
@@ -261,7 +261,7 @@
     <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md mx-4 sm:mx-0 max-h-[90vh] overflow-y-auto">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Edit Keahlian</h3>
+                <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Edit Keahlian</h3>
                 <form id="editForm" method="POST">
                     @csrf
                     @method('PUT')
@@ -276,10 +276,10 @@
                     </div>
                     <div class="flex items-center justify-end space-x-3">
                         <button type="button" onclick="closeEditModal()" 
-                                class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+                                class="px-4 py-2 text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green transition-colors">
                             Batal
                         </button>
-                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors">
                             Perbarui Keahlian
                         </button>
                     </div>

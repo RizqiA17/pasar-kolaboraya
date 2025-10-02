@@ -3,12 +3,12 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">Detail Aksi Kolektif</h1>
-                <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">{{ $collectiveAction->title }}</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary-blue dark:text-secondary-green">Detail Aksi Kolektif</h1>
+                <p class="text-gray-600 dark:text-slate-300 mt-1 text-sm sm:text-base">{{ $collectiveAction->title }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <a href="{{ route('admin.collective-actions') }}" 
-                   class="w-full sm:w-auto px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-center">
+                   class="w-full sm:w-auto px-4 py-2 bg-primary-blue dark:bg-secondary-green text-white rounded-lg hover:bg-sky-800 dark:hover:bg-teal-600 transition-colors text-center">
                     Kembali ke Aksi Kolektif
                 </a>
             </div>
@@ -19,23 +19,23 @@
             <div class="lg:col-span-2 space-y-6">
                 <!-- Informasi Dasar -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Informasi Dasar</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Informasi Dasar</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Judul Aksi Kolektif</label>
-                            <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->title }}</p>
+                            <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Judul Aksi Kolektif</label>
+                            <p class="text-primary-blue dark:text-secondary-green">{{ $collectiveAction->title }}</p>
                         </div>
                         <div>
-                            <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Deskripsi</label>
-                            <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->description }}</p>
+                            <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Deskripsi</label>
+                            <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->description }}</p>
                         </div>
                         <div>
-                            <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Tujuan</label>
-                            <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->goals }}</p>
+                            <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Tujuan</label>
+                            <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->goals }}</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Status</label>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Status</label>
                                 @php
                                     $statusColors = [
                                         'draft' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400',
@@ -50,7 +50,7 @@
                                 </span>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Skala</label>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Skala</label>
                                 <span class="inline-flex px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400 rounded-full">
                                     {{ ucfirst($collectiveAction->scale) }}
                                 </span>
@@ -58,48 +58,48 @@
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Lingkup</label>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Lingkup</label>
                                 <span class="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 rounded-full">
                                     {{ ucfirst($collectiveAction->scope) }}
                                 </span>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Minimal Ekosistem</label>
-                                <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->min_ecosystems }}</p>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Minimal Ekosistem</label>
+                                <p class="text-primary-blue dark:text-secondary-green">{{ $collectiveAction->min_ecosystems }}</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Tanggal Mulai</label>
-                                <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->start_date ? $collectiveAction->start_date->format('d M Y') : 'Tidak ditentukan' }}</p>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Tanggal Mulai</label>
+                                <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->start_date ? $collectiveAction->start_date->format('d M Y') : 'Tidak ditentukan' }}</p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Tanggal Selesai</label>
-                                <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->end_date ? $collectiveAction->end_date->format('d M Y') : 'Tidak ditentukan' }}</p>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Tanggal Selesai</label>
+                                <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->end_date ? $collectiveAction->end_date->format('d M Y') : 'Tidak ditentukan' }}</p>
                             </div>
                         </div>
                         @if($collectiveAction->location)
                             <div>
-                                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Lokasi</label>
-                                <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->location }}</p>
+                                <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Lokasi</label>
+                                <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->location }}</p>
                             </div>
                         @endif
                         <div>
-                            <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Dibuat</label>
-                            <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->created_at->format('M d, Y H:i') }}</p>
+                            <label class="text-sm font-medium text-gray-500 dark:text-slate-400">Dibuat</label>
+                            <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->created_at->format('M d, Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pembuat Information -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Pembuat</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Pembuat</h3>
                     <div class="flex items-center space-x-4">
                         <x-ui.avatar :user="$collectiveAction->creator" size="lg" />
                         <div>
-                            <div class="text-lg font-medium text-slate-800 dark:text-slate-200">{{ $collectiveAction->creator->name }}</div>
-                            <div class="text-slate-600 dark:text-slate-400">{{ $collectiveAction->creator->email }}</div>
-                            <div class="text-sm text-slate-500 dark:text-slate-400">Bergabung {{ $collectiveAction->creator->created_at->format('M d, Y') }}</div>
+                            <div class="text-lg font-medium text-primary-blue dark:text-secondary-green">{{ $collectiveAction->creator->name }}</div>
+                            <div class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->creator->email }}</div>
+                            <div class="text-sm text-gray-500 dark:text-slate-400">Bergabung {{ $collectiveAction->creator->created_at->format('M d, Y') }}</div>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                 <!-- Required Resources -->
                 @if($collectiveAction->required_resources && count($collectiveAction->required_resources) > 0)
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Sumber Daya yang Dibutuhkan</h3>
+                        <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Sumber Daya yang Dibutuhkan</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($collectiveAction->required_resources as $resource)
                                 <span class="inline-flex px-3 py-1 text-sm font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 rounded-full">
@@ -121,14 +121,14 @@
                 <!-- Collaboration Terms -->
                 @if($collectiveAction->collaboration_terms)
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Syarat Kolaborasi</h3>
-                        <p class="text-slate-800 dark:text-slate-200">{{ $collectiveAction->collaboration_terms }}</p>
+                        <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Syarat Kolaborasi</h3>
+                        <p class="text-gray-600 dark:text-slate-300">{{ $collectiveAction->collaboration_terms }}</p>
                     </div>
                 @endif
 
                 <!-- Participating Ecosystems -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Ekosistem yang Berpartisipasi ({{ $collectiveAction->participatingEcosystems->count() }})</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Ekosistem yang Berpartisipasi ({{ $collectiveAction->participatingEcosystems->count() }})</h3>
                     <div class="space-y-3">
                         @forelse($collectiveAction->participatingEcosystems as $ecosystem)
                             <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
@@ -139,8 +139,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $ecosystem->ecosystem_title }}</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">{{ $ecosystem->organization_name }}</div>
+                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $ecosystem->ecosystem_title }}</div>
+                                        <div class="text-xs text-gray-600 dark:text-slate-300">{{ $ecosystem->organization_name }}</div>
                                     </div>
                                 </div>
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-secondary-green/10 text-secondary-green dark:bg-secondary-green/20 dark:text-secondary-green">
@@ -148,23 +148,23 @@
                                 </span>
                             </div>
                         @empty
-                            <p class="text-slate-500 dark:text-slate-400">Tidak ada ekosistem yang berpartisipasi.</p>
+                            <p class="text-gray-600 dark:text-slate-300">Tidak ada ekosistem yang berpartisipasi.</p>
                         @endforelse
                     </div>
                 </div>
 
                 <!-- Contributors -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Kontributor ({{ $collectiveAction->contributors->count() }})</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Kontributor ({{ $collectiveAction->contributors->count() }})</h3>
                     <div class="space-y-3">
                         @forelse($collectiveAction->contributors as $contributor)
                             <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     <x-ui.avatar :user="$contributor" size="sm" />
                                     <div>
-                                        <div class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ $contributor->name }}</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">{{ $contributor->email }}</div>
-                                        <div class="text-xs text-slate-500 dark:text-slate-400">{{ ucfirst($contributor->pivot->contribution_type) }}</div>
+                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">{{ $contributor->name }}</div>
+                                        <div class="text-xs text-gray-600 dark:text-slate-300">{{ $contributor->email }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-slate-400">{{ ucfirst($contributor->pivot->contribution_type) }}</div>
                                     </div>
                                 </div>
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
@@ -175,19 +175,19 @@
                                 </span>
                             </div>
                         @empty
-                            <p class="text-slate-500 dark:text-slate-400">Tidak ada kontributor ditemukan.</p>
+                            <p class="text-gray-600 dark:text-slate-300">Tidak ada kontributor ditemukan.</p>
                         @endforelse
                     </div>
                 </div>
 
                 <!-- Quality Metrics & Analytics -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-6">Analisis Kualitas & Kesehatan Aksi Kolektif</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-6">Analisis Kualitas & Kesehatan Aksi Kolektif</h3>
                     
                     <!-- Collective Action Health Score -->
                     <div class="mb-6">
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-md font-medium text-slate-700 dark:text-slate-300">Skor Kesehatan Aksi Kolektif</h4>
+                            <h4 class="text-md font-medium text-primary-blue dark:text-secondary-green">Skor Kesehatan Aksi Kolektif</h4>
                             <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                 @php
                                     $participatingEcosystems = $collectiveAction->participatingEcosystems->count();
@@ -211,12 +211,12 @@
                             <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full" 
                                  style="width: {{ $healthScore }}%"></div>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Berdasarkan partisipasi ekosistem, kontributor, status, dan kelengkapan informasi</p>
+                        <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">Berdasarkan partisipasi ekosistem, kontributor, status, dan kelengkapan informasi</p>
                     </div>
 
                     <!-- Contribution Status Chart -->
                     <div class="mb-6">
-                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Status Kontribusi</h4>
+                        <h4 class="text-md font-medium text-primary-blue dark:text-secondary-green mb-4">Status Kontribusi</h4>
                         <div class="relative" style="height: 200px;">
                             <canvas id="contributionStatusChart" wire:ignore></canvas>
                         </div>
@@ -224,7 +224,7 @@
 
                     <!-- Ecosystem Participation Chart -->
                     <div class="mb-6">
-                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Partisipasi Ekosistem</h4>
+                        <h4 class="text-md font-medium text-primary-blue dark:text-secondary-green mb-4">Partisipasi Ekosistem</h4>
                         <div class="relative" style="height: 200px;">
                             <canvas id="ecosystemParticipationChart" wire:ignore></canvas>
                         </div>
@@ -235,8 +235,8 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Partisipasi Ekosistem</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Ekosistem vs minimal</p>
+                                    <h5 class="text-sm font-medium text-gray-500 dark:text-slate-400">Tingkat Partisipasi Ekosistem</h5>
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">Ekosistem vs minimal</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-green-600 dark:text-green-400">
@@ -249,8 +249,8 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Penerimaan Kontribusi</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Kontributor diterima</p>
+                                    <h5 class="text-sm font-medium text-gray-500 dark:text-slate-400">Tingkat Penerimaan Kontribusi</h5>
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">Kontributor diterima</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-blue-600 dark:text-blue-400">
@@ -263,8 +263,8 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kelengkapan Informasi</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Sumber daya & syarat</p>
+                                    <h5 class="text-sm font-medium text-gray-500 dark:text-slate-400">Kelengkapan Informasi</h5>
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">Sumber daya & syarat</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
@@ -277,8 +277,8 @@
                         <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="text-sm font-medium text-slate-600 dark:text-slate-400">Tingkat Aktivitas</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Status aksi kolektif</p>
+                                    <h5 class="text-sm font-medium text-gray-500 dark:text-slate-400">Tingkat Aktivitas</h5>
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">Status aksi kolektif</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-lg font-bold text-orange-600 dark:text-orange-400">
@@ -300,7 +300,7 @@
 
                     <!-- Collective Action Timeline -->
                     <div class="mt-6">
-                        <h4 class="text-md font-medium text-slate-700 dark:text-slate-300 mb-4">Timeline & Progress</h4>
+                        <h4 class="text-md font-medium text-primary-blue dark:text-secondary-green mb-4">Timeline & Progress</h4>
                         <div class="relative" style="height: 200px;">
                             <canvas id="collectiveActionTimelineChart" wire:ignore></canvas>
                         </div>
@@ -310,7 +310,7 @@
                 <!-- Pilar III - Aksi Kolektif Quality Metrics -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Kualitas Aksi Kolektif</h3>
+                        <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green">Kualitas Aksi Kolektif</h3>
                         <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
                             Pilar III
                         </span>
@@ -325,8 +325,8 @@
                         <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
                             <span class="text-xl font-bold text-white">{{ $aksiQuality['aksi_score'] }}%</span>
                         </div>
-                        <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Skor Aksi Kolektif</h4>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">Rata-rata dari 6 metrik kualitas</p>
+                        <h4 class="text-lg font-semibold text-primary-blue dark:text-secondary-green">Skor Aksi Kolektif</h4>
+                        <p class="text-sm text-gray-600 dark:text-slate-300">Rata-rata dari 6 metrik kualitas</p>
                     </div>
 
                     <!-- Metrics Grid -->
@@ -334,13 +334,13 @@
                         <!-- Activity Score -->
                         <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Tingkat Aktivitas</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Tingkat Aktivitas</h5>
                                 <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ $aksiQuality['activity_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['activity_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 Status: {{ $aksiQuality['details']['action_status'] }}
                             </p>
                         </div>
@@ -348,13 +348,13 @@
                         <!-- Impact Score -->
                         <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Dampak Skala & Cakupan</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Dampak Skala & Cakupan</h5>
                                 <span class="text-lg font-bold text-purple-600 dark:text-purple-400">{{ $aksiQuality['impact_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['impact_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 {{ ucfirst($collectiveAction->scale) }} × {{ ucfirst($collectiveAction->scope) }}
                             </p>
                         </div>
@@ -362,13 +362,13 @@
                         <!-- Participation Score -->
                         <div class="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Tingkat Partisipasi</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Tingkat Partisipasi</h5>
                                 <span class="text-lg font-bold text-orange-600 dark:text-orange-400">{{ $aksiQuality['participation_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['participation_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 {{ $aksiQuality['details']['active_participants'] }} dari {{ $aksiQuality['details']['total_registered'] }} user
                             </p>
                         </div>
@@ -376,13 +376,13 @@
                         <!-- Engagement Score -->
                         <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 rounded-lg p-4 border border-indigo-200 dark:border-indigo-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Keterlibatan Ekosistem</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Keterlibatan Ekosistem</h5>
                                 <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ $aksiQuality['engagement_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['engagement_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 {{ $aksiQuality['details']['accepted_ecosystems'] }} dari {{ $aksiQuality['details']['invited_ecosystems'] }} ekosistem
                             </p>
                         </div>
@@ -390,13 +390,13 @@
                         <!-- Completion Score -->
                         <div class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg p-4 border border-pink-200 dark:border-pink-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Penyelesaian Kontribusi</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Penyelesaian Kontribusi</h5>
                                 <span class="text-lg font-bold text-pink-600 dark:text-pink-400">{{ $aksiQuality['completion_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-pink-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['completion_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 {{ $aksiQuality['details']['completed_contributions'] }} dari {{ $aksiQuality['details']['total_contributions'] }} kontribusi
                             </p>
                         </div>
@@ -404,13 +404,13 @@
                         <!-- Diversity Score -->
                         <div class="bg-gradient-to-r from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 rounded-lg p-4 border border-teal-200 dark:border-teal-800">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-medium text-slate-800 dark:text-slate-200 text-sm">Keragaman Kontribusi</h5>
+                                <h5 class="font-medium text-primary-blue dark:text-secondary-green text-sm">Keragaman Kontribusi</h5>
                                 <span class="text-lg font-bold text-teal-600 dark:text-teal-400">{{ $aksiQuality['diversity_score'] }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mb-2">
                                 <div class="bg-teal-500 h-2 rounded-full transition-all duration-1000" style="width: {{ $aksiQuality['diversity_score'] }}%"></div>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-gray-600 dark:text-slate-300">
                                 {{ $aksiQuality['details']['contribution_types_count'] }} jenis (HHI: {{ $aksiQuality['details']['hhi_value'] }})
                             </p>
                         </div>
@@ -418,10 +418,10 @@
 
                     <!-- Performance Insights -->
                     <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <h4 class="font-medium text-slate-800 dark:text-slate-200 mb-3">Insight Performa</h4>
+                        <h4 class="font-medium text-primary-blue dark:text-secondary-green mb-3">Insight Performa</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
-                                <span class="text-slate-600 dark:text-slate-400">Metrik Terbaik:</span>
+                                <span class="text-gray-600 dark:text-slate-300">Metrik Terbaik:</span>
                                 <span class="font-medium text-green-600 dark:text-green-400">
                                     @php
                                         $bestMetric = '';
@@ -445,7 +445,7 @@
                                 </span>
                             </div>
                             <div>
-                                <span class="text-slate-600 dark:text-slate-400">Perlu Perbaikan:</span>
+                                <span class="text-gray-600 dark:text-slate-300">Perlu Perbaikan:</span>
                                 <span class="font-medium text-orange-600 dark:text-orange-400">
                                     @php
                                         $worstMetric = '';
@@ -469,30 +469,30 @@
             <div class="space-y-6">
                 <!-- Statistik Cepat -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Statistik Cepat</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Statistik Cepat</h3>
                     <div class="space-y-4">
                         <div class="text-center">
                             <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $collectiveAction->participatingEcosystems->count() }}</div>
-                            <div class="text-sm text-slate-600 dark:text-slate-400">Ekosistem Berpartisipasi</div>
+                            <div class="text-sm text-gray-600 dark:text-slate-300">Ekosistem Berpartisipasi</div>
                         </div>
                         <div class="text-center">
                             <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $collectiveAction->contributors->where('pivot.status', 'accepted')->count() }}</div>
-                            <div class="text-sm text-slate-600 dark:text-slate-400">Kontributor Aktif</div>
+                            <div class="text-sm text-gray-600 dark:text-slate-300">Kontributor Aktif</div>
                         </div>
                         <div class="text-center">
                             <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $collectiveAction->contributors->where('pivot.status', 'offered')->count() }}</div>
-                            <div class="text-sm text-slate-600 dark:text-slate-400">Menunggu Persetujuan</div>
+                            <div class="text-sm text-gray-600 dark:text-slate-300">Menunggu Persetujuan</div>
                         </div>
                         <div class="text-center">
                             <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $collectiveAction->min_ecosystems }}</div>
-                            <div class="text-sm text-slate-600 dark:text-slate-400">Minimal Ekosistem</div>
+                            <div class="text-sm text-gray-600 dark:text-slate-300">Minimal Ekosistem</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Aksi Cepat -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4">Aksi Cepat</h3>
+                    <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Aksi Cepat</h3>
                     <div class="space-y-3">
                         <form method="POST" action="{{ route('admin.collective-actions.delete', $collectiveAction) }}" 
                               onsubmit="return confirm('Are you sure you want to delete this collective action? This action cannot be undone.')">
