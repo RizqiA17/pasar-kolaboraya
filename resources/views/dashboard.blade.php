@@ -44,6 +44,9 @@
                             </div>
                         </div>
 
+                        <div class="col-span-1 lg:hidden sm:col-span-2 lg:col-span-3">
+                            <livewire:dashboard.active-session-info />
+                        </div>
 
                         <!-- Connections Card -->
                         <div
@@ -106,7 +109,7 @@
                                             <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Ekosistem</h3>
+                                    <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">kolaborasi</h3>
                                     <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Ekosistem yang diikuti
                                     </p>
                                     <flux:link wire:navigate href="{{ route('ecosystem.browse') }}"
@@ -163,30 +166,44 @@
                             </div>
                         @endif
 
-                        
+
                         <!-- QR Code Card -->
-                        <div class="col-span-1 lg:hidden group relative overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-gray-100 dark:border-slate-700">
-                            <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10"></div>
+                        <div
+                            class="col-span-1 lg:hidden group relative overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-gray-100 dark:border-slate-700">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10">
+                            </div>
                             <div class="absolute top-0 right-0 w-16 h-16 opacity-10">
-                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt="" class="w-full h-full object-contain">
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
+                                    class="w-full h-full object-contain">
                             </div>
                             <div class="relative z-10 p-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code Saya</h3>
-                                        <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya</p>
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code
+                                            Saya</h3>
+                                        <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya
+                                        </p>
                                     </div>
-                                    <div class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center shadow-lg">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                                    <div
+                                        class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                                            </path>
                                         </svg>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 dark:text-slate-400 text-sm mb-4">Tunjukkan QR code ini kepada admin untuk masuk ke Pasar Kolaboraya</p>
-                                <flux:link wire:navigate href="{{ route('qr.show') }}" class="inline-flex items-center text-sm font-medium transition-colors">
+                                <p class="text-gray-600 dark:text-slate-400 text-sm mb-4">Tunjukkan QR code ini kepada
+                                    admin untuk masuk ke Pasar Kolaboraya</p>
+                                <flux:link wire:navigate href="{{ route('qr.show') }}"
+                                    class="inline-flex items-center text-sm font-medium transition-colors">
                                     Lihat QR Code
-                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </flux:link>
                             </div>
@@ -217,42 +234,50 @@
                         </div> --}}
                     </div>
                     <!-- QR Code Card -->
-                    <div
-                        class="col-span-1 mt-24 hidden lg:block group relative overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-gray-100 dark:border-slate-700">
+
+                    <div class="col-span-1 flex-col gap-4 lg:flex mt-6 hidden">
+                        <livewire:dashboard.active-session-info />
+
                         <div
-                            class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10">
-                        </div>
-                        <div class="absolute top-0 right-0 w-16 h-16 opacity-10">
-                            <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
-                                class="w-full h-full object-contain">
-                        </div>
-                        <div class="relative z-10 p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code Saya
-                                    </h3>
-                                    <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya</p>
+                            class="col-span-1 mt-auto h-fit hidden lg:block group relative overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-gray-100 dark:border-slate-700">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10">
+                            </div>
+                            <div class="absolute top-0 right-0 w-16 h-16 opacity-10">
+                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
+                                    class="w-full h-full object-contain">
+                            </div>
+                            <div class="relative z-10 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">QR Code
+                                            Saya
+                                        </h3>
+                                        <p class="text-gray-600 dark:text-slate-400 text-sm">Akses ke Pasar Kolaboraya
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                                            </path>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div
-                                    class="w-12 h-12 bg-secondary-green rounded-lg flex items-center justify-center shadow-lg">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                <p class="text-gray-600 dark:text-slate-400 text-sm mb-4">Tunjukkan QR code ini kepada
+                                    admin untuk masuk ke Pasar Kolaboraya</p>
+                                <flux:link wire:navigate href="{{ route('qr.show') }}"
+                                    class="inline-flex items-center text-sm font-medium transition-colors">
+                                    Lihat QR Code
+                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
-                                        </path>
+                                            d="M9 5l7 7-7 7"></path>
                                     </svg>
-                                </div>
+                                </flux:link>
                             </div>
-                            <p class="text-gray-600 dark:text-slate-400 text-sm mb-4">Tunjukkan QR code ini kepada
-                                admin untuk masuk ke Pasar Kolaboraya</p>
-                            <flux:link wire:navigate href="{{ route('qr.show') }}"
-                                class="inline-flex items-center text-sm font-medium transition-colors">
-                                Lihat QR Code
-                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </flux:link>
                         </div>
                     </div>
                     {{-- <div
@@ -369,7 +394,6 @@
                         </div> --}}
 
                         <!-- Active Session Info - Show current session status -->
-                        <livewire:dashboard.active-session-info />
                         <!-- Survey Card - Show active survey -->
                         <livewire:dashboard.survey-card />
                         <!-- Connection Quality - Only show if connections exist -->
