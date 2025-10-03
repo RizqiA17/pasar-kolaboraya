@@ -17,6 +17,7 @@ class ManagePasarKolaborayaUsers extends Component
     public $showAddUserModal = false;
     public $selectedUsers = [];
     public $availableUsers = [];
+    public $allUsersSelected = false;
 
     public function mount(PasarKolaboraya $pasarKolaboraya)
     {
@@ -27,12 +28,12 @@ class ManagePasarKolaborayaUsers extends Component
     public function updatedSearch()
     {
         $this->loadAvailableUsers();
+        $this->updateSelectAllState();
     }
 
     public function loadAvailableUsers()
     {
-        $query = User::where('id', '!=', Auth::id())
-                    ->where('role', '!=', 'super_admin');
+        $query = User::query();
 
         if ($this->search) {
             $query->where(function($q) {
@@ -48,12 +49,14 @@ class ManagePasarKolaborayaUsers extends Component
     {
         $this->showAddUserModal = true;
         $this->selectedUsers = [];
+        $this->allUsersSelected = false;
     }
 
     public function closeAddUserModal()
     {
         $this->showAddUserModal = false;
         $this->selectedUsers = [];
+        $this->allUsersSelected = false;
     }
 
     public function toggleUser($userId)
@@ -63,6 +66,35 @@ class ManagePasarKolaborayaUsers extends Component
         } else {
             $this->selectedUsers[] = $userId;
         }
+        $this->updateSelectAllState();
+    }
+
+    public function toggleSelectAll()
+    {
+        if ($this->allUsersSelected) {
+            // Unselect all
+            $this->selectedUsers = [];
+            $this->allUsersSelected = false;
+        } else {
+            // Select all available users (excluding current members)
+            $availableUserIds = $this->availableUsers
+                ->whereNotIn('id', $this->pasarKolaboraya->users->pluck('id'))
+                ->pluck('id')
+                ->toArray();
+            $this->selectedUsers = array_values($availableUserIds);
+            $this->allUsersSelected = true;
+        }
+    }
+
+    public function updateSelectAllState()
+    {
+        $availableUserIds = $this->availableUsers
+            ->whereNotIn('id', $this->pasarKolaboraya->users->pluck('id'))
+            ->pluck('id')
+            ->toArray();
+        
+        $this->allUsersSelected = count($availableUserIds) > 0 && 
+                                 count(array_diff($availableUserIds, $this->selectedUsers)) === 0;
     }
 
     public function addSelectedUsers()

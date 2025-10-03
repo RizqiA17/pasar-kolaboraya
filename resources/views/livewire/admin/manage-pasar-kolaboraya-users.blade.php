@@ -222,8 +222,19 @@
                                     placeholder="Cari user berdasarkan nama atau email..." class="w-full" />
                             </div>
 
+                            <div class="flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-700 bg-slate-100/50 dark:bg-slate-700/50 rounded-t-xl">
+                                <div class="flex items-center space-x-3">
+                                    <flux:checkbox wire:click="toggleSelectAll" :checked="$allUsersSelected" />
+                                    <div class="font-medium text-slate-800 dark:text-slate-200">
+                                        Pilih Semua
+                                    </div>
+                                </div>
+                                <div class="text-sm text-slate-500 dark:text-slate-400">
+                                    {{ $availableUsers->whereNotIn('id', $pasarKolaboraya->users->pluck('id'))->count() }} user tersedia
+                                </div>
+                            </div>
                             <div
-                                class="border border-slate-200 dark:border-slate-700 rounded-xl max-h-64 overflow-y-auto bg-slate-50/50 dark:bg-slate-800/50">
+                                class="border-l border-r border-b border-slate-200 dark:border-slate-700 rounded-b-xl max-h-64 overflow-y-auto bg-slate-50/50 dark:bg-slate-800/50">
                                 @forelse($availableUsers as $user)
                                     @if (!$pasarKolaboraya->isUserMember($user))
                                         <div
