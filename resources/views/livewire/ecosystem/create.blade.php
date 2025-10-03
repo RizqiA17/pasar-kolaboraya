@@ -496,7 +496,7 @@
                         </div>
 
                         <!-- Auto Join Collective Actions Setting -->
-                        <div
+                        {{-- <div
                             class="bg-gradient-to-br from-blue-50 to-blue-50/50 dark:from-green-900/30 dark:to-green-900/20 border border-blue-200/70 dark:border-green-800 rounded-xl p-6 shadow-sm backdrop-blur-sm">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0 pt-1">
@@ -525,7 +525,7 @@
                                 </svg>
                                 <span>Pengaturan ini dapat diubah nanti di halaman pengaturan ekosistem</span>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- Action Buttons -->
                         <div class="flex gap-4 mt-4 flex-col sm:flex-row-reverse">

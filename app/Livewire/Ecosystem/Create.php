@@ -36,7 +36,7 @@ class Create extends Component
         'description' => 'nullable|string',
         'selectedIssues' => 'required|array|min:1',
         'selectedExistingRoles' => 'nullable|array|',
-        'auto_join_collective_actions' => 'boolean',
+        // 'auto_join_collective_actions' => 'boolean',
     ];
 
     protected $messages = [
@@ -92,7 +92,8 @@ class Create extends Component
             'max_users' => $this->max_users ?: null,
             'terms_conditions' => $this->terms_conditions,
             'description' => $this->description,
-            'auto_join_collective_actions' => $this->auto_join_collective_actions,
+            'auto_join_collective_actions' => false,
+            // 'auto_join_collective_actions' => $this->auto_join_collective_actions,
             'qr_code'=> $qrCode,
         ]);
         // dd($ecosystem);

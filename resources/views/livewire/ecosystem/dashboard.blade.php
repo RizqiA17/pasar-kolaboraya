@@ -100,7 +100,7 @@
                             </svg>
                             Edit
                         </a>
-                        <a href="{{ route('ecosystem.settings', $ecosystem) }}" wire:navigate
+                        {{-- <a href="{{ route('ecosystem.settings', $ecosystem) }}" wire:navigate
                             class="inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -110,7 +110,7 @@
                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             Pengaturan
-                        </a>
+                        </a> --}}
                     </div>
                 @endif
             </div>

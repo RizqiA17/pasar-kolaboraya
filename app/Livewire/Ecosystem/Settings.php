@@ -33,9 +33,9 @@ class Settings extends Component
     {
         $this->validate();
 
-        $this->ecosystem->update([
-            'auto_join_collective_actions' => $this->auto_join_collective_actions,
-        ]);
+            // $this->ecosystem->update([
+            //     'auto_join_collective_actions' => $this->auto_join_collective_actions,
+            // ]);
 
         session()->flash('message', 'Pengaturan ekosistem berhasil diperbarui!');
     }
