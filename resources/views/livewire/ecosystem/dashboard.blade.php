@@ -564,8 +564,8 @@
                         @if ($acceptedMembers->count() > 0)
                             <div class="divide-y divide-gray-200 dark:divide-slate-700">
                                 @foreach ($acceptedMembers as $member)
-                                    <div class="p-6 flex items-start justify-between">
-                                        <div class="flex items-start space-x-4">
+                                    <div class="p-6 flex-wrap gap-4 flex items-start justify-between">
+                                        <div class="flex flex-wrap gap-4 items-start space-x-4">
                                             <div
                                                 class="w-12 h-12 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
                                                 @if ($member->profile && $member->profile->profile_photo)
@@ -608,7 +608,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        @if ($isOwner)
+                                        {{-- @if ($isOwner)
                                             <div class="flex space-x-2">
                                                 <button wire:click="removeMember({{ $member->id }})"
                                                     onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
@@ -620,7 +620,7 @@
                                             <div class="text-sm text-gray-500 dark:text-slate-400">
                                                 Anggota aktif
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 @endforeach
                             </div>
@@ -912,7 +912,7 @@
                                             <p class="text-sm text-gray-600 dark:text-slate-300 mt-1">
                                                 {{ $action->description }}</p>
                                             <div
-                                                class="flex items-center space-x-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
+                                                class="flex flex-wrap gap-2 items-center space-x-4 mt-2 text-sm text-gray-500 dark:text-slate-400">
                                                 <span>📅
                                                     {{ $action->start_date ? $action->start_date->format('d M Y') : 'Tanggal belum ditentukan' }}</span>
                                                 <span>📍 {{ $action->location ?? 'Lokasi belum ditentukan' }}</span>
@@ -958,14 +958,14 @@
                                     @foreach ($pendingInvitations as $invitation)
                                         <div
                                             class="border border-orange-200 dark:border-orange-900 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/10">
-                                            <div class="flex items-start justify-between">
+                                            <div class="flex max-sm:flex-col gap-4 items-start justify-between">
                                                 <div class="flex-1">
                                                     <h4 class="font-semibold text-gray-900 dark:text-slate-100">
                                                         {{ $invitation->collectiveAction->title }}
                                                     </h4>
-                                                    <div class="flex items-center gap-3 mt-2">
+                                                    <div class="flex flex-wrap items-center gap-3 mt-2">
                                                         <span
-                                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs 
+                                                            class="inline-flex flex-wrap items-center px-2 py-1 rounded-full text-xs 
                                                             @if ($invitation->collectiveAction->scale === 'kecil') bg-green-100 dark:bg-green-800/60 text-green-800 dark:text-green-200
                                                             @elseif($invitation->collectiveAction->scale === 'sedang') bg-yellow-100 dark:bg-yellow-800/60 text-yellow-800 dark:text-yellow-200
                                                             @else bg-red-100 dark:bg-red-800/60 text-red-800 dark:text-red-200 @endif">
@@ -984,8 +984,7 @@
                                                         {{ Str::limit($invitation->collectiveAction->description, 150) }}
                                                     </p>
                                                     @if ($invitation->invitation_message)
-                                                        <div
-                                                            class="mt-3 p-3 bg-gray-100 dark:bg-slate-800/60 rounded-lg">
+                                                        <div class="mt-3 bg-gray-100 dark:bg-slate-800/60 rounded-lg">
                                                             <p class="text-sm text-gray-700 dark:text-slate-300">
                                                                 <strong>Pesan:</strong>
                                                                 {{ $invitation->invitation_message }}
@@ -993,19 +992,19 @@
                                                         </div>
                                                     @endif
                                                     <div
-                                                        class="flex items-center mt-3 text-sm text-gray-500 dark:text-slate-400">
-                                                        <div class="flex-shrink-0 mr-2">
+                                                        class="flex flex-wrap gap-2 items-center mt-3 text-sm text-gray-500 dark:text-slate-400">
+                                                        <div class="flex-shrink-02">
                                                             <div
                                                                 class="w-6 h-6 bg-gradient-to-r from-orange-600 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-medium">
                                                                 {{ $invitation->invitedBy->initials() }}
                                                             </div>
                                                         </div>
                                                         <span>Diundang oleh {{ $invitation->invitedBy->name }}</span>
-                                                        <span class="mx-2">•</span>
+                                                        <span class="">•</span>
                                                         <span>{{ $invitation->created_at->diffForHumans() }}</span>
                                                     </div>
                                                 </div>
-                                                <div class="ml-4">
+                                                <div class="">
                                                     <a href="{{ route('collective-action.respond-invitation', $invitation) }}"
                                                         class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors">
                                                         <svg class="w-4 h-4 mr-2" fill="none"
