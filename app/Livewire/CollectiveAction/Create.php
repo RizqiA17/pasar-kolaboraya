@@ -156,7 +156,7 @@ class Create extends Component
 
         // Add creator as admin of the collective action
         // Get creator's ecosystem to associate with the collective action
-        $creatorEcosystem = Auth::user()->createdEcosystems->first();
+        $creatorEcosystem = Auth::user()->createdEcosystems->where('pasar_kolaboraya_id', Auth::user()->active_pasar_kolaboraya_id)->first();
         $action->addUser(Auth::user(), 'admin', 'Creator of collective action', $creatorEcosystem->id);
 
         // Create invitation record for creator's ecosystem (auto-accepted)
