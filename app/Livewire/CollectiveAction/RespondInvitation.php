@@ -4,6 +4,7 @@ namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveActionEcosystemInvitation;
 use App\Models\Ecosystem;
+use App\Events\CollectiveActionInvitationUpdated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -56,6 +57,9 @@ class RespondInvitation extends Component
             'response_message' => $this->response_message,
             'responded_at' => now(),
         ]);
+
+        // Broadcast invitation updated event
+        broadcast(new CollectiveActionInvitationUpdated($this->invitation));
 
         if ($isAccepted) {
             $collectiveAction = $this->invitation->collectiveAction;

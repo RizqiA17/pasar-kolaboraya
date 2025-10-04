@@ -7,6 +7,7 @@ use App\Models\CollectiveActionEcosystemInvitation;
 use App\Models\Contribution;
 use App\Models\Ecosystem;
 use App\Services\NotificationService;
+use App\Events\CollectiveActionInvitationCreated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -324,7 +325,7 @@ class Dashboard extends Component
             }
 
             // Create invitation
-            CollectiveActionEcosystemInvitation::create([
+            $invitation = CollectiveActionEcosystemInvitation::create([
                 'collective_action_id' => $this->collectiveAction->id,
                 'ecosystem_id' => $ecosystemId,
                 'invited_by' => Auth::id(),
@@ -332,6 +333,9 @@ class Dashboard extends Component
                 'role' => 'admin', // Ecosystem builders become admins
                 'invitation_message' => $this->invitation_message ?? 'Anda diundang untuk bergabung dalam aksi kolektif: ' . $this->collectiveAction->title,
             ]);
+
+            // Broadcast invitation created event
+            broadcast(new CollectiveActionInvitationCreated($invitation));
 
             $ecosystem = Ecosystem::find($ecosystemId);
             $ecosystemNames[] = $ecosystem->ecosystem_title;

@@ -7,7 +7,9 @@ use App\Models\Ecosystem;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Models\CollectiveAction;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CollectiveActionEcosystemInvitation;
 
 #[Layout('components.layouts.app', ['title' => 'Aksi Kolektif'])]
 class Browse extends Component
@@ -19,12 +21,22 @@ class Browse extends Component
     public $selectedScope = '';
     public $selectedStatus = '';
     public $hasCollectiveAction = false;
+    
+    // Tab system
+    public $activeTab = 'actions';
+    
+    // Invitation filters
+    public $invitationSearch = '';
+    public $invitationStatus = '';
 
     protected $queryString = [
         'search' => ['except' => ''],
         'selectedScale' => ['except' => ''],
         'selectedScope' => ['except' => ''],
         'selectedStatus' => ['except' => ''],
+        'activeTab' => ['except' => 'actions'],
+        'invitationSearch' => ['except' => ''],
+        'invitationStatus' => ['except' => ''],
     ];
 
     public function updatingSearch()
@@ -47,12 +59,29 @@ class Browse extends Component
         $this->resetPage();
     }
 
+    public function updatingInvitationSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingInvitationStatus()
+    {
+        $this->resetPage();
+    }
+
     public function clearFilters()
     {
         $this->search = '';
         $this->selectedScale = '';
         $this->selectedScope = '';
         $this->selectedStatus = '';
+        $this->resetPage();
+    }
+
+    public function clearInvitationFilters()
+    {
+        $this->invitationSearch = '';
+        $this->invitationStatus = '';
         $this->resetPage();
     }
 
@@ -93,16 +122,69 @@ class Browse extends Component
         return $query->latest()->paginate(12);
     }
 
+    public function getInvitationsProperty()
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        
+        if (!$user || !$user->isEcosystemBuilder()) {
+            return collect();
+        }
+
+        $query = CollectiveActionEcosystemInvitation::with(['collectiveAction', 'invitedBy'])
+            ->whereHas('ecosystem', function ($q) use ($user) {
+                $q->where('creator_id', $user->id);
+            });
+
+        // Search filter
+        if ($this->invitationSearch) {
+            $query->whereHas('collectiveAction', function ($q) {
+                $q->where('title', 'like', '%' . $this->invitationSearch . '%')
+                  ->orWhere('description', 'like', '%' . $this->invitationSearch . '%');
+            });
+        }
+
+        // Status filter
+        if ($this->invitationStatus) {
+            $query->where('status', $this->invitationStatus);
+        }
+
+        return $query->latest()->paginate(12);
+    }
+
+    public function getPendingInvitationsCountProperty()
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        
+        if (!$user || !$user->isEcosystemBuilder()) {
+            return 0;
+        }
+
+        return CollectiveActionEcosystemInvitation::whereHas('ecosystem', function ($q) use ($user) {
+            $q->where('creator_id', $user->id);
+        })->where('status', 'pending')->count();
+    }
+
+
     public function contributeToAction($actionId)
     {
         $action = CollectiveAction::findOrFail($actionId);
         return redirect()->route('collective-action.show', $action);
     }
 
+    public function refreshData()
+    {
+        // This method is called by the polling to refresh data
+        // The properties will automatically update due to Livewire's reactivity
+    }
+
     public function render()
     {
         return view('livewire.collective-action.browse', [
             'collectiveActions' => $this->collectiveActions,
+            'invitations' => $this->invitations,
+            'pendingInvitationsCount' => $this->pendingInvitationsCount,
         ]);
     }
 }
