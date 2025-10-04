@@ -234,10 +234,37 @@
                             Menunggu Persetujuan
                         </span>
                     @elseif($canJoin)
-                        <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
-                            size="sm" class="w-full">
-                            Bergabung
-                        </flux:button>
+                        @if (Auth::user()->isGuestOrInvitation())
+                            <!-- Like button for guest/invitation users -->
+                            <button id="like-button-{{ $ecosystem->id }}" 
+                                class="w-full {{ $ecosystem->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
+                                <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="like-text-{{ $ecosystem->id }}">{{ $ecosystem->isLiked ? 'Disukai' : 'Suka' }}</span>
+                                <span id="like-count-{{ $ecosystem->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $ecosystem->likeCount }}</span>
+                            </button>
+                        @else
+                            <!-- Regular join button for partisipan users -->
+                            <div class="space-y-2">
+                                <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
+                                    size="sm" class="w-full">
+                                    Bergabung
+                                </flux:button>
+                                
+                                <!-- Like button for partisipan users too -->
+                                <button id="like-button-{{ $ecosystem->id }}" 
+                                    class="w-full {{ $ecosystem->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
+                                    <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-text-{{ $ecosystem->id }}">{{ $ecosystem->isLiked ? 'Disukai' : 'Suka' }}</span>
+                                    <span id="like-count-{{ $ecosystem->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $ecosystem->likeCount }}</span>
+                                </button>
+                            </div>
+                        @endif
                     @else
                         <span class="text-sm text-gray-500 dark:text-gray-400">
                             @if ($ecosystem->max_users && $ecosystem->acceptedUsers->count() >= $ecosystem->max_users)
@@ -297,3 +324,112 @@
         </div>
     @endif
 </div>
+
+@push('scripts')
+<script>
+    // Like functionality
+    function toggleLike(type, id, elementId) {
+        const button = document.getElementById(`like-button-${elementId}`);
+        const icon = document.getElementById(`like-icon-${elementId}`);
+        const text = document.getElementById(`like-text-${elementId}`);
+        const count = document.getElementById(`like-count-${elementId}`);
+        
+        // Disable button during request
+        button.disabled = true;
+        
+        fetch(`/${type}/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update button state
+                if (data.isLiked) {
+                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                    button.classList.add('bg-red-600', 'hover:bg-red-700');
+                    text.textContent = 'Disukai';
+                } else {
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-red-500', 'hover:bg-red-600');
+                    text.textContent = 'Suka';
+                }
+                
+                // Update count
+                count.textContent = data.likeCount;
+                
+                // Show notification
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message || 'Terjadi kesalahan', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Terjadi kesalahan saat memproses like', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+    }
+
+    function loadLikeStatus(type, id, elementId) {
+        fetch(`/${type}/${id}/like-status`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const button = document.getElementById(`like-button-${elementId}`);
+                const icon = document.getElementById(`like-icon-${elementId}`);
+                const text = document.getElementById(`like-text-${elementId}`);
+                const count = document.getElementById(`like-count-${elementId}`);
+                
+                if (data.isLiked) {
+                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                    button.classList.add('bg-red-600', 'hover:bg-red-700');
+                    text.textContent = 'Disukai';
+                } else {
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-red-500', 'hover:bg-red-600');
+                    text.textContent = 'Suka';
+                }
+                
+                count.textContent = data.likeCount;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading like status:', error);
+        });
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 3000);
+    }
+
+    // Load like status for all ecosystems on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all like buttons and load their status
+        const likeButtons = document.querySelectorAll('[id^="like-button-"]');
+        likeButtons.forEach(button => {
+            const elementId = button.id.replace('like-button-', '');
+            loadLikeStatus('ecosystem', elementId, elementId);
+        });
+    });
+</script>
+@endpush

@@ -89,7 +89,7 @@ class Browse extends Component
     {
         $user = Auth::user();
         
-        $query = Ecosystem::with(['creator', 'acceptedUsers'])
+        $query = Ecosystem::with(['creator', 'acceptedUsers', 'likes'])
             ->where('is_active', true)
             ->forUserActiveSession($user); // Filter by user's active session
 
@@ -143,8 +143,17 @@ class Browse extends Component
 
     public function render()
     {
+        $ecosystems = $this->ecosystems;
+        
+        // Add like data for each ecosystem
+        $ecosystems->getCollection()->transform(function ($ecosystem) {
+            $ecosystem->likeCount = $ecosystem->likes()->count();
+            $ecosystem->isLiked = Auth::user() ? $ecosystem->isLikedBy(Auth::user()) : false;
+            return $ecosystem;
+        });
+        
         return view('livewire.ecosystem.browse', [
-            'ecosystems' => $this->ecosystems,
+            'ecosystems' => $ecosystems,
         ]);
     }
 }

@@ -348,20 +348,51 @@
                             </span>
                         @endif
                     @elseif($canJoin)
-                        <div class="flex space-x-2">
-                            <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary" wire:navigate
-                                size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                                </svg>
-                                Bergabung
-                            </flux:button>
-                            <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
-                                size="sm" class="flex-1">
-                                Lihat Detail
-                            </flux:button>
-                        </div>
+                        @if (Auth::user()->isGuestOrInvitation())
+                            <!-- Like button for guest/invitation users -->
+                            <div class="flex space-x-2">
+                                <button id="like-button-{{ $action->id }}" 
+                                    class="flex-1 {{ $action->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                    onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
+                                    <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-text-{{ $action->id }}">{{ $action->isLiked ? 'Disukai' : 'Suka' }}</span>
+                                    <span id="like-count-{{ $action->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $action->likeCount }}</span>
+                                </button>
+                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
+                                    size="sm" class="flex-1">
+                                    Lihat Detail
+                                </flux:button>
+                            </div>
+                        @else
+                            <!-- Regular buttons for partisipan users -->
+                            <div class="flex space-x-2">
+                                <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary" wire:navigate
+                                    size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                    Bergabung
+                                </flux:button>
+                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
+                                    size="sm" class="flex-1">
+                                    Lihat Detail
+                                </flux:button>
+                                
+                                <!-- Like button for partisipan users too -->
+                                <button id="like-button-{{ $action->id }}" 
+                                    class="{{ $action->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                    onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
+                                    <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-text-{{ $action->id }}">{{ $action->isLiked ? 'Disukai' : 'Suka' }}</span>
+                                    <span id="like-count-{{ $action->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $action->likeCount }}</span>
+                                </button>
+                            </div>
+                        @endif
                     @elseif($userContribution)
                         @php $status = $userContribution->status; @endphp
                         <span
@@ -720,5 +751,110 @@
             }, 300);
         }, 5000);
     }
+
+    // Like functionality
+    function toggleLike(type, id, elementId) {
+        const button = document.getElementById(`like-button-${elementId}`);
+        const icon = document.getElementById(`like-icon-${elementId}`);
+        const text = document.getElementById(`like-text-${elementId}`);
+        const count = document.getElementById(`like-count-${elementId}`);
+        
+        // Disable button during request
+        button.disabled = true;
+        
+        fetch(`/${type}s/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update button state
+                if (data.isLiked) {
+                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                    button.classList.add('bg-red-600', 'hover:bg-red-700');
+                    text.textContent = 'Disukai';
+                } else {
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-red-500', 'hover:bg-red-600');
+                    text.textContent = 'Suka';
+                }
+                
+                // Update count
+                count.textContent = data.likeCount;
+                
+                // Show notification
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message || 'Terjadi kesalahan', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Terjadi kesalahan saat memproses like', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+    }
+
+    function loadLikeStatus(type, id, elementId) {
+        fetch(`/${type}s/${id}/like-status`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const button = document.getElementById(`like-button-${elementId}`);
+                const icon = document.getElementById(`like-icon-${elementId}`);
+                const text = document.getElementById(`like-text-${elementId}`);
+                const count = document.getElementById(`like-count-${elementId}`);
+                
+                if (data.isLiked) {
+                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                    button.classList.add('bg-red-600', 'hover:bg-red-700');
+                    text.textContent = 'Disukai';
+                } else {
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-red-500', 'hover:bg-red-600');
+                    text.textContent = 'Suka';
+                }
+                
+                count.textContent = data.likeCount;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading like status:', error);
+        });
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 3000);
+    }
+
+    // Load like status for all collective actions on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all like buttons and load their status
+        const likeButtons = document.querySelectorAll('[id^="like-button-"]');
+        likeButtons.forEach(button => {
+            const elementId = button.id.replace('like-button-', '');
+            loadLikeStatus('collective-action', elementId, elementId);
+        });
+    });
 </script>
 @endpush

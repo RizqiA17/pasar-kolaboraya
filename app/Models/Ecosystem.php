@@ -725,4 +725,36 @@ class Ecosystem extends Model
             'ecosystem_quality' => $this->calculateEkosistemScore(),
         ];
     }
+
+    /**
+     * Get likes for this ecosystem
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(EcosystemLike::class);
+    }
+
+    /**
+     * Get users who liked this ecosystem
+     */
+    public function likedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'ecosystem_likes');
+    }
+
+    /**
+     * Check if user has liked this ecosystem
+     */
+    public function isLikedBy(User $user): bool
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Get like count for this ecosystem
+     */
+    public function getLikeCountAttribute(): int
+    {
+        return $this->likes()->count();
+    }
 }

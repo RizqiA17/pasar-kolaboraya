@@ -349,6 +349,8 @@ class Dashboard extends Component
             'pendingContributions' => $this->pendingContributions,
             'acceptedContributions' => $this->acceptedContributions,
             'analyticsData' => $this->ecosystem->getEcosystemAnalytics(),
+            'likeCount' => $this->ecosystem->likes()->count(),
+            'isLiked' => Auth::user() ? $this->ecosystem->isLikedBy(Auth::user()) : false,
         ]);
     }
 }

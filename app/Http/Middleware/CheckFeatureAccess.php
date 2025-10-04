@@ -44,17 +44,13 @@ class CheckFeatureAccess
                     return redirect()->route('login');
                 }
                 
-                // Check if user can only connect (tamu and komunitas)
-                if ($user->canOnlyConnect()) {
-                    return redirect()->back()->with('error', 'Fitur ekosistem tidak tersedia untuk user tipe ' . $user->getUserTypeLabelAttribute() . '. Hanya partisipan yang dapat mengakses fitur ekosistem.');
-                }
-                
+                // Check if ecosystems feature is disabled by admin
                 if (!SystemSetting::isEcosystemsEnabled($user)) {
                     if ($user->isEcosystemBuilder()) {
                         // Ecosystem builder should always have access - this shouldn't happen
                         break;
                     }
-                    return redirect()->back()->with('error', 'Fitur ekosistem sedang dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat mengakses fitur ini.');
+                    return redirect()->back()->with('error', 'Fitur ekosistem sedang dinonaktifkan oleh administrator.');
                 }
                 break;
                 
@@ -69,13 +65,9 @@ class CheckFeatureAccess
                     return redirect()->route('login');
                 }
                 
-                // Check if user can only connect (tamu and komunitas)
-                if ($user->canOnlyConnect()) {
-                    return redirect()->back()->with('error', 'Fitur aksi kolektif tidak tersedia untuk user tipe ' . $user->getUserTypeLabelAttribute() . '. Hanya partisipan yang dapat mengakses fitur aksi kolektif.');
-                }
-                
+                // Check if collective actions feature is disabled by admin
                 if (!SystemSetting::isCollectiveActionsEnabled($user)) {
-                    return redirect()->back()->with('error', 'Fitur aksi kolektif sedang dinonaktifkan oleh administrator. Aktifkan fitur aksi pengguna untuk menggunakan aksi kolektif.');
+                    return redirect()->back()->with('error', 'Fitur aksi kolektif sedang dinonaktifkan oleh administrator.');
                 }
                 break;
                 

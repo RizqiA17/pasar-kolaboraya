@@ -174,6 +174,17 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions/{collectiveAction}/qr/data', [App\Http\Controllers\CollectiveActionQrController::class, 'getQrData'])->name('collective-action.qr.data');
     });
 
+    // Like functionality routes (accessible to all approved users)
+    Route::middleware(['check.user.approval'])->group(function () {
+        // Collective Action Like routes
+        Route::post('collective-actions/{collectiveAction}/like', [App\Http\Controllers\LikeController::class, 'toggleCollectiveActionLike'])->name('collective-action.like');
+        Route::get('collective-actions/{collectiveAction}/like-status', [App\Http\Controllers\LikeController::class, 'getCollectiveActionLikeStatus'])->name('collective-action.like-status');
+        
+        // Ecosystem Like routes
+        Route::post('ecosystem/{ecosystem}/like', [App\Http\Controllers\LikeController::class, 'toggleEcosystemLike'])->name('ecosystem.like');
+        Route::get('ecosystem/{ecosystem}/like-status', [App\Http\Controllers\LikeController::class, 'getEcosystemLikeStatus'])->name('ecosystem.like-status');
+    });
+
 
 });
 

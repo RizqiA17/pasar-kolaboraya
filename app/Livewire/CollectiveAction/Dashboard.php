@@ -466,6 +466,8 @@ class Dashboard extends Component
             'participatingEcosystems' => $participatingEcosystems,
             'pendingInvitations' => $pendingInvitations,
             'allInvitations' => $allInvitations,
+            'likeCount' => $this->collectiveAction->likes()->count(),
+            'isLiked' => Auth::user() ? $this->collectiveAction->isLikedBy(Auth::user()) : false,
         ]);
     }
 }

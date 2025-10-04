@@ -298,22 +298,58 @@
                                         persetujuan</span>
                                 </div>
                             @elseif($canJoin)
-                                <div
-                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                                    <div class="flex items-center text-primary-blue dark:text-primary-blue">
-                                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                        <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan
-                                            ekosistem ini</span>
+                                @if (Auth::user()->isGuestOrInvitation())
+                                    <!-- Like button for guest/invitation users -->
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                                        <div class="flex items-center text-primary-blue dark:text-primary-blue">
+                                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            <span class="font-medium text-sm sm:text-base">Anda dapat melihat dan menyukai
+                                                ekosistem ini</span>
+                                        </div>
+                                        <button id="like-button" 
+                                            class="{{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
+                                            onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
+                                            <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
+                                            <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
+                                        </button>
                                     </div>
-                                    <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
-                                        class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
-                                        Bergabung Sekarang
-                                    </a>
-                                </div>
+                                @else
+                                    <!-- Regular join button for partisipan users -->
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                                        <div class="flex items-center text-primary-blue dark:text-primary-blue">
+                                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan
+                                                ekosistem ini</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
+                                                class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
+                                                Bergabung Sekarang
+                                            </a>
+                                            <button id="like-button" 
+                                                class="{{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                                onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
+                                                <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
+                                                <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
                             @else
                                 <div class="flex items-center text-gray-700 dark:text-gray-300">
                                     <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
@@ -2216,11 +2252,125 @@
         // Check on page load
         document.addEventListener('DOMContentLoaded', function() {
             checkEcosystemContributionCharts();
+            
+            // Load initial like status
+            loadLikeStatus('ecosystem', {{ $ecosystem->id }});
         });
 
         // Initialize theme listener
         setupThemeListener();
         const test = @json($acceptedContributions);
         console.log(test)
+
+        // Like functionality
+        function toggleLike(type, id) {
+            // Find the like button (there might be multiple)
+            const buttons = document.querySelectorAll('#like-button');
+            if (buttons.length === 0) return;
+            
+            const button = buttons[0]; // Use the first one
+            const icon = button.querySelector('#like-icon');
+            const text = button.querySelector('#like-text');
+            const count = button.querySelector('#like-count');
+            
+            // Disable button during request
+            button.disabled = true;
+            
+            fetch(`/${type}/${id}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update all like buttons
+                    const allButtons = document.querySelectorAll('#like-button');
+                    allButtons.forEach(btn => {
+                        const btnIcon = btn.querySelector('#like-icon');
+                        const btnText = btn.querySelector('#like-text');
+                        const btnCount = btn.querySelector('#like-count');
+                        
+                        if (data.isLiked) {
+                            btn.classList.remove('bg-red-500', 'hover:bg-red-600');
+                            btn.classList.add('bg-red-600', 'hover:bg-red-700');
+                            btnText.textContent = 'Disukai';
+                        } else {
+                            btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                            btn.classList.add('bg-red-500', 'hover:bg-red-600');
+                            btnText.textContent = 'Suka';
+                        }
+                        
+                        // Update count
+                        btnCount.textContent = data.likeCount;
+                    });
+                    
+                    // Show notification
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification(data.message || 'Terjadi kesalahan', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Terjadi kesalahan saat memproses like', 'error');
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+        }
+
+        function loadLikeStatus(type, id) {
+            const url = `/${type}/${id}/like-status`;
+            
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Find the like button (there might be multiple)
+                    const buttons = document.querySelectorAll('#like-button');
+                    buttons.forEach(button => {
+                        const icon = button.querySelector('#like-icon');
+                        const text = button.querySelector('#like-text');
+                        const count = button.querySelector('#like-count');
+                        
+                        if (data.isLiked) {
+                            button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                            button.classList.add('bg-red-600', 'hover:bg-red-700');
+                            text.textContent = 'Disukai';
+                        } else {
+                            button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                            button.classList.add('bg-red-500', 'hover:bg-red-600');
+                            text.textContent = 'Suka';
+                        }
+                        
+                        count.textContent = data.likeCount;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading like status:', error);
+            });
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        }
     </script>
 @endpush

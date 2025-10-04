@@ -11,8 +11,7 @@
     @livewireScripts
 </head>
 
-<body
-    class="min-h-screen bg-primary-light-blue block! dark:bg-slate-950">
+<body class="min-h-screen bg-primary-light-blue block! dark:bg-slate-950">
     {{-- Decorative SVG Elements --}}
     <x-decorative-svgs-subtle />
 
@@ -60,7 +59,7 @@
             @endphp
 
             <!-- Koneksi -->
-            @if (($connectionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+            @if ($connectionsEnabled && $hasActiveMarketSession)
                 <flux:navbar.item icon="link" :href="route('connections')"
                     :current="request()->routeIs('connections')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-400 transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl mx-1"
@@ -88,7 +87,7 @@
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
                             @else
-                                Fitur koneksi sedang dinonaktifkan oleh administrator
+                                Fitur koneksi sedang dinonaktifkan oleh administrator.
                             @endif
                         </span>
                         <div
@@ -131,10 +130,7 @@
             @endif --}}
 
             <!-- Ekosistem (follows collaboration setting, but ecosystem builders always have access) -->
-            @if (
-                ($ecosystemsEnabled || $isEcosystemBuilder) &&
-                    $hasActiveMarketSession &&
-                    ($user->canAccessEcosystem() || $isSuperAdmin))
+            @if ($collaborationsEnabled && $hasActiveMarketSession)
                 {{-- {{dd('ecosystemsEnabled: ' => $ecosystemsEnabled, 'isSuperAdmin: ' => $isSuperAdmin, 'isEcosystemBuilder: ' => $isEcosystemBuilder, 'hasActiveMarketSession: ' => $hasActiveMarketSession)}} --}}
                 <flux:navbar.item icon="building-library" :href="route('ecosystem.browse')"
                     :current="request()->routeIs('ecosystem.*')"
@@ -161,13 +157,8 @@
                         <span>
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
-                            @elseif($user->canOnlyConnect())
-                                Fitur ekosistem tidak tersedia untuk user tipe
-                                {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur
-                                ekosistem.
-                            @else
-                                Fitur ekosistem dinonaktifkan untuk user biasa. Hanya ecosystem builder yang dapat
-                                mengakses.
+                            @elseif(!$collaborationsEnabled)
+                                Fitur kolaborasi sedang dinonaktifkan oleh administrator.
                             @endif
                         </span>
                         <div
@@ -178,7 +169,7 @@
             @endif
 
             <!-- Aksi Kolektif (follows user actions setting) -->
-            @if (($collectiveActionsEnabled && $hasActiveMarketSession) || ($isSuperAdmin && $user->canAccessEcosystem()))
+            @if ($userActionsEnabled && $hasActiveMarketSession)
                 <flux:navbar.item icon="sparkles" :href="route('collective-action.browse')"
                     :current="request()->routeIs('collective-action.*')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl mx-1"
@@ -204,12 +195,13 @@
                         <span>
                             @if (!$hasActiveMarketSession)
                                 Anda harus bergabung dengan sesi pasar terlebih dahulu
-                            @elseif($user->canOnlyConnect())
-                                Fitur aksi kolektif tidak tersedia untuk user tipe
-                                {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan yang dapat mengakses fitur
-                                aksi kolektif.
+                            @elseif(!$userActionsEnabled)
+                                Fitur aksi kolektif sedang dinonaktifkan oleh administrator.
                             @else
-                                Fitur aksi kolektif dinonaktifkan. Aktifkan aksi pengguna di admin panel.
+                                Fitur aksi kolektif tidak tersedia untuk user tipe
+                                {{ $user->getUserTypeLabelAttribute() }}. Hanya partisipan, tamu, dan komunitas yang
+                                dapat mengakses fitur
+                                aksi kolektif.
                             @endif
                         </span>
                         <div
@@ -629,7 +621,7 @@
                 </a>
 
                 <!-- Connections -->
-                @if (($connectionsEnabled && $hasActiveMarketSession) || $isSuperAdmin)
+                @if ($connectionsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('connections') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
                         wire:navigate>
@@ -667,7 +659,7 @@
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
                                 @else
-                                    Fitur koneksi sedang dinonaktifkan
+                                    Fitur koneksi sedang dinonaktifkan sedang dinonaktifkan oleh administrator.
                                 @endif
                             </span>
                             <div
@@ -721,10 +713,7 @@
                 @endif --}}
 
                 <!-- Ekosistem -->
-                @if (
-                    ($ecosystemsEnabled || $isEcosystemBuilder) &&
-                        $hasActiveMarketSession &&
-                        ($user->canAccessEcosystem() || $isSuperAdmin))
+                @if ($collaborationsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('ecosystem.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
                         wire:navigate>
@@ -761,11 +750,8 @@
                             <span>
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
-                                @elseif($user->canOnlyConnect())
-                                    Fitur ekosistem tidak tersedia untuk user tipe
-                                    {{ $user->getUserTypeLabelAttribute() }}
-                                @else
-                                    Fitur ekosistem dinonaktifkan untuk user biasa
+                                @elseif(!$collaborationsEnabled)
+                                    Fitur kolaborasi sedang dinonaktifkan oleh administrator.
                                 @endif
                             </span>
                             <div
@@ -776,7 +762,7 @@
                 @endif
 
                 <!-- Aksi Kolektif -->
-                @if (($collectiveActionsEnabled && $hasActiveMarketSession) || ($isSuperAdmin && $user->canAccessEcosystem()))
+                @if ($userActionsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('collective-action.browse') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
                         wire:navigate>
@@ -813,11 +799,11 @@
                             <span>
                                 @if (!$hasActiveMarketSession)
                                     Bergabung dengan sesi pasar terlebih dahulu
-                                @elseif($user->canOnlyConnect())
+                                @elseif(!$userActionsEnabled)
+                                    Fitur aksi kolektif sedang dinonaktifkan oleh administrator.
+                                @else
                                     Fitur aksi kolektif tidak tersedia untuk user tipe
                                     {{ $user->getUserTypeLabelAttribute() }}
-                                @else
-                                    Fitur aksi kolektif dinonaktifkan
                                 @endif
                             </span>
                             <div

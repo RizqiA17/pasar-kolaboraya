@@ -124,6 +124,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if user is guest or invitation type (can only like)
+     */
+    public function isGuestOrInvitation(): bool
+    {
+        return $this->isApproved() && in_array($this->user_type, ['tamu', 'komunitas']);
+    }
+
+    /**
+     * Check if user can like content (guest, invitation, or partisipan)
+     */
+    public function canLike(): bool
+    {
+        return $this->isApproved();
+    }
+
+    /**
      * Get user type label
      */
     public function getUserTypeLabelAttribute(): string
@@ -1090,5 +1106,21 @@ public function getConnectionStatus($otherUserId)
             'color' => 'gray',
             'approved_at' => null,
         ];
+    }
+
+    /**
+     * Get collective action likes by this user
+     */
+    public function collectiveActionLikes(): HasMany
+    {
+        return $this->hasMany(CollectiveActionLike::class);
+    }
+
+    /**
+     * Get ecosystem likes by this user
+     */
+    public function ecosystemLikes(): HasMany
+    {
+        return $this->hasMany(EcosystemLike::class);
     }
 }

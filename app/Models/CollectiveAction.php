@@ -957,4 +957,36 @@ class CollectiveAction extends Model
             'total_members' => $this->users()->count(),
         ];
     }
+
+    /**
+     * Get likes for this collective action
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(CollectiveActionLike::class);
+    }
+
+    /**
+     * Get users who liked this collective action
+     */
+    public function likedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'collective_action_likes');
+    }
+
+    /**
+     * Check if user has liked this collective action
+     */
+    public function isLikedBy(User $user): bool
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Get like count for this collective action
+     */
+    public function getLikeCountAttribute(): int
+    {
+        return $this->likes()->count();
+    }
 }

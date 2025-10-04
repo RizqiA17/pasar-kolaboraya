@@ -89,7 +89,7 @@ class Browse extends Component
     {
         $user = Auth::user();
 
-        $query = CollectiveAction::with(['creator'])
+        $query = CollectiveAction::with(['creator', 'likes'])
             ->where('status', '!=', 'draft')
             ->forUserActiveSession($user); // Filter by user's active session
 
@@ -181,8 +181,17 @@ class Browse extends Component
 
     public function render()
     {
+        $collectiveActions = $this->collectiveActions;
+        
+        // Add like data for each collective action
+        $collectiveActions->getCollection()->transform(function ($action) {
+            $action->likeCount = $action->likes()->count();
+            $action->isLiked = Auth::user() ? $action->isLikedBy(Auth::user()) : false;
+            return $action;
+        });
+        
         return view('livewire.collective-action.browse', [
-            'collectiveActions' => $this->collectiveActions,
+            'collectiveActions' => $collectiveActions,
             'invitations' => $this->invitations,
             'pendingInvitationsCount' => $this->pendingInvitationsCount,
         ]);
