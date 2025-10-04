@@ -3,10 +3,10 @@
         <div class="max-w-4xl mx-auto w-full">
             {{-- Header --}}
             <div class="text-center mb-6 sm:mb-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Koneksi QR</h1>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Scan QR code untuk terhubung dengan user
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Kode Koneksi</h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Berikan kode koneksi untuk terhubung dengan user
                     lain</p>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Refresh jika kamera tidak muncul</p>
+                {{-- <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Refresh jika kamera tidak muncul</p> --}}
             </div>
 
             {{-- Status Messages --}}
@@ -30,16 +30,16 @@
                     <div class="text-center w-full">
                         <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                             @if ($connectionStatus === 'idle')
-                                QR Code Anda
+                                Kode Koneksi Anda
                             @elseif($connectionStatus === 'waiting_for_response')
-                                QR Response Anda
+                                Kode Koneksi Response Anda
                             @else
                                 Koneksi Berhasil!
                             @endif
                         </h2>
 
                         @if ($myQrSvg)
-                            <div class="flex justify-center mb-3 sm:mb-4">
+                            {{-- <div class="flex justify-center mb-3 sm:mb-4">
                                 <div
                                     class="bg-white p-1 sm:p-4 rounded-lg border-2 border-gray-200 max-w-52 sm:max-w-none">
                                     <div
@@ -47,20 +47,20 @@
                                         {!! $myQrSvg !!}
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <p
-                                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 break-all px-2 text-center">
+                                class="text-md sm:text-lg text-bold text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 break-all px-2 text-center">
                                 {{ $myQrCode }}
                             </p>
                         @endif
 
                         @if ($connectionStatus === 'idle')
                             <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-                                Tunjukkan QR ini kepada user lain untuk di-scan
+                                Tunjukkan Kode ini kepada user lain untuk di-scan
                             </p>
                         @elseif($connectionStatus === 'waiting_for_response')
                             <p class="text-xs sm:text-sm text-blue-600 dark:text-blue-400 mb-3 sm:mb-4">
-                                Tunjukkan QR ini kepada <strong>{{ $targetUser->name ?? 'user' }}</strong> untuk
+                                Tunjukkan Kode ini kepada <strong>{{ $targetUser->name ?? 'user' }}</strong> untuk
                                 menyelesaikan
                                 koneksi
                             </p>
@@ -76,8 +76,8 @@
                                 class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-3 sm:mb-4">
                                 <p class="text-xs sm:text-sm text-yellow-700 dark:text-yellow-300">
                                     <span class="inline-block w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-                                    <strong>Tips:</strong> Jika QR code tidak terbaca, tekan tombol "Buat QR Baru" untuk
-                                    membuat QR baru.
+                                    <strong>Tips:</strong> Jika Kode tidak valid, tekan tombol "Buat Kode Baru" untuk
+                                    membuat Kode baru.
                                 </p>
                             </div>
                         @else
@@ -89,7 +89,7 @@
                                 <p class="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                                     <span
                                         class="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></span>
-                                    Koneksi berhasil! Anda dapat membuat koneksi baru dengan menekan tombol "Buat QR
+                                    Koneksi berhasil! Anda dapat membuat koneksi baru dengan menekan tombol "Buat Kode
                                     Baru".
                                 </p>
                             </div>
@@ -98,11 +98,11 @@
                         <div class="space-y-2 w-full">
                             @if ($connectionStatus === 'idle')
                                 <flux:button variant="primary" wire:click="refreshQr" class="w-full">
-                                    Buat QR Baru
+                                    Buat Kode Baru
                                 </flux:button>
                             @elseif($connectionStatus === 'waiting_for_response')
                                 <flux:button variant="primary" color="green" wire:click="refreshQr" class="w-full">
-                                    Buat QR Baru
+                                    Buat Kode Baru
                                 </flux:button>
                                 <flux:button variant="danger" wire:click="resetConnection" class="w-full">
                                     Hentikan Koneksi
@@ -110,7 +110,7 @@
                             @elseif($connectionStatus === 'connected')
                                 <flux:button wire:click="refreshQr"
                                     class="w-full bg-primary-blue hover:bg-sky-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium">
-                                    Buat QR Baru
+                                    Buat Kode Baru
                                 </flux:button>
                             @endif
                         </div>
@@ -121,7 +121,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
                     <div class="text-center w-full">
                         <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                            Scan QR Code
+                            Scan Kode Koneksi
                         </h2>
 
                         {{-- @if ($connectionStatus === 'connected')
@@ -138,11 +138,11 @@
                             <div>
                                 <label
                                     class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Atau masukkan QR code secara manual:
+                                    Masukkan Kode Koneksi:
                                 </label>
                                 <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full">
                                     <input type="text" wire:model="scannedQrCode"
-                                        wire:keydown.enter="processScannedQr" placeholder="Paste QR code di sini..."
+                                        wire:keydown.enter="processScannedQr" placeholder="Paste Kode Koneksi di sini..."
                                         class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
                                     <flux:button variant="primary" wire:click="processScannedQr" class="">
                                         Scan
@@ -151,9 +151,9 @@
                             </div>
 
                             {{-- Camera Scanner --}}
-                            <div
+                            {{-- <div
                                 class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
-                                {{-- <div wire:ignore id="openCam" class="text-center w-full">
+                                <div wire:ignore id="openCam" class="text-center w-full">
                                         <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📷</div>
                                         <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
                                             Gunakan kamera untuk scan QR code
@@ -162,16 +162,16 @@
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
                                             Buka Kamera
                                         </flux:button>
-                                    </div> --}}
+                                    </div>
                                 <div wire:ignore id="closeCam" class="text-center w-full">
                                     <div wire:ignore id="qr-reader" class="w-full max-w-sm mx-auto overflow-hidden">
                                     </div>
-                                    {{-- <flux:button wire:click="stopScanning"
+                                    <flux:button wire:click="stopScanning"
                                             class="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
                                             Tutup Kamera
-                                        </flux:button> --}}
+                                        </flux:button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         {{-- @endif --}}
                     </div>
@@ -186,14 +186,14 @@
                 </h3>
                 <ol
                     class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
-                    <li>User A menampilkan QR code mereka</li>
-                    <li>User B scan QR code User A</li>
-                    <li>User B akan mendapat QR code baru untuk ditunjukkan kepada User A</li>
-                    <li>User A scan QR code User B</li>
+                    <li>User A meberikan Kode Koneksi mereka</li>
+                    <li>User B scan Kode Koneksi User A</li>
+                    <li>User B akan mendapat Kode Koneksi baru untuk ditunjukkan kepada User A</li>
+                    <li>User A scan Kode Koneksi User B</li>
                     <li>Koneksi berhasil dibuat!</li>
                 </ol>
                 <p class="text-xs sm:text-sm text-blue-700 dark:text-teal-300 mt-2 sm:mt-3">
-                    <strong>Catatan:</strong> QR code berlaku selama 5 menit dan akan otomatis diperbarui.
+                    <strong>Catatan:</strong> Kode Koneksi berlaku selama 5 menit dan akan otomatis diperbarui.
                 </p>
             </div>
         </div>
@@ -295,6 +295,7 @@
             // kalau sudah ada polling jalan, hentikan dulu
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
             }
 
             // jalankan polling tiap 3 detik
@@ -345,12 +346,12 @@
             const url = window.location.href;
 
             // Auto-start camera when page loads
-            if (url.includes("qr-scanner") || url.includes("connections")) {
-                setTimeout(() => {
-                    console.log('Auto-starting camera...');
-                    startCamera();
-                }, 1000);
-            }
+            // if (url.includes("qr-scanner") || url.includes("connections")) {
+            //     setTimeout(() => {
+            //         console.log('Auto-starting camera...');
+            //         startCamera();
+            //     }, 1000);
+            // }
         });
 
         document.addEventListener("livewire:load", () => { // Initialize Pusher
@@ -367,10 +368,10 @@
             // });
 
             // Auto-start camera when page loads
-            setTimeout(() => {
-                console.log('Auto-starting camera...');
-                startCamera();
-            }, 1000);
+            // setTimeout(() => {
+            //     console.log('Auto-starting camera...');
+            //     startCamera();
+            // }, 1000);
         });
 
         async function startCamera() {
@@ -447,6 +448,7 @@
             // Clear all intervals
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
             }
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
@@ -462,29 +464,30 @@
         });
 
         // Handle page visibility change
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && isScanning) {
-                stopCamera();
-            }
+        // document.addEventListener('visibilitychange', () => {
+        //     if (document.hidden && isScanning) {
+        //         stopCamera();
+        //     }
 
-            if (!document.hidden) {
-                startCamera();
-            }
-        });
+        //     if (!document.hidden) {
+        //         startCamera();
+        //     }
+        // });
 
-        Livewire.on("change-tab", (data) => {
-            if (data.tab === 'qr-scan') {
-                startCamera();
-            } else {
-                stopCamera();
-            }
-        });
+        // Livewire.on("change-tab", (data) => {
+        //     if (data.tab === 'qr-scan') {
+        //         startCamera();
+        //     } else {
+        //         stopCamera();
+        //     }
+        // });
 
         document.addEventListener('livewire:navigating', () => {
             stopCamera();
             // Clear all intervals
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
             }
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
@@ -505,6 +508,7 @@
             // Stop any existing polling
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
             }
 
             // Start new polling
@@ -557,6 +561,7 @@
         document.addEventListener('livewire:destroyed', () => {
             if (window.connectionPollingInterval) {
                 clearInterval(window.connectionPollingInterval);
+                window.connectionPollingInterval = null;
             }
             if (window.qrRefreshInterval) {
                 clearInterval(window.qrRefreshInterval);
