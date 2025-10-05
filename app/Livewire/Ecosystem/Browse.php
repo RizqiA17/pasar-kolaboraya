@@ -141,6 +141,12 @@ class Browse extends Component
         return redirect()->route('ecosystem.join', $ecosystem);
     }
 
+    public function refreshData()
+    {
+        // This method is called by the polling to refresh data
+        // The properties will automatically update due to Livewire's reactivity
+    }
+
     public function render()
     {
         $ecosystems = $this->ecosystems;

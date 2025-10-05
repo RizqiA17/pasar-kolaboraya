@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-6" wire:poll.30s="refreshData">
     <!-- Header -->
     <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex justify-between items-start max-sm:flex-col">
@@ -326,7 +326,101 @@
 </div>
 
 @push('scripts')
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
+    // Initialize Pusher for real-time ecosystem updates
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
+                const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                    cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+                    encrypted: true,
+                    authEndpoint: '{{ route('broadcasting.auth') }}',
+                    auth: {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    }
+                });
+
+                // Subscribe to user's private channel
+                const userId = {{ auth()->id() }};
+                const channel = pusher.subscribe('private-user.' + userId);
+
+                // Listen for ecosystem user status updated events
+                channel.bind('ecosystem.user.status.updated', function(data) {
+                    console.log('Ecosystem user status updated:', data);
+                    
+                    // Show notification
+                    showEcosystemStatusNotification(data);
+                    
+                    // Refresh Livewire component data
+                    @this.call('refreshData');
+                });
+
+                console.log('Pusher initialized for ecosystem updates');
+            } else {
+                console.log('Pusher not configured, using polling fallback');
+            }
+        } catch (error) {
+            console.error('Pusher initialization failed:', error);
+        }
+    });
+
+    // Show ecosystem status notification
+    function showEcosystemStatusNotification(data) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
+        
+        let message = '';
+        let icon = '';
+        
+        if (data.action === 'accepted') {
+            message = `Anda telah diterima di ekosistem "${data.ecosystem.title}"`;
+            icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
+        } else if (data.action === 'rejected') {
+            message = `Permintaan bergabung ke ekosistem "${data.ecosystem.title}" ditolak`;
+            icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
+        }
+        
+        notification.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${icon}
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold">Update Status Ekosistem</h4>
+                    <p class="text-sm mt-1">${message}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 text-white hover:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 5000);
+    }
+
     // Like functionality
     function toggleLike(type, id, elementId) {
         const button = document.getElementById(`like-button-${elementId}`);

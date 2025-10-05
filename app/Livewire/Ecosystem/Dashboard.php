@@ -5,6 +5,7 @@ namespace App\Livewire\Ecosystem;
 use App\Models\Ecosystem;
 use App\Models\User;
 use App\Services\NotificationService;
+use App\Events\EcosystemUserStatusUpdated;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -43,7 +44,7 @@ class Dashboard extends Component
         $this->resetPage();
 
         // Debug: Log the dispatch
-        \Log::info('Dispatching tabChanged event with tab: ' . $tab);
+        \Illuminate\Support\Facades\Log::info('Dispatching tabChanged event with tab: ' . $tab);
 
         $this->dispatch('tabChanged', tab: $tab);
     }
@@ -93,6 +94,9 @@ class Dashboard extends Component
             Auth::user()
         );
 
+        // Broadcast real-time update
+        broadcast(new EcosystemUserStatusUpdated($this->ecosystem, $user, 'accepted', 'accepted'));
+
         session()->flash('message', "Permintaan dari {$user->name} telah diterima.");
 
         // Refresh the component
@@ -124,6 +128,9 @@ class Dashboard extends Component
             $this->ecosystem,
             Auth::user()
         );
+
+        // Broadcast real-time update
+        broadcast(new EcosystemUserStatusUpdated($this->ecosystem, $user, 'rejected', 'rejected'));
 
         // Remove the user from ecosystem
         $this->ecosystem->users()->detach($userId);

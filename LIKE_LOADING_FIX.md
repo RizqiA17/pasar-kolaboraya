@@ -151,3 +151,4 @@ Masalah ini kemungkinan disebabkan oleh:
 3. **Network Issue**: Request yang gagal atau timeout
 
 Dengan menambahkan error handling dan memastikan semua komponen backend berfungsi dengan benar, masalah ini telah teratasi.
+
