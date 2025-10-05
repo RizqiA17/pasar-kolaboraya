@@ -119,6 +119,23 @@
                     @endforeach
                 </flux:select>
                 
+                <!-- Custom Contribution Type (shown when "Lainnya" is selected) -->
+                @php
+                    $selectedContribution = \App\Models\Contribution::find($contribution_id);
+                    $isOther = $selectedContribution && (str_contains(strtolower($selectedContribution->name), 'lainnya') || str_contains(strtolower($selectedContribution->name), 'other'));
+                @endphp
+                @if($isOther)
+                    <div class="mt-4">
+                        <flux:input
+                            wire:model="contribution_custom_type"
+                            :label="'Jenis Kontribusi Custom'"
+                            type="text"
+                            required
+                            :placeholder="'Masukkan jenis kontribusi yang ingin Anda berikan...'"
+                        />
+                    </div>
+                @endif
+                
                 <!-- Dynamic form based on contribution type -->
                 @php
                     $selectedContribution = \App\Models\Contribution::find($contribution_id);

@@ -16,6 +16,7 @@ class Contribute extends Component
     public $contribution_description = '';
     public $contribution_amount = '';
     public $contribution_details = [];
+    public $contribution_custom_type = '';
 
     public $contributionTypes = [];
 
@@ -36,6 +37,7 @@ class Contribute extends Component
             'contribution_id' => 'required|exists:contributions,id',
             'contribution_description' => 'required|string|min:10|max:1000',
             'contribution_details' => 'nullable|array',
+            'contribution_custom_type' => 'nullable|string|max:255',
         ];
 
         // Only require amount for funding contributions
@@ -44,6 +46,11 @@ class Contribute extends Component
             $rules['contribution_amount'] = 'required|numeric|min:0';
         } else {
             $rules['contribution_amount'] = 'nullable|numeric|min:0';
+        }
+
+        // Add custom type validation for "Lainnya" contributions
+        if ($contribution && (str_contains(strtolower($contribution->name), 'lainnya') || str_contains(strtolower($contribution->name), 'other'))) {
+            $rules['contribution_custom_type'] = 'required|string|max:255';
         }
 
         return $rules;
@@ -95,6 +102,7 @@ class Contribute extends Component
             'contribution_description' => $this->contribution_description,
             'contribution_amount' => $contributionAmount,
             'contribution_details' => $this->contribution_details,
+            'contribution_custom_type' => $this->contribution_custom_type,
             'status' => 'offered',
         ];
 

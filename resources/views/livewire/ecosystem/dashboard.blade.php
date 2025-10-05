@@ -1124,7 +1124,7 @@
                                                     </div>
                                                     <span
                                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs {{ $contribution->status_color_class }}">
-                                                        {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
+                                                        {{ $contribution->contribution_type_label }}
                                                     </span>
                                                 </div>
 
@@ -1229,7 +1229,7 @@
                                                 </span>
                                                 <span
                                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue text-primary-blue dark:text-primary-light-blue">
-                                                    {{ $contribution->contribution->name ?? 'Tidak Diketahui' }}
+                                                    {{ $contribution->contribution_type_label }}
                                                 </span>
                                             </div>
 

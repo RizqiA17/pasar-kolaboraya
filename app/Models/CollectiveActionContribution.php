@@ -14,6 +14,7 @@ class CollectiveActionContribution extends Model
         'contribution_description',
         'contribution_amount',
         'contribution_details',
+        'contribution_custom_type',
         'status',
         'offered_at',
         'accepted_at',
@@ -90,6 +91,11 @@ class CollectiveActionContribution extends Model
      */
     public function getContributionTypeLabelAttribute(): string
     {
+        // If custom type is provided, use it
+        if ($this->contribution_custom_type) {
+            return $this->contribution_custom_type;
+        }
+        
         return $this->contribution ? $this->contribution->name : 'Unknown';
     }
 

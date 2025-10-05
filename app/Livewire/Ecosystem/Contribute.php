@@ -17,6 +17,7 @@ class Contribute extends Component
     public $contribution_description = '';
     public $contribution_amount = '';
     public $contribution_details = [];
+    public $contribution_custom_type = '';
 
     public $contributionTypes;
 
@@ -36,6 +37,7 @@ class Contribute extends Component
         'contribution_description' => 'required|string|min:10|max:1000',
         'contribution_amount' => 'nullable|numeric|min:0',
         'contribution_details' => 'nullable|array',
+        'contribution_custom_type' => 'nullable|string|max:255',
     ];
 
     protected function rules()
@@ -46,6 +48,11 @@ class Contribute extends Component
         $selectedContribution = $this->contributionTypes->where('id', $this->contribution_id)->first();
         if ($selectedContribution && str_contains(strtolower($selectedContribution->name), 'dana')) {
             $rules['contribution_amount'] = 'required|numeric|min:1';
+        }
+        
+        // Add custom type validation for "Lainnya" contributions
+        if ($selectedContribution && (str_contains(strtolower($selectedContribution->name), 'lainnya') || str_contains(strtolower($selectedContribution->name), 'other'))) {
+            $rules['contribution_custom_type'] = 'required|string|max:255';
         }
         
         return $rules;
@@ -74,6 +81,7 @@ class Contribute extends Component
         // Reset amount when changing type
         $this->contribution_amount = '';
         $this->contribution_details = [];
+        $this->contribution_custom_type = '';
     }
 
     public function addResourceDetail()
@@ -111,6 +119,7 @@ class Contribute extends Component
             'contribution_description' => $this->contribution_description,
             'contribution_amount' => $this->contribution_amount ?: null,
             'contribution_details' => $details,
+            'contribution_custom_type' => $this->contribution_custom_type,
             'status' => 'offered',
             'offered_at' => now(),
         ]);

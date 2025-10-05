@@ -56,6 +56,27 @@
                 @enderror
             </div>
 
+            <!-- Custom Contribution Type (shown when "Lainnya" is selected) -->
+            @php
+                $selectedContribution = $contributionTypes->firstWhere('id', $contribution_id);
+                $isOther = $selectedContribution && (str_contains(strtolower($selectedContribution->name), 'lainnya') || str_contains(strtolower($selectedContribution->name), 'other'));
+            @endphp
+            @if($isOther)
+                <div>
+                    <label for="contribution_custom_type" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Jenis Kontribusi Custom <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" 
+                           wire:model="contribution_custom_type" 
+                           id="contribution_custom_type"
+                           class="mt-1 p-4 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="Masukkan jenis kontribusi yang ingin Anda berikan...">
+                    @error('contribution_custom_type') 
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> 
+                    @enderror
+                </div>
+            @endif
+
             <!-- Contribution Description -->
             <div>
                 <label for="contribution_description" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
