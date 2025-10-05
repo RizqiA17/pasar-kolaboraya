@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Profile extends Model
 {
@@ -33,17 +34,17 @@ class Profile extends Model
     public function interests(): BelongsToMany
     {
         return $this->belongsToMany(Interest::class, 'user_interests', 'profile_id', 'interest_id')
-            ->withPivot('level')
+            ->withPivot('level', 'custom_name')
             ->withTimestamps()
-            ->select(['interests.*', 'user_interests.level']);
+            ->select(['interests.*', 'user_interests.level', 'user_interests.custom_name']);
     }
 
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'user_skills', 'profile_id', 'skill_id')
-            ->withPivot('level', 'is_primary')
+            ->withPivot('level', 'is_primary', 'custom_name')
             ->withTimestamps()
-            ->select(['skills.*', 'user_skills.level', 'user_skills.is_primary']);
+            ->select(['skills.*', 'user_skills.level', 'user_skills.is_primary', 'user_skills.custom_name']);
     }
 
     public function contributions(): BelongsToMany
@@ -57,6 +58,26 @@ class Profile extends Model
     public function peran()
     {
         return $this->belongsTo(Peran::class);
+    }
+
+    /**
+     * Get all skills including custom ones
+     */
+    public function getAllSkills()
+    {
+        return DB::table('user_skills')
+            ->where('profile_id', $this->id)
+            ->get();
+    }
+
+    /**
+     * Get all interests including custom ones
+     */
+    public function getAllInterests()
+    {
+        return DB::table('user_interests')
+            ->where('profile_id', $this->id)
+            ->get();
     }
 }
 

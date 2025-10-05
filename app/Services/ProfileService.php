@@ -20,24 +20,42 @@ class ProfileService
     /**
      * Update user interests
      */
-    public function updateInterests(User $user, array $interests): bool
+    public function updateInterests(User $user, array $interests = [], array $customInterests = []): bool
     {
         try {
             DB::beginTransaction();
             
             $profile = $this->getOrCreateProfile($user);
             
-            // Clear existing interests first
-            $profile->interests()->detach();
+            // Clear existing interests first (both regular and custom)
+            DB::table('user_interests')->where('profile_id', $profile->id)->delete();
             
-            // Prepare interests data with level
-            $interestsData = collect($interests)->mapWithKeys(function ($interestId) {
-                return [$interestId => ['level' => 1]]; // Default level 1
-            })->toArray();
+            // Add selected interests
+            if (!empty($interests)) {
+                $selectedInterestData = [];
+                foreach ($interests as $interestId) {
+                    $selectedInterestData[$interestId] = [
+                        'level' => 1,
+                        'custom_name' => null
+                    ];
+                }
+                $profile->interests()->attach($selectedInterestData);
+            }
             
-            // Attach new interests
-            if (!empty($interestsData)) {
-                $profile->interests()->attach($interestsData);
+            // Add custom interests directly to database
+            if (!empty($customInterests)) {
+                foreach ($customInterests as $customInterest) {
+                    if (!empty($customInterest['name'])) {
+                        DB::table('user_interests')->insert([
+                            'profile_id' => $profile->id,
+                            'interest_id' => null,
+                            'custom_name' => $customInterest['name'],
+                            'level' => 1, // Default level
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
+                }
             }
             
             DB::commit();
@@ -48,6 +66,7 @@ class ProfileService
             Log::error('Failed to update user interests: ' . $e->getMessage(), [
                 'user_id' => $user->id,
                 'interests' => $interests,
+                'custom_interests' => $customInterests,
                 'trace' => $e->getTraceAsString()
             ]);
             return false;
@@ -57,27 +76,44 @@ class ProfileService
     /**
      * Update user skills
      */
-    public function updateSkills(User $user, array $skills): bool
+    public function updateSkills(User $user, array $skills = [], array $customSkills = []): bool
     {
         try {
             DB::beginTransaction();
             
             $profile = $this->getOrCreateProfile($user);
             
-            // Clear existing skills first
-            $profile->skills()->detach();
+            // Clear existing skills first (both regular and custom)
+            DB::table('user_skills')->where('profile_id', $profile->id)->delete();
             
-            // Prepare skills data with level and primary flag
-            $skillsData = collect($skills)->mapWithKeys(function ($skillId) {
-                return [$skillId => [
-                    'level' => 1, // Default level 1
-                    'is_primary' => false // Default not primary
-                ]];
-            })->toArray();
+            // Add selected skills
+            if (!empty($skills)) {
+                $selectedSkillData = [];
+                foreach ($skills as $skillId) {
+                    $selectedSkillData[$skillId] = [
+                        'level' => 1,
+                        'is_primary' => false,
+                        'custom_name' => null
+                    ];
+                }
+                $profile->skills()->attach($selectedSkillData);
+            }
             
-            // Attach new skills
-            if (!empty($skillsData)) {
-                $profile->skills()->attach($skillsData);
+            // Add custom skills directly to database
+            if (!empty($customSkills)) {
+                foreach ($customSkills as $customSkill) {
+                    if (!empty($customSkill['name'])) {
+                        DB::table('user_skills')->insert([
+                            'profile_id' => $profile->id,
+                            'skill_id' => null,
+                            'custom_name' => $customSkill['name'],
+                            'level' => 1, // Default level
+                            'is_primary' => false, // Default not primary
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
+                }
             }
             
             DB::commit();
@@ -88,6 +124,7 @@ class ProfileService
             Log::error('Failed to update user skills: ' . $e->getMessage(), [
                 'user_id' => $user->id,
                 'skills' => $skills,
+                'custom_skills' => $customSkills,
                 'trace' => $e->getTraceAsString()
             ]);
             return false;

@@ -44,6 +44,8 @@ class ProfileSettings extends Component
     // public $peran = [];
     public $selectedInterests = [];
     public $selectedSkills = [];
+    public $customSkills = [];
+    public $customInterests = [];
     public $newContribution = [
         'contribution_id' => '',
         'description' => '',
@@ -125,13 +127,7 @@ class ProfileSettings extends Component
         $this->loadSocialMediaData($profile);
 
         // Load user's current selections from profile
-        $this->selectedInterests = $profile->interests()
-            ->pluck('id')
-            ->toArray();
-
-        $this->selectedSkills = $profile->skills()
-            ->pluck('id')
-            ->toArray();
+        $this->loadSkillsAndInterests($profile);
 
         // Load levels and primary flags
         $this->loadSkillLevels($profile);
@@ -193,14 +189,54 @@ class ProfileSettings extends Component
         session()->flash('message', 'Profil berhasil diperbarui!');
     }
 
+    private function loadSkillsAndInterests($profile)
+    {
+        $this->selectedInterests = [];
+        $this->selectedSkills = [];
+        $this->customSkills = [];
+        $this->customInterests = [];
+
+        // Load skills (both regular and custom)
+        $allSkills = $profile->getAllSkills();
+        foreach ($allSkills as $skillData) {
+            if ($skillData->custom_name) {
+                // Custom skill
+                $this->customSkills[] = [
+                    'name' => $skillData->custom_name
+                ];
+            } else {
+                // Regular skill
+                $this->selectedSkills[] = $skillData->skill_id;
+            }
+        }
+
+        // Load interests (both regular and custom)
+        $allInterests = $profile->getAllInterests();
+        foreach ($allInterests as $interestData) {
+            if ($interestData->custom_name) {
+                // Custom interest
+                $this->customInterests[] = [
+                    'name' => $interestData->custom_name
+                ];
+            } else {
+                // Regular interest
+                $this->selectedInterests[] = $interestData->interest_id;
+            }
+        }
+    }
+
     private function loadSkillLevels($profile)
     {
         $this->skillLevels = [];
         $this->primarySkills = [];
 
-        foreach ($profile->skills as $skill) {
-            $this->skillLevels[$skill->id] = $skill->pivot->level ?? 1;
-            $this->primarySkills[$skill->id] = $skill->pivot->is_primary ?? false;
+        $allSkills = $profile->getAllSkills();
+        foreach ($allSkills as $skillData) {
+            if (!$skillData->custom_name && $skillData->skill_id) {
+                // Only load levels for regular skills, not custom ones
+                $this->skillLevels[$skillData->skill_id] = $skillData->level ?? 1;
+                $this->primarySkills[$skillData->skill_id] = $skillData->is_primary ?? false;
+            }
         }
     }
 
@@ -208,8 +244,12 @@ class ProfileSettings extends Component
     {
         $this->interestLevels = [];
 
-        foreach ($profile->interests as $interest) {
-            $this->interestLevels[$interest->id] = $interest->pivot->level ?? 1;
+        $allInterests = $profile->getAllInterests();
+        foreach ($allInterests as $interestData) {
+            if (!$interestData->custom_name && $interestData->interest_id) {
+                // Only load levels for regular interests, not custom ones
+                $this->interestLevels[$interestData->interest_id] = $interestData->level ?? 1;
+            }
         }
     }
 
@@ -218,12 +258,15 @@ class ProfileSettings extends Component
         $this->validate([
             'selectedInterests' => 'array',
             'selectedInterests.*' => 'exists:interests,id',
+            'customInterests' => 'array',
+            'customInterests.*.name' => 'required|string|max:255',
+            'customInterests.*.level' => 'integer|min:1|max:5',
         ]);
 
         $profileService = new ProfileService();
         /** @var User $user */
         $user = auth()->user();
-        $success = $profileService->updateInterests($user, $this->selectedInterests);
+        $success = $profileService->updateInterests($user, $this->selectedInterests, $this->customInterests);
 
         if ($success) {
             $this->dispatch('profile-updated');
@@ -238,18 +281,22 @@ class ProfileSettings extends Component
         $this->validate([
             'selectedSkills' => 'array',
             'selectedSkills.*' => 'exists:skills,id',
+            'customSkills' => 'array',
+            'customSkills.*.name' => 'required|string|max:255',
+            'customSkills.*.level' => 'integer|min:1|max:5',
         ]);
 
         // Add logging for debugging
         Log::info('Updating skills for user', [
             'user_id' => auth()->id(),
-            'selected_skills' => $this->selectedSkills
+            'selected_skills' => $this->selectedSkills,
+            'custom_skills' => $this->customSkills
         ]);
 
         $profileService = new ProfileService();
         /** @var User $user */
         $user = auth()->user();
-        $success = $profileService->updateSkills($user, $this->selectedSkills);
+        $success = $profileService->updateSkills($user, $this->selectedSkills, $this->customSkills);
 
         if ($success) {
             Log::info('Skills updated successfully');
@@ -298,6 +345,32 @@ class ProfileSettings extends Component
         } else {
             session()->flash('error', 'Gagal memperbarui level minat. Silakan coba lagi.');
         }
+    }
+
+    public function addCustomSkill()
+    {
+        $this->customSkills[] = [
+            'name' => ''
+        ];
+    }
+
+    public function removeCustomSkill($index)
+    {
+        unset($this->customSkills[$index]);
+        $this->customSkills = array_values($this->customSkills);
+    }
+
+    public function addCustomInterest()
+    {
+        $this->customInterests[] = [
+            'name' => ''
+        ];
+    }
+
+    public function removeCustomInterest($index)
+    {
+        unset($this->customInterests[$index]);
+        $this->customInterests = array_values($this->customInterests);
     }
 
     public function togglePrimarySkill($skillId)

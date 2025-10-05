@@ -7,6 +7,7 @@ use App\Models\Interest;
 use App\Models\Skill;
 use App\Models\Contribution;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -33,10 +34,12 @@ class ProfileSetup extends Component
     public $selectedSkills = [];
     public $skillLevels = [];
     public $primarySkills = [];
+    public $customSkills = [];
 
     // Interests
     public $selectedInterests = [];
     public $interestLevels = [];
+    public $customInterests = [];
 
     // Contributions
     public $selectedContributions = [];
@@ -103,22 +106,36 @@ class ProfileSetup extends Component
                 }
             }
             
-            // Load skills
-            if ($profile->skills) {
-                foreach ($profile->skills as $skill) {
-                    $this->selectedSkills[] = $skill->id;
-                    $this->skillLevels[$skill->id] = $this->mapIntegerToSkillLevel($skill->pivot->level ?? 1);
-                    if ($skill->pivot->is_primary ?? false) {
-                        $this->primarySkills[] = $skill->id;
+            // Load skills (both regular and custom)
+            $allSkills = $profile->getAllSkills();
+            foreach ($allSkills as $skillData) {
+                if ($skillData->custom_name) {
+                    // Custom skill
+                    $this->customSkills[] = [
+                        'name' => $skillData->custom_name
+                    ];
+                } else {
+                    // Regular skill from database
+                    $this->selectedSkills[] = $skillData->skill_id;
+                    $this->skillLevels[$skillData->skill_id] = $this->mapIntegerToSkillLevel($skillData->level ?? 1);
+                    if ($skillData->is_primary ?? false) {
+                        $this->primarySkills[] = $skillData->skill_id;
                     }
                 }
             }
 
-            // Load interests
-            if ($profile->interests) {
-                foreach ($profile->interests as $interest) {
-                    $this->selectedInterests[] = $interest->id;
-                    $this->interestLevels[$interest->id] = $this->mapIntegerToInterestLevel($interest->pivot->level ?? 1);
+            // Load interests (both regular and custom)
+            $allInterests = $profile->getAllInterests();
+            foreach ($allInterests as $interestData) {
+                if ($interestData->custom_name) {
+                    // Custom interest
+                    $this->customInterests[] = [
+                        'name' => $interestData->custom_name
+                    ];
+                } else {
+                    // Regular interest from database
+                    $this->selectedInterests[] = $interestData->interest_id;
+                    $this->interestLevels[$interestData->interest_id] = $this->mapIntegerToInterestLevel($interestData->level ?? 1);
                 }
             }
 
@@ -144,8 +161,10 @@ class ProfileSetup extends Component
             'selectedSkills' => $this->selectedSkills,
             'skillLevels' => $this->skillLevels,
             'primarySkills' => $this->primarySkills,
+            'customSkills' => $this->customSkills,
             'selectedInterests' => $this->selectedInterests,
             'interestLevels' => $this->interestLevels,
+            'customInterests' => $this->customInterests,
             'selectedContributions' => $this->selectedContributions,
             'contributionDescriptions' => $this->contributionDescriptions,
             'contributionDates' => $this->contributionDates,
@@ -162,8 +181,10 @@ class ProfileSetup extends Component
             'selectedSkills' => $this->selectedSkills,
             'skillLevels' => $this->skillLevels,
             'primarySkills' => $this->primarySkills,
+            'customSkills' => $this->customSkills,
             'selectedInterests' => $this->selectedInterests,
             'interestLevels' => $this->interestLevels,
+            'customInterests' => $this->customInterests,
             'selectedContributions' => $this->selectedContributions,
             'contributionDescriptions' => $this->contributionDescriptions,
             'contributionDates' => $this->contributionDates,
@@ -232,27 +253,70 @@ class ProfileSetup extends Component
             ]
         );
 
-        // Sync skills
+        // Handle skills (both selected and custom)
+        // First, clear existing skills
+        $profile->skills()->detach();
+        
+        // Add selected skills
         if (!empty($this->selectedSkills)) {
-            $skillData = [];
+            $selectedSkillData = [];
             foreach ($this->selectedSkills as $skillId) {
-                $skillData[$skillId] = [
+                $selectedSkillData[$skillId] = [
                     'level' => $this->mapSkillLevelToInteger($this->skillLevels[$skillId] ?? 'beginner'),
-                    'is_primary' => in_array($skillId, $this->primarySkills)
+                    'is_primary' => in_array($skillId, $this->primarySkills),
+                    'custom_name' => null
                 ];
             }
-            $profile->skills()->sync($skillData);
+            $profile->skills()->attach($selectedSkillData);
+        }
+        
+        // Add custom skills directly to database
+        if (!empty($this->customSkills)) {
+            foreach ($this->customSkills as $customSkill) {
+                if (!empty($customSkill['name'])) {
+                    DB::table('user_skills')->insert([
+                        'profile_id' => $profile->id,
+                        'skill_id' => null,
+                        'custom_name' => $customSkill['name'],
+                        'level' => 1, // Default level
+                        'is_primary' => false, // Default not primary
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
         }
 
-        // Sync interests
+        // Handle interests (both selected and custom)
+        // First, clear existing interests
+        $profile->interests()->detach();
+        
+        // Add selected interests
         if (!empty($this->selectedInterests)) {
-            $interestData = [];
+            $selectedInterestData = [];
             foreach ($this->selectedInterests as $interestId) {
-                $interestData[$interestId] = [
-                    'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low')
+                $selectedInterestData[$interestId] = [
+                    'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low'),
+                    'custom_name' => null
                 ];
             }
-            $profile->interests()->sync($interestData);
+            $profile->interests()->attach($selectedInterestData);
+        }
+        
+        // Add custom interests directly to database
+        if (!empty($this->customInterests)) {
+            foreach ($this->customInterests as $customInterest) {
+                if (!empty($customInterest['name'])) {
+                    DB::table('user_interests')->insert([
+                        'profile_id' => $profile->id,
+                        'interest_id' => null,
+                        'custom_name' => $customInterest['name'],
+                        'level' => 1, // Default level
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
         }
 
         // Sync contributions
@@ -321,6 +385,32 @@ class ProfileSetup extends Component
         $this->selectedInterests = array_filter($this->selectedInterests, function($id) use ($interestId) {
             return $id != $interestId;
         });
+    }
+
+    public function addCustomSkill()
+    {
+        $this->customSkills[] = [
+            'name' => ''
+        ];
+    }
+
+    public function removeCustomSkill($index)
+    {
+        unset($this->customSkills[$index]);
+        $this->customSkills = array_values($this->customSkills);
+    }
+
+    public function addCustomInterest()
+    {
+        $this->customInterests[] = [
+            'name' => ''
+        ];
+    }
+
+    public function removeCustomInterest($index)
+    {
+        unset($this->customInterests[$index]);
+        $this->customInterests = array_values($this->customInterests);
     }
 
     public function addSocialMedia()
@@ -528,6 +618,7 @@ class ProfileSetup extends Component
         return view('livewire.auth.profile-setup', compact('interests', 'skills', 'contributions', 'completionPercentage'));
     }
 }
+
 
 
 

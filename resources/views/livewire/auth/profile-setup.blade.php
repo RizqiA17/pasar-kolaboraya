@@ -307,6 +307,38 @@
                         </div>
                     </div>
                 @endif
+
+                <!-- Custom Skills Input -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-slate-300">Keahlian Kustom</h4>
+                        <button type="button" wire:click="addCustomSkill"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 border border-purple-200 dark:border-purple-700 rounded-md hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Tambah Keahlian
+                        </button>
+                    </div>
+
+                    @foreach ($customSkills as $index => $customSkill)
+                        <div class="flex items-center space-x-3 mb-3 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700">
+                            <div class="flex-1">
+                                <input type="text" wire:model="customSkills.{{ $index }}.name"
+                                    placeholder="Nama keahlian kustom"
+                                    class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-purple-500 focus:border-purple-500 dark:bg-slate-700 dark:text-slate-300">
+                            </div>
+                            <div class="flex items-center">
+                                <button type="button" wire:click="removeCustomSkill({{ $index }})"
+                                    class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         @elseif($currentStep === 4)
             <!-- Step 4: Interests & Contributions -->
@@ -394,6 +426,38 @@
                             </div>
                         </div>
                     @endif
+
+                    <!-- Custom Interests Input -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-medium text-gray-700 dark:text-slate-300">Minat Kustom</h4>
+                            <button type="button" wire:click="addCustomInterest"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 border border-orange-200 dark:border-orange-700 rounded-md hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Tambah Minat
+                            </button>
+                        </div>
+
+                        @foreach ($customInterests as $index => $customInterest)
+                            <div class="flex items-center space-x-3 mb-3 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700">
+                                <div class="flex-1">
+                                    <input type="text" wire:model="customInterests.{{ $index }}.name"
+                                        placeholder="Nama minat kustom"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-orange-500 focus:border-orange-500 dark:bg-slate-700 dark:text-slate-300">
+                                </div>
+                                <div class="flex items-center">
+                                    <button type="button" wire:click="removeCustomInterest({{ $index }})"
+                                        class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
 
                 <!-- Contributions -->
