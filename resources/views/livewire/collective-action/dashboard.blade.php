@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto space-y-6">
+<div class="max-w-7xl mx-auto space-y-6" wire:poll.30s="refreshData">
     <!-- Header -->
     <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="md:block hidden">
@@ -1579,6 +1579,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
         let contributionTypesChart = null;
         let contributionStatusChart = null;
@@ -2160,5 +2161,95 @@
                 notification.remove();
             }, 500);
         }, 3000);
+    }
+
+    // Initialize Pusher for real-time collective action dashboard updates
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
+                const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                    cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+                    encrypted: true,
+                    authEndpoint: '{{ route('broadcasting.auth') }}',
+                    auth: {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    }
+                });
+
+                // Subscribe to user's private channel
+                const userId = {{ auth()->id() }};
+                const channel = pusher.subscribe('private-user.' + userId);
+
+                // Listen for invitation created events
+                channel.bind('invitation.created', function(data) {
+                    console.log('New invitation received:', data);
+                    
+                    // Show notification
+                    showInvitationNotification(data.invitation);
+                    
+                    // Refresh Livewire component data
+                    @this.call('refreshData');
+                });
+
+                // Listen for invitation updated events
+                channel.bind('invitation.updated', function(data) {
+                    console.log('Invitation updated:', data);
+                    
+                    // Refresh Livewire component data
+                    @this.call('refreshData');
+                });
+
+                console.log('Pusher initialized for collective action dashboard updates');
+            } else {
+                console.log('Pusher not configured, using polling fallback');
+            }
+        } catch (error) {
+            console.error('Pusher initialization failed:', error);
+        }
+    });
+
+    // Show invitation notification
+    function showInvitationNotification(invitation) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-orange-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
+        notification.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold">Undangan Aksi Kolektif Baru</h4>
+                    <p class="text-sm mt-1">${invitation.collective_action.title}</p>
+                    <p class="text-xs mt-1 opacity-90">Dari: ${invitation.invited_by.name}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 text-white hover:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 5000);
     }
 </script>

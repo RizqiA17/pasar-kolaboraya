@@ -360,4 +360,11 @@ class Dashboard extends Component
             'isLiked' => Auth::user() ? $this->ecosystem->isLikedBy(Auth::user()) : false,
         ]);
     }
+
+    public function refreshData()
+    {
+        // This method is called by the polling to refresh data
+        // The properties will automatically update due to Livewire's reactivity
+        $this->ecosystem = $this->ecosystem->fresh();
+    }
 }
