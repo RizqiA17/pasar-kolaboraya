@@ -57,18 +57,30 @@
                     </div>
 
                     <!-- Skills -->
-                    @if($selectedUser->profile?->skills && $selectedUser->profile->skills->count() > 0)
+                    @if($allSkills && $allSkills->count() > 0)
                         <div class="mb-4">
                             <h5 class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Keahlian</h5>
                             <div class="flex flex-wrap gap-2">
-                                @foreach($selectedUser->profile->skills->take(5) as $skill)
-                                    <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full">
-                                        {{ $skill->name }}
-                                    </span>
+                                @foreach($allSkills->take(5) as $skillData)
+                                    @if($skillData->custom_name)
+                                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full">
+                                            {{ $skillData->custom_name }}
+                                            <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                        </span>
+                                    @else
+                                        @php
+                                            $skill = $selectedUser->profile->skills->firstWhere('id', $skillData->skill_id);
+                                        @endphp
+                                        @if($skill && $skill->name)
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full">
+                                                {{ $skill->name }}
+                                            </span>
+                                        @endif
+                                    @endif
                                 @endforeach
-                                @if($selectedUser->profile->skills->count() > 5)
+                                @if($allSkills->count() > 5)
                                     <span class="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs rounded-full">
-                                        +{{ $selectedUser->profile->skills->count() - 5 }}
+                                        +{{ $allSkills->count() - 5 }}
                                     </span>
                                 @endif
                             </div>
@@ -76,18 +88,30 @@
                     @endif
 
                     <!-- Interests -->
-                    @if($selectedUser->profile?->interests && $selectedUser->profile->interests->count() > 0)
+                    @if($allInterests && $allInterests->count() > 0)
                         <div class="mb-6">
                             <h5 class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Minat</h5>
                             <div class="flex flex-wrap gap-2">
-                                @foreach($selectedUser->profile->interests->take(5) as $interest)
-                                    <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full">
-                                        {{ $interest->name }}
-                                    </span>
+                                @foreach($allInterests->take(5) as $interestData)
+                                    @if($interestData->custom_name)
+                                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full">
+                                            {{ $interestData->custom_name }}
+                                            <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                        </span>
+                                    @else
+                                        @php
+                                            $interest = $selectedUser->profile->interests->firstWhere('id', $interestData->interest_id);
+                                        @endphp
+                                        @if($interest && $interest->name)
+                                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full">
+                                                {{ $interest->name }}
+                                            </span>
+                                        @endif
+                                    @endif
                                 @endforeach
-                                @if($selectedUser->profile->interests->count() > 5)
+                                @if($allInterests->count() > 5)
                                     <span class="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs rounded-full">
-                                        +{{ $selectedUser->profile->interests->count() - 5 }}
+                                        +{{ $allInterests->count() - 5 }}
                                     </span>
                                 @endif
                             </div>

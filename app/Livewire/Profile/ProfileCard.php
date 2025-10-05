@@ -166,6 +166,13 @@ class ProfileCard extends Component
 
     public function render()
     {
-        return view('livewire.profile.profile-card');
+        // Get all skills and interests including custom ones
+        $allSkills = $this->selectedUser && $this->selectedUser->profile ? $this->selectedUser->profile->getAllSkills() : collect();
+        $allInterests = $this->selectedUser && $this->selectedUser->profile ? $this->selectedUser->profile->getAllInterests() : collect();
+        
+        return view('livewire.profile.profile-card', [
+            'allSkills' => $allSkills,
+            'allInterests' => $allInterests,
+        ]);
     }
 }

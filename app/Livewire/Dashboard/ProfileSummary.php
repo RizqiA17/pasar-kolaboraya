@@ -27,7 +27,14 @@ class ProfileSummary extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.profile-summary');
+        // Get all skills and interests including custom ones
+        $allSkills = $this->profile ? $this->profile->getAllSkills() : collect();
+        $allInterests = $this->profile ? $this->profile->getAllInterests() : collect();
+        
+        return view('livewire.dashboard.profile-summary', [
+            'allSkills' => $allSkills,
+            'allInterests' => $allInterests,
+        ]);
     }
 }
 

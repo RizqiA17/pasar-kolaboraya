@@ -314,18 +314,29 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Keahlian
                                             </h3>
                                         </div>
-                                        @if ($profile?->skills)
+                                        @if ($allSkills && $allSkills->count() > 0)
                                             <span
                                                 class="inline-flex items-center rounded-full bg-[#379eff]/10 dark:bg-[#379eff]/20 px-2.5 py-1 text-xs font-medium text-[#379eff] dark:text-[#379eff]">
-                                                {{ $profile->skills->count() }} skills
+                                                {{ $allSkills->count() }} skills
                                             </span>
                                         @endif
                                     </div>
                                     <div class="flex flex-wrap gap-2">
-                                        @forelse ($profile?->skills ?? [] as $skill)
-                                            @if ($skill && $skill->name)
+                                        @forelse ($allSkills ?? [] as $skillData)
+                                            @if ($skillData->custom_name)
                                                 <span
-                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">{{ $skill->name }}</span>
+                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">
+                                                    {{ $skillData->custom_name }}
+                                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                                </span>
+                                            @else
+                                                @php
+                                                    $skill = $skills->firstWhere('id', $skillData->skill_id);
+                                                @endphp
+                                                @if ($skill && $skill->name)
+                                                    <span
+                                                        class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-[#379eff]/5 dark:bg-[#379eff]/20 text-[#379eff] dark:text-[#379eff] ring-1 ring-inset ring-[#379eff]/10 dark:ring-[#379eff]/20 transition-all duration-200 hover:bg-[#379eff]/10 dark:hover:bg-[#379eff]/30">{{ $skill->name }}</span>
+                                                @endif
                                             @endif
                                         @empty
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan
@@ -356,18 +367,29 @@
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Minat &
                                                 Ketertarikan</h3>
                                         </div>
-                                        @if ($profile?->interests)
+                                        @if ($allInterests && $allInterests->count() > 0)
                                             <span
                                                 class="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
-                                                {{ $profile->interests->count() }} interests
+                                                {{ $allInterests->count() }} interests
                                             </span>
                                         @endif
                                     </div>
                                     <div class="flex flex-wrap gap-2">
-                                        @forelse ($profile?->interests ?? [] as $interest)
-                                            @if ($interest && $interest->name)
+                                        @forelse ($allInterests ?? [] as $interestData)
+                                            @if ($interestData->custom_name)
                                                 <span
-                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">{{ $interest->name }}</span>
+                                                    class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
+                                                    {{ $interestData->custom_name }}
+                                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                                </span>
+                                            @else
+                                                @php
+                                                    $interest = $interests->firstWhere('id', $interestData->interest_id);
+                                                @endphp
+                                                @if ($interest && $interest->name)
+                                                    <span
+                                                        class="group/item inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-600/30 transition-all duration-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">{{ $interest->name }}</span>
+                                                @endif
                                             @endif
                                         @empty
                                             <span class="text-sm text-gray-500 dark:text-slate-400">Belum menambahkan

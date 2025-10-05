@@ -83,7 +83,7 @@
             </div>
 
             <!-- Skills with Enhanced Design -->
-            @if ($skills && $skills->count() > 0)
+            @if ($allSkills && $allSkills->count() > 0)
                 <div class="mb-8">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                         <div
@@ -97,24 +97,37 @@
                         Keahlian
                     </h4>
                     <div class="flex flex-wrap gap-3">
-                        @foreach ($skills->take(5) as $skill)
-                            <span
-                                class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-700 shadow-sm">
-                                {{ $skill->name }}
-                                @if ($skill->pivot->is_primary)
-                                    <svg class="w-4 h-4 ml-2 text-blue-600 dark:text-blue-400" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                        @foreach ($allSkills->take(5) as $skillData)
+                            @if($skillData->custom_name)
+                                <span
+                                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-700 shadow-sm">
+                                    {{ $skillData->custom_name }}
+                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                </span>
+                            @else
+                                @php
+                                    $skill = $skills->firstWhere('id', $skillData->skill_id);
+                                @endphp
+                                @if($skill && $skill->name)
+                                    <span
+                                        class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-700 shadow-sm">
+                                        {{ $skill->name }}
+                                        @if ($skillData->is_primary)
+                                            <svg class="w-4 h-4 ml-2 text-blue-600 dark:text-blue-400" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        @endif
+                                    </span>
                                 @endif
-                            </span>
+                            @endif
                         @endforeach
-                        @if ($skills->count() > 5)
+                        @if ($allSkills->count() > 5)
                             <span
                                 class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm">
-                                +{{ $skills->count() - 5 }} lagi
+                                +{{ $allSkills->count() - 5 }} lagi
                             </span>
                         @endif
                     </div>
@@ -122,7 +135,7 @@
             @endif
 
             <!-- Interests with Enhanced Design -->
-            @if ($interests && $interests->count() > 0)
+            @if ($allInterests && $allInterests->count() > 0)
                 <div class="mb-8">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                         <div class="w-8 h-8 bg-secondary-green rounded-lg flex items-center justify-center mr-3">
@@ -135,16 +148,29 @@
                         Minat
                     </h4>
                     <div class="flex flex-wrap gap-3">
-                        @foreach ($interests->take(5) as $interest)
-                            <span
-                                class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-200 border border-green-200 dark:border-green-700 shadow-sm">
-                                {{ $interest->name }}
-                            </span>
+                        @foreach ($allInterests->take(5) as $interestData)
+                            @if($interestData->custom_name)
+                                <span
+                                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-200 border border-green-200 dark:border-green-700 shadow-sm">
+                                    {{ $interestData->custom_name }}
+                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                </span>
+                            @else
+                                @php
+                                    $interest = $interests->firstWhere('id', $interestData->interest_id);
+                                @endphp
+                                @if($interest && $interest->name)
+                                    <span
+                                        class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-200 border border-green-200 dark:border-green-700 shadow-sm">
+                                        {{ $interest->name }}
+                                    </span>
+                                @endif
+                            @endif
                         @endforeach
-                        @if ($interests->count() > 5)
+                        @if ($allInterests->count() > 5)
                             <span
                                 class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm">
-                                +{{ $interests->count() - 5 }} lagi
+                                +{{ $allInterests->count() - 5 }} lagi
                             </span>
                         @endif
                     </div>

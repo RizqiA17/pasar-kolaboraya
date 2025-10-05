@@ -175,10 +175,16 @@ class ViewProfile extends Component
 
     public function render()
     {
+        // Get all skills and interests including custom ones
+        $allSkills = $this->profile ? $this->profile->getAllSkills() : collect();
+        $allInterests = $this->profile ? $this->profile->getAllInterests() : collect();
+        
         return view('livewire.profile.view-profile', [
             'skills' => \App\Models\Skill::all(),
             'interests' => \App\Models\Interest::all(),
             'contributions' => \App\Models\Contribution::all(),
+            'allSkills' => $allSkills,
+            'allInterests' => $allInterests,
         ]);
     }
 }
