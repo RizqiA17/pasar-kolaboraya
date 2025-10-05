@@ -78,7 +78,7 @@
 
                     <!-- Profile Details -->
                     <div class="flex-1 min-w-0 w-full sm:w-auto">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:mt-20 gap-4">
                             <div class="text-center sm:text-left">
                                 <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
                                     {{ $user->name }}</h1>
