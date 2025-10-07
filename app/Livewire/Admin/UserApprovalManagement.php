@@ -128,6 +128,13 @@ class UserApprovalManagement extends Component
     {
         $this->selectedUser = User::withTrashed()->findOrFail($userId);
         $this->isApprovalModalOpen = true;
+        if ($this->selectedUser->user_type === 'tamu') {
+            $this->assignedPeran = 'Tamu';
+        } elseif ($this->selectedUser->user_type === 'komunitas') {
+            $this->assignedPeran = 'Komunitas';
+        }else{
+            $this->assignedPeran = '';
+        }
     }
 
     public function resetApprovalModal()

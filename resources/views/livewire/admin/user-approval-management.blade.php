@@ -359,9 +359,9 @@
                                     <select wire:model="assignedPeran"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                                         @if ($selectedUser->user_type === 'tamu')
-                                            <option value="Tamu">Tamu</option>
+                                            <option value="Tamu" selected>Tamu</option>
                                         @elseif ($selectedUser->user_type === 'komunitas')
-                                            <option value="Komunitas">Komunitas</option>
+                                            <option value="Komunitas" selected>Komunitas</option>
                                         @else
                                             <option value="">Pilih Peran</option>
                                         @endif

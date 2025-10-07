@@ -353,7 +353,7 @@
                                             <option value="laki-laki" class="dark:bg-slate-800 dark:text-slate-100">Laki-laki</option>
                                             <option value="perempuan" class="dark:bg-slate-800 dark:text-slate-100">Perempuan</option>
                                             <option value="non-biner" class="dark:bg-slate-800 dark:text-slate-100">Non-biner</option>
-                                            <option value="yang_lainnya" class="dark:bg-slate-800 dark:text-slate-100">Yang lainnya</option>
+                                            <option value="yang_lainnya" class="dark:bg-slate-800 dark:text-slate-100">Lainnya</option>
                                             <option value="tidak_ingin_menyebutkan" class="dark:bg-slate-800 dark:text-slate-100">Tidak ingin menyebutkan</option>
                                         </select>
                                     </div>

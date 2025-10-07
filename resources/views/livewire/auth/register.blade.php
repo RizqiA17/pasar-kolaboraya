@@ -68,7 +68,7 @@
             <flux:select.option value="laki-laki">Laki-laki</flux:select.option>
             <flux:select.option value="perempuan">Perempuan</flux:select.option>
             <flux:select.option value="non-biner">Non-biner</flux:select.option>
-            <flux:select.option value="yang_lainnya">Yang lainnya</flux:select.option>
+            <flux:select.option value="yang_lainnya">Lainnya</flux:select.option>
             <flux:select.option value="tidak_ingin_menyebutkan">Tidak ingin menyebutkan</flux:select.option>
         </flux:select>
 

@@ -109,7 +109,7 @@
                                             <div class="text-gray-900 dark:text-slate-300 text-xs">Total</div>
                                         </div>
                                     </div>
-                                    <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">kolaborasi</h3>
+                                    <h3 class="text-sm font-bold mb-2 text-gray-900 dark:text-slate-100">Kolaborasi</h3>
                                     <p class="text-gray-900 dark:text-slate-300 mb-3 text-xs">Ekosistem yang diikuti
                                     </p>
                                     <flux:link wire:navigate href="{{ route('ecosystem.browse') }}"
