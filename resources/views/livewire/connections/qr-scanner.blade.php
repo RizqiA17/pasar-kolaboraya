@@ -204,7 +204,7 @@
     <!-- QR Scanner Script -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script>
+    <script data-navigate-once>
         let html5QrcodeScanner = null;
         let isScanning = false;
         let pusher = null;

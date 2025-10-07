@@ -131,7 +131,7 @@
 
     <!-- QR Code Scanner JavaScript -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script>
+    <script data-navigate-once>
         let html5QrcodeScanner = null;
         let isScanning = false;
 
@@ -149,13 +149,6 @@
             stopCamera()
         });
 
-        document.addEventListener("livewire:load", () => {
-            // Auto-start camera when page loads
-            setTimeout(() => {
-                console.log('Auto-starting camera...');
-                startCamera();
-            }, 1000);
-        });
 
         async function startCamera() {
             try {

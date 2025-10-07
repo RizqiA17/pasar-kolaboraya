@@ -74,7 +74,7 @@
 
 @if ($pasarKolaboraya && count($ecosystems) > 0)
     @push('scripts')
-        <script>
+        <script data-navigate-once>
             // Load D3.js dynamically if not already loaded
             function loadD3() {
                 return new Promise((resolve, reject) => {
@@ -91,7 +91,7 @@
                 });
             }
         </script>
-        <script>
+        <script data-navigate-once>
             async function initializeEcosystemMapping() {
                 // Check if container exists
                 const container = document.getElementById('ecosystem-mapping-container');

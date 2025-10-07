@@ -19,7 +19,7 @@
     </button>
 </div>
 
-<script>
+<script data-navigate-once>
 function applyTheme() {
     const html = document.documentElement;
     const savedTheme = localStorage.getItem('theme');

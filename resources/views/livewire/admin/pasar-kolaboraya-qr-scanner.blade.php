@@ -178,7 +178,7 @@
 
 <!-- QR Scanner Script -->
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-<script>
+<script data-navigate-once>
     let html5QrcodeScanner = null;
     let isScanning = false;
 
@@ -261,6 +261,10 @@
 
     // Clean up on page unload
     window.addEventListener('beforeunload', () => {
+        stopCamera();
+    });
+
+    document.addEventListener('livewire:navigating', () => {
         stopCamera();
     });
 

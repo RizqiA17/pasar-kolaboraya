@@ -454,7 +454,7 @@
         @include('components.ecosystem-detail-modal')
 
         @if ($selectedPasar && $ecosystems->count() > 0)
-            <script>
+            <script data-navigate-once>
                 // Load D3.js dynamically if not already loaded
                 function loadD3() {
                     return new Promise((resolve, reject) => {
@@ -1849,7 +1849,7 @@
             @include('components.ecosystem-detail-modal')
 
             @if ($selectedPasar && $ecosystems->count() > 0)
-                <script>
+                <script data-navigate-once>
                     // Load D3.js dynamically if not already loaded
                     function loadD3() {
                         return new Promise((resolve, reject) => {

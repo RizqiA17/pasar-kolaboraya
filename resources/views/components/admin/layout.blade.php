@@ -277,7 +277,7 @@
     </div>
 
     <!-- Mobile Sidebar JavaScript -->
-    <script>
+    <script data-navigate-once>
         function initializeMobileSidebar() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileSidebar = document.getElementById('mobile-sidebar');

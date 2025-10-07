@@ -383,7 +383,7 @@
     {{-- @if ($totalResponses > 0 && $activeTab === 'chart') --}}
         @push('scripts')
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
+            <script data-navigate-once>
                 let radarChartInstanceKoneksi = null;
                 let radarChartInstanceKolaborasi = null;
                 let radarChartInstanceAksi = null;
