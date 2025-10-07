@@ -23,6 +23,7 @@ class ProfileSettings extends Component
     // Profile Information Properties
     public string $name = '';
     public string $email = '';
+    public string $gender = '';
     public ?string $organization = '';
     public ?string $phone = '';
     public ?string $vision = '';
@@ -64,6 +65,7 @@ class ProfileSettings extends Component
             'email',
             'max:255',
         ],
+        'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
         'organization' => ['nullable', 'string', 'max:255'],
         'phone' => ['nullable', 'string', 'max:255'],
         'vision' => ['nullable', 'string'],
@@ -80,6 +82,8 @@ class ProfileSettings extends Component
         'email.required' => 'Email wajib diisi',
         'email.email' => 'Format email tidak valid',
         'email.max' => 'Email maksimal 255 karakter',
+        'gender.required' => 'Jenis kelamin wajib diisi',
+        'gender.in' => 'Pilihan jenis kelamin tidak valid',
         'organization.max' => 'Organisasi maksimal 255 karakter',
         'phone.max' => 'Nomor telepon maksimal 255 karakter',
         'profilePhoto.required' => 'Foto profil wajib dipilih',
@@ -118,6 +122,7 @@ class ProfileSettings extends Component
         // Load profile information
         $this->name = $user->name;
         $this->email = $user->email;
+        $this->gender = $user->gender ?? '';
         $this->organization = $profile->organization ?? '';
         $this->phone = $profile->phone ?? '';
         $this->vision = $profile->vision ?? '';
@@ -145,6 +150,7 @@ class ProfileSettings extends Component
                 'max:255',
                 Rule::unique(User::class)->ignore(auth()->id()),
             ],
+            'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
             'organization' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'vision' => ['nullable', 'string'],
@@ -160,6 +166,7 @@ class ProfileSettings extends Component
         $user->fill([
             'name' => $this->name,
             'email' => $this->email,
+            'gender' => $this->gender,
         ]);
 
         if ($user->isDirty('email')) {

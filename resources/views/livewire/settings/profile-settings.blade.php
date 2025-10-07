@@ -335,6 +335,34 @@
                                 </div>
 
                                 <div class="space-y-2">
+                                    <label for="gender"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Jenis Kelamin</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400 dark:text-slate-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <select wire:model="gender" id="gender" required
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            <option value="" class="text-gray-400 dark:text-slate-500 dark:bg-slate-800">Pilih jenis kelamin</option>
+                                            <option value="laki-laki" class="dark:bg-slate-800 dark:text-slate-100">Laki-laki</option>
+                                            <option value="perempuan" class="dark:bg-slate-800 dark:text-slate-100">Perempuan</option>
+                                            <option value="non-biner" class="dark:bg-slate-800 dark:text-slate-100">Non-biner</option>
+                                            <option value="yang_lainnya" class="dark:bg-slate-800 dark:text-slate-100">Yang lainnya</option>
+                                            <option value="tidak_ingin_menyebutkan" class="dark:bg-slate-800 dark:text-slate-100">Tidak ingin menyebutkan</option>
+                                        </select>
+                                    </div>
+                                    @error('gender')
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="space-y-2">
                                     <label for="organization"
                                         class="block text-sm font-medium text-gray-900 dark:text-slate-100">Organisasi</label>
                                     <div class="relative">

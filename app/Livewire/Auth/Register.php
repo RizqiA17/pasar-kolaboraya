@@ -21,6 +21,8 @@ class Register extends Component
 
     public string $email = '';
 
+    public string $gender = '';
+
     public string $password = '';
 
     public string $password_confirmation = '';
@@ -37,6 +39,8 @@ class Register extends Component
         'email.email' => 'Format email tidak valid',
         'email.max' => 'Email maksimal 255 karakter',
         'email.unique' => 'Email sudah terdaftar',
+        'gender.required' => 'Jenis kelamin wajib diisi',
+        'gender.in' => 'Pilihan jenis kelamin tidak valid',
         'password.required' => 'Kata sandi wajib diisi',
         'password.string' => 'Kata sandi harus berupa teks',
         'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
@@ -59,6 +63,7 @@ class Register extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
+            'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'registration_key' => ['required', 'string', 'exists:registration_keys,key'],
         ]);

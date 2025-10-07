@@ -58,6 +58,20 @@
             placeholder="contoh@gmail.com"
         />
 
+        <!-- Gender -->
+        <flux:select
+            wire:model="gender"
+            :label="'Jenis Kelamin'"
+            required
+            :placeholder="'Pilih jenis kelamin'"
+        >
+            <flux:select.option value="laki-laki">Laki-laki</flux:select.option>
+            <flux:select.option value="perempuan">Perempuan</flux:select.option>
+            <flux:select.option value="non-biner">Non-biner</flux:select.option>
+            <flux:select.option value="yang_lainnya">Yang lainnya</flux:select.option>
+            <flux:select.option value="tidak_ingin_menyebutkan">Tidak ingin menyebutkan</flux:select.option>
+        </flux:select>
+
         <!-- Password -->
         <flux:input
             wire:model="password"
