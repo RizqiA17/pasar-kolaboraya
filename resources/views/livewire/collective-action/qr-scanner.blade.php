@@ -213,7 +213,7 @@
                     config,
                     (decodedText, decodedResult) => {
                         console.log('QR Code detected:', decodedText);
-                        @this.call('onQrScanned', decodedText);
+                        @this.call('handleQrScanned', decodedText);
                         // Don't stop scanner, keep it running for next scan
                     },
                     (errorMessage) => {
