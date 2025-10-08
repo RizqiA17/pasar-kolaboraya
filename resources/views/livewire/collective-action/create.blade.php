@@ -4,6 +4,14 @@
 
 @push('scripts')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Ensure Leaflet is loaded before Alpine.js initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof L === 'undefined') {
+                console.error('Leaflet library not loaded properly');
+            }
+        });
+    </script>
 @endpush
 
 <div class="flex flex-col gap-6 relative">
@@ -182,6 +190,13 @@
                 isSearching: false,
             
                 initializeMap() {
+                    // Wait for Leaflet to be available
+                    if (typeof L === 'undefined') {
+                        console.warn('Leaflet not loaded yet, retrying in 100ms...');
+                        setTimeout(() => this.initializeMap(), 100);
+                        return;
+                    }
+            
                     if (this.map) {
                         this.map.remove();
                     }
@@ -333,6 +348,10 @@
                 },
             
                 updateMarker() {
+                    if (typeof L === 'undefined') {
+                        console.warn('Leaflet not available for marker update');
+                        return;
+                    }
                     if (this.map && this.marker && this.latitude && this.longitude) {
                         const newLatLng = L.latLng(this.latitude, this.longitude);
                         this.marker.setLatLng(newLatLng);
@@ -358,7 +377,10 @@
                 },
             
                 init() {
-                    this.initializeMap();
+                    // Wait a bit for DOM to be ready and Leaflet to load
+                    setTimeout(() => {
+                        this.initializeMap();
+                    }, 100);
             
                     this.$watch('latitude', (newVal, oldVal) => {
                         if (newVal !== oldVal && this.map && this.marker && newVal && oldVal) {

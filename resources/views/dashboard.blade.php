@@ -2,7 +2,7 @@
     <div class="">
 
         <!-- Main Dashboard Grid -->
-        <div class="px-4 pb-6">
+        <div class="pb-6">
             <div class="mx-auto max-w-7xl space-y-6">
                 <!-- Stats Cards Row - Consistent 3-column grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
