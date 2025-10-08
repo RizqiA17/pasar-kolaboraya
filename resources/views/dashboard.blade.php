@@ -328,7 +328,7 @@
                             </div>
 
                             <div class="relative z-10 p-6">
-                                <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center justify-between mb-4 gap-2">
                                     <div>
                                         <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">Aktivitas
                                             Terbaru</h3>
@@ -336,7 +336,7 @@
                                             komunitas Anda</p>
                                     </div>
                                     <div
-                                        class="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center shadow-lg">
+                                        class="w-12 h-12 min-w-12 bg-primary-blue rounded-lg flex items-center justify-center shadow-lg">
                                         <flux:icon.clock class="size-6 text-white" />
                                     </div>
                                 </div>
