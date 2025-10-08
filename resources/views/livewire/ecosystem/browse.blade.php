@@ -206,64 +206,59 @@
                             </p>
                         </div>
                     </div>
+
+                    <!-- Like Button and Status -->
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <!-- Like Button -->
+                        <button id="like-button-{{ $ecosystem->id }}" 
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $ecosystem->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600' }}"
+                            onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
+                            <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="like-count-{{ $ecosystem->id }}" class="font-medium">{{ $ecosystem->likeCount }}</span>
+                        </button>
+
+                        <!-- User Status Badge -->
+                        @php
+                            $userStatus = Auth::user() ? $ecosystem->getUserStatus(Auth::user()) : null;
+                        @endphp
+                        @if ($userStatus === 'accepted')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Sudah Bergabung
+                            </span>
+                        @elseif($userStatus === 'pending')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700 dark:text-secondary-yellow">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Menunggu Persetujuan
+                            </span>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
                     @php
-                        $userStatus = Auth::user() ? $ecosystem->getUserStatus(Auth::user()) : null;
                         $canJoin = Auth::user() ? $ecosystem->canUserJoin(Auth::user()) : false;
                     @endphp
 
-                    @if ($userStatus === 'accepted')
-                        <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                            Sudah Bergabung
-                        </span>
-                    @elseif($userStatus === 'pending')
-                        <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700    dark:text-secondary-yellow">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Menunggu Persetujuan
-                        </span>
-                    @elseif($canJoin)
+                    @if ($canJoin)
                         @if (Auth::user()->isGuestOrInvitation())
-                            <!-- Like button for guest/invitation users -->
-                            <button id="like-button-{{ $ecosystem->id }}" 
-                                class="w-full {{ $ecosystem->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                                onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
-                                <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span id="like-text-{{ $ecosystem->id }}">{{ $ecosystem->isLiked ? 'Disukai' : 'Suka' }}</span>
-                                <span id="like-count-{{ $ecosystem->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $ecosystem->likeCount }}</span>
-                            </button>
+                            <!-- Simple message for guest/invitation users -->
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                Login untuk bergabung dengan ekosistem
+                            </span>
                         @else
                             <!-- Regular join button for partisipan users -->
-                            <div class="space-y-2">
-                                <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
-                                    size="sm" class="w-full">
-                                    Bergabung
-                                </flux:button>
-                                
-                                <!-- Like button for partisipan users too -->
-                                <button id="like-button-{{ $ecosystem->id }}" 
-                                    class="w-full {{ $ecosystem->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
-                                    <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span id="like-text-{{ $ecosystem->id }}">{{ $ecosystem->isLiked ? 'Disukai' : 'Suka' }}</span>
-                                    <span id="like-count-{{ $ecosystem->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $ecosystem->likeCount }}</span>
-                                </button>
-                            </div>
+                            <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
+                                size="sm" class="w-full">
+                                Bergabung
+                            </flux:button>
                         @endif
                     @else
                         <span class="text-sm text-gray-500 dark:text-gray-400">
@@ -425,7 +420,6 @@
     function toggleLike(type, id, elementId) {
         const button = document.getElementById(`like-button-${elementId}`);
         const icon = document.getElementById(`like-icon-${elementId}`);
-        const text = document.getElementById(`like-text-${elementId}`);
         const count = document.getElementById(`like-count-${elementId}`);
         
         // Disable button during request
@@ -443,13 +437,11 @@
             if (data.success) {
                 // Update button state
                 if (data.isLiked) {
-                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                    button.classList.add('bg-red-600', 'hover:bg-red-700');
-                    text.textContent = 'Disukai';
+                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
                 } else {
-                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    button.classList.add('bg-red-500', 'hover:bg-red-600');
-                    text.textContent = 'Suka';
+                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
                 }
                 
                 // Update count
@@ -476,18 +468,14 @@
         .then(data => {
             if (data.success) {
                 const button = document.getElementById(`like-button-${elementId}`);
-                const icon = document.getElementById(`like-icon-${elementId}`);
-                const text = document.getElementById(`like-text-${elementId}`);
                 const count = document.getElementById(`like-count-${elementId}`);
                 
                 if (data.isLiked) {
-                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                    button.classList.add('bg-red-600', 'hover:bg-red-700');
-                    text.textContent = 'Disukai';
+                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
                 } else {
-                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    button.classList.add('bg-red-500', 'hover:bg-red-600');
-                    text.textContent = 'Suka';
+                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
                 }
                 
                 count.textContent = data.likeCount;

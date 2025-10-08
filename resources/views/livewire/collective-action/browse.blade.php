@@ -287,6 +287,57 @@
                             </p>
                         </div>
                     </div>
+
+                    <!-- Like Button and Status -->
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <!-- Like Button -->
+                        <button id="like-button-{{ $action->id }}" 
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $action->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600' }}"
+                            onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
+                            <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="like-count-{{ $action->id }}" class="font-medium">{{ $action->likeCount }}</span>
+                        </button>
+
+                        <!-- User Status Badge -->
+                        @php
+                            $user = Auth::user();
+                            $isUserRegistered = $user ? $action->isUserRegistered($user) : false;
+                            $userStatus = $user && $isUserRegistered ? $action->getUserStatus($user) : null;
+                        @endphp
+                        @if ($isUserRegistered)
+                            @if ($userStatus === 'active')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Sudah Bergabung
+                                </span>
+                            @elseif($userStatus === 'pending_approval')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Menunggu Persetujuan
+                                </span>
+                            @elseif($userStatus === 'rejected')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Ditolak
+                                </span>
+                            @elseif($userStatus === 'inactive')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                                    </svg>
+                                    Tidak Aktif
+                                </span>
+                            @endif
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Footer -->
@@ -304,62 +355,15 @@
 
                     @if ($isUserRegistered)
                         @if ($userStatus === 'active')
-                            <div class="flex space-x-2">
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Sudah Bergabung
-                                </span>
-                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline" wire:navigate
-                                    size="sm" class="flex-1">
-                                    Lihat Detail
-                                </flux:button>
-                            </div>
-                        @elseif($userStatus === 'pending_approval')
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Menunggu Persetujuan
-                            </span>
-                        @elseif($userStatus === 'rejected')
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                Ditolak
-                            </span>
-                        @elseif($userStatus === 'inactive')
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                                </svg>
-                                Tidak Aktif
-                            </span>
+                            <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline" wire:navigate
+                                size="sm" class="w-full">
+                                Lihat Detail
+                            </flux:button>
                         @endif
                     @elseif($canJoin)
                         @if (Auth::user()->isGuestOrInvitation())
-                            <!-- Like button for guest/invitation users -->
+                            <!-- Simple buttons for guest/invitation users -->
                             <div class="flex space-x-2">
-                                <button id="like-button-{{ $action->id }}" 
-                                    class="flex-1 {{ $action->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                                    onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
-                                    <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span id="like-text-{{ $action->id }}">{{ $action->isLiked ? 'Disukai' : 'Suka' }}</span>
-                                    <span id="like-count-{{ $action->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $action->likeCount }}</span>
-                                </button>
                                 <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
                                     size="sm" class="flex-1">
                                     Lihat Detail
@@ -380,17 +384,6 @@
                                     size="sm" class="flex-1">
                                     Lihat Detail
                                 </flux:button>
-                                
-                                <!-- Like button for partisipan users too -->
-                                <button id="like-button-{{ $action->id }}" 
-                                    class="{{ $action->isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                                    onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
-                                    <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span id="like-text-{{ $action->id }}">{{ $action->isLiked ? 'Disukai' : 'Suka' }}</span>
-                                    <span id="like-count-{{ $action->id }}" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $action->likeCount }}</span>
-                                </button>
                             </div>
                         @endif
                     @elseif($userContribution)
@@ -756,7 +749,6 @@
     function toggleLike(type, id, elementId) {
         const button = document.getElementById(`like-button-${elementId}`);
         const icon = document.getElementById(`like-icon-${elementId}`);
-        const text = document.getElementById(`like-text-${elementId}`);
         const count = document.getElementById(`like-count-${elementId}`);
         
         // Disable button during request
@@ -774,13 +766,11 @@
             if (data.success) {
                 // Update button state
                 if (data.isLiked) {
-                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                    button.classList.add('bg-red-600', 'hover:bg-red-700');
-                    text.textContent = 'Disukai';
+                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
                 } else {
-                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    button.classList.add('bg-red-500', 'hover:bg-red-600');
-                    text.textContent = 'Suka';
+                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
                 }
                 
                 // Update count
@@ -807,18 +797,14 @@
         .then(data => {
             if (data.success) {
                 const button = document.getElementById(`like-button-${elementId}`);
-                const icon = document.getElementById(`like-icon-${elementId}`);
-                const text = document.getElementById(`like-text-${elementId}`);
                 const count = document.getElementById(`like-count-${elementId}`);
                 
                 if (data.isLiked) {
-                    button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                    button.classList.add('bg-red-600', 'hover:bg-red-700');
-                    text.textContent = 'Disukai';
+                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
                 } else {
-                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    button.classList.add('bg-red-500', 'hover:bg-red-600');
-                    text.textContent = 'Suka';
+                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
                 }
                 
                 count.textContent = data.likeCount;
