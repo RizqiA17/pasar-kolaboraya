@@ -2,11 +2,11 @@
     @forelse($activities as $activity)
         <div class="group relative">
             <!-- Timeline Line -->
-            <div class="absolute left-6 top-8 bottom-0 w-0.5 bg-gradient-to-b from-gray-200 to-transparent dark:from-gray-700"></div>
+            <div class="absolute max-sm:hidden left-6 top-8 bottom-0 w-0.5 bg-gradient-to-b from-gray-200 to-transparent dark:from-gray-700"></div>
             
             <div class="flex items-start relative">
                 <!-- Enhanced Icon -->
-                <div class="relative mt-1">
+                <div class="relative max-sm:hidden mt-1">
                     <div @class([
                         'flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 group-hover:scale-110',
                         'bg-secondary-green' => $activity->type === 'collective_action',
@@ -36,12 +36,12 @@
                 </div>
 
                 <!-- Enhanced Content -->
-                <div class="ml-6 flex-1">
+                <div class="sm:ml-6 flex-1 w-full">
                     <div class="bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-blue-200 dark:group-hover:border-blue-700 min-h-[140px]">
                         <div class="flex items-start justify-between h-full max-sm:flex-col">
-                            <div class="flex-1 flex flex-col justify-between">
+                            <div class="flex-1 flex flex-col justify-between w-full">
                                 <div>
-                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight break-words overflow-hidden line-clamp-2">
                                         {{ $activity->title }}
                                     </h4>
                                     
