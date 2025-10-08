@@ -242,8 +242,8 @@
                     class="absolute top-0 right-0 w-3 h-3 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full animate-pulse">
                 </div>
                 <flux:menu
-                    class="mt-2 -translate-x-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
-                    <div class="p-4 lg:w-128 w-full">
+                    class="mt-2 max-sm:-translate-x-4 lg:-translate-x-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-blue-500/20 rounded-2xl overflow-hidden">
+                    <div class="p-4 lg:w-128 w-80 max-w-[calc(100vw-2rem)]">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Notifikasi</h3>
                             <div class="flex items-center space-x-2">
