@@ -336,7 +336,7 @@
 
                         <!-- Mapping Container -->
                         <div class="relative z-10 p-6">
-                            <div class="w-full h-[800px] bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
+                            <div class="w-full bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
                                 <div id="ecosystem-mapping-container" class="w-full h-full"></div>
                             </div>
 
@@ -706,7 +706,7 @@
                     }
 
                     const width = container.node().offsetWidth;
-                        const height = container.node().offsetHeight > width ? width : 800;
+                        const height = 800 > width ? width : 800;
 
                     console.log('Container dimensions:', width, 'x', height);
 
