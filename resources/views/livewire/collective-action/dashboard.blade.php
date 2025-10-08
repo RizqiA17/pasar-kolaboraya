@@ -44,6 +44,25 @@
                             </svg>
                             QR Code
                         </a>
+                    @else
+                        <!-- Like and Join Buttons for non-managers -->
+                        @if ($collectiveAction->canUserJoin(Auth::user()))
+                            <button wire:click="joinCollectiveAction"
+                                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors border border-white/20 hover:border-white/30 shadow-sm">
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Bergabung
+                            </button>
+                        @endif
+                        <button id="like-button" 
+                            class="flex items-center gap-2 px-3 py-2 {{ $isLiked ? 'bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-400/30' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20' }} rounded-lg text-sm font-medium transition-colors"
+                            onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
+                            <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="like-count" class="font-medium">{{ $likeCount }}</span>
+                        </button>
                     @endif
                 </div>
             </div>
@@ -93,6 +112,25 @@
                             </svg>
                             QR Code
                         </a>
+                    @else
+                        <!-- Like and Join Buttons for non-managers (Mobile) -->
+                        @if ($collectiveAction->canUserJoin(Auth::user()))
+                            <button wire:click="joinCollectiveAction"
+                                class="px-4 py-2 w-full bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors border border-white/20 hover:border-white/30 shadow-sm">
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Bergabung
+                            </button>
+                        @endif
+                        <button id="like-button-mobile" 
+                            class="flex items-center gap-2 px-3 py-2 w-full {{ $isLiked ? 'bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-400/30' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20' }} rounded-lg text-sm font-medium transition-colors justify-center"
+                            onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
+                            <svg id="like-icon-mobile" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="like-count-mobile" class="font-medium">{{ $likeCount }}</span>
+                        </button>
                     @endif
                 </div>
             </div>
@@ -1128,41 +1166,10 @@
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Kontribusi</h2>
             <div class="flex gap-3">
-                @if (Auth::user()->isGuestOrInvitation())
-                    <!-- Like button for guest/invitation users -->
-                    <button id="like-button" 
-                        class="px-4 py-2 {{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                        onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
-                        <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
-                        <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
-                    </button>
-                @else
-                    <!-- Regular buttons for partisipan users -->
-                @if ($collectiveAction->canUserJoin(Auth::user()))
-                    <button wire:click="joinCollectiveAction"
-                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors">
-                        Bergabung
-                    </button>
-                @endif
                 @if ($collectiveAction->canUserContribute(Auth::user()))
                     <button wire:click="toggleContributionForm"
                         class="px-4 py-2 bg-primary-blue hover:bg-sky-700 text-white rounded-lg text-sm font-medium transition-colors">
                         {{ $show_contribution_form ? 'Batal' : 'Berkontribusi' }}
-                        </button>
-                    @endif
-                    
-                    <!-- Like button for partisipan users too -->
-                    <button id="like-button" 
-                        class="px-4 py-2 {{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                        onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
-                        <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
-                        <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
                     </button>
                 @endif
             </div>
@@ -2093,25 +2100,34 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update all like buttons
-                const allButtons = document.querySelectorAll('#like-button');
+                // Update all like buttons (desktop and mobile)
+                const allButtons = document.querySelectorAll('#like-button, #like-button-mobile');
                 allButtons.forEach(btn => {
-                    const btnIcon = btn.querySelector('#like-icon');
-                    const btnText = btn.querySelector('#like-text');
-                    const btnCount = btn.querySelector('#like-count');
+                    const btnIcon = btn.querySelector('#like-icon, #like-icon-mobile');
+                    const btnCount = btn.querySelector('#like-count, #like-count-mobile');
                     
                     if (data.isLiked) {
-                        btn.classList.remove('bg-red-500', 'hover:bg-red-600');
-                        btn.classList.add('bg-red-600', 'hover:bg-red-700');
-                        btnText.textContent = 'Disukai';
+                        btn.classList.remove('bg-white/10', 'hover:bg-white/20', 'text-white', 'border-white/20');
+                        btn.classList.add('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200', 'border-red-400/30');
+                        // Update icon fill
+                        if (btnIcon) {
+                            btnIcon.classList.remove('fill-white');
+                            btnIcon.classList.add('fill-red-300');
+                        }
                     } else {
-                        btn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                        btn.classList.add('bg-red-500', 'hover:bg-red-600');
-                        btnText.textContent = 'Suka';
+                        btn.classList.remove('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200', 'border-red-400/30');
+                        btn.classList.add('bg-white/10', 'hover:bg-white/20', 'text-white', 'border-white/20');
+                        // Update icon fill
+                        if (btnIcon) {
+                            btnIcon.classList.remove('fill-red-300');
+                            btnIcon.classList.add('fill-white');
+                        }
                     }
                     
                     // Update count
-                    btnCount.textContent = data.likeCount;
+                    if (btnCount) {
+                        btnCount.textContent = data.likeCount;
+                    }
                 });
                 
                 // Show notification

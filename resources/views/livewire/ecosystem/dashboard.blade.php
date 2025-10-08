@@ -80,6 +80,43 @@
                 <div class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
                     {{ $ecosystemQuality['ekosistem_score'] }}%</div>
                 <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
+                
+                <!-- Like and Join Buttons -->
+                @if (!$isOwner)
+                    <div class="mt-3 flex flex-col sm:flex-row gap-2">
+                        @if ($ecosystem->canUserJoin(Auth::user()))
+                            @if (Auth::user()->isGuestOrInvitation())
+                                <!-- Like button for guest/invitation users -->
+                                <button id="like-button" 
+                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }} justify-center"
+                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
+                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-count" class="font-medium">{{ $likeCount }}</span>
+                                </button>
+                            @else
+                                <!-- Join and Like buttons for partisipan users -->
+                                <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
+                                    class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center border border-primary-blue hover:border-primary-blue/80 shadow-sm">
+                                    <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Bergabung
+                                </a>
+                                <button id="like-button" 
+                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
+                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
+                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-count" class="font-medium">{{ $likeCount }}</span>
+                                </button>
+                            @endif
+                        @endif
+                    </div>
+                @endif
+                
                 @if ($isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
                         <a href="{{ route('ecosystem.qr.show', $ecosystem) }}" wire:navigate
@@ -297,59 +334,6 @@
                                         menunggu
                                         persetujuan</span>
                                 </div>
-                            @elseif($canJoin)
-                                @if (Auth::user()->isGuestOrInvitation())
-                                    <!-- Like button for guest/invitation users -->
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                                        <div class="flex items-center text-primary-blue dark:text-primary-blue">
-                                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                            <span class="font-medium text-sm sm:text-base">Anda dapat melihat dan menyukai
-                                                ekosistem ini</span>
-                                        </div>
-                                        <button id="like-button" 
-                                            class="{{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
-                                            onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
-                                            <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
-                                            <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
-                                        </button>
-                                    </div>
-                                @else
-                                    <!-- Regular join button for partisipan users -->
-                                    <div
-                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                                        <div class="flex items-center text-primary-blue dark:text-primary-blue">
-                                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                            <span class="font-medium text-sm sm:text-base">Anda dapat bergabung dengan
-                                                ekosistem ini</span>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
-                                                class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto text-center">
-                                                Bergabung Sekarang
-                                            </a>
-                                            <button id="like-button" 
-                                                class="{{ $isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600' }} text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                                                onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
-                                                <svg id="like-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                <span id="like-text">{{ $isLiked ? 'Disukai' : 'Suka' }}</span>
-                                                <span id="like-count" class="bg-red-600 px-2 py-1 rounded-full text-xs">{{ $likeCount }}</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endif
                             @else
                                 <div class="flex items-center text-gray-700 dark:text-gray-300">
                                     <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
@@ -2295,13 +2279,21 @@
                         const btnCount = btn.querySelector('#like-count');
                         
                         if (data.isLiked) {
-                            btn.classList.remove('bg-red-500', 'hover:bg-red-600');
-                            btn.classList.add('bg-red-600', 'hover:bg-red-700');
-                            btnText.textContent = 'Disukai';
+                            btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
+                            btn.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+                            // Update icon fill
+                            if (btnIcon) {
+                                btnIcon.classList.remove('fill-gray-600');
+                                btnIcon.classList.add('fill-red-600');
+                            }
                         } else {
-                            btn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                            btn.classList.add('bg-red-500', 'hover:bg-red-600');
-                            btnText.textContent = 'Suka';
+                            btn.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+                            btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
+                            // Update icon fill
+                            if (btnIcon) {
+                                btnIcon.classList.remove('fill-red-600');
+                                btnIcon.classList.add('fill-gray-600');
+                            }
                         }
                         
                         // Update count

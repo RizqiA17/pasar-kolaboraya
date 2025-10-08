@@ -292,9 +292,9 @@
                     <div class="flex items-center justify-between mb-4 gap-3">
                         <!-- Like Button -->
                         <button id="like-button-{{ $action->id }}" 
-                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $action->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600' }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $action->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
                             onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
-                            <svg id="like-icon-{{ $action->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg id="like-icon-{{ $action->id }}" class="w-4 h-4 {{ $action->isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
                             </svg>
                             <span id="like-count-{{ $action->id }}" class="font-medium">{{ $action->likeCount }}</span>
@@ -373,10 +373,10 @@
                             <!-- Regular buttons for partisipan users -->
                             <div class="flex space-x-2">
                                 <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary" wire:navigate
-                                    size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90">
+                                    size="sm" class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90 border border-primary-blue hover:border-primary-blue/80 dark:border-secondary-green dark:hover:border-secondary-green/80 shadow-sm">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     Bergabung
                                 </flux:button>
@@ -766,11 +766,21 @@
             if (data.success) {
                 // Update button state
                 if (data.isLiked) {
-                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
+                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+                    // Update icon fill
+                    if (icon) {
+                        icon.classList.remove('fill-gray-600');
+                        icon.classList.add('fill-red-600');
+                    }
                 } else {
-                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
+                    // Update icon fill
+                    if (icon) {
+                        icon.classList.remove('fill-red-600');
+                        icon.classList.add('fill-gray-600');
+                    }
                 }
                 
                 // Update count
