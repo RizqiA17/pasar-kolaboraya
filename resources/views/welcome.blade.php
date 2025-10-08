@@ -140,7 +140,7 @@
                                 lintas-ekosistem</span> bagi Kreator Perubahan Sosial yang siap <span
                                 class="text-coral dark:text-coral-400 font-semibold">memperluas dampak</span>.
                         </p>
-                        <div class="space-x-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="{{ route('register') }}"
                                 class="inline-flex items-center px-8 py-4 bg-navy dark:bg-secondary-green text-white rounded-full text-lg font-semibold hover:bg-sky-700 dark:hover:bg-teal-600 transition">
                                 Bergabung Sekarang

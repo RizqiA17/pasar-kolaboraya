@@ -706,7 +706,7 @@
                     }
 
                     const width = container.node().offsetWidth;
-                    const height = container.node().offsetHeight;
+                        const height = container.node().offsetHeight > width ? width : 800;
 
                     console.log('Container dimensions:', width, 'x', height);
 
@@ -1573,7 +1573,7 @@
                     </div> --}}
 
                     <div class="text-center mb-8">
-                        <h1 class="text-4xl font-extrabold mb-4 dark:text-neutral-100 text-primary-blue">
+                        <h1 class="text-4xl font-bold mb-4 font-sans dark:text-neutral-100 text-primary-blue">
                             Peta Ekosistem Kolaboraya
                         </h1>
                         <p class="text-lg opacity-90 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-300">
@@ -1846,7 +1846,7 @@
 
                             <!-- Mapping Container -->
                             <div class="relative z-10 p-6">
-                                <div class="w-full h-[800px] bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
+                                <div class="w-full bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
                                     <div id="ecosystem-mapping-container" class="w-full h-full"></div>
                                 </div>
 
@@ -2216,7 +2216,7 @@
                         }
 
                         const width = container.node().offsetWidth;
-                        const height = container.node().offsetHeight;
+                        const height = 800 > width ? width : 800;
 
                         console.log('Container dimensions:', width, 'x', height);
 
