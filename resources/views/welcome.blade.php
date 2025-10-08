@@ -337,31 +337,43 @@
                 const newDarkModeToggle = mobileDarkModeToggle.cloneNode(true);
                 mobileDarkModeToggle.parentNode.replaceChild(newDarkModeToggle, mobileDarkModeToggle);
                 
-                newDarkModeToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Dark mode toggle clicked');
-                    
-                    // Toggle dark mode
-                    document.documentElement.classList.toggle('dark');
-                    
-                    // Update theme text
+                // Function to update mobile theme text
+                function updateMobileThemeText() {
                     if (document.documentElement.classList.contains('dark')) {
                         mobileThemeText.textContent = 'Mode Terang';
                     } else {
                         mobileThemeText.textContent = 'Mode Gelap';
                     }
+                }
+                
+                newDarkModeToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile dark mode toggle clicked');
                     
-                    // Store preference
-                    localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+                    // Use same logic as desktop component
+                    const html = document.documentElement;
+                    const isDark = html.classList.contains('dark');
+                    html.classList.toggle('dark', !isDark);
+                    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                    localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+                    
+                    // Update mobile theme text
+                    updateMobileThemeText();
+                    
+                    // Dispatch custom event for theme change (same as desktop)
+                    document.dispatchEvent(new CustomEvent('themeChanged', {
+                        detail: { theme: isDark ? 'light' : 'dark' }
+                    }));
                 });
 
                 // Initialize theme text
-                if (document.documentElement.classList.contains('dark')) {
-                    mobileThemeText.textContent = 'Mode Terang';
-                } else {
-                    mobileThemeText.textContent = 'Mode Gelap';
-                }
+                updateMobileThemeText();
+                
+                // Listen for theme changes from desktop toggle
+                document.addEventListener('themeChanged', function(event) {
+                    updateMobileThemeText();
+                });
             }
         }
 

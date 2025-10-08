@@ -5,8 +5,8 @@
 
         <style>
             /* .market-selector {
-                                                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                                                        } */
+                                                                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                                                            } */
 
             .market-card {
                 transition: all 0.3s ease;
@@ -198,7 +198,7 @@
                                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586
-                                                                                                                                                               7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                                                                                                                   7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                                 Aktif
@@ -706,7 +706,7 @@
                     }
 
                     const width = container.node().offsetWidth;
-                        const height = 800 > width ? width : 800;
+                    const height = 800 > width ? width : 800;
 
                     console.log('Container dimensions:', width, 'x', height);
 
@@ -1330,8 +1330,8 @@
 
         <style>
             /* .market-selector {
-                                                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                                                        } */
+                                                                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                                                            } */
 
             .market-card {
                 transition: all 0.3s ease;
@@ -1389,7 +1389,7 @@
         <script>
             function initializeMobileMenu() {
                 console.log('Initializing mobile menu...');
-                
+
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
                 const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
@@ -1407,7 +1407,7 @@
                     // Remove existing event listeners
                     const newButton = mobileMenuButton.cloneNode(true);
                     mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
-                    
+
                     // Add new event listener
                     newButton.addEventListener('click', function(e) {
                         e.preventDefault();
@@ -1430,31 +1430,43 @@
                     const newDarkModeToggle = mobileDarkModeToggle.cloneNode(true);
                     mobileDarkModeToggle.parentNode.replaceChild(newDarkModeToggle, mobileDarkModeToggle);
                     
-                    newDarkModeToggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Dark mode toggle clicked');
-                        
-                        // Toggle dark mode
-                        document.documentElement.classList.toggle('dark');
-                        
-                        // Update theme text
+                    // Function to update mobile theme text
+                    function updateMobileThemeText() {
                         if (document.documentElement.classList.contains('dark')) {
                             mobileThemeText.textContent = 'Mode Terang';
                         } else {
                             mobileThemeText.textContent = 'Mode Gelap';
                         }
+                    }
+                    
+                    newDarkModeToggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Mobile dark mode toggle clicked');
                         
-                        // Store preference
-                        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+                        // Use same logic as desktop component
+                        const html = document.documentElement;
+                        const isDark = html.classList.contains('dark');
+                        html.classList.toggle('dark', !isDark);
+                        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                        localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+                        
+                        // Update mobile theme text
+                        updateMobileThemeText();
+                        
+                        // Dispatch custom event for theme change (same as desktop)
+                        document.dispatchEvent(new CustomEvent('themeChanged', {
+                            detail: { theme: isDark ? 'light' : 'dark' }
+                        }));
                     });
 
                     // Initialize theme text
-                    if (document.documentElement.classList.contains('dark')) {
-                        mobileThemeText.textContent = 'Mode Terang';
-                    } else {
-                        mobileThemeText.textContent = 'Mode Gelap';
-                    }
+                    updateMobileThemeText();
+                    
+                    // Listen for theme changes from desktop toggle
+                    document.addEventListener('themeChanged', function(event) {
+                        updateMobileThemeText();
+                    });
                 }
             }
 
@@ -1478,12 +1490,12 @@
                 console.log('Livewire load - initializing mobile menu');
                 initializeMobileMenu();
             });
-            
+
             document.addEventListener('livewire:update', function() {
                 console.log('Livewire update - reinitializing mobile menu');
                 setTimeout(initializeMobileMenu, 200);
             });
-            
+
             document.addEventListener('livewire:updated', function() {
                 console.log('Livewire updated - reinitializing mobile menu');
                 setTimeout(initializeMobileMenu, 300);
@@ -1506,7 +1518,7 @@
                         <img src="{{ Storage::url('web/pasar-kolaboraya-logo-2025.webp') }}" alt="logo"
                             class="h-8 sm:h-10">
                     </a>
-                    
+
                     <!-- Desktop Navigation -->
                     <div class="hidden md:flex items-center space-x-4">
                         <!-- Dark Mode Toggle -->
@@ -1531,23 +1543,29 @@
 
                     <!-- Mobile Menu Button -->
                     <div class="md:hidden">
-                        <button id="mobile-menu-button" class="p-2 rounded-lg bg-white/10 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700 hover:bg-white/20 dark:hover:bg-slate-700/50 transition">
-                            <svg class="w-6 h-6 text-navy dark:text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <button id="mobile-menu-button"
+                            class="p-2 rounded-lg bg-white/10 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700 hover:bg-white/20 dark:hover:bg-slate-700/50 transition">
+                            <svg class="w-6 h-6 text-navy dark:text-slate-200" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
                     </div>
                 </div>
 
                 <!-- Mobile Dropdown Menu -->
-                <div id="mobile-menu" class="md:hidden absolute top-full left-0 right-0 mt-2 mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200 dark:border-slate-700 opacity-0 invisible transform translate-y-2 transition-all duration-200">
+                <div id="mobile-menu"
+                    class="md:hidden absolute top-full left-0 right-0 mt-2 mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200 dark:border-slate-700 opacity-0 invisible transform translate-y-2 transition-all duration-200">
                     <div class="p-4 space-y-3">
                         @if (Route::has('login'))
                             @auth
                                 <a href="{{ url('/dashboard') }}"
                                     class="flex items-center w-full px-4 py-3 bg-navy dark:bg-secondary-green text-white rounded-lg hover:bg-sky-700 dark:hover:bg-teal-600 transition">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                        </path>
                                     </svg>
                                     Beranda
                                 </a>
@@ -1555,7 +1573,9 @@
                                 <a href="{{ route('login') }}"
                                     class="flex items-center w-full px-4 py-3 text-navy dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                        </path>
                                     </svg>
                                     Masuk
                                 </a>
@@ -1563,22 +1583,31 @@
                                     <a href="{{ route('register') }}"
                                         class="flex items-center w-full px-4 py-3 bg-navy dark:bg-secondary-green text-white rounded-lg hover:bg-sky-700 dark:hover:bg-teal-600 transition">
                                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                                            </path>
                                         </svg>
                                         Daftar
                                     </a>
                                 @endif
                             @endauth
                         @endif
-                        
+
                         <!-- Dark Mode Toggle for Mobile -->
                         <div class="pt-3 border-t border-gray-200 dark:border-slate-700">
-                            <button id="mobile-dark-mode-toggle" class="flex items-center w-full px-4 py-3 text-navy dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition">
-                                <svg id="mobile-sun-icon" class="w-5 h-5 mr-3 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            <button id="mobile-dark-mode-toggle"
+                                class="flex items-center w-full px-4 py-3 text-navy dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition">
+                                <svg id="mobile-sun-icon" class="w-5 h-5 mr-3 hidden dark:block" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                                    </path>
                                 </svg>
-                                <svg id="mobile-moon-icon" class="w-5 h-5 mr-3 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                                <svg id="mobile-moon-icon" class="w-5 h-5 mr-3 block dark:hidden" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                                    </path>
                                 </svg>
                                 <span id="mobile-theme-text">Ganti Tema</span>
                             </button>
@@ -1766,7 +1795,7 @@
                                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
                                                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586
-                                                                                                                                                               7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                                                                                                                   7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
                                                     Aktif
