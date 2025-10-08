@@ -71,7 +71,7 @@
         <div class="mb-8">
             @if($completionPercentage >= 100)
                 <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-2xl">
-                    <div class="w-12 h-12 bg-secondary-green rounded-full flex items-center justify-center mr-4">
+                    <div class="w-12 min-w-12 h-12 bg-secondary-green rounded-full flex items-center justify-center mr-4">
                         <flux:icon.rocket-launch class="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -81,7 +81,7 @@
                 </div>
             @elseif($completionPercentage >= 70)
                 <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700 rounded-2xl">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mr-4">
+                    <div class="w-12 min-w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mr-4">
                         <flux:icon.sparkles class="h-7 w-7 text-white" />
                     </div>
                     <div>
@@ -91,7 +91,7 @@
                 </div>
             @elseif($completionPercentage >= 40)
                 <div class="flex items-center p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mr-4">
+                    <div class="w-12 min-w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mr-4">
                         <flux:icon.clock class="h-7 w-7 text-white" />
                     </div>
                     <div>
@@ -101,7 +101,7 @@
                 </div>
             @else
                 <div class="flex items-center p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-700 rounded-2xl">
-                    <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-500 rounded-full flex items-center justify-center mr-4">
+                    <div class="w-12 min-w-12 h-12 bg-gradient-to-br from-red-400 to-pink-500 rounded-full flex items-center justify-center mr-4">
                         <flux:icon.exclamation-triangle class="h-7 w-7 text-white" />
                     </div>
                     <div>
