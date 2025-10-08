@@ -223,7 +223,7 @@
 
             pollingInterval = setInterval(async () => {
                 try {
-                    const response = await fetch('{{ route('qr.status') }}', {
+                    const response = await fetch('{{ route("qr.status") }}', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

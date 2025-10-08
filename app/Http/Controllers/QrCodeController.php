@@ -116,14 +116,18 @@ class QrCodeController extends Controller
             ->select('pk.id as pasar_kolaboraya_id', 'pk.name as pasar_kolaboraya_name')
             ->first();
 
+        if ($pasar) {
+            return response()->json([
+                'success' => true,
+                'pasar_kolaboraya_name' => $pasar?->pasar_kolaboraya_name,
+                'pasar_kolaboraya_id' => $pasar?->pasar_kolaboraya_id,
+                'user_id' => $user->id,
+            ]);
+        }
         return response()->json([
-            'success' => true,
-            'pasar_kolaboraya_name' => $pasar?->pasar_kolaboraya_name,
-            'pasar_kolaboraya_id' => $pasar?->pasar_kolaboraya_id,
-            'user_id' => $user->id,
-        ]);
-
-
+            'success' => false,
+            'message' => 'Pasar Kolaboraya tidak ditemukan'
+        ], 404);
     }
 
     public function setPasar(Request $request)
