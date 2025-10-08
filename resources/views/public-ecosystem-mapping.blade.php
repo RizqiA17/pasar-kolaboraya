@@ -1387,31 +1387,54 @@
         </style>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            function initializeMobileMenu() {
+                console.log('Initializing mobile menu...');
+                
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
                 const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
-                const mobileSunIcon = document.getElementById('mobile-sun-icon');
-                const mobileMoonIcon = document.getElementById('mobile-moon-icon');
                 const mobileThemeText = document.getElementById('mobile-theme-text');
+
+                console.log('Elements found:', {
+                    mobileMenuButton: !!mobileMenuButton,
+                    mobileMenu: !!mobileMenu,
+                    mobileDarkModeToggle: !!mobileDarkModeToggle,
+                    mobileThemeText: !!mobileThemeText
+                });
 
                 // Toggle mobile menu
                 if (mobileMenuButton && mobileMenu) {
-                    mobileMenuButton.addEventListener('click', function() {
+                    // Remove existing event listeners
+                    const newButton = mobileMenuButton.cloneNode(true);
+                    mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
+                    
+                    // Add new event listener
+                    newButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Mobile menu button clicked');
                         mobileMenu.classList.toggle('mobile-menu-open');
                     });
 
                     // Close menu when clicking outside
                     document.addEventListener('click', function(event) {
-                        if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                        if (!newButton.contains(event.target) && !mobileMenu.contains(event.target)) {
                             mobileMenu.classList.remove('mobile-menu-open');
                         }
                     });
                 }
 
                 // Mobile dark mode toggle
-                if (mobileDarkModeToggle) {
-                    mobileDarkModeToggle.addEventListener('click', function() {
+                if (mobileDarkModeToggle && mobileThemeText) {
+                    // Remove existing event listeners
+                    const newDarkModeToggle = mobileDarkModeToggle.cloneNode(true);
+                    mobileDarkModeToggle.parentNode.replaceChild(newDarkModeToggle, mobileDarkModeToggle);
+                    
+                    newDarkModeToggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Dark mode toggle clicked');
+                        
                         // Toggle dark mode
                         document.documentElement.classList.toggle('dark');
                         
@@ -1433,7 +1456,44 @@
                         mobileThemeText.textContent = 'Mode Gelap';
                     }
                 }
+            }
+
+            // Initialize immediately
+            initializeMobileMenu();
+
+            // Initialize on DOM ready
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM Content Loaded - initializing mobile menu');
+                initializeMobileMenu();
             });
+
+            // Re-initialize after Livewire navigation
+            document.addEventListener('livewire:navigated', function() {
+                console.log('Livewire navigated - reinitializing mobile menu');
+                setTimeout(initializeMobileMenu, 100);
+            });
+
+            // Also listen for other Livewire events
+            document.addEventListener('livewire:load', function() {
+                console.log('Livewire load - initializing mobile menu');
+                initializeMobileMenu();
+            });
+            
+            document.addEventListener('livewire:update', function() {
+                console.log('Livewire update - reinitializing mobile menu');
+                setTimeout(initializeMobileMenu, 200);
+            });
+            
+            document.addEventListener('livewire:updated', function() {
+                console.log('Livewire updated - reinitializing mobile menu');
+                setTimeout(initializeMobileMenu, 300);
+            });
+
+            // Force initialization after a delay to ensure everything is loaded
+            setTimeout(function() {
+                console.log('Force initialization after delay');
+                initializeMobileMenu();
+            }, 1000);
         </script>
     </head>
 
