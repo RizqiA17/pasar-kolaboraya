@@ -50,8 +50,16 @@ class AdminController extends Controller
         ];
 
         $recentUsers = User::with('profile')->latest()->take(5)->get();
-        $recentEcosystems = Ecosystem::with('creator')->latest()->take(5)->get();
-        $recentCollectiveActions = CollectiveAction::with('creator')->latest()->take(5)->get();
+        $recentEcosystems = Ecosystem::with(['creator' => function($query) {
+            $query->withoutTrashed();
+        }])->whereHas('creator', function($query) {
+            $query->withoutTrashed();
+        })->latest()->take(5)->get();
+        $recentCollectiveActions = CollectiveAction::with(['creator' => function($query) {
+            $query->withoutTrashed();
+        }])->whereHas('creator', function($query) {
+            $query->withoutTrashed();
+        })->latest()->take(5)->get();
 
         return view('admin.dashboard', compact('stats', 'recentUsers', 'recentEcosystems', 'recentCollectiveActions'));
     }
@@ -118,7 +126,19 @@ class AdminController extends Controller
             return redirect()->route('admin.users')->with('error', 'User not found.');
         }
         
-        $user->load(['profile', 'sentConnections', 'receivedConnections', 'collaborations', 'events']);
+        $user->load(['profile', 'sentConnections' => function($query) {
+            $query->with(['receiver' => function($subQuery) {
+                $subQuery->withoutTrashed();
+            }])->whereHas('receiver', function($subQuery) {
+                $subQuery->withoutTrashed();
+            });
+        }, 'receivedConnections' => function($query) {
+            $query->with(['requester' => function($subQuery) {
+                $subQuery->withoutTrashed();
+            }])->whereHas('requester', function($subQuery) {
+                $subQuery->withoutTrashed();
+            });
+        }, 'collaborations', 'events']);
         return view('admin.users.show', compact('user'));
     }
 
@@ -185,7 +205,25 @@ class AdminController extends Controller
      */
     public function marketAnalysis(Request $request)
     {
-        $query = PasarKolaboraya::with(['creator', 'acceptedUsers', 'ecosystems', 'collectiveActions']);
+        $query = PasarKolaboraya::with(['creator' => function($query) {
+            $query->withoutTrashed();
+        }, 'acceptedUsers' => function($query) {
+            $query->withoutTrashed();
+        }, 'ecosystems' => function($query) {
+            $query->with(['creator' => function($subQuery) {
+                $subQuery->withoutTrashed();
+            }])->whereHas('creator', function($subQuery) {
+                $subQuery->withoutTrashed();
+            });
+        }, 'collectiveActions' => function($query) {
+            $query->with(['creator' => function($subQuery) {
+                $subQuery->withoutTrashed();
+            }])->whereHas('creator', function($subQuery) {
+                $subQuery->withoutTrashed();
+            });
+        }])->whereHas('creator', function($query) {
+            $query->withoutTrashed();
+        });
 
         if ($request->has('search') && $request->search) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -214,11 +252,33 @@ class AdminController extends Controller
     public function showMarketAnalysis(PasarKolaboraya $pasarKolaboraya)
     {
         $pasarKolaboraya->load([
-            'creator', 
-            'acceptedUsers.profile.skills', 
-            'ecosystems.creator', 
-            'collectiveActions.creator',
-            'pasarKolaborayaUsers.user.profile.skills'
+            'creator' => function($query) {
+                $query->withoutTrashed();
+            }, 
+            'acceptedUsers' => function($query) {
+                $query->withoutTrashed()->with(['profile.skills']);
+            }, 
+            'ecosystems' => function($query) {
+                $query->with(['creator' => function($subQuery) {
+                    $subQuery->withoutTrashed();
+                }])->whereHas('creator', function($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            }, 
+            'collectiveActions' => function($query) {
+                $query->with(['creator' => function($subQuery) {
+                    $subQuery->withoutTrashed();
+                }])->whereHas('creator', function($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            },
+            'pasarKolaborayaUsers' => function($query) {
+                $query->with(['user' => function($subQuery) {
+                    $subQuery->withoutTrashed()->with(['profile.skills']);
+                }])->whereHas('user', function($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            }
         ]);
 
         // Calculate health metrics
@@ -449,7 +509,11 @@ class AdminController extends Controller
      */
     public function ecosystems(Request $request)
     {
-        $query = Ecosystem::with('creator');
+        $query = Ecosystem::with(['creator' => function($query) {
+            $query->withoutTrashed();
+        }])->whereHas('creator', function($query) {
+            $query->withoutTrashed();
+        });
 
         if ($request->has('search') && $request->search) {
             $query->where('ecosystem_title', 'like', '%' . $request->search . '%');
@@ -485,7 +549,11 @@ class AdminController extends Controller
      */
     public function showEcosystem(Ecosystem $ecosystem)
     {
-        $ecosystem->load(['creator', 'users']);
+        $ecosystem->load(['creator' => function($query) {
+            $query->withoutTrashed();
+        }, 'users' => function($query) {
+            $query->withoutTrashed();
+        }]);
         return view('admin.ecosystems.show', compact('ecosystem'));
     }
 
@@ -503,7 +571,11 @@ class AdminController extends Controller
      */
     public function collectiveActions(Request $request)
     {
-        $query = CollectiveAction::with('creator');
+        $query = CollectiveAction::with(['creator' => function($query) {
+            $query->withoutTrashed();
+        }])->whereHas('creator', function($query) {
+            $query->withoutTrashed();
+        });
 
         if ($request->has('search') && $request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
@@ -535,7 +607,17 @@ class AdminController extends Controller
      */
     public function showCollectiveAction(CollectiveAction $collectiveAction)
     {
-        $collectiveAction->load(['creator', 'contributors', 'participatingEcosystems']);
+        $collectiveAction->load(['creator' => function($query) {
+            $query->withoutTrashed();
+        }, 'contributors' => function($query) {
+            $query->withoutTrashed();
+        }, 'participatingEcosystems' => function($query) {
+            $query->with(['creator' => function($subQuery) {
+                $subQuery->withoutTrashed();
+            }])->whereHas('creator', function($subQuery) {
+                $subQuery->withoutTrashed();
+            });
+        }]);
         return view('admin.collective-actions.show', compact('collectiveAction'));
     }
 
@@ -553,7 +635,15 @@ class AdminController extends Controller
      */
     public function connections(Request $request)
     {
-        $query = Connection::with(['requester', 'receiver']);
+        $query = Connection::with(['requester' => function($query) {
+            $query->withoutTrashed();
+        }, 'receiver' => function($query) {
+            $query->withoutTrashed();
+        }])->whereHas('requester', function($query) {
+            $query->withoutTrashed();
+        })->whereHas('receiver', function($query) {
+            $query->withoutTrashed();
+        });
 
         if ($request->has('status') && $request->status) {
             $query->where('status', $request->status);
@@ -586,7 +676,11 @@ class AdminController extends Controller
             return redirect()->route('admin.connections')->with('error', 'Connection not found.');
         }
         
-        $connection->load(['requester', 'receiver']);
+        $connection->load(['requester' => function($query) {
+            $query->withoutTrashed();
+        }, 'receiver' => function($query) {
+            $query->withoutTrashed();
+        }]);
         return view('admin.connections.show', compact('connection'));
     }
 
