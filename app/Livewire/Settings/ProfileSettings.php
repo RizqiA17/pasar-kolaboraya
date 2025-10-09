@@ -9,6 +9,7 @@ use App\Models\Interest;
 use App\Models\Contribution;
 use App\Models\Peran;
 use Illuminate\Validation\Rule;
+use App\Rules\UniqueEmailForActiveUsers;
 use Livewire\Attributes\Layout;
 use App\Services\ProfileService;
 use Illuminate\Support\Facades\Log;
@@ -148,7 +149,7 @@ class ProfileSettings extends Component
                 'string',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore(auth()->id()),
+                new UniqueEmailForActiveUsers(auth()->id()),
             ],
             'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
             'organization' => ['nullable', 'string', 'max:255'],

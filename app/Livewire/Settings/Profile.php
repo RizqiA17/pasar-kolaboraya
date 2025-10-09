@@ -7,6 +7,7 @@ use App\Models\Profile as ProfileModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
+use App\Rules\UniqueEmailForActiveUsers;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -70,7 +71,7 @@ class Profile extends Component
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($user->id),
+                new UniqueEmailForActiveUsers($user->id),
             ],
             'organization' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
