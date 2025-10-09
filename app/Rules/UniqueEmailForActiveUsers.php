@@ -29,7 +29,7 @@ class UniqueEmailForActiveUsers implements ValidationRule
         }
         
         if ($query->exists()) {
-            $fail('The :attribute has already been taken.');
+            $fail(':attribute sudah terdaftar.');
         }
     }
 }
