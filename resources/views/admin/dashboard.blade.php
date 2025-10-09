@@ -229,7 +229,7 @@
             </div>
 
             <!-- Recent Ecosystems -->
-            {{-- <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                 <div class="flex items-center justify-between mb-3 sm:mb-4">
                     <h3 class="text-base sm:text-lg font-semibold text-purple-600 dark:text-purple-400">Ekosistem Terbaru</h3>
                     <a href="{{ route('admin.ecosystems') }}" class="text-xs sm:text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">Lihat semua</a>
@@ -254,7 +254,7 @@
                         <p class="text-sm text-gray-600 dark:text-slate-300">Tidak ada ekosistem ditemukan.</p>
                     @endforelse
                 </div>
-            </div> --}}
+            </div>
 
             <!-- Recent Collective Actions -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">

@@ -42,7 +42,7 @@ class AdminController extends Controller
             'interests' => Interest::count(),
             'skills' => Skill::count(),
             'contributions' => Contribution::count(),
-            'event_categories' => EventCategory::count(),
+            'event_categories' => EventCategory::count(),   
             'peran' => Peran::count(),
             'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
             'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
