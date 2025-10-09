@@ -51,7 +51,6 @@ class AdminController extends Controller
 
         $recentUsers = User::with('profile')->latest()->take(5)->get();
         $recentEcosystems = Ecosystem::with('creator')->latest()->take(5)->get();
-        dd($recentEcosystems);
         $recentCollectiveActions = CollectiveAction::with('creator')->latest()->take(5)->get();
 
         return view('admin.dashboard', compact('stats', 'recentUsers', 'recentEcosystems', 'recentCollectiveActions'));
