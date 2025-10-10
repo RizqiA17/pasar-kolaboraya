@@ -8,7 +8,7 @@
                     {{ $tab === 'qr-scan'
                         ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
                         : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
-                Scan QR
+                Kode
             </button>
 
             <button wire:click="setTab('list')"
