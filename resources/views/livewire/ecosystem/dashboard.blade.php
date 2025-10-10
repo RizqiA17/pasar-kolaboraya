@@ -166,7 +166,7 @@
                                 : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         Ringkasan
                     </button>
-                    @if ($isOwner || $isEcosystemBuilder)
+                    {{-- @if ($isOwner || $isEcosystemBuilder)
                         <button wire:click="setActiveTab('members')"
                             class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
                                 {{ $activeTab === 'members'
@@ -195,7 +195,7 @@
                                 </span>
                             </button>
                         @endif
-                    @endif
+                    @endif --}}
                     <button wire:click="setActiveTab('quality')"
                         class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
                             {{ $activeTab === 'quality'
@@ -210,7 +210,7 @@
                                 : 'text-neutral-600 hover:text-sky-600 dark:text-neutral-300 dark:hover:text-secondary-green' }}">
                         Aksi Kolektif
                     </button>
-                    <button wire:click="setActiveTab('contributions')"
+                    {{-- <button wire:click="setActiveTab('contributions')"
                         class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
                             {{ $activeTab === 'contributions'
                                 ? 'border-b-2 border-sky-500 text-sky-600 dark:border-secondary-green dark:text-secondary-green'
@@ -222,7 +222,7 @@
                                     class="ml-1 sm:ml-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 py-0.5 px-1.5 sm:py-1 sm:px-2 rounded-full text-xs">{{ $pendingContributions->count() }}</span>
                             @endif
                         </span>
-                    </button>
+                    </button> --}}
                 </nav>
             </div>
         </div>
@@ -473,6 +473,255 @@
                             </div>
                         </div>
                     </div> --}}
+                </div>
+
+                <!-- Pending Requests Section - Owner Only -->
+                @if ($pendingRequests->count() > 0 && $isOwner)
+                    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 sm:p-6 mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h3 class="text-base sm:text-lg font-semibold text-amber-800 dark:text-amber-200">
+                                Permintaan Bergabung ({{ $pendingRequests->count() }})
+                            </h3>
+                        </div>
+                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
+                            @foreach ($pendingRequests->take(5) as $request)
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700 rounded-lg space-y-3 sm:space-y-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 sm:ml-4">
+                                        <button wire:click="acceptMember({{ $request->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                            Terima
+                                        </button>
+                                        <button wire:click="rejectMember({{ $request->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                            Tolak
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                            @if ($pendingRequests->count() > 5)
+                                <div class="text-center py-2">
+                                    <p class="text-sm text-amber-600 dark:text-amber-400">
+                                        Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Pending Contributions Section - Owner Only -->
+                @if ($pendingContributions->count() > 0 && $isOwner)
+                    <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 sm:p-6 mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h3 class="text-base sm:text-lg font-semibold text-orange-800 dark:text-orange-200">
+                                Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})
+                            </h3>
+                        </div>
+                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
+                            @foreach ($pendingContributions->take(5) as $contribution)
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-orange-900/10 border border-orange-200 dark:border-orange-700 rounded-lg space-y-3 sm:space-y-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $contribution->user->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $contribution->contribution_type_label }}</p>
+                                            @if ($contribution->contribution_amount)
+                                                <p class="text-xs text-gray-500 dark:text-gray-500">
+                                                    Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 sm:ml-4">
+                                        <button wire:click="acceptContribution({{ $contribution->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                            Terima
+                                        </button>
+                                        <button wire:click="rejectContribution({{ $contribution->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                            Tolak
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                            @if ($pendingContributions->count() > 5)
+                                <div class="text-center py-2">
+                                    <p class="text-sm text-orange-600 dark:text-orange-400">
+                                        Dan {{ $pendingContributions->count() - 5 }} kontribusi lainnya...
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Members and Contributions Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Members Section -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
+                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                {{ $acceptedMembers->count() }} anggota aktif
+                            </span>
+                        </div>
+
+                        @if ($acceptedMembers->count() > 0)
+                            <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
+                                @foreach ($acceptedMembers->take(10) as $member)
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
+                                                    {{ substr($member->name, 0, 1) }}
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $member->name }}
+                                                </h3>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $member->email }}</p>
+                                                @if ($member->pivot->joined_at)
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                                                        Bergabung: {{ Carbon\Carbon::parse($member->pivot->joined_at)->format('d M Y') }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between sm:justify-end space-x-2 sm:ml-4">
+                                            <span
+                                                class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
+                                                Aktif
+                                            </span>
+                                            @if ($isOwner)
+                                                <button wire:click="removeMember({{ $member->id }})"
+                                                    onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
+                                                    class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
+                                                    Keluarkan
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if ($acceptedMembers->count() > 10)
+                                    <div class="text-center py-2">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            Dan {{ $acceptedMembers->count() - 10 }} anggota lainnya...
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="text-center py-6">
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Belum ada anggota</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Contributions Section -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontribusi Terbaru</h2>
+                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                {{ $contributions->count() }} total kontribusi
+                            </span>
+                        </div>
+
+                        @if ($contributions->count() > 0)
+                            <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
+                                @foreach ($contributions->take(10) as $contribution)
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
+                                                    {{ substr($contribution->user->name, 0, 1) }}
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                                    {{ $contribution->user->name }}
+                                                </h3>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                                    {{ $contribution->contribution_type_label }}
+                                                </p>
+                                                @if ($contribution->contribution_amount)
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                                                        Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                    </p>
+                                                @endif
+                                                <p class="text-xs text-gray-500 dark:text-gray-500">
+                                                    {{ $contribution->created_at->format('d M Y') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 sm:ml-4">
+                                            @if ($contribution->status === 'accepted')
+                                                <span
+                                                    class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs text-center">
+                                                    Diterima
+                                                </span>
+                                            @elseif ($contribution->status === 'offered')
+                                                <span
+                                                    class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs text-center">
+                                                    Ditawarkan
+                                                </span>
+                                            @elseif ($contribution->status === 'declined')
+                                                <span
+                                                    class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-xs text-center">
+                                                    Ditolak
+                                                </span>
+                                            @elseif ($contribution->status === 'completed')
+                                                <span
+                                                    class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs text-center">
+                                                    Selesai
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-xs text-center">
+                                                    {{ $contribution->status_label }}
+                                                </span>
+                                            @endif
+                                            @if ($isOwner && $contribution->status === 'offered')
+                                                <div class="flex space-x-2">
+                                                    <button wire:click="acceptContribution({{ $contribution->id }})"
+                                                        class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                                        Terima
+                                                    </button>
+                                                    <button wire:click="rejectContribution({{ $contribution->id }})"
+                                                        class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                                        Tolak
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if ($contributions->count() > 10)
+                                    <div class="text-center py-2">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            Dan {{ $contributions->count() - 10 }} kontribusi lainnya...
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="text-center py-6">
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Belum ada kontribusi</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             @endif
 
