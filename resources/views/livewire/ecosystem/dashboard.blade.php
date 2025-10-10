@@ -505,7 +505,7 @@
                             </div>
                             <div class="divide-y divide-amber-200 dark:divide-amber-800">
                                 @foreach ($pendingRequests as $request)
-                                    <div class="p-6 flex items-start justify-between">
+                                    <div class="p-6 gap-4 flex flex-wrap items-start justify-between">
                                         <div class="flex items-start space-x-4">
                                             <div
                                                 class="w-12 h-12 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
