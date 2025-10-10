@@ -213,16 +213,30 @@
                                     Profil</label>
                                 <div class="flex items-center space-x-6">
                                     <div class="flex-shrink-0">
-                                        <x-ui.avatar :user="auth()->user()" size="xl" />
+                                        @if($tempProfilePhoto)
+                                            <div class="relative">
+                                                <img src="{{ $tempProfilePhoto->temporaryUrl() }}" alt="Preview" 
+                                                     class="w-24 h-24 rounded-full object-cover border-4 border-blue-200 dark:border-blue-800">
+                                                <button type="button" wire:click="resetTempProfilePhoto"
+                                                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <x-ui.avatar :user="auth()->user()" size="xl" />
+                                        @endif
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-center space-x-3">
-                                            <input type="file" wire:model="profilePhoto" id="profilePhoto"
+                                            <input type="file" wire:model="tempProfilePhoto" id="profilePhoto"
                                                 accept="image/*"
                                                 onchange="validateFileSize(this, 2, 'profilePhoto')"
                                                 class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                             <button type="button" wire:click="updateProfilePhoto"
                                                 wire:loading.attr="disabled"
+                                                @if(!$this->canUploadProfilePhoto) disabled @endif
                                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed">
                                                 <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -242,6 +256,23 @@
                                                 Upload
                                             </button>
                                         </div>
+                                        @if($tempProfilePhoto)
+                                            @if($this->canUploadProfilePhoto)
+                                                <p class="mt-2 text-sm text-green-600 dark:text-green-400">
+                                                    <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    File siap diupload
+                                                </p>
+                                            @else
+                                                <p class="mt-2 text-sm text-amber-600 dark:text-amber-400">
+                                                    <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                                    </svg>
+                                                    Simpan perubahan data terlebih dahulu
+                                                </p>
+                                            @endif
+                                        @endif
                                         <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG,
                                             GIF. Maksimal 2MB.</p>
                                         <div id="profilePhoto-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
@@ -257,12 +288,26 @@
                                 <label
                                     class="block text-sm font-medium text-gray-900 dark:text-slate-100">Banner</label>
                                 <div class="space-y-4">
-                                    <x-ui.banner :user="auth()->user()" height="h-32" />
+                                    @if($tempBanner)
+                                        <div class="relative">
+                                            <img src="{{ $tempBanner->temporaryUrl() }}" alt="Banner Preview" 
+                                                 class="w-full h-32 object-cover rounded-lg border-4 border-blue-200 dark:border-blue-800">
+                                            <button type="button" wire:click="resetTempBanner"
+                                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @else
+                                        <x-ui.banner :user="auth()->user()" height="h-32" />
+                                    @endif
                                     <div class="flex items-center space-x-3">
-                                        <input type="file" wire:model="banner" id="banner" accept="image/*"
+                                        <input type="file" wire:model="tempBanner" id="banner" accept="image/*"
                                             onchange="validateFileSize(this, 5, 'banner')"
                                             class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                         <button type="button" wire:click="updateBanner" wire:loading.attr="disabled"
+                                            @if(!$this->canUploadBanner) disabled @endif
                                             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <svg wire:loading.remove class="mr-2 h-4 w-4" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -281,6 +326,23 @@
                                             Upload
                                         </button>
                                     </div>
+                                    @if($tempBanner)
+                                        @if($this->canUploadBanner)
+                                            <p class="text-sm text-green-600 dark:text-green-400">
+                                                <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                File siap diupload
+                                            </p>
+                                        @else
+                                            <p class="text-sm text-amber-600 dark:text-amber-400">
+                                                <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                                </svg>
+                                                Simpan perubahan data terlebih dahulu
+                                            </p>
+                                        @endif
+                                    @endif
                                     <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF.
                                         Maksimal 5MB.</p>
                                     <div id="banner-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
@@ -1749,7 +1811,7 @@
     function validateFileSize(input, maxSizeMB, fieldName) {
         const file = input.files[0];
         const errorElement = document.getElementById(fieldName + '-error');
-        const uploadButton = input.parentElement.querySelector('button[wire\\:click]');
+        const uploadButton = input.parentElement.querySelector('button[type="submit"]');
         
         // Clear previous errors
         if (errorElement) {
@@ -1787,4 +1849,31 @@
         
         return true;
     }
+
+    // Clear form after successful upload
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('profile-updated', () => {
+            // Clear file inputs after successful upload
+            const profilePhotoInput = document.getElementById('profilePhoto');
+            const bannerInput = document.getElementById('banner');
+            
+            if (profilePhotoInput) {
+                profilePhotoInput.value = '';
+                const profilePhotoError = document.getElementById('profilePhoto-error');
+                if (profilePhotoError) {
+                    profilePhotoError.classList.add('hidden');
+                    profilePhotoError.textContent = '';
+                }
+            }
+            
+            if (bannerInput) {
+                bannerInput.value = '';
+                const bannerError = document.getElementById('banner-error');
+                if (bannerError) {
+                    bannerError.classList.add('hidden');
+                    bannerError.textContent = '';
+                }
+            }
+        });
+    });
 </script>

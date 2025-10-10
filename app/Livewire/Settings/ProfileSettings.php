@@ -15,11 +15,12 @@ use App\Services\ProfileService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 #[Layout('components.layouts.app', ['title' => 'Profile Settings'])]
 class ProfileSettings extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, AuthorizesRequests;
 
     // Profile Information Properties
     public string $name = '';
@@ -34,9 +35,17 @@ class ProfileSettings extends Component
     public $socialMediaItems = [];
     public $showPlatformModal = false;
 
-    // Image Properties
-    public $profilePhoto;
-    public $banner;
+    // Temporary file properties for upload
+    public $tempProfilePhoto;
+    public $tempBanner;
+    
+    // Track if temporary files have changed
+    public $hasTempProfilePhoto = false;
+    public $hasTempBanner = false;
+    public $isProcessing = false;
+    
+    // Track if data has changed to disable upload buttons
+    public $hasDataChanged = false;
 
     // Existing Properties
     public $tab = 'profile';
@@ -70,8 +79,7 @@ class ProfileSettings extends Component
         'organization' => ['nullable', 'string', 'max:255'],
         'phone' => ['nullable', 'string', 'max:255'],
         'vision' => ['nullable', 'string'],
-        'profilePhoto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-        'banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+        // File validation now handled in individual methods
         'newContribution.contribution_id' => 'required|exists:contributions,id',
         'newContribution.description' => 'required|string|max:500',
         'newContribution.date' => 'required|date|before_or_equal:today',
@@ -87,14 +95,7 @@ class ProfileSettings extends Component
         'gender.in' => 'Pilihan jenis kelamin tidak valid',
         'organization.max' => 'Organisasi maksimal 255 karakter',
         'phone.max' => 'Nomor telepon maksimal 255 karakter',
-        'profilePhoto.required' => 'Foto profil wajib dipilih',
-        'profilePhoto.image' => 'File harus berupa gambar',
-        'profilePhoto.mimes' => 'Format gambar harus JPG, PNG, atau GIF',
-        'profilePhoto.max' => 'Ukuran gambar maksimal 2MB',
-        'banner.required' => 'Banner wajib dipilih',
-        'banner.image' => 'File harus berupa gambar',
-        'banner.mimes' => 'Format gambar harus JPG, PNG, atau GIF',
-        'banner.max' => 'Ukuran gambar maksimal 5MB',
+        // File validation messages now handled in individual methods
         'newContribution.contribution_id.required' => 'Pilih jenis kontribusi',
         'newContribution.contribution_id.exists' => 'Jenis kontribusi tidak valid',
         'newContribution.description.required' => 'Deskripsi kontribusi wajib diisi',
@@ -114,7 +115,7 @@ class ProfileSettings extends Component
 
         // Get or create user profile
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $profile = $user->profile;
         if (!$profile) {
             $profile = $user->profile()->create();
@@ -140,6 +141,135 @@ class ProfileSettings extends Component
         $this->loadInterestLevels($profile);
     }
 
+    // Helper method to get authenticated user
+    private function getUser(): User
+    {
+        return Auth::user();
+    }
+
+    // Computed properties for upload button states
+    public function getCanUploadProfilePhotoProperty()
+    {
+        return $this->hasTempProfilePhoto && !$this->isProcessing && !$this->hasDataChanged;
+    }
+
+    public function getCanUploadBannerProperty()
+    {
+        return $this->hasTempBanner && !$this->isProcessing && !$this->hasDataChanged;
+    }
+
+    // Listen for temporary file changes
+    public function updatedTempProfilePhoto()
+    {
+        $this->hasTempProfilePhoto = !is_null($this->tempProfilePhoto);
+        $this->hasDataChanged = false; // Reset data change flag when file changes
+    }
+
+    public function updatedTempBanner()
+    {
+        $this->hasTempBanner = !is_null($this->tempBanner);
+        $this->hasDataChanged = false; // Reset data change flag when file changes
+    }
+
+    // Listen for data changes to disable upload buttons
+    public function updatedName()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedEmail()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedGender()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedOrganization()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedPhone()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedVision()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedSocialMediaItems()
+    {
+        $this->hasDataChanged = true;
+    }
+
+    // Method to reset temporary files
+    public function resetTempProfilePhoto()
+    {
+        $this->tempProfilePhoto = null;
+        $this->hasTempProfilePhoto = false;
+        $this->hasDataChanged = false;
+    }
+
+    public function resetTempBanner()
+    {
+        $this->tempBanner = null;
+        $this->hasTempBanner = false;
+        $this->hasDataChanged = false;
+    }
+
+    // Method to reset data change flag
+    public function resetDataChangeFlag()
+    {
+        $this->hasDataChanged = false;
+    }
+
+    // Method to reset all temporary data
+    public function resetAllTempData()
+    {
+        $this->tempProfilePhoto = null;
+        $this->tempBanner = null;
+        $this->hasTempProfilePhoto = false;
+        $this->hasTempBanner = false;
+        $this->hasDataChanged = false;
+        $this->isProcessing = false;
+    }
+
+    // Method to check if upload is allowed
+    public function isUploadAllowed()
+    {
+        return !$this->isProcessing && !$this->hasDataChanged;
+    }
+
+    // Method to check if specific upload is allowed
+    public function isProfilePhotoUploadAllowed()
+    {
+        return $this->hasTempProfilePhoto && $this->isUploadAllowed();
+    }
+
+    public function isBannerUploadAllowed()
+    {
+        return $this->hasTempBanner && $this->isUploadAllowed();
+    }
+
+    // Method to get upload status message
+    public function getUploadStatusMessage()
+    {
+        if ($this->isProcessing) {
+            return 'Sedang memproses...';
+        }
+        
+        if ($this->hasDataChanged) {
+            return 'Simpan perubahan data terlebih dahulu';
+        }
+        
+        return 'File siap diupload';
+    }
+
     public function updateProfileInformation()
     {
         $this->validate([
@@ -149,7 +279,7 @@ class ProfileSettings extends Component
                 'string',
                 'email',
                 'max:255',
-                new UniqueEmailForActiveUsers(auth()->id()),
+                new UniqueEmailForActiveUsers($this->getUser()->id),
             ],
             'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
             'organization' => ['nullable', 'string', 'max:255'],
@@ -161,7 +291,7 @@ class ProfileSettings extends Component
         ]);
 
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
 
         // Update user fields
         $user->fill([
@@ -188,9 +318,10 @@ class ProfileSettings extends Component
             // 'peran_id' => $this->selectedRole,
         ]);
 
+        $this->hasDataChanged = false;
         $this->dispatch('profile-updated');
         if ($user->email_verified_at == null) {
-            Auth::user()->sendEmailVerificationNotification();
+            $this->getUser()->sendEmailVerificationNotification();
             return redirect()->route('verification.notice');
         }
 
@@ -273,7 +404,7 @@ class ProfileSettings extends Component
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $success = $profileService->updateInterests($user, $this->selectedInterests, $this->customInterests);
 
         if ($success) {
@@ -296,14 +427,14 @@ class ProfileSettings extends Component
 
         // Add logging for debugging
         Log::info('Updating skills for user', [
-            'user_id' => auth()->id(),
+            'user_id' => $this->getUser()->id,
             'selected_skills' => $this->selectedSkills,
             'custom_skills' => $this->customSkills
         ]);
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $success = $profileService->updateSkills($user, $this->selectedSkills, $this->customSkills);
 
         if ($success) {
@@ -324,7 +455,7 @@ class ProfileSettings extends Component
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $isPrimary = $this->primarySkills[$skillId] ?? false;
         $success = $profileService->updateSkillLevel($user, $skillId, $level, $isPrimary);
 
@@ -344,7 +475,7 @@ class ProfileSettings extends Component
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $success = $profileService->updateInterestLevel($user, $interestId, $level);
 
         if ($success) {
@@ -387,7 +518,7 @@ class ProfileSettings extends Component
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $level = $this->skillLevels[$skillId] ?? 1;
         $success = $profileService->updateSkillLevel($user, $skillId, $level, $this->primarySkills[$skillId]);
 
@@ -405,7 +536,7 @@ class ProfileSettings extends Component
 
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $success = $profileService->addContribution($user, $this->newContribution);
 
         if ($success) {
@@ -426,7 +557,7 @@ class ProfileSettings extends Component
     {
         $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $success = $profileService->removeContribution($user, $contributionId);
 
         if ($success) {
@@ -439,45 +570,80 @@ class ProfileSettings extends Component
     public function setTab($tab)
     {
         $this->tab = $tab;
+        $this->hasDataChanged = false;
     }
 
     public function updateProfilePhoto()
     {
-        $this->validate([
-            'profilePhoto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-        ]);
+        try {
+            if (!$this->tempProfilePhoto) {
+                session()->flash('error', 'Tidak ada file yang dipilih.');
+                return;
+            }
 
-        $profileService = new ProfileService();
+            $this->isProcessing = true;
+
+            // Validate the file
+            $this->validate([
+                'tempProfilePhoto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            ]);
+
+            $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
-        $success = $profileService->updateProfilePhoto($user, $this->profilePhoto);
+        $user = $this->getUser();
+            $success = $profileService->updateProfilePhoto($user, $this->tempProfilePhoto);
 
-        if ($success) {
-            $this->profilePhoto = null;
-            $this->dispatch('profile-updated');
-            session()->flash('message', 'Foto profil berhasil diperbarui!');
-        } else {
-            session()->flash('error', 'Gagal memperbarui foto profil. Silakan coba lagi.');
+            if ($success) {
+                $this->tempProfilePhoto = null;
+                $this->hasTempProfilePhoto = false;
+                $this->hasDataChanged = false;
+                $this->dispatch('profile-updated');
+                session()->flash('message', 'Foto profil berhasil diperbarui!');
+            } else {
+                session()->flash('error', 'Gagal memperbarui foto profil. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Profile photo upload error: ' . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat mengupload foto profil. Silakan coba lagi.');
+        } finally {
+            $this->isProcessing = false;
         }
     }
 
     public function updateBanner()
     {
-        $this->validate([
-            'banner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
-        ]);
+        try {
+            if (!$this->tempBanner) {
+                session()->flash('error', 'Tidak ada file yang dipilih.');
+                return;
+            }
 
-        $profileService = new ProfileService();
+            $this->isProcessing = true;
+
+            // Validate the file
+            $this->validate([
+                'tempBanner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+            ]);
+
+            $profileService = new ProfileService();
         /** @var User $user */
-        $user = auth()->user();
-        $success = $profileService->updateBanner($user, $this->banner);
+        $user = $this->getUser();
+            $success = $profileService->updateBanner($user, $this->tempBanner);
 
-        if ($success) {
-            $this->banner = null;
-            $this->dispatch('profile-updated');
-            session()->flash('message', 'Banner berhasil diperbarui!');
-        } else {
-            session()->flash('error', 'Gagal memperbarui banner. Silakan coba lagi.');
+            if ($success) {
+                $this->tempBanner = null;
+                $this->hasTempBanner = false;
+                $this->hasDataChanged = false;
+                $this->dispatch('profile-updated');
+                session()->flash('message', 'Banner berhasil diperbarui!');
+            } else {
+                session()->flash('error', 'Gagal memperbarui banner. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Banner upload error: ' . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat mengupload banner. Silakan coba lagi.');
+        } finally {
+            $this->isProcessing = false;
         }
     }
 
@@ -608,7 +774,7 @@ class ProfileSettings extends Component
     public function render()
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = $this->getUser();
         $profile = $user->profile;
         if (!$profile) {
             $profile = $user->profile()->create();
