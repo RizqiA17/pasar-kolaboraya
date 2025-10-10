@@ -29,7 +29,7 @@
                 <div>
                     <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Anggota</p>
                     <p class="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
-                        {{ $users->where('status', 'accepted')->count() }}</p>
+                        {{ $totalMembers }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
@@ -46,7 +46,7 @@
                     <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Menunggu Persetujuan
                     </p>
                     <p class="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400">
-                        {{ $users->where('status', 'pending')->count() }}</p>
+                        {{ $totalPending }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl flex items-center justify-center">
@@ -62,7 +62,7 @@
                 <div>
                     <p class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Ditolak</p>
                     <p class="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400">
-                        {{ $users->where('status', 'rejected')->count() }}</p>
+                        {{ $totalRejected }}</p>
                 </div>
                 <div
                     class="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 dark:bg-red-900/20 rounded-xl flex items-center justify-center">
