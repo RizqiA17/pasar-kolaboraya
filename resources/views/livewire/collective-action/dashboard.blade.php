@@ -1259,7 +1259,7 @@
                     @foreach ($pendingContributions as $contribution)
                         <div
                             class="p-4 border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                            <div class="flex items-start justify-between">
+                            <div class="flex flex-wrap items-start justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex items-center mb-2">
                                         <div
