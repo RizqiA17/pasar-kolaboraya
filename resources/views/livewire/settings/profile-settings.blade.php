@@ -695,7 +695,7 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                                    {{ count($selectedInterests) }}</div>
+                                    {{ count($selectedInterests) + count($customInterests) }}</div>
                                 <div class="text-sm text-gray-600 dark:text-slate-400">Minat Dipilih</div>
                             </div>
                         </div>
@@ -716,7 +716,7 @@
                                     </div>
                                     <div>
                                         <div class="text-lg font-semibold text-gray-900 dark:text-slate-100">
-                                            {{ count($selectedInterests) }}</div>
+                                            {{ count($selectedInterests) ." + ". count($customInterests) }}</div>
                                         <div class="text-xs text-gray-600 dark:text-slate-400">Dipilih</div>
                                     </div>
                                 </div>
@@ -913,7 +913,7 @@
                             </div>
                             <span
                                 class="inline-flex min-w-fit items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-600/30">
-                                {{ count($selectedSkills) }} dipilih
+                                {{ count($selectedSkills) + count($customSkills) }} dipilih
                             </span>
                         </div>
                     </div>
