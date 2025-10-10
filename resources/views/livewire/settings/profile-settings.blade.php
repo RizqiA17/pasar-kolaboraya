@@ -219,6 +219,7 @@
                                         <div class="flex items-center space-x-3">
                                             <input type="file" wire:model="profilePhoto" id="profilePhoto"
                                                 accept="image/*"
+                                                onchange="validateFileSize(this, 2, 'profilePhoto')"
                                                 class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                             <button type="button" wire:click="updateProfilePhoto"
                                                 wire:loading.attr="disabled"
@@ -243,6 +244,7 @@
                                         </div>
                                         <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG,
                                             GIF. Maksimal 2MB.</p>
+                                        <div id="profilePhoto-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
                                         @error('profilePhoto')
                                             <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                         @enderror
@@ -258,6 +260,7 @@
                                     <x-ui.banner :user="auth()->user()" height="h-32" />
                                     <div class="flex items-center space-x-3">
                                         <input type="file" wire:model="banner" id="banner" accept="image/*"
+                                            onchange="validateFileSize(this, 5, 'banner')"
                                             class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                         <button type="button" wire:click="updateBanner" wire:loading.attr="disabled"
                                             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -280,6 +283,7 @@
                                     </div>
                                     <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF.
                                         Maksimal 5MB.</p>
+                                    <div id="banner-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
                                     @error('banner')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
@@ -1740,4 +1744,47 @@
             }
         });
     });
+
+    // File size validation function
+    function validateFileSize(input, maxSizeMB, fieldName) {
+        const file = input.files[0];
+        const errorElement = document.getElementById(fieldName + '-error');
+        const uploadButton = input.parentElement.querySelector('button[wire\\:click]');
+        
+        // Clear previous errors
+        if (errorElement) {
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+        }
+        
+        if (file) {
+            const fileSizeMB = file.size / (1024 * 1024);
+            
+            if (fileSizeMB > maxSizeMB) {
+                // Show error
+                if (errorElement) {
+                    errorElement.classList.remove('hidden');
+                    errorElement.textContent = `Ukuran file terlalu besar. Maksimal ${maxSizeMB}MB. File Anda: ${fileSizeMB.toFixed(2)}MB`;
+                }
+                
+                // Disable upload button
+                if (uploadButton) {
+                    uploadButton.disabled = true;
+                    uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                
+                // Clear the input
+                input.value = '';
+                return false;
+            } else {
+                // Enable upload button
+                if (uploadButton) {
+                    uploadButton.disabled = false;
+                    uploadButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        }
+        
+        return true;
+    }
 </script>
