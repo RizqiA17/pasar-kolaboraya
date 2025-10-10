@@ -121,7 +121,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
                     <div class="text-center w-full">
                         <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                            Scan Kode Koneksi
+                            Masukkan Kode Koneksi
                         </h2>
 
                         {{-- @if ($connectionStatus === 'connected')
@@ -145,7 +145,7 @@
                                         wire:keydown.enter="processScannedQr" placeholder="Paste Kode Koneksi di sini..."
                                         class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
                                     <flux:button variant="primary" wire:click="processScannedQr" class="">
-                                        Scan
+                                        Masukkan
                                     </flux:button>
                                 </div>
                             </div>
@@ -182,19 +182,52 @@
             <div
                 class="mt-6 sm:mt-8 bg-blue-50 dark:bg-green-900/20 border border-blue-200 dark:border-green-800/30 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
                 <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-secondary-green mb-2 sm:mb-3">
-                    Cara Menggunakan:
+                    Cara Menggunakan Koneksi QR:
                 </h3>
-                <ol
-                    class="list-decimal list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
-                    <li>User A meberikan Kode Koneksi mereka</li>
-                    <li>User B scan Kode Koneksi User A</li>
-                    <li>User B akan mendapat Kode Koneksi baru untuk ditunjukkan kepada User A</li>
-                    <li>User A scan Kode Koneksi User B</li>
-                    <li>Koneksi berhasil dibuat!</li>
-                </ol>
-                <p class="text-xs sm:text-sm text-blue-700 dark:text-teal-300 mt-2 sm:mt-3">
-                    <strong>Catatan:</strong> Kode Koneksi berlaku selama 5 menit dan akan otomatis diperbarui.
-                </p>
+                <div class="space-y-3 sm:space-y-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-blue-200 dark:border-blue-700">
+                        <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                            Langkah 1: Inisiator (User A)
+                        </h4>
+                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
+                            <li>Klik "Buat Kode Baru" untuk membuat Kode Koneksi</li>
+                            <li>Tunjukkan Kode Koneksi kepada User B untuk dimasukkan</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-green-200 dark:border-green-700">
+                        <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100 mb-2">
+                            Langkah 2: Responder (User B)
+                        </h4>
+                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-green-800 dark:text-green-100">
+                            <li>Masukkan Kode Koneksi User A ke dalam input field</li>
+                            <li>Sistem akan otomatis membuat Kode Response baru</li>
+                            <li>Tunjukkan Kode Response kepada User A untuk dimasukkan</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-purple-200 dark:border-purple-700">
+                        <h4 class="text-sm sm:text-base font-semibold text-purple-900 dark:text-purple-100 mb-2">
+                            Langkah 3: Penyelesaian (User A)
+                        </h4>
+                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-purple-800 dark:text-purple-100">
+                            <li>Masukkan Kode Response dari User B ke dalam input field</li>
+                            <li>Koneksi berhasil dibuat dan kedua user terhubung!</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                    <p class="text-xs sm:text-sm text-yellow-800 dark:text-yellow-200">
+                        <strong>💡 Tips Penting:</strong>
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-yellow-700 dark:text-yellow-300 mt-2">
+                        <li>Kode Koneksi berlaku selama 5 menit dan akan otomatis diperbarui</li>
+                        <li>Jika Kode tidak valid, tekan "Buat Kode Baru" untuk membuat Kode baru</li>
+                        <li>Anda tidak dapat memasukkan Kode Koneksi sendiri</li>
+                        <li>Jika sudah terhubung sebelumnya, sistem akan menampilkan status "sudah terhubung"</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
