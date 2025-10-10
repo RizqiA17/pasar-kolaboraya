@@ -445,6 +445,11 @@ class Dashboard extends Component
         $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
         $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->get();
         
+        // Get pending users (both pending and pending_approval)
+        $pendingUsers = $this->collectiveAction->pendingUsers()->with('profile')->get();
+        $pendingApprovalUsers = $this->collectiveAction->pendingApprovalUsers()->with('profile')->get();
+        $allPendingUsers = $pendingUsers->merge($pendingApprovalUsers);
+        
         // Get contributors from contributions table (users who have made contributions)
         $contributorUsers = $this->collectiveAction->contributions()
             ->with('user.profile')
@@ -467,6 +472,7 @@ class Dashboard extends Component
             'adminUsers' => $adminUsers,
             'memberUsers' => $memberUsers,
             'contributorUsers' => $contributorUsers,
+            'pendingUsers' => $allPendingUsers,
             'pendingContributions' => $pendingContributions,
             'acceptedContributions' => $acceptedContributions,
             'completedContributions' => $completedContributions,
@@ -484,5 +490,80 @@ class Dashboard extends Component
         // This method is called by the polling to refresh data
         // The properties will automatically update due to Livewire's reactivity
         $this->collectiveAction = $this->collectiveAction->fresh();
+    }
+
+    public function acceptMember($userId)
+    {
+        // Check if user can manage this collective action
+        if (!$this->collectiveAction->canUserManage(Auth::user())) {
+            session()->flash('error', 'Akses ditolak. Hanya admin yang dapat menerima anggota.');
+            return;
+        }
+
+        $user = \App\Models\User::findOrFail($userId);
+
+        // Check if user has pending request
+        $pivotData = $this->collectiveAction->users()->where('users.id', $userId)->first();
+
+        if (!$pivotData || !in_array($pivotData->pivot->status, ['pending', 'pending_approval'])) {
+            session()->flash('error', 'Permintaan tidak ditemukan atau sudah diproses.');
+            return;
+        }
+
+        // Update status to active
+        $this->collectiveAction->users()->updateExistingPivot($userId, [
+            'status' => 'active',
+            'joined_at' => now(),
+        ]);
+
+        session()->flash('message', "Permintaan dari {$user->name} telah diterima.");
+    }
+
+    public function rejectMember($userId)
+    {
+        // Check if user can manage this collective action
+        if (!$this->collectiveAction->canUserManage(Auth::user())) {
+            session()->flash('error', 'Akses ditolak. Hanya admin yang dapat menolak anggota.');
+            return;
+        }
+
+        $user = \App\Models\User::findOrFail($userId);
+
+        // Check if user has pending request
+        $pivotData = $this->collectiveAction->users()->where('users.id', $userId)->first();
+
+        if (!$pivotData || !in_array($pivotData->pivot->status, ['pending', 'pending_approval'])) {
+            session()->flash('error', 'Permintaan tidak ditemukan atau sudah diproses.');
+            return;
+        }
+
+        // Update status to rejected
+        $this->collectiveAction->users()->updateExistingPivot($userId, [
+            'status' => 'rejected',
+        ]);
+
+        session()->flash('message', "Permintaan dari {$user->name} telah ditolak.");
+    }
+
+    public function removeMember($userId)
+    {
+        // Check if user can manage this collective action
+        if (!$this->collectiveAction->canUserManage(Auth::user())) {
+            session()->flash('error', 'Akses ditolak. Hanya admin yang dapat mengeluarkan anggota.');
+            return;
+        }
+
+        $user = \App\Models\User::findOrFail($userId);
+
+        // Check if user is the creator
+        if ($user->id === $this->collectiveAction->created_by) {
+            session()->flash('error', 'Tidak dapat mengeluarkan pembuat aksi kolektif.');
+            return;
+        }
+
+        // Remove user from collective action
+        $this->collectiveAction->removeUser($user);
+
+        session()->flash('message', "{$user->name} telah dikeluarkan dari aksi kolektif.");
     }
 }

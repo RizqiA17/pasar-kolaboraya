@@ -1195,6 +1195,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <flux:select wire:model="contribution_id" :label="'Jenis Kontribusi'" required>
+                            <option value="">Pilih Jenis Kontribusi</option>
                             @foreach ($contributionTypes as $id => $name)
                                 <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
@@ -1455,6 +1456,106 @@
         @endif
     </div>
 
+    <!-- Pending Membership Requests Section - Manager Only -->
+    @if ($collectiveAction->canUserManage(Auth::user()) && $pendingUsers->count() > 0)
+        <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                <h3 class="text-base sm:text-lg font-semibold text-blue-800 dark:text-blue-200">
+                    Permintaan Bergabung ({{ $pendingUsers->count() }})
+                </h3>
+            </div>
+            <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
+                @foreach ($pendingUsers->take(5) as $request)
+                    <div class="p-3 bg-white dark:bg-blue-900/5 border border-blue-200 dark:border-blue-700 rounded-lg">
+                        <!-- Mobile Layout -->
+                        <div class="block sm:hidden space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
+                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
+                                </div>
+                            </div>
+                            
+                            @if ($request->pivot->join_reason)
+                                <div class="p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+                                    <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan Bergabung:</p>
+                                    <p class="text-xs text-gray-700 dark:text-gray-300 break-words">{{ $request->pivot->join_reason }}</p>
+                                </div>
+                            @endif
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                                    {{ $request->pivot->join_type === 'ecosystem' ? 'Via Ekosistem' : 'Bergabung Langsung' }}
+                                </span>
+                                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
+                                    {{ $request->pivot->status === 'pending' ? 'Menunggu' : 'Perlu Persetujuan' }}
+                                </span>
+                            </div>
+                            
+                            <div class="flex gap-2">
+                                <button wire:click="acceptMember({{ $request->id }})"
+                                    class="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors">
+                                    Terima
+                                </button>
+                                <button wire:click="rejectMember({{ $request->id }})"
+                                    class="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-medium transition-colors">
+                                    Tolak
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Desktop Layout -->
+                        <div class="hidden sm:flex items-start justify-between gap-4">
+                            <div class="flex items-start space-x-3 min-w-0 flex-1">
+                                <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
+                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
+                                    @if ($request->pivot->join_reason)
+                                        <div class="mt-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan Bergabung:</p>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 break-words">{{ $request->pivot->join_reason }}</p>
+                                        </div>
+                                    @endif
+                                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                                            {{ $request->pivot->join_type === 'ecosystem' ? 'Via Ekosistem' : 'Bergabung Langsung' }}
+                                        </span>
+                                        <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
+                                            {{ $request->pivot->status === 'pending' ? 'Menunggu' : 'Perlu Persetujuan' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2 flex-shrink-0">
+                                <button wire:click="acceptMember({{ $request->id }})"
+                                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors whitespace-nowrap">
+                                    Terima
+                                </button>
+                                <button wire:click="rejectMember({{ $request->id }})"
+                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-medium transition-colors whitespace-nowrap">
+                                    Tolak
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @if ($pendingUsers->count() > 5)
+                    <div class="text-center py-2">
+                        <p class="text-sm text-blue-600 dark:text-blue-400">
+                            Dan {{ $pendingUsers->count() - 5 }} permintaan lainnya...
+                        </p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
+
     <!-- Members Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Admin Users -->
@@ -1496,31 +1597,49 @@
         </div>
 
         <!-- Member Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anggota</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
+                <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    {{ $memberUsers->count() }} anggota aktif
+                </span>
+            </div>
 
             @if ($memberUsers->count() > 0)
-                <div class="space-y-3 max-h-64 overflow-y-auto">
+                <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
                     @foreach ($memberUsers as $user)
-                        <div class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                            <div
-                                class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3">
-                                <span class="text-green-600 dark:text-green-400 font-semibold text-sm">
-                                    {{ $user->initials() }}
-                                </span>
+                        <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                                    <div
+                                        class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
+                                            {{ $user->initials() }}
+                                        </span>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $user->name }}
+                                        </h3>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $user->email }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-500">
+                                            {{ $user->pivot->join_type_label }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 flex-shrink-0">
+                                    <span
+                                        class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs whitespace-nowrap">
+                                        {{ $user->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                                    </span>
+                                    {{-- @if ($collectiveAction->canUserManage(Auth::user()) && $user->id !== $collectiveAction->created_by)
+                                        <button wire:click="removeMember({{ $user->id }})"
+                                            onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $user->name }} dari aksi kolektif ini?')"
+                                            class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors whitespace-nowrap">
+                                            Keluarkan
+                                        </button>
+                                    @endif --}}
+                                </div>
                             </div>
-                            <div class="flex-1">
-                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $user->name }}
-                                </h3>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ $user->email }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-500">
-                                    {{ $user->pivot->join_type_label }}
-                                </p>
-                            </div>
-                            <span
-                                class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
-                                {{ $user->pivot->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
-                            </span>
                         </div>
                     @endforeach
                 </div>
@@ -1532,11 +1651,16 @@
         </div>
 
         <!-- Contributor Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Kontributor</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontributor</h2>
+                <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    {{ $contributorUsers->count() }} kontributor
+                </span>
+            </div>
 
             @if ($contributorUsers->count() > 0)
-                <div class="space-y-3 max-h-64 overflow-y-auto">
+                <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
                     @foreach ($contributorUsers as $user)
                         @php
                             $userContributions = $collectiveAction->contributions()->where('user_id', $user->id)->get();
@@ -1544,50 +1668,61 @@
                             $completedCount = $userContributions->where('status', 'completed')->count();
                             $totalAmount = $userContributions->where('status', 'accepted')->sum('contribution_amount');
                         @endphp
-                        <div class="flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                            <div
-                                class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-3">
-                                <span class="text-purple-600 dark:text-purple-400 font-semibold text-sm">
-                                    {{ $user->initials() }}
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $user->name }}
-                                </h3>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ $user->email }}</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-xs text-gray-500 dark:text-gray-500">
-                                        {{ $userContributions->count() }} kontribusi
-                                    </span>
-                                    @if ($acceptedCount > 0)
-                                        <span class="text-xs text-green-600 dark:text-green-400">
-                                            {{ $acceptedCount }} diterima
+                        <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                                    <div
+                                        class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
+                                            {{ $user->initials() }}
                                         </span>
-                                    @endif
-                                    @if ($completedCount > 0)
-                                        <span class="text-xs text-primary-blue dark:text-blue-400">
-                                            {{ $completedCount }} selesai
-                                        </span>
-                                    @endif
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $user->name }}
+                                        </h3>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $user->email }}</p>
+                                        <div class="flex flex-wrap items-center gap-2 mt-1">
+                                            <span class="text-xs text-gray-500 dark:text-gray-500">
+                                                {{ $userContributions->count() }} kontribusi
+                                            </span>
+                                            @if ($acceptedCount > 0)
+                                                <span class="text-xs text-green-600 dark:text-green-400">
+                                                    {{ $acceptedCount }} diterima
+                                                </span>
+                                            @endif
+                                            @if ($completedCount > 0)
+                                                <span class="text-xs text-primary-blue dark:text-blue-400">
+                                                    {{ $completedCount }} selesai
+                                                </span>
+                                            @endif
+                                        </div>
+                                        @if ($totalAmount > 0)
+                                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                                Total: Rp {{ number_format($totalAmount, 0, ',', '.') }}
+                                            </p>
+                                        @endif
+                                    </div>
                                 </div>
-                                @if ($totalAmount > 0)
-                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                                        Total: Rp {{ number_format($totalAmount, 0, ',', '.') }}
-                                    </p>
-                                @endif
-                            </div>
-                            <div class="text-right">
-                                @if ($acceptedCount > 0)
-                                    <span
-                                        class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
-                                        Aktif
-                                    </span>
-                                @else
-                                    <span
-                                        class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-xs">
-                                        Menunggu
-                                    </span>
-                                @endif
+                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 flex-shrink-0">
+                                    @if ($acceptedCount > 0)
+                                        <span
+                                            class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs whitespace-nowrap">
+                                            Aktif
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-xs whitespace-nowrap">
+                                            Menunggu
+                                        </span>
+                                    @endif
+                                    {{-- @if ($collectiveAction->canUserManage(Auth::user()) && $user->id !== $collectiveAction->created_by)
+                                        <button wire:click="removeMember({{ $user->id }})"
+                                            onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $user->name }} dari aksi kolektif ini?')"
+                                            class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors whitespace-nowrap">
+                                            Keluarkan
+                                        </button>
+                                    @endif --}}
+                                </div>
                             </div>
                         </div>
                     @endforeach

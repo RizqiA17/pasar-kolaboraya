@@ -604,13 +604,13 @@
                                                 class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
                                                 Aktif
                                             </span>
-                                            @if ($isOwner)
+                                            {{-- @if ($isOwner)
                                                 <button wire:click="removeMember({{ $member->id }})"
                                                     onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
                                                     class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                                     Keluarkan
                                                 </button>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 @endforeach
