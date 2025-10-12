@@ -542,6 +542,11 @@ class CollectiveAction extends Model
      */
     public function canUserJoin(User $user): bool
     {
+        // Check if user can join ecosystems and actions (tamu and partisipan only)
+        if (!$user->canJoinEcosystemsAndActions()) {
+            return false;
+        }
+
         // Check if user is already registered (any status)
         if ($this->isUserRegistered($user)) {
             return false;

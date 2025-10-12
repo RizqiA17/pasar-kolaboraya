@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'read.only.access' => \App\Http\Middleware\ReadOnlyAccess::class,
             'check.active.pasar.kolaboraya' => \App\Http\Middleware\CheckActivePasarKolaboraya::class,
             'check.user.approval' => \App\Http\Middleware\CheckUserApproval::class,
+            'can.join.ecosystems.and.actions' => \App\Http\Middleware\CanJoinEcosystemsAndActions::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes

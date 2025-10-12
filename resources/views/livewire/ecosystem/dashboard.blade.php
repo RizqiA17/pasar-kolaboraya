@@ -85,18 +85,8 @@
                 @if (!$isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
                         @if ($ecosystem->canUserJoin(Auth::user()))
-                            @if (Auth::user()->isGuestOrInvitation())
-                                <!-- Like button for guest/invitation users -->
-                                <button id="like-button" 
-                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }} justify-center"
-                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
-                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span id="like-count" class="font-medium">{{ $likeCount }}</span>
-                                </button>
-                            @else
-                                <!-- Join and Like buttons for partisipan users -->
+                            @if (Auth::user()->canJoinEcosystemsAndActions())
+                                <!-- Join and Like buttons for tamu and partisipan users -->
                                 <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
                                     class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center border border-primary-blue hover:border-primary-blue/80 shadow-sm">
                                     <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,6 +96,16 @@
                                 </a>
                                 <button id="like-button" 
                                     class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
+                                    onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
+                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="like-count" class="font-medium">{{ $likeCount }}</span>
+                                </button>
+                            @else
+                                <!-- Like button for komunitas users only -->
+                                <button id="like-button" 
+                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }} justify-center"
                                     onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
                                     <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>

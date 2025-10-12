@@ -131,7 +131,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
     Route::middleware(['check.feature.access:ecosystems', 'check.active.pasar.kolaboraya'])->group(function () {
         Route::get('ecosystem', \App\Livewire\Ecosystem\Browse::class)->name('ecosystem.browse');
         Route::get('ecosystem/create', \App\Livewire\Ecosystem\Create::class)->name('ecosystem.create');
-        Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join');
+        Route::get('ecosystem/{ecosystem}/join', \App\Livewire\Ecosystem\Join::class)->name('ecosystem.join')->middleware('can.join.ecosystems.and.actions');
         Route::get('ecosystem/{ecosystem}/dashboard', \App\Livewire\Ecosystem\Dashboard::class)->name('ecosystem.dashboard');
         Route::get('ecosystem/{ecosystem}/settings', \App\Livewire\Ecosystem\Settings::class)->name('ecosystem.settings');
         Route::get('ecosystem/{ecosystem}/edit', \App\Livewire\Ecosystem\Edit::class)->name('ecosystem.edit');
@@ -150,11 +150,11 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 
 
     // Collective Action QR Scanner route
-    Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner');
+    Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner')->middleware('can.join.ecosystems.and.actions');
     Route::post('collective-actions/qr-scanner/process', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
 
     // Ecosystem QR Scanner route
-    Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner');
+    Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner')->middleware('can.join.ecosystems.and.actions');
 
     // Collective Action Routes (Protected by collective_actions feature check and active session)
     Route::middleware(['check.feature.access:collective_actions', 'check.active.pasar.kolaboraya'])->group(function () {
@@ -162,7 +162,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions/create', \App\Livewire\CollectiveAction\Create::class)->name('collective-action.create')->middleware('ecosystem.builder.only');
         Route::get('collective-actions/{collectiveAction}', \App\Livewire\CollectiveAction\Dashboard::class)->name('collective-action.show');
         Route::get('collective-actions/{collectiveAction}/edit', \App\Livewire\CollectiveAction\Edit::class)->name('collective-action.edit')->middleware('ecosystem.builder.only');
-        Route::get('collective-actions/{collectiveAction}/join', \App\Livewire\CollectiveAction\Join::class)->name('collective-action.join');
+        Route::get('collective-actions/{collectiveAction}/join', \App\Livewire\CollectiveAction\Join::class)->name('collective-action.join')->middleware('can.join.ecosystems.and.actions');
         Route::get('collective-actions/{collectiveAction}/contribute', \App\Livewire\CollectiveAction\Contribute::class)->name('collective-action.contribute');
         Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\MemberManagement::class)->name('collective-action.members');
         Route::get('collective-actions/{collectiveAction}/approvals', \App\Livewire\CollectiveAction\UserApprovals::class)->name('collective-action.user-approvals');

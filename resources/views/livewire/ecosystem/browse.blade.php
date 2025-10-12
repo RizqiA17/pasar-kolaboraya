@@ -248,24 +248,22 @@
                     @endphp
 
                     @if ($canJoin)
-                        @if (Auth::user()->isGuestOrInvitation())
-                            <!-- Simple message for guest/invitation users -->
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                Login untuk bergabung dengan ekosistem
-                            </span>
-                        @else
-                            <!-- Regular join button for partisipan users -->
+                        @if (Auth::user()->canJoinEcosystemsAndActions())
+                            <!-- Join button for tamu and partisipan users -->
                             <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
                                 size="sm" class="w-full">
                                 Bergabung
                             </flux:button>
+                        @else
+                            <!-- Message for komunitas users who can only connect -->
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                Hanya dapat terhubung dengan pengguna lain
+                            </span>
                         @endif
                     @else
                         <span class="text-sm text-gray-500 dark:text-gray-400">
                             @if ($ecosystem->max_users && $ecosystem->acceptedUsers->count() >= $ecosystem->max_users)
                                 Ekosistem Penuh
-                            @else
-                                Tidak Dapat Bergabung
                             @endif
                         </span>
                     @endif

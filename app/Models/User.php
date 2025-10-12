@@ -113,23 +113,24 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessEcosystem(): bool
     {
-        return $this->user_type === 'partisipan';
+        return in_array($this->user_type, ['tamu', 'partisipan']);
     }
 
     /**
-     * Check if user can only connect (tamu and komunitas)
+     * Check if user can only connect (komunitas only)
      */
     public function canOnlyConnect(): bool
     {
-        return $this->isApproved() && in_array($this->user_type, ['tamu', 'komunitas']);
+        return $this->isApproved() && in_array($this->user_type, ['komunitas']);
     }
 
     /**
      * Check if user is guest or invitation type (can only like)
+     * Updated: Only komunitas users are restricted to like-only functionality
      */
     public function isGuestOrInvitation(): bool
     {
-        return $this->isApproved() && in_array($this->user_type, ['tamu', 'komunitas']);
+        return $this->isApproved() && in_array($this->user_type, ['komunitas']);
     }
 
     /**
@@ -138,6 +139,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function canLike(): bool
     {
         return $this->isApproved();
+    }
+
+    /**
+     * Check if user can join ecosystems and collective actions
+     * Updated: Both tamu and partisipan users can join
+     */
+    public function canJoinEcosystemsAndActions(): bool
+    {
+        return $this->isApproved() && in_array($this->user_type, ['tamu', 'partisipan']);
     }
 
     /**
