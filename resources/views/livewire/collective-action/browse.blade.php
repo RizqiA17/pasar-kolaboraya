@@ -372,13 +372,26 @@
                         @endphp
 
                         @if ($isUserRegistered)
-                            @if ($userStatus === 'active')
-                                <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
-                                    wire:navigate size="sm" class="w-full">
-                                    Lihat Detail
-                                </flux:button>
+                            @if ($action->canUserContribute(Auth::user()))
+                                <!-- Contribute button for users who can contribute -->
+                                <div class="flex space-x-2">
+                                    <flux:button href="{{ route('collective-action.contribute', $action) }}"
+                                        variant="primary" wire:navigate size="sm"
+                                        class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90 border border-primary-blue hover:border-primary-blue/80 dark:border-secondary-green dark:hover:border-secondary-green/80 shadow-sm">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                        Berkontribusi
+                                    </flux:button>
+                                    <flux:button href="{{ route('collective-action.show', $action) }}"
+                                        variant="outline" size="sm" class="flex-1">
+                                        Lihat Detail
+                                    </flux:button>
+                                </div>
                             @else
-                                <!-- Simple buttons for komunitas users who can only connect -->
+                                <!-- Simple buttons for users who cannot contribute -->
                                 <div class="flex space-x-2">
                                     <flux:button href="{{ route('collective-action.show', $action) }}"
                                         variant="outline" size="sm" class="flex-1">
