@@ -16,6 +16,7 @@ class Edit extends Component
     public $organization_name = '';
     public $ecosystem_title = '';
     public $selectedIssues = [];
+    public $customIssues = [];
     public $work_region = '';
     public $selectedExistingRoles = [];
     public $max_users = '';
@@ -35,7 +36,8 @@ class Edit extends Component
         'max_users' => 'nullable|integer|min:1',
         'terms_conditions' => 'required|string',
         'description' => 'nullable|string',
-        'selectedIssues' => 'required|array|min:1',
+        'selectedIssues' => 'array',
+        'customIssues' => 'array',
         'selectedExistingRoles' => 'nullable|array|',
         'auto_join_collective_actions' => 'boolean',
     ];
@@ -59,34 +61,63 @@ class Edit extends Component
 
         $this->ecosystem = $ecosystem;
 
+        // Load available interests and roles first
+        $this->interests = Interest::all();
+        $this->roles = Peran::all();
+
         // Load existing data
         $this->organization_name = $ecosystem->organization_name;
         $this->ecosystem_title = $ecosystem->ecosystem_title;
-        $this->selectedIssues = $ecosystem->issues_addressed;
+        
+        // Separate predefined issues from custom issues
+        $allIssues = $ecosystem->issues_addressed ?? [];
+        $interestIds = collect($this->interests)->pluck('id')->toArray();
+        
+        $this->selectedIssues = array_values(array_filter($allIssues, function($issue) use ($interestIds) {
+            return in_array($issue, $interestIds);
+        }));
+        
+        $this->customIssues = array_values(array_filter($allIssues, function($issue) use ($interestIds) {
+            return !in_array($issue, $interestIds);
+        }));
+        
         $this->work_region = $ecosystem->work_region;
         $this->selectedExistingRoles = $ecosystem->existing_roles;
         $this->max_users = $ecosystem->max_users;
         $this->terms_conditions = $ecosystem->terms_conditions;
         $this->description = $ecosystem->description;
         $this->auto_join_collective_actions = $ecosystem->auto_join_collective_actions;
-
-        // Load available interests and roles
-        $this->interests = Interest::all();
-        $this->roles = Peran::all();
     }
 
     public function updateEcosystem()
     {
         $this->validate();
+        
+        // Custom validation: at least one issue must be selected (either predefined or custom)
+        $allIssues = array_merge(
+            $this->selectedIssues,
+            array_filter($this->customIssues)
+        );
+        
+        if (empty($allIssues)) {
+            $this->addError('selectedIssues', 'Minimal pilih 1 isu yang diperjuangkan');
+            return;
+        }
 
         // Ekosistem WAJIB memerlukan semua peran yang tersedia
         $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
+
+        // Merge predefined issues with custom issues
+        $allIssues = array_merge(
+            $this->selectedIssues,
+            array_filter($this->customIssues) // Remove empty custom issues
+        );
 
         // Update the ecosystem
         $this->ecosystem->update([
             'organization_name' => $this->organization_name,
             'ecosystem_title' => $this->ecosystem_title,
-            'issues_addressed' => $this->selectedIssues,
+            'issues_addressed' => $allIssues,
             'work_region' => $this->work_region,
             'existing_roles' => $this->selectedExistingRoles,
             'needed_roles' => $allRoleIds, // WAJIB semua peran
@@ -159,6 +190,17 @@ class Edit extends Component
         $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function ($id) use ($roleId) {
             return $id != $roleId;
         });
+    }
+
+    public function addCustomIssue()
+    {
+        $this->customIssues[] = '';
+    }
+
+    public function removeCustomIssue($index)
+    {
+        unset($this->customIssues[$index]);
+        $this->customIssues = array_values($this->customIssues); // Re-index array
     }
 
     public function render()

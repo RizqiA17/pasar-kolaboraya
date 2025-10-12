@@ -184,7 +184,7 @@
                         </div>
 
                         <!-- Selected Issues Display -->
-                        @if (count($selectedIssues) > 0)
+                        @if (count($selectedIssues) > 0 || count(array_filter($customIssues)) > 0)
                             <div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
                                 <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Isu yang Dipilih:
                                 </h3>
@@ -214,6 +214,27 @@
                                             </div>
                                         @endif
                                     @endforeach
+                                    
+                                    @foreach (array_filter($customIssues) as $index => $customIssue)
+                                        <div
+                                            class="group inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-700 transition-all duration-200 hover:bg-green-100 dark:hover:bg-green-900/30">
+                                            <svg class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="1.5"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            <span>{{ $customIssue }}</span>
+                                            <button type="button" wire:click="removeCustomIssue({{ $index }})"
+                                                class="ml-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         @endif
@@ -223,9 +244,44 @@
                         @enderror
                     </div>
 
+                    <!-- Custom Issues -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Atau tambahkan isu custom:</h3>
+                            <flux:button type="button" wire:click="addCustomIssue" variant="outline" size="sm"
+                                class="text-primary-blue hover:bg-primary-blue/10" icon="plus">
+                                <span class="max-sm:hidden"> Tambah Custom</span>
+                            </flux:button>
+                        </div>
+
+                        @if (count($customIssues) > 0)
+                            <div class="space-y-3">
+                                @foreach ($customIssues as $index => $customIssue)
+                                    <div class="flex items-center gap-3">
+                                        <flux:input wire:model="customIssues.{{ $index }}"
+                                            :placeholder="'Masukkan isu custom yang diperjuangkan...'" class="flex-1" />
+                                        <flux:button type="button"
+                                            wire:click="removeCustomIssue({{ $index }})" variant="outline"
+                                            size="sm" class="text-accent-red hover:bg-accent-red/10">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </flux:button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                                Klik "Tambah Custom" untuk menambahkan isu yang tidak ada dalam daftar
+                            </p>
+                        @endif
+                    </div>
+
                     <!-- Form Section: Informasi Lokasi dan Kapasitas -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl p-5 mb-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                        class="bg-white mt-6 dark:bg-gray-800 rounded-xl p-5 mb-6 shadow-sm border border-gray-100 dark:border-gray-700">
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Lokasi dan
                             Kapasitas</h2>
 
@@ -482,7 +538,7 @@
                         </div>
 
                         <!-- Auto Join Collective Actions Setting -->
-                        <div
+                        {{-- <div
                             class="bg-gradient-to-br from-blue-50 to-blue-50/50 dark:from-green-900/30 dark:to-green-900/20 border border-blue-200/70 dark:border-green-800 rounded-xl p-6 shadow-sm backdrop-blur-sm">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0 pt-1">
@@ -511,7 +567,7 @@
                                 </svg>
                                 <span>Pengaturan ini dapat diubah nanti di halaman pengaturan ekosistem</span>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- Action Buttons -->
                         <div class="flex gap-4 mt-4 flex-col sm:flex-row-reverse">

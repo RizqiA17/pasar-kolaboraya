@@ -6,6 +6,7 @@ use App\Models\Ecosystem;
 use App\Models\Interest;
 use App\Models\Peran;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -15,6 +16,7 @@ class Create extends Component
     public $organization_name = '';
     public $ecosystem_title = '';
     public $selectedIssues = [];
+    public $customIssues = [];
     public $work_region = '';
     public $selectedExistingRoles = [];
     public $max_users = '';
@@ -34,7 +36,8 @@ class Create extends Component
         'max_users' => 'nullable|integer|min:1',
         'terms_conditions' => 'required|string',
         'description' => 'nullable|string',
-        'selectedIssues' => 'required|array|min:1',
+        'selectedIssues' => 'array',
+        'customIssues' => 'array',
         'selectedExistingRoles' => 'nullable|array|',
         // 'auto_join_collective_actions' => 'boolean',
     ];
@@ -59,7 +62,7 @@ class Create extends Component
             } else {
                 session()->flash('error', 'Anda belum disetujui sebagai Ecosystem Builder. Silakan hubungi admin untuk informasi lebih lanjut.');
             }
-            return ilat()->route('ecosystem.browse');
+            return redirect()->route('ecosystem.browse');
         }
 
         $this->interests = Interest::all();
@@ -71,21 +74,38 @@ class Create extends Component
         
         $this->validate();
         
+        // Custom validation: at least one issue must be selected (either predefined or custom)
+        $allIssues = array_merge(
+            $this->selectedIssues,
+            array_filter($this->customIssues)
+        );
+        
+        if (empty($allIssues)) {
+            $this->addError('selectedIssues', 'Minimal pilih 1 isu yang diperjuangkan');
+            return;
+        }
+        
         // Ekosistem WAJIB memerlukan semua peran yang tersedia
         $allRoleIds = \App\Models\Peran::pluck('id')->toArray();
 
-        $qrCode = ''.\Str::random(6);
+        $qrCode = ''.Str::random(6);
         while (Ecosystem::where('qr_code', $qrCode)->exists()) {
-            $qrCode = ''.\Str::random(6);
+            $qrCode = ''.Str::random(6);
         }
         
+        // Merge predefined issues with custom issues
+        $allIssues = array_merge(
+            $this->selectedIssues,
+            array_filter($this->customIssues) // Remove empty custom issues
+        );
+
         // Create the ecosystem
         $ecosystem = Ecosystem::create([
             'creator_id' => Auth::id(),
             'pasar_kolaboraya_id' => Auth::user()->active_pasar_kolaboraya_id,
             'organization_name' => $this->organization_name,
             'ecosystem_title' => $this->ecosystem_title,
-            'issues_addressed' => $this->selectedIssues,
+            'issues_addressed' => $allIssues,
             'work_region' => $this->work_region,
             'existing_roles' => $this->selectedExistingRoles,
             'needed_roles' => $allRoleIds, // WAJIB semua peran
@@ -168,6 +188,17 @@ class Create extends Component
         $this->selectedExistingRoles = array_filter($this->selectedExistingRoles, function($id) use ($roleId) {
             return $id != $roleId;
         });
+    }
+
+    public function addCustomIssue()
+    {
+        $this->customIssues[] = '';
+    }
+
+    public function removeCustomIssue($index)
+    {
+        unset($this->customIssues[$index]);
+        $this->customIssues = array_values($this->customIssues); // Re-index array
     }
 
     public function render()
