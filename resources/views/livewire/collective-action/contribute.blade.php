@@ -109,11 +109,12 @@
             <!-- Contribution Type -->
             <div class="mb-6">
                 <flux:select 
-                    wire:model="contribution_id" 
+                    wire:model.live="contribution_id" 
                     :label="'Jenis Kontribusi'" 
                     required
                     class="mb-4"
                 >
+                    <option value="">Pilih jenis kontribusi...</option>
                     @foreach($contributionTypes as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
                     @endforeach
@@ -167,15 +168,15 @@
                 
                 <!-- Help text based on contribution type -->
                 <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    @if($contribution_type === 'volunteer')
+                    @if($this->contribution_type === 'volunteer')
                         Jelaskan keahlian, waktu yang tersedia, dan jenis bantuan yang dapat Anda berikan.
-                    @elseif($contribution_type === 'funding')
+                    @elseif($this->contribution_type === 'funding')
                         Jelaskan tujuan penggunaan dana dan apakah ada syarat khusus untuk penggunaannya.
-                    @elseif($contribution_type === 'expertise')
+                    @elseif($this->contribution_type === 'expertise')
                         Jelaskan keahlian spesifik, pengalaman, dan bagaimana Anda dapat membantu.
-                    @elseif($contribution_type === 'resources')
+                    @elseif($this->contribution_type === 'resources')
                         Jelaskan jenis sumber daya, fasilitas, atau peralatan yang dapat Anda sediakan.
-                    @elseif($contribution_type === 'promotion')
+                    @elseif($this->contribution_type === 'promotion')
                         Jelaskan platform promosi yang Anda miliki dan jangkauan audiens.
                     @else
                         Jelaskan secara detail kontribusi yang ingin Anda berikan.
@@ -184,7 +185,7 @@
             </div>
 
             <!-- Additional Details for specific types -->
-            @if($contribution_type === 'volunteer')
+            @if($this->contribution_type === 'volunteer')
                 <div class="mb-6">
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Detail Relawan</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

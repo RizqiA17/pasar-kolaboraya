@@ -31,6 +31,34 @@ class Contribute extends Component
         'relasi' => 'Relasi/Networking',
     ];
 
+    public function getContributionTypeProperty()
+    {
+        if (!$this->contribution_id) {
+            return null;
+        }
+        
+        $contribution = Contribution::find($this->contribution_id);
+        if (!$contribution) {
+            return null;
+        }
+        
+        $name = strtolower($contribution->name);
+        
+        if (str_contains($name, 'relawan') || str_contains($name, 'volunteer')) {
+            return 'volunteer';
+        } elseif (str_contains($name, 'dana') || str_contains($name, 'funding')) {
+            return 'funding';
+        } elseif (str_contains($name, 'keahlian') || str_contains($name, 'expertise')) {
+            return 'expertise';
+        } elseif (str_contains($name, 'sumber') || str_contains($name, 'resource')) {
+            return 'resources';
+        } elseif (str_contains($name, 'promosi') || str_contains($name, 'promotion')) {
+            return 'promotion';
+        }
+        
+        return 'other';
+    }
+
     protected function rules()
     {
         $rules = [
@@ -71,7 +99,7 @@ class Contribute extends Component
         $this->collectiveAction = $collectiveAction;
 
         // Load contribution types from database
-        $this->contributionTypes = Contribution::all();
+        $this->contributionTypes = Contribution::all()->pluck('name', 'id')->toArray();
 
         // Check if user can contribute
         if (!$collectiveAction->canUserContribute(Auth::user())) {
@@ -116,6 +144,9 @@ class Contribute extends Component
 
     public function render()
     {
-        return view('livewire.collective-action.contribute');
+        return view('livewire.collective-action.contribute', [
+            'contributionTypes' => $this->contributionTypes,
+            'resourceTypes' => $this->resourceTypes,
+        ]);
     }
 }
