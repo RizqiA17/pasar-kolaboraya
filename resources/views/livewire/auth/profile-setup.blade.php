@@ -241,42 +241,105 @@
 
                 <!-- Skills Multi-Select -->
                 <div class="mb-6">
-                    <div class="multi-select-container">
+                    <div x-data="{
+                        open: false,
+                        search: '',
+                        selectedItems: @entangle('selectedSkills').live,
+                        mainInput: '',
+                        isProcessing: false,
+                        updateMainInput() {
+                            this.mainInput = this.selectedItems.map(id =>
+                                document.getElementById('skill_label_' + id)?.textContent || ''
+                            ).filter(Boolean).join(', ');
+                        },
+                        async toggleItem(id) {
+                            if (this.isProcessing) return;
+                            this.isProcessing = true;
+                            try {
+                                await $wire.toggleSkill(id);
+                                this.updateMainInput();
+                            } finally {
+                                this.isProcessing = false;
+                            }
+                        }
+                    }" x-init="updateMainInput()" @click.away="open = false"
+                        class="multi-select-container relative">
                         <!-- Main Selector Input -->
                         <div class="relative">
-                            <input type="text" id="skillsMainInput" placeholder="Pilih keahlian Anda..."
-                                class="w-full" readonly onclick="toggleSkillsDropdown()">
+                            <input type="text" x-model="mainInput" placeholder="Pilih keahlian Anda..."
+                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 cursor-pointer transition-all duration-200"
+                                readonly @click="open = !open">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </div>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
                         </div>
 
-                        <!-- Search Input (Shows when dropdown is open) -->
-                        <div id="skillsSearchInput" class="hidden mt-2">
+                        <!-- Dropdown Panel -->
+                        <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 transform -translate-y-2"
+                            x-transition:enter-end="opacity-100 transform translate-y-0"
+                            class="absolute left-0 right-0 z-10 mt-2">
+                            <!-- Search Input -->
+                            <div class="relative">
                             <input type="text" wire:model.live="skillSearch" placeholder="Cari keahlian..."
-                                class="multi-search-input w-full">
+                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200 shadow-sm"
+                                    @click.stop>
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
                         </div>
 
                         <!-- Dropdown List -->
-                        <div id="skillsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
+                            <div
+                                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                             @foreach ($this->getFilteredSkills() as $skill)
-                                <div class="multi-option {{ in_array($skill->id, $selectedSkills) ? 'selected' : '' }}"
-                                    wire:click="toggleSkill({{ $skill->id }})"
-                                    onclick="toggleSkillAndUpdate({{ $skill->id }}, '{{ $skill->name }}')">
+                                    <div class="multi-option {{ in_array($skill->id, is_array($selectedSkills) ? $selectedSkills : []) ? 'bg-purple-50 dark:bg-purple-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
+                                        @click.stop="toggleItem({{ $skill->id }})">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
+                                                <div class="flex items-center justify-center w-5 h-5">
                                             <input type="checkbox" id="skill_{{ $skill->id }}"
-                                                wire:model="selectedSkills" value="{{ $skill->id }}"
-                                                class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600 bg-slate-700">
-                                            <span class="font-medium">{{ $skill->name }}</span>
+                                                        :checked="selectedItems.includes({{ $skill->id }})"
+                                                        class="h-4 w-4 text-purple-600 focus:ring-2 focus:ring-purple-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                </div>
+                                                <div>
+                                                    <span id="skill_label_{{ $skill->id }}"
+                                                        class="font-medium text-gray-700 dark:text-gray-300">{{ $skill->name }}</span>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                                        Pilih untuk menambahkan ke profil Anda</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center"
+                                                x-show="selectedItems.includes({{ $skill->id }})">
+                                                <span
+                                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                                    Terpilih
+                                                </span>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+                                @if ($this->getFilteredSkills()->isEmpty())
+                                    <div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                        Tidak ada hasil yang ditemukan
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -360,42 +423,105 @@
                 <div>
                     <h4 class="text-md font-medium text-gray-900 dark:text-slate-100 mb-3">Minat</h4>
                     <div class="mb-6">
-                        <div class="multi-select-container">
+                        <div x-data="{
+                            open: false,
+                            search: '',
+                            selectedItems: @entangle('selectedInterests').live,
+                            mainInput: '',
+                            isProcessing: false,
+                            updateMainInput() {
+                                this.mainInput = this.selectedItems.map(id =>
+                                    document.getElementById('interest_label_' + id)?.textContent || ''
+                                ).filter(Boolean).join(', ');
+                            },
+                            async toggleItem(id) {
+                                if (this.isProcessing) return;
+                                this.isProcessing = true;
+                                try {
+                                    await $wire.toggleInterest(id);
+                                    this.updateMainInput();
+                                } finally {
+                                    this.isProcessing = false;
+                                }
+                            }
+                        }" x-init="updateMainInput()" @click.away="open = false"
+                            class="multi-select-container relative">
                             <!-- Main Selector Input -->
                             <div class="relative">
-                                <input type="text" id="interestsMainInput" placeholder="Pilih minat Anda..."
-                                    class="w-full" readonly onclick="toggleInterestsDropdown()">
+                                <input type="text" x-model="mainInput" placeholder="Pilih minat Anda..."
+                                    class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 cursor-pointer transition-all duration-200"
+                                    readonly @click="open = !open">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                             </div>
 
-                            <!-- Search Input (Shows when dropdown is open) -->
-                            <div id="interestsSearchInput" class="hidden mt-2">
+                            <!-- Dropdown Panel -->
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                class="absolute left-0 right-0 z-10 mt-2">
+                                <!-- Search Input -->
+                                <div class="relative">
                                 <input type="text" wire:model.live="interestSearch" placeholder="Cari minat..."
-                                    class="multi-search-input w-full">
+                                        class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-200 shadow-sm"
+                                        @click.stop>
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </div>
                             </div>
 
                             <!-- Dropdown List -->
-                            <div id="interestsDropdown" class="hidden absolute z-10 w-full mt-1 multi-dropdown">
+                                <div
+                                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                 @foreach ($this->getFilteredInterests() as $interest)
-                                    <div class="multi-option {{ in_array($interest->id, $selectedInterests) ? 'selected' : '' }}"
-                                        wire:click="toggleInterest({{ $interest->id }})"
-                                        onclick="toggleInterestAndUpdate({{ $interest->id }}, '{{ $interest->name }}')">
+                                        <div class="multi-option {{ in_array($interest->id, is_array($selectedInterests) ? $selectedInterests : []) ? 'bg-orange-50 dark:bg-orange-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
+                                            @click.stop="toggleItem({{ $interest->id }})">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-3">
+                                                <div class="flex items-center justify-center w-5 h-5">
                                                 <input type="checkbox" id="interest_{{ $interest->id }}"
-                                                    wire:model="selectedInterests" value="{{ $interest->id }}"
-                                                    class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-600 bg-slate-700">
-                                                <span class="font-medium">{{ $interest->name }}</span>
+                                                        :checked="selectedItems.includes({{ $interest->id }})"
+                                                        class="h-4 w-4 text-orange-600 focus:ring-2 focus:ring-orange-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                </div>
+                                                    <div>
+                                                        <span id="interest_label_{{ $interest->id }}"
+                                                            class="font-medium text-gray-700 dark:text-gray-300">{{ $interest->name }}</span>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                                            Pilih untuk menambahkan ke profil Anda</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center"
+                                                    x-show="selectedItems.includes({{ $interest->id }})">
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                                        Terpilih
+                                                    </span>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
+                                    @if ($this->getFilteredInterests()->isEmpty())
+                                        <div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                            Tidak ada hasil yang ditemukan
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -817,96 +943,8 @@
     </style>
 
     <script>
-        // Skills Multi-Select Functions
-        function toggleSkillsDropdown() {
-            const dropdown = document.getElementById('skillsDropdown');
-            const searchInput = document.getElementById('skillsSearchInput');
-
-            if (dropdown.classList.contains('hidden')) {
-                dropdown.classList.remove('hidden');
-                searchInput.classList.remove('hidden');
-                // Focus on search input
-                setTimeout(() => {
-                    searchInput.querySelector('input').focus();
-                }, 100);
-            } else {
-                dropdown.classList.add('hidden');
-                searchInput.classList.add('hidden');
-            }
-        }
-
-        function toggleSkillAndUpdate(skillId, skillName) {
-            // Update the main input to show selected count
-            updateSkillsMainInput();
-        }
-
-        function updateSkillsMainInput() {
-            const selectedCount = document.querySelectorAll('input[name="selectedSkills"]:checked').length;
-            const mainInput = document.getElementById('skillsMainInput');
-
-            if (selectedCount > 0) {
-                mainInput.value = `${selectedCount} keahlian dipilih`;
-            } else {
-                mainInput.value = '';
-            }
-        }
-
-        // Interests Multi-Select Functions
-        function toggleInterestsDropdown() {
-            const dropdown = document.getElementById('interestsDropdown');
-            const searchInput = document.getElementById('interestsSearchInput');
-
-            if (dropdown.classList.contains('hidden')) {
-                dropdown.classList.remove('hidden');
-                searchInput.classList.remove('hidden');
-                // Focus on search input
-                setTimeout(() => {
-                    searchInput.querySelector('input').focus();
-                }, 100);
-            } else {
-                dropdown.classList.add('hidden');
-                searchInput.classList.add('hidden');
-            }
-        }
-
-        function toggleInterestAndUpdate(interestId, interestName) {
-            // Update the main input to show selected count
-            updateInterestsMainInput();
-        }
-
-        function updateInterestsMainInput() {
-            const selectedCount = document.querySelectorAll('input[name="selectedInterests"]:checked').length;
-            const mainInput = document.getElementById('interestsMainInput');
-
-            if (selectedCount > 0) {
-                mainInput.value = `${selectedCount} minat dipilih`;
-            } else {
-                mainInput.value = '';
-            }
-        }
-
-        // Close dropdowns when clicking outside
+        // Platform selection dropdown close handler
         document.addEventListener('click', function(event) {
-            // Skills selector
-            const skillsSelector = document.querySelector('input[placeholder="Pilih keahlian Anda..."]');
-            if (skillsSelector) {
-                const skillsSelectorContainer = skillsSelector.closest('.multi-select-container');
-                if (skillsSelectorContainer && !skillsSelectorContainer.contains(event.target)) {
-                    document.getElementById('skillsDropdown').classList.add('hidden');
-                    document.getElementById('skillsSearchInput').classList.add('hidden');
-                }
-            }
-
-            // Interests selector
-            const interestsSelector = document.querySelector('input[placeholder="Pilih minat Anda..."]');
-            if (interestsSelector) {
-                const interestsSelectorContainer = interestsSelector.closest('.multi-select-container');
-                if (interestsSelectorContainer && !interestsSelectorContainer.contains(event.target)) {
-                    document.getElementById('interestsDropdown').classList.add('hidden');
-                    document.getElementById('interestsSearchInput').classList.add('hidden');
-                }
-            }
-
             // Platform selection dropdown
             const platformSelectionContainer = document.querySelector('.platform-selection-container');
             if (platformSelectionContainer && !platformSelectionContainer.contains(event.target)) {
