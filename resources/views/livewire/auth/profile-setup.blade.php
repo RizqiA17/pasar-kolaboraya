@@ -314,8 +314,9 @@
                                         <div class="flex items-center space-x-3">
                                                 <div class="flex items-center justify-center w-5 h-5">
                                             <input type="checkbox" id="skill_{{ $skill->id }}"
-                                                        :checked="selectedItems.includes({{ $skill->id }})"
-                                                        class="h-4 w-4 text-purple-600 focus:ring-2 focus:ring-purple-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                            :checked="selectedItems.includes({{ $skill->id }})"
+                                                            @click.stop="toggleItem({{ $skill->id }})"
+                                                            class="h-4 w-4 text-purple-600 focus:ring-2 focus:ring-purple-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
                                                 </div>
                                                 <div>
                                                     <span id="skill_label_{{ $skill->id }}"
@@ -324,8 +325,8 @@
                                                         Pilih untuk menambahkan ke profil Anda</p>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center"
-                                                x-show="selectedItems.includes({{ $skill->id }})">
+                                                <div class="flex items-center"
+                                                    x-show="selectedItems.includes({{ $skill->id }})">
                                                 <span
                                                     class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                                                     Terpilih
@@ -423,29 +424,29 @@
                 <div>
                     <h4 class="text-md font-medium text-gray-900 dark:text-slate-100 mb-3">Minat</h4>
                     <div class="mb-6">
-                        <div x-data="{
-                            open: false,
-                            search: '',
-                            selectedItems: @entangle('selectedInterests').live,
-                            mainInput: '',
-                            isProcessing: false,
-                            updateMainInput() {
-                                this.mainInput = this.selectedItems.map(id =>
-                                    document.getElementById('interest_label_' + id)?.textContent || ''
-                                ).filter(Boolean).join(', ');
-                            },
-                            async toggleItem(id) {
-                                if (this.isProcessing) return;
-                                this.isProcessing = true;
-                                try {
-                                    await $wire.toggleInterest(id);
-                                    this.updateMainInput();
-                                } finally {
-                                    this.isProcessing = false;
-                                }
+                    <div x-data="{
+                        open: false,
+                        search: '',
+                        selectedItems: @entangle('selectedInterests').live,
+                        mainInput: '',
+                        isProcessing: false,
+                        updateMainInput() {
+                            this.mainInput = this.selectedItems.map(id =>
+                                document.getElementById('interest_label_' + id)?.textContent || ''
+                            ).filter(Boolean).join(', ');
+                        },
+                        async toggleItem(id) {
+                            if (this.isProcessing) return;
+                            this.isProcessing = true;
+                            try {
+                                await $wire.toggleInterest(id);
+                                this.updateMainInput();
+                            } finally {
+                                this.isProcessing = false;
                             }
-                        }" x-init="updateMainInput()" @click.away="open = false"
-                            class="multi-select-container relative">
+                        }
+                    }" x-init="updateMainInput()" @click.away="open = false"
+                        class="multi-select-container relative">
                             <!-- Main Selector Input -->
                             <div class="relative">
                                 <input type="text" x-model="mainInput" placeholder="Pilih minat Anda..."
@@ -496,8 +497,9 @@
                                             <div class="flex items-center space-x-3">
                                                 <div class="flex items-center justify-center w-5 h-5">
                                                 <input type="checkbox" id="interest_{{ $interest->id }}"
-                                                        :checked="selectedItems.includes({{ $interest->id }})"
-                                                        class="h-4 w-4 text-orange-600 focus:ring-2 focus:ring-orange-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
+                                                            :checked="selectedItems.includes({{ $interest->id }})"
+                                                            @click.stop="toggleItem({{ $interest->id }})"
+                                                            class="h-4 w-4 text-orange-600 focus:ring-2 focus:ring-orange-500/20 border-gray-300 dark:border-gray-600 rounded transition-colors duration-200">
                                                 </div>
                                                     <div>
                                                         <span id="interest_label_{{ $interest->id }}"

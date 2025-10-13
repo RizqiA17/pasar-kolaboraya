@@ -354,9 +354,8 @@ class ProfileSetup extends Component
     public function toggleSkill($skillId)
     {
         if (in_array($skillId, $this->selectedSkills)) {
-            $this->selectedSkills = array_filter($this->selectedSkills, function($id) use ($skillId) {
-                return $id != $skillId;
-            });
+            // Use array_diff to maintain indexed array structure
+            $this->selectedSkills = array_values(array_diff($this->selectedSkills, [$skillId]));
         } else {
             $this->selectedSkills[] = $skillId;
         }
@@ -365,9 +364,7 @@ class ProfileSetup extends Component
     public function toggleInterest($interestId)
     {
         if (in_array($interestId, $this->selectedInterests)) {
-            $this->selectedInterests = array_filter($this->selectedInterests, function($id) use ($interestId) {
-                return $id != $interestId;
-            });
+            $this->selectedInterests = array_values(array_diff($this->selectedInterests, [$interestId]));
         } else {
             $this->selectedInterests[] = $interestId;
         }
@@ -375,16 +372,12 @@ class ProfileSetup extends Component
 
     public function removeSkill($skillId)
     {
-        $this->selectedSkills = array_filter($this->selectedSkills, function($id) use ($skillId) {
-            return $id != $skillId;
-        });
+        $this->selectedSkills = array_values(array_diff($this->selectedSkills, [$skillId]));
     }
 
     public function removeInterest($interestId)
     {
-        $this->selectedInterests = array_filter($this->selectedInterests, function($id) use ($interestId) {
-            return $id != $interestId;
-        });
+        $this->selectedInterests = array_values(array_diff($this->selectedInterests, [$interestId]));
     }
 
     public function addCustomSkill()
