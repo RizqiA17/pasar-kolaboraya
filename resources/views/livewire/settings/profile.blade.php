@@ -166,7 +166,7 @@
                                 });
                             @endphp
                             <div class="mt-4 flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3">
-                                @forelse ($profile->social_media as $platform => $url)
+                                @forelse ($profile->formatted_social_media as $platform => $url)
                                     @if (!empty($url))
                                         <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
                                             class="inline-flex items-center px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors">

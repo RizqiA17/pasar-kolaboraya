@@ -26,6 +26,73 @@ class Profile extends Model
         'social_media' => 'array',
     ];
 
+    /**
+     * Get social media links with backward compatibility
+     */
+    public function getSocialMediaAttribute($value)
+    {
+        $socialMedia = json_decode($value, true) ?? [];
+        
+        // If empty, return empty array
+        if (empty($socialMedia)) {
+            return [];
+        }
+        
+        // Check if this is old format (key-value pairs)
+        $isOldFormat = false;
+        foreach ($socialMedia as $key => $val) {
+            if (is_string($key) && is_string($val)) {
+                $isOldFormat = true;
+                break;
+            }
+        }
+        
+        // If old format, convert to new format
+        if ($isOldFormat) {
+            return \App\Helpers\SocialLinkFormatter::convertOldFormat($socialMedia);
+        }
+        
+        // Return as is if already new format
+        return $socialMedia;
+    }
+
+    /**
+     * Set social media links
+     */
+    public function setSocialMediaAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['social_media'] = json_encode($value);
+        } else {
+            $this->attributes['social_media'] = $value;
+        }
+    }
+
+    /**
+     * Get formatted social media links for display
+     */
+    public function getFormattedSocialMediaAttribute()
+    {
+        $socialMedia = $this->social_media ?? [];
+        $formatted = [];
+        
+        foreach ($socialMedia as $item) {
+            if (!empty($item['platform'])) {
+                $url = \App\Helpers\SocialLinkFormatter::generateProfileUrl(
+                    $item['platform'],
+                    $item['username'] ?? null,
+                    $item['custom_link'] ?? null
+                );
+                
+                if ($url && $url !== '#') {
+                    $formatted[$item['platform']] = $url;
+                }
+            }
+        }
+        
+        return $formatted;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

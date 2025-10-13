@@ -95,14 +95,46 @@ class ProfileSetup extends Component
             $this->phone = $profile->phone ?? '';
             $this->vision = $profile->vision ?? '';
             // Load social media items
-            $socialMedia = $profile->social_media ?? [];
+            // Get raw data from database to check original format
+            $rawSocialMedia = $profile->getRawOriginal('social_media');
+            $socialMedia = json_decode($rawSocialMedia, true) ?? [];
             $this->socialMediaItems = [];
-            foreach ($socialMedia as $type => $url) {
-                if (!empty($url)) {
-                    $this->socialMediaItems[] = [
-                        'type' => $type,
-                        'url' => $url
-                    ];
+            
+            if (is_array($socialMedia)) {
+                // Check if it's old format (associative array with platform => url)
+                $isOldFormat = false;
+                foreach ($socialMedia as $key => $val) {
+                    if (is_string($key) && is_string($val)) {
+                        $isOldFormat = true;
+                        break;
+                    }
+                }
+                
+                if ($isOldFormat) {
+                    // Convert old format to new format
+                    foreach ($socialMedia as $platform => $url) {
+                        if (!empty($url)) {
+                            $this->socialMediaItems[] = [
+                                'platform' => $platform,
+                                'username' => '',
+                                'custom_link' => $url,
+                                'use_custom_link' => true
+                            ];
+                        }
+                    }
+                } else {
+                    // New format - use the processed data from accessor
+                    $processedSocialMedia = $profile->social_media ?? [];
+                    foreach ($processedSocialMedia as $item) {
+                        if (is_array($item) && !empty($item['platform'])) {
+                            $this->socialMediaItems[] = [
+                                'platform' => $item['platform'],
+                                'username' => $item['username'] ?? '',
+                                'custom_link' => $item['custom_link'] ?? '',
+                                'use_custom_link' => !empty($item['custom_link'])
+                            ];
+                        }
+                    }
                 }
             }
             
@@ -409,8 +441,10 @@ class ProfileSetup extends Component
     public function addSocialMedia()
     {
         $this->socialMediaItems[] = [
-            'type' => '',
-            'url' => ''
+            'platform' => '',
+            'username' => '',
+            'custom_link' => '',
+            'use_custom_link' => false
         ];
     }
 
@@ -424,8 +458,20 @@ class ProfileSetup extends Component
     {
         $socialMedia = [];
         foreach ($this->socialMediaItems as $item) {
-            if (!empty($item['type']) && !empty($item['url'])) {
-                $socialMedia[$item['type']] = $item['url'];
+            if (!empty($item['platform'])) {
+                $socialMediaItem = [
+                    'platform' => $item['platform']
+                ];
+                
+                if (!empty($item['use_custom_link']) && !empty($item['custom_link'])) {
+                    $socialMediaItem['custom_link'] = $item['custom_link'];
+                    $socialMediaItem['username'] = null;
+                } elseif (!empty($item['username'])) {
+                    $socialMediaItem['username'] = $item['username'];
+                    $socialMediaItem['custom_link'] = null;
+                }
+                
+                $socialMedia[] = $socialMediaItem;
             }
         }
         return $socialMedia;
@@ -444,13 +490,20 @@ class ProfileSetup extends Component
     public function selectPlatform($platformType)
     {
         $this->socialMediaItems[] = [
-            'type' => $platformType,
-            'url' => ''
+            'platform' => $platformType,
+            'username' => '',
+            'custom_link' => '',
+            'use_custom_link' => false
         ];
         $this->showPlatformModal = false;
     }
 
     public function getAvailablePlatforms()
+    {
+        return \App\Helpers\SocialLinkFormatter::getAvailablePlatforms();
+    }
+
+    public function getAvailablePlatformsOld()
     {
         return [
             [
@@ -496,21 +549,37 @@ class ProfileSetup extends Component
         ];
     }
 
-    public function getPlaceholderForPlatform($platformType)
+    public function getPlaceholderForPlatform($platformType, $isCustomLink = false)
     {
-        $placeholders = [
-            'linkedin' => 'https://linkedin.com/in/username',
-            'twitter' => 'https://twitter.com/username',
-            'instagram' => 'https://instagram.com/username',
-            'facebook' => 'https://facebook.com/username',
-            'youtube' => 'https://youtube.com/@username',
-            'tiktok' => 'https://tiktok.com/@username',
-            'github' => 'https://github.com/username',
-            'website' => 'https://website.com',
-            'other' => 'https://example.com/username'
-        ];
+        return \App\Helpers\SocialLinkFormatter::getPlaceholderForPlatform($platformType, $isCustomLink);
+    }
 
-        return $placeholders[$platformType] ?? 'https://example.com/username';
+    public function toggleCustomLink($index)
+    {
+        if (isset($this->socialMediaItems[$index])) {
+            $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
+            
+            // Clear the other field when toggling
+            if ($this->socialMediaItems[$index]['use_custom_link']) {
+                $this->socialMediaItems[$index]['username'] = '';
+            } else {
+                $this->socialMediaItems[$index]['custom_link'] = '';
+            }
+        }
+    }
+
+    public function getGeneratedUrl($index)
+    {
+        if (!isset($this->socialMediaItems[$index])) {
+            return '#';
+        }
+
+        $item = $this->socialMediaItems[$index];
+        return \App\Helpers\SocialLinkFormatter::generateProfileUrl(
+            $item['platform'] ?? '',
+            $item['username'] ?? null,
+            $item['custom_link'] ?? null
+        );
     }
 
     public function saveProfile()

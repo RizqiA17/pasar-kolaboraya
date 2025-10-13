@@ -80,111 +80,73 @@
                     <div class="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Media Sosial</div>
 
                     <!-- Existing Social Media Items -->
-                    @foreach ($socialMediaItems as $index => $item)
-                        <div
-                            class="social-media-item relative flex items-center space-x-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                            <!-- Platform Icon -->
-                            <div class="absolute left-2 flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                                @if ($item['type'] === 'linkedin')
-                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                                    </svg>
-                                @elseif($item['type'] === 'twitter')
-                                    <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                                    </svg>
-                                @elseif($item['type'] === 'instagram')
-                                    <svg class="w-5 h-5 text-pink-500" viewBox="0 0 32 32" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#a)" />
-                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#b)" />
-                                        <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#c)" />
-                                        <path d="M23 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" fill="#fff" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M16 21a5 5 0 1 0 0-10 5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
-                                            fill="#fff" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M6 15.6c0-3.36 0-5.04.654-6.324a6 6 0 0 1 2.622-2.622C10.56 6 12.24 6 15.6 6h.8c3.36 0 5.04 0 6.324.654a6 6 0 0 1 2.622 2.622C26 10.56 26 12.24 26 15.6v.8c0 3.36 0 5.04-.654 6.324a6 6 0 0 1-2.622 2.622C21.44 26 19.76 26 16.4 26h-.8c-3.36 0-5.04 0-6.324-.654a6 6 0 0 1-2.622-2.622C6 21.44 6 19.76 6 16.4zM15.6 8h.8c1.713 0 2.878.002 3.778.075.877.072 1.325.202 1.638.361a4 4 0 0 1 1.748 1.748c.16.313.29.761.36 1.638.074.9.076 2.065.076 3.778v.8c0 1.713-.002 2.878-.075 3.778-.072.877-.202 1.325-.361 1.638a4 4 0 0 1-1.748 1.748c-.313.16-.761.29-1.638.36-.9.074-2.065.076-3.778.076h-.8c-1.713 0-2.878-.002-3.778-.075-.877-.072-1.325-.202-1.638-.361a4 4 0 0 1-1.748-1.748c-.16-.313-.29-.761-.36-1.638C8.001 19.278 8 18.113 8 16.4v-.8c0-1.713.002-2.878.075-3.778.072-.877.202-1.325.361-1.638a4 4 0 0 1 1.748-1.748c.313-.16.761-.29 1.638-.36.9-.074 2.065-.076 3.778-.076"
-                                            fill="#fff" />
-                                        <defs>
-                                            <radialGradient id="a" cx="0" cy="0" r="1"
-                                                gradientUnits="userSpaceOnUse"
-                                                gradientTransform="rotate(-55.376 27.916 .066)scale(25.5196)">
-                                                <stop stop-color="#B13589" />
-                                                <stop offset=".793" stop-color="#C62F94" />
-                                                <stop offset="1" stop-color="#8A3AC8" />
-                                            </radialGradient>
-                                            <radialGradient id="b" cx="0" cy="0" r="1"
-                                                gradientUnits="userSpaceOnUse"
-                                                gradientTransform="rotate(-65.136 29.766 6.89)scale(22.5942)">
-                                                <stop stop-color="#E0E8B7" />
-                                                <stop offset=".445" stop-color="#FB8A2E" />
-                                                <stop offset=".715" stop-color="#E2425C" />
-                                                <stop offset="1" stop-color="#E2425C" stop-opacity="0" />
-                                            </radialGradient>
-                                            <radialGradient id="c" cx="0" cy="0" r="1"
-                                                gradientUnits="userSpaceOnUse"
-                                                gradientTransform="matrix(38.50003 -5.5 1.1764 8.23476 .5 3)">
-                                                <stop offset=".157" stop-color="#406ADC" />
-                                                <stop offset=".468" stop-color="#6A45BE" />
-                                                <stop offset="1" stop-color="#6A45BE" stop-opacity="0" />
-                                            </radialGradient>
-                                        </defs>
-                                    </svg>
-                                @elseif($item['type'] === 'facebook')
-                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                    </svg>
-                                @elseif($item['type'] === 'youtube')
-                                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                    </svg>
-                                @elseif($item['type'] === 'tiktok')
-                                    <svg class="w-5 h-5 text-black dark:text-white" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.08-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
-                                    </svg>
-                                @elseif($item['type'] === 'github')
-                                    <svg class="w-5 h-5 text-gray-800 dark:text-white" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                    </svg>
-                                @elseif($item['type'] === 'website')
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                    </svg>
-                                @else
-                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                    </svg>
-                                @endif
+                    <div class="space-y-4">
+                        @foreach($socialMediaItems as $index => $item)
+                            <div class="social-media-item bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+                                <!-- Header -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 flex items-center justify-center">
+                                            {!! \App\Helpers\SocialLinkFormatter::getPlatformIcon($item['platform'] ?? '') !!}
+                                        </div>
+                                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                            @php
+                                                $platforms = \App\Helpers\SocialLinkFormatter::getAvailablePlatforms();
+                                                $platformLabel = collect($platforms)->firstWhere('value', $item['platform'])['label'] ?? ucfirst($item['platform']);
+                                            @endphp
+                                            {{ $platformLabel }}
+                                        </span>
+                                    </div>
+                                    <button type="button" wire:click="removeSocialMedia({{ $index }})"
+                                            class="p-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Input Fields -->
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Username</label>
+                                        <input type="text" wire:model="socialMediaItems.{{ $index }}.username"
+                                               placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '') }}"
+                                               class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                               @if($item['use_custom_link'] ?? false) disabled @endif>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <label class="flex items-center space-x-2 cursor-pointer">
+                                            <div class="relative">
+                                                <input type="checkbox" wire:click="toggleCustomLink({{ $index }})"
+                                                       @if($item['use_custom_link'] ?? false) checked @endif class="sr-only">
+                                                <div class="block w-10 h-5 rounded-full transition-colors duration-200 {{ ($item['use_custom_link'] ?? false) ? 'bg-blue-500' : 'bg-slate-300 dark:bg-slate-600' }}"></div>
+                                                <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform duration-200 ease-in-out {{ ($item['use_custom_link'] ?? false) ? 'translate-x-5' : '' }}"></div>
+                                            </div>
+                                            <span class="text-sm text-slate-600 dark:text-slate-400">Gunakan Custom Link</span>
+                                        </label>
+                                    </div>
+                                    
+                                    @if($item['use_custom_link'] ?? false)
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Custom Link</label>
+                                            <input type="url" wire:model="socialMediaItems.{{ $index }}.custom_link"
+                                                   placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '', true) }}"
+                                                   class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">
+                                        <span class="font-medium">Preview:</span>
+                                        <a href="{{ $this->getGeneratedUrl($index) }}" target="_blank" rel="noopener noreferrer"
+                                           class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 ml-1 break-all">
+                                            {{ $this->getGeneratedUrl($index) }}
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- URL Input -->
-                            <input type="url" wire:model="socialMediaItems.{{ $index }}.url"
-                                placeholder="{{ $this->getPlaceholderForPlatform($item['type']) }}"
-                                class="w-full px-12 py-4 m-0 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-
-                            <!-- Remove Button -->
-                            <button type="button" wire:click="removeSocialMedia({{ $index }})"
-                                class="p-2 absolute right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
 
                     <!-- Platform Selection Dropdown -->
                     @if ($showPlatformModal)

@@ -192,8 +192,8 @@
                         Media Sosial
                     </h4>
                     <div class="flex flex-wrap gap-3">
-                        @foreach ($profile->social_media as $platform => $username)
-                            @if ($username && !empty($username))
+                        @foreach ($profile->formatted_social_media as $platform => $url)
+                            @if ($url && !empty($url))
                                 <div
                                     class="flex items-center p-3 bg-red-100 dark:bg-red-900/50 rounded-xl border border-red-100 dark:border-red-800">
                                     <div
@@ -205,7 +205,10 @@
                                         <div class="text-xs font-medium text-red-600 dark:text-red-200">
                                             {{ ucfirst($platform) }}</div>
                                         <div class="text-sm font-semibold text-red-900 dark:text-red-100">
-                                            {{ $username }}</div>
+                                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="hover:underline">
+                                                {{ $url }}
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
