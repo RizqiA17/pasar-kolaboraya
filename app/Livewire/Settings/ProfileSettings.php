@@ -806,9 +806,9 @@ class ProfileSettings extends Component
         ];
     }
 
-    public function getPlaceholderForPlatform($platformType)
+    public function getPlaceholderForPlatform($platformType, $isCustomLink = false)
     {
-        return \App\Helpers\SocialLinkFormatter::getPlaceholderForPlatform($platformType);
+        return \App\Helpers\SocialLinkFormatter::getPlaceholderForPlatform($platformType, $isCustomLink);
     }
 
     public function toggleCustomLink($index)
@@ -816,12 +816,8 @@ class ProfileSettings extends Component
         if (isset($this->socialMediaItems[$index])) {
             $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
             
-            // Clear the other field when toggling
-            if ($this->socialMediaItems[$index]['use_custom_link']) {
-                $this->socialMediaItems[$index]['username'] = '';
-            } else {
-                $this->socialMediaItems[$index]['custom_link'] = '';
-            }
+            // Don't clear the fields - keep both values
+            // User can switch between username and custom link without losing data
         }
     }
 

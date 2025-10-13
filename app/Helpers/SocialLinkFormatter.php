@@ -93,21 +93,35 @@ class SocialLinkFormatter
     /**
      * Get placeholder text for platform
      */
-    public static function getPlaceholderForPlatform(string $platform): string
+    public static function getPlaceholderForPlatform(string $platform, bool $isCustomLink = false): string
     {
-        $placeholders = [
-            'linkedin' => 'username',
-            'x' => 'username',
-            'twitter' => 'username',
-            'instagram' => 'username',
-            'facebook' => 'username',
-            'youtube' => 'username',
-            'tiktok' => 'username',
-            'github' => 'username',
-            'website' => 'yourwebsite.com',
-        ];
+        if ($isCustomLink) {
+            $placeholders = [
+                'linkedin' => 'https://linkedin.com/in/your-profile',
+                'x' => 'https://x.com/your-profile',
+                'twitter' => 'https://twitter.com/your-profile',
+                'instagram' => 'https://instagram.com/your-profile',
+                'facebook' => 'https://facebook.com/your-profile',
+                'youtube' => 'https://youtube.com/@your-channel',
+                'tiktok' => 'https://tiktok.com/@your-profile',
+                'github' => 'https://github.com/your-profile',
+                'website' => 'https://yourwebsite.com',
+            ];
+        } else {
+            $placeholders = [
+                'linkedin' => 'username',
+                'x' => 'username',
+                'twitter' => 'username',
+                'instagram' => 'username',
+                'facebook' => 'username',
+                'youtube' => 'username',
+                'tiktok' => 'username',
+                'github' => 'username',
+                'website' => 'yourwebsite.com',
+            ];
+        }
 
-        return $placeholders[$platform] ?? 'username';
+        return $placeholders[$platform] ?? ($isCustomLink ? 'https://example.com' : 'username');
     }
 
     /**

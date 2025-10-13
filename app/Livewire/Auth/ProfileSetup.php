@@ -559,12 +559,8 @@ class ProfileSetup extends Component
         if (isset($this->socialMediaItems[$index])) {
             $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
             
-            // Clear the other field when toggling
-            if ($this->socialMediaItems[$index]['use_custom_link']) {
-                $this->socialMediaItems[$index]['username'] = '';
-            } else {
-                $this->socialMediaItems[$index]['custom_link'] = '';
-            }
+            // Don't clear the fields - keep both values
+            // User can switch between username and custom link without losing data
         }
     }
 
