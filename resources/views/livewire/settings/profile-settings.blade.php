@@ -542,7 +542,7 @@
                                                 <div class="flex items-center space-x-3">
                                                     <div class="w-8 h-8 flex items-center justify-center">
                                                         {!! \App\Helpers\SocialLinkFormatter::getPlatformIcon($item['platform'] ?? '') !!}
-                                                    </div>
+                                            </div>
                                                     <span class="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                         @php
                                                             $platforms = \App\Helpers\SocialLinkFormatter::getAvailablePlatforms();
@@ -553,10 +553,10 @@
                                                 </div>
                                                 <button type="button" wire:click="removeSocialMedia({{ $index }})"
                                                         class="p-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                </button>
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
                                             </div>
                                             
                                             <!-- Input Fields -->
@@ -570,14 +570,14 @@
                                                             <div class="block w-10 h-5 rounded-full transition-colors duration-200 {{ ($item['use_custom_link'] ?? false) ? 'bg-blue-500' : 'bg-slate-300 dark:bg-slate-600' }}"></div>
                                                             <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform duration-200 ease-in-out {{ ($item['use_custom_link'] ?? false) ? 'translate-x-5' : '' }}"></div>
                                                         </div>
-                                                        <span class="text-sm text-slate-600 dark:text-slate-400">Gunakan Custom Link</span>
+                                                        <span class="text-sm text-slate-600 dark:text-slate-400">Gunakan Link</span>
                                                     </label>
                                                 </div>
                                                 
                                                 <!-- Single Input Field - Saling Mengganti -->
                                                 <div>
                                                     @if($item['use_custom_link'] ?? false)
-                                                        <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Custom Link</label>
+                                                        <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Link</label>
                                                         <input type="url" wire:model="socialMediaItems.{{ $index }}.custom_link"
                                                                placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '', true) }}"
                                                                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('socialMediaItems.'.$index.'.custom_link') border-red-500 @enderror">

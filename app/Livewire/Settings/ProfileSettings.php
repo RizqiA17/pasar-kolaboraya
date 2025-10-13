@@ -686,7 +686,7 @@ class ProfileSettings extends Component
                 $processedSocialMedia = $profile->social_media ?? [];
                 foreach ($processedSocialMedia as $item) {
                     if (is_array($item) && !empty($item['platform'])) {
-                        $this->socialMediaItems[] = [
+                    $this->socialMediaItems[] = [
                             'platform' => $item['platform'],
                             'username' => $item['username'] ?? '',
                             'custom_link' => $item['custom_link'] ?? '',
@@ -712,7 +712,11 @@ class ProfileSettings extends Component
     {
         unset($this->socialMediaItems[$index]);
         $this->socialMediaItems = array_values($this->socialMediaItems); // Re-index array
+        
+        // Clear all social media errors when removing items
+        $this->clearSocialMediaErrors();
     }
+    
 
     public function formatSocialMediaForSave()
     {
@@ -820,6 +824,8 @@ class ProfileSettings extends Component
     private function validateSocialMediaItems()
     {
         if (empty($this->socialMediaItems)) {
+            // Clear all social media errors if no items
+            $this->clearSocialMediaErrors();
             return;
         }
 
@@ -829,9 +835,9 @@ class ProfileSettings extends Component
             if ($useCustomLink) {
                 // If using custom link, custom_link is required and must be valid URL
                 if (empty($item['custom_link'])) {
-                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus diisi.');
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Link harus diisi.');
                 } elseif (!filter_var($item['custom_link'], FILTER_VALIDATE_URL)) {
-                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus berupa URL yang valid.');
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Link harus berupa URL yang valid.');
                 }
             } else {
                 // If using username, username is required
@@ -839,6 +845,25 @@ class ProfileSettings extends Component
                     $this->addError("socialMediaItems.{$index}.username", 'Username harus diisi.');
                 }
             }
+        }
+    }
+    
+    /**
+     * Clear all social media validation errors
+     */
+    private function clearSocialMediaErrors()
+    {
+        $errorBag = $this->getErrorBag();
+        $errorsToRemove = [];
+        
+        foreach ($errorBag->getMessages() as $key => $messages) {
+            if (str_starts_with($key, 'socialMediaItems.')) {
+                $errorsToRemove[] = $key;
+            }
+        }
+        
+        foreach ($errorsToRemove as $key) {
+            $this->resetErrorBag($key);
         }
     }
 
