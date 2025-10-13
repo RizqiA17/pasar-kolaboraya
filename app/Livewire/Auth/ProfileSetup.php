@@ -228,11 +228,20 @@ class ProfileSetup extends Component
 
     public function nextStep()
     {
+        // Validate social media items if we're on social media step
+        if ($this->currentStep == 2) { // Social media is step 2
+            $this->validateSocialMediaItems();
+            
+            // If there are validation errors, don't proceed
+            if ($this->getErrorBag()->any()) {
+                return;
+            }
+        }
+        
         // Check for changes and save if there are any
         if ($this->checkForChanges()) {
             $this->saveCurrentStepData();
         }
-
 
         if ($this->currentStep < $this->totalSteps) {
             $this->currentStep++;
@@ -554,6 +563,34 @@ class ProfileSetup extends Component
         return \App\Helpers\SocialLinkFormatter::getPlaceholderForPlatform($platformType, $isCustomLink);
     }
 
+    /**
+     * Validate social media items with custom rules
+     */
+    private function validateSocialMediaItems()
+    {
+        if (empty($this->socialMediaItems)) {
+            return;
+        }
+
+        foreach ($this->socialMediaItems as $index => $item) {
+            $useCustomLink = $item['use_custom_link'] ?? false;
+            
+            if ($useCustomLink) {
+                // If using custom link, custom_link is required and must be valid URL
+                if (empty($item['custom_link'])) {
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus diisi.');
+                } elseif (!filter_var($item['custom_link'], FILTER_VALIDATE_URL)) {
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus berupa URL yang valid.');
+                }
+            } else {
+                // If using username, username is required
+                if (empty($item['username'])) {
+                    $this->addError("socialMediaItems.{$index}.username", 'Username harus diisi.');
+                }
+            }
+        }
+    }
+
     public function toggleCustomLink($index)
     {
         if (isset($this->socialMediaItems[$index])) {
@@ -580,6 +617,16 @@ class ProfileSetup extends Component
 
     public function saveProfile()
     {
+        // Validate social media items if we're on social media step
+        if ($this->currentStep == 2) { // Social media is step 2
+            $this->validateSocialMediaItems();
+            
+            // If there are validation errors, don't proceed
+            if ($this->getErrorBag()->any()) {
+                return;
+            }
+        }
+        
         // Check for changes and save if there are any
         if ($this->checkForChanges()) {
             $this->saveCurrentStepData();

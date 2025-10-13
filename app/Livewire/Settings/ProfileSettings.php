@@ -272,6 +272,9 @@ class ProfileSettings extends Component
 
     public function updateProfileInformation()
     {
+        // Custom validation for social media items
+        $this->validateSocialMediaItems();
+        
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -288,7 +291,7 @@ class ProfileSettings extends Component
             'socialMediaItems' => ['nullable', 'array'],
             'socialMediaItems.*.platform' => ['required_with:socialMediaItems', 'string'],
             'socialMediaItems.*.username' => ['nullable', 'string', 'max:255'],
-            'socialMediaItems.*.custom_link' => ['nullable', 'url', 'max:500'],
+            'socialMediaItems.*.custom_link' => ['nullable', 'string', 'max:500'],
         ]);
 
         /** @var User $user */
@@ -809,6 +812,34 @@ class ProfileSettings extends Component
     public function getPlaceholderForPlatform($platformType, $isCustomLink = false)
     {
         return \App\Helpers\SocialLinkFormatter::getPlaceholderForPlatform($platformType, $isCustomLink);
+    }
+
+    /**
+     * Validate social media items with custom rules
+     */
+    private function validateSocialMediaItems()
+    {
+        if (empty($this->socialMediaItems)) {
+            return;
+        }
+
+        foreach ($this->socialMediaItems as $index => $item) {
+            $useCustomLink = $item['use_custom_link'] ?? false;
+            
+            if ($useCustomLink) {
+                // If using custom link, custom_link is required and must be valid URL
+                if (empty($item['custom_link'])) {
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus diisi.');
+                } elseif (!filter_var($item['custom_link'], FILTER_VALIDATE_URL)) {
+                    $this->addError("socialMediaItems.{$index}.custom_link", 'Custom link harus berupa URL yang valid.');
+                }
+            } else {
+                // If using username, username is required
+                if (empty($item['username'])) {
+                    $this->addError("socialMediaItems.{$index}.username", 'Username harus diisi.');
+                }
+            }
+        }
     }
 
     public function toggleCustomLink($index)

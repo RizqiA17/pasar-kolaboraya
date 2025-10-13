@@ -126,12 +126,18 @@
                                             <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Custom Link</label>
                                             <input type="url" wire:model="socialMediaItems.{{ $index }}.custom_link"
                                                    placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '', true) }}"
-                                                   class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('socialMediaItems.'.$index.'.custom_link') border-red-500 @enderror">
+                                            @error('socialMediaItems.'.$index.'.custom_link')
+                                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                            @enderror
                                         @else
                                             <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Username</label>
                                             <input type="text" wire:model="socialMediaItems.{{ $index }}.username"
                                                    placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '', false) }}"
-                                                   class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('socialMediaItems.'.$index.'.username') border-red-500 @enderror">
+                                            @error('socialMediaItems.'.$index.'.username')
+                                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                            @enderror
                                         @endif
                                     </div>
                                     
