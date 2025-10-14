@@ -133,7 +133,7 @@ class QrScanner extends Component
             $this->js('
                 setTimeout(() => {
                     console.log("Redirecting to collective action join page...");
-                    Livewire.visit("/collective-actions/' . $collectiveAction->id . '/join");
+                    window.location.href = "/collective-actions/' . $collectiveAction->id . '/join";
                 }, 2000);
             ');
 

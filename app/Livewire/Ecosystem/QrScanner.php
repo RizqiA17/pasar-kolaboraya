@@ -133,7 +133,7 @@ class QrScanner extends Component
             $this->js('
                 setTimeout(() => {
                     console.log("Redirecting to ecosystem join page...");
-                    Livewire.visit("/ecosystem/' . $ecosystem->id . '/join");
+                    window.location.href = "/ecosystem/' . $ecosystem->id . '/join";
                 }, 2000);
             ');
 
