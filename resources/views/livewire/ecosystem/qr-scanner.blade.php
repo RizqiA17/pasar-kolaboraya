@@ -200,7 +200,6 @@
                     },
                     (errorMessage) => {
                         // Ignore scan errors, keep scanning
-                        console.log('QR scan error:', errorMessage);
                         // console.log('QR scan error:', errorMessage);
                     }
                 );
