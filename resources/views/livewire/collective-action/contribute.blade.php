@@ -100,7 +100,7 @@
     </div>
 
     <!-- Contribution Form -->
-    <form wire:submit="submitContribution" class="space-y-6">
+    <div class="space-y-6">
         <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                 Form Kontribusi
@@ -284,7 +284,7 @@
         <!-- Submit Button -->
         <div class="flex gap-3">
             <flux:button 
-                type="submit" 
+                wire:click="submitContribution" 
                 variant="primary" 
                 class="flex-1"
                 {{-- :loading="$wire.loading" --}}
@@ -300,7 +300,7 @@
                 Batal
             </flux:button>
         </div>
-    </form>
+    </div>
 
     <!-- Success/Error Messages -->
     @if (session()->has('message'))

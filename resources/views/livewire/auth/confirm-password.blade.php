@@ -7,7 +7,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form method="POST" wire:submit="confirmPassword" class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6">
         <!-- Password -->
         <flux:input
             wire:model="password"
@@ -19,6 +19,6 @@
             viewable
         />
 
-        <flux:button variant="primary" type="submit" class="w-full">{{ __('Confirm') }}</flux:button>
-    </form>
+        <flux:button wire:click="confirmPassword" variant="primary" class="w-full">{{ __('Confirm') }}</flux:button>
+    </div>
 </div>

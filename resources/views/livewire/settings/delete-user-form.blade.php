@@ -19,7 +19,7 @@
             <!-- SVG Accent for Modal -->
             <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
             
-            <form method="POST" wire:submit="deleteUser" class="space-y-6">
+            <div class="space-y-6">
                 <div>
                     <flux:heading size="lg">{{ __('Are you sure you want to delete your account?') }}</flux:heading>
 
@@ -35,9 +35,9 @@
                         <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
                     </flux:modal.close>
 
-                    <flux:button variant="danger" type="submit">{{ __('Delete account') }}</flux:button>
+                    <flux:button wire:click="deleteUser" variant="danger">{{ __('Delete account') }}</flux:button>
                 </div>
-            </form>
+            </div>
         </div>
     </flux:modal>
 </section>

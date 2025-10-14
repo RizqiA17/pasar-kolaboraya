@@ -8,6 +8,7 @@ use App\Models\Skill;
 use App\Models\Contribution;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -232,8 +233,9 @@ class ProfileSetup extends Component
         if ($this->currentStep == 2) { // Social media is step 2
             $this->validateSocialMediaItems();
             
-            // If there are validation errors, don't proceed
+            // If there are validation errors, show error message and don't proceed
             if ($this->getErrorBag()->any()) {
+                session()->flash('error', 'Terdapat kesalahan pada data media sosial. Silakan periksa dan lengkapi data yang diperlukan.');
                 return;
             }
         }
@@ -241,6 +243,12 @@ class ProfileSetup extends Component
         // Check for changes and save if there are any
         if ($this->checkForChanges()) {
             $this->saveCurrentStepData();
+            
+            // Check if save was successful by checking for errors
+            if ($this->getErrorBag()->any()) {
+                session()->flash('error', 'Terdapat kesalahan saat menyimpan data. Silakan periksa dan coba lagi.');
+                return;
+            }
         }
 
         if ($this->currentStep < $this->totalSteps) {
@@ -281,95 +289,129 @@ class ProfileSetup extends Component
 
     public function saveCurrentStepData()
     {
-        $user = Auth::user();
-        
-        // Create or update profile with current data
-        $profile = $user->profile()->updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'organization' => $this->organization,
-                'phone' => $this->phone,
-                'vision' => $this->vision,
-                'social_media' => $this->formatSocialMediaForSave(),
-            ]
-        );
-
-        // Handle skills (both selected and custom)
-        // First, clear existing skills
-        $profile->skills()->detach();
-        
-        // Add selected skills
-        if (!empty($this->selectedSkills)) {
-            $selectedSkillData = [];
-            foreach ($this->selectedSkills as $skillId) {
-                $selectedSkillData[$skillId] = [
-                    'level' => $this->mapSkillLevelToInteger($this->skillLevels[$skillId] ?? 'beginner'),
-                    'is_primary' => in_array($skillId, $this->primarySkills),
-                    'custom_name' => null
-                ];
+        try {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            
+            // Check if user is still authenticated
+            if (!$user) {
+                session()->flash('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+                return redirect()->route('login');
             }
-            $profile->skills()->attach($selectedSkillData);
-        }
-        
-        // Add custom skills directly to database
-        if (!empty($this->customSkills)) {
-            foreach ($this->customSkills as $customSkill) {
-                if (!empty($customSkill['name'])) {
-                    DB::table('user_skills')->insert([
-                        'profile_id' => $profile->id,
-                        'skill_id' => null,
-                        'custom_name' => $customSkill['name'],
-                        'level' => 1, // Default level
-                        'is_primary' => false, // Default not primary
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
+            
+            // Use database transaction to ensure data consistency
+            $profile = DB::transaction(function () use ($user) {
+                // Create or update profile with current data
+                /** @var \App\Models\Profile $profile */
+                $profile = $user->profile()->updateOrCreate(
+                    [],
+                    [
+                        'organization' => $this->organization,
+                        'phone' => $this->phone,
+                        'vision' => $this->vision,
+                        'social_media' => $this->formatSocialMediaForSave(),
+                    ]
+                );
+
+                // Handle skills (both selected and custom)
+                // First, clear existing skills
+                $profile->skills()->detach();
+                
+                // Add selected skills
+                if (!empty($this->selectedSkills)) {
+                    $selectedSkillData = [];
+                    foreach ($this->selectedSkills as $skillId) {
+                        $selectedSkillData[$skillId] = [
+                            'level' => $this->mapSkillLevelToInteger($this->skillLevels[$skillId] ?? 'beginner'),
+                            'is_primary' => in_array($skillId, $this->primarySkills),
+                            'custom_name' => null
+                        ];
+                    }
+                    $profile->skills()->attach($selectedSkillData);
                 }
-            }
-        }
-
-        // Handle interests (both selected and custom)
-        // First, clear existing interests
-        $profile->interests()->detach();
-        
-        // Add selected interests
-        if (!empty($this->selectedInterests)) {
-            $selectedInterestData = [];
-            foreach ($this->selectedInterests as $interestId) {
-                $selectedInterestData[$interestId] = [
-                    'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low'),
-                    'custom_name' => null
-                ];
-            }
-            $profile->interests()->attach($selectedInterestData);
-        }
-        
-        // Add custom interests directly to database
-        if (!empty($this->customInterests)) {
-            foreach ($this->customInterests as $customInterest) {
-                if (!empty($customInterest['name'])) {
-                    DB::table('user_interests')->insert([
-                        'profile_id' => $profile->id,
-                        'interest_id' => null,
-                        'custom_name' => $customInterest['name'],
-                        'level' => 1, // Default level
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
+                
+                // Add custom skills directly to database
+                if (!empty($this->customSkills)) {
+                    foreach ($this->customSkills as $customSkill) {
+                        if (!empty($customSkill['name'])) {
+                            DB::table('user_skills')->insert([
+                                'profile_id' => $profile->id,
+                                'skill_id' => null,
+                                'custom_name' => $customSkill['name'],
+                                'level' => 1, // Default level
+                                'is_primary' => false, // Default not primary
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+                    }
                 }
-            }
-        }
 
-        // Sync contributions
-        if (!empty($this->selectedContributions)) {
-            $contributionData = [];
-            foreach ($this->selectedContributions as $contributionId) {
-                $contributionData[$contributionId] = [
-                    'description' => $this->contributionDescriptions[$contributionId] ?? '',
-                    'date' => $this->contributionDates[$contributionId] ?? now()
-                ];
-            }
-            $profile->contributions()->sync($contributionData);
+                // Handle interests (both selected and custom)
+                // First, clear existing interests
+                $profile->interests()->detach();
+                
+                // Add selected interests
+                if (!empty($this->selectedInterests)) {
+                    $selectedInterestData = [];
+                    foreach ($this->selectedInterests as $interestId) {
+                        $selectedInterestData[$interestId] = [
+                            'level' => $this->mapInterestLevelToInteger($this->interestLevels[$interestId] ?? 'low'),
+                            'custom_name' => null
+                        ];
+                    }
+                    $profile->interests()->attach($selectedInterestData);
+                }
+                
+                // Add custom interests directly to database
+                if (!empty($this->customInterests)) {
+                    foreach ($this->customInterests as $customInterest) {
+                        if (!empty($customInterest['name'])) {
+                            DB::table('user_interests')->insert([
+                                'profile_id' => $profile->id,
+                                'interest_id' => null,
+                                'custom_name' => $customInterest['name'],
+                                'level' => 1, // Default level
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+                        }
+                    }
+                }
+
+                // Sync contributions
+                if (!empty($this->selectedContributions)) {
+                    $contributionData = [];
+                    foreach ($this->selectedContributions as $contributionId) {
+                        $contributionData[$contributionId] = [
+                            'description' => $this->contributionDescriptions[$contributionId] ?? '',
+                            'date' => $this->contributionDates[$contributionId] ?? now()
+                        ];
+                    }
+                    $profile->contributions()->sync($contributionData);
+                }
+                
+                return $profile;
+            });
+            
+            // Log successful save
+            Log::info('Profile setup data saved successfully', [
+                'user_id' => $user->id,
+                'current_step' => $this->currentStep,
+                'profile_id' => $profile->id
+            ]);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Re-throw validation exceptions to show field errors
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Profile setup save failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'current_step' => $this->currentStep,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan data profil. Silakan coba lagi atau hubungi administrator jika masalah berlanjut.');
         }
     }
 
@@ -573,12 +615,15 @@ class ProfileSetup extends Component
     private function validateSocialMediaItems()
     {
         if (empty($this->socialMediaItems)) {
-            // Clear all social media errors if no items
-            $this->clearSocialMediaErrors();
             return;
         }
 
         foreach ($this->socialMediaItems as $index => $item) {
+            // Skip validation if platform is not selected
+            if (empty($item['platform'])) {
+                continue;
+            }
+            
             $useCustomLink = $item['use_custom_link'] ?? false;
             
             if ($useCustomLink) {
@@ -621,8 +666,36 @@ class ProfileSetup extends Component
         if (isset($this->socialMediaItems[$index])) {
             $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
             
+            // Clear errors for this specific item when toggling
+            $this->clearSocialMediaItemErrors($index);
+            
             // Don't clear the fields - keep both values
             // User can switch between username and custom link without losing data
+        }
+    }
+    
+    /**
+     * Clear errors for a specific social media item
+     */
+    private function clearSocialMediaItemErrors($index)
+    {
+        $this->resetErrorBag("socialMediaItems.{$index}.custom_link");
+        $this->resetErrorBag("socialMediaItems.{$index}.username");
+    }
+    
+    /**
+     * Handle social media input changes
+     */
+    public function updatedSocialMediaItems($value, $key)
+    {
+        // Extract index from key (e.g., "0.custom_link" -> 0)
+        $parts = explode('.', $key);
+        if (count($parts) >= 2) {
+            $index = $parts[0];
+            $field = $parts[1];
+            
+            // Clear errors for this specific field when user starts typing
+            $this->resetErrorBag("socialMediaItems.{$index}.{$field}");
         }
     }
 
@@ -642,23 +715,57 @@ class ProfileSetup extends Component
 
     public function saveProfile()
     {
-        // Validate social media items if we're on social media step
-        if ($this->currentStep == 2) { // Social media is step 2
-            $this->validateSocialMediaItems();
-            
-            // If there are validation errors, don't proceed
-            if ($this->getErrorBag()->any()) {
-                return;
+        try {
+            // Validate social media items if we're on social media step
+            if ($this->currentStep == 2) { // Social media is step 2
+                $this->validateSocialMediaItems();
+                
+                // If there are validation errors, show error message and don't proceed
+                if ($this->getErrorBag()->any()) {
+                    session()->flash('error', 'Terdapat kesalahan pada data media sosial. Silakan periksa dan lengkapi data yang diperlukan.');
+                    return;
+                }
             }
-        }
-        
-        // Check for changes and save if there are any
-        if ($this->checkForChanges()) {
-            $this->saveCurrentStepData();
-        }
+            
+            // Check for changes and save if there are any
+            if ($this->checkForChanges()) {
+                $this->saveCurrentStepData();
+                
+                // Check if save was successful by checking for errors
+                if ($this->getErrorBag()->any()) {
+                    session()->flash('error', 'Terdapat kesalahan saat menyimpan data. Silakan periksa dan coba lagi.');
+                    return;
+                }
+            }
 
-        // Redirect to dashboard
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+            // Show success message
+            session()->flash('message', 'Profil berhasil disimpan!');
+            
+            // Redirect to dashboard
+            $this->redirect(route('dashboard', absolute: false), navigate: true);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Log validation exception
+            Log::warning('Profile setup validation failed', [
+                'user_id' => Auth::id(),
+                'current_step' => $this->currentStep,
+                'errors' => $e->errors()
+            ]);
+            
+            // Show error message to user
+            session()->flash('error', 'Terdapat kesalahan pada data yang diisi. Silakan periksa dan lengkapi data yang diperlukan.');
+            
+            // Re-throw validation exceptions to show field errors
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Profile save failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'current_step' => $this->currentStep,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan profil. Silakan coba lagi atau hubungi administrator jika masalah berlanjut.');
+        }
     }
 
     private function mapSkillLevelToInteger($level)

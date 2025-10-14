@@ -355,7 +355,7 @@
                     </div>
 
                     <div class="p-6">
-                        <form wire:submit="updateProfileInformation" class="space-y-6">
+                        <div class="space-y-6">
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
@@ -578,7 +578,7 @@
                                                 <div>
                                                     @if($item['use_custom_link'] ?? false)
                                                         <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Link</label>
-                                                        <input type="url" wire:model="socialMediaItems.{{ $index }}.custom_link"
+                                                        <input type="text" wire:model="socialMediaItems.{{ $index }}.custom_link"
                                                                placeholder="{{ $this->getPlaceholderForPlatform($item['platform'] ?? '', true) }}"
                                                                class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-700 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('socialMediaItems.'.$index.'.custom_link') border-red-500 @enderror">
                                                         @error('socialMediaItems.'.$index.'.custom_link')
@@ -681,7 +681,7 @@
 
                             <div class="flex items-center justify-between p-6 border-t border-gray-200">
                                 <div class="flex items-center space-x-3">
-                                    <button type="submit"
+                                    <button wire:click="updateProfileInformation"
                                         class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
                                         <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -718,7 +718,7 @@
                                     </span>
                                 </x-action-message>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             @elseif ($tab === 'interests')
@@ -1565,13 +1565,43 @@
     document.addEventListener('DOMContentLoaded', function() {
         let hasUnsavedChanges = false;
         let originalFormData = {};
+        let csrfTokenRefreshInterval;
+        
+        // CSRF Token Management
+        function refreshCsrfToken() {
+            fetch('/csrf-token-refresh', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // Update CSRF token in meta tag
+                    document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.token);
+                    
+                    // Update CSRF token in forms
+                    document.querySelectorAll('input[name="_token"]').forEach(input => {
+                        input.value = data.token;
+                    });
+                    
+                    console.log('CSRF token refreshed successfully');
+                }
+            })
+            .catch(error => {
+                console.error('Failed to refresh CSRF token:', error);
+            });
+        }
+        
+        // Refresh CSRF token every 15 minutes
+        csrfTokenRefreshInterval = setInterval(refreshCsrfToken, 15 * 60 * 1000);
 
         // Track form changes for profile section
         function trackProfileChanges() {
-            const form = document.querySelector('form[wire\\:submit="updateProfileInformation"]');
-            if (!form) return;
-
-            const inputs = form.querySelectorAll('input, textarea');
+            const inputs = document.querySelectorAll('input[wire\\:model], textarea[wire\\:model], select[wire\\:model]');
+            if (!inputs.length) return;
 
             // Store original values
             inputs.forEach(input => {
@@ -1582,7 +1612,7 @@
             inputs.forEach(input => {
                 input.addEventListener('input', function() {
                     const currentValue = this.value;
-                    const originalValue = originalFormData[this.name || input.id];
+                    const originalValue = originalFormData[this.name || this.id];
 
                     if (currentValue !== originalValue) {
                         showUnsavedIndicator('profile');
@@ -1747,14 +1777,10 @@
                 hasUnsavedChanges = false;
                 hideUnsavedWarning();
                 // Reset original form data
-                const form = document.querySelector(
-                    'form[wire\\:submit="updateProfileInformation"]');
-                if (form) {
-                    const inputs = form.querySelectorAll('input, textarea');
-                    inputs.forEach(input => {
-                        originalFormData[input.name || input.id] = input.value;
-                    });
-                }
+                const inputs = document.querySelectorAll('input[wire\\:model], textarea[wire\\:model], select[wire\\:model]');
+                inputs.forEach(input => {
+                    originalFormData[input.name || input.id] = input.value;
+                });
             });
 
             Livewire.on('interests-updated', () => {
@@ -1792,7 +1818,60 @@
                 return 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman ini?';
             }
         });
+        
+        // Handle Livewire errors
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('profile-updated', () => {
+                hasUnsavedChanges = false;
+                hideUnsavedWarning();
+            });
+            
+            // Listen for validation errors
+            Livewire.on('validation-error', (error) => {
+                console.error('Validation error:', error);
+                // Show user-friendly error message
+                if (error.message) {
+                    showErrorNotification(error.message);
+                }
+            });
+        });
+        
+        // Clean up interval when page unloads
+        window.addEventListener('beforeunload', function() {
+            if (csrfTokenRefreshInterval) {
+                clearInterval(csrfTokenRefreshInterval);
+            }
+        });
     });
+    
+    // Helper function to show error notifications
+    function showErrorNotification(message) {
+        // Create error notification element
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 z-50 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg';
+        notification.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-red-500 hover:text-red-700">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    }
 
     // File size validation function
     function validateFileSize(input, maxSizeMB, fieldName) {

@@ -139,14 +139,15 @@
             // Auto-start camera when page loads
             const url = window.location.href;
             if(url.includes("qr-scanner")){
-            setTimeout(() => {
-                console.log('Auto-starting camera...');
-                startCamera();
-            }, 1000);}
+                setTimeout(() => {
+                    console.log('Auto-starting camera...');
+                    startCamera();
+                }, 1000);
+            }
         });
 
         document.addEventListener('livewire:navigating', () => {
-            stopCamera()
+            stopCamera();
         });
 
 
@@ -230,6 +231,9 @@
                     html5QrcodeScanner = null;
                 }).catch((err) => {
                     console.log('Error stopping scanner:', err);
+                    // Force cleanup even if stop fails
+                    html5QrcodeScanner.clear();
+                    html5QrcodeScanner = null;
                 });
             }
         }

@@ -3,6 +3,7 @@
 namespace App\Livewire\CollectiveAction;
 
 use App\Models\CollectiveAction;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
@@ -55,12 +56,33 @@ class QrScanner extends Component
         $this->successMessage = '';
 
         try {
-            // Parse QR code URL to get collective action ID
+            // Check if user can join collective actions first
+            if (Auth::check()) {
+                /** @var User $user */
+                $user = Auth::user();
+                if (!$user->canJoinEcosystemsAndActions()) {
+                    $this->errorMessage = 'Anda tidak dapat bergabung dengan aksi kolektif. Hanya pengguna tamu dan partisipan yang dapat bergabung.';
+                    return;
+                }
+            }
+
+            // Validate QR code format first
+            if (empty($this->scannedQrCode)) {
+                $this->errorMessage = 'QR code tidak boleh kosong.';
+                return;
+            }
+
+            // Try to find collective action by QR code
             $collectiveActionId = CollectiveAction::where('qr_code', $this->scannedQrCode)->value('id');
             
             if (!$collectiveActionId) {
-                $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung aksi kolektif.';
-                return;
+                // Try alternative formats
+                $collectiveActionId = $this->extractCollectiveActionIdFromQr($this->scannedQrCode);
+                
+                if (!$collectiveActionId) {
+                    $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung aksi kolektif.';
+                    return;
+                }
             }
 
             // Find collective action
@@ -104,13 +126,14 @@ class QrScanner extends Component
             Log::info('QR Code redirect triggered', [
                 'collective_action_id' => $collectiveAction->id,
                 'user_id' => Auth::id(),
+                'qr_code' => $this->scannedQrCode,
             ]);
             
-            // Use JavaScript to redirect after showing success message
+            // Use Livewire redirect instead of JavaScript
             $this->js('
                 setTimeout(() => {
                     console.log("Redirecting to collective action join page...");
-                    window.location.href = "/collective-actions/' . $collectiveAction->id . '/join";
+                    Livewire.visit("/collective-actions/' . $collectiveAction->id . '/join");
                 }, 2000);
             ');
 
@@ -119,9 +142,10 @@ class QrScanner extends Component
                 'qr_code' => $this->scannedQrCode,
                 'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString(),
             ]);
             
-            $this->errorMessage = 'Terjadi kesalahan saat memproses QR code.';
+            $this->errorMessage = 'Terjadi kesalahan saat memproses QR code. Silakan coba lagi.';
         }
     }
 

@@ -36,7 +36,7 @@
         </div>
     @else
 
-    <form method="POST" wire:submit="register" class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6">
         <!-- Name -->
         <flux:input
             wire:model="name"
@@ -107,11 +107,11 @@
         </p>
 
         <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full cursor-pointer">
+            <flux:button wire:click="register" variant="primary" class="w-full cursor-pointer">
                 {{ 'Buat akun' }}
             </flux:button>
         </div>
-    </form>
+    </div>
 
     <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600">
         <span>{{ 'Sudah punya akun?' }}</span>

@@ -14,6 +14,7 @@ use Livewire\Attributes\Layout;
 use App\Services\ProfileService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -202,9 +203,27 @@ class ProfileSettings extends Component
         $this->hasDataChanged = true;
     }
 
-    public function updatedSocialMediaItems()
+    public function updatedSocialMediaItems($value, $key)
     {
         $this->hasDataChanged = true;
+        
+        // Extract index from key (e.g., "0.custom_link" -> 0)
+        $parts = explode('.', $key);
+        if (count($parts) >= 2) {
+            $index = $parts[0];
+            $field = $parts[1];
+            
+            // Clear errors for this specific field when user starts typing
+            $this->resetErrorBag("socialMediaItems.{$index}.{$field}");
+            
+            // Also clear any session error messages
+            if (session()->has('error')) {
+                session()->forget('error');
+            }
+            
+            // Real-time validation for the specific field
+            $this->validateSocialMediaField($index, $field, $value);
+        }
     }
 
     // Method to reset temporary files
@@ -272,64 +291,134 @@ class ProfileSettings extends Component
 
     public function updateProfileInformation()
     {
-        // Custom validation for social media items
-        $this->validateSocialMediaItems();
-        
-        $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                new UniqueEmailForActiveUsers($this->getUser()->id),
-            ],
-            'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
-            'organization' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'vision' => ['nullable', 'string'],
-            'socialMediaItems' => ['nullable', 'array'],
-            'socialMediaItems.*.platform' => ['required_with:socialMediaItems', 'string'],
-            'socialMediaItems.*.username' => ['nullable', 'string', 'max:255'],
-            'socialMediaItems.*.custom_link' => ['nullable', 'string', 'max:500'],
-        ]);
+        try {
+            // Log the update attempt
+            Log::info('Profile update attempt started', [
+                'user_id' => $this->getUser()->id,
+                'has_data_changed' => $this->hasDataChanged,
+                'social_media_items_count' => count($this->socialMediaItems)
+            ]);
+            
+            // Remove empty social media items first
+            $this->removeEmptySocialMediaItems();
+            
+            // Validate all fields using Livewire validation
+            $this->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    new UniqueEmailForActiveUsers($this->getUser()->id),
+                ],
+                'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
+                'organization' => ['nullable', 'string', 'max:255'],
+                'phone' => ['nullable', 'string', 'max:255'],
+                'vision' => ['nullable', 'string'],
+                'socialMediaItems' => ['nullable', 'array'],
+                'socialMediaItems.*.platform' => ['required_with:socialMediaItems', 'string'],
+                'socialMediaItems.*.username' => ['nullable', 'string', 'max:255'],
+                'socialMediaItems.*.custom_link' => ['nullable', 'string', 'max:500'],
+            ]);
+            
+            // Custom validation for social media items after Livewire validation
+            $this->validateSocialMediaItems();
+            
+            // Check if there are any validation errors after custom validation
+            if ($this->getErrorBag()->any()) {
+                // Log validation errors
+                Log::warning('Social media validation failed', [
+                    'user_id' => $this->getUser()->id,
+                    'errors' => $this->getErrorBag()->getMessages()
+                ]);
+                
+                // Show error message to user
+                session()->flash('error', 'Terdapat kesalahan pada data yang diisi. Silakan periksa dan lengkapi data yang diperlukan.');
+                return; // Stop execution if there are validation errors
+            }
 
-        /** @var User $user */
-        $user = $this->getUser();
+            /** @var User $user */
+            $user = $this->getUser();
 
-        // Update user fields
-        $user->fill([
-            'name' => $this->name,
-            'email' => $this->email,
-            'gender' => $this->gender,
-        ]);
+            // Check if user is still authenticated
+            if (!$user) {
+                session()->flash('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+                return redirect()->route('login');
+            }
 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
+            // Use database transaction to ensure data consistency
+            DB::transaction(function () use ($user) {
+                // Update user fields
+                $user->fill([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'gender' => $this->gender,
+                ]);
+
+                if ($user->isDirty('email')) {
+                    $user->email_verified_at = null;
+                }
+
+                $user->save();
+
+                // Format social media for save
+                $socialMedia = $this->formatSocialMediaForSave();
+
+                // Update or create profile
+                $user->profile()->updateOrCreate([], [
+                    'organization' => $this->organization,
+                    'phone' => $this->phone,
+                    'vision' => $this->vision,
+                    'social_media' => $socialMedia,
+                    // 'peran_id' => $this->selectedRole,
+                ]);
+            });
+
+            $this->hasDataChanged = false;
+            $this->dispatch('profile-updated');
+            
+            // Log successful update
+            Log::info('Profile updated successfully', [
+                'user_id' => $user->id,
+                'profile_id' => $user->profile->id ?? null
+            ]);
+            
+            if ($user->email_verified_at == null) {
+                try {
+                    $this->getUser()->sendEmailVerificationNotification();
+                    return redirect()->route('verification.notice');
+                } catch (\Exception $e) {
+                    Log::warning('Email verification notification failed', [
+                        'user_id' => $user->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Continue without redirecting - user can request resend later
+                }
+            }
+
+            session()->flash('message', 'Profil berhasil diperbarui!');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Log validation exception
+            Log::warning('Profile validation failed', [
+                'user_id' => $this->getUser()->id ?? null,
+                'errors' => $e->errors()
+            ]);
+            
+            // Show error message to user
+            session()->flash('error', 'Terdapat kesalahan pada data yang diisi. Silakan periksa dan lengkapi data yang diperlukan.');
+            
+            // Re-throw validation exceptions to show field errors
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Profile update failed: ' . $e->getMessage(), [
+                'user_id' => $this->getUser()->id ?? null,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan profil. Silakan coba lagi atau hubungi administrator jika masalah berlanjut.');
         }
-
-        $user->save();
-
-        // Format social media for save
-        $socialMedia = $this->formatSocialMediaForSave();
-
-        // Update or create profile
-        $user->profile()->updateOrCreate([], [
-            'organization' => $this->organization,
-            'phone' => $this->phone,
-            'vision' => $this->vision,
-            'social_media' => $socialMedia,
-            // 'peran_id' => $this->selectedRole,
-        ]);
-
-        $this->hasDataChanged = false;
-        $this->dispatch('profile-updated');
-        if ($user->email_verified_at == null) {
-            $this->getUser()->sendEmailVerificationNotification();
-            return redirect()->route('verification.notice');
-        }
-
-        session()->flash('message', 'Profil berhasil diperbarui!');
     }
 
     private function loadSkillsAndInterests($profile)
@@ -398,56 +487,84 @@ class ProfileSettings extends Component
 
     public function updateInterests()
     {
-        $this->validate([
-            'selectedInterests' => 'array',
-            'selectedInterests.*' => 'exists:interests,id',
-            'customInterests' => 'array',
-            'customInterests.*.name' => 'required|string|max:255',
-            'customInterests.*.level' => 'integer|min:1|max:5',
-        ]);
+        try {
+            $this->validate([
+                'selectedInterests' => 'array',
+                'selectedInterests.*' => 'exists:interests,id',
+                'customInterests' => 'array',
+                'customInterests.*.name' => 'required|string|max:255',
+                'customInterests.*.level' => 'integer|min:1|max:5',
+            ]);
 
-        $profileService = new ProfileService();
-        /** @var User $user */
-        $user = $this->getUser();
-        $success = $profileService->updateInterests($user, $this->selectedInterests, $this->customInterests);
+            $profileService = new ProfileService();
+            /** @var User $user */
+            $user = $this->getUser();
+            $success = $profileService->updateInterests($user, $this->selectedInterests, $this->customInterests);
 
-        if ($success) {
-            $this->dispatch('profile-updated');
-            session()->flash('message', 'Minat berhasil diperbarui!');
-        } else {
-            session()->flash('error', 'Gagal memperbarui minat. Silakan coba lagi.');
+            if ($success) {
+                $this->dispatch('profile-updated');
+                session()->flash('message', 'Minat berhasil diperbarui!');
+                
+                Log::info('User interests updated successfully', [
+                    'user_id' => $user->id,
+                    'interests_count' => count($this->selectedInterests),
+                    'custom_interests_count' => count($this->customInterests)
+                ]);
+            } else {
+                session()->flash('error', 'Gagal memperbarui minat. Silakan coba lagi.');
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Failed to update interests: ' . $e->getMessage(), [
+                'user_id' => $this->getUser()->id ?? null,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui minat. Silakan coba lagi.');
         }
     }
 
     public function updateSkills()
     {
-        $this->validate([
-            'selectedSkills' => 'array',
-            'selectedSkills.*' => 'exists:skills,id',
-            'customSkills' => 'array',
-            'customSkills.*.name' => 'required|string|max:255',
-            'customSkills.*.level' => 'integer|min:1|max:5',
-        ]);
+        try {
+            $this->validate([
+                'selectedSkills' => 'array',
+                'selectedSkills.*' => 'exists:skills,id',
+                'customSkills' => 'array',
+                'customSkills.*.name' => 'required|string|max:255',
+                'customSkills.*.level' => 'integer|min:1|max:5',
+            ]);
 
-        // Add logging for debugging
-        Log::info('Updating skills for user', [
-            'user_id' => $this->getUser()->id,
-            'selected_skills' => $this->selectedSkills,
-            'custom_skills' => $this->customSkills
-        ]);
+            // Add logging for debugging
+            Log::info('Updating skills for user', [
+                'user_id' => $this->getUser()->id,
+                'selected_skills' => $this->selectedSkills,
+                'custom_skills' => $this->customSkills
+            ]);
 
-        $profileService = new ProfileService();
-        /** @var User $user */
-        $user = $this->getUser();
-        $success = $profileService->updateSkills($user, $this->selectedSkills, $this->customSkills);
+            $profileService = new ProfileService();
+            /** @var User $user */
+            $user = $this->getUser();
+            $success = $profileService->updateSkills($user, $this->selectedSkills, $this->customSkills);
 
-        if ($success) {
-            Log::info('Skills updated successfully');
-            $this->dispatch('profile-updated');
-            session()->flash('message', 'Keahlian berhasil diperbarui!');
-        } else {
-            Log::error('Failed to update skills');
-            session()->flash('error', 'Gagal memperbarui keahlian. Silakan coba lagi.');
+            if ($success) {
+                Log::info('Skills updated successfully');
+                $this->dispatch('profile-updated');
+                session()->flash('message', 'Keahlian berhasil diperbarui!');
+            } else {
+                Log::error('Failed to update skills');
+                session()->flash('error', 'Gagal memperbarui keahlian. Silakan coba lagi.');
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Failed to update skills: ' . $e->getMessage(), [
+                'user_id' => $this->getUser()->id ?? null,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui keahlian. Silakan coba lagi.');
         }
     }
 
@@ -706,6 +823,11 @@ class ProfileSettings extends Component
             'custom_link' => '',
             'use_custom_link' => false
         ];
+        
+        // Clear any session error messages when adding new social media
+        if (session()->has('error')) {
+            session()->forget('error');
+        }
     }
 
     public function removeSocialMedia($index)
@@ -717,25 +839,52 @@ class ProfileSettings extends Component
         $this->clearSocialMediaErrors();
     }
     
+    /**
+     * Remove empty social media items automatically
+     * Only remove items that are completely empty (no platform selected)
+     */
+    public function removeEmptySocialMediaItems()
+    {
+        $this->socialMediaItems = array_filter($this->socialMediaItems, function($item) {
+            // Only remove items that have no platform selected
+            // Keep items with platform even if username/link is empty (for validation)
+            return !empty($item['platform']);
+        });
+        
+        // Re-index array
+        $this->socialMediaItems = array_values($this->socialMediaItems);
+    }
+    
 
     public function formatSocialMediaForSave()
     {
         $socialMedia = [];
         foreach ($this->socialMediaItems as $item) {
-            if (!empty($item['platform'])) {
-                $socialMediaItem = [
-                    'platform' => $item['platform']
-                ];
-                
-                if (!empty($item['use_custom_link']) && !empty($item['custom_link'])) {
+            // Only save items with platform selected
+            if (empty($item['platform'])) {
+                continue;
+            }
+            
+            $socialMediaItem = [
+                'platform' => $item['platform']
+            ];
+            
+            $useCustomLink = $item['use_custom_link'] ?? false;
+            
+            if ($useCustomLink) {
+                // Only save if custom_link is not empty
+                if (!empty($item['custom_link'])) {
                     $socialMediaItem['custom_link'] = $item['custom_link'];
                     $socialMediaItem['username'] = null;
-                } elseif (!empty($item['username'])) {
+                    $socialMedia[] = $socialMediaItem;
+                }
+            } else {
+                // Only save if username is not empty
+                if (!empty($item['username'])) {
                     $socialMediaItem['username'] = $item['username'];
                     $socialMediaItem['custom_link'] = null;
+                    $socialMedia[] = $socialMediaItem;
                 }
-                
-                $socialMedia[] = $socialMediaItem;
             }
         }
         return $socialMedia;
@@ -824,12 +973,15 @@ class ProfileSettings extends Component
     private function validateSocialMediaItems()
     {
         if (empty($this->socialMediaItems)) {
-            // Clear all social media errors if no items
-            $this->clearSocialMediaErrors();
             return;
         }
 
         foreach ($this->socialMediaItems as $index => $item) {
+            // Skip validation if platform is not selected
+            if (empty($item['platform'])) {
+                continue;
+            }
+            
             $useCustomLink = $item['use_custom_link'] ?? false;
             
             if ($useCustomLink) {
@@ -866,16 +1018,82 @@ class ProfileSettings extends Component
             $this->resetErrorBag($key);
         }
     }
+    
+    /**
+     * Clear all validation errors
+     */
+    public function clearAllErrors()
+    {
+        $this->resetErrorBag();
+    }
 
     public function toggleCustomLink($index)
     {
         if (isset($this->socialMediaItems[$index])) {
             $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
             
+            // Clear errors for this specific item when toggling
+            $this->clearSocialMediaItemErrors($index);
+            
+            // Clear session error messages
+            if (session()->has('error')) {
+                session()->forget('error');
+            }
+            
             // Don't clear the fields - keep both values
             // User can switch between username and custom link without losing data
         }
     }
+    
+    /**
+     * Clear errors for a specific social media item
+     */
+    private function clearSocialMediaItemErrors($index)
+    {
+        $this->resetErrorBag("socialMediaItems.{$index}.custom_link");
+        $this->resetErrorBag("socialMediaItems.{$index}.username");
+    }
+    
+    /**
+     * Clear errors for a specific field
+     */
+    public function clearFieldError($field)
+    {
+        $this->resetErrorBag($field);
+    }
+    
+    /**
+     * Validate a specific social media field in real-time
+     */
+    private function validateSocialMediaField($index, $field, $value)
+    {
+        if (!isset($this->socialMediaItems[$index])) {
+            return;
+        }
+        
+        $item = $this->socialMediaItems[$index];
+        
+        // Skip validation if platform is not selected
+        if (empty($item['platform'])) {
+            return;
+        }
+        
+        $useCustomLink = $item['use_custom_link'] ?? false;
+        
+        if ($field === 'custom_link' && $useCustomLink) {
+            // If using custom link, custom_link is required and must be valid URL
+            if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+                $this->addError("socialMediaItems.{$index}.custom_link", 'Link harus berupa URL yang valid.');
+            }
+        } elseif ($field === 'username' && !$useCustomLink) {
+            // If using username, username is required
+            if (empty($value)) {
+                $this->addError("socialMediaItems.{$index}.username", 'Username harus diisi.');
+            }
+        }
+    }
+    
+    
 
     public function getGeneratedUrl($index)
     {

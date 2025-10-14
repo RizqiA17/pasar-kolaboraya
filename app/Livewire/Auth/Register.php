@@ -9,6 +9,8 @@ use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -68,35 +70,82 @@ class Register extends Component
             'registration_key' => ['required', 'string', 'exists:registration_keys,key'],
         ]);
 
-        // Validate registration key
-        $registrationKey = RegistrationKey::where('key', $validated['registration_key'])->first();
-        
-        if (!$registrationKey || !$registrationKey->canBeUsed()) {
+        try {
+            return DB::transaction(function () use ($validated) {
+                // Lock registration key to prevent race conditions
+                $registrationKey = RegistrationKey::where('key', $validated['registration_key'])
+                    ->lockForUpdate()
+                    ->first();
+                
+                if (!$registrationKey || !$registrationKey->canBeUsed()) {
+                    throw ValidationException::withMessages([
+                        'registration_key' => 'Kode registrasi tidak valid atau sudah tidak aktif.',
+                    ]);
+                }
+
+                // Prepare user data
+                $userData = [
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'gender' => $validated['gender'],
+                    'password' => Hash::make($validated['password']),
+                    'user_type' => $registrationKey->user_type,
+                    'approval_status' => 'pending',
+                    'registration_key' => $validated['registration_key'],
+                ];
+
+                // Create user
+                $user = User::create($userData);
+
+                // Increment usage count for the registration key
+                $registrationKey->incrementUsage();
+
+                // Generate QR code with error handling
+                try {
+                    $user->generateQrCode();
+                } catch (\Exception $e) {
+                    Log::warning('QR code generation failed for user: ' . $user->id, [
+                        'error' => $e->getMessage(),
+                        'user_id' => $user->id
+                    ]);
+                    // Continue without QR code - not critical for registration
+                }
+
+                // Login user temporarily to send verification email
+                Auth::login($user);
+
+                // Send email verification notification with error handling
+                try {
+                    $user->sendEmailVerificationNotification();
+                } catch (\Exception $e) {
+                    Log::error('Email verification notification failed for user: ' . $user->id, [
+                        'error' => $e->getMessage(),
+                        'user_id' => $user->id,
+                        'email' => $user->email
+                    ]);
+                    
+                    // Don't rollback the transaction for email failures
+                    // User can request resend later
+                }
+
+                session()->flash('message', 'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi akun. Setelah email diverifikasi, akun Anda akan menunggu persetujuan admin.');
+
+                return redirect()->route('verification.notice');
+            });
+        } catch (ValidationException $e) {
+            // Re-throw validation exceptions
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Registration failed', [
+                'error' => $e->getMessage(),
+                'email' => $validated['email'] ?? 'unknown',
+                'registration_key' => $validated['registration_key'] ?? 'unknown',
+                'trace' => $e->getTraceAsString()
+            ]);
+
             throw ValidationException::withMessages([
-                'registration_key' => 'Kode registrasi tidak valid atau sudah tidak aktif.',
+                'email' => 'Terjadi kesalahan saat mendaftar. Silakan coba lagi atau hubungi administrator.',
             ]);
         }
-
-        $validated['password'] = Hash::make($validated['password']);
-        $validated['user_type'] = $registrationKey->user_type;
-        $validated['approval_status'] = 'pending';
-
-        // Increment usage count for the registration key
-        $registrationKey->incrementUsage();
-
-        // Create user without triggering Registered event to avoid duplicate emails
-        $user = User::create($validated);
-
-        // Login user temporarily to send verification email
-        Auth::login($user);
-
-        $user->generateQrCode();
-        
-        // Send email verification notification
-        $user->sendEmailVerificationNotification();
-
-        session()->flash('message', 'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi akun. Setelah email diverifikasi, akun Anda akan menunggu persetujuan admin.');
-
-        return redirect()->route('verification.notice');
     }
 }

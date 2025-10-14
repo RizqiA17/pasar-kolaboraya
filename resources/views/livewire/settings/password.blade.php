@@ -10,7 +10,7 @@
             <!-- SVG Accent for Form -->
             <x-svg-accent position="top-right" size="w-8 h-8" opacity="opacity-5" />
             
-            <form method="POST" wire:submit="updatePassword" class="mt-6 space-y-6">
+            <div class="mt-6 space-y-6">
                 <flux:input
                     wire:model="current_password"
                     :label="__('Current password')"
@@ -35,14 +35,14 @@
 
                 <div class="flex items-center gap-4">
                     <div class="flex items-center justify-end">
-                        <flux:button variant="primary" type="submit" class="w-full">{{ __('Save') }}</flux:button>
+                        <flux:button wire:click="updatePassword" variant="primary" class="w-full">{{ __('Save') }}</flux:button>
                     </div>
 
                     <x-action-message class="me-3" on="password-updated">
                         {{ __('Saved.') }}
                     </x-action-message>
                 </div>
-            </form>
+            </div>
         </div>
     </x-settings.layout>
 </section>

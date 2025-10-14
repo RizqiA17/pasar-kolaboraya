@@ -3,6 +3,7 @@
 namespace App\Livewire\Ecosystem;
 
 use App\Models\Ecosystem;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -59,12 +60,33 @@ class QrScanner extends Component
         $this->successMessage = '';
 
         try {
-            // Parse QR code URL to get ecosystem ID
+            // Check if user can join ecosystems first
+            if (Auth::check()) {
+                /** @var User $user */
+                $user = Auth::user();
+                if (!$user->canJoinEcosystemsAndActions()) {
+                    $this->errorMessage = 'Anda tidak dapat bergabung dengan ekosistem. Hanya pengguna tamu dan partisipan yang dapat bergabung.';
+                    return;
+                }
+            }
+
+            // Validate QR code format first
+            if (empty($this->scannedQrCode)) {
+                $this->errorMessage = 'QR code tidak boleh kosong.';
+                return;
+            }
+
+            // Try to find ecosystem by QR code
             $ecosystemId = Ecosystem::where('qr_code', $this->scannedQrCode)->value('id');
             
             if (!$ecosystemId) {
-                $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung ekosistem.';
-                return;
+                // Try alternative formats
+                $ecosystemId = $this->extractEcosystemIdFromQr($this->scannedQrCode);
+                
+                if (!$ecosystemId) {
+                    $this->errorMessage = 'QR code tidak valid. Pastikan QR code adalah untuk bergabung ekosistem.';
+                    return;
+                }
             }
 
             // Find ecosystem
@@ -104,13 +126,14 @@ class QrScanner extends Component
             Log::info('QR Code redirect triggered', [
                 'ecosystem_id' => $ecosystem->id,
                 'user_id' => Auth::id(),
+                'qr_code' => $this->scannedQrCode,
             ]);
             
-            // Use JavaScript to redirect after showing success message
+            // Use Livewire redirect instead of JavaScript
             $this->js('
                 setTimeout(() => {
                     console.log("Redirecting to ecosystem join page...");
-                    window.location.href = "/ecosystem/' . $ecosystem->id . '/join";
+                    Livewire.visit("/ecosystem/' . $ecosystem->id . '/join");
                 }, 2000);
             ');
 
@@ -119,9 +142,10 @@ class QrScanner extends Component
                 'qr_code' => $this->scannedQrCode,
                 'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString(),
             ]);
             
-            $this->errorMessage = 'Terjadi kesalahan saat memproses QR code.';
+            $this->errorMessage = 'Terjadi kesalahan saat memproses QR code. Silakan coba lagi.';
         }
     }
 

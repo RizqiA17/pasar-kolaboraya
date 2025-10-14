@@ -4,7 +4,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form method="POST" wire:submit="resetPassword" class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
             wire:model="email"
@@ -37,9 +37,9 @@
         />
 
         <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
+            <flux:button wire:click="resetPassword" variant="primary" class="w-full">
                 {{ __('Reset Kata Sandi') }}
             </flux:button>
         </div>
-    </form>
+    </div>
 </div>

@@ -149,11 +149,11 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
     })->name('ecosystem.mapping');
 
 
-    // Collective Action QR Scanner route
+    // Collective Action QR Scanner route - only for tamu and partisipan users
     Route::get('collective-actions/qr-scanner', \App\Livewire\CollectiveAction\QrScanner::class)->name('collective-action.qr.scanner')->middleware('can.join.ecosystems.and.actions');
     Route::post('collective-actions/qr-scanner/process', [App\Http\Controllers\CollectiveActionQrController::class, 'processScan'])->name('collective-action.qr.process-scan');
 
-    // Ecosystem QR Scanner route
+    // Ecosystem QR Scanner route - only for tamu and partisipan users
     Route::get('ecosystem/qr-scanner', \App\Livewire\Ecosystem\QrScanner::class)->name('ecosystem.qr.scanner')->middleware('can.join.ecosystems.and.actions');
 
     // Collective Action Routes (Protected by collective_actions feature check and active session)
