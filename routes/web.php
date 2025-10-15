@@ -24,6 +24,14 @@ Route::get('/', function () {
 // Public Ecosystem Mapping Route (No Auth Required)
 Route::get('public/ecosystem-mapping', [App\Http\Controllers\PublicEcosystemMappingController::class, 'index'])->name('public.ecosystem.mapping');
 
+// Pasar Kolaboraya QR Registration Routes (Admin Only - Auth Required)
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {
+    Route::get('pasar-kolaboraya/qr/{code?}', [App\Http\Controllers\PasarKolaborayaQrController::class, 'showRegistrationQr'])->name('pasar-kolaboraya.qr.registration');
+    Route::get('pasar-kolaboraya/qr-data/{code?}', [App\Http\Controllers\PasarKolaborayaQrController::class, 'getQrData'])->name('pasar-kolaboraya.qr.data');
+    Route::get('pasar-kolaboraya/qr-download/{code?}', [App\Http\Controllers\PasarKolaborayaQrController::class, 'downloadQr'])->name('pasar-kolaboraya.qr.download');
+    Route::get('pasar-kolaboraya/qr-printable/{code?}', [App\Http\Controllers\PasarKolaborayaQrController::class, 'showPrintableQr'])->name('pasar-kolaboraya.qr.printable');
+});
+
 // Test routes for error pages (remove in production)
 if (app()->environment('local', 'development')) {
     Route::get('/test/404', function () {

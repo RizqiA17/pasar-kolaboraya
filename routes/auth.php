@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');
     Route::get('register', Register::class)->name('register');
+    Route::get('register/pasar-kolaboraya/{code?}', \App\Livewire\Auth\RegisterPasarKolaboraya::class)->name('register.pasar-kolaboraya');
     Route::get('forgot-password', ForgotPassword::class)->name('password.request');
     Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
 });

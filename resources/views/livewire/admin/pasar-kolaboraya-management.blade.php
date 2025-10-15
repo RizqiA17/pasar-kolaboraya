@@ -178,8 +178,20 @@
                         @endif
 
                         @if ($pasarKolaboraya->status === 'active')
-                            <flux:button href="{{ route('admin.pasar-kolaboraya.qr-scanner', $pasarKolaboraya) }}"
+                            <flux:button href="{{ route('pasar-kolaboraya.qr.registration', $pasarKolaboraya->qr_code) }}"
                                 variant="primary" size="sm" icon="qr-code" >
+                                QR Registrasi
+                            </flux:button>
+                            <flux:button onclick="downloadQR('{{ $pasarKolaboraya->qr_code }}')"
+                                variant="outline" size="sm" icon="arrow-down-tray" >
+                                Download QR
+                            </flux:button>
+                            {{-- <flux:button href="{{ route('pasar-kolaboraya.qr.printable', $pasarKolaboraya->qr_code) }}"
+                                variant="outline" size="sm" icon="printer" >
+                                Print Poster
+                            </flux:button> --}}
+                            <flux:button href="{{ route('admin.pasar-kolaboraya.qr-scanner', $pasarKolaboraya) }}"
+                                variant="outline" size="sm" icon="camera" >
                                 Buka Scanner
                             </flux:button>
                         @endif
@@ -249,4 +261,18 @@
             </div>
         </div>
     @endif
+
+    <script>
+        function downloadQR(pasarCode) {
+            // Generate QR code data
+            const registrationUrl = `{{ url('/register/pasar-kolaboraya') }}/${encodeURIComponent(pasarCode)}`;
+            
+            // Create QR code using a simple approach
+            const qrCodeData = registrationUrl;
+            
+            // Create a simple QR code using a library or generate SVG
+            // For now, we'll redirect to the QR page and trigger download
+            window.open(`{{ url('/pasar-kolaboraya/qr') }}/${encodeURIComponent(pasarCode)}?download=1`, '_blank');
+        }
+    </script>
 </div>

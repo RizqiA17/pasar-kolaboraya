@@ -17,6 +17,7 @@ class PasarKolaboraya extends Model
         'settings',
         'started_at',
         'ended_at',
+        'qr_code',
     ];
 
     protected $casts = [
