@@ -19,8 +19,9 @@ class Profile extends Component
     
     public string $name = '';
     public string $email = '';
-    public ?string $organization = '';
-    public ?string $phone = '';
+    public string $organization_type = '';
+    public string $organization_name = '';
+    public string $phone_number = '';
     public ?array $social_media = [];
     public array $selectedSkills = [];
     public array $selectedInterests = [];
@@ -49,13 +50,23 @@ class Profile extends Component
 
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->organization = $profile?->organization ?? '';
-        $this->phone = $profile?->phone ?? '';
+        $this->organization_type = $user->organization_type ?? '';
+        $this->organization_name = $user->organization_name ?? '';
+        $this->phone_number = $user->phone_number ?? '';
         $this->social_media = is_array($profile?->social_media) ? $profile->social_media : [];
         $this->selectedSkills = $profile ? $profile->skills()->pluck('skills.id')->toArray() : [];
         $this->selectedInterests = $profile ? $profile->interests()->pluck('interests.id')->toArray() : [];
         $this->userContributions = $profile ? $profile->contributions()->get()->toArray() : [];
         $this->vision = $profile?->vision ?? '';
+    }
+
+    public function updatedOrganization_type($value)
+    {
+        if ($value === 'individu') {
+            $this->organization_name = 'Individu';
+        } else {
+            $this->organization_name = '';
+        }
     }
 
     public function updateProfileInformation(): void
@@ -73,8 +84,9 @@ class Profile extends Component
                 'max:255',
                 new UniqueEmailForActiveUsers($user->id),
             ],
-            'organization' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
+            'organization_type' => ['required', 'string', 'in:organisasi,komunitas,individu'],
+            'organization_name' => ['required_if:organization_type,organisasi,komunitas', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:20'],
             'social_media' => ['nullable', 'array'],
             'social_media.*' => ['nullable', 'string', 'url'],
             'vision' => ['nullable', 'string'],
@@ -84,6 +96,9 @@ class Profile extends Component
         $user->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'organization_type' => $validated['organization_type'],
+            'organization_name' => $validated['organization_type'] === 'individu' ? 'Individu' : $validated['organization_name'],
+            'phone_number' => $validated['phone_number'],
         ]);
 
         if ($user->isDirty('email')) {
@@ -94,8 +109,6 @@ class Profile extends Component
 
         // Update or create profile
         $profile = $user->profile()->updateOrCreate([], [
-            'organization' => $validated['organization'],
-            'phone' => $validated['phone'],
             'social_media' => $validated['social_media'],
             'vision' => $validated['vision'],
         ]);

@@ -72,6 +72,38 @@
             <flux:select.option value="tidak_ingin_menyebutkan">Tidak ingin menyebutkan</flux:select.option>
         </flux:select>
 
+        <!-- Organization Type -->
+        <flux:select
+            wire:model.live="organization_type"
+            :label="'Tipe Organisasi'"
+            required
+            :placeholder="'Pilih tipe organisasi'"
+        >
+            <flux:select.option value="organisasi">Organisasi</flux:select.option>
+            <flux:select.option value="komunitas">Komunitas</flux:select.option>
+            <flux:select.option value="individu">Individu</flux:select.option>
+        </flux:select>
+
+        <!-- Organization Name -->
+        <flux:input
+            wire:model.live="organization_name"
+            :label="'Nama Organisasi/Komunitas'"
+            type="text"
+            :required="$organization_type === 'organisasi' || $organization_type === 'komunitas'"
+            :disabled="!$organization_type"
+            :readonly="$organization_type === 'individu'"
+            :placeholder="$organization_type === 'individu' ? 'Individu' : ($organization_type ? 'Masukkan nama organisasi atau komunitas' : 'Pilih tipe organisasi terlebih dahulu')"
+        />
+
+        <!-- Phone Number -->
+        <flux:input
+            wire:model="phone_number"
+            :label="'Nomor Telepon'"
+            type="tel"
+            required
+            :placeholder="'Masukkan nomor telepon'"
+        />
+
         <!-- Password -->
         <flux:input
             wire:model="password"

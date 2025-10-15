@@ -434,8 +434,8 @@
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label for="organization"
-                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Organisasi</label>
+                                    <label for="organization_type"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Tipe Organisasi</label>
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -446,12 +446,40 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <input type="text" wire:model="organization" id="organization"
-                                            autocomplete="organization"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
-                                            placeholder="Nama organisasi atau perusahaan">
+                                        <select wire:model.live="organization_type" id="organization_type" required
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            <option value="" class="text-gray-400 dark:text-slate-500 dark:bg-slate-800">Pilih tipe organisasi</option>
+                                            <option value="organisasi" class="dark:bg-slate-800 dark:text-slate-100">Organisasi</option>
+                                            <option value="komunitas" class="dark:bg-slate-800 dark:text-slate-100">Komunitas</option>
+                                            <option value="individu" class="dark:bg-slate-800 dark:text-slate-100">Individu</option>
+                                        </select>
                                     </div>
-                                    @error('organization')
+                                    @error('organization_type')
+                                        <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label for="organization_name"
+                                        class="block text-sm font-medium text-gray-900 dark:text-slate-100">Nama Organisasi/Komunitas</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <input type="text" wire:model.live="organization_name" id="organization_name"
+                                            :required="$organization_type === 'organisasi' || $organization_type === 'komunitas'"
+                                            :disabled="!$organization_type"
+                                            :readonly="$organization_type === 'individu'"
+                                            :placeholder="$organization_type === 'individu' ? 'Individu' : ($organization_type ? 'Masukkan nama organisasi atau komunitas' : 'Pilih tipe organisasi terlebih dahulu')"
+                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                    </div>
+                                    @error('organization_name')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -470,11 +498,11 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <input type="tel" wire:model="phone" id="phone" autocomplete="tel"
+                                        <input type="tel" wire:model="phone_number" id="phone_number" required autocomplete="tel"
                                             class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
-                                            placeholder="Nomor telepon (opsional)">
+                                            placeholder="Masukkan nomor telepon">
                                     </div>
-                                    @error('phone')
+                                    @error('phone_number')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                                     @enderror
                                 </div>

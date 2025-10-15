@@ -27,8 +27,9 @@ class ProfileSettings extends Component
     public string $name = '';
     public string $email = '';
     public string $gender = '';
-    public ?string $organization = '';
-    public ?string $phone = '';
+    public string $organization_type = '';
+    public string $organization_name = '';
+    public string $phone_number = '';
     public ?string $vision = '';
     public ?string $selectedRole = '';
 
@@ -126,9 +127,18 @@ class ProfileSettings extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->gender = $user->gender ?? '';
-        $this->organization = $profile->organization ?? '';
-        $this->phone = $profile->phone ?? '';
+        $this->organization_type = $user->organization_type ?? '';
+        $this->organization_name = $user->organization_name ?? '';
+        $this->phone_number = $user->phone_number ?? '';
         $this->vision = $profile->vision ?? '';
+        
+        // Debug log
+        Log::info('ProfileSettings Mount Debug', [
+            'user_id' => $user->id,
+            'organization_type' => $this->organization_type,
+            'organization_name' => $this->organization_name,
+            'phone_number' => $this->phone_number,
+        ]);
         // $this->selectedRole = $profile->peran_id ?? '';
 
         // Load social media data
@@ -188,12 +198,22 @@ class ProfileSettings extends Component
         $this->hasDataChanged = true;
     }
 
-    public function updatedOrganization()
+    public function updatedOrganization_type($value)
+    {
+        if ($value === 'individu') {
+            $this->organization_name = 'Individu';
+        } else {
+            $this->organization_name = '';
+        }
+        $this->hasDataChanged = true;
+    }
+
+    public function updatedOrganization_name()
     {
         $this->hasDataChanged = true;
     }
 
-    public function updatedPhone()
+    public function updatedPhone_number()
     {
         $this->hasDataChanged = true;
     }
@@ -313,8 +333,9 @@ class ProfileSettings extends Component
                     new UniqueEmailForActiveUsers($this->getUser()->id),
                 ],
                 'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
-                'organization' => ['nullable', 'string', 'max:255'],
-                'phone' => ['nullable', 'string', 'max:255'],
+                'organization_type' => ['required', 'string', 'in:organisasi,komunitas,individu'],
+                'organization_name' => ['required_if:organization_type,organisasi,komunitas', 'string', 'max:255'],
+                'phone_number' => ['required', 'string', 'max:20'],
                 'vision' => ['nullable', 'string'],
                 'socialMediaItems' => ['nullable', 'array'],
                 'socialMediaItems.*.platform' => ['required_with:socialMediaItems', 'string'],
@@ -354,6 +375,9 @@ class ProfileSettings extends Component
                     'name' => $this->name,
                     'email' => $this->email,
                     'gender' => $this->gender,
+                    'organization_type' => $this->organization_type,
+                    'organization_name' => $this->organization_type === 'individu' ? 'Individu' : $this->organization_name,
+                    'phone_number' => $this->phone_number,
                 ]);
 
                 if ($user->isDirty('email')) {
@@ -367,8 +391,6 @@ class ProfileSettings extends Component
 
                 // Update or create profile
                 $user->profile()->updateOrCreate([], [
-                    'organization' => $this->organization,
-                    'phone' => $this->phone,
                     'vision' => $this->vision,
                     'social_media' => $socialMedia,
                     // 'peran_id' => $this->selectedRole,

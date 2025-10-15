@@ -50,12 +50,6 @@
                     <p class="text-sm text-gray-600 dark:text-slate-400">Berikan informasi dasar tentang diri Anda</p>
                 </div>
 
-                <flux:input wire:model="organization" :label="'Organisasi/Perusahaan'" type="text"
-                    :placeholder="'Nama organisasi atau perusahaan Anda'" />
-
-                <flux:input wire:model="phone" :label="'Nomor Telepon'" type="tel"
-                    :placeholder="'0812-3456-7890'" />
-
                 <flux:textarea wire:model="vision" rows="4" :label="'Visi/Misi'"
                     :placeholder="'Ceritakan visi dan misi Anda'" />
             </div>

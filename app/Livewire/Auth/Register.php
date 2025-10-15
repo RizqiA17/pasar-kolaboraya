@@ -25,11 +25,36 @@ class Register extends Component
 
     public string $gender = '';
 
+    public string $organization_type = '';
+
+    public string $organization_name = '';
+
+    public string $phone_number = '';
+
     public string $password = '';
 
     public string $password_confirmation = '';
 
     public string $registration_key = '';
+
+    public function mount()
+    {
+        // Initialize organization_name based on organization_type
+        if ($this->organization_type === 'individu') {
+            $this->organization_name = 'Individu';
+        } else {
+            $this->organization_name = '';
+        }
+    }
+
+    public function updatedOrganization_type($value)
+    {
+        if ($value === 'individu') {
+            $this->organization_name = 'Individu';
+        } else {
+            $this->organization_name = '';
+        }
+    }
 
     protected $messages = [
         'name.required' => 'Nama wajib diisi',
@@ -43,6 +68,14 @@ class Register extends Component
         'email.unique' => 'Email sudah terdaftar',
         'gender.required' => 'Jenis kelamin wajib diisi',
         'gender.in' => 'Pilihan jenis kelamin tidak valid',
+        'organization_type.required' => 'Tipe organisasi wajib diisi',
+        'organization_type.in' => 'Pilihan tipe organisasi tidak valid',
+        'organization_name.required_if' => 'Nama organisasi wajib diisi',
+        'organization_name.string' => 'Nama organisasi harus berupa teks',
+        'organization_name.max' => 'Nama organisasi maksimal 255 karakter',
+        'phone_number.required' => 'Nomor telepon wajib diisi',
+        'phone_number.string' => 'Nomor telepon harus berupa teks',
+        'phone_number.max' => 'Nomor telepon maksimal 20 karakter',
         'password.required' => 'Kata sandi wajib diisi',
         'password.string' => 'Kata sandi harus berupa teks',
         'password.confirmed' => 'Konfirmasi kata sandi tidak cocok',
@@ -66,6 +99,9 @@ class Register extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
             'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
+            'organization_type' => ['required', 'string', 'in:organisasi,komunitas,individu'],
+            'organization_name' => ['required_if:organization_type,organisasi,komunitas', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'registration_key' => ['required', 'string', 'exists:registration_keys,key'],
         ]);
@@ -88,6 +124,9 @@ class Register extends Component
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                     'gender' => $validated['gender'],
+                    'organization_type' => $validated['organization_type'],
+                    'organization_name' => $validated['organization_type'] === 'individu' ? 'Individu' : $validated['organization_name'],
+                    'phone_number' => $validated['phone_number'],
                     'password' => Hash::make($validated['password']),
                     'user_type' => $registrationKey->user_type,
                     'approval_status' => 'pending',

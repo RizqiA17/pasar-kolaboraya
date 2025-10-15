@@ -23,8 +23,6 @@ class ProfileSetup extends Component
     public $progress = 25;
 
     // Basic Info
-    public $organization = '';
-    public $phone = '';
     public $vision = '';
 
     // Social Media
@@ -57,8 +55,6 @@ class ProfileSetup extends Component
     public $hasChanges = false;
 
     protected $messages = [
-        'organization.max' => 'Nama organisasi maksimal 255 karakter',
-        'phone.max' => 'Nomor telepon maksimal 255 karakter',
         'vision.max' => 'Visi maksimal 1000 karakter',
         'socialMedia.linkedin.url' => 'URL LinkedIn tidak valid',
         'socialMedia.twitter.url' => 'URL Twitter tidak valid',
@@ -92,8 +88,6 @@ class ProfileSetup extends Component
         $user = Auth::user();
         if ($user->profile) {
             $profile = $user->profile;
-            $this->organization = $profile->organization ?? '';
-            $this->phone = $profile->phone ?? '';
             $this->vision = $profile->vision ?? '';
             // Load social media items
             // Get raw data from database to check original format
@@ -187,8 +181,6 @@ class ProfileSetup extends Component
     public function storeOriginalData()
     {
         $this->originalData = [
-            'organization' => $this->organization,
-            'phone' => $this->phone,
             'vision' => $this->vision,
             'socialMediaItems' => $this->socialMediaItems,
             'selectedSkills' => $this->selectedSkills,
@@ -207,8 +199,6 @@ class ProfileSetup extends Component
     public function checkForChanges()
     {
         $currentData = [
-            'organization' => $this->organization,
-            'phone' => $this->phone,
             'vision' => $this->vision,
             'socialMediaItems' => $this->socialMediaItems,
             'selectedSkills' => $this->selectedSkills,
@@ -306,8 +296,6 @@ class ProfileSetup extends Component
                 $profile = $user->profile()->updateOrCreate(
                     [],
                     [
-                        'organization' => $this->organization,
-                        'phone' => $this->phone,
                         'vision' => $this->vision,
                         'social_media' => $this->formatSocialMediaForSave(),
                     ]
@@ -816,9 +804,7 @@ class ProfileSetup extends Component
         $filledFields = 0;
 
         // Basic info
-        $totalFields += 3;
-        if (!empty($this->organization)) $filledFields++;
-        if (!empty($this->phone)) $filledFields++;
+        $totalFields += 1;
         if (!empty($this->vision)) $filledFields++;
 
         // Social media (dijadikan 1 field)
