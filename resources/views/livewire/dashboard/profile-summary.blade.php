@@ -29,7 +29,7 @@
         @if ($profile)
             <!-- Basic Info with Enhanced Design -->
             <div class="space-y-4 mb-8">
-                @if ($profile->organization)
+                @if ($user->organization_name)
                     <div
                         class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800">
                         <div class="min-w-10! w-10 h-10 bg-primary-blue rounded-xl flex items-center justify-center mr-4">
@@ -41,12 +41,12 @@
                         <div>
                             <div class="text-sm font-medium text-blue-700 dark:text-blue-300">Organisasi</div>
                             <div class="text-lg font-semibold text-blue-900 dark:text-blue-100">
-                                {{ $profile->organization }}</div>
+                                {{ $user->organization_name }}</div>
                         </div>
                     </div>
                 @endif
 
-                @if ($profile->phone)
+                @if ($user->phone_number)
                     <div
                         class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-100 dark:border-green-800">
                         <div class="min-w-10! w-10 h-10 bg-secondary-green rounded-xl flex items-center justify-center mr-4">
@@ -57,7 +57,7 @@
                         </div>
                         <div>
                             <div class="text-sm font-medium text-green-700 dark:text-green-300">Telepon</div>
-                            <div class="text-lg font-semibold text-green-900 dark:text-green-100">{{ $profile->phone }}
+                            <div class="text-lg font-semibold text-green-900 dark:text-green-100">{{ $user->phone_number }}
                             </div>
                         </div>
                     </div>

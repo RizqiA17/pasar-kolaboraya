@@ -84,7 +84,7 @@
                                     {{ $user->name }}</h1>
                                 <p class="text-gray-500 dark:text-slate-400 text-sm sm:text-base">{{ $user->email }}
                                 </p>
-                                @if ($profile?->organization)
+                                @if ($user->organization_name)
                                     <div
                                         class="flex items-center justify-center sm:justify-start mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" stroke="currentColor"
@@ -93,10 +93,10 @@
                                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                             </path>
                                         </svg>
-                                        <span class="text-sm sm:text-base">{{ $profile->organization }}</span>
+                                        <span class="text-sm sm:text-base">{{ $user->organization_name }}</span>
                                     </div>
                                 @endif
-                                @if ($profile?->phone)
+                                @if ($user->phone_number)
                                     <div
                                         class="flex items-center justify-center sm:justify-start mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" stroke="currentColor"
@@ -105,7 +105,7 @@
                                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
                                             </path>
                                         </svg>
-                                        <span class="text-sm sm:text-base">{{ $profile->phone }}</span>
+                                        <span class="text-sm sm:text-base">{{ $user->phone_number }}</span>
                                     </div>
                                 @endif
                                 @if ($user->is_ecosystem_builder)

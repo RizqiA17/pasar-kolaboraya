@@ -193,9 +193,9 @@
                     <p class="font-medium text-gray-900 dark:text-white">
                         {{ $ecosystem->creator->name }}
                     </p>
-                    @if ($ecosystem->creator->profile?->organization)
+                    @if ($ecosystem->creator->organization_name)
                         <p class="text-sm text-gray-600 dark:text-gray-400">
-                            {{ $ecosystem->creator->profile->organization }}
+                            {{ $ecosystem->creator->organization_name }}
                         </p>
                     @endif
                 </div>

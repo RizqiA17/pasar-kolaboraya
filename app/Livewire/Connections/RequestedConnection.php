@@ -42,7 +42,7 @@ class RequestedConnection extends Component
                     'email' => $item->requester->email,
                     'created_at' => $item->requester->created_at,
                     'profile_photo' => $item->requester->profile?->profile_photo,
-                    'organization' => $item->requester->profile?->organization,
+                    'organization_name' => $item->requester->organization_name,
                     'initials' => $item->requester->initials(),
                 ],
                 'receiver' => $item->receiver->id,

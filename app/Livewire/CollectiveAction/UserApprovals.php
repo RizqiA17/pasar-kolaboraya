@@ -38,6 +38,8 @@ class UserApprovals extends Component
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'organization_name' => $user->organization_name,
+                    'phone_number' => $user->phone_number,
                     'profile' => $user->profile,
                     'join_reason' => $user->pivot->join_reason,
                     'join_type' => $user->pivot->join_type,

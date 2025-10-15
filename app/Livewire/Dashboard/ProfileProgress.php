@@ -26,20 +26,29 @@ class ProfileProgress extends Component
         $this->filledFields = 0;
         $this->missingFields = [];
 
-        // Basic info fields
+        // Basic info fields - now from user table
+        $user = Auth::user();
         $basicFields = [
-            'organization' => 'Organisasi/Perusahaan',
-            'phone' => 'Nomor Telepon',
-            'vision' => 'Visi/Misi'
+            'organization_type' => 'Tipe Organisasi',
+            'organization_name' => 'Nama Organisasi',
+            'phone_number' => 'Nomor Telepon'
         ];
 
         foreach ($basicFields as $field => $label) {
             $this->totalFields++;
-            if ($profile && !empty($profile->$field)) {
+            if ($user && !empty($user->$field)) {
                 $this->filledFields++;
             } else {
                 $this->missingFields[] = $label;
             }
+        }
+
+        // Vision field from profile table
+        $this->totalFields++;
+        if ($profile && !empty($profile->vision)) {
+            $this->filledFields++;
+        } else {
+            $this->missingFields[] = 'Visi/Misi';
         }
 
         // Social media (dijadikan 1 field)

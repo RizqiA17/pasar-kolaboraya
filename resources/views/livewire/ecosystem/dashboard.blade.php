@@ -772,9 +772,9 @@
                                                     {{ $request->name }}</h4>
                                                 <p class="text-sm text-gray-600 dark:text-slate-300">
                                                     {{ $request->email }}</p>
-                                                @if ($request->profile && $request->profile->organization)
+                                                @if ($request->organization_name)
                                                     <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                        {{ $request->profile->organization }}</p>
+                                                        {{ $request->organization_name }}</p>
                                                 @endif
                                                 <div class="mt-2">
                                                     <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Alasan
@@ -851,9 +851,9 @@
                                                     {{ $member->name }}</h4>
                                                 <p class="text-sm text-gray-600 dark:text-slate-300">
                                                     {{ $member->email }}</p>
-                                                @if ($member->profile && $member->profile->organization)
+                                                @if ($member->organization_name)
                                                     <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                        {{ $member->profile->organization }}</p>
+                                                        {{ $member->organization_name }}</p>
                                                 @endif
                                                 @if ($member->pivot->joined_at)
                                                     <p class="text-sm text-gray-500 dark:text-slate-400">Bergabung:

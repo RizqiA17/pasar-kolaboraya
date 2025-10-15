@@ -45,13 +45,13 @@
                         <h4 class="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1">{{ $selectedUser->name }}</h4>
                         <p class="text-gray-500 dark:text-slate-400 text-sm">{{ $selectedUser->email }}</p>
                         
-                        @if($selectedUser->profile?->organization)
+                        @if($selectedUser->organization_name)
                             <div class="flex items-center justify-center gap-2 mt-2 text-gray-600 dark:text-slate-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                           d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
-                                <span class="text-sm">{{ $selectedUser->profile->organization }}</span>
+                                <span class="text-sm">{{ $selectedUser->organization_name }}</span>
                             </div>
                         @endif
                     </div>

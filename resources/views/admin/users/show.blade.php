@@ -93,16 +93,16 @@
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
                         <h3 class="text-lg font-semibold text-primary-blue dark:text-secondary-green mb-4">Informasi Profil</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            @if($user->profile->organization)
+                            @if($user->organization_name)
                                 <div>
                                     <label class="text-sm font-medium text-gray-600 dark:text-slate-300">Organisasi</label>
-                                    <p class="text-primary-blue dark:text-secondary-green">{{ $user->profile->organization }}</p>
+                                    <p class="text-primary-blue dark:text-secondary-green">{{ $user->organization_name }}</p>
                                 </div>
                             @endif
-                            @if($user->profile->phone)
+                            @if($user->phone_number)
                                 <div>
                                     <label class="text-sm font-medium text-gray-600 dark:text-slate-300">Telepon</label>
-                                    <p class="text-primary-blue dark:text-secondary-green">{{ $user->profile->phone }}</p>
+                                    <p class="text-primary-blue dark:text-secondary-green">{{ $user->phone_number }}</p>
                                 </div>
                             @endif
                             @if($user->profile->vision)
@@ -252,7 +252,7 @@
                         // Calculate participant quality metrics
                         $profileCompleteness = 0;
                         if ($user->profile) {
-                            $profileFields = ['bio', 'phone', 'address', 'skills', 'interests', 'experience'];
+                            $profileFields = ['bio', 'address', 'skills', 'interests', 'experience'];
                             $completedFields = 0;
                             foreach ($profileFields as $field) {
                                 if (!empty($user->profile->$field)) {

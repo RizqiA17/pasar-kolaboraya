@@ -24,10 +24,15 @@ class ProfileSeeder extends Seeder
                 return; // Skip if profile already exists
             }
 
+            // Update user with organization and phone data
+            $user->update([
+                'organization_type' => fake()->randomElement(['organisasi', 'komunitas', 'individu']),
+                'organization_name' => fake()->company(),
+                'phone_number' => fake()->phoneNumber(),
+            ]);
+
             $profile = Profile::create([
                 'user_id' => $user->id,
-                'organization' => fake()->company(),
-                'phone' => fake()->phoneNumber(),
                 'social_media' => [
                     'twitter' => fake()->userName(),
                     'linkedin' => fake()->userName(),

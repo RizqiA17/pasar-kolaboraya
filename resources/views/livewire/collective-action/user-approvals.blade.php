@@ -101,10 +101,10 @@
                                     <div class="mt-4">
                                         <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100">Informasi Profil:</h4>
                                         <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                            @if ($user['profile']['organization'])
+                                            @if ($user['organization_name'])
                                                 <div>
                                                     <span class="font-medium text-gray-700 dark:text-slate-300">Organisasi:</span>
-                                                    <span class="text-gray-600 dark:text-slate-400">{{ $user['profile']['organization'] }}</span>
+                                                    <span class="text-gray-600 dark:text-slate-400">{{ $user['organization_name'] }}</span>
                                                 </div>
                                             @endif
                                             @if ($user['profile']['location'])

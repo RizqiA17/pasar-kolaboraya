@@ -31,9 +31,9 @@
                 </p>
             @endif
             
-            @if($showOrganization && $user->profile?->organization)
+            @if($showOrganization && $user->organization_name)
                 <p class="text-xs text-gray-400 truncate">
-                    {{ $user->profile->organization }}
+                    {{ $user->organization_name }}
                 </p>
             @endif
         </div>

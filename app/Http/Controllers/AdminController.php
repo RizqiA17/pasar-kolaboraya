@@ -452,7 +452,7 @@ class AdminController extends Controller
         $users = $pasarKolaboraya->acceptedUsers;
         if ($users->isEmpty()) return 0;
         
-        $sectors = $users->pluck('profile.organization')->filter()->unique()->count();
+        $sectors = $users->pluck('organization_name')->filter()->unique()->count();
         $skills = $users->flatMap(function($user) {
             return $user->profile ? $user->profile->skills->pluck('name') : collect();
         })->unique()->count();

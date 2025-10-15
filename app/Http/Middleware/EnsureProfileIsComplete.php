@@ -22,8 +22,8 @@ class EnsureProfileIsComplete
             
             // Check if profile exists and has basic information
             $hasBasicInfo = $profile && (
-                !empty($profile->organization) ||
-                !empty($profile->phone) ||
+                !empty($user->organization_name) ||
+                !empty($user->phone_number) ||
                 !empty($profile->vision)
             );
             
