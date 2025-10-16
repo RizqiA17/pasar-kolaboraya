@@ -162,7 +162,7 @@ class RegisterPasarKolaboraya extends Component
             Log::error('Event registration failed', [
                 'error' => $e->getMessage(),
                 'email' => $validated['email'] ?? 'unknown',
-                'pasar_slug' => $this->pasar_slug,
+                'pasar_code' => $this->pasar_code,
                 'trace' => $e->getTraceAsString()
             ]);
 
