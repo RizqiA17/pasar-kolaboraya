@@ -32,6 +32,10 @@ class VerifyEmailController extends Controller
         } elseif ($request->user()->isRejected()) {
             return redirect()->route('auth.rejected');
         } elseif ($request->user()->isApproved()) {
+            // Check if user registered through event (Pasar Kolaboraya)
+            if ($request->user()->registration_key === 'EVENT_REGISTRATION') {
+                return redirect()->route('profile.setup');
+            }
             return redirect()->route('dashboard');
         }
 

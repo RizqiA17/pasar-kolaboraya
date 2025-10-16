@@ -22,6 +22,8 @@ class RegisterPasarKolaboraya extends Component
     public string $name = '';
     public string $email = '';
     public string $gender = '';
+    public string $organization_type = 'komunitas'; // Default to komunitas for event registration
+    public string $organization_name = '';
     public string $phone_number = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -57,6 +59,11 @@ class RegisterPasarKolaboraya extends Component
         'email.unique' => 'Email sudah terdaftar',
         'gender.required' => 'Jenis kelamin wajib diisi',
         'gender.in' => 'Pilihan jenis kelamin tidak valid',
+        'organization_type.required' => 'Tipe organisasi wajib diisi',
+        'organization_type.in' => 'Pilihan tipe organisasi tidak valid',
+        'organization_name.required' => 'Nama organisasi wajib diisi',
+        'organization_name.string' => 'Nama organisasi harus berupa teks',
+        'organization_name.max' => 'Nama organisasi maksimal 255 karakter',
         'phone_number.required' => 'Nomor telepon wajib diisi',
         'phone_number.string' => 'Nomor telepon harus berupa teks',
         'phone_number.max' => 'Nomor telepon maksimal 20 karakter',
@@ -88,6 +95,8 @@ class RegisterPasarKolaboraya extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
             'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
+            'organization_type' => ['required', 'string', 'in:organisasi,komunitas,individu'],
+            'organization_name' => ['required_if:organization_type,organisasi,komunitas', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -99,11 +108,13 @@ class RegisterPasarKolaboraya extends Component
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                     'gender' => $validated['gender'],
-                    'organization_type' => 'komunitas', // Default for event registration
-                    'organization_name' => 'Pasar Kolaboraya', // Default for event registration
+                    'organization_type' => $validated['organization_type'],
+                    'organization_name' => $validated['organization_name'] ?? ($validated['organization_type'] === 'individu' ? 'Individu' : 'Pasar Kolaboraya'),
                     'phone_number' => $validated['phone_number'],
                     'password' => Hash::make($validated['password']),
                     'user_type' => 'komunitas', // Default for event registration
+                    'role' => 'komunitas', // Set role to komunitas
+                    'peran' => 'komunitas', // Set peran to komunitas
                     'approval_status' => 'approved', // Auto-approved for event registration
                     'registration_key' => 'EVENT_REGISTRATION', // Special key for event registration
                 ];
@@ -141,7 +152,7 @@ class RegisterPasarKolaboraya extends Component
                     ]);
                 }
 
-                session()->flash('message', 'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi akun. Setelah email diverifikasi, Anda dapat langsung menggunakan aplikasi.');
+                session()->flash('message', 'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi akun. Setelah email diverifikasi, Anda akan diarahkan ke halaman setup profil.');
 
                 return redirect()->route('verification.notice');
             });
