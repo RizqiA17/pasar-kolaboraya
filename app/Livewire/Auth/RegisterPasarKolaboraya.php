@@ -113,8 +113,8 @@ class RegisterPasarKolaboraya extends Component
                     'phone_number' => $validated['phone_number'],
                     'password' => Hash::make($validated['password']),
                     'user_type' => 'komunitas', // Default for event registration
-                    'role' => 'komunitas', // Set role to komunitas
-                    'peran' => 'komunitas', // Set peran to komunitas
+                    'role' => 'user', // Set role to user (enum: user, admin, super_admin)
+                    'assigned_role' => 'Komunitas', // Set assigned_role to komunitas
                     'approval_status' => 'approved', // Auto-approved for event registration
                     'registration_key' => 'EVENT_REGISTRATION', // Special key for event registration
                 ];
