@@ -102,7 +102,7 @@ class QrScanner extends Component
         $this->currentConnectionId = null;
         $this->targetUser = null;
         $this->errorMessage = '';
-        $this->successMessage = 'QR Code berhasil dibuat. Tunjukkan QR ini kepada user lain untuk di-scan.';
+        $this->successMessage = 'Kode berhasil dibuat. Tunjukkan QR ini kepada user lain untuk di-scan.';
     }
 
     public function handleQrScanned($qrCode)
@@ -131,13 +131,13 @@ class QrScanner extends Component
             ->first();
 
         if (!$scannedQr) {
-            $this->errorMessage = 'QR Code tidak valid atau sudah expired';
+            $this->errorMessage = 'Kode tidak valid atau sudah expired';
             return;
         }
 
         // Check if it's the same user
         if ($scannedQr->user_id === $user->id) {
-            $this->errorMessage = 'Anda tidak dapat scan QR code sendiri';
+            $this->errorMessage = 'Anda tidak dapat memasukan Kode sendiri';
             return;
         }
 
@@ -229,7 +229,7 @@ class QrScanner extends Component
 
         // Verify this is the correct responder QR
         if ($scannedQr->target_qr_code !== $this->myQrCode) {
-            $this->errorMessage = 'QR Code tidak sesuai dengan koneksi yang sedang berlangsung';
+            $this->errorMessage = 'Kode tidak sesuai dengan koneksi yang sedang berlangsung';
             return;
         }
 
@@ -434,7 +434,7 @@ class QrScanner extends Component
 
         $this->connectionStatus = 'waiting_for_response';
         $this->errorMessage = '';
-        $this->successMessage = 'QR Response berhasil diperbarui. Tunjukkan QR ini kepada ' . $this->targetUser->name . ' untuk melanjutkan koneksi.';
+        $this->successMessage = 'Kode Response berhasil diperbarui. Berikan kode ini kepada ' . $this->targetUser->name . ' untuk melanjutkan koneksi.';
     }
 
     private function areUsersAlreadyConnected($userId1, $userId2, $pasarKolaborayaId)

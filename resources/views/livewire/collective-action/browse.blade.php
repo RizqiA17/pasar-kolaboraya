@@ -33,29 +33,30 @@
 
     <!-- Tabs -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-        <div class="flex space-x-1 mb-6">
-            <button wire:click="$set('activeTab', 'actions')"
-                class="px-4 py-2 text-sm font-medium rounded-lg transition-colors
+        @if (Auth::user()->isEcosystemBuilder())
+            <div class="flex space-x-1 mb-6">
+                <button wire:click="$set('activeTab', 'actions')"
+                    class="px-4 py-2 text-sm font-medium rounded-lg transition-colors
                 @if ($activeTab === 'actions') bg-primary-blue text-white 
                 @else 
                     text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 @endif">
-                Aksi Kolektif
-            </button>
-            <button wire:click="$set('activeTab', 'invitations')"
-                class="px-4 py-2 text-sm font-medium rounded-lg transition-colors
+                    Aksi Kolektif
+                </button>
+                <button wire:click="$set('activeTab', 'invitations')"
+                    class="px-4 py-2 text-sm font-medium rounded-lg transition-colors
                 @if ($activeTab === 'invitations') bg-primary-blue text-white 
                 @else 
                     text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 @endif">
-                Undangan
-                @if ($pendingInvitationsCount > 0)
-                    <span
-                        class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-red text-white">
-                        {{ $pendingInvitationsCount }}
-                    </span>
-                @endif
-            </button>
-        </div>
-
+                    Undangan
+                    @if ($pendingInvitationsCount > 0)
+                        <span
+                            class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-red text-white">
+                            {{ $pendingInvitationsCount }}
+                        </span>
+                    @endif
+                </button>
+            </div>
+        @endif
         @if ($activeTab === 'actions')
             <h2 class="text-lg font-semibold mb-4">Filter Pencarian</h2>
         @else

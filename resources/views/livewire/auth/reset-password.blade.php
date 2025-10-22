@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-6">
+<form wire:submit.prevent="resetPassword" class="flex flex-col gap-6">
     <x-auth-header :title="__('Reset Kata Sandi')" :description="__('Silakan masukkan kata sandi baru Anda di bawah ini')" />
 
     <!-- Session Status -->
@@ -42,4 +42,4 @@
             </flux:button>
         </div>
     </div>
-</div>
+</form>

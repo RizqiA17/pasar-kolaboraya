@@ -8,7 +8,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <div class="flex flex-col gap-6">
+    <form wire:submit.prevent="login" class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
             wire:model="email"
@@ -45,7 +45,7 @@
         <div class="flex items-center justify-end">
             <flux:button wire:click="login" variant="primary" class="w-full cursor-pointer">{{ 'Masuk' }}</flux:button>
         </div>
-    </div>
+    </form>
 
         @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-slate-400">

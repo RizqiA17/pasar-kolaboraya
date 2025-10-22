@@ -17,14 +17,16 @@
                         Buat Ekosistem
                     </flux:button>
                 @endif
-                <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
-                        </path>
-                    </svg>
-                    Scan QR Code
-                </flux:button>
+                @if (Auth::user()->canJoinEcosystemsAndActions())
+                    <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                        Scan QR Code
+                    </flux:button>
+                @endif
             </div>
         </div>
     </div>
@@ -210,13 +212,17 @@
                     <!-- Like Button and Status -->
                     <div class="flex items-center justify-between mb-4 gap-3">
                         <!-- Like Button -->
-                        <button id="like-button-{{ $ecosystem->id }}" 
+                        <button id="like-button-{{ $ecosystem->id }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $ecosystem->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600' }}"
                             onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
-                            <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                    clip-rule="evenodd"></path>
                             </svg>
-                            <span id="like-count-{{ $ecosystem->id }}" class="font-medium">{{ $ecosystem->likeCount }}</span>
+                            <span id="like-count-{{ $ecosystem->id }}"
+                                class="font-medium">{{ $ecosystem->likeCount }}</span>
                         </button>
 
                         <!-- User Status Badge -->
@@ -224,16 +230,20 @@
                             $userStatus = Auth::user() ? $ecosystem->getUserStatus(Auth::user()) : null;
                         @endphp
                         @if ($userStatus === 'accepted')
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Sudah Bergabung
                             </span>
                         @elseif($userStatus === 'pending')
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700 dark:text-secondary-yellow">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700 dark:text-secondary-yellow">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Menunggu Persetujuan
                             </span>
@@ -265,7 +275,8 @@
                         <flux:button href="{{ route('ecosystem.contribute', $ecosystem) }}" variant="primary"
                             size="sm" class="w-full" wire:navigate>
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                             Berkontribusi
                         </flux:button>
@@ -328,64 +339,66 @@
 </div>
 
 @push('scripts')
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script>
-    // Initialize Pusher for real-time ecosystem updates
-    document.addEventListener('DOMContentLoaded', function() {
-        try {
-            if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
-                const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
-                    cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
-                    encrypted: true,
-                    authEndpoint: '{{ route('broadcasting.auth') }}',
-                    auth: {
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        // Initialize Pusher for real-time ecosystem updates
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                if (typeof Pusher !== 'undefined' && '{{ config('broadcasting.default') }}' === 'pusher') {
+                    const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                        cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+                        encrypted: true,
+                        authEndpoint: '{{ route('broadcasting.auth') }}',
+                        auth: {
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            }
                         }
-                    }
-                });
+                    });
 
-                // Subscribe to user's private channel
-                const userId = {{ auth()->id() }};
-                const channel = pusher.subscribe('private-user.' + userId);
+                    // Subscribe to user's private channel
+                    const userId = {{ auth()->id() }};
+                    const channel = pusher.subscribe('private-user.' + userId);
 
-                // Listen for ecosystem user status updated events
-                channel.bind('ecosystem.user.status.updated', function(data) {
-                    console.log('Ecosystem user status updated:', data);
-                    
-                    // Show notification
-                    showEcosystemStatusNotification(data);
-                    
-                    // Refresh Livewire component data
-                    @this.call('refreshData');
-                });
+                    // Listen for ecosystem user status updated events
+                    channel.bind('ecosystem.user.status.updated', function(data) {
+                        console.log('Ecosystem user status updated:', data);
 
-                console.log('Pusher initialized for ecosystem updates');
-            } else {
-                console.log('Pusher not configured, using polling fallback');
+                        // Show notification
+                        showEcosystemStatusNotification(data);
+
+                        // Refresh Livewire component data
+                        @this.call('refreshData');
+                    });
+
+                    console.log('Pusher initialized for ecosystem updates');
+                } else {
+                    console.log('Pusher not configured, using polling fallback');
+                }
+            } catch (error) {
+                console.error('Pusher initialization failed:', error);
             }
-        } catch (error) {
-            console.error('Pusher initialization failed:', error);
-        }
-    });
+        });
 
-    // Show ecosystem status notification
-    function showEcosystemStatusNotification(data) {
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
-        
-        let message = '';
-        let icon = '';
-        
-        if (data.action === 'accepted') {
-            message = `Anda telah diterima di ekosistem "${data.ecosystem.title}"`;
-            icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
-        } else if (data.action === 'rejected') {
-            message = `Permintaan bergabung ke ekosistem "${data.ecosystem.title}" ditolak`;
-            icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
-        }
-        
-        notification.innerHTML = `
+        // Show ecosystem status notification
+        function showEcosystemStatusNotification(data) {
+            const notification = document.createElement('div');
+            notification.className =
+                'fixed top-4 right-4 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
+
+            let message = '';
+            let icon = '';
+
+            if (data.action === 'accepted') {
+                message = `Anda telah diterima di ekosistem "${data.ecosystem.title}"`;
+                icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
+            } else if (data.action === 'rejected') {
+                message = `Permintaan bergabung ke ekosistem "${data.ecosystem.title}" ditolak`;
+                icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
+            }
+
+            notification.innerHTML = `
             <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -404,121 +417,129 @@
             </div>
         `;
 
-        // Add to page
-        document.body.appendChild(notification);
+            // Add to page
+            document.body.appendChild(notification);
 
-        // Animate in
-        setTimeout(() => {
-            notification.classList.remove('translate-x-full');
-        }, 100);
-
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            notification.classList.add('translate-x-full');
+            // Animate in
             setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 300);
-        }, 5000);
-    }
+                notification.classList.remove('translate-x-full');
+            }, 100);
 
-    // Like functionality
-    function toggleLike(type, id, elementId) {
-        const button = document.getElementById(`like-button-${elementId}`);
-        const icon = document.getElementById(`like-icon-${elementId}`);
-        const count = document.getElementById(`like-count-${elementId}`);
-        
-        // Disable button during request
-        button.disabled = true;
-        
-        fetch(`/${type}/${id}/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update button state
-                if (data.isLiked) {
-                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                } else {
-                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                }
-                
-                // Update count
-                count.textContent = data.likeCount;
-                
-                // Show notification
-                showNotification(data.message, 'success');
-            } else {
-                showNotification(data.message || 'Terjadi kesalahan', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Terjadi kesalahan saat memproses like', 'error');
-        })
-        .finally(() => {
-            button.disabled = false;
-        });
-    }
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
 
-    function loadLikeStatus(type, id, elementId) {
-        fetch(`/${type}/${id}/like-status`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const button = document.getElementById(`like-button-${elementId}`);
-                const count = document.getElementById(`like-count-${elementId}`);
-                
-                if (data.isLiked) {
-                    button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                    button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                } else {
-                    button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                    button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                }
-                
-                count.textContent = data.likeCount;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading like status:', error);
-        });
-    }
+        // Like functionality
+        function toggleLike(type, id, elementId) {
+            const button = document.getElementById(`like-button-${elementId}`);
+            const icon = document.getElementById(`like-icon-${elementId}`);
+            const count = document.getElementById(`like-count-${elementId}`);
 
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
+            // Disable button during request
+            button.disabled = true;
+
+            fetch(`/${type}/${id}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update button state
+                        if (data.isLiked) {
+                            button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                            button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20',
+                                'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                        } else {
+                            button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200',
+                                'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                            button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                        }
+
+                        // Update count
+                        count.textContent = data.likeCount;
+
+                        // Show notification
+                        showNotification(data.message, 'success');
+                    } else {
+                        showNotification(data.message || 'Terjadi kesalahan', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Terjadi kesalahan saat memproses like', 'error');
+                })
+                .finally(() => {
+                    button.disabled = false;
+                });
+        }
+
+        function loadLikeStatus(type, id, elementId) {
+            fetch(`/${type}/${id}/like-status`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const button = document.getElementById(`like-button-${elementId}`);
+                        const count = document.getElementById(`like-count-${elementId}`);
+
+                        if (data.isLiked) {
+                            button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                            button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20',
+                                'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                        } else {
+                            button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200',
+                                'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                            button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                        }
+
+                        count.textContent = data.likeCount;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading like status:', error);
+                });
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
             type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
         }`;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.5s ease-out';
-            setTimeout(() => {
-                notification.remove();
-            }, 500);
-        }, 3000);
-    }
+            notification.textContent = message;
 
-    // Load like status for all ecosystems on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        // Find all like buttons and load their status
-        const likeButtons = document.querySelectorAll('[id^="like-button-"]');
-        likeButtons.forEach(button => {
-            const elementId = button.id.replace('like-button-', '');
-            loadLikeStatus('ecosystem', elementId, elementId);
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        }
+
+        // Load like status for all ecosystems on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find all like buttons and load their status
+            const likeButtons = document.querySelectorAll('[id^="like-button-"]');
+            likeButtons.forEach(button => {
+                const elementId = button.id.replace('like-button-', '');
+                loadLikeStatus('ecosystem', elementId, elementId);
+            });
         });
-    });
-</script>
+    </script>
 @endpush

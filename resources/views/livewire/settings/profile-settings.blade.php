@@ -1624,7 +1624,7 @@
         }
         
         // Refresh CSRF token every 15 minutes
-        csrfTokenRefreshInterval = setInterval(refreshCsrfToken, 15 * 60 * 1000);
+        csrfTokenRefreshInterval = setInterval(refreshCsrfToken, 60 * 60 * 1000);
 
         // Track form changes for profile section
         function trackProfileChanges() {
