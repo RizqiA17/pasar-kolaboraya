@@ -221,7 +221,7 @@
                         <!-- Main Selector Input -->
                         <div class="relative">
                             <input type="text" x-model="mainInput" placeholder="Pilih keahlian Anda..."
-                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 cursor-pointer transition-all duration-200"
+                                class="w-full pl-10 pr-12 py-3 px-10! text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 cursor-pointer transition-all duration-200"
                                 readonly @click="open = !open">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
@@ -404,7 +404,7 @@
                             <!-- Main Selector Input -->
                             <div class="relative">
                                 <input type="text" x-model="mainInput" placeholder="Pilih minat Anda..."
-                                    class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 cursor-pointer transition-all duration-200"
+                                    class="w-full pl-10 pr-12 px-10! py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 cursor-pointer transition-all duration-200"
                                     readonly @click="open = !open">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"

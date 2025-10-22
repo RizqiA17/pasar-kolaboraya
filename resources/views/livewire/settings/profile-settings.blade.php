@@ -374,7 +374,7 @@
                                         </div>
                                         <input type="text" wire:model="name" id="name" required autofocus
                                             autocomplete="name"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan nama lengkap Anda">
                                     </div>
                                     @error('name')
@@ -397,7 +397,7 @@
                                         </div>
                                         <input type="email" wire:model="email" id="email" required
                                             autocomplete="email"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan email Anda">
                                     </div>
                                     @error('email')
@@ -419,7 +419,7 @@
                                             </svg>
                                         </div>
                                         <select wire:model="gender" id="gender" required
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
                                             <option value="" class="text-gray-400 dark:text-slate-500 dark:bg-slate-800">Pilih jenis kelamin</option>
                                             <option value="laki-laki" class="dark:bg-slate-800 dark:text-slate-100">Laki-laki</option>
                                             <option value="perempuan" class="dark:bg-slate-800 dark:text-slate-100">Perempuan</option>
@@ -447,7 +447,7 @@
                                             </svg>
                                         </div>
                                         <select wire:model.live="organization_type" id="organization_type" required
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
                                             <option value="" class="text-gray-400 dark:text-slate-500 dark:bg-slate-800">Pilih tipe organisasi</option>
                                             <option value="organisasi" class="dark:bg-slate-800 dark:text-slate-100">Organisasi</option>
                                             <option value="komunitas" class="dark:bg-slate-800 dark:text-slate-100">Komunitas</option>
@@ -477,7 +477,7 @@
                                             :disabled="!$organization_type"
                                             :readonly="$organization_type === 'individu'"
                                             :placeholder="$organization_type === 'individu' ? 'Individu' : ($organization_type ? 'Masukkan nama organisasi atau komunitas' : 'Pilih tipe organisasi terlebih dahulu')"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
                                     </div>
                                     @error('organization_name')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
@@ -499,7 +499,7 @@
                                             </svg>
                                         </div>
                                         <input type="tel" wire:model="phone_number" id="phone_number" required autocomplete="tel"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                             placeholder="Masukkan nomor telepon">
                                     </div>
                                     @error('phone_number')
@@ -521,7 +521,7 @@
                                             </svg>
                                         </div>
                                         <select wire:model="selectedRole" id="selectedRole"
-                                            class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
+                                            class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6">
                                             <option value="">Pilih peran Anda</option>
                                             @foreach($peran as $role)
                                                 <option value="{{ $role->id }}">{{ $role->nama }}</option>
@@ -548,7 +548,7 @@
                                         </svg>
                                     </div>
                                     <textarea wire:model="vision" id="vision" rows="4"
-                                        class="pl-12 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
+                                        class="pl-12! pr-4 block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-600 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 sm:text-sm sm:leading-6"
                                         placeholder="Ceritakan visi dan misi Anda dalam berkarya..."></textarea>
                                 </div>
                                 @error('vision')
