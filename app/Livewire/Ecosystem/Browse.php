@@ -7,6 +7,7 @@ use App\Models\Interest;
 use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -89,19 +90,24 @@ class Browse extends Component
     {
         $user = Auth::user();
         
-        $query = Ecosystem::with(['creator', 'acceptedUsers', 'likes'])
+        // Use optimized scope for listing
+        $query = Ecosystem::forListing()
             ->where('is_active', true)
-            ->forUserActiveSession($user); // Filter by user's active session
+            ->forUserActiveSession($user);
 
-        $this->hasEcosystem = Ecosystem::where('creator_id', $user->id)->where('is_active', true)->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)->exists();
+        // Cache hasEcosystem check
+        $this->hasEcosystem = \Cache::remember(
+            "user_has_ecosystem_{$user->id}_{$user->active_pasar_kolaboraya_id}", 
+            300, 
+            function () use ($user) {
+                return Ecosystem::where('creator_id', $user->id)
+                    ->where('is_active', true)
+                    ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)
+                    ->exists();
+            }
+        );
 
-        // // Role-based filtering: Ecosystem builders only see their own ecosystems
-        // if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
-        //     $query->where('creator_id', $user->id);
-        // }
-        // User biasa dan super admin melihat semua ekosistem (tidak ada filter tambahan)
-
-        // Search filter
+        // Search filter with full-text search optimization
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('ecosystem_title', 'like', '%' . $this->search . '%')

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Cache;
 
 class Ecosystem extends Model
 {
@@ -126,8 +127,10 @@ class Ecosystem extends Model
      */
     public function calculateQuality(): array
     {
-        // Get all available roles
-        $allRoles = \App\Models\Peran::pluck('id')->toArray();
+        // Cache all available roles
+        $allRoles = \Cache::remember('all_roles_ids', 3600, function () {
+            return \App\Models\Peran::pluck('id')->toArray();
+        });
         $totalRoles = count($allRoles);
 
         if ($totalRoles === 0) {
@@ -139,37 +142,33 @@ class Ecosystem extends Model
             ];
         }
 
-        // Get existing roles from ecosystem
-        $existingRoleIds = collect($this->existing_roles ?? [])->toArray();
+        // Get existing roles from ecosystem (these are role names, not IDs)
+        $existingRoleNames = collect($this->existing_roles ?? [])->toArray();
 
-        // Get roles from accepted members
-        $memberRoleIds = [];
-        $acceptedMembers = $this->acceptedUsers()->with('profile.peran')->get();
-
-        foreach ($acceptedMembers as $member) {
-            if ($member->profile && $member->profile->peran) {
-                $memberRoleIds[] = $member->profile->peran_id;
-            }
-        }
+        // Get member roles from users.assigned_role
+        $memberRoles = $this->acceptedUsers()
+            ->whereNotNull('assigned_role')
+            ->pluck('assigned_role')
+            ->toArray();
 
         // Combine and get unique roles
-        $coveredRoleIds = array_unique(array_merge($existingRoleIds, $memberRoleIds));
-        $coveredRolesCount = count($coveredRoleIds);
+        $coveredRoles = array_unique(array_merge($existingRoleNames, $memberRoles));
+        $coveredRolesCount = count($coveredRoles);
 
         // Calculate percentage
         $percentage = ($coveredRolesCount / $totalRoles) * 100;
 
-        // Get missing roles
-        $missingRoleIds = array_diff($allRoles, $coveredRoleIds);
-        $missingRoles = \App\Models\Peran::whereIn('id', $missingRoleIds)->pluck('nama')->toArray();
+        // Get missing roles - compare with all role names from database
+        $allRoleNames = \App\Models\Peran::pluck('nama')->toArray();
+        $missingRoles = array_diff($allRoleNames, $coveredRoles);
 
         return [
             'percentage' => round($percentage, 1),
             'covered_roles' => $coveredRolesCount,
             'total_roles' => $totalRoles,
             'missing_roles' => $missingRoles,
-            'existing_roles_count' => count($existingRoleIds),
-            'member_roles_count' => count(array_unique($memberRoleIds)),
+            'existing_roles_count' => count($existingRoleNames),
+            'member_roles_count' => count(array_unique($memberRoles)),
         ];
     }
 
@@ -417,6 +416,51 @@ class Ecosystem extends Model
     }
 
     /**
+     * Scope for optimized ecosystem listing with minimal data
+     */
+    public function scopeForListing($query)
+    {
+        return $query->select([
+            'id', 'creator_id', 'ecosystem_title', 'organization_name', 
+            'description', 'work_region', 'issues_addressed', 'needed_roles', 
+            'is_active', 'created_at', 'updated_at'
+        ])
+        ->with([
+            'creator:id,name,email',
+            'acceptedUsers:id,name,assigned_role',
+            'likes:id,ecosystem_id,user_id'
+        ]);
+    }
+
+    /**
+     * Scope for ecosystem analytics with optimized queries
+     */
+    public function scopeForAnalytics($query)
+    {
+        return $query->with([
+            'creator:id,name,email',
+            'acceptedUsers:id,name,assigned_role',
+            'contributions:id,ecosystem_id,status,contribution_id',
+            'likes:id,ecosystem_id,user_id'
+        ]);
+    }
+
+    /**
+     * Scope to get ecosystems with role diversity data
+     */
+    public function scopeWithRoleDiversity($query)
+    {
+        return $query->with([
+            'acceptedUsers' => function($q) {
+                $q->join('profiles', 'users.id', '=', 'profiles.user_id')
+                  ->join('peran', 'profiles.peran_id', '=', 'peran.id')
+                  ->select('users.id', 'users.name', 'users.assigned_role', 'peran.nama as role_name')
+                  ->whereNotNull('profiles.peran_id');
+            }
+        ]);
+    }
+
+    /**
      * Generate QR code URL for ecosystem joining
      */
     public function getQrJoinUrl(): string
@@ -582,40 +626,65 @@ class Ecosystem extends Model
      */
     public function calculateEkosistemScore(): array
     {
-        // Get all unique roles in this ecosystem from profile.peran relationship
-        $members = $this->acceptedUsers()->get();
-        $existingRole = [];
+        // Cache total roles count to avoid repeated queries
+        $totalRolesInDatabase = \Cache::remember('total_roles_count', 3600, function () {
+            return \App\Models\Peran::count();
+        });
 
-        foreach ($members as $member) {
-            if ($member->assigned_role) {
-                $existingRole[] = $member->assigned_role;
-            }
+        if ($totalRolesInDatabase === 0) {
+            return [
+                'ekosistem_score' => 0,
+                'role_diversity_score' => 0,
+                'total_ekosistem_score' => 0,
+                'details' => [
+                    'existing_roles_count' => 0,
+                    'total_roles_in_database' => 0,
+                    'role_diversity_details' => [],
+                    'existing_role_names' => [],
+                ]
+            ];
         }
+
+        // Get existing roles from ecosystem (already in memory)
+        $alreadyExistsRole = collect($this->existing_roles ?? [])->toArray();
+        
+        // Get role names in single query instead of loop
+        $existingRoleNames = \App\Models\Peran::whereIn('id', $alreadyExistsRole)
+            ->pluck('nama')
+            ->toArray();
+
+        // Get member assigned roles in single query
+        $memberRoles = $this->acceptedUsers()
+            ->whereNotNull('assigned_role')
+            ->pluck('assigned_role')
+            ->toArray();
+
+        $totalAlreadyExistsRole = array_merge($memberRoles, $existingRoleNames);
 
         $exclude = ['Ekosistem Builder', 'Tamu', 'Komunitas'];
 
         $uniqueExistingRoles = array_values(array_unique(
-            array_diff($existingRole, $exclude)
+            array_diff($memberRoles, $exclude)
         ));
-        
+
+        $uniqueTotalAlreadyExistsRoles = array_values(array_unique(array_diff($totalAlreadyExistsRole, $exclude)));
+
+        $alreadyExistsRolesCount = count($uniqueTotalAlreadyExistsRoles);
         $existingRolesCount = count($uniqueExistingRoles);
 
-        // Get total roles in database
-        $totalRolesInDatabase = \App\Models\Peran::count();
-
         // Calculate ecosystem quality score: peran yang ada / total seluruh peran di database
-        $ekosistemScore = $totalRolesInDatabase > 0
-            ? ($existingRolesCount / $totalRolesInDatabase) * 100
-            : 0;
+        $ekosistemScore = ($existingRolesCount / $totalRolesInDatabase) * 100;
+        $totalEkosistemScore = ($alreadyExistsRolesCount / $totalRolesInDatabase) * 100;
 
         return [
             'ekosistem_score' => round($ekosistemScore, 1),
             'role_diversity_score' => round($ekosistemScore, 1),
+            'total_ekosistem_score' => round($totalEkosistemScore, 1),
             'details' => [
                 'existing_roles_count' => $existingRolesCount,
                 'total_roles_in_database' => $totalRolesInDatabase,
                 'role_diversity_details' => $this->getRoleDiversityDetails(),
-                'existing_role_names' => $uniqueExistingRoles
+                'existing_role_names' => $existingRoleNames,
             ]
         ];
     }
@@ -639,27 +708,33 @@ class Ecosystem extends Model
      */
     public function getRoleDiversityDetails(): array
     {
-        $members = $this->acceptedUsers()->with('profile.peran')->get();
-        $roleDistribution = [];
-        $totalMembers = $members->count();
+        // Use raw query with users.assigned_role instead of profiles.peran_id
+        $roleDistribution = \DB::table('ecosystem_users')
+            ->join('users', 'ecosystem_users.user_id', '=', 'users.id')
+            ->where('ecosystem_users.ecosystem_id', $this->id)
+            ->where('ecosystem_users.status', 'accepted')
+            ->whereNull('users.deleted_at')
+            ->whereNotNull('users.assigned_role')
+            ->selectRaw('users.assigned_role as role_name, COUNT(*) as count')
+            ->groupBy('users.assigned_role')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->role_name,
+                    'count' => $item->count,
+                    'percentage' => 0 // Will be calculated below
+                ];
+            })
+            ->keyBy('role_name')
+            ->toArray();
 
-        foreach ($members as $member) {
-            if ($member->profile && $member->profile->peran) {
-                $roleId = $member->profile->peran->id;
-                $roleName = $member->profile->peran->nama;
-                if (!isset($roleDistribution[$roleId])) {
-                    $roleDistribution[$roleId] = [
-                        'name' => $roleName,
-                        'count' => 0,
-                        'percentage' => 0
-                    ];
-                }
-                $roleDistribution[$roleId]['count']++;
-            }
-        }
+        $totalMembers = $this->acceptedUsers()->count();
+        $membersWithoutRoles = $this->acceptedUsers()
+            ->whereNull('assigned_role')
+            ->count();
 
         // Calculate percentages
-        foreach ($roleDistribution as $roleId => &$data) {
+        foreach ($roleDistribution as $roleName => &$data) {
             $data['percentage'] = $totalMembers > 0 ? round(($data['count'] / $totalMembers) * 100, 1) : 0;
         }
 
@@ -667,7 +742,7 @@ class Ecosystem extends Model
             'total_members' => $totalMembers,
             'unique_roles' => count($roleDistribution),
             'role_distribution' => array_values($roleDistribution),
-            'members_without_roles' => $members->where('profile.peran', null)->count()
+            'members_without_roles' => $membersWithoutRoles
         ];
     }
 

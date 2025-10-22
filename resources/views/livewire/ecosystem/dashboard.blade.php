@@ -1,3 +1,4 @@
+{{-- {{dd($ecosystemQuality)}} --}}
 <div class="space-y-6" wire:poll.30s="refreshData">
     {{-- {{dd(['contributions' => $contributions,'pendingContributions' => $pendingContributions, 'acceptedContributions' =>  $acceptedContributions])}} --}}
     <!-- Flash Messages -->
@@ -78,8 +79,8 @@
             </div>
             <div class="flex flex-col sm:text-right">
                 <div class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
-                    {{ $ecosystemQuality['ekosistem_score'] }}%</div>
-                <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem</div>
+                    {{ $ecosystemQuality['total_ekosistem_score'] }}%</div>
+                <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem Keseluruhan</div>
                 
                 <!-- Like and Join Buttons -->
                 @if (!$isOwner)
@@ -242,7 +243,7 @@
                                 <div class="text-xs sm:text-sm text-green-600 dark:text-green-300 mt-1">Kualitas
                                     Ekosistem</div>
                                 <div class="text-xs text-green-500 dark:text-green-400 mt-1">Berdasarkan Keragaman
-                                    Peran</div>
+                                    Peran Saat Ini</div>
                             </div>
                         </div>
 
@@ -254,7 +255,7 @@
                                     {{ $ecosystemQuality['role_diversity_score'] }}%</div>
                                 <div class="text-xs sm:text-sm text-cyan-600 dark:text-cyan-300 mt-1">Keragaman Peran
                                 </div>
-                                <div class="text-xs text-cyan-500 dark:text-cyan-400 mt-1">Peran Ada / Total Peran
+                                <div class="text-xs text-cyan-500 dark:text-cyan-400 mt-1">Peran Saat Ini / Total Peran
                                 </div>
                             </div>
                         </div>
@@ -548,7 +549,7 @@
                                             class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
                                             Terima
                                         </button>
-                                        <button wire:click="rejectContribution({{ $contribution->id }})"
+                                        <button wire:click="declineContribution({{ $contribution->id }})"
                                             class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
                                             Tolak
                                         </button>
@@ -699,7 +700,7 @@
                                                         class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
                                                         Terima
                                                     </button>
-                                                    <button wire:click="rejectContribution({{ $contribution->id }})"
+                                                    <button wire:click="declineContribution({{ $contribution->id }})"
                                                         class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
                                                         Tolak
                                                     </button>

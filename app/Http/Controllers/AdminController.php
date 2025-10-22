@@ -19,6 +19,7 @@ use App\Models\Peran;
 use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
@@ -33,33 +34,51 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        $stats = [
-            'users' => User::count(),
-            'profiles' => Profile::count(),
-            'ecosystems' => Ecosystem::count(),
-            'collective_actions' => CollectiveAction::count(),
-            'connections' => Connection::count(),
-            'interests' => Interest::count(),
-            'skills' => Skill::count(),
-            'contributions' => Contribution::count(),
-            'event_categories' => EventCategory::count(),   
-            'peran' => Peran::count(),
-            'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
-            'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
-            'ecosystem_builders_rejected' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'rejected')->count(),
-        ];
+        // Cache stats for better performance
+        $stats = \Cache::remember('admin_dashboard_stats', 300, function () {
+            return [
+                'users' => User::count(),
+                'profiles' => Profile::count(),
+                'ecosystems' => Ecosystem::count(),
+                'collective_actions' => CollectiveAction::count(),
+                'connections' => Connection::count(),
+                'interests' => Interest::count(),
+                'skills' => Skill::count(),
+                'contributions' => Contribution::count(),
+                'event_categories' => EventCategory::count(),   
+                'peran' => Peran::count(),
+                'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
+                'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
+                'ecosystem_builders_rejected' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'rejected')->count(),
+            ];
+        });
 
-        $recentUsers = User::with('profile')->latest()->take(5)->get();
+        // Optimize recent data queries with proper eager loading
+        $recentUsers = User::with('profile')
+            ->whereHas('profile')
+            ->latest()
+            ->take(5)
+            ->get();
+            
         $recentEcosystems = Ecosystem::with(['creator' => function($query) {
             $query->withoutTrashed();
-        }])->whereHas('creator', function($query) {
+        }])
+        ->whereHas('creator', function($query) {
             $query->withoutTrashed();
-        })->latest()->take(5)->get();
+        })
+        ->latest()
+        ->take(5)
+        ->get();
+        
         $recentCollectiveActions = CollectiveAction::with(['creator' => function($query) {
             $query->withoutTrashed();
-        }])->whereHas('creator', function($query) {
+        }])
+        ->whereHas('creator', function($query) {
             $query->withoutTrashed();
-        })->latest()->take(5)->get();
+        })
+        ->latest()
+        ->take(5)
+        ->get();
 
         return view('admin.dashboard', compact('stats', 'recentUsers', 'recentEcosystems', 'recentCollectiveActions'));
     }
