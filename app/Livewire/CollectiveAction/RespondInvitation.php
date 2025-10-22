@@ -121,7 +121,7 @@ class RespondInvitation extends Component
 
         session()->flash('message', $message);
 
-        return redirect()->route('ecosystem.dashboard', $this->invitation->ecosystem);
+        return redirect()->route('collective-action.show', $this->invitation->collectiveAction);
 
     }
 

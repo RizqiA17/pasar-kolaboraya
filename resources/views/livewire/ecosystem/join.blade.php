@@ -96,12 +96,19 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach ($ecosystem->issues_addressed as $issueId)
                             @php
-                                $interest = \App\Models\Interest::find($issueId);
+                                // Check if it's a numeric ID (predefined issue) or string (custom issue)
+                                if (is_numeric($issueId) && $issueId > 0) {
+                                    $interest = \App\Models\Interest::find($issueId);
+                                    $issueName = $interest ? $interest->name : null;
+                                } else {
+                                    // It's a custom issue (string)
+                                    $issueName = $issueId;
+                                }
                             @endphp
-                            @if ($interest)
+                            @if ($issueName)
                                 <span
                                     class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                                    {{ $interest->name }}
+                                    {{ $issueName }}
                                 </span>
                             @endif
                         @endforeach
