@@ -96,7 +96,7 @@ class Browse extends Component
             ->forUserActiveSession($user);
 
         // Cache hasEcosystem check
-        $this->hasEcosystem = \Cache::remember(
+        $this->hasEcosystem = Cache::remember(
             "user_has_ecosystem_{$user->id}_{$user->active_pasar_kolaboraya_id}", 
             300, 
             function () use ($user) {

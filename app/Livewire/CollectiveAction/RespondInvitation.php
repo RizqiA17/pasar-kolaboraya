@@ -2,12 +2,13 @@
 
 namespace App\Livewire\CollectiveAction;
 
-use App\Models\CollectiveActionEcosystemInvitation;
-use App\Models\Ecosystem;
-use App\Events\CollectiveActionInvitationUpdated;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Ecosystem;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Events\CollectiveActionInvitationUpdated;
+use App\Models\CollectiveActionEcosystemInvitation;
 
 #[Layout('components.layouts.app', ['title' => 'Respons Undangan Aksi Kolektif'])]
 class RespondInvitation extends Component
@@ -88,6 +89,7 @@ class RespondInvitation extends Component
                     'joined_at' => now(),
                 ]);
             }
+            Log::info('insertData', $insertData);
 
             if ($ecosystem->auto_join_collective_actions == 1) {
                 // Tambahkan semua anggota ekosistem sebagai member
@@ -108,9 +110,9 @@ class RespondInvitation extends Component
                 }
 
                 // Masukkan batch, hindari duplikat
-                if (!empty($insertData)) {
-                    $collectiveAction->users()->syncWithoutDetaching($insertData);
-                }
+            }
+            if (!empty($insertData)) {
+                $collectiveAction->users()->syncWithoutDetaching($insertData);
             }
         }
 
