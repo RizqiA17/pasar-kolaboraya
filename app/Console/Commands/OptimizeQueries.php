@@ -102,3 +102,4 @@ class OptimizeQueries extends Command
         $this->info('All caches cleared successfully!');
     }
 }
+

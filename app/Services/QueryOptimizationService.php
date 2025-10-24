@@ -161,3 +161,4 @@ class QueryOptimizationService
         self::clearUserCaches();
     }
 }
+
