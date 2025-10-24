@@ -21,8 +21,10 @@ Route::get('/', function () {
 })->name('home');
 
 
-// Public Ecosystem Mapping Route (No Auth Required)
-Route::get('public/ecosystem-mapping', [App\Http\Controllers\PublicEcosystemMappingController::class, 'index'])->name('public.ecosystem.mapping');
+// Admin Market Statistics Route (Admin Only)
+Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'super.admin'])->group(function () {
+    Route::get('admin/market-statistics', [App\Http\Controllers\AdminMarketStatisticsController::class, 'index'])->name('admin.market.statistics');
+});
 
 // Pasar Kolaboraya QR Registration Routes (Admin Only - Auth Required)
 Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.user.approval'])->group(function () {

@@ -149,7 +149,7 @@
                                         d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
                             </a>
-                            <a href="{{ route('public.ecosystem.mapping') }}"
+                            {{-- <a href="{{ route('public.ecosystem.mapping') }}"
                                 class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-secondary-green to-primary-blue text-white rounded-full text-lg font-semibold hover:from-teal-600 hover:to-sky-700 transition">
                                 <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -157,7 +157,7 @@
                                     </path>
                                 </svg>
                                 Lihat Peta Ekosistem
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
 

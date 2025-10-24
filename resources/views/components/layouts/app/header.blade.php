@@ -212,7 +212,7 @@
             @endif
 
             <!-- Peta Ekosistem (Public Access) -->
-            <flux:navbar.item icon="map"
+            {{-- <flux:navbar.item icon="map"
                 :href="route('public.ecosystem.mapping') .'?pasar_id='.auth()->user()->active_pasar_kolaboraya_id"
                 :current="request()->routeIs('public.ecosystem.mapping')"
                 class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
@@ -221,7 +221,17 @@
                 <div
                     class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 </div>
-            </flux:navbar.item>
+            </flux:navbar.item> --}}
+
+            @if (Auth::user()->isSuperAdmin())
+                <flux:navbar.item icon="chart-bar"
+                    :href="route('admin.market.statistics')"
+                    :current="request()->routeIs('admin.market.statistics')"
+                    class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
+                    wire:navigate>
+                    <span class="relative z-10">{{ __('Statistik Pasar') }}</span>
+                </flux:navbar.item>
+            @endif
 
             <!-- Note: "Aksi Bersama" functionality is now unified with "Aksi Kolektif" -->
         </flux:navbar>
@@ -814,7 +824,7 @@
                 @endif
 
                 <!-- Peta Ekosistem (Public Access) -->
-                <a href="{{ route('public.ecosystem.mapping') . '?pasar_id=' . auth()->user()->active_pasar_kolaboraya_id }}"
+                {{-- <a href="{{ route('public.ecosystem.mapping') . '?pasar_id=' . auth()->user()->active_pasar_kolaboraya_id }}"
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.mapping') ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 hover:bg-cyan-500/10' }}"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
@@ -825,7 +835,17 @@
                         </svg>
                     </div>
                     <span class="text-xs font-medium">{{ __('Peta') }}</span>
-                </a>
+                </a> --}}
+
+                @if (Auth::user()->isSuperAdmin())
+                    <flux:navbar.item icon="chart-bar"
+                        :href="route('admin.market.statistics')"
+                        :current="request()->routeIs('admin.market.statistics')"
+                        class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
+                        wire:navigate>
+                        <span class="relative z-10">{{ __('Statistik Pasar') }}</span>
+                    </flux:navbar.item>
+                @endif
 
                 <!-- Aksi -->
                 {{-- @if ($userActionsEnabled || $isSuperAdmin)

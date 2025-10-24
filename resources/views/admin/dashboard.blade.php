@@ -94,13 +94,48 @@
             </div>
         </div>
 
-        <!-- Market Analysis Card -->
+        <!-- Quick Links -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Market Statistics Card -->
+            <div class="bg-gradient-to-br from-primary-blue to-sky-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                 onclick="window.location.href='{{ route('admin.market.statistics') }}'">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-bold">Statistik Pasar</h3>
+                    <svg class="w-8 h-8 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <p class="text-sky-100 text-sm mb-4">Lihat rekap lengkap data koneksi, ekosistem, aksi kolektif, dan kontribusi dari pasar yang dibuka</p>
+                <div class="flex items-center text-sm font-semibold">
+                    <span>Buka Dashboard Statistik</span>
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Market Analysis Card -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-bold text-primary-blue dark:text-secondary-green">Analisis Sesi Pasar</h3>
+                    <svg class="w-8 h-8 text-primary-blue dark:text-secondary-green opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <p class="text-gray-600 dark:text-slate-300 text-sm mb-4">Lihat detail analisis kesehatan dan performa setiap sesi Pasar Kolaboraya</p>
+                <a href="{{ route('admin.market-analysis') }}" class="inline-flex items-center text-sm font-semibold text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">
+                    <span>Lihat Analisis Detail</span>
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Market Session Stats -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-slate-700/50 shadow-lg">
             <div class="flex items-center justify-between mb-3 sm:mb-4">
-                <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green">Analisis Sesi Pasar</h3>
-                <a href="{{ route('admin.market-analysis') }}" class="text-xs sm:text-sm text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 font-medium">
-                    Lihat analisis detail →
-                </a>
+                <h3 class="text-base sm:text-lg font-semibold text-primary-blue dark:text-secondary-green">Ringkasan Sesi Pasar</h3>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="text-center">
