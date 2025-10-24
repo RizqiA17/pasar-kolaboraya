@@ -54,11 +54,18 @@ class ProfileProgress extends Component
         // Social media (dijadikan 1 field)
         $this->totalFields++;
         $hasSocialMedia = false;
-        if ($profile && !empty($profile->social_media)) {
+        if ($profile && !empty($profile->social_media) && is_array($profile->social_media)) {
             $socialMedia = $profile->social_media;
-            $socialFields = ['linkedin', 'twitter', 'instagram', 'facebook', 'website'];
-            foreach ($socialFields as $field) {
-                if (!empty($socialMedia[$field])) {
+            $expectedPlatforms = ['linkedin', 'twitter', 'instagram', 'facebook', 'website'];
+            foreach ($socialMedia as $social) {
+                if (
+                    isset($social['platform']) &&
+                    in_array(strtolower($social['platform']), $expectedPlatforms) &&
+                    (
+                        (!empty($social['username']) && $social['username'] !== null) ||
+                        (!empty($social['custom_link']) && $social['custom_link'] !== null)
+                    )
+                ) {
                     $hasSocialMedia = true;
                     break;
                 }
