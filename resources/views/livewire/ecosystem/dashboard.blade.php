@@ -619,9 +619,15 @@
                             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontribusi
                                 Terbaru</h2>
-                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                                {{ $contributions->count() }} total kontribusi
-                            </span>
+                            {{-- Lihat Semua Kontribusi Button --}}
+                            <a href="{{ route('ecosystem.contributions', $ecosystem) }}"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                            <span>Lihat Semua</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                            </a>
                         </div>
                         @if ($pendingContributions->count() > 0 && $isOwner)
                             <div
@@ -688,7 +694,7 @@
 
                         @if ($nonOfferedContributions->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
-                                @foreach ($nonOfferedContributions->take(10) as $contribution)
+                                @foreach ($nonOfferedContributions->take(5) as $contribution)
                                     <div
                                         class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
                                         <div class="flex items-center space-x-3">
@@ -744,10 +750,10 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                @if ($nonOfferedContributions->count() > 10)
+                                @if ($nonOfferedContributions->count() > 5)
                                     <div class="text-center py-2">
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                                            Dan {{ $nonOfferedContributions->count() - 10 }} kontribusi lainnya...
+                                            Dan {{ $nonOfferedContributions->count() - 5 }} kontribusi lainnya...
                                         </p>
                                     </div>
                                 @endif
@@ -1546,7 +1552,20 @@
                                 @endforeach
                             </div>
                             <div class="p-4 sm:p-6 border-t border-gray-200 dark:border-slate-700">
-                                {{ $contributions->links() }}
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                    <div>
+                                        {{ $contributions->links() }}
+                                    </div>
+                                    <div>
+                                        <a href="{{ route('ecosystem.contributions', $ecosystem) }}"
+                                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                            Lihat Semua Kontribusi
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         @else
                             <div class="p-6 text-center text-gray-500 dark:text-slate-400">

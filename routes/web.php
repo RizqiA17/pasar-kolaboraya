@@ -145,6 +145,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('ecosystem/{ecosystem}/edit', \App\Livewire\Ecosystem\Edit::class)->name('ecosystem.edit');
         Route::get('ecosystem/{ecosystem}/contribute', \App\Livewire\Ecosystem\Contribute::class)->name('ecosystem.contribute');
         Route::get('ecosystem/{ecosystem}/members', \App\Livewire\Ecosystem\Members::class)->name('ecosystem.members');
+        Route::get('ecosystem/{ecosystem}/contributions', \App\Livewire\Ecosystem\Contributions::class)->name('ecosystem.contributions');
 
         // Ecosystem QR Code routes
         Route::get('ecosystem/{ecosystem}/qr', [App\Http\Controllers\EcosystemQrController::class, 'showQr'])->name('ecosystem.qr.show');
