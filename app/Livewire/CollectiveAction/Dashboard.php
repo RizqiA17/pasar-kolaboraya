@@ -450,7 +450,7 @@ class Dashboard extends Component
     public function render()
     {
         $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
-        $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->get();
+        $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->limit(5)->get();
         
         // Get pending users (both pending and pending_approval)
         $pendingUsers = $this->collectiveAction->pendingUsers()->with('profile')->get();

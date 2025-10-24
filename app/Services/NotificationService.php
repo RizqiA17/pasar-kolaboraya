@@ -542,4 +542,44 @@ class NotificationService
             ]
         );
     }
+
+    /**
+     * Create collective action acceptance notification for user
+     */
+    public function createCollectiveActionAcceptanceNotification(User $user, \App\Models\CollectiveAction $collectiveAction, User $approver): Notification
+    {
+        return $this->createNotification(
+            $user,
+            'Permintaan Bergabung Diterima',
+            "Permintaan bergabung Anda dengan aksi kolektif '{$collectiveAction->title}' telah diterima oleh {$approver->name}.",
+            route('collective-action.show', $collectiveAction),
+            [
+                'collective_action_id' => $collectiveAction->id,
+                'collective_action_name' => $collectiveAction->title,
+                'approver_id' => $approver->id,
+                'approver_name' => $approver->name,
+                'type' => 'collective_action_acceptance'
+            ]
+        );
+    }
+
+    /**
+     * Create collective action rejection notification for user
+     */
+    public function createCollectiveActionRejectionNotification(User $user, \App\Models\CollectiveAction $collectiveAction, User $approver): Notification
+    {
+        return $this->createNotification(
+            $user,
+            'Permintaan Bergabung Ditolak',
+            "Permintaan bergabung Anda dengan aksi kolektif '{$collectiveAction->title}' telah ditolak oleh {$approver->name}.",
+            route('collective-action.browse'),
+            [
+                'collective_action_id' => $collectiveAction->id,
+                'collective_action_name' => $collectiveAction->title,
+                'approver_id' => $approver->id,
+                'approver_name' => $approver->name,
+                'type' => 'collective_action_rejection'
+            ]
+        );
+    }
 }

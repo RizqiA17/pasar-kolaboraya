@@ -22,10 +22,10 @@
                         {{ $collectiveAction->status_label }}
                     </span>
                     @if ($collectiveAction->canUserManage(Auth::user()))
-                        <a href="{{ route('collective-action.members', $collectiveAction) }}"
+                        {{-- <a href="{{ route('collective-action.members', $collectiveAction) }}"
                             class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors">
                             Kelola Anggota
-                        </a>
+                        </a> --}}
                         <a href="{{ route('collective-action.edit', $collectiveAction) }}"
                             class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1644,9 +1644,12 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                 <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
-                <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                    {{ $memberUsers->count() }} anggota aktif
-                </span>
+                <div class="flex items-center gap-3">
+                        <a href="{{ route('collective-action.members', $collectiveAction) }}"
+                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
+                            Lihat Semua
+                        </a>
+                </div>
             </div>
 
             @if ($memberUsers->count() > 0)
