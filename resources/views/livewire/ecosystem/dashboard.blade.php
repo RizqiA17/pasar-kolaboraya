@@ -490,60 +490,7 @@
                 @if ($pendingContributions->count() > 0 && $isOwner)
                     <div
                         class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 sm:p-6 mb-6">
-                        <div
-                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                            <h3 class="text-base sm:text-lg font-semibold text-orange-800 dark:text-orange-200">
-                                Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})
-                            </h3>
-                        </div>
-                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
-                            @foreach ($pendingContributions->take(5) as $contribution)
-                                <div
-                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-orange-900/10 border border-orange-200 dark:border-orange-700 rounded-lg space-y-3 sm:space-y-0">
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                            <h4
-                                                class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
-                                                {{ $contribution->user->name }}</h4>
-                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
-                                                {{ $contribution->contribution_type_label }}</p>
-                                            @if ($contribution->contribution_amount)
-                                                <p class="text-xs text-gray-500 dark:text-gray-500">
-                                                    Rp
-                                                    {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
-                                                </p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="flex space-x-2 sm:ml-4">
-                                        <button wire:click="openContributionDetailModal({{ $contribution->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
-                                            Detail
-                                        </button>
-                                        <button wire:click="acceptContribution({{ $contribution->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
-                                            Terima
-                                        </button>
-                                        <button wire:click="declineContribution({{ $contribution->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
-                                            Tolak
-                                        </button>
-                                    </div>
-                                </div>
-                            @endforeach
-                            @if ($pendingContributions->count() > 5)
-                                <div class="text-center py-2">
-                                    <p class="text-sm text-orange-600 dark:text-orange-400">
-                                        Dan {{ $pendingContributions->count() - 5 }} kontribusi lainnya...
-                                    </p>
-                                </div>
-                            @endif
-                        </div>
+                        
                     </div>
                 @endif
 
@@ -677,7 +624,62 @@
                                 {{ $contributions->count() }} total kontribusi
                             </span>
                         </div>
-
+                        @if ($pendingContributions->count() > 0 && $isOwner)
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                                <h3 class="text-base sm:text-lg font-semibold text-orange-800 dark:text-orange-200">
+                                    Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})
+                                </h3>
+                            </div>
+                            <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto mb-4">
+                                @foreach ($pendingContributions->take(5) as $contribution)
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-orange-900/10 border border-orange-200 dark:border-orange-700 rounded-lg space-y-3 sm:space-y-0">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span
+                                                    class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h4
+                                                    class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                                    {{ $contribution->user->name }}</h4>
+                                                <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                                    {{ $contribution->contribution_type_label }}</p>
+                                                @if ($contribution->contribution_amount)
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                                                        Rp
+                                                        {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2 sm:ml-4">
+                                            <button wire:click="openContributionDetailModal({{ $contribution->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
+                                                Detail
+                                            </button>
+                                            <button wire:click="acceptContribution({{ $contribution->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                                Terima
+                                            </button>
+                                            <button wire:click="declineContribution({{ $contribution->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                                Tolak
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if ($pendingContributions->count() > 5)
+                                    <div class="text-center py-2">
+                                        <p class="text-sm text-orange-600 dark:text-orange-400">
+                                            Dan {{ $pendingContributions->count() - 5 }} kontribusi lainnya...
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
                         @if ($contributions->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
                                 @foreach ($contributions->take(10) as $contribution)
