@@ -169,7 +169,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="border-b border-gray-200 dark:border-slate-700">
             <div class="overflow-x-auto">
-                <nav class="flex space-x-2 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
+                <nav class="flex gap-2 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
                     <button wire:click="setActiveTab('overview')"
                         class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
                             {{ $activeTab === 'overview'
@@ -485,15 +485,7 @@
                         </div>
                     </div> --}}
                 </div>
-
-                <!-- Pending Contributions Section - Owner Only -->
-                @if ($pendingContributions->count() > 0 && $isOwner)
-                    <div
-                        class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 sm:p-6 mb-6">
-                        
-                    </div>
-                @endif
-
+                
                 <!-- Members and Contributions Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Members Section -->
@@ -530,7 +522,7 @@
                                                     {{ $request->email }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2 sm:ml-4">
+                                        <div class="flex gap-2 sm:ml-4">
                                             <button wire:click="openMemberDetailModal({{ $request->id }})"
                                                 class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
                                                 Detail
@@ -584,7 +576,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="flex items-center justify-between sm:justify-end space-x-2 sm:ml-4">
+                                            class="flex items-center justify-between sm:justify-end gap-2 sm:ml-4">
                                             <span
                                                 class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
                                                 Aktif
@@ -655,7 +647,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2 sm:ml-4">
+                                        <div class="flex gap-2 sm:ml-4">
                                             <button wire:click="openContributionDetailModal({{ $contribution->id }})"
                                                 class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
                                                 Detail
@@ -720,7 +712,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 sm:ml-4">
+                                            class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:gap-2 sm:ml-4">
                                             @if ($contribution->status === 'accepted')
                                                 <span
                                                     class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs text-center">
@@ -742,25 +734,13 @@
                                                     {{ $contribution->status_label }}
                                                 </span>
                                             @endif
-                                            @if ($isOwner && $contribution->status === 'offered')
-                                                <div class="flex space-x-2">
-                                                    <button wire:click="acceptContribution({{ $contribution->id }})"
-                                                        class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
-                                                        Terima
-                                                    </button>
-                                                    <button wire:click="declineContribution({{ $contribution->id }})"
-                                                        class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
-                                                        Tolak
-                                                    </button>
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
-                                @if ($contributions->count() > 10)
+                                @if ($nonOfferedContributions->count() > 10)
                                     <div class="text-center py-2">
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                                            Dan {{ $contributions->count() - 10 }} kontribusi lainnya...
+                                            Dan {{ $nonOfferedContributions->count() - 10 }} kontribusi lainnya...
                                         </p>
                                     </div>
                                 @endif
@@ -793,14 +773,7 @@
                             </div>
                         </div>
                     @endif
-                    <!-- Pending Requests -->
-                    @if ($pendingRequests->count() > 0)
-                        <div
-                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-
-                        </div>
-                    @endif
-
+                    
                     <!-- Accepted Members -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
                         @if ($pendingRequests->count() > 0)
@@ -860,7 +833,7 @@
                                         </div>
                                     </div>
                                     @if ($isOwner)
-                                        <div class="flex space-x-2">
+                                        <div class="flex gap-2">
                                             <button wire:click="acceptMember({{ $request->id }})"
                                                 class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                 Terima
@@ -921,7 +894,7 @@
                                                             @endforeach
                                                             @if ($member->profile->skills->count() > 5)
                                                                 <span
-                                                                    class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs px-2 py-1 rounded">+{{ $member->profile->skills->count() - 5 }}
+                                                                    class="inline-block space- bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs px-2 py-1 rounded">+{{ $member->profile->skills->count() - 5 }}
                                                                     lainnya</span>
                                                             @endif
                                                         </div>
@@ -930,7 +903,7 @@
                                             </div>
                                         </div>
                                         {{-- @if ($isOwner)
-                                            <div class="flex space-x-2">
+                                            <div class="flex gap-2">
                                                 <button wire:click="removeMember({{ $member->id }})"
                                                     onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
                                                     class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
@@ -1382,8 +1355,7 @@
                         <div
                             class="border border-orange-200 dark:border-orange-900 rounded-lg bg-orange-50 dark:bg-orange-900/10">
                             <div class="p-6 border-b border-orange-200 dark:border-orange-900">
-                                <h3 class="text-lg font-semibold text-orange-800 dark:text-orange-200">Kontribusi
-                                    Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
+                                <h3 class="text-lg font-semibold text-orange-800 dark:text-orange-200">Menunggu Persetujuan ({{ $pendingContributions->count() }})</h3>
                             </div>
                             <div class="divide-y divide-orange-200 dark:divide-orange-900">
                                 @foreach ($pendingContributions as $contribution)
@@ -1457,7 +1429,7 @@
                                             </div>
 
                                             @if ($isOwner)
-                                                <div class="flex space-x-2">
+                                                <div class="flex gap-2">
                                                     <button
                                                         wire:click="openContributionDetailModal({{ $contribution->id }})"
                                                         class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
@@ -1591,7 +1563,7 @@
     @if ($showMemberDetailModal && $selectedMember)
         <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
             aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-32 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
                 <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
                     wire:click="closeMemberDetailModal"></div>
@@ -1647,12 +1619,6 @@
                                                 {{ $selectedMember->assigned_role }}
                                             </p>
                                         @endif
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
-                                            {{ $selectedMember->pivot ? ucfirst($selectedMember->pivot->status) : 'N/A' }}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -1781,7 +1747,7 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
+                    <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
                         <button wire:click="acceptMember({{ $selectedMember->id }})" type="button"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Terima
@@ -1804,7 +1770,7 @@
     @if ($showContributionDetailModal && $selectedContribution)
         <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
             aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-32 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
                 <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
                     wire:click="closeContributionDetailModal"></div>
@@ -1860,12 +1826,6 @@
                                                 {{ $selectedContribution->user->profile->organization_name }}
                                             </p>
                                         @endif
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $selectedContribution->status_color_class }}">
-                                            {{ $selectedContribution->status_label }}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -1971,7 +1931,7 @@
                             </div>
 
                             <!-- Admin Notes -->
-                            <div>
+                            {{-- <div>
                                 <label for="admin_notes_contribution"
                                     class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                     Catatan Admin (opsional)
@@ -1979,13 +1939,13 @@
                                 <textarea wire:model="adminNotes" id="admin_notes_contribution" rows="3"
                                     class="block w-full border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 sm:text-sm placeholder-gray-500 dark:placeholder-slate-400"
                                     placeholder="Tambahkan catatan untuk keputusan ini..."></textarea>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
                     <!-- Modal Footer -->
                     @if ($selectedContribution->status === 'offered')
-                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
+                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
                             <button wire:click="acceptContribution({{ $selectedContribution->id }})" type="button"
                                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Terima
@@ -2000,7 +1960,7 @@
                             </button>
                         </div>
                     @else
-                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse">
                             <button wire:click="closeContributionDetailModal" type="button"
                                 class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:w-auto sm:text-sm">
                                 Tutup

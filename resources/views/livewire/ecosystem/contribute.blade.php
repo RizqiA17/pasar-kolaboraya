@@ -46,7 +46,7 @@
                 <select wire:model.live="contribution_id" 
                         id="contribution_id"
                         class="mt-1 p-4 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Pilih jenis kontribusi...</option>
+                    <option disabled selected value="">Pilih jenis kontribusi...</option>
                     @foreach($contributionTypes as $contribution)
                         <option value="{{ $contribution->id }}">{{ $contribution->name }}</option>
                     @endforeach
@@ -110,7 +110,7 @@
                         <input type="number" 
                                wire:model="contribution_amount" 
                                id="contribution_amount"
-                               class="pl-10 mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               class="pl-10 p-4 mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="0">
                     </div>
                     @error('contribution_amount') 
@@ -123,7 +123,7 @@
             @php
                 $isResources = $selectedContribution && str_contains(strtolower($selectedContribution->name), 'sumber daya');
             @endphp
-            @if($isResources)
+            {{-- @if($isResources)
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                         Detail Sumber Daya
@@ -192,7 +192,7 @@
                         </button>
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             <!-- Additional Information -->
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
