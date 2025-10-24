@@ -23,6 +23,13 @@ class Dashboard extends Component
     public $isReadOnly = false;
     public $pendingInvitations;
     public $showMembershipRequests = false;
+    
+    // Modal properties
+    public $showMemberDetailModal = false;
+    public $showContributionDetailModal = false;
+    public $selectedMemberId = null;
+    public $selectedContributionId = null;
+    public $adminNotes = '';
 
     protected $queryString = [
         'activeTab' => ['except' => 'overview'],
@@ -60,6 +67,57 @@ class Dashboard extends Component
     public function toggleMembershipRequests()
     {
         $this->showMembershipRequests = !$this->showMembershipRequests;
+    }
+    
+    public function openMemberDetailModal($userId)
+    {
+        $this->selectedMemberId = $userId;
+        $this->showMemberDetailModal = true;
+        $this->adminNotes = '';
+    }
+    
+    public function closeMemberDetailModal()
+    {
+        $this->showMemberDetailModal = false;
+        $this->selectedMemberId = null;
+        $this->adminNotes = '';
+    }
+    
+    public function openContributionDetailModal($contributionId)
+    {
+        $this->selectedContributionId = $contributionId;
+        $this->showContributionDetailModal = true;
+        $this->adminNotes = '';
+    }
+    
+    public function closeContributionDetailModal()
+    {
+        $this->showContributionDetailModal = false;
+        $this->selectedContributionId = null;
+        $this->adminNotes = '';
+    }
+    
+    public function getSelectedMemberProperty()
+    {
+        if (!$this->selectedMemberId) {
+            return null;
+        }
+        
+        return $this->ecosystem->users()
+            ->where('users.id', $this->selectedMemberId)
+            ->with(['profile.skills'])
+            ->first();
+    }
+    
+    public function getSelectedContributionProperty()
+    {
+        if (!$this->selectedContributionId) {
+            return null;
+        }
+        
+        return \App\Models\EcosystemContribution::where('id', $this->selectedContributionId)
+            ->with(['user.profile', 'contribution'])
+            ->first();
     }
 
     public function acceptMember($userId)
@@ -101,6 +159,9 @@ class Dashboard extends Component
 
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
+        
+        // Close modal if open
+        $this->closeMemberDetailModal();
     }
 
     public function rejectMember($userId)
@@ -139,6 +200,9 @@ class Dashboard extends Component
 
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
+        
+        // Close modal if open
+        $this->closeMemberDetailModal();
     }
 
     public function removeMember($userId)
@@ -288,6 +352,9 @@ class Dashboard extends Component
 
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
+        
+        // Close modal if open
+        $this->closeContributionDetailModal();
     }
 
     public function declineContribution($contributionId)
@@ -313,6 +380,9 @@ class Dashboard extends Component
 
         // Refresh the component
         $this->ecosystem = $this->ecosystem->fresh();
+        
+        // Close modal if open
+        $this->closeContributionDetailModal();
     }
 
     public function completeContribution($contributionId)
@@ -358,6 +428,8 @@ class Dashboard extends Component
             'analyticsData' => $this->ecosystem->getEcosystemAnalytics(),
             'likeCount' => $this->ecosystem->likes()->count(),
             'isLiked' => Auth::user() ? $this->ecosystem->isLikedBy(Auth::user()) : false,
+            'selectedMember' => $this->selectedMember,
+            'selectedContribution' => $this->selectedContribution,
         ]);
     }
 

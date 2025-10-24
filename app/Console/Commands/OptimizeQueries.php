@@ -103,3 +103,4 @@ class OptimizeQueries extends Command
     }
 }
 
+
