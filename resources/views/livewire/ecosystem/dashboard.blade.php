@@ -1650,27 +1650,19 @@
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi Profil</h4>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        @if ($selectedMember->profile->organization_name)
+                                        @if ($selectedMember->profile->organization)
                                             <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
                                                 <span class="text-xs text-gray-500 dark:text-slate-400">Organisasi</span>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
-                                                    {{ $selectedMember->profile->organization_name }}
+                                                    {{ $selectedMember->profile->organization }}
                                                 </p>
                                             </div>
                                         @endif
-                                        @if ($selectedMember->profile->location)
-                                            <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Lokasi</span>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
-                                                    {{ $selectedMember->profile->location }}
-                                                </p>
-                                            </div>
-                                        @endif
-                                        @if ($selectedMember->profile->bio)
+                                        @if ($selectedMember->profile->vision)
                                             <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600 md:col-span-2">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Bio</span>
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Visi dan Misi</span>
                                                 <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
-                                                    {{ $selectedMember->profile->bio }}
+                                                    {{ $selectedMember->profile->vision }}
                                                 </p>
                                             </div>
                                         @endif
@@ -1679,15 +1671,36 @@
                             @endif
 
                             <!-- Skills -->
-                            @if ($selectedMember->profile && $selectedMember->profile->skills && $selectedMember->profile->skills->count() > 0)
+                            @if ($selectedMember->profile && $selectedMember->profile->allSkills && $selectedMember->profile->allSkills->count() > 0)
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian</h4>
                                     <div class="flex flex-wrap gap-2">
-                                        @foreach ($selectedMember->profile->skills as $skill)
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                                                {{ $skill->skill_name }}
-                                            </span>
+                                        @foreach ($selectedMember->profile->allSkills as $skillData)
+                                            @if ($skillData->custom_name)
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                    {{ $skillData->custom_name }}
+                                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                                </span>
+                                            @else
+                                                @php
+                                                    $skill = \App\Models\Skill::find($skillData->skill_id);
+                                                @endphp
+                                                @if ($skill && $skill->name)
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                        {{ $skill->name }}
+                                                    </span>
+                                                @endif
+                                            @endif
                                         @endforeach
+                                    </div>
+                                </div>
+                            @elseif ($selectedMember->profile)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian</h4>
+                                    <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <p class="text-sm text-gray-500 dark:text-slate-400 italic">
+                                            Tidak ada keahlian yang tercatat
+                                        </p>
                                     </div>
                                 </div>
                             @endif
@@ -1697,24 +1710,8 @@
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi Bergabung</h4>
                                     <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <span class="text-xs text-gray-500 dark:text-slate-400">Tipe Bergabung</span>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                       {{ $selectedMember->pivot->join_type === 'direct' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' }}">
-                                                {{ $selectedMember->pivot->join_type === 'direct' ? 'Bergabung Langsung' : 'Melalui Aksi Kolektif' }}
-                                            </span>
-                                        </div>
-                                        @if ($selectedMember->pivot->requested_at)
-                                            <div class="flex items-center justify-between mb-2">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Waktu Permintaan</span>
-                                                <span class="text-xs text-gray-900 dark:text-slate-100">
-                                                    {{ \Carbon\Carbon::parse($selectedMember->pivot->requested_at)->format('d M Y H:i') }}
-                                                    ({{ \Carbon\Carbon::parse($selectedMember->pivot->requested_at)->diffForHumans() }})
-                                                </span>
-                                            </div>
-                                        @endif
                                         @if ($selectedMember->pivot->join_reason)
-                                            <div class="mt-3 pt-3 border-t border-gray-200 dark:border-slate-600">
+                                            <div class="">
                                                 <span class="text-xs text-gray-500 dark:text-slate-400">Alasan Bergabung</span>
                                                 <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
                                                     {{ $selectedMember->pivot->join_reason }}
@@ -1726,7 +1723,7 @@
                             @endif
 
                             <!-- Admin Notes -->
-                            <div>
+                            {{-- <div>
                                 <label for="admin_notes_member" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                     Catatan Admin (opsional)
                                 </label>
@@ -1736,7 +1733,7 @@
                                     rows="3" 
                                     class="block w-full border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 sm:text-sm placeholder-gray-500 dark:placeholder-slate-400"
                                     placeholder="Tambahkan catatan untuk keputusan ini..."></textarea>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 

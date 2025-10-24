@@ -103,10 +103,17 @@ class Dashboard extends Component
             return null;
         }
         
-        return $this->ecosystem->users()
+        $member = $this->ecosystem->users()
             ->where('users.id', $this->selectedMemberId)
-            ->with(['profile.skills'])
+            ->with(['profile'])
             ->first();
+            
+        // Load skills using getAllSkills method like in profile
+        if ($member && $member->profile) {
+            $member->profile->allSkills = $member->profile->getAllSkills();
+        }
+        
+        return $member;
     }
     
     public function getSelectedContributionProperty()
