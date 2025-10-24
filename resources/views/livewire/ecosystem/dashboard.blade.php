@@ -559,54 +559,54 @@
                             </span>
                         </div>
                         @if ($pendingRequests->count() > 0 && $isOwner)
-                        <div
-                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                            <h3 class="text-base sm:text-lg font-semibold text-amber-800 dark:text-amber-200">
-                                Permintaan Bergabung ({{ $pendingRequests->count() }})
-                            </h3>
-                        </div>
-                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto mb-4">
-                            @foreach ($pendingRequests->take(5) as $request)
-                                <div
-                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700 rounded-lg space-y-3 sm:space-y-0">
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                                <h3 class="text-base sm:text-lg font-semibold text-amber-800 dark:text-amber-200">
+                                    Permintaan Bergabung ({{ $pendingRequests->count() }})
+                                </h3>
+                            </div>
+                            <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto mb-4">
+                                @foreach ($pendingRequests->take(5) as $request)
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700 rounded-lg space-y-3 sm:space-y-0">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span
+                                                    class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h4
+                                                    class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                                    {{ $request->name }}</h4>
+                                                <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                                    {{ $request->email }}</p>
+                                            </div>
                                         </div>
-                                        <div class="min-w-0 flex-1">
-                                            <h4
-                                                class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
-                                                {{ $request->name }}</h4>
-                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
-                                                {{ $request->email }}</p>
+                                        <div class="flex space-x-2 sm:ml-4">
+                                            <button wire:click="openMemberDetailModal({{ $request->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
+                                                Detail
+                                            </button>
+                                            <button wire:click="acceptMember({{ $request->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                                Terima
+                                            </button>
+                                            <button wire:click="rejectMember({{ $request->id }})"
+                                                class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                                Tolak
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="flex space-x-2 sm:ml-4">
-                                        <button wire:click="openMemberDetailModal({{ $request->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
-                                            Detail
-                                        </button>
-                                        <button wire:click="acceptMember({{ $request->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
-                                            Terima
-                                        </button>
-                                        <button wire:click="rejectMember({{ $request->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
-                                            Tolak
-                                        </button>
+                                @endforeach
+                                @if ($pendingRequests->count() > 5)
+                                    <div class="text-center py-2">
+                                        <p class="text-sm text-amber-600 dark:text-amber-400">
+                                            Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
+                                        </p>
                                     </div>
-                                </div>
-                            @endforeach
-                            @if ($pendingRequests->count() > 5)
-                                <div class="text-center py-2">
-                                    <p class="text-sm text-amber-600 dark:text-amber-400">
-                                        Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
-                                    </p>
-                                </div>
-                            @endif
-                        </div>
+                                @endif
+                            </div>
                         @endif
                         @if ($acceptedMembers->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
@@ -1048,7 +1048,8 @@
                                     @foreach ($ecosystemQuality['details']['existing_role_names'] as $roleName)
                                         <div class="flex items-center gap-2 text-sm">
                                             <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span class="text-gray-700 dark:text-slate-300">{{ $roleName }}</span>
+                                            <span
+                                                class="text-gray-700 dark:text-slate-300">{{ $roleName }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -1453,7 +1454,8 @@
 
                                             @if ($isOwner)
                                                 <div class="flex space-x-2">
-                                                    <button wire:click="openContributionDetailModal({{ $contribution->id }})"
+                                                    <button
+                                                        wire:click="openContributionDetailModal({{ $contribution->id }})"
                                                         class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                         Detail
                                                     </button>
@@ -1583,25 +1585,28 @@
 
     <!-- Modal Detail Member Approval -->
     @if ($showMemberDetailModal && $selectedMember)
-        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
-                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity" 
-                     wire:click="closeMemberDetailModal"></div>
+                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
+                    wire:click="closeMemberDetailModal"></div>
 
                 <!-- Center modal -->
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-                <div class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                <div
+                    class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
                     <div class="bg-white dark:bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100">
                                 Detail Permintaan Bergabung
                             </h3>
-                            <button wire:click="closeMemberDetailModal" 
-                                    class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
+                            <button wire:click="closeMemberDetailModal"
+                                class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
@@ -1612,13 +1617,17 @@
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
                                         @if ($selectedMember->profile && $selectedMember->profile->profile_photo)
-                                            <img class="h-16 w-16 rounded-full object-cover" 
-                                                 src="{{ asset('storage/' . $selectedMember->profile->profile_photo) }}" 
-                                                 alt="{{ $selectedMember->name }}">
+                                            <img class="h-16 w-16 rounded-full object-cover"
+                                                src="{{ asset('storage/' . $selectedMember->profile->profile_photo) }}"
+                                                alt="{{ $selectedMember->name }}">
                                         @else
-                                            <div class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
-                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                            <div
+                                                class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
+                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
                                                 </svg>
                                             </div>
                                         @endif
@@ -1627,18 +1636,17 @@
                                         <h4 class="text-lg font-semibold text-gray-900 dark:text-slate-100">
                                             {{ $selectedMember->name }}
                                         </h4>
-                                        <p class="text-sm text-gray-600 dark:text-slate-400">{{ $selectedMember->email }}</p>
-                                        @if ($selectedMember->profile && $selectedMember->profile->phone)
+                                        <p class="text-sm text-gray-600 dark:text-slate-400">
+                                            {{ $selectedMember->email }}</p>
+                                        @if ($selectedMember->assigned_role)
                                             <p class="text-sm text-gray-600 dark:text-slate-400">
-                                                <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                                </svg>
-                                                {{ $selectedMember->profile->phone }}
+                                                {{ $selectedMember->assigned_role }}
                                             </p>
                                         @endif
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
                                             {{ $selectedMember->pivot ? ucfirst($selectedMember->pivot->status) : 'N/A' }}
                                         </span>
                                     </div>
@@ -1648,19 +1656,42 @@
                             <!-- Profile Information -->
                             @if ($selectedMember->profile)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi Profil</h4>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                        Profil</h4>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         @if ($selectedMember->profile->organization)
-                                            <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Organisasi</span>
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span
+                                                    class="text-xs text-gray-500 dark:text-slate-400">Organisasi</span>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
                                                     {{ $selectedMember->profile->organization }}
                                                 </p>
                                             </div>
                                         @endif
+                                        @if ($selectedMember->profile->location)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Lokasi</span>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->location }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                        @if ($selectedMember->profile->phone)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Telepon</span>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->phone }}
+                                                </p>
+                                            </div>
+                                        @endif
                                         @if ($selectedMember->profile->vision)
-                                            <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600 md:col-span-2">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Visi dan Misi</span>
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600 md:col-span-2">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Visi dan
+                                                    Misi</span>
                                                 <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
                                                     {{ $selectedMember->profile->vision }}
                                                 </p>
@@ -1673,11 +1704,13 @@
                             <!-- Skills -->
                             @if ($selectedMember->profile && $selectedMember->profile->allSkills && $selectedMember->profile->allSkills->count() > 0)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian</h4>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian
+                                    </h4>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach ($selectedMember->profile->allSkills as $skillData)
                                             @if ($skillData->custom_name)
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                <span
+                                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                                                     {{ $skillData->custom_name }}
                                                     <span class="ml-1 text-xs opacity-75">(Custom)</span>
                                                 </span>
@@ -1686,7 +1719,8 @@
                                                     $skill = \App\Models\Skill::find($skillData->skill_id);
                                                 @endphp
                                                 @if ($skill && $skill->name)
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                                                         {{ $skill->name }}
                                                     </span>
                                                 @endif
@@ -1696,8 +1730,10 @@
                                 </div>
                             @elseif ($selectedMember->profile)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian</h4>
-                                    <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian
+                                    </h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
                                         <p class="text-sm text-gray-500 dark:text-slate-400 italic">
                                             Tidak ada keahlian yang tercatat
                                         </p>
@@ -1708,11 +1744,14 @@
                             <!-- Join Information -->
                             @if ($selectedMember->pivot)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi Bergabung</h4>
-                                    <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                        Bergabung</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
                                         @if ($selectedMember->pivot->join_reason)
                                             <div class="">
-                                                <span class="text-xs text-gray-500 dark:text-slate-400">Alasan Bergabung</span>
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Alasan
+                                                    Bergabung</span>
                                                 <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
                                                     {{ $selectedMember->pivot->join_reason }}
                                                 </p>
@@ -1739,19 +1778,16 @@
 
                     <!-- Modal Footer -->
                     <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
-                        <button wire:click="acceptMember({{ $selectedMember->id }})" 
-                                type="button"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button wire:click="acceptMember({{ $selectedMember->id }})" type="button"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Terima
                         </button>
-                        <button wire:click="rejectMember({{ $selectedMember->id }})" 
-                                type="button"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button wire:click="rejectMember({{ $selectedMember->id }})" type="button"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Tolak
                         </button>
-                        <button wire:click="closeMemberDetailModal" 
-                                type="button"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
+                        <button wire:click="closeMemberDetailModal" type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
                             Batal
                         </button>
                     </div>
@@ -1762,25 +1798,28 @@
 
     <!-- Modal Detail Contribution Approval -->
     @if ($showContributionDetailModal && $selectedContribution)
-        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
-                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity" 
-                     wire:click="closeContributionDetailModal"></div>
+                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
+                    wire:click="closeContributionDetailModal"></div>
 
                 <!-- Center modal -->
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-                <div class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                <div
+                    class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
                     <div class="bg-white dark:bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100">
                                 Detail Kontribusi
                             </h3>
-                            <button wire:click="closeContributionDetailModal" 
-                                    class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
+                            <button wire:click="closeContributionDetailModal"
+                                class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
@@ -1791,13 +1830,17 @@
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
                                         @if ($selectedContribution->user->profile && $selectedContribution->user->profile->profile_photo)
-                                            <img class="h-16 w-16 rounded-full object-cover" 
-                                                 src="{{ asset('storage/' . $selectedContribution->user->profile->profile_photo) }}" 
-                                                 alt="{{ $selectedContribution->user->name }}">
+                                            <img class="h-16 w-16 rounded-full object-cover"
+                                                src="{{ asset('storage/' . $selectedContribution->user->profile->profile_photo) }}"
+                                                alt="{{ $selectedContribution->user->name }}">
                                         @else
-                                            <div class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
-                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                            <div
+                                                class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
+                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
                                                 </svg>
                                             </div>
                                         @endif
@@ -1806,7 +1849,8 @@
                                         <h4 class="text-lg font-semibold text-gray-900 dark:text-slate-100">
                                             {{ $selectedContribution->user->name }}
                                         </h4>
-                                        <p class="text-sm text-gray-600 dark:text-slate-400">{{ $selectedContribution->user->email }}</p>
+                                        <p class="text-sm text-gray-600 dark:text-slate-400">
+                                            {{ $selectedContribution->user->email }}</p>
                                         @if ($selectedContribution->user->profile && $selectedContribution->user->profile->organization_name)
                                             <p class="text-sm text-gray-600 dark:text-slate-400">
                                                 {{ $selectedContribution->user->profile->organization_name }}
@@ -1814,7 +1858,8 @@
                                         @endif
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $selectedContribution->status_color_class }}">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $selectedContribution->status_color_class }}">
                                             {{ $selectedContribution->status_label }}
                                         </span>
                                     </div>
@@ -1823,19 +1868,23 @@
 
                             <!-- Contribution Type & Status -->
                             <div>
-                                <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi Kontribusi</h4>
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                    Kontribusi</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
                                         <span class="text-xs text-gray-500 dark:text-slate-400">Jenis Kontribusi</span>
                                         <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
                                             {{ $selectedContribution->contribution_type_label }}
                                         </p>
                                     </div>
                                     @if ($selectedContribution->contribution_amount)
-                                        <div class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <div
+                                            class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
                                             <span class="text-xs text-gray-500 dark:text-slate-400">Jumlah</span>
                                             <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
-                                                Rp {{ number_format($selectedContribution->contribution_amount, 0, ',', '.') }}
+                                                Rp
+                                                {{ number_format($selectedContribution->contribution_amount, 0, ',', '.') }}
                                             </p>
                                         </div>
                                     @endif
@@ -1845,8 +1894,10 @@
                             <!-- Contribution Description -->
                             @if ($selectedContribution->contribution_description)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Deskripsi Kontribusi</h4>
-                                    <div class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Deskripsi
+                                        Kontribusi</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
                                         <p class="text-sm text-gray-900 dark:text-slate-100">
                                             {{ $selectedContribution->contribution_description }}
                                         </p>
@@ -1855,17 +1906,23 @@
                             @endif
 
                             <!-- Contribution Details -->
-                            @if ($selectedContribution->contribution_details && is_array($selectedContribution->contribution_details) && count($selectedContribution->contribution_details) > 0)
+                            @if (
+                                $selectedContribution->contribution_details &&
+                                    is_array($selectedContribution->contribution_details) &&
+                                    count($selectedContribution->contribution_details) > 0)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Detail Tambahan</h4>
-                                    <div class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Detail
+                                        Tambahan</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
                                         <ul class="space-y-2">
                                             @foreach ($selectedContribution->contribution_details as $detail)
                                                 <li class="text-sm text-gray-900 dark:text-slate-100">
                                                     <span class="font-medium">{{ $detail['type'] ?? 'N/A' }}:</span>
                                                     {{ $detail['description'] ?? 'N/A' }}
                                                     @if (isset($detail['quantity']) && $detail['quantity'])
-                                                        <span class="text-gray-600 dark:text-slate-400">({{ $detail['quantity'] }})</span>
+                                                        <span
+                                                            class="text-gray-600 dark:text-slate-400">({{ $detail['quantity'] }})</span>
                                                     @endif
                                                 </li>
                                             @endforeach
@@ -1877,7 +1934,8 @@
                             <!-- Timeline Information -->
                             <div>
                                 <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Timeline</h4>
-                                <div class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600 space-y-2">
+                                <div
+                                    class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600 space-y-2">
                                     @if ($selectedContribution->offered_at)
                                         <div class="flex items-center justify-between text-sm">
                                             <span class="text-gray-500 dark:text-slate-400">Diajukan</span>
@@ -1910,13 +1968,11 @@
 
                             <!-- Admin Notes -->
                             <div>
-                                <label for="admin_notes_contribution" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                <label for="admin_notes_contribution"
+                                    class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                     Catatan Admin (opsional)
                                 </label>
-                                <textarea 
-                                    wire:model="adminNotes"
-                                    id="admin_notes_contribution"
-                                    rows="3" 
+                                <textarea wire:model="adminNotes" id="admin_notes_contribution" rows="3"
                                     class="block w-full border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 sm:text-sm placeholder-gray-500 dark:placeholder-slate-400"
                                     placeholder="Tambahkan catatan untuk keputusan ini..."></textarea>
                             </div>
@@ -1926,27 +1982,23 @@
                     <!-- Modal Footer -->
                     @if ($selectedContribution->status === 'offered')
                         <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
-                            <button wire:click="acceptContribution({{ $selectedContribution->id }})" 
-                                    type="button"
-                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            <button wire:click="acceptContribution({{ $selectedContribution->id }})" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Terima
                             </button>
-                            <button wire:click="declineContribution({{ $selectedContribution->id }})" 
-                                    type="button"
-                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            <button wire:click="declineContribution({{ $selectedContribution->id }})" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Tolak
                             </button>
-                            <button wire:click="closeContributionDetailModal" 
-                                    type="button"
-                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
+                            <button wire:click="closeContributionDetailModal" type="button"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
                                 Tutup
                             </button>
                         </div>
                     @else
                         <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                            <button wire:click="closeContributionDetailModal" 
-                                    type="button"
-                                    class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:w-auto sm:text-sm">
+                            <button wire:click="closeContributionDetailModal" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:w-auto sm:text-sm">
                                 Tutup
                             </button>
                         </div>

@@ -105,7 +105,7 @@ class Dashboard extends Component
         
         $member = $this->ecosystem->users()
             ->where('users.id', $this->selectedMemberId)
-            ->with(['profile'])
+            ->with(['profile.peran'])
             ->first();
             
         // Load skills using getAllSkills method like in profile
