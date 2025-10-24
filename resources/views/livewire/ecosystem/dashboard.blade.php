@@ -1901,7 +1901,7 @@
                                 <div
                                     class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600 space-y-2">
                                     @if ($selectedContribution->offered_at)
-                                        <div class="flex items-center justify-between text-sm">
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
                                             <span class="text-gray-500 dark:text-slate-400">Diajukan</span>
                                             <span class="text-gray-900 dark:text-slate-100">
                                                 {{ $selectedContribution->offered_at->format('d M Y H:i') }}
@@ -1912,7 +1912,7 @@
                                         </div>
                                     @endif
                                     @if ($selectedContribution->accepted_at)
-                                        <div class="flex items-center justify-between text-sm">
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
                                             <span class="text-gray-500 dark:text-slate-400">Diterima</span>
                                             <span class="text-gray-900 dark:text-slate-100">
                                                 {{ \Carbon\Carbon::parse($selectedContribution->accepted_at)->format('d M Y H:i') }}
@@ -1920,7 +1920,7 @@
                                         </div>
                                     @endif
                                     @if ($selectedContribution->completed_at)
-                                        <div class="flex items-center justify-between text-sm">
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
                                             <span class="text-gray-500 dark:text-slate-400">Diselesaikan</span>
                                             <span class="text-gray-900 dark:text-slate-100">
                                                 {{ \Carbon\Carbon::parse($selectedContribution->completed_at)->format('d M Y H:i') }}

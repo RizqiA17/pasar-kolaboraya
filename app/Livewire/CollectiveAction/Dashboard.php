@@ -36,6 +36,13 @@ class Dashboard extends Component
 
     public $contributionTypes = [];
 
+    // Modal properties
+    public $showMemberDetailModal = false;
+    public $showContributionDetailModal = false;
+    public $selectedMemberId = null;
+    public $selectedContributionId = null;
+    public $adminNotes = '';
+
     public $resourceTypes = [
         'dana' => 'Dana/Pendanaan',
         'keahlian' => 'Keahlian/Expertise',
@@ -482,6 +489,8 @@ class Dashboard extends Component
             'allInvitations' => $allInvitations,
             'likeCount' => $this->collectiveAction->likes()->count(),
             'isLiked' => Auth::user() ? $this->collectiveAction->isLikedBy(Auth::user()) : false,
+            'selectedMember' => $this->selectedMember,
+            'selectedContribution' => $this->selectedContribution,
         ]);
     }
 
@@ -565,5 +574,52 @@ class Dashboard extends Component
         $this->collectiveAction->removeUser($user);
 
         session()->flash('message', "{$user->name} telah dikeluarkan dari aksi kolektif.");
+    }
+
+    // Modal methods
+    public function openMemberDetailModal($userId)
+    {
+        $this->selectedMemberId = $userId;
+        $this->showMemberDetailModal = true;
+    }
+
+    public function closeMemberDetailModal()
+    {
+        $this->showMemberDetailModal = false;
+        $this->selectedMemberId = null;
+        $this->adminNotes = '';
+    }
+
+    public function openContributionDetailModal($contributionId)
+    {
+        $this->selectedContributionId = $contributionId;
+        $this->showContributionDetailModal = true;
+    }
+
+    public function closeContributionDetailModal()
+    {
+        $this->showContributionDetailModal = false;
+        $this->selectedContributionId = null;
+        $this->adminNotes = '';
+    }
+
+    public function getSelectedMemberProperty()
+    {
+        if (!$this->selectedMemberId) {
+            return null;
+        }
+
+        return \App\Models\User::with('profile')
+            ->find($this->selectedMemberId);
+    }
+
+    public function getSelectedContributionProperty()
+    {
+        if (!$this->selectedContributionId) {
+            return null;
+        }
+
+        return \App\Models\CollectiveActionContribution::with('user.profile', 'contribution')
+            ->find($this->selectedContributionId);
     }
 }

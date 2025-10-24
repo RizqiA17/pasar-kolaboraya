@@ -49,17 +49,22 @@
                         @if ($collectiveAction->canUserJoin(Auth::user()))
                             <button wire:click="joinCollectiveAction"
                                 class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors border border-white/20 hover:border-white/30 shadow-sm">
-                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                                 Bergabung
                             </button>
                         @endif
-                        <button id="like-button" 
+                        <button id="like-button"
                             class="flex items-center gap-2 px-3 py-2 {{ $isLiked ? 'bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-400/30' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20' }} rounded-lg text-sm font-medium transition-colors"
                             onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
-                            <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                             <span id="like-count" class="font-medium">{{ $likeCount }}</span>
                         </button>
@@ -117,17 +122,22 @@
                         @if ($collectiveAction->canUserJoin(Auth::user()))
                             <button wire:click="joinCollectiveAction"
                                 class="px-4 py-2 w-full bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors border border-white/20 hover:border-white/30 shadow-sm">
-                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                                 Bergabung
                             </button>
                         @endif
-                        <button id="like-button-mobile" 
+                        <button id="like-button-mobile"
                             class="flex items-center gap-2 px-3 py-2 w-full {{ $isLiked ? 'bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-400/30' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20' }} rounded-lg text-sm font-medium transition-colors justify-center"
                             onclick="toggleLike('collective-action', {{ $collectiveAction->id }})">
-                            <svg id="like-icon-mobile" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            <svg id="like-icon-mobile" class="w-4 h-4 {{ $isLiked ? 'fill-red-300' : 'fill-white' }}"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                             <span id="like-count-mobile" class="font-medium">{{ $likeCount }}</span>
                         </button>
@@ -170,7 +180,7 @@
                 @if (count($available_ecosystems) > 0)
                     <button wire:click="toggleInvitationForm"
                         class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors">
-                       @if ($show_invitation_form)
+                        @if ($show_invitation_form)
                             Batal
                         @else
                             + <span class="hidden md:inline-block">Undang Ekosistem</span>
@@ -185,7 +195,8 @@
                         <label for="ecosystem_search"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Pilih Ekosistem
-                            <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">(Dapat memilih lebih dari
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">(Dapat memilih lebih
+                                dari
                                 satu)</span>
                         </label>
 
@@ -202,7 +213,8 @@
                                 @if ($selected_ecosystems)
                                     <button type="button" wire:click="clearEcosystemSelection"
                                         class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12" />
                                         </svg>
@@ -250,7 +262,8 @@
                                                         {{ $ecosystem->work_region }}
                                                     </span>
                                                     @if ($ecosystem->description)
-                                                        <span class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                        <span
+                                                            class="text-xs text-gray-500 dark:text-gray-400 truncate">
                                                             {{ Str::limit($ecosystem->description, 50) }}
                                                         </span>
                                                     @endif
@@ -608,7 +621,7 @@
                     mutations.forEach(function(mutation) {
                         mutation.addedNodes.forEach(function(node) {
                             if (node.nodeType === 1 && node.hasAttribute(
-                                'data-dropdown-items')) {
+                                    'data-dropdown-items')) {
                                 node.classList.add('ecosystem-dropdown-enter');
                             }
                         });
@@ -1200,21 +1213,20 @@
                                 <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
                         </flux:select>
-                        
+
                         <!-- Custom Contribution Type (shown when "Lainnya" is selected) -->
                         @php
                             $selectedContribution = \App\Models\Contribution::find($contribution_id);
-                            $isOther = $selectedContribution && (str_contains(strtolower($selectedContribution->name), 'lainnya') || str_contains(strtolower($selectedContribution->name), 'other'));
+                            $isOther =
+                                $selectedContribution &&
+                                (str_contains(strtolower($selectedContribution->name), 'lainnya') ||
+                                    str_contains(strtolower($selectedContribution->name), 'other'));
                         @endphp
-                        @if($isOther)
+                        @if ($isOther)
                             <div class="mt-4">
-                                <flux:input
-                                    wire:model="contribution_custom_type"
-                                    :label="'Jenis Kontribusi Custom'"
-                                    type="text"
-                                    required
-                                    :placeholder="'Masukkan jenis kontribusi yang ingin Anda berikan...'"
-                                />
+                                <flux:input wire:model="contribution_custom_type" :label="'Jenis Kontribusi Custom'"
+                                    type="text" required
+                                    :placeholder="'Masukkan jenis kontribusi yang ingin Anda berikan...'" />
                             </div>
                         @endif
                     </div>
@@ -1300,6 +1312,10 @@
                                     </p>
                                 </div>
                                 <div class="flex gap-2 ml-4">
+                                    <button wire:click="openContributionDetailModal({{ $contribution->id }})"
+                                        class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
+                                        Detail
+                                    </button>
                                     <button wire:click="acceptContribution({{ $contribution->id }})"
                                         class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
                                         Terima
@@ -1458,7 +1474,8 @@
 
     <!-- Pending Membership Requests Section - Manager Only -->
     @if ($collectiveAction->canUserManage(Auth::user()) && $pendingUsers->count() > 0)
-        <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 mb-6">
+        <div
+            class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-4 sm:p-6 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                 <h3 class="text-base sm:text-lg font-semibold text-blue-800 dark:text-blue-200">
                     Permintaan Bergabung ({{ $pendingUsers->count() }})
@@ -1466,36 +1483,50 @@
             </div>
             <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
                 @foreach ($pendingUsers->take(5) as $request)
-                    <div class="p-3 bg-white dark:bg-blue-900/5 border border-blue-200 dark:border-blue-700 rounded-lg">
+                    <div
+                        class="p-3 bg-white dark:bg-blue-900/5 border border-blue-200 dark:border-blue-700 rounded-lg">
                         <!-- Mobile Layout -->
                         <div class="block sm:hidden space-y-3">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                <div
+                                    class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span
+                                        class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
-                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
+                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                        {{ $request->name }}</h4>
+                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                        {{ $request->email }}</p>
                                 </div>
                             </div>
-                            
+
                             @if ($request->pivot->join_reason)
-                                <div class="p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
-                                    <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan Bergabung:</p>
-                                    <p class="text-xs text-gray-700 dark:text-gray-300 break-words">{{ $request->pivot->join_reason }}</p>
+                                <div
+                                    class="p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+                                    <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan
+                                        Bergabung:</p>
+                                    <p class="text-xs text-gray-700 dark:text-gray-300 break-words">
+                                        {{ $request->pivot->join_reason }}</p>
                                 </div>
                             @endif
-                            
+
                             <div class="flex flex-wrap gap-2">
-                                <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                                <span
+                                    class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
                                     {{ $request->pivot->join_type === 'ecosystem' ? 'Via Ekosistem' : 'Bergabung Langsung' }}
                                 </span>
-                                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
+                                <span
+                                    class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
                                     {{ $request->pivot->status === 'pending' ? 'Menunggu' : 'Perlu Persetujuan' }}
                                 </span>
                             </div>
-                            
+
                             <div class="flex gap-2">
+                                <button wire:click="openMemberDetailModal({{ $request->id }})"
+                                    class="flex-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs font-medium transition-colors">
+                                    Detail
+                                </button>
                                 <button wire:click="acceptMember({{ $request->id }})"
                                     class="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors">
                                     Terima
@@ -1506,33 +1537,46 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <!-- Desktop Layout -->
                         <div class="hidden sm:flex items-start justify-between gap-4">
                             <div class="flex items-start space-x-3 min-w-0 flex-1">
-                                <div class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                <div
+                                    class="w-10 h-10 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span
+                                        class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
-                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
+                                    <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                        {{ $request->name }}</h4>
+                                    <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                        {{ $request->email }}</p>
                                     @if ($request->pivot->join_reason)
-                                        <div class="mt-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
-                                            <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan Bergabung:</p>
-                                            <p class="text-xs text-gray-700 dark:text-gray-300 break-words">{{ $request->pivot->join_reason }}</p>
+                                        <div
+                                            class="mt-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Alasan
+                                                Bergabung:</p>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 break-words">
+                                                {{ $request->pivot->join_reason }}</p>
                                         </div>
                                     @endif
                                     <div class="flex flex-wrap items-center gap-2 mt-2">
-                                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                                        <span
+                                            class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs">
                                             {{ $request->pivot->join_type === 'ecosystem' ? 'Via Ekosistem' : 'Bergabung Langsung' }}
                                         </span>
-                                        <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
+                                        <span
+                                            class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs">
                                             {{ $request->pivot->status === 'pending' ? 'Menunggu' : 'Perlu Persetujuan' }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex flex-col gap-2 flex-shrink-0">
+                                <button wire:click="openMemberDetailModal({{ $request->id }})"
+                                    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs font-medium transition-colors whitespace-nowrap">
+                                    Detail
+                                </button>
                                 <button wire:click="acceptMember({{ $request->id }})"
                                     class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors whitespace-nowrap">
                                     Terima
@@ -1613,14 +1657,17 @@
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
                                     <div
                                         class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
+                                        <span
+                                            class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
                                             {{ $user->initials() }}
                                         </span>
                                     </div>
                                     <div class="min-w-0 flex-1">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $user->name }}
+                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                            {{ $user->name }}
                                         </h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $user->email }}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                            {{ $user->email }}</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-500">
                                             {{ $user->pivot->join_type_label }}
                                         </p>
@@ -1673,14 +1720,17 @@
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
                                     <div
                                         class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
+                                        <span
+                                            class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
                                             {{ $user->initials() }}
                                         </span>
                                     </div>
                                     <div class="min-w-0 flex-1">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $user->name }}
+                                        <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                            {{ $user->name }}
                                         </h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $user->email }}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                            {{ $user->email }}</p>
                                         <div class="flex flex-wrap items-center gap-2 mt-1">
                                             <span class="text-xs text-gray-500 dark:text-gray-500">
                                                 {{ $userContributions->count() }} kontribusi
@@ -1734,6 +1784,419 @@
             @endif
         </div>
     </div>
+
+    <!-- Modal Detail Member Approval -->
+    @if ($showMemberDetailModal && $selectedMember)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-32 text-center sm:block sm:p-0">
+                <!-- Background overlay -->
+                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
+                    wire:click="closeMemberDetailModal"></div>
+
+                <!-- Center modal -->
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div
+                    class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                    <div class="bg-white dark:bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100">
+                                Detail Permintaan Bergabung
+                            </h3>
+                            <button wire:click="closeMemberDetailModal"
+                                class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- User Info -->
+                            <div class="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        @if ($selectedMember->profile && $selectedMember->profile->profile_photo)
+                                            <img class="h-16 w-16 rounded-full object-cover"
+                                                src="{{ asset('storage/' . $selectedMember->profile->profile_photo) }}"
+                                                alt="{{ $selectedMember->name }}">
+                                        @else
+                                            <div
+                                                class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
+                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-slate-100">
+                                            {{ $selectedMember->name }}
+                                        </h4>
+                                        <p class="text-sm text-gray-600 dark:text-slate-400">
+                                            {{ $selectedMember->email }}</p>
+                                        @if ($selectedMember->assigned_role)
+                                            <p class="text-sm text-gray-600 dark:text-slate-400">
+                                                {{ $selectedMember->assigned_role }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile Information -->
+                            @if ($selectedMember->profile)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                        Profil</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        @if ($selectedMember->profile->organization)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span
+                                                    class="text-xs text-gray-500 dark:text-slate-400">Organisasi</span>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->organization }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                        @if ($selectedMember->profile->location)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Lokasi</span>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->location }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                        @if ($selectedMember->profile->phone)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Telepon</span>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->phone }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                        @if ($selectedMember->profile->vision)
+                                            <div
+                                                class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600 md:col-span-2">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Visi dan
+                                                    Misi</span>
+                                                <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->profile->vision }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Skills -->
+                            @if ($selectedMember->profile && $selectedMember->profile->allSkills && $selectedMember->profile->allSkills->count() > 0)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian
+                                    </h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach ($selectedMember->profile->allSkills as $skillData)
+                                            @if ($skillData->custom_name)
+                                                <span
+                                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                    {{ $skillData->custom_name }}
+                                                    <span class="ml-1 text-xs opacity-75">(Custom)</span>
+                                                </span>
+                                            @else
+                                                @php
+                                                    $skill = \App\Models\Skill::find($skillData->skill_id);
+                                                @endphp
+                                                @if ($skill && $skill->name)
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                                                        {{ $skill->name }}
+                                                    </span>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @elseif ($selectedMember->profile)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Keahlian
+                                    </h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <p class="text-sm text-gray-500 dark:text-slate-400 italic">
+                                            Tidak ada keahlian yang tercatat
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Join Information -->
+                            @if ($selectedMember->pivot)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                        Bergabung</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                        @if ($selectedMember->pivot->join_reason)
+                                            <div class="">
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">Alasan
+                                                    Bergabung</span>
+                                                <p class="text-sm text-gray-900 dark:text-slate-100 mt-1">
+                                                    {{ $selectedMember->pivot->join_reason }}
+                                                </p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Admin Notes -->
+                            {{-- <div>
+                                <label for="admin_notes_member" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                    Catatan Admin (opsional)
+                                </label>
+                                <textarea 
+                                    wire:model="adminNotes"
+                                    id="admin_notes_member"
+                                    rows="3" 
+                                    class="block w-full border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 sm:text-sm placeholder-gray-500 dark:placeholder-slate-400"
+                                    placeholder="Tambahkan catatan untuk keputusan ini..."></textarea>
+                            </div> --}}
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
+                        <button wire:click="acceptMember({{ $selectedMember->id }})" type="button"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Terima
+                        </button>
+                        <button wire:click="rejectMember({{ $selectedMember->id }})" type="button"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Tolak
+                        </button>
+                        <button wire:click="closeMemberDetailModal" type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal Detail Contribution Approval -->
+    @if ($showContributionDetailModal && $selectedContribution)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-32 text-center sm:block sm:p-0">
+                <!-- Background overlay -->
+                <div class="fixed inset-0 bg-gray-500/75 -z-[1] dark:bg-gray-900/75 transition-opacity"
+                    wire:click="closeContributionDetailModal"></div>
+
+                <!-- Center modal -->
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div
+                    class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                    <div class="bg-white dark:bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100">
+                                Detail Kontribusi
+                            </h3>
+                            <button wire:click="closeContributionDetailModal"
+                                class="text-gray-400 hover:text-gray-500 dark:text-slate-400 dark:hover:text-slate-300">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- User Info -->
+                            <div class="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        @if ($selectedContribution->user->profile && $selectedContribution->user->profile->profile_photo)
+                                            <img class="h-16 w-16 rounded-full object-cover"
+                                                src="{{ asset('storage/' . $selectedContribution->user->profile->profile_photo) }}"
+                                                alt="{{ $selectedContribution->user->name }}">
+                                        @else
+                                            <div
+                                                class="h-16 w-16 rounded-full bg-gray-300 dark:bg-slate-600 flex items-center justify-center">
+                                                <svg class="h-10 w-10 text-gray-500 dark:text-slate-400"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-slate-100">
+                                            {{ $selectedContribution->user->name }}
+                                        </h4>
+                                        <p class="text-sm text-gray-600 dark:text-slate-400">
+                                            {{ $selectedContribution->user->email }}</p>
+                                        @if ($selectedContribution->user->profile && $selectedContribution->user->profile->organization_name)
+                                            <p class="text-sm text-gray-600 dark:text-slate-400">
+                                                {{ $selectedContribution->user->profile->organization_name }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contribution Type & Status -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Informasi
+                                    Kontribusi</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <span class="text-xs text-gray-500 dark:text-slate-400">Jenis Kontribusi</span>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                            {{ $selectedContribution->contribution_type_label }}
+                                        </p>
+                                    </div>
+                                    @if ($selectedContribution->contribution_amount)
+                                        <div
+                                            class="bg-white dark:bg-slate-700 p-3 rounded-md border border-gray-200 dark:border-slate-600">
+                                            <span class="text-xs text-gray-500 dark:text-slate-400">Jumlah</span>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-slate-100 mt-1">
+                                                Rp
+                                                {{ number_format($selectedContribution->contribution_amount, 0, ',', '.') }}
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Contribution Description -->
+                            @if ($selectedContribution->contribution_description)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Deskripsi
+                                        Kontribusi</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <p class="text-sm text-gray-900 dark:text-slate-100">
+                                            {{ $selectedContribution->contribution_description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Contribution Details -->
+                            @if (
+                                $selectedContribution->contribution_details &&
+                                    is_array($selectedContribution->contribution_details) &&
+                                    count($selectedContribution->contribution_details) > 0)
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Detail
+                                        Tambahan</h4>
+                                    <div
+                                        class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600">
+                                        <ul class="space-y-2">
+                                            @foreach ($selectedContribution->contribution_details as $detail)
+                                                <li class="text-sm text-gray-900 dark:text-slate-100">
+                                                    <span class="font-medium">{{ $detail['type'] ?? 'N/A' }}:</span>
+                                                    {{ $detail['description'] ?? 'N/A' }}
+                                                    @if (isset($detail['quantity']) && $detail['quantity'])
+                                                        <span
+                                                            class="text-gray-600 dark:text-slate-400">({{ $detail['quantity'] }})</span>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Timeline Information -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-slate-100 mb-3">Timeline</h4>
+                                <div
+                                    class="bg-white dark:bg-slate-700 p-4 rounded-md border border-gray-200 dark:border-slate-600 space-y-2">
+                                    @if ($selectedContribution->offered_at)
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
+                                            <span class="text-gray-500 dark:text-slate-400">Diajukan</span>
+                                            <span class="text-gray-900 dark:text-slate-100">
+                                                {{ $selectedContribution->offered_at->format('d M Y H:i') }}
+                                                <span class="text-xs text-gray-500 dark:text-slate-400">
+                                                    ({{ $selectedContribution->offered_at->diffForHumans() }})
+                                                </span>
+                                            </span>
+                                        </div>
+                                    @endif
+                                    @if ($selectedContribution->accepted_at)
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
+                                            <span class="text-gray-500 dark:text-slate-400">Diterima</span>
+                                            <span class="text-gray-900 dark:text-slate-100">
+                                                {{ \Carbon\Carbon::parse($selectedContribution->accepted_at)->format('d M Y H:i') }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                    @if ($selectedContribution->completed_at)
+                                        <div class="flex items-center justify-between text-sm flex-wrap">
+                                            <span class="text-gray-500 dark:text-slate-400">Diselesaikan</span>
+                                            <span class="text-gray-900 dark:text-slate-100">
+                                                {{ \Carbon\Carbon::parse($selectedContribution->completed_at)->format('d M Y H:i') }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Admin Notes -->
+                            {{-- <div>
+                                <label for="admin_notes_contribution"
+                                    class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                    Catatan Admin (opsional)
+                                </label>
+                                <textarea wire:model="adminNotes" id="admin_notes_contribution" rows="3"
+                                    class="block w-full border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 sm:text-sm placeholder-gray-500 dark:placeholder-slate-400"
+                                    placeholder="Tambahkan catatan untuk keputusan ini..."></textarea>
+                            </div> --}}
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    @if ($selectedContribution->status === 'offered')
+                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
+                            <button wire:click="acceptContribution({{ $selectedContribution->id }})" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Terima
+                            </button>
+                            <button wire:click="declineContribution({{ $selectedContribution->id }})" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Tolak
+                            </button>
+                            <button wire:click="closeContributionDetailModal" type="button"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                Tutup
+                            </button>
+                        </div>
+                    @else
+                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse">
+                            <button wire:click="closeContributionDetailModal" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-700 text-base font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:w-auto sm:text-sm">
+                                Tutup
+                            </button>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 
 @push('scripts')
@@ -2216,101 +2679,105 @@
         // Find the like button (there might be multiple)
         const buttons = document.querySelectorAll('#like-button');
         if (buttons.length === 0) return;
-        
+
         const button = buttons[0]; // Use the first one
         const icon = button.querySelector('#like-icon');
         const text = button.querySelector('#like-text');
         const count = button.querySelector('#like-count');
-        
+
         // Disable button during request
         button.disabled = true;
-        
+
         fetch(`/${type}s/${id}/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update all like buttons (desktop and mobile)
-                const allButtons = document.querySelectorAll('#like-button, #like-button-mobile');
-                allButtons.forEach(btn => {
-                    const btnIcon = btn.querySelector('#like-icon, #like-icon-mobile');
-                    const btnCount = btn.querySelector('#like-count, #like-count-mobile');
-                    
-                    if (data.isLiked) {
-                        btn.classList.remove('bg-white/10', 'hover:bg-white/20', 'text-white', 'border-white/20');
-                        btn.classList.add('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200', 'border-red-400/30');
-                        // Update icon fill
-                        if (btnIcon) {
-                            btnIcon.classList.remove('fill-white');
-                            btnIcon.classList.add('fill-red-300');
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update all like buttons (desktop and mobile)
+                    const allButtons = document.querySelectorAll('#like-button, #like-button-mobile');
+                    allButtons.forEach(btn => {
+                        const btnIcon = btn.querySelector('#like-icon, #like-icon-mobile');
+                        const btnCount = btn.querySelector('#like-count, #like-count-mobile');
+
+                        if (data.isLiked) {
+                            btn.classList.remove('bg-white/10', 'hover:bg-white/20', 'text-white',
+                                'border-white/20');
+                            btn.classList.add('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200',
+                                'border-red-400/30');
+                            // Update icon fill
+                            if (btnIcon) {
+                                btnIcon.classList.remove('fill-white');
+                                btnIcon.classList.add('fill-red-300');
+                            }
+                        } else {
+                            btn.classList.remove('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200',
+                                'border-red-400/30');
+                            btn.classList.add('bg-white/10', 'hover:bg-white/20', 'text-white',
+                                'border-white/20');
+                            // Update icon fill
+                            if (btnIcon) {
+                                btnIcon.classList.remove('fill-red-300');
+                                btnIcon.classList.add('fill-white');
+                            }
                         }
-                    } else {
-                        btn.classList.remove('bg-red-500/20', 'hover:bg-red-500/30', 'text-red-200', 'border-red-400/30');
-                        btn.classList.add('bg-white/10', 'hover:bg-white/20', 'text-white', 'border-white/20');
-                        // Update icon fill
-                        if (btnIcon) {
-                            btnIcon.classList.remove('fill-red-300');
-                            btnIcon.classList.add('fill-white');
+
+                        // Update count
+                        if (btnCount) {
+                            btnCount.textContent = data.likeCount;
                         }
-                    }
-                    
-                    // Update count
-                    if (btnCount) {
-                        btnCount.textContent = data.likeCount;
-                    }
-                });
-                
-                // Show notification
-                showNotification(data.message, 'success');
-            } else {
-                showNotification(data.message || 'Terjadi kesalahan', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Terjadi kesalahan saat memproses like', 'error');
-        })
-        .finally(() => {
-            button.disabled = false;
-        });
+                    });
+
+                    // Show notification
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification(data.message || 'Terjadi kesalahan', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Terjadi kesalahan saat memproses like', 'error');
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
     }
 
     function loadLikeStatus(type, id) {
         const url = `/${type}s/${id}/like-status`;
-        
+
         fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Find the like button (there might be multiple)
-                const buttons = document.querySelectorAll('#like-button');
-                buttons.forEach(button => {
-                    const icon = button.querySelector('#like-icon');
-                    const text = button.querySelector('#like-text');
-                    const count = button.querySelector('#like-count');
-                    
-                    if (data.isLiked) {
-                        button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                        button.classList.add('bg-red-600', 'hover:bg-red-700');
-                        text.textContent = 'Disukai';
-                    } else {
-                        button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                        button.classList.add('bg-red-500', 'hover:bg-red-600');
-                        text.textContent = 'Suka';
-                    }
-                    
-                    count.textContent = data.likeCount;
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error loading like status:', error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Find the like button (there might be multiple)
+                    const buttons = document.querySelectorAll('#like-button');
+                    buttons.forEach(button => {
+                        const icon = button.querySelector('#like-icon');
+                        const text = button.querySelector('#like-text');
+                        const count = button.querySelector('#like-count');
+
+                        if (data.isLiked) {
+                            button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                            button.classList.add('bg-red-600', 'hover:bg-red-700');
+                            text.textContent = 'Disukai';
+                        } else {
+                            button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                            button.classList.add('bg-red-500', 'hover:bg-red-600');
+                            text.textContent = 'Suka';
+                        }
+
+                        count.textContent = data.likeCount;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading like status:', error);
+            });
     }
 
     function showNotification(message, type) {
@@ -2319,9 +2786,9 @@
             type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
         }`;
         notification.textContent = message;
-        
+
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
             notification.style.opacity = '0';
             notification.style.transition = 'opacity 0.5s ease-out';
@@ -2341,7 +2808,8 @@
                     authEndpoint: '{{ route('broadcasting.auth') }}',
                     auth: {
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
                         }
                     }
                 });
@@ -2353,10 +2821,10 @@
                 // Listen for invitation created events
                 channel.bind('invitation.created', function(data) {
                     console.log('New invitation received:', data);
-                    
+
                     // Show notification
                     showInvitationNotification(data.invitation);
-                    
+
                     // Refresh Livewire component data
                     @this.call('refreshData');
                 });
@@ -2364,7 +2832,7 @@
                 // Listen for invitation updated events
                 channel.bind('invitation.updated', function(data) {
                     console.log('Invitation updated:', data);
-                    
+
                     // Refresh Livewire component data
                     @this.call('refreshData');
                 });
@@ -2381,7 +2849,8 @@
     // Show invitation notification
     function showInvitationNotification(invitation) {
         const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-orange-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
+        notification.className =
+            'fixed top-4 right-4 bg-orange-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
         notification.innerHTML = `
             <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0">
