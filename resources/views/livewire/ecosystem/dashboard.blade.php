@@ -493,9 +493,14 @@
                         <div
                             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
-                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                                {{ $acceptedMembers->count() }} anggota aktif
-                            </span>
+                            <a href="{{ route('ecosystem.members', $ecosystem) }}"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                                <span>Lihat Semua</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
                         </div>
                         @if ($pendingRequests->count() > 0 && $isOwner)
                             <div
@@ -540,16 +545,17 @@
                                 @endforeach
                                 @if ($pendingRequests->count() > 5)
                                     <div class="text-center py-2">
-                                        <p class="text-sm text-amber-600 dark:text-amber-400">
-                                            Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
-                                        </p>
+                                        <a href="{{ route('ecosystem.members', $ecosystem) }}?statusFilter=pending"
+                                            class="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-medium">
+                                            Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya... Klik untuk melihat semua
+                                        </a>
                                     </div>
                                 @endif
                             </div>
                         @endif
                         @if ($acceptedMembers->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
-                                @foreach ($acceptedMembers->take(10) as $member)
+                                @foreach ($acceptedMembers->take(5) as $member)
                                     <div
                                         class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
                                         <div class="flex items-center space-x-3">
@@ -591,11 +597,12 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                @if ($acceptedMembers->count() > 10)
+                                @if ($acceptedMembers->count() > 5)
                                     <div class="text-center py-2">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                                            Dan {{ $acceptedMembers->count() - 10 }} anggota lainnya...
-                                        </p>
+                                        <a href="{{ route('ecosystem.members', $ecosystem) }}"
+                                            class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                                            Dan {{ $acceptedMembers->count() - 5 }} anggota lainnya... Klik untuk melihat semua
+                                        </a>
                                     </div>
                                 @endif
                             </div>

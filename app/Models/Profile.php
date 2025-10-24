@@ -133,7 +133,9 @@ class Profile extends Model
     public function getAllSkills()
     {
         return DB::table('user_skills')
-            ->where('profile_id', $this->id)
+            ->leftJoin('skills', 'user_skills.skill_id', '=', 'skills.id')
+            ->where('user_skills.profile_id', $this->id)
+            ->select('user_skills.*', 'skills.name as skill_name')
             ->get();
     }
 
