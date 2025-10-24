@@ -680,9 +680,16 @@
                                 @endif
                             </div>
                         @endif
-                        @if ($contributions->count() > 0)
+                        @php
+                            // Ambil kontribusi yang status-nya tidak 'offered'
+                            $nonOfferedContributions = $contributions->filter(function($c) {
+                                return $c->status !== 'offered';
+                            });
+                        @endphp
+
+                        @if ($nonOfferedContributions->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
-                                @foreach ($contributions->take(10) as $contribution)
+                                @foreach ($nonOfferedContributions->take(10) as $contribution)
                                     <div
                                         class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
                                         <div class="flex items-center space-x-3">
@@ -718,11 +725,6 @@
                                                 <span
                                                     class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs text-center">
                                                     Diterima
-                                                </span>
-                                            @elseif ($contribution->status === 'offered')
-                                                <span
-                                                    class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs text-center">
-                                                    Ditawarkan
                                                 </span>
                                             @elseif ($contribution->status === 'declined')
                                                 <span
