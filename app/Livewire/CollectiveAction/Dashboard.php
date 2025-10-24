@@ -609,8 +609,18 @@ class Dashboard extends Component
             return null;
         }
 
-        return \App\Models\User::with('profile')
-            ->find($this->selectedMemberId);
+        // Load member from collective action's users relationship to get pivot data
+        $member = $this->collectiveAction->users()
+            ->where('users.id', $this->selectedMemberId)
+            ->with('profile')
+            ->first();
+            
+        // Load skills using getAllSkills method like in profile
+        if ($member && $member->profile) {
+            $member->profile->allSkills = $member->profile->getAllSkills();
+        }
+        
+        return $member;
     }
 
     public function getSelectedContributionProperty()
