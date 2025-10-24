@@ -81,7 +81,7 @@
                 <div class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
                     {{ $ecosystemQuality['total_ekosistem_score'] }}%</div>
                 <div class="text-sm text-gray-500 dark:text-slate-400">Skor Ekosistem Keseluruhan</div>
-                
+
                 <!-- Like and Join Buttons -->
                 @if (!$isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
@@ -90,26 +90,36 @@
                                 <!-- Join and Like buttons for tamu and partisipan users -->
                                 <a href="{{ route('ecosystem.join', $ecosystem) }}" wire:navigate
                                     class="bg-primary-blue hover:bg-primary-blue/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center border border-primary-blue hover:border-primary-blue/80 shadow-sm">
-                                    <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
                                     Bergabung
                                 </a>
-                                <button id="like-button" 
+                                <button id="like-button"
                                     class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
                                     onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
-                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    <svg id="like-icon"
+                                        class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                     <span id="like-count" class="font-medium">{{ $likeCount }}</span>
                                 </button>
                             @else
                                 <!-- Like button for komunitas users only -->
-                                <button id="like-button" 
+                                <button id="like-button"
                                     class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }} justify-center"
                                     onclick="toggleLike('ecosystem', {{ $ecosystem->id }})">
-                                    <svg id="like-icon" class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    <svg id="like-icon"
+                                        class="w-4 h-4 {{ $isLiked ? 'fill-red-600' : 'fill-gray-600' }}"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                     <span id="like-count" class="font-medium">{{ $likeCount }}</span>
                                 </button>
@@ -117,7 +127,7 @@
                         @endif
                     </div>
                 @endif
-                
+
                 @if ($isOwner)
                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
                         <a href="{{ route('ecosystem.qr.show', $ecosystem) }}" wire:navigate
@@ -476,70 +486,36 @@
                     </div> --}}
                 </div>
 
-                <!-- Pending Requests Section - Owner Only -->
-                @if ($pendingRequests->count() > 0 && $isOwner)
-                    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 sm:p-6 mb-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                            <h3 class="text-base sm:text-lg font-semibold text-amber-800 dark:text-amber-200">
-                                Permintaan Bergabung ({{ $pendingRequests->count() }})
-                            </h3>
-                        </div>
-                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
-                            @foreach ($pendingRequests->take(5) as $request)
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700 rounded-lg space-y-3 sm:space-y-0">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $request->name }}</h4>
-                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $request->email }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex space-x-2 sm:ml-4">
-                                        <button wire:click="acceptMember({{ $request->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
-                                            Terima
-                                        </button>
-                                        <button wire:click="rejectMember({{ $request->id }})"
-                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
-                                            Tolak
-                                        </button>
-                                    </div>
-                                </div>
-                            @endforeach
-                            @if ($pendingRequests->count() > 5)
-                                <div class="text-center py-2">
-                                    <p class="text-sm text-amber-600 dark:text-amber-400">
-                                        Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
-                                    </p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-
                 <!-- Pending Contributions Section - Owner Only -->
                 @if ($pendingContributions->count() > 0 && $isOwner)
-                    <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 sm:p-6 mb-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                    <div
+                        class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 sm:p-6 mb-6">
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h3 class="text-base sm:text-lg font-semibold text-orange-800 dark:text-orange-200">
                                 Kontribusi Menunggu Persetujuan ({{ $pendingContributions->count() }})
                             </h3>
                         </div>
                         <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
                             @foreach ($pendingContributions->take(5) as $contribution)
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-orange-900/10 border border-orange-200 dark:border-orange-700 rounded-lg space-y-3 sm:space-y-0">
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-orange-900/10 border border-orange-200 dark:border-orange-700 rounded-lg space-y-3 sm:space-y-0">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <span class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
+                                        <div
+                                            class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span
+                                                class="text-sm text-gray-600 dark:text-slate-300">{{ substr($contribution->user->name, 0, 1) }}</span>
                                         </div>
                                         <div class="min-w-0 flex-1">
-                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">{{ $contribution->user->name }}</h4>
-                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">{{ $contribution->contribution_type_label }}</p>
+                                            <h4
+                                                class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                                {{ $contribution->user->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                                {{ $contribution->contribution_type_label }}</p>
                                             @if ($contribution->contribution_amount)
                                                 <p class="text-xs text-gray-500 dark:text-gray-500">
-                                                    Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                    Rp
+                                                    {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
                                                 </p>
                                             @endif
                                         </div>
@@ -571,36 +547,89 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Members Section -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
                             <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                 {{ $acceptedMembers->count() }} anggota aktif
                             </span>
                         </div>
-
+                        @if ($pendingRequests->count() > 0 && $isOwner)
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h3 class="text-base sm:text-lg font-semibold text-amber-800 dark:text-amber-200">
+                                Permintaan Bergabung ({{ $pendingRequests->count() }})
+                            </h3>
+                        </div>
+                        <div class="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto mb-4">
+                            @foreach ($pendingRequests->take(5) as $request)
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-white dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700 rounded-lg space-y-3 sm:space-y-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div
+                                            class="w-8 h-8 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span
+                                                class="text-sm text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h4
+                                                class="font-semibold text-gray-900 dark:text-slate-100 text-sm truncate">
+                                                {{ $request->name }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-slate-300 truncate">
+                                                {{ $request->email }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 sm:ml-4">
+                                        <button wire:click="acceptMember({{ $request->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition-colors">
+                                            Terima
+                                        </button>
+                                        <button wire:click="rejectMember({{ $request->id }})"
+                                            class="flex-1 sm:flex-none px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
+                                            Tolak
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                            @if ($pendingRequests->count() > 5)
+                                <div class="text-center py-2">
+                                    <p class="text-sm text-amber-600 dark:text-amber-400">
+                                        Dan {{ $pendingRequests->count() - 5 }} permintaan lainnya...
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                        @endif
                         @if ($acceptedMembers->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
                                 @foreach ($acceptedMembers->take(10) as $member)
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
                                         <div class="flex items-center space-x-3">
                                             <div
                                                 class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <span class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
+                                                <span
+                                                    class="text-green-600 dark:text-green-400 font-semibold text-xs sm:text-sm">
                                                     {{ substr($member->name, 0, 1) }}
                                                 </span>
                                             </div>
                                             <div class="min-w-0 flex-1">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $member->name }}
+                                                <h3
+                                                    class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                                    {{ $member->name }}
                                                 </h3>
-                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $member->email }}</p>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                                    {{ $member->email }}</p>
                                                 @if ($member->pivot->joined_at)
                                                     <p class="text-xs text-gray-500 dark:text-gray-500">
-                                                        Bergabung: {{ Carbon\Carbon::parse($member->pivot->joined_at)->format('d M Y') }}
+                                                        Bergabung:
+                                                        {{ Carbon\Carbon::parse($member->pivot->joined_at)->format('d M Y') }}
                                                     </p>
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="flex items-center justify-between sm:justify-end space-x-2 sm:ml-4">
+                                        <div
+                                            class="flex items-center justify-between sm:justify-end space-x-2 sm:ml-4">
                                             <span
                                                 class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">
                                                 Aktif
@@ -632,8 +661,10 @@
 
                     <!-- Contributions Section -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontribusi Terbaru</h2>
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontribusi
+                                Terbaru</h2>
                             <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                 {{ $contributions->count() }} total kontribusi
                             </span>
@@ -642,16 +673,19 @@
                         @if ($contributions->count() > 0)
                             <div class="space-y-2 sm:space-y-3 max-h-64 overflow-y-auto">
                                 @foreach ($contributions->take(10) as $contribution)
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3 sm:space-y-0">
                                         <div class="flex items-center space-x-3">
                                             <div
                                                 class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center flex-shrink-0">
-                                                <span class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
+                                                <span
+                                                    class="text-purple-600 dark:text-purple-400 font-semibold text-xs sm:text-sm">
                                                     {{ substr($contribution->user->name, 0, 1) }}
                                                 </span>
                                             </div>
                                             <div class="min-w-0 flex-1">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                                <h3
+                                                    class="font-semibold text-gray-900 dark:text-white text-sm truncate">
                                                     {{ $contribution->user->name }}
                                                 </h3>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
@@ -659,7 +693,8 @@
                                                 </p>
                                                 @if ($contribution->contribution_amount)
                                                     <p class="text-xs text-gray-500 dark:text-gray-500">
-                                                        Rp {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
+                                                        Rp
+                                                        {{ number_format($contribution->contribution_amount, 0, ',', '.') }}
                                                     </p>
                                                 @endif
                                                 <p class="text-xs text-gray-500 dark:text-gray-500">
@@ -667,7 +702,8 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 sm:ml-4">
+                                        <div
+                                            class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 sm:ml-4">
                                             @if ($contribution->status === 'accepted')
                                                 <span
                                                     class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs text-center">
@@ -749,84 +785,87 @@
                     @if ($pendingRequests->count() > 0)
                         <div
                             class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                            <div class="p-6 border-b border-amber-200 dark:border-amber-800">
-                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Permintaan
-                                    Bergabung ({{ $pendingRequests->count() }})</h3>
-                            </div>
-                            <div class="divide-y divide-amber-200 dark:divide-amber-800">
-                                @foreach ($pendingRequests as $request)
-                                    <div class="p-6 gap-4 flex flex-wrap items-start justify-between">
-                                        <div class="flex items-start space-x-4">
-                                            <div
-                                                class="w-12 h-12 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
-                                                @if ($request->profile && $request->profile->profile_photo)
-                                                    <img src="{{ asset('storage/' . $request->profile->profile_photo) }}"
-                                                        alt="{{ $request->name }}"
-                                                        class="w-12 h-12 rounded-full object-cover">
-                                                @else
-                                                    <span
-                                                        class="text-lg text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
-                                                @endif
-                                            </div>
-                                            <div class="flex-1">
-                                                <h4 class="font-semibold text-gray-900 dark:text-slate-100">
-                                                    {{ $request->name }}</h4>
-                                                <p class="text-sm text-gray-600 dark:text-slate-300">
-                                                    {{ $request->email }}</p>
-                                                @if ($request->organization_name)
-                                                    <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                        {{ $request->organization_name }}</p>
-                                                @endif
-                                                <div class="mt-2">
-                                                    <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Alasan
-                                                            bergabung:</strong></p>
-                                                    <p class="text-sm text-gray-600 dark:text-slate-400">
-                                                        {{ $request->pivot->join_reason }}</p>
-                                                </div>
-                                                @if ($request->profile && $request->profile->skills->count() > 0)
-                                                    <div class="mt-2">
-                                                        <p class="text-sm text-gray-700 dark:text-slate-300 mb-1">
-                                                            <strong>Keahlian:</strong>
-                                                        </p>
-                                                        <div class="flex flex-wrap gap-1">
-                                                            @foreach ($request->profile->skills->take(5) as $skill)
-                                                                <span
-                                                                    class="inline-block bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
-                                                            @endforeach
-                                                            @if ($request->profile->skills->count() > 5)
-                                                                <span
-                                                                    class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs px-2 py-1 rounded">+{{ $request->profile->skills->count() - 5 }}
-                                                                    lainnya</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        @if ($isOwner)
-                                            <div class="flex space-x-2">
-                                                <button wire:click="acceptMember({{ $request->id }})"
-                                                    class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                    Terima
-                                                </button>
-                                                <button wire:click="rejectMember({{ $request->id }})"
-                                                    class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                    Tolak
-                                                </button>
-                                            </div>
-                                        @else
-                                            <div class="text-sm text-gray-500 dark:text-slate-400">
-                                                Menunggu persetujuan pemilik
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
+
                         </div>
                     @endif
 
                     <!-- Accepted Members -->
                     <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg">
+                        @if ($pendingRequests->count() > 0)
+                            <div class="p-6 border-b border-amber-200 dark:border-amber-800">
+                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200">Permintaan
+                                    Bergabung ({{ $pendingRequests->count() }})</h3>
+                            </div>
+                        @endif
+                        <div class="divide-y divide-amber-200 dark:divide-amber-800">
+                            @foreach ($pendingRequests as $request)
+                                <div class="p-6 gap-4 flex flex-wrap items-start justify-between">
+                                    <div class="flex items-start space-x-4">
+                                        <div
+                                            class="w-12 h-12 bg-gray-300 dark:bg-slate-600 rounded-full flex items-center justify-center">
+                                            @if ($request->profile && $request->profile->profile_photo)
+                                                <img src="{{ asset('storage/' . $request->profile->profile_photo) }}"
+                                                    alt="{{ $request->name }}"
+                                                    class="w-12 h-12 rounded-full object-cover">
+                                            @else
+                                                <span
+                                                    class="text-lg text-gray-600 dark:text-slate-300">{{ substr($request->name, 0, 1) }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-900 dark:text-slate-100">
+                                                {{ $request->name }}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-slate-300">
+                                                {{ $request->email }}</p>
+                                            @if ($request->organization_name)
+                                                <p class="text-sm text-gray-500 dark:text-slate-400">
+                                                    {{ $request->organization_name }}</p>
+                                            @endif
+                                            <div class="mt-2">
+                                                <p class="text-sm text-gray-700 dark:text-slate-300"><strong>Alasan
+                                                        bergabung:</strong></p>
+                                                <p class="text-sm text-gray-600 dark:text-slate-400">
+                                                    {{ $request->pivot->join_reason }}</p>
+                                            </div>
+                                            @if ($request->profile && $request->profile->skills->count() > 0)
+                                                <div class="mt-2">
+                                                    <p class="text-sm text-gray-700 dark:text-slate-300 mb-1">
+                                                        <strong>Keahlian:</strong>
+                                                    </p>
+                                                    <div class="flex flex-wrap gap-1">
+                                                        @foreach ($request->profile->skills->take(5) as $skill)
+                                                            <span
+                                                                class="inline-block bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange text-xs px-2 py-1 rounded">{{ $skill->name }}</span>
+                                                        @endforeach
+                                                        @if ($request->profile->skills->count() > 5)
+                                                            <span
+                                                                class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400 text-xs px-2 py-1 rounded">+{{ $request->profile->skills->count() - 5 }}
+                                                                lainnya</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @if ($isOwner)
+                                        <div class="flex space-x-2">
+                                            <button wire:click="acceptMember({{ $request->id }})"
+                                                class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                Terima
+                                            </button>
+                                            <button wire:click="rejectMember({{ $request->id }})"
+                                                class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                Tolak
+                                            </button>
+                                        </div>
+                                    @else
+                                        <div class="text-sm text-gray-500 dark:text-slate-400">
+                                            Menunggu persetujuan pemilik
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                         <div class="p-6 border-b border-gray-200 dark:border-slate-700">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100">Anggota Aktif
                                 ({{ $acceptedMembers->total() }})</h3>
@@ -2487,7 +2526,7 @@
         // Check on page load
         document.addEventListener('DOMContentLoaded', function() {
             checkEcosystemContributionCharts();
-            
+
             // Load initial like status
             loadLikeStatus('ecosystem', {{ $ecosystem->id }});
         });
@@ -2502,100 +2541,108 @@
             // Find the like button (there might be multiple)
             const buttons = document.querySelectorAll('#like-button');
             if (buttons.length === 0) return;
-            
+
             const button = buttons[0]; // Use the first one
             const icon = button.querySelector('#like-icon');
             const text = button.querySelector('#like-text');
             const count = button.querySelector('#like-count');
-            
+
             // Disable button during request
             button.disabled = true;
-            
+
             fetch(`/${type}/${id}/like`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update all like buttons
-                    const allButtons = document.querySelectorAll('#like-button');
-                    allButtons.forEach(btn => {
-                        const btnIcon = btn.querySelector('#like-icon');
-                        const btnText = btn.querySelector('#like-text');
-                        const btnCount = btn.querySelector('#like-count');
-                        
-                        if (data.isLiked) {
-                            btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
-                            btn.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
-                            // Update icon fill
-                            if (btnIcon) {
-                                btnIcon.classList.remove('fill-gray-600');
-                                btnIcon.classList.add('fill-red-600');
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update all like buttons
+                        const allButtons = document.querySelectorAll('#like-button');
+                        allButtons.forEach(btn => {
+                            const btnIcon = btn.querySelector('#like-icon');
+                            const btnText = btn.querySelector('#like-text');
+                            const btnCount = btn.querySelector('#like-count');
+
+                            if (data.isLiked) {
+                                btn.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                    'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600',
+                                    'border-gray-200', 'dark:border-gray-600');
+                                btn.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200',
+                                    'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30',
+                                    'border-red-200', 'dark:border-red-800');
+                                // Update icon fill
+                                if (btnIcon) {
+                                    btnIcon.classList.remove('fill-gray-600');
+                                    btnIcon.classList.add('fill-red-600');
+                                }
+                            } else {
+                                btn.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200',
+                                    'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30',
+                                    'border-red-200', 'dark:border-red-800');
+                                btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
+                                    'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600',
+                                    'border-gray-200', 'dark:border-gray-600');
+                                // Update icon fill
+                                if (btnIcon) {
+                                    btnIcon.classList.remove('fill-red-600');
+                                    btnIcon.classList.add('fill-gray-600');
+                                }
                             }
-                        } else {
-                            btn.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
-                            btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200', 'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600', 'border-gray-200', 'dark:border-gray-600');
-                            // Update icon fill
-                            if (btnIcon) {
-                                btnIcon.classList.remove('fill-red-600');
-                                btnIcon.classList.add('fill-gray-600');
-                            }
-                        }
-                        
-                        // Update count
-                        btnCount.textContent = data.likeCount;
-                    });
-                    
-                    // Show notification
-                    showNotification(data.message, 'success');
-                } else {
-                    showNotification(data.message || 'Terjadi kesalahan', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Terjadi kesalahan saat memproses like', 'error');
-            })
-            .finally(() => {
-                button.disabled = false;
-            });
+
+                            // Update count
+                            btnCount.textContent = data.likeCount;
+                        });
+
+                        // Show notification
+                        showNotification(data.message, 'success');
+                    } else {
+                        showNotification(data.message || 'Terjadi kesalahan', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Terjadi kesalahan saat memproses like', 'error');
+                })
+                .finally(() => {
+                    button.disabled = false;
+                });
         }
 
         function loadLikeStatus(type, id) {
             const url = `/${type}/${id}/like-status`;
-            
+
             fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Find the like button (there might be multiple)
-                    const buttons = document.querySelectorAll('#like-button');
-                    buttons.forEach(button => {
-                        const icon = button.querySelector('#like-icon');
-                        const text = button.querySelector('#like-text');
-                        const count = button.querySelector('#like-count');
-                        
-                        if (data.isLiked) {
-                            button.classList.remove('bg-red-500', 'hover:bg-red-600');
-                            button.classList.add('bg-red-600', 'hover:bg-red-700');
-                            text.textContent = 'Disukai';
-                        } else {
-                            button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                            button.classList.add('bg-red-500', 'hover:bg-red-600');
-                            text.textContent = 'Suka';
-                        }
-                        
-                        count.textContent = data.likeCount;
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error loading like status:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Find the like button (there might be multiple)
+                        const buttons = document.querySelectorAll('#like-button');
+                        buttons.forEach(button => {
+                            const icon = button.querySelector('#like-icon');
+                            const text = button.querySelector('#like-text');
+                            const count = button.querySelector('#like-count');
+
+                            if (data.isLiked) {
+                                button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                                button.classList.add('bg-red-600', 'hover:bg-red-700');
+                                text.textContent = 'Disukai';
+                            } else {
+                                button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                                button.classList.add('bg-red-500', 'hover:bg-red-600');
+                                text.textContent = 'Suka';
+                            }
+
+                            count.textContent = data.likeCount;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading like status:', error);
+                });
         }
 
         function showNotification(message, type) {
@@ -2604,9 +2651,9 @@
                 type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
             }`;
             notification.textContent = message;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.opacity = '0';
                 notification.style.transition = 'opacity 0.5s ease-out';
@@ -2626,7 +2673,8 @@
                         authEndpoint: '{{ route('broadcasting.auth') }}',
                         auth: {
                             headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
                             }
                         }
                     });
@@ -2638,10 +2686,10 @@
                     // Listen for ecosystem user status updated events
                     channel.bind('ecosystem.user.status.updated', function(data) {
                         console.log('Ecosystem user status updated:', data);
-                        
+
                         // Show notification
                         showEcosystemStatusNotification(data);
-                        
+
                         // Refresh Livewire component data
                         @this.call('refreshData');
                     });
@@ -2658,11 +2706,12 @@
         // Show ecosystem status notification
         function showEcosystemStatusNotification(data) {
             const notification = document.createElement('div');
-            notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
-            
+            notification.className =
+                'fixed top-4 right-4 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md transform transition-all duration-300 translate-x-full';
+
             let message = '';
             let icon = '';
-            
+
             if (data.action === 'accepted') {
                 message = `Anda telah diterima di ekosistem "${data.ecosystem.title}"`;
                 icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
@@ -2670,7 +2719,7 @@
                 message = `Permintaan bergabung ke ekosistem "${data.ecosystem.title}" ditolak`;
                 icon = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
             }
-            
+
             notification.innerHTML = `
                 <div class="flex items-start space-x-3">
                     <div class="flex-shrink-0">
