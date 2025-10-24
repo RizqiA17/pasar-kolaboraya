@@ -1470,6 +1470,18 @@
                 @endif
             </div>
         @endif
+
+        <!-- View All Contributions Button -->
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <a href="{{ route('collective-action.contributions', $collectiveAction) }}"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                    <span>Lihat Semua</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
     </div>
 
     <!-- Pending Membership Requests Section - Manager Only -->
@@ -1646,8 +1658,12 @@
                 <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
                 <div class="flex items-center gap-3">
                         <a href="{{ route('collective-action.members', $collectiveAction) }}"
-                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors">
-                            Lihat Semua
+                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                            <span>Lihat Semua</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
                         </a>
                 </div>
             </div>

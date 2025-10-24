@@ -465,11 +465,11 @@ class Dashboard extends Component
             ->unique('id')
             ->values();
         
-        // Use new contributions relationships
-        $pendingContributions = $this->collectiveAction->offeredContributions()->with('user.profile')->get();
-        $acceptedContributions = $this->collectiveAction->acceptedContributions()->with('user.profile')->get();
-        $completedContributions = $this->collectiveAction->completedContributions()->with('user.profile')->get();
-        $declinedContributions = $this->collectiveAction->declinedContributions()->with('user.profile')->get();
+        // Use new contributions relationships - limit to 5 for dashboard display
+        $pendingContributions = $this->collectiveAction->offeredContributions()->with('user.profile')->limit(5)->get();
+        $acceptedContributions = $this->collectiveAction->acceptedContributions()->with('user.profile')->limit(5)->get();
+        $completedContributions = $this->collectiveAction->completedContributions()->with('user.profile')->limit(5)->get();
+        $declinedContributions = $this->collectiveAction->declinedContributions()->with('user.profile')->limit(5)->get();
         
         $participatingEcosystems = $this->collectiveAction->participatingEcosystems;
         $pendingInvitations = $this->collectiveAction->pendingInvitations()->with('ecosystem')->get();

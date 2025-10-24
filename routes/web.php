@@ -175,6 +175,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         Route::get('collective-actions/{collectiveAction}/join', \App\Livewire\CollectiveAction\Join::class)->name('collective-action.join')->middleware('can.join.ecosystems.and.actions');
         Route::get('collective-actions/{collectiveAction}/contribute', \App\Livewire\CollectiveAction\Contribute::class)->name('collective-action.contribute');
         Route::get('collective-actions/{collectiveAction}/members', \App\Livewire\CollectiveAction\Members::class)->name('collective-action.members');
+        Route::get('collective-actions/{collectiveAction}/contributions', \App\Livewire\CollectiveAction\Contributions::class)->name('collective-action.contributions');
         Route::get('collective-actions/{collectiveAction}/approvals', \App\Livewire\CollectiveAction\UserApprovals::class)->name('collective-action.user-approvals');
         Route::get('collective-actions/invitations/{invitation}/respond', \App\Livewire\CollectiveAction\RespondInvitation::class)->name('collective-action.respond-invitation')->middleware('ecosystem.builder.only');
 
