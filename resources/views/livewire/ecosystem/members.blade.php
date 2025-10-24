@@ -1,5 +1,5 @@
 <div
-    class="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-8">
+    class="bg-gradient-to-br from-green-50/20 via-blue-50/20 to-purple-50/20 dark:from-slate-900/20 dark:via-slate-800/20 dark:to-slate-900/20 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Header Section --}}
         <div class="mb-6">
@@ -152,14 +152,14 @@
             </div>
 
             {{-- Clear Filters --}}
-            @if ($search || $statusFilter !== 'all')
+            {{-- @if ($search || $statusFilter !== 'all')
                 <div class="mt-4">
                     <button wire:click="$set('search', ''); $set('statusFilter', 'all')"
                         class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
                         Hapus Filter
                     </button>
                 </div>
-            @endif
+            @endif --}}
         </div>
 
         {{-- Members List --}}
@@ -247,14 +247,14 @@
                                             </button>
                                         @endif
 
-                                        @if ($isOwner && $member->pivot->status === 'accepted')
-                                            {{-- Remove Button --}}
+                                        {{-- @if ($isOwner && $member->pivot->status === 'accepted')
+                                            <!-- Remove Button -->
                                             <button wire:click="removeMember({{ $member->id }})"
                                                 onclick="return confirm('Apakah Anda yakin ingin mengeluarkan {{ $member->name }} dari ekosistem ini?')"
                                                 class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors">
                                                 Keluarkan
                                             </button>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 </div>
                             </div>
