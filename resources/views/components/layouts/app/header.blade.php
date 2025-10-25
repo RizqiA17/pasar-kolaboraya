@@ -617,32 +617,48 @@
             <div class="relative flex items-center justify-around px-2 py-3">
                 <!-- Dashboard -->
                 <a href="{{ route('dashboard') }}"
-                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('dashboard') ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 hover:bg-blue-500/10' }}"
+                    class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
-                        <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg 
+                            class="w-full h-full transition-colors duration-200
+                                {{ request()->routeIs('dashboard') ? 'stroke-blue-600 dark:stroke-blue-400' : 'stroke-slate-600 group-hover:stroke-blue-600 dark:stroke-slate-300 dark:group-hover:stroke-blue-400' }}" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
                         </svg>
                     </div>
-                    <span class="text-xs font-medium">{{ __('Dashboard') }}</span>
+                    <span class="text-xs font-medium transition-colors duration-200
+                                  {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400' }}">
+                        {{ __('Dashboard') }}
+                    </span>
                 </a>
 
                 <!-- Connections -->
                 @if ($connectionsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('connections') }}"
-                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('connections') ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 hover:bg-indigo-500/10' }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg 
+                                class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('connections') ? 'stroke-indigo-600 dark:stroke-indigo-400' : 'stroke-slate-600 group-hover:stroke-indigo-600 dark:stroke-slate-300 dark:group-hover:stroke-indigo-400' }}" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{ __('Koneksi') }}</span>
+                        <span class="text-xs font-medium transition-colors duration-200
+                                    {{ request()->routeIs('connections') ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 group-hover:text-indigo-600 dark:text-slate-300 dark:group-hover:text-indigo-400' }}">
+                            {{ __('Koneksi') }}
+                        </span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
@@ -725,16 +741,24 @@
                 <!-- Ekosistem -->
                 @if ($collaborationsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('ecosystem.browse') }}"
-                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('ecosystem.*') ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'text-slate-600 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-400 hover:bg-green-500/10' }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg 
+                                class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('ecosystem.*') ? 'stroke-green-600 dark:stroke-green-400' : 'stroke-slate-600 group-hover:stroke-green-600 dark:stroke-slate-300 dark:group-hover:stroke-green-400' }}" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium">{{ __('Kolaborasi') }}</span>
+                        <span class="text-xs font-medium transition-colors duration-200
+                                    {{ request()->routeIs('ecosystem.*') ? 'text-green-600 dark:text-green-400' : 'text-slate-600 group-hover:text-green-600 dark:text-slate-300 dark:group-hover:text-green-400' }}">
+                            {{ __('Kolaborasi') }}
+                        </span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
@@ -774,16 +798,24 @@
                 <!-- Aksi Kolektif -->
                 @if ($userActionsEnabled && $hasActiveMarketSession)
                     <a href="{{ route('collective-action.browse') }}"
-                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group {{ request()->routeIs('collective-action.*') ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' : 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 hover:bg-purple-500/10' }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg 
+                                class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('collective-action.*') ? 'stroke-purple-600 dark:stroke-purple-400' : 'stroke-slate-600 group-hover:stroke-purple-600 dark:stroke-slate-300 dark:group-hover:stroke-purple-400' }}" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-center">{{ __('Aksi Kolektif') }}</span>
+                        <span class="text-xs font-medium text-center transition-colors duration-200
+                                    {{ request()->routeIs('collective-action.*') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}">
+                            {{ __('Aksi Kolektif') }}
+                        </span>
                     </a>
                 @else
                     <div class="flex flex-col items-center justify-center size-20 rounded-2xl opacity-60 cursor-not-allowed"
@@ -838,13 +870,19 @@
                 </a> --}}
 
                 @if (Auth::user()->isSuperAdmin())
-                    <flux:navbar.item icon="chart-bar"
-                        :href="route('admin.market.statistics')"
-                        :current="request()->routeIs('admin.market.statistics')"
-                        class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
+                    <a 
+                        href="{{ route('admin.market.statistics') }}"
+                        class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
-                        <span class="relative z-10">{{ __('Statistik Pasar') }}</span>
-                    </flux:navbar.item>
+                        <flux:icon 
+                            name="chart-bar" 
+                            class="w-6 h-6 mb-1 transition-colors duration-200 {{ request()->routeIs('admin.market.statistics') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}" 
+                        />
+                        <span class="text-xs font-medium text-center transition-colors duration-200
+                                    {{ request()->routeIs('admin.market.statistics') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}">
+                            {{ __('Statistik Pasar') }}
+                        </span>
+                    </a>
                 @endif
 
                 <!-- Aksi -->
@@ -905,7 +943,7 @@
             </div>
 
             <!-- Active indicator -->
-            @if (request()->routeIs('dashboard'))
+            {{-- @if (request()->routeIs('dashboard'))
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-t-full">
                 </div>
@@ -929,6 +967,10 @@
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-t-full">
                 </div>
+            @elseif(request()->routeIs('admin.market.statistics'))
+                <div
+                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-t-full">
+                </div>
             @elseif(request()->routeIs('events'))
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-pink-500 to-rose-500 rounded-t-full">
@@ -937,7 +979,7 @@
                 <div
                     class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-t-full">
                 </div>
-            @endif
+            @endif --}}
         </div>
     </div>
 
