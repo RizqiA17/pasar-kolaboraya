@@ -231,7 +231,7 @@
                                     <div class="flex items-center space-x-3">
                                         <input type="file" wire:model="tempProfilePhoto" id="profilePhoto"
                                             accept="image/*"
-                                            onchange="validateFileSize(this, 2, 'profilePhoto')"
+                                            onchange="validateFileSize(this, 25, 'profilePhoto')"
                                             class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                         <button type="button" wire:click="updateProfilePhoto"
                                             wire:loading.attr="disabled"
@@ -273,7 +273,7 @@
                                         @endif
                                     @endif
                                     <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG,
-                                        GIF. Maksimal 2MB.</p>
+                                        GIF. Maksimal 25MB.</p>
                                     <div id="profilePhoto-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
                                     @error('profilePhoto')
                                         <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
@@ -305,7 +305,7 @@
                                 @endif
                                 <div class="flex items-center space-x-3">
                                     <input type="file" wire:model="tempBanner" id="banner" accept="image/*"
-                                        onchange="validateFileSize(this, 5, 'banner')"
+                                        onchange="validateFileSize(this, 25, 'banner')"
                                         class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/30 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/50">
                                     <button type="button" wire:click="updateBanner" wire:loading.attr="disabled"
                                         @if(!$this->canUploadBanner) disabled @endif
@@ -345,7 +345,7 @@
                                     @endif
                                 @endif
                                 <p class="text-sm text-gray-500 dark:text-slate-400">Format: JPG, PNG, GIF.
-                                    Maksimal 5MB.</p>
+                                    Maksimal 25MB.</p>
                                 <div id="banner-error" class="hidden mt-2 text-sm text-red-600 dark:text-red-400"></div>
                                 @error('banner')
                                     <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
