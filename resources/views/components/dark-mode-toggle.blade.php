@@ -1,6 +1,22 @@
 @props(['class' => ''])
 
 <div class="relative {{ $class }}">
+    <script>
+        // Apply theme immediately when component is rendered
+        (function() {
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                html.classList.add('dark');
+                localStorage.setItem('flux.appearance', 'dark');
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('flux.appearance', 'light');
+            }
+        })();
+    </script>
     <button 
         id="dark-mode-toggle"
         type="button"
@@ -19,57 +35,78 @@
     </button>
 </div>
 
-<script data-navigate-once>
-function applyTheme() {
-    const html = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        html.classList.add('dark');
-        localStorage.setItem('flux.appearance', 'dark');
-    } else {
-        html.classList.remove('dark');
-        localStorage.setItem('flux.appearance', 'light');
-    }
-    
-    // Dispatch custom event for theme change
-    const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
-    document.dispatchEvent(new CustomEvent('themeChanged', {
-        detail: { theme: currentTheme }
-    }));
-}
-
-function bindToggle() {
-    const toggle = document.getElementById('dark-mode-toggle');
-    if (!toggle) return;
-
-    toggle.removeEventListener('click', toggle._listener); // prevent duplicate
-    toggle._listener = () => {
+<script>
+// Global dark mode functions
+window.darkModeUtils = {
+    applyTheme() {
         const html = document.documentElement;
-        const isDark = html.classList.contains('dark');
-        html.classList.toggle('dark', !isDark);
-        localStorage.setItem('theme', isDark ? 'light' : 'dark');
-        localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            html.classList.add('dark');
+            localStorage.setItem('flux.appearance', 'dark');
+        } else {
+            html.classList.remove('dark');
+            localStorage.setItem('flux.appearance', 'light');
+        }
         
         // Dispatch custom event for theme change
+        const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
         document.dispatchEvent(new CustomEvent('themeChanged', {
-            detail: { theme: isDark ? 'light' : 'dark' }
+            detail: { theme: currentTheme }
         }));
-    };
-    toggle.addEventListener('click', toggle._listener);
+    },
+
+    bindToggle() {
+        const toggle = document.getElementById('dark-mode-toggle');
+        if (!toggle) return;
+
+        // Remove existing listener if any
+        if (toggle._darkModeListener) {
+            toggle.removeEventListener('click', toggle._darkModeListener);
+        }
+
+        // Create new listener
+        toggle._darkModeListener = () => {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            html.classList.toggle('dark', !isDark);
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('flux.appearance', isDark ? 'light' : 'dark');
+            
+            // Dispatch custom event for theme change
+            document.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: { theme: isDark ? 'light' : 'dark' }
+            }));
+        };
+        
+        toggle.addEventListener('click', toggle._darkModeListener);
+    },
+
+    init() {
+        this.applyTheme();
+        this.bindToggle();
+    }
+};
+
+// Initialize on DOM ready
+function initializeDarkMode() {
+    window.darkModeUtils.init();
 }
 
-function initDarkMode() {
-    applyTheme();
-    bindToggle();
-}
+// Re-initialize after Livewire navigation
+document.addEventListener('livewire:navigated', function() {
+    // Small delay to ensure DOM is updated
+    setTimeout(() => {
+        window.darkModeUtils.init();
+    }, 50);
+});
 
-document.addEventListener('livewire:navigated', applyTheme);
-
+// Initialize on page load
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDarkMode);
+    document.addEventListener('DOMContentLoaded', initializeDarkMode);
 } else {
-    initDarkMode();
+    initializeDarkMode();
 }
 </script>
