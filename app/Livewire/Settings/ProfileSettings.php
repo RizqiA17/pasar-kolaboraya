@@ -735,7 +735,7 @@ class ProfileSettings extends Component
 
             // Validate the file
             $this->validate([
-                'tempProfilePhoto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                'tempProfilePhoto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:25600'],
             ]);
 
             $profileService = new ProfileService();
@@ -772,7 +772,7 @@ class ProfileSettings extends Component
 
             // Validate the file
             $this->validate([
-                'tempBanner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+                'tempBanner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:25600'],
             ]);
 
             $profileService = new ProfileService();
