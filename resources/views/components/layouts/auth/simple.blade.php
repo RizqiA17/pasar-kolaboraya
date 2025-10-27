@@ -10,7 +10,7 @@
     <div class="opacity-30 p-16 absolute">
         <x-decorative-svgs />
     </div>
-    <img src="{{ Storage::url('web/ASET VISUAL/bg.png') }}" class="absolute w-full h-svh object-cover opacity-60"
+    <img src="{{ Storage::url('web/ASET VISUAL/bg.webp') }}" class="absolute w-full h-svh object-cover opacity-60"
         alt="">
 
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -23,7 +23,7 @@
     </div>
 
     <div class="relative flex min-h-svh items-center justify-center gap-8">
-        <div class="lg:flex items-center justify-center gap-4 flex-grow relative hidden">
+        <div class="lg:flex items-center justify-center gap-4 flex-grow lg:relative! absolute lg:left-0 -left-[200svw]">
             <div class="text-center lg:p-8">
                 <h1 class="text-4xl sm:text-5xl font-bold text-navy dark:text-slate-100 mb-8 leading-tight">
                     Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial

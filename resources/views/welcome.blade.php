@@ -94,39 +94,39 @@
             <div>
                 <div
                     class="absolute top-0 max-md:-translate-x-1/2 max-md:translate-y-1/2 left-0 w-80 h-80 opacity-70 animate-float">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/1.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/1-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div
                     class="absolute top-10 max-md:translate-x-1/2 max-md:translate-y-1/2 right-0 w-96 h-96 opacity-60 animate-float-delay-2">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/7-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div
                     class="absolute top-0  right-0 translate-x-1/4 -translate-y-1/4 w-72 h-72 opacity-50 animate-float-delay-3">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/8.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/8-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div
                     class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 right-5 w-80 h-80 opacity-60 animate-float">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/5.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/5-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div
                     class="absolute -bottom-50 max-md:translate-x-1/2 max-md:translate-y-1/2 left-5 w-64 h-64 opacity-50 animate-float-delay-1">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/6.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/6-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div
                     class="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-72 h-72 opacity-60 animate-float-delay-2">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/3.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/3-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
 
                 <!-- Floating Elements with Animation -->
                 <div
                     class="absolute top-0 max-md:-translate-x-1/2 max-md:translate-y-1/2 left-7 w-32 h-32 opacity-50 animate-float">
-                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/15.webp') }}" alt=""
+                    <img src="{{ Storage::url('web/ASET VISUAL/WEBP/15-1.webp') }}" alt=""
                         class="w-full h-full object-contain">
                 </div>
                 <div class="max-w-7xl relative z-1 mx-auto px-6 lg:px-8">

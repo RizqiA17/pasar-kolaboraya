@@ -22,16 +22,22 @@ class RegisterPasarKolaboraya extends Component
     public string $name = '';
     public string $email = '';
     public string $gender = '';
-    public string $organization_type = 'komunitas'; // Default to komunitas for event registration
-    public string $organization_name = '';
+    public ?string $organization_type = 'komunitas'; // Default to komunitas for event registration
+    public ?string $organization_name = '';
     public string $phone_number = '';
     public string $password = '';
     public string $password_confirmation = '';
     public string $pasar_code = '';
     public $pasarKolaboraya;
+    public bool $registrationEnabled = true;
+
+    protected $listeners = ['organizationUpdated' => 'syncOrganization'];
 
     public function mount($code = null)
     {
+        // Load settings once during mount to avoid repeated database queries
+        $this->registrationEnabled = SystemSetting::getValue('registration_enabled', '1') === '1';
+        
         $this->pasar_code = $code;
         
         // Find Pasar Kolaboraya by QR code or use default
@@ -45,6 +51,44 @@ class RegisterPasarKolaboraya extends Component
         if (!$this->pasarKolaboraya) {
             $this->pasarKolaboraya = PasarKolaboraya::where('status', 'active')->first();
         }
+    }
+
+    public function syncOrganization($data =[])
+    {
+        $this->organization_type = $data['type'] ?? null;
+        $this->organization_name = $data['name'] ?? null;
+    }
+    
+    /**
+     * Handle organization type change - called explicitly via wire:change
+     * Ensures reliable execution and prevents Safari iOS issues
+     */
+    public function handleOrganizationTypeChange()
+    {
+        // Update organization_name based on selected type
+        if ($this->organization_type === 'individu') {
+            $this->organization_name = 'Individu';
+        } elseif (in_array($this->organization_type, ['organisasi', 'komunitas'])) {
+            // Clear if it was previously 'Individu'
+            if ($this->organization_name === 'Individu') {
+                $this->organization_name = '';
+            }
+        }
+    }
+
+    /**
+     * Computed property for organization name placeholder
+     * Reduces complexity in blade template for better Safari compatibility
+     */
+    public function getOrganizationNamePlaceholderProperty()
+    {
+        if ($this->organization_type === 'individu') {
+            return 'Individu';
+        }
+        if ($this->organization_type) {
+            return 'Masukkan nama organisasi atau komunitas';
+        }
+        return 'Pilih tipe organisasi terlebih dahulu';
     }
 
     protected $messages = [
@@ -90,16 +134,29 @@ class RegisterPasarKolaboraya extends Component
                 'email' => 'Pasar Kolaboraya tidak ditemukan atau tidak aktif.',
             ]);
         }
+        
+        // Ensure organization_name is set for 'individu' type BEFORE validation
+        if ($this->organization_type === 'individu') {
+            $this->organization_name = 'Individu';
+        }
 
-        $validated = $this->validate([
+        // Validation rules - organization_name tidak required untuk individu karena akan otomatis diset
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', new UniqueEmailForActiveUsers()],
             'gender' => ['required', 'string', 'in:laki-laki,perempuan,non-biner,yang_lainnya,tidak_ingin_menyebutkan'],
             'organization_type' => ['required', 'string', 'in:organisasi,komunitas,individu'],
-            'organization_name' => ['required_if:organization_type,organisasi,komunitas', 'string', 'max:255'],
+            'organization_name' => ['exclude_if:organization_type,individu', 'required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-        ]);
+        ];
+        
+        $validated = $this->validate($rules);
+
+        // Ensure organization_name is set after validation (handle exclude_if case)
+        if ($validated['organization_type'] === 'individu' && empty($validated['organization_name'] ?? null)) {
+            $validated['organization_name'] = 'Individu';
+        }
 
         try {
             return DB::transaction(function () use ($validated) {

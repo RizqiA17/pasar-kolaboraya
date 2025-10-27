@@ -101,6 +101,13 @@
     }
 }
 
+@supports (-webkit-touch-callout: none)
+{
+    [data-safari-layer]
+    {
+        will-change: transform;
+    }
+}
 
 @layer base
 {
@@ -179,6 +186,7 @@ select:focus[data-flux-control]
     }
 }
 
-button{
+button
+{
     cursor: pointer;
 }

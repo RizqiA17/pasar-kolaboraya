@@ -43,7 +43,6 @@
             :label="'Nama'"
             type="text"
             required
-            autofocus
             autocomplete="name"
             :placeholder="'Nama lengkap'"
         />
