@@ -14,11 +14,12 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

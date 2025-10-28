@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -25,6 +26,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.active.pasar.kolaboraya' => \App\Http\Middleware\CheckActivePasarKolaboraya::class,
             'check.user.approval' => \App\Http\Middleware\CheckUserApproval::class,
             'can.join.ecosystems.and.actions' => \App\Http\Middleware\CanJoinEcosystemsAndActions::class,
+            'secure.api' => \App\Http\Middleware\SecureApiAccess::class,
+            'api.key' => \App\Http\Middleware\ApiKeyAuthentication::class,
         ]);
         
         // Apply CSRF refresh middleware to web routes

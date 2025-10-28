@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'api' => [
+        'shared_secret' => env('API_SHARED_SECRET'),
+    ],
+
 ];
