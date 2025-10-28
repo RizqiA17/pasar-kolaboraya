@@ -294,6 +294,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/qr-scanner', \App\Livewire\Admin\PasarKolaborayaQrScanner::class)->name('pasar-kolaboraya.qr-scanner');
+    
+    // Pasar Kolaboraya export routes
+    Route::get('/pasar-kolaboraya/{pasarKolaboraya}/export-csv', [App\Http\Controllers\Admin\PasarKolaborayaExportController::class, 'exportCsv'])->name('pasar-kolaboraya.export-csv');
+    Route::get('/pasar-kolaboraya/{pasarKolaboraya}/export-sql', [App\Http\Controllers\Admin\PasarKolaborayaExportController::class, 'exportSql'])->name('pasar-kolaboraya.export-sql');
 
     // QR Code Scanner for admin
     Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');

@@ -200,6 +200,22 @@
                             {{-- variant="secondary" --}} size="sm" icon="users" >
                             Kelola User
                         </flux:button>
+                        
+                        <!-- Export Data Buttons -->
+                        <div class="w-full lg:w-auto mt-2 lg:mt-0">
+                            <div class="flex flex-wrap gap-2">
+                                <flux:button href="{{ route('admin.pasar-kolaboraya.export-csv', $pasarKolaboraya) }}"
+                                    variant="outline" size="sm" icon="arrow-down-tray"
+                                    title="Download data user dalam format CSV">
+                                    Export CSV
+                                </flux:button>
+                                <flux:button href="{{ route('admin.pasar-kolaboraya.export-sql', $pasarKolaboraya) }}"
+                                    variant="outline" size="sm" icon="arrow-down-tray"
+                                    title="Download data user dalam format SQL untuk import ke database">
+                                    Export SQL
+                                </flux:button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
