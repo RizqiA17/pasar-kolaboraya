@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\ApiDocumentationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,11 @@ use App\Http\Controllers\Api\V1\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// API Documentation
+Route::get('/{version}/docs', [ApiDocumentationController::class, 'index'])
+    ->name('api.docs')
+    ->where('version', 'v1');
 
 // API Version 1 - User Authentication (Sanctum)
 Route::prefix('v1')
