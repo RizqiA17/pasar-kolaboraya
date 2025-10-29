@@ -16,11 +16,13 @@
             --dark-bg: #212529;
             --border-color: #dee2e6;
             --code-bg: #f8f9fa;
+            --navbar-height: 56px;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-color);
             line-height: 1.6;
+            padding-top: var(--navbar-height);
         }
         h1, h2, h3, h4 {
             color: var(--heading-color);
@@ -29,9 +31,9 @@
         .api-sidebar {
             background-color: var(--light-bg);
             border-right: 1px solid var(--border-color);
-            height: 100vh;
+            height: calc(100vh - var(--navbar-height));
             position: sticky;
-            top: 0;
+            top: var(--navbar-height);
             padding-top: 1.5rem;
             overflow-y: auto;
         }
@@ -134,9 +136,191 @@
             margin-left: 0.5rem;
             font-weight: normal;
         }
+        
+        /* Top Navbar with Hamburger */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 1rem;
+            z-index: 1050;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            padding: 0.375rem 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .mobile-menu-toggle:hover {
+            background-color: rgba(13,110,253,0.1);
+        }
+        .navbar-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+        .top-navbar .api-version {
+            display: inline-block;
+            margin: 0 0 0 0.5rem;
+            font-size: 0.75rem;
+            color: var(--primary-color);
+            background-color: rgba(13,110,253,0.12);
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            letter-spacing: 0.03em;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .api-sidebar {
+                position: fixed;
+                left: -100%;
+                top: var(--navbar-height);
+                width: 280px;
+                height: calc(100vh - var(--navbar-height));
+                z-index: 1040;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            }
+            
+            .api-sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1030;
+            }
+            
+            .sidebar-overlay.show {
+                display: block;
+            }
+            
+            .content-section {
+                padding: 1rem 0;
+            }
+            
+            .top-heading {
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+                margin-top: 0.75rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.25rem;
+            }
+            
+            .endpoint {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .method {
+                margin-bottom: 0.5rem;
+                margin-right: 0;
+            }
+            
+            .url {
+                font-size: 0.85rem;
+                word-break: break-all;
+            }
+            
+            .code-block {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+            
+            .code-block pre {
+                margin: 0;
+            }
+            
+            .table-responsive {
+                margin-bottom: 1rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            body {
+                font-size: 0.9rem;
+            }
+            
+            .top-heading {
+                font-size: 1.5rem;
+            }
+            
+            /* Keep version badge inline in navbar on small screens */
+            .top-navbar .api-version {
+                display: inline-block;
+                margin: 0 0 0 0.5rem;
+            }
+            
+            h2 {
+                font-size: 1.35rem;
+            }
+            
+            h3 {
+                font-size: 1.15rem;
+            }
+            
+            .alert {
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Table Responsive */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 <body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open navigation">
+            ☰
+        </button>
+        <p class="navbar-title">Pasar Kolaboraya API <span class="api-version">{{ strtoupper($version) }}</span></p>
+    </nav>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Navigation -->
@@ -213,37 +397,39 @@
                     
                     <p>Include these headers in every API request:</p>
                     
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Header</th>
-                                <th>Description</th>
-                                <th>Example</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><code>X-API-Key</code></td>
-                                <td>Your application's API key</td>
-                                <td><code>your_api_key_here</code></td>
-                            </tr>
-                            <tr>
-                                <td><code>X-API-Secret</code></td>
-                                <td>Your application's API secret</td>
-                                <td><code>your_api_secret_here</code></td>
-                            </tr>
-                            <tr>
-                                <td><code>Accept</code></td>
-                                <td>Specify response format</td>
-                                <td><code>application/json</code></td>
-                            </tr>
-                            <tr>
-                                <td><code>Content-Type</code></td>
-                                <td>Request body format (for POST requests)</td>
-                                <td><code>application/json</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Description</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>X-API-Key</code></td>
+                                    <td>Your application's API key</td>
+                                    <td><code>your_api_key_here</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>X-API-Secret</code></td>
+                                    <td>Your application's API secret</td>
+                                    <td><code>your_api_secret_here</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Accept</code></td>
+                                    <td>Specify response format</td>
+                                    <td><code>application/json</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Content-Type</code></td>
+                                    <td>Request body format (for POST requests)</td>
+                                    <td><code>application/json</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h3 class="section-heading">Example Request</h3>
                     <div class="code-block">
@@ -270,28 +456,30 @@ Accept: application/json</code></pre>
                     <h3 class="section-heading">Rate Limit Response Headers</h3>
                     <p>Each API response includes headers that indicate your current rate limit status:</p>
                     
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Header</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><code>X-RateLimit-Limit</code></td>
-                                <td>Maximum number of requests allowed per minute (100)</td>
-                            </tr>
-                            <tr>
-                                <td><code>X-RateLimit-Remaining</code></td>
-                                <td>Number of requests remaining in the current minute</td>
-                            </tr>
-                            <tr>
-                                <td><code>Retry-After</code></td>
-                                <td>Seconds to wait before retrying (only present when limit is reached)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>X-RateLimit-Limit</code></td>
+                                    <td>Maximum number of requests allowed per minute (100)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>X-RateLimit-Remaining</code></td>
+                                    <td>Number of requests remaining in the current minute</td>
+                                </tr>
+                                <tr>
+                                    <td><code>Retry-After</code></td>
+                                    <td>Seconds to wait before retrying (only present when limit is reached)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h3 class="section-heading">Handling Rate Limits</h3>
                     <p>When you exceed the rate limit, you'll receive a <code>429 Too Many Requests</code> response:</p>
@@ -317,48 +505,50 @@ Accept: application/json</code></pre>
                     </p>
                     
                     <h3 class="section-heading">HTTP Status Codes</h3>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>200 OK</td>
-                                <td>The request was successful</td>
-                            </tr>
-                            <tr>
-                                <td>400 Bad Request</td>
-                                <td>Invalid request parameters or QR code</td>
-                            </tr>
-                            <tr>
-                                <td>401 Unauthorized</td>
-                                <td>Authentication failed (invalid token or API key)</td>
-                            </tr>
-                            <tr>
-                                <td>403 Forbidden</td>
-                                <td>The request is not allowed (invalid signature or timestamp)</td>
-                            </tr>
-                            <tr>
-                                <td>404 Not Found</td>
-                                <td>The requested resource was not found</td>
-                            </tr>
-                            <tr>
-                                <td>422 Unprocessable Entity</td>
-                                <td>Validation errors</td>
-                            </tr>
-                            <tr>
-                                <td>429 Too Many Requests</td>
-                                <td>Rate limit exceeded</td>
-                            </tr>
-                            <tr>
-                                <td>500 Internal Server Error</td>
-                                <td>Server error</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>200 OK</td>
+                                    <td>The request was successful</td>
+                                </tr>
+                                <tr>
+                                    <td>400 Bad Request</td>
+                                    <td>Invalid request parameters or QR code</td>
+                                </tr>
+                                <tr>
+                                    <td>401 Unauthorized</td>
+                                    <td>Authentication failed (invalid token or API key)</td>
+                                </tr>
+                                <tr>
+                                    <td>403 Forbidden</td>
+                                    <td>The request is not allowed (invalid signature or timestamp)</td>
+                                </tr>
+                                <tr>
+                                    <td>404 Not Found</td>
+                                    <td>The requested resource was not found</td>
+                                </tr>
+                                <tr>
+                                    <td>422 Unprocessable Entity</td>
+                                    <td>Validation errors</td>
+                                </tr>
+                                <tr>
+                                    <td>429 Too Many Requests</td>
+                                    <td>Rate limit exceeded</td>
+                                </tr>
+                                <tr>
+                                    <td>500 Internal Server Error</td>
+                                    <td>Server error</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h3 class="section-heading">Error Response Format</h3>
                     <div class="code-block">
@@ -388,24 +578,26 @@ Accept: application/json</code></pre>
                     </div>
                     
                     <h4 class="section-heading">Request Parameters</h4>
-                    <table class="table table-bordered param-table">
-                        <thead>
-                            <tr>
-                                <th>Parameter</th>
-                                <th>Type</th>
-                                <th>Required</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><code>qr_code</code></td>
-                                <td>string</td>
-                                <td>Yes</td>
-                                <td>The QR code identifier</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>qr_code</code></td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>The QR code identifier</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h4 class="section-heading">Example Request</h4>
                     <div class="code-block">
@@ -472,24 +664,26 @@ Accept: application/json
                     </div>
                     
                     <h4 class="section-heading">Path Parameters</h4>
-                    <table class="table table-bordered param-table">
-                        <thead>
-                            <tr>
-                                <th>Parameter</th>
-                                <th>Type</th>
-                                <th>Required</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><code>id</code></td>
-                                <td>integer</td>
-                                <td>Yes</td>
-                                <td>The user ID</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>id</code></td>
+                                    <td>integer</td>
+                                    <td>Yes</td>
+                                    <td>The user ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h4 class="section-heading">Example Request</h4>
                     <div class="code-block">
@@ -551,54 +745,56 @@ Accept: application/json</code></pre>
                     </div>
                     
                     <h4 class="section-heading">Query Parameters</h4>
-                    <table class="table table-bordered param-table">
-                        <thead>
-                            <tr>
-                                <th>Parameter</th>
-                                <th>Type</th>
-                                <th>Required</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><code>per_page</code></td>
-                                <td>integer</td>
-                                <td>No</td>
-                                <td>Number of items per page (default: 15, max: 100)</td>
-                            </tr>
-                            <tr>
-                                <td><code>page</code></td>
-                                <td>integer</td>
-                                <td>No</td>
-                                <td>Page number (default: 1)</td>
-                            </tr>
-                            <tr>
-                                <td><code>approval_status</code></td>
-                                <td>string</td>
-                                <td>No</td>
-                                <td>Filter by approval status: pending, approved, rejected</td>
-                            </tr>
-                            <tr>
-                                <td><code>user_type</code></td>
-                                <td>string</td>
-                                <td>No</td>
-                                <td>Filter by user type: partisipan, tamu, komunitas</td>
-                            </tr>
-                            <tr>
-                                <td><code>is_ecosystem_builder</code></td>
-                                <td>boolean</td>
-                                <td>No</td>
-                                <td>Filter by ecosystem builder status</td>
-                            </tr>
-                            <tr>
-                                <td><code>search</code></td>
-                                <td>string</td>
-                                <td>No</td>
-                                <td>Search term for name, email, or organization name</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>per_page</code></td>
+                                    <td>integer</td>
+                                    <td>No</td>
+                                    <td>Number of items per page (default: 15, max: 100)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>page</code></td>
+                                    <td>integer</td>
+                                    <td>No</td>
+                                    <td>Page number (default: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>approval_status</code></td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Filter by approval status: pending, approved, rejected</td>
+                                </tr>
+                                <tr>
+                                    <td><code>user_type</code></td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Filter by user type: partisipan, tamu, komunitas</td>
+                                </tr>
+                                <tr>
+                                    <td><code>is_ecosystem_builder</code></td>
+                                    <td>boolean</td>
+                                    <td>No</td>
+                                    <td>Filter by ecosystem builder status</td>
+                                </tr>
+                                <tr>
+                                    <td><code>search</code></td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Search term for name, email, or organization name</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <h4 class="section-heading">Example Request</h4>
                     <div class="code-block">
@@ -939,6 +1135,33 @@ if ($result['success']) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script>
+        // Mobile menu functionality
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.api-sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        // Toggle mobile menu
+        mobileMenuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+            sidebarOverlay.classList.toggle('show');
+        });
+        
+        // Close sidebar when overlay is clicked
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+        });
+        
+        // Close sidebar when nav link is clicked (mobile)
+        document.querySelectorAll('.api-sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                }
+            });
+        });
+        
         // Activate the first nav link
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.api-sidebar .nav-link');
@@ -954,8 +1177,10 @@ if ($result['success']) {
                     const targetElement = document.querySelector(targetId);
                     
                     if (targetElement) {
+                        // Calculate offset for mobile menu button
+                        const offset = window.innerWidth <= 768 ? 70 : 20;
                         window.scrollTo({
-                            top: targetElement.offsetTop - 20,
+                            top: targetElement.offsetTop - offset,
                             behavior: 'smooth'
                         });
                         
