@@ -1,14 +1,83 @@
-    <!-- Safari warning, inject at very top -->
-    <div id="safari-warning" style="display: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: #fffbe6; color: #856404; border-bottom: 1px solid #ffeeba; text-align: center; padding: 10px; font-size: 15px; font-weight: 500; box-shadow: 0 2px 6px #0001;">
+    <!-- Browser not supported warning (di atas semua konten) -->
+    <div id="browser-warning" style="display:none;position:fixed;top:0;left:0;width:100%;z-index:99999;background:#fff0f3;color:#b91c1c;border-bottom:1px solid #fca5a5;text-align:center;padding:10px;font-size:15px;font-weight:500;box-shadow:0 2px 6px #0001;"></div>
+    <div id="safari-warning" style="display: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 99998; background: #fffbe6; color: #856404; border-bottom: 1px solid #ffeeba; text-align: center; padding: 10px; font-size: 15px; font-weight: 500; box-shadow: 0 2px 6px #0001;">
         Kami mendeteksi Anda menggunakan <b>Safari</b>. Untuk pengalaman optimal, silakan gunakan <b>Chrome</b> dan perangkat terbaru.
     </div>
     <script>
-        // Simple Safari detector, ignore Chrome UA on iOS
-        (function(){
-            var ua = navigator.userAgent;
-            var isSafari = /^((?!chrome|android).)*safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua);
-            if(isSafari && document.getElementById('safari-warning')) {
-                document.getElementById('safari-warning').style.display = 'block';
+        (function () {
+            function getBrowserMeta() {
+                var ua = navigator.userAgent;
+                var tem, M = ua.match(/(Opera|OPR|Edg|Edge|Chrome|CriOS|Firefox|FxiOS|Safari|SamsungBrowser|MSIE|Trident)\/?\s*(\d+\.?\d*)/i) || [];
+                var browser = (M[1] || "");
+                var version = (M[2] || "0");
+
+                // Handle edge cases for IE/Trident
+                if (/trident/i.test(browser)) {
+                    var tem2 =  ua.match(/rv:(\d+\.?\d*)/i);
+                    return {name:'IE', version: tem2 ? tem2[1] : version};
+                }
+                if (browser === 'Chrome') {
+                  // detect Edge
+                  if (/Edg/i.test(ua)) {
+                    return {name:'Edge', version: (ua.match(/Edg\/(\d+\.?\d*)/i)||[])[1]||"0"};
+                  }
+                  // detect Opera
+                  if (/OPR/i.test(ua)) {
+                    return {name:'Opera', version: (ua.match(/OPR\/(\d+\.?\d*)/i)||[])[1]||"0"};
+                  }
+                  // detect Samsung
+                  if (/SamsungBrowser/i.test(ua)) {
+                    return {name:'Samsung Internet', version: (ua.match(/SamsungBrowser\/(\d+\.?\d*)/i)||[])[1]||"0"};
+                  }
+                }
+                // Handle Safari on iOS
+                if (/safari/i.test(browser) && /CriOS|FxiOS|OPiOS|EdgiOS/.test(ua)) {
+                  if (/CriOS/.test(ua)) return {name:'Chrome', version:(ua.match(/CriOS\/(\d+\.?\d*)/i)||[])[1]||'0'};
+                  if (/FxiOS/.test(ua)) return {name:'Firefox',version:(ua.match(/FxiOS\/(\d+\.?\d*)/i)||[])[1]||'0'};
+                  if (/OPiOS/.test(ua)) return {name:'Opera', version:(ua.match(/OPiOS\/(\d+\.?\d*)/i)||[])[1]||'0'};
+                  if (/EdgiOS/.test(ua)) return {name:'Edge',version:(ua.match(/EdgiOS\/(\d+\.?\d*)/i)||[])[1]||'0'};
+                }
+                if (/Safari/.test(browser) && !/Chrome|Chromium|OPR|Edg|SamsungBrowser|CriOS|FxiOS|OPiOS|EdgiOS/.test(ua)) {
+                  // Standalone Safari or iOS Safari
+                  // add version parse for iOS
+                  var safariVer = (ua.match(/Version\/(\d+\.?\d*)/)||[])[1] || version;
+                  return {name: 'Safari', version: safariVer};
+                }
+                return {name: browser, version};
+            }
+            function isOldVersion() {
+                var meta = getBrowserMeta();
+                // to number
+                function verN(str) { return Number(str.split('.')[0] || 0)+(Number(str.split('.')[1]||0)/100); }
+                var v = verN(meta.version);
+                // Chrome
+                if (meta.name.indexOf('Chrome')!==-1 && v <= 110) return true;
+                if (meta.name === 'Edge' && v <= 110) return true;
+                if (meta.name === 'Opera' && v <= 96) return true;
+                if (meta.name === 'Firefox' && v <= 127) return true;
+                if (meta.name === 'Safari' && v <= 16.3) return true;
+                if (meta.name === 'Samsung Internet') return true;
+                if (meta.name === 'IE' || meta.name === 'MSIE' || /trident/i.test(navigator.userAgent)) return true;
+                return false;
+            }
+            function getUnsupportedMessage() {
+                var meta = getBrowserMeta();
+                return 'Browser yang Anda gunakan ('+meta.name+' versi '+meta.version+') tidak didukung. Silakan gunakan browser versi terbaru (Chrome 111+, Safari 16.4+, Firefox 128+, Edge 111+, Opera 97+) untuk pengalaman terbaik.';
+            }
+            // Show warning banner if old/unsupported
+            if (isOldVersion()) {
+                var bw = document.getElementById('browser-warning');
+                bw.innerHTML = getUnsupportedMessage();
+                bw.style.display = 'block';
+                // Hide Safari warning if both triggered
+                var sw = document.getElementById('safari-warning'); if(sw)sw.style.display='none';
+            } else {
+                // Safari (optimalisasi saja)
+                var ua = navigator.userAgent;
+                var isSafari = /^((?!chrome|android).)*safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua);
+                if (isSafari && document.getElementById('safari-warning')) {
+                    document.getElementById('safari-warning').style.display = 'block';
+                }
             }
         })();
     </script>
