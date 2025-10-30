@@ -16,17 +16,13 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <script nomodule src="{{ asset('build/legacy.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('build/legacy.css') }}">
 </head>
 
-<body
-    class="font-sans antialiased min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-
+<body class="font-sans antialiased min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    
     {{-- Decorative SVG Elements --}}
     {{-- <x-decorative-svgs /> --}}
-
+    
     {{ $slot }}
 </body>
 
