@@ -2,6 +2,7 @@ import {
     defineConfig
 } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import legacy from '@vitejs/plugin-legacy';
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
@@ -12,6 +13,14 @@ export default defineConfig({
 	    preload: false,
         }),
         tailwindcss(),
+        legacy({
+            targets: ['defaults', 'not IE 11', 'iOS >= 10'],
+            modernPolyfills: true,
+            renderLegacyChunks: true,
+            additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+            // paksa SystemJS loader disertakan
+            polyfills: true,
+        }),
     ],
     server: {
         cors: true,

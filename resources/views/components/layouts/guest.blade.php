@@ -15,14 +15,35 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    @php
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+        $legacyJs = $manifest['resources/js/app-legacy.js']['file'] ?? null;
+    @endphp
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Polyfill untuk browser lama --}}
+    <script src="https://cdn.jsdelivr.net/npm/systemjs@6/dist/system.min.js"></script>
+    <script>
+        (function() {
+            // deteksi browser lama
+            try {
+                new Function('import("")');
+            } catch (e) {
+                // jika gagal, muat legacy bundle
+                System.import('{{ asset('build/' . $legacyJs) }}');
+            }
+        })();
+    </script>
+
 </head>
 
-<body class="font-sans antialiased min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-    
+<body
+    class="font-sans antialiased min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+
     {{-- Decorative SVG Elements --}}
     {{-- <x-decorative-svgs /> --}}
-    
+
     {{ $slot }}
 </body>
 
