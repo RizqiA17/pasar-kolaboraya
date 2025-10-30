@@ -12,7 +12,6 @@ export default defineConfig({
 	    preload: false,
         }),
         tailwindcss(),
-    
     ],
     server: {
         cors: true,
