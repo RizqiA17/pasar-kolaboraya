@@ -15,24 +15,40 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @php
         $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+
         $legacyJs = $manifest['resources/js/app-legacy.js']['file'] ?? null;
+        $legacyCss = $manifest['resources/css/app-legacy.css']['file'] ?? null;
     @endphp
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if ($legacyCss)
+        <link rel="stylesheet" href="{{ asset('build/' . $legacyCss) }}">
+    @endif
+
+    @if ($legacyJs)
+        <script nomodule src="{{ asset('build/' . $legacyJs) }}"></script>
+    @endif
 
     <script>
         (function() {
             var supportsModule = 'noModule' in HTMLScriptElement.prototype;
             if (!supportsModule) {
                 var legacyScript = document.createElement('script');
-                legacyScript.src = '{{ asset('build/' . $legacyJs) }}';
+                legacyScript.src = '{{ asset('build/' . ($legacyJs ?? 'assets/app-legacy-D5tWMAoz.js')) }}';
                 document.head.appendChild(legacyScript);
+
+                var legacyCss = '{{ $legacyCss ?? '' }}';
+                if (legacyCss) {
+                    var link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = '{{ asset('build/' . ($legacyCss ?? '')) }}';
+                    document.head.appendChild(link);
+                }
             }
         })();
     </script>
-
 </head>
 
 <body
