@@ -16,9 +16,21 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
 
-    <script nomodule src="{{ asset('build/legacy.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('build/legacy.css') }}">
+        $legacyJs = $manifest['resources/js/app-legacy.js']['file'] ?? null;
+        $legacyCss = $manifest['resources/css/app-legacy.css']['file'] ?? null;
+    @endphp
+
+    @if ($legacyCss)
+        <link rel="stylesheet" href="{{ asset('build/' . $legacyCss) }}">
+    @endif
+
+    @if ($legacyJs)
+        <script nomodule src="{{ asset('build/' . $legacyJs) }}"></script>
+    @endif
+
 </head>
 
 <body
