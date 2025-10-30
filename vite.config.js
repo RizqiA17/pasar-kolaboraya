@@ -11,7 +11,9 @@ export default defineConfig({
             refresh: true,
         }),
         tailwindcss(),
-    
+        legacy({
+            targets: ['defaults', 'not IE 11', 'iOS >= 10'],
+        }),
     ],
     server: {
         cors: true,
