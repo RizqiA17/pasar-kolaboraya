@@ -1,3 +1,17 @@
+    <!-- Safari warning, inject at very top -->
+    <div id="safari-warning" style="display: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: #fffbe6; color: #856404; border-bottom: 1px solid #ffeeba; text-align: center; padding: 10px; font-size: 15px; font-weight: 500; box-shadow: 0 2px 6px #0001;">
+        Kami mendeteksi Anda menggunakan <b>Safari</b>. Untuk pengalaman optimal, silakan gunakan <b>Chrome</b> dan perangkat terbaru.
+    </div>
+    <script>
+        // Simple Safari detector, ignore Chrome UA on iOS
+        (function(){
+            var ua = navigator.userAgent;
+            var isSafari = /^((?!chrome|android).)*safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua);
+            if(isSafari && document.getElementById('safari-warning')) {
+                document.getElementById('safari-warning').style.display = 'block';
+            }
+        })();
+    </script>
 <x-layouts.guest>
     <!-- Hero Section -->
     <div class="relative min-h-screen bg-primary-light-blue dark:bg-slate-900 overflow-hidden">
