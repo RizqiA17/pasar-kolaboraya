@@ -14,6 +14,11 @@ export default defineConfig({
         tailwindcss(),
         legacy({
             targets: ['defaults', 'not IE 11', 'iOS >= 10'],
+            modernPolyfills: true,
+            renderLegacyChunks: true,
+            additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+            // paksa SystemJS loader disertakan
+            polyfills: true,
         }),
     ],
     server: {
