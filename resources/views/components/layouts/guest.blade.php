@@ -22,16 +22,13 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Polyfill untuk browser lama --}}
-    <script src="https://cdn.jsdelivr.net/npm/systemjs@6/dist/system.min.js"></script>
     <script>
         (function() {
-            // deteksi browser lama
-            try {
-                new Function('import("")');
-            } catch (e) {
-                // jika gagal, muat legacy bundle
-                System.import('{{ asset('build/' . $legacyJs) }}');
+            var supportsModule = 'noModule' in HTMLScriptElement.prototype;
+            if (!supportsModule) {
+                var legacyScript = document.createElement('script');
+                legacyScript.src = '{{ asset('build/' . $legacyJs) }}';
+                document.head.appendChild(legacyScript);
             }
         })();
     </script>

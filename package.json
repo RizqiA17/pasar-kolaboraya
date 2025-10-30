@@ -21,7 +21,6 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
-        "@vitejs/plugin-legacy": "^7.2.1",
-        "systemjs": "^6.15.1"
+        "@vitejs/plugin-legacy": "^7.2.1"
     }
 }
