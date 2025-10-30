@@ -31,6 +31,24 @@
         <script nomodule src="{{ asset('build/' . $legacyJs) }}"></script>
     @endif
 
+    <script>
+        (function() {
+            var supportsModule = 'noModule' in HTMLScriptElement.prototype;
+            if (!supportsModule) {
+                var legacyScript = document.createElement('script');
+                legacyScript.src = '{{ asset('build/' . ($legacyJs ?? 'assets/app-legacy-D5tWMAoz.js')) }}';
+                document.head.appendChild(legacyScript);
+
+                var legacyCss = '{{ $legacyCss ?? '' }}';
+                if (legacyCss) {
+                    var link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = '{{ asset('build/' . ($legacyCss ?? '')) }}';
+                    document.head.appendChild(link);
+                }
+            }
+        })();
+    </script>
 </head>
 
 <body
