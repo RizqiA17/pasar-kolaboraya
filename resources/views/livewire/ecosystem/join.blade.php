@@ -115,7 +115,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach ($ecosystem->existing_roles as $roleId)
                             @php
-                                $skill = \App\Models\Skill::find($roleId);
+                                $skill = \App\Models\Peran::find($roleId);
                             @endphp
                             @if ($skill)
                                 <span
