@@ -14,8 +14,7 @@ class Join extends Component
     public Ecosystem $ecosystem;
     public $join_reason = '';
     public $agreed_to_terms = false;
-    public $selectedIssues = [];
-    public $customIssues = [];
+    public $issues = [];
 
     protected $rules = [
         'join_reason' => 'required|string|min:10|max:500',
