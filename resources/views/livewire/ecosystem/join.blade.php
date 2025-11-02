@@ -120,7 +120,7 @@
                             @if ($skill)
                                 <span
                                     class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                                    {{ $skill->name }}
+                                    {{ $skill->nama }}
                                 </span>
                             @endif
                         @endforeach
