@@ -181,7 +181,7 @@
                     Livewire.dispatch('organizationUpdated', e.detail)
                 });
 
-                updateOrgName() {
+                function updateOrgName() {
                     const newName = this.organizationType === 'individu' ? 'Individu' : '';
                     if (this.organizationName !== newName) {
                         this.organizationName = newName;
