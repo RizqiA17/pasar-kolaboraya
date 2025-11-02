@@ -14,6 +14,8 @@ class Join extends Component
     public Ecosystem $ecosystem;
     public $join_reason = '';
     public $agreed_to_terms = false;
+    public $selectedIssues = [];
+    public $customIssues = [];
 
     protected $rules = [
         'join_reason' => 'required|string|min:10|max:500',
@@ -29,14 +31,40 @@ class Join extends Component
 
     public function mount(Ecosystem $ecosystem)
     {
-        $this->ecosystem = $ecosystem;
-
-        // Check if user can join
+        // Cegah user tidak berhak
         if (!$ecosystem->canUserJoin(Auth::user())) {
             session()->flash('error', 'Anda tidak dapat bergabung dengan ekosistem ini.');
             return redirect()->route('ecosystem.browse');
         }
+
+        $this->ecosystem = $ecosystem;
+
+        // Ambil semua issue dari ekosistem
+        $allIssues = $ecosystem->issues_addressed ?? [];
+
+        // Pisahkan antara ID numerik dan custom
+        $interestIds = array_filter($allIssues, fn($v) => is_numeric($v));
+        $interests = \App\Models\Interest::whereIn('id', $interestIds)->get(['id', 'name'])->keyBy('id');
+
+        // Gabungkan jadi satu array siap pakai untuk view
+        $this->issues = array_map(function ($issue) use ($interests) {
+            if (is_numeric($issue) && isset($interests[$issue])) {
+                return [
+                    'id' => $issue,
+                    'name' => $interests[$issue]->name,
+                    'type' => 'interest'
+                ];
+            }
+
+            // Custom issue (string)
+            return [
+                'id' => null,
+                'name' => $issue,
+                'type' => 'custom'
+            ];
+        }, $allIssues);
     }
+
 
     public function joinEcosystem()
     {
