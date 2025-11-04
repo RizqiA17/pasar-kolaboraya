@@ -13,7 +13,7 @@ class CustomUserSeeder extends Seeder
      */
     public function run(): void
     {
-	$email = 'admin@pasar-kolaboraya.com'
+	$email = 'admin@pasar-kolaboraya.com';
         // Check if test user already exists
         if (User::where('email', $email)->exists()) {
             $this->command->info('User already exists. Skipping user creation.');
