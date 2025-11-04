@@ -100,8 +100,8 @@
                 <flux:button 
                     type="submit" 
                     variant="primary"
+                    icon="plus"
                 >
-                    <flux:icon.plus class="w-4 h-4 mr-2" />
                     Buat Pasar Kolaboraya
                 </flux:button>
             </div>
