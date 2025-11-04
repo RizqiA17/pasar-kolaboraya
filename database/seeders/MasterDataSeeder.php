@@ -18,7 +18,7 @@ class MasterDataSeeder extends Seeder
             ContributionSeeder::class,
             EventCategorySeeder::class,
             PeranSeeder::class,
-	    CostumUserSeeder::class,
+	    CustomUserSeeder::class,
         ]);
     }
 }
