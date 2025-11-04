@@ -100,7 +100,6 @@
                 <flux:button 
                     type="submit" 
                     variant="primary"
-                    :disabled="empty($name)"
                 >
                     <flux:icon.plus class="w-4 h-4 mr-2" />
                     Buat Pasar Kolaboraya
