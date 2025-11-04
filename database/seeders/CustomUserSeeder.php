@@ -13,17 +13,18 @@ class CustomUserSeeder extends Seeder
      */
     public function run(): void
     {
+	$email = 'admin@pasar-kolaboraya.com'
         // Check if test user already exists
-        if (User::where('email', 'test@gmail.com')->exists()) {
-            $this->command->info('Test user already exists. Skipping test user creation.');
+        if (User::where('email', $email)->exists()) {
+            $this->command->info('User already exists. Skipping user creation.');
             return;
         }
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@gmail.com',
+            'name' => 'Super Admin',
+            'email' => $email,
             'password' => bcrypt('1234567890'),
-            'role' => 'user',
+            'role' => 'super_admin',
         ]);
     }
 }
