@@ -78,6 +78,9 @@ class CreatePasarKolaboraya extends Component
                 'started_at' => now(),
             ]);
 
+            $pasarKolaboraya->qr_code = 'PK_' . $pasarKolaboraya->id . '_' . \Str::random(8);
+            $pasarKolaboraya->save();
+
             // Add creator as admin
             $pasarKolaboraya->addUser(Auth::user(), 'admin', 'Creator of Pasar Kolaboraya');
 
