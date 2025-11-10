@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PasarKolaborayaExportController extends Controller
@@ -51,73 +52,62 @@ class PasarKolaborayaExportController extends Controller
      */
     private function streamCsvResponse(PasarKolaboraya $pasarKolaboraya, string $fileName): StreamedResponse
     {
+        $filename = 'pasar_kolaboraya_users_' . $pasarKolaboraya->id . '_' . date('Y-m-d_His') . '.csv';
+
         return new StreamedResponse(function () use ($pasarKolaboraya) {
             $handle = fopen('php://output', 'w');
-            
-            // Set UTF-8 BOM for proper Excel encoding
-            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
-            // CSV Headers
+            // Tambahkan BOM agar Excel membaca UTF-8
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            // Header CSV
             $headers = [
-                'ID',
-                'Name',
-                'Email',
-                'Gender',
-                'Phone Number',
-                'Organization Type',
-                'Organization Name',
-                'Role',
-                'User Type',
-                'Assigned Role',
-                'Status',
-                'Pasar Kolaboraya Role',
-                'Join Reason',
-                'Joined At',
-                'Email Verified',
-                'Approval Status',
-                'Created At',
+                'qr_code',
+                'qr_code_svg',
+                'full_name',
+                'email',
+                'phone',
+                'institution',
+                'peran',
+                'notes',
             ];
 
             fputcsv($handle, $headers);
 
-            // Fetch users in chunks for memory optimization
             $pasarKolaboraya->users()
                 ->wherePivot('status', 'accepted')
+                ->where('users.role', 'user')
                 ->select([
                     'users.id',
+                    'users.qr_code',
                     'users.name',
                     'users.email',
-                    'users.gender',
                     'users.phone_number',
-                    'users.organization_type',
                     'users.organization_name',
-                    'users.role',
-                    'users.user_type',
                     'users.assigned_role',
-                    'users.approval_status',
-                    'users.email_verified_at',
-                    'users.created_at',
                 ])
                 ->chunk(100, function ($users) use ($handle) {
                     foreach ($users as $user) {
+                        $qrSvg = '';
+                        if (!empty($user->qr_code)) {
+                            // Generate QR code SVG
+                            $qrSvg = QrCode::format('svg')
+                                ->size(150)
+                                ->generate($user->qr_code);
+
+                            // Hapus break line agar svg satu baris
+                            $qrSvg = str_replace(["\n", "\r"], '', $qrSvg);
+                        }
+
                         $row = [
-                            $user->id,
-                            $user->name,
-                            $user->email,
-                            $user->gender ?? '',
+                            $user->qr_code ?? '',
+                            $qrSvg,
+                            $user->name ?? '',
+                            $user->email ?? '',
                             $user->phone_number ?? '',
-                            $user->organization_type ?? '',
                             $user->organization_name ?? '',
-                            $user->role ?? '',
-                            $user->user_type ?? '',
                             $user->assigned_role ?? '',
-                            $user->pivot->status ?? '',
-                            $user->pivot->role ?? '',
-                            $user->pivot->join_reason ?? '',
-                            $user->pivot->joined_at ? date('Y-m-d H:i:s', strtotime($user->pivot->joined_at)) : '',
-                            $user->email_verified_at ? 'Yes' : 'No',
-                            $user->approval_status ?? '',
-                            $user->created_at ? $user->created_at->format('Y-m-d H:i:s') : '',
+                            '', // notes kosong
                         ];
 
                         fputcsv($handle, $row);
@@ -126,12 +116,10 @@ class PasarKolaborayaExportController extends Controller
 
             fclose($handle);
         }, 200, [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
-            'Pragma' => 'no-cache',
-            'Expires' => '0',
+            "Content-Type" => "text/csv; charset=UTF-8",
+            "Content-Disposition" => 'attachment; filename="' . $filename . '"',
         ]);
+
     }
 
     /**
@@ -160,7 +148,7 @@ class PasarKolaborayaExportController extends Controller
 
             // Create tables if not exist
             fwrite($handle, "-- Create Tables (if not exist)\n");
-            
+
             // Create users table
             fwrite($handle, "CREATE TABLE IF NOT EXISTS `users` (\n");
             fwrite($handle, "    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n");
@@ -181,7 +169,7 @@ class PasarKolaborayaExportController extends Controller
             fwrite($handle, "    PRIMARY KEY (`id`),\n");
             fwrite($handle, "    UNIQUE KEY `users_email_unique` (`email`)\n");
             fwrite($handle, ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;\n\n");
-            
+
             // Create pasar_kolaboraya_users table
             fwrite($handle, "CREATE TABLE IF NOT EXISTS `pasar_kolaboraya_users` (\n");
             fwrite($handle, "    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n");
@@ -202,7 +190,7 @@ class PasarKolaborayaExportController extends Controller
 
             // Users table inserts
             fwrite($handle, "-- Insert Users\n");
-            
+
             $pasarKolaboraya->users()
                 ->wherePivot('status', 'accepted')
                 ->select([
