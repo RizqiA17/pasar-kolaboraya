@@ -69,7 +69,7 @@ class PasarKolaborayaExportController extends Controller
                 'phone',
                 'institution',
                 'category',
-                'notes',
+                'noted',
             ];
 
             fputcsv($handle, $headers);
