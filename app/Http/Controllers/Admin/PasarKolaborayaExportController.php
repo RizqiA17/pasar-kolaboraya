@@ -63,12 +63,12 @@ class PasarKolaborayaExportController extends Controller
             // Header CSV
             $headers = [
                 'qr_code',
-                'qr_code_svg',
+                'image_qr_code',
                 'full_name',
                 'email',
                 'phone',
                 'institution',
-                'peran',
+                'category',
                 'notes',
             ];
 
