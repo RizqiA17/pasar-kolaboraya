@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-200">
-                Kelola User - {{ $pasarKolaboraya->name }}
+                Kelola User - {{ $pasarKolaboraya->name ?? '' }}
             </h1>
             <p class="text-slate-600 dark:text-slate-400 mt-1 text-sm sm:text-base">
                 Kelola anggota dan permintaan bergabung di Pasar Kolaboraya ini.
@@ -115,15 +115,15 @@
                         <div
                             class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
                             <span class="text-white font-semibold text-lg">
-                                {{ substr($userPivot->user->name, 0, 1) }}
+                                {{ substr($userPivot->user->name ?? '', 0, 1) }}
                             </span>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">
-                                {{ $userPivot->user->name }}
+                                {{ $userPivot->user->name ?? '' }}
                             </h3>
                             <p class="text-sm text-slate-500 dark:text-slate-400">
-                                {{ $userPivot->user->email }}
+                                {{ $userPivot->user->email ?? '' }}
                             </p>
                             <div class="flex items-center space-x-4 mt-1">
                                 <span
@@ -131,11 +131,11 @@
                                     @if ($userPivot->status === 'accepted') bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300
                                     @elseif($userPivot->status === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300
                                     @else bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300 @endif">
-                                    {{ $userPivot->status_label }}
+                                    {{ $userPivot->status_label ?? '' }}
                                 </span>
                                 <span
                                     class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
-                                    {{ $userPivot->role_label }}
+                                    {{ $userPivot->role_label ?? '' }}
                                 </span>
                             </div>
                         </div>
@@ -143,16 +143,16 @@
 
                     <div class="flex flex-wrap items-center gap-2">
                         @if ($userPivot->status === 'pending')
-                            <flux:button wire:click="approveUser({{ $userPivot->user->id }})" variant="primary"
+                            <flux:button wire:click="approveUser({{ $userPivot->user->id ?? '' }})" variant="primary"
                                 size="sm" icon="check">
                                 Setujui
                             </flux:button>
-                            <flux:button wire:click="rejectUser({{ $userPivot->user->id }})" variant="danger"
+                            <flux:button wire:click="rejectUser({{ $userPivot->user->id ?? '' }})" variant="danger"
                                 size="sm" icon="x-mark">
                                 Tolak
                             </flux:button>
                         @elseif($userPivot->status === 'accepted')
-                            <flux:button wire:click="removeUser({{ $userPivot->user->id }})" variant="danger"
+                            <flux:button wire:click="removeUser({{ $userPivot->user->id ?? '' }})" variant="danger"
                                 size="sm" wire:confirm="Apakah Anda yakin ingin mengeluarkan user ini?"
                                 icon="user-minus">
                                 Keluarkan
@@ -182,7 +182,7 @@
                         Bergabung: {{ $userPivot->joined_at->format('d M Y H:i') }}
                     @endif
                     @if ($userPivot->invitedBy)
-                        • Diundang oleh: {{ $userPivot->invitedBy->name }}
+                        • Diundang oleh: {{ $userPivot->invitedBy->name ?? '' }}
                     @endif
                 </div>
             </div>

@@ -22,7 +22,7 @@ class ManagePasarKolaborayaUsers extends Component
     public $availableUsers = [];
     public $allUsersSelected = false;
     public $perPage = 10;
-    
+
     // Stats properties
     public $totalMembers = 0;
     public $totalPending = 0;
@@ -52,9 +52,9 @@ class ManagePasarKolaborayaUsers extends Component
         $query = User::query();
 
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
             });
         }
 
@@ -66,11 +66,11 @@ class ManagePasarKolaborayaUsers extends Component
         $this->totalMembers = $this->pasarKolaboraya->pasarKolaborayaUsers()
             ->where('status', 'accepted')
             ->count();
-            
+
         $this->totalPending = $this->pasarKolaboraya->pasarKolaborayaUsers()
             ->where('status', 'pending')
             ->count();
-            
+
         $this->totalRejected = $this->pasarKolaboraya->pasarKolaborayaUsers()
             ->where('status', 'rejected')
             ->count();
@@ -125,9 +125,8 @@ class ManagePasarKolaborayaUsers extends Component
             ->whereNotIn('id', $existingMemberIds)
             ->pluck('id')
             ->toArray();
-        
-        $this->allUsersSelected = count($availableUserIds) > 0 && 
-                                 count(array_diff($availableUserIds, $this->selectedUsers)) === 0;
+
+        $this->allUsersSelected = count($availableUserIds) > 0 && count(array_diff($availableUserIds, $this->selectedUsers)) === 0;
     }
 
     public function addSelectedUsers()
@@ -150,7 +149,7 @@ class ManagePasarKolaborayaUsers extends Component
     {
         // Get all users that are not already members of this Pasar Kolaboraya
         $existingMemberIds = $this->pasarKolaboraya->users()->pluck('users.id')->toArray();
-        
+
         // Get all users excluding existing members with optimized query
         $usersToAdd = User::whereNotIn('id', $existingMemberIds)
             ->select('id')
@@ -192,10 +191,10 @@ class ManagePasarKolaborayaUsers extends Component
     private function addSpecificUsers()
     {
         $addedCount = 0;
-        
+
         // Get existing member IDs to avoid duplicate checks
         $existingMemberIds = $this->pasarKolaboraya->users()->pluck('users.id')->toArray();
-        
+
         // Filter selected users that are not already members
         $usersToAdd = User::whereIn('id', $this->selectedUsers)
             ->whereNotIn('id', $existingMemberIds)
@@ -264,7 +263,12 @@ class ManagePasarKolaborayaUsers extends Component
 
     public function render()
     {
-        $query = $this->pasarKolaboraya->pasarKolaborayaUsers()->with(['user', 'invitedBy']);
+        $query = $this->pasarKolaboraya
+            ->pasarKolaborayaUsers()
+            ->with(['user', 'invitedBy'])
+            ->whereHas('user', function ($q) {
+                $q->whereNull('deleted_at');
+            });
 
         // Apply status filter
         if ($this->statusFilter !== 'all') {

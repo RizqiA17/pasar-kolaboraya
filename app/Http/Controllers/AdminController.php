@@ -194,7 +194,7 @@ class AdminController extends Controller
 
         // Handle assigned_role and ecosystem builder status
         $assignedRole = $request->assigned_role;
-        $isEcosystemBuilder = $assignedRole === 'Ekosistem Builder';
+        $isEcosystemBuilder = $assignedRole === 'Ecosystem Builder';
         
         // Update user with assigned_role and ecosystem builder status
         $user->update([
@@ -212,7 +212,7 @@ class AdminController extends Controller
 
         $message = 'User updated successfully.';
         if ($isEcosystemBuilder) {
-            $message .= ' User telah diaktifkan sebagai Ekosistem Builder.';
+            $message .= ' User telah diaktifkan sebagai Ecosystem Builder.';
         }
 
         return redirect()->route('admin.users.show', $user)

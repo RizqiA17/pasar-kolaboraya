@@ -76,9 +76,9 @@
                                 @else
                                     <option value="">Pilih Peran Peserta</option>
                                 @endif
-                                <option value="Ekosistem Builder"
-                                    {{ old('assigned_role', $user->is_ecosystem_builder ? 'Ekosistem Builder' : $user->assigned_role) == 'Ekosistem Builder' ? 'selected' : '' }}>
-                                    Ekosistem Builder
+                                <option value="Ecosystem Builder"
+                                    {{ old('assigned_role', $user->is_ecosystem_builder ? 'Ecosystem Builder' : $user->assigned_role) == 'Ecosystem Builder' ? 'selected' : '' }}>
+                                    Ecosystem Builder
                                 </option>
                                 @foreach (\App\Models\Peran::get() as $peran)
                                     <option value="{{ $peran->nama }}"
@@ -114,16 +114,16 @@
                         </flux:field>
                     </div>
 
-                    <!-- Status Ekosistem Builder -->
+                    <!-- Status Ecosystem Builder -->
                     {{-- <div>
                         <flux:field>
-                            <flux:label>Status Ekosistem Builder</flux:label>
+                            <flux:label>Status Ecosystem Builder</flux:label>
                             <div class="mt-2">
                                 @if ($user->is_ecosystem_builder)
                                     <div class="flex items-center space-x-2">
                                         <span
                                             class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-neutral-purple/10 text-neutral-purple dark:bg-neutral-purple/20 dark:text-neutral-purple">
-                                            Ekosistem Builder Aktif
+                                            Ecosystem Builder Aktif
                                         </span>
                                         @if ($user->ecosystem_builder_approved_at)
                                             <span class="text-xs text-slate-500 dark:text-slate-400">
@@ -135,7 +135,7 @@
                                 @else
                                     <span
                                         class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-800 dark:bg-slate-900/20 dark:text-slate-400">
-                                        Bukan Ekosistem Builder
+                                        Bukan Ecosystem Builder
                                     </span>
                                 @endif
                             </div>
@@ -256,7 +256,7 @@
                 roleSelect.value = "Komunitas";
 
             } else {
-                ensureOption("Ekosistem Builder", "Ekosistem Builder");
+                ensureOption("Ecosystem Builder", "Ecosystem Builder");
 
                 if (!oldRole || oldRole === "Tamu" || oldRole === "Komunitas") {
                     // Tambahkan placeholder kalau belum ada

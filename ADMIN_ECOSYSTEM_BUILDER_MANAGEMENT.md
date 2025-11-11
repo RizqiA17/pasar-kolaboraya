@@ -1,18 +1,18 @@
-# Admin Ekosistem Builder Management - Pasar Kolaboraya
+# Admin Ecosystem Builder Management - Pasar Kolaboraya
 
 ## Overview
-Fitur ini memungkinkan admin untuk mengelola peran peserta dengan menambahkan opsi Ekosistem Builder di form edit pengguna, seperti yang ada di sistem persetujuan user. Admin dapat mengaktifkan atau menonaktifkan status Ekosistem Builder untuk pengguna yang ada.
+Fitur ini memungkinkan admin untuk mengelola peran peserta dengan menambahkan opsi Ecosystem Builder di form edit pengguna, seperti yang ada di sistem persetujuan user. Admin dapat mengaktifkan atau menonaktifkan status Ecosystem Builder untuk pengguna yang ada.
 
 ## Fitur yang Diimplementasikan
 
 ### 1. Form Edit Pengguna
-- **Opsi Ekosistem Builder**: Ditambahkan opsi "Ekosistem Builder" di dropdown peran peserta
+- **Opsi Ecosystem Builder**: Ditambahkan opsi "Ecosystem Builder" di dropdown peran peserta
 - **Status Display**: Menampilkan status ekosistem builder saat ini (aktif/tidak aktif)
 - **Informasi Approval**: Menampilkan tanggal dan waktu persetujuan ekosistem builder
 
 ### 2. Halaman Manajemen Pengguna
-- **Visual Indicator**: Badge ungu untuk menandai pengguna dengan status Ekosistem Builder
-- **Filter Ekosistem Builder**: Filter khusus untuk menampilkan hanya pengguna dengan status Ekosistem Builder
+- **Visual Indicator**: Badge ungu untuk menandai pengguna dengan status Ecosystem Builder
+- **Filter Ecosystem Builder**: Filter khusus untuk menampilkan hanya pengguna dengan status Ecosystem Builder
 - **Responsive Design**: Tampilan yang konsisten di desktop dan mobile
 
 ### 3. Halaman Detail Pengguna
@@ -52,17 +52,17 @@ app/Http/Controllers/AdminController.php       # Controller admin
 
 ## Alur Aplikasi
 
-### 1. Mengaktifkan Ekosistem Builder
+### 1. Mengaktifkan Ecosystem Builder
 ```
-Admin Login → /admin/users → Klik Edit → Pilih "Ekosistem Builder" → Simpan
-```
-
-### 2. Filter Ekosistem Builder
-```
-Admin Login → /admin/users → Filter "Ekosistem Builder" → Lihat hasil filter
+Admin Login → /admin/users → Klik Edit → Pilih "Ecosystem Builder" → Simpan
 ```
 
-### 3. Melihat Status Ekosistem Builder
+### 2. Filter Ecosystem Builder
+```
+Admin Login → /admin/users → Filter "Ecosystem Builder" → Lihat hasil filter
+```
+
+### 3. Melihat Status Ecosystem Builder
 ```
 Admin Login → /admin/users → Klik Lihat → Lihat status ekosistem builder
 ```
@@ -86,12 +86,12 @@ Admin Login → /admin/users → Klik Lihat → Lihat status ekosistem builder
 ## UI/UX Features
 
 ### Visual Indicators
-- **Ekosistem Builder**: Badge ungu dengan teks "Ekosistem Builder"
+- **Ecosystem Builder**: Badge ungu dengan teks "Ecosystem Builder"
 - **Peran Biasa**: Badge indigo dengan nama peran
 - **Belum Dipilih**: Badge abu-abu dengan teks "Belum Dipilih"
 
 ### Filter System
-- **Dropdown Filter**: Opsi "Ekosistem Builder" di filter peran peserta
+- **Dropdown Filter**: Opsi "Ecosystem Builder" di filter peran peserta
 - **Active Filters**: Menampilkan filter aktif dengan badge berwarna
 - **Clear Filters**: Tombol untuk menghapus semua filter
 
@@ -127,7 +127,7 @@ Admin Login → /admin/users → Klik Lihat → Lihat status ekosistem builder
 ### Manual Testing
 1. Login sebagai super admin
 2. Akses halaman `/admin/users`
-3. Edit pengguna dan pilih "Ekosistem Builder"
+3. Edit pengguna dan pilih "Ecosystem Builder"
 4. Verifikasi status ekosistem builder di halaman detail
 5. Test filter ekosistem builder
 6. Test validasi form
@@ -154,7 +154,7 @@ Admin Login → /admin/users → Klik Lihat → Lihat status ekosistem builder
 ## Troubleshooting
 
 ### Common Issues
-1. **Ekosistem Builder tidak muncul**: Pastikan opsi dipilih dengan benar
+1. **Ecosystem Builder tidak muncul**: Pastikan opsi dipilih dengan benar
 2. **Filter tidak bekerja**: Periksa logika filter di controller
 3. **Update gagal**: Periksa validasi dan database constraint
 4. **UI tidak responsive**: Periksa CSS dan JavaScript
@@ -180,11 +180,11 @@ Admin Login → /admin/users → Klik Lihat → Lihat status ekosistem builder
 
 ## Conclusion
 
-Fitur admin mengelola peran peserta dengan opsi Ekosistem Builder telah berhasil diimplementasikan dengan fitur lengkap meliputi:
-- Opsi Ekosistem Builder di form edit pengguna
+Fitur admin mengelola peran peserta dengan opsi Ecosystem Builder telah berhasil diimplementasikan dengan fitur lengkap meliputi:
+- Opsi Ecosystem Builder di form edit pengguna
 - Status display yang informatif
 - Filter khusus untuk ekosistem builder
 - Validasi dan security yang proper
 - UI/UX yang konsisten dengan sistem yang ada
 
-Fitur ini memberikan admin kontrol penuh untuk mengelola status Ekosistem Builder pengguna yang ada, dengan antarmuka yang intuitif dan mudah digunakan.
+Fitur ini memberikan admin kontrol penuh untuk mengelola status Ecosystem Builder pengguna yang ada, dengan antarmuka yang intuitif dan mudah digunakan.

@@ -376,7 +376,7 @@
                         @if ($user->is_ecosystem_builder)
                             <span
                                 class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
-                                Ekosistem Builder
+                                Ecosystem Builder
                             </span>
                         @elseif($user->assigned_role)
                             <span

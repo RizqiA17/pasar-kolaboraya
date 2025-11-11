@@ -1074,7 +1074,7 @@ public function getConnectionStatus($otherUserId)
     public function getAssignedRoleLabelAttribute(): string
     {
         if ($this->is_ecosystem_builder) {
-            return 'Ekosistem Builder';
+            return 'Ecosystem Builder';
         }
         
         if ($this->assigned_role) {
@@ -1100,7 +1100,7 @@ public function getConnectionStatus($otherUserId)
         if ($this->is_ecosystem_builder) {
             return [
                 'type' => 'ecosystem_builder',
-                'label' => 'Ekosistem Builder',
+                'label' => 'Ecosystem Builder',
                 'color' => 'purple',
                 'approved_at' => $this->ecosystem_builder_approved_at,
             ];

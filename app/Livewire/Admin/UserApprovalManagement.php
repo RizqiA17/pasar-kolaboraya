@@ -76,13 +76,13 @@ class UserApprovalManagement extends Component
             'assigned_role' => $this->assignedPeran,
         ];
 
-        // If role is "Ekosistem Builder", set ecosystem builder status
-        if ($this->assignedPeran === 'Ekosistem Builder') {
+        // If role is "Ecosystem Builder", set ecosystem builder status
+        if ($this->assignedPeran === 'Ecosystem Builder') {
             $updateData['is_ecosystem_builder'] = true;
             $updateData['ecosystem_builder_status'] = 'approved';
             $updateData['ecosystem_builder_approved_at'] = now();
             $updateData['ecosystem_builder_approved_by'] = Auth::id();
-            $updateData['ecosystem_builder_reason'] = 'Disetujui sebagai Ekosistem Builder melalui approval user';
+            $updateData['ecosystem_builder_reason'] = 'Disetujui sebagai Ecosystem Builder melalui approval user';
         }
 
         $user->update($updateData);
@@ -91,8 +91,8 @@ class UserApprovalManagement extends Component
         $user->notify(new UserApprovalNotification($user, $this->assignedPeran));
 
         $message = "User {$user->name} berhasil disetujui dengan peran {$this->assignedPeran}.";
-        if ($this->assignedPeran === 'Ekosistem Builder') {
-            $message .= " User juga telah diaktifkan sebagai Ekosistem Builder.";
+        if ($this->assignedPeran === 'Ecosystem Builder') {
+            $message .= " User juga telah diaktifkan sebagai Ecosystem Builder.";
         }
         
         session()->flash('message', $message);

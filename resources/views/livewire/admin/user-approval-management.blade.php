@@ -135,7 +135,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 @if ($user->assigned_role)
-                                    @if ($user->assigned_role === 'Ekosistem Builder')
+                                    @if ($user->assigned_role === 'Ecosystem Builder')
                                         <div class="flex flex-col space-y-1">
                                             <span
                                                 class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
@@ -323,10 +323,10 @@
                                                 <p class="text-sm text-primary-blue dark:text-secondary-green">
                                                     {{ $selectedUser->assigned_role ?: '-' }}
                                                 </p>
-                                                @if ($selectedUser->assigned_role === 'Ekosistem Builder')
+                                                @if ($selectedUser->assigned_role === 'Ecosystem Builder')
                                                     <span
                                                         class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                                        Ekosistem Builder
+                                                        Ecosystem Builder
                                                     </span>
                                                 @endif
                                             </div>
@@ -365,7 +365,7 @@
                                         @else
                                             <option value="">Pilih Peran</option>
                                         @endif
-                                        <option value="Ekosistem Builder">Ekosistem Builder</option>
+                                        <option value="Ecosystem Builder">Ecosystem Builder</option>
                                         @foreach ($peran as $role)
                                             <option value="{{ $role->nama }}">{{ $role->nama }}</option>
                                         @endforeach

@@ -38,7 +38,7 @@
                     <div>
                         <flux:select name="peran_peserta" placeholder="Filter berdasarkan peran peserta">
                             <option value="">Semua Peran Peserta</option>
-                            <option value="ecosystem_builder" {{ request('peran_peserta') == 'ecosystem_builder' ? 'selected' : '' }}>Ekosistem Builder</option>
+                            <option value="ecosystem_builder" {{ request('peran_peserta') == 'ecosystem_builder' ? 'selected' : '' }}>Ecosystem Builder</option>
                             @foreach(\App\Models\Peran::get() as $peran)
                                 <option value="{{ $peran->nama }}" {{ request('peran_peserta') == $peran->nama ? 'selected' : '' }}>{{ $peran->nama }}</option>
                             @endforeach
@@ -114,7 +114,7 @@
                             @endif
                             @if(request('peran_peserta'))
                                 @php
-                                    $peranName = request('peran_peserta') === 'ecosystem_builder' ? 'Ekosistem Builder' : request('peran_peserta');
+                                    $peranName = request('peran_peserta') === 'ecosystem_builder' ? 'Ecosystem Builder' : request('peran_peserta');
                                 @endphp
                                 <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400 rounded-full">
                                     Peran Peserta: {{ $peranName }}
@@ -183,7 +183,7 @@
                                 <div class="mt-2">
                                     @if($user->is_ecosystem_builder)
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                            Ekosistem Builder
+                                            Ecosystem Builder
                                         </span>
                                     @elseif($user->assigned_role)
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
@@ -268,7 +268,7 @@
                                 <td class="px-6 py-4">
                                     @if($user->is_ecosystem_builder)
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                            Ekosistem Builder
+                                            Ecosystem Builder
                                         </span>
                                     @elseif($user->assigned_role != '')
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">

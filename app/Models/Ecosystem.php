@@ -661,7 +661,7 @@ class Ecosystem extends Model
 
         $totalAlreadyExistsRole = array_merge($memberRoles, $existingRoleNames);
 
-        $exclude = ['Ekosistem Builder', 'Tamu', 'Komunitas'];
+        $exclude = ['Ecosystem Builder', 'Tamu', 'Komunitas'];
 
         $uniqueExistingRoles = array_values(array_unique(
             array_diff($memberRoles, $exclude)
