@@ -102,7 +102,7 @@ class QrScanner extends Component
         $this->currentConnectionId = null;
         $this->targetUser = null;
         $this->errorMessage = '';
-        $this->successMessage = 'Kode berhasil dibuat. Tunjukkan QR ini kepada user lain untuk di-scan.';
+        $this->successMessage = 'Kode berhasil dibuat. Tunjukkan Kode ini kepada user lain untuk di-scan.';
     }
 
     public function handleQrScanned($qrCode)
@@ -198,7 +198,7 @@ class QrScanner extends Component
             ->generate($this->myQrCode) . '';
 
         $this->connectionStatus = 'waiting_for_response';
-        $this->successMessage = 'QR berhasil di-scan! Sekarang tunjukkan QR Anda kepada <strong>' . $this->targetUser->name . '</strong> untuk menyelesaikan koneksi.';
+        $this->successMessage = 'Kode berhasil di-scan! Sekarang tunjukkan Kode Anda kepada <strong>' . $this->targetUser->name . '</strong> untuk menyelesaikan koneksi.';
 
         // Simpan state koneksi yang sedang berlangsung
         $this->currentConnectionId = $responderQr->id;

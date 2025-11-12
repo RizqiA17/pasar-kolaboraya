@@ -182,7 +182,7 @@
             <div
                 class="mt-6 sm:mt-8 bg-blue-50 dark:bg-green-900/20 border border-blue-200 dark:border-green-800/30 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
                 <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-secondary-green mb-2 sm:mb-3">
-                    Cara Menggunakan Koneksi QR:
+                    Cara Menggunakan Kode Koneksi:
                 </h3>
                 <div class="space-y-3 sm:space-y-4">
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-blue-200 dark:border-blue-700">

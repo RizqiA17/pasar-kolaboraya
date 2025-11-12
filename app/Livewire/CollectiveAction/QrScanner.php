@@ -93,12 +93,6 @@ class QrScanner extends Component
                 return;
             }
 
-            // Check if collective action is active
-            if ($collectiveAction->status !== 'active') {
-                $this->errorMessage = 'Aksi kolektif tidak aktif.';
-                return;
-            }
-
             // Check if user is already a member
             if (Auth::check()) {
                 $existingMember = $collectiveAction->users()

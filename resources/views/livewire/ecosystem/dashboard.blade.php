@@ -2764,19 +2764,20 @@
             // Contribution Status Chart
             const contributionStatusCtx = document.getElementById('ecosystemContributionStatusChart');
             if (contributionStatusCtx) {
-                const labels = ['Ditawarkan', 'Diterima', 'Selesai', 'Ditolak'];
+                // const labels = ['Ditawarkan', 'Diterima', 'Selesai', 'Ditolak'];
+                const labels = ['Diterima', 'Selesai'];
                 const data = [
-                    contributionStatus.offered,
+                    // contributionStatus.offered,
                     contributionStatus.accepted,
                     contributionStatus.completed,
-                    contributionStatus.declined
+                    // contributionStatus.declined
                 ];
 
                 const colors = [
-                    'rgba(245, 158, 11, 0.8)',
+                    // 'rgba(245, 158, 11, 0.8)',
                     'rgba(34, 197, 94, 0.8)',
                     'rgba(59, 130, 246, 0.8)',
-                    'rgba(239, 68, 68, 0.8)'
+                    // 'rgba(239, 68, 68, 0.8)'
                 ];
 
                 ecosystemContributionStatusChart = new Chart(contributionStatusCtx, {

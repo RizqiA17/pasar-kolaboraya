@@ -100,7 +100,7 @@ class ProfileProgress extends Component
 
     public function goToProfileSetup()
     {
-        return redirect()->route('settings.profile-settings');
+        return redirect()->route('profile.setup');
     }
 
     public function render()
