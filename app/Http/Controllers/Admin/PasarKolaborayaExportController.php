@@ -92,7 +92,7 @@ class PasarKolaborayaExportController extends Controller
                         if (!empty($user->qr_code)) {
                             // Generate QR code SVG
                             $qrSvg = QrCode::format('svg')
-                                ->size(150)
+                                ->size(50)
                                 ->generate($user->qr_code);
 
                             // Hapus break line agar svg satu baris
