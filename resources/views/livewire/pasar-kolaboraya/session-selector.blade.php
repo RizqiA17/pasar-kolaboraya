@@ -76,7 +76,7 @@
     @endif
 
     <!-- Available Pasar Kolaboraya -->
-    @if($availablePasarKolaborayas->count() > 0)
+    {{-- @if($availablePasarKolaborayas->count() > 0)
         <div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 Pasar Kolaboraya Tersedia
@@ -113,7 +113,6 @@
 
                         <flux:button 
                             wire:click="requestToJoin({{ $pasarKolaboraya->id }})"
-                            {{-- variant="secondary" --}}
                             class="w-full"
                         >
                             Minta Bergabung
@@ -122,7 +121,7 @@
                 @endforeach
             </div>
         </div>
-    @endif
+    @endif --}}
 
     <!-- No Pasar Kolaboraya -->
     @if($pasarKolaborayas->count() === 0 && $availablePasarKolaborayas->count() === 0)
