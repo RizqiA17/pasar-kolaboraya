@@ -85,6 +85,7 @@ class PasarKolaborayaExportController extends Controller
                     'users.phone_number',
                     'users.organization_name',
                     'users.assigned_role',
+                    'users.organization_type',
                 ])
                 ->chunk(100, function ($users) use ($handle) {
                     foreach ($users as $user) {
@@ -107,7 +108,7 @@ class PasarKolaborayaExportController extends Controller
                             $user->phone_number ?? '',
                             $user->organization_name ?? '',
                             $user->assigned_role ?? '',
-                            '', // notes kosong
+                            $user->organization_type ?? '',
                         ];
 
                         fputcsv($handle, $row);
