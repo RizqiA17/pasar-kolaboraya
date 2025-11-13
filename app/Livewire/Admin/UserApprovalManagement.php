@@ -56,7 +56,7 @@ class UserApprovalManagement extends Component
     public function approveUser($userId)
     {
         $user = User::withTrashed()->findOrFail($userId);
-        
+
         if ($user->approval_status !== 'pending') {
             session()->flash('error', 'User tidak dalam status pending.');
             return;
@@ -94,7 +94,7 @@ class UserApprovalManagement extends Component
         if ($this->assignedPeran === 'Ecosystem Builder') {
             $message .= " User juga telah diaktifkan sebagai Ecosystem Builder.";
         }
-        
+
         session()->flash('message', $message);
         $this->resetApprovalModal();
     }
@@ -102,7 +102,7 @@ class UserApprovalManagement extends Component
     public function rejectUser($userId)
     {
         $user = User::withTrashed()->findOrFail($userId);
-        
+
         if ($user->approval_status !== 'pending') {
             session()->flash('error', 'User tidak dalam status pending.');
             return;
@@ -132,7 +132,7 @@ class UserApprovalManagement extends Component
             $this->assignedPeran = 'Tamu';
         } elseif ($this->selectedUser->user_type === 'komunitas') {
             $this->assignedPeran = 'Komunitas';
-        }else{
+        } else {
             $this->assignedPeran = '';
         }
     }
@@ -147,14 +147,13 @@ class UserApprovalManagement extends Component
 
     public function getUsersProperty()
     {
-        $query = User::withTrashed()
-            ->whereNotNull('user_type')
+        $query = User::whereNotNull('user_type')
             ->with('approvedBy');
 
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
             });
         }
 
