@@ -109,7 +109,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <flux:select wire:model.live="invitationStatus" placeholder="Filter Status Undangan">
                     <option value="">Semua Status</option>
-                    <option value="pending">Menunggu Respons</option>
+                    <option value="pending">Menunggu</option>
                     <option value="accepted">Diterima</option>
                     <option value="declined">Ditolak</option>
                 </flux:select>
@@ -614,14 +614,14 @@
                     <!-- Footer Actions -->
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
                         @if ($invitation->status === 'pending')
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
                                 <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    Menunggu respons Anda
+                                    Menunggu respons
                                 </div>
                                 <div class="flex space-x-2">
                                     <a href="{{ route('collective-action.respond-invitation', $invitation) }}"
@@ -653,14 +653,14 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M5 13l4 4L19 7" />
                                             </svg>
-                                            Undangan Diterima
+                                            Diterima
                                         @else
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M6 18L18 6M6 6l12 12" />
                                             </svg>
-                                            Undangan Ditolak
+                                            Ditolak
                                         @endif
                                     </span>
                                 </div>

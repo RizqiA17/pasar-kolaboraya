@@ -52,7 +52,7 @@ class CollectiveActionEcosystemInvitation extends Model
     public function getStatusLabelAttribute(): string
     {
         return match($this->status) {
-            'pending' => 'Menunggu Respons',
+            'pending' => 'Menunggu',
             'accepted' => 'Diterima',
             'declined' => 'Ditolak',
             default => ucfirst($this->status),
