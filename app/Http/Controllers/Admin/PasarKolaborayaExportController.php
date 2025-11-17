@@ -91,19 +91,24 @@ class PasarKolaborayaExportController extends Controller
                     foreach ($users as $user) {
                         $qrSvg = '';
                         if (!empty($user->qr_code)) {
-                            // Generate QR code SVG
                             $qrSvg = QrCode::format('svg')
                                 ->size(50)
                                 ->generate($user->qr_code);
 
-                            // Hapus break line agar svg satu baris
                             $qrSvg = str_replace(["\n", "\r"], '', $qrSvg);
+                        }
+
+                        // Potong nama menjadi maksimal 2 kata
+                        $name = $user->name ?? '';
+                        $nameParts = preg_split('/\s+/', trim($name));
+                        if (count($nameParts) > 2) {
+                            $name = $nameParts[0] . ' ' . $nameParts[1];
                         }
 
                         $row = [
                             $user->qr_code ?? '',
                             $qrSvg,
-                            $user->name ?? '',
+                            $name,
                             $user->email ?? '',
                             $user->phone_number ?? '',
                             $user->organization_name ?? '',
@@ -113,6 +118,7 @@ class PasarKolaborayaExportController extends Controller
 
                         fputcsv($handle, $row);
                     }
+
                 });
 
             fclose($handle);
