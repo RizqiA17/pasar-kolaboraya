@@ -1,7 +1,7 @@
-<div>
+<div class="m-0">
     @if ($activeSurvey)
         <div
-            class="relative overflow-hidden rounded-xl bg-white dark:bg-zinc-800 shadow-lg border border-gray-100 dark:border-gray-700">
+            class="relative overflow-hidden rounded-xl mb-6 bg-white dark:bg-zinc-800 shadow-lg border border-gray-100 dark:border-gray-700">
             <!-- Background gradient -->
             <div
                 class="absolute inset-0 bg-gradient-to-r from-emerald-50/50 to-teal-50/50 dark:from-emerald-900/10 dark:to-teal-900/10">
