@@ -97,7 +97,7 @@ class ManagePasarKolaborayaUsers extends Component
         } else {
             $this->selectedUsers[] = $userId;
         }
-        $this->updateSelectAllState();
+        // $this->updateSelectAllState();
     }
 
     public function toggleSelectAll()
