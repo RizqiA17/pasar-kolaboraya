@@ -163,6 +163,13 @@
             <!-- Confirm Password -->
             <flux:input wire:model="password_confirmation" :label="'Konfirmasi kata sandi'" type="password" required
                 autocomplete="new-password" :placeholder="'Konfirmasi kata sandi'" viewable />
+                
+            <p class="text-[12px] text-gray-600 dark:text-gray-400">
+                Data pribadi yang dikumpulkan dalam aplikasi ini hanya akan digunakan untuk pendataan terkait kegiatan
+                Pasar
+                Kolaboraya dan keperluan internal Roemi. Data pribadi tidak akan digunakan untuk keperluan lainnya tanpa
+                seizin pemilik data pribadi.
+            </p>
 
             <div class="flex items-center justify-end">
                 <flux:button wire:click="register" variant="primary" class="w-full cursor-pointer">
