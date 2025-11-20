@@ -707,7 +707,14 @@
                                 </div>
                             @endif
 
-                            <div class="flex items-center justify-between p-6 border-t border-gray-200">
+                            
+            <p class="text-[12px] text-gray-600 dark:text-gray-400 border-t border-gray-700 p-6">
+                Data pribadi yang dikumpulkan dalam aplikasi ini hanya akan digunakan untuk pendataan terkait kegiatan
+                Pasar
+                Kolaboraya dan keperluan internal Roemi. Data pribadi tidak akan digunakan untuk keperluan lainnya tanpa
+                seizin pemilik data pribadi.
+            </p>
+                            <div class="flex items-center justify-between p-6 border-t border-gray-700">
                                 <div class="flex items-center space-x-3">
                                     <button wire:click="updateProfileInformation"
                                         class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
