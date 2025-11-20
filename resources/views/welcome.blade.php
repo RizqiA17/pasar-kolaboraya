@@ -276,7 +276,7 @@
                  <div class="max-w-7xl relative z-1 mx-auto px-6 lg:px-8">
                      <div class="text-center">
                          <h1 class="text-4xl sm:text-5xl font-bold text-navy dark:text-slate-100 mb-8 leading-tight">
-                             Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk perubahan sosial
+                             Bangun Koneksi, Kolaborasi, <br>dan Aksi Bersama untuk Perubahan Sosial
                          </h1>
                          <p class="text-xl sm:text-2xl text-gray-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto">
                              Pasar Kolaboraya adalah ruang <span
