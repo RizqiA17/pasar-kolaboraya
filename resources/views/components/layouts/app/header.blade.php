@@ -224,8 +224,7 @@
             </flux:navbar.item> --}}
 
             @if (Auth::user()->isSuperAdmin())
-                <flux:navbar.item icon="chart-bar"
-                    :href="route('admin.market.statistics')"
+                <flux:navbar.item icon="chart-bar" :href="route('admin.market.statistics')"
                     :current="request()->routeIs('admin.market.statistics')"
                     class="group relative px-4 py-2 text-slate-700 hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400 transition-all duration-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 rounded-xl mx-1"
                     wire:navigate>
@@ -620,19 +619,17 @@
                     class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                     wire:navigate>
                     <div class="w-6 h-6 mb-1">
-                        <svg 
-                            class="w-full h-full transition-colors duration-200
-                                {{ request()->routeIs('dashboard') ? 'stroke-blue-600 dark:stroke-blue-400' : 'stroke-slate-600 group-hover:stroke-blue-600 dark:stroke-slate-300 dark:group-hover:stroke-blue-400' }}" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24">
+                        <svg class="w-full h-full transition-colors duration-200
+                                {{ request()->routeIs('dashboard') ? 'stroke-blue-600 dark:stroke-blue-400' : 'stroke-slate-600 group-hover:stroke-blue-600 dark:stroke-slate-300 dark:group-hover:stroke-blue-400' }}"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
                         </svg>
                     </div>
-                    <span class="text-xs font-medium transition-colors duration-200
+                    <span
+                        class="text-xs font-medium transition-colors duration-200
                                   {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400' }}">
                         {{ __('Dashboard') }}
                     </span>
@@ -644,18 +641,16 @@
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg 
-                                class="w-full h-full transition-colors duration-200
-                                    {{ request()->routeIs('connections') ? 'stroke-indigo-600 dark:stroke-indigo-400' : 'stroke-slate-600 group-hover:stroke-indigo-600 dark:stroke-slate-300 dark:group-hover:stroke-indigo-400' }}" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24">
+                            <svg class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('connections') ? 'stroke-indigo-600 dark:stroke-indigo-400' : 'stroke-slate-600 group-hover:stroke-indigo-600 dark:stroke-slate-300 dark:group-hover:stroke-indigo-400' }}"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium transition-colors duration-200
+                        <span
+                            class="text-xs font-medium transition-colors duration-200
                                     {{ request()->routeIs('connections') ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 group-hover:text-indigo-600 dark:text-slate-300 dark:group-hover:text-indigo-400' }}">
                             {{ __('Koneksi') }}
                         </span>
@@ -744,18 +739,16 @@
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg 
-                                class="w-full h-full transition-colors duration-200
-                                    {{ request()->routeIs('ecosystem.*') ? 'stroke-green-600 dark:stroke-green-400' : 'stroke-slate-600 group-hover:stroke-green-600 dark:stroke-slate-300 dark:group-hover:stroke-green-400' }}" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24">
+                            <svg class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('ecosystem.*') ? 'stroke-green-600 dark:stroke-green-400' : 'stroke-slate-600 group-hover:stroke-green-600 dark:stroke-slate-300 dark:group-hover:stroke-green-400' }}"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium transition-colors duration-200
+                        <span
+                            class="text-xs font-medium transition-colors duration-200
                                     {{ request()->routeIs('ecosystem.*') ? 'text-green-600 dark:text-green-400' : 'text-slate-600 group-hover:text-green-600 dark:text-slate-300 dark:group-hover:text-green-400' }}">
                             {{ __('Kolaborasi') }}
                         </span>
@@ -801,18 +794,16 @@
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
                         <div class="w-6 h-6 mb-1">
-                            <svg 
-                                class="w-full h-full transition-colors duration-200
-                                    {{ request()->routeIs('collective-action.*') ? 'stroke-purple-600 dark:stroke-purple-400' : 'stroke-slate-600 group-hover:stroke-purple-600 dark:stroke-slate-300 dark:group-hover:stroke-purple-400' }}" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24">
+                            <svg class="w-full h-full transition-colors duration-200
+                                    {{ request()->routeIs('collective-action.*') ? 'stroke-purple-600 dark:stroke-purple-400' : 'stroke-slate-600 group-hover:stroke-purple-600 dark:stroke-slate-300 dark:group-hover:stroke-purple-400' }}"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-center transition-colors duration-200
+                        <span
+                            class="text-xs font-medium text-center transition-colors duration-200
                                     {{ request()->routeIs('collective-action.*') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}">
                             {{ __('Aksi Kolektif') }}
                         </span>
@@ -870,15 +861,13 @@
                 </a> --}}
 
                 @if (Auth::user()->isSuperAdmin())
-                    <a 
-                        href="{{ route('admin.market.statistics') }}"
+                    <a href="{{ route('admin.market.statistics') }}"
                         class="flex flex-col items-center justify-center size-20 rounded-2xl transition-all duration-300 group p-1"
                         wire:navigate>
-                        <flux:icon 
-                            name="chart-bar" 
-                            class="w-6 h-6 mb-1 transition-colors duration-200 {{ request()->routeIs('admin.market.statistics') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}" 
-                        />
-                        <span class="text-xs font-medium text-center transition-colors duration-200
+                        <flux:icon name="chart-bar"
+                            class="w-6 h-6 mb-1 transition-colors duration-200 {{ request()->routeIs('admin.market.statistics') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}" />
+                        <span
+                            class="text-xs font-medium text-center transition-colors duration-200
                                     {{ request()->routeIs('admin.market.statistics') ? 'text-purple-600 dark:text-purple-400' : 'text-slate-600 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400' }}">
                             {{ __('Statistik Pasar') }}
                         </span>
@@ -1008,7 +997,7 @@
                     // Refresh notifications every 5 seconds for real-time updates
                     setInterval(() => {
                         this.loadNotifications();
-                    }, 5000);
+                    }, 60000);
 
                     // Also refresh when page becomes visible (user switches tabs)
                     document.addEventListener('visibilitychange', () => {
