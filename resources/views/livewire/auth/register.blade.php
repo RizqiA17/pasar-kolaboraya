@@ -91,7 +91,7 @@
 
                     <flux:label>Kode Registrasi</flux:label>
                     <div class="relative" x-data="{ tooltip: false }" @mouseenter="tooltip = true"
-                        @mouseleave="tooltip = false" >
+                        @mouseleave="tooltip = false">
 
                         <flux:icon.information-circle class="relative" />
                         <div x-show="tooltip" x-transition:enter="transition ease-out duration-200"
@@ -114,10 +114,10 @@
                     :placeholder="'Masukkan kode registrasi yang diberikan admin'" />
             </flux:field>
             <p class="text-[12px] text-gray-600 dark:text-gray-400">
-                Data pribadi yang dikumpulkan dalam aplikasi ini hanya akan digunakan untuk pendataan terkait kegiatan
-                Pasar
-                Kolaboraya dan keperluan internal Roemi. Data pribadi tidak akan digunakan untuk keperluan lainnya tanpa
-                seizin pemilik data pribadi.
+                Dengan mengisi data pribadi di Aplikasi, Anda menyetujui bahwa informasi yang Anda berikan dapat
+                digunakan untuk keperluan internal Roemi dan Kolaboraya serta dibagikan kepada pengguna lain yang Anda
+                setujui untuk terkoneksi. Data sensitif seperti nomor telepon akan disembunyikan, dan Anda dapat
+                menanyakannya langsung kepada pihak yang telah Anda setujui untuk berkoneksi.
             </p>
 
             <div class="flex items-center justify-end">
