@@ -4,9 +4,12 @@
             {{-- Header --}}
             <div class="text-center mb-6 sm:mb-8">
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Kode Koneksi</h1>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Berikan kode koneksi untuk terhubung dengan user
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Berikan kode koneksi untuk terhubung
+                    dengan user
                     lain</p>
-                {{-- <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Refresh jika kamera tidak muncul</p> --}}
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-4">Proses koneksi membutuhkan persetujuan
+                    dari kedua belah pihak. Setelah Anda menyetujui permintaan koneksi, pengguna tersebut akan dapat
+                    melihat informasi yang Anda pilih untuk ditampilkan di halaman profil.</p>
             </div>
 
             {{-- Status Messages --}}
@@ -142,7 +145,8 @@
                                 </label>
                                 <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full">
                                     <input type="text" wire:model="scannedQrCode"
-                                        wire:keydown.enter="processScannedQr" placeholder="Paste Kode Koneksi di sini..."
+                                        wire:keydown.enter="processScannedQr"
+                                        placeholder="Paste Kode Koneksi di sini..."
                                         class="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm sm:text-base min-w-0">
                                     <flux:button variant="primary" wire:click="processScannedQr" class="">
                                         Masukkan
@@ -185,43 +189,51 @@
                     Cara Menggunakan Kode Koneksi:
                 </h3>
                 <div class="space-y-3 sm:space-y-4">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-blue-200 dark:border-blue-700">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-blue-200 dark:border-blue-700">
                         <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100 mb-2">
                             Langkah 1: Inisiator (User A)
                         </h4>
-                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
+                        <ol
+                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
                             <li>Klik "Buat Kode Baru" untuk membuat Kode Koneksi</li>
                             <li>Tunjukkan Kode Koneksi kepada User B untuk dimasukkan</li>
                         </ol>
                     </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-green-200 dark:border-green-700">
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-green-200 dark:border-green-700">
                         <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100 mb-2">
                             Langkah 2: Responder (User B)
                         </h4>
-                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-green-800 dark:text-green-100">
+                        <ol
+                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-green-800 dark:text-green-100">
                             <li>Masukkan Kode Koneksi User A ke dalam input field</li>
                             <li>Sistem akan otomatis membuat Kode Response baru</li>
                             <li>Tunjukkan Kode Response kepada User A untuk dimasukkan</li>
                         </ol>
                     </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-purple-200 dark:border-purple-700">
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-purple-200 dark:border-purple-700">
                         <h4 class="text-sm sm:text-base font-semibold text-purple-900 dark:text-purple-100 mb-2">
                             Langkah 3: Penyelesaian (User A)
                         </h4>
-                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-purple-800 dark:text-purple-100">
+                        <ol
+                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-purple-800 dark:text-purple-100">
                             <li>Masukkan Kode Response dari User B ke dalam input field</li>
                             <li>Koneksi berhasil dibuat dan kedua user terhubung!</li>
                         </ol>
                     </div>
                 </div>
-                
-                <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+
+                <div
+                    class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
                     <p class="text-xs sm:text-sm text-yellow-800 dark:text-yellow-200">
                         <strong>💡 Tips Penting:</strong>
                     </p>
-                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-yellow-700 dark:text-yellow-300 mt-2">
+                    <ul
+                        class="list-disc list-inside space-y-1 text-xs sm:text-sm text-yellow-700 dark:text-yellow-300 mt-2">
                         <li>Kode Koneksi berlaku selama 5 menit dan akan otomatis diperbarui</li>
                         <li>Jika Kode tidak valid, tekan "Buat Kode Baru" untuk membuat Kode baru</li>
                         <li>Anda tidak dapat memasukkan Kode Koneksi sendiri</li>

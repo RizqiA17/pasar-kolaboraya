@@ -84,7 +84,7 @@
                                     {{ $user->name }}</h1>
                                 <p class="text-gray-500 dark:text-slate-400 text-sm sm:text-base">{{ $user->email }}
                                 </p>
-                                @if ($user->organization_name)
+                                {{-- @if ($user->organization_name)
                                     <div
                                         class="flex items-center justify-center sm:justify-start mt-2 text-gray-600 dark:text-slate-400">
                                         <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" stroke="currentColor"
@@ -107,7 +107,7 @@
                                         </svg>
                                         <span class="text-sm sm:text-base">{{ $user->phone_number }}</span>
                                     </div>
-                                @endif
+                                @endif --}}
                                 @if ($user->is_ecosystem_builder)
                                     <div
                                         class="flex items-center justify-center sm:justify-start mt-2 bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
@@ -1002,15 +1002,15 @@
                                                                     class="text-sm font-medium text-gray-900 dark:text-slate-100">
                                                                     {{ $otherUser->name }}</p>
                                                                 <p class="text-sm text-gray-500 dark:text-slate-400">
-                                                                    {{ $otherUser->email }}
+                                                                    {{ $otherUser->assigned_role }}
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                        <div class="flex items-center space-x-2">
+                                                        {{-- <div class="flex items-center space-x-2">
                                                             <a href="{{ route('profile.view', $otherUser->id) }}"
                                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">Lihat
                                                                 Profil</a>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 @endif
                                             @endforeach
