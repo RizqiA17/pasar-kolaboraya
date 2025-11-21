@@ -285,8 +285,7 @@
                                 <flux:button wire:click="closeAddUserModal" {{-- variant="secondary" --}}>
                                     Batal
                                 </flux:button>
-                                <flux:button wire:click="addSelectedUsers" variant="primary"
-                                    :disabled="empty($selectedUsers)" icon="plus">
+                                <flux:button wire:click="addSelectedUsers" variant="primary" icon="plus">
                                     Tambah User
                                 </flux:button>
                             </div>

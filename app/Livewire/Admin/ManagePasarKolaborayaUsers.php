@@ -49,7 +49,7 @@ class ManagePasarKolaborayaUsers extends Component
 
     public function loadAvailableUsers()
     {
-        $query = User::query();
+        $query = User::where('approval_status', 'approved');
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -58,7 +58,7 @@ class ManagePasarKolaborayaUsers extends Component
             });
         }
 
-        $this->availableUsers = $query->limit(20)->get();
+        $this->availableUsers = $query->limit(20)->orderBy('id', 'desc')->get();
     }
 
     public function loadStats()
@@ -153,6 +153,7 @@ class ManagePasarKolaborayaUsers extends Component
         // Get all users excluding existing members with optimized query
         $usersToAdd = User::whereNotIn('id', $existingMemberIds)
             ->select('id')
+            ->where('approval_status', 'approved')
             ->get();
 
         if ($usersToAdd->isEmpty()) {
