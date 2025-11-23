@@ -667,7 +667,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Anggota</p>
-                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $memberUsers->count() }}</p>
+                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $totalMembersCount }}</p>
                 </div>
             </div>
         </div>
@@ -684,7 +684,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Kontributor</p>
-                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $contributorUsers->count() }}
+                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $totalContributorsCount }}
                     </p>
                 </div>
             </div>

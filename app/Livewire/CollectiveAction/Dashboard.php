@@ -32,7 +32,7 @@ class Dashboard extends Component
     public $available_ecosystems;
     public $ecosystem_search = '';
     public $show_ecosystem_dropdown = false;
-    public $selected_ecosystems = []; // Array of selected ecosystem objects
+public $selected_ecosystems = []; // Array of selected ecosystem objects
 
     public $contributionTypes = [];
 
@@ -451,6 +451,10 @@ class Dashboard extends Component
     {
         $adminUsers = $this->collectiveAction->adminUsers()->with('profile')->get();
         $memberUsers = $this->collectiveAction->memberUsers()->with('profile')->limit(5)->get();
+        $totalMembersCount = $this->collectiveAction->users()->count();
+        $totalContributorsCount = $this->collectiveAction->contributions()
+            ->distinct('user_id')
+            ->count('user_id');
         
         // Get pending users (both pending and pending_approval)
         $pendingUsers = $this->collectiveAction->pendingUsers()->with('profile')->get();
@@ -478,6 +482,8 @@ class Dashboard extends Component
         return view('livewire.collective-action.dashboard', [
             'adminUsers' => $adminUsers,
             'memberUsers' => $memberUsers,
+            'totalMembersCount' => $totalMembersCount,
+            'totalContributorsCount' => $totalContributorsCount,
             'contributorUsers' => $contributorUsers,
             'pendingUsers' => $allPendingUsers,
             'pendingContributions' => $pendingContributions,
