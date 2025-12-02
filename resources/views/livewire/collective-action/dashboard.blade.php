@@ -1,4 +1,22 @@
 <div class="max-w-7xl mx-auto space-y-6" wire:poll.30s="refreshData">
+
+    <!-- Success/Error Messages -->
+    @if (session()->has('message'))
+        <div class="fixed top-4 right-4 z-50">
+            <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+                {{ session('message') }}
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="fixed top-4 right-4 z-50">
+            <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
+
     <!-- Header -->
     <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="md:block hidden">
@@ -1472,16 +1490,15 @@
         @endif
 
         <!-- View All Contributions Button -->
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <a href="{{ route('collective-action.contributions', $collectiveAction) }}"
-                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
-                    <span>Lihat Semua</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </div>
+        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <a href="{{ route('collective-action.contributions', $collectiveAction) }}"
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                <span>Lihat Semua</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
     </div>
 
     <!-- Pending Membership Requests Section - Manager Only -->
@@ -1657,14 +1674,13 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                 <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
                 <div class="flex items-center gap-3">
-                        <a href="{{ route('collective-action.members', $collectiveAction) }}"
-                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
-                            <span>Lihat Semua</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
+                    <a href="{{ route('collective-action.members', $collectiveAction) }}"
+                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                        <span>Lihat Semua</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
                 </div>
             </div>
 
@@ -1992,7 +2008,8 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
+                    <div
+                        class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
                         <button wire:click="acceptMember({{ $selectedMember->id }})" type="button"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Terima
@@ -2190,7 +2207,8 @@
 
                     <!-- Modal Footer -->
                     @if ($selectedContribution->status === 'offered')
-                        <div class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
+                        <div
+                            class="bg-gray-50 dark:bg-slate-700 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
                             <button wire:click="acceptContribution({{ $selectedContribution->id }})" type="button"
                                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Terima
@@ -2658,22 +2676,7 @@
     @endpush
 @endif
 
-<!-- Success/Error Messages -->
-@if (session()->has('message'))
-    <div class="fixed top-4 right-4 z-50">
-        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
-            {{ session('message') }}
-        </div>
-    </div>
-@endif
 
-@if (session()->has('error'))
-    <div class="fixed top-4 right-4 z-50">
-        <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
-            {{ session('error') }}
-        </div>
-    </div>
-@endif
 
 <script>
     // Auto-hide success/error messages after 5 seconds
