@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -29,6 +30,20 @@ class EcosystemContribution extends Model
         'accepted_at' => 'datetime',
         'completed_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($contribution) {
+            Cache::tags('activity_timeline')
+                ->forget("activity_timeline:{$contribution->user_id}:{$contribution->ecosystem->pasar_kolaboraya_id}");
+        });
+
+        static::deleted(function ($contribution) {
+            Cache::tags('activity_timeline')
+                ->forget("activity_timeline:{$contribution->user_id}:{$contribution->ecosystem->pasar_kolaboraya_id}");
+        });
+    }
+
 
     /**
      * Get the ecosystem this contribution belongs to
@@ -95,7 +110,7 @@ class EcosystemContribution extends Model
         if ($this->contribution_custom_type) {
             return $this->contribution_custom_type;
         }
-        
+
         return $this->contribution ? $this->contribution->name : 'Tidak Diketahui';
     }
 
@@ -104,7 +119,7 @@ class EcosystemContribution extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'offered' => 'Ditawarkan',
             'accepted' => 'Diterima',
             'completed' => 'Selesai',
@@ -118,7 +133,7 @@ class EcosystemContribution extends Model
      */
     public function getStatusColorClassAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'offered' => 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300',
             'accepted' => 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
             'completed' => 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',

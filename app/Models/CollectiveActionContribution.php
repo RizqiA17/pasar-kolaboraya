@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -29,6 +30,21 @@ class CollectiveActionContribution extends Model
         'accepted_at' => 'datetime',
         'completed_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($contribution) {
+            // Invalidate activity timeline cache untuk user ini
+            Cache::tags('activity_timeline')
+                ->forget("activity_timeline:{$contribution->user_id}:{$contribution->collectiveAction->pasar_kolaboraya_id}");
+        });
+
+        static::deleted(function ($contribution) {
+            Cache::tags('activity_timeline')
+                ->forget("activity_timeline:{$contribution->user_id}:{$contribution->collectiveAction->pasar_kolaboraya_id}");
+        });
+    }
+
 
     /**
      * Get the collective action this contribution belongs to
@@ -95,7 +111,7 @@ class CollectiveActionContribution extends Model
         if ($this->contribution_custom_type) {
             return $this->contribution_custom_type;
         }
-        
+
         return $this->contribution ? $this->contribution->name : 'Unknown';
     }
 
@@ -104,7 +120,7 @@ class CollectiveActionContribution extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'offered' => 'Ditawarkan',
             'accepted' => 'Diterima',
             'completed' => 'Selesai',
@@ -118,7 +134,7 @@ class CollectiveActionContribution extends Model
      */
     public function getStatusBadgeColorAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'offered' => 'warning',
             'accepted' => 'success',
             'completed' => 'primary',
@@ -164,7 +180,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopeFunding($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%funding%')->orWhere('name', 'like', '%dana%');
         });
     }
@@ -174,7 +190,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopeVolunteer($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%volunteer%')->orWhere('name', 'like', '%relawan%');
         });
     }
@@ -184,7 +200,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopeExpertise($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%expertise%')->orWhere('name', 'like', '%keahlian%');
         });
     }
@@ -194,7 +210,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopeResources($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%resource%')->orWhere('name', 'like', '%sumber daya%');
         });
     }
@@ -204,7 +220,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopePromotion($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%promotion%')->orWhere('name', 'like', '%promosi%');
         });
     }
@@ -214,7 +230,7 @@ class CollectiveActionContribution extends Model
      */
     public function scopeOther($query)
     {
-        return $query->whereHas('contribution', function($q) {
+        return $query->whereHas('contribution', function ($q) {
             $q->where('name', 'like', '%other%')->orWhere('name', 'like', '%lainnya%');
         });
     }

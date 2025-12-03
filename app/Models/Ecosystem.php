@@ -35,6 +35,24 @@ class Ecosystem extends Model
         'auto_join_collective_actions' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::saved(function ($ecosystem) {
+            // Invalidate activity timeline cache untuk semua user yang terkait
+            foreach ($ecosystem->users as $user) {
+                Cache::tags('activity_timeline')
+                    ->forget("activity_timeline:{$user->id}:{$ecosystem->pasar_kolaboraya_id}");
+            }
+        });
+
+        static::deleted(function ($ecosystem) {
+            foreach ($ecosystem->users as $user) {
+                Cache::tags('activity_timeline')
+                    ->forget("activity_timeline:{$user->id}:{$ecosystem->pasar_kolaboraya_id}");
+            }
+        });
+    }
+
     /**
      * Get the creator of this ecosystem
      */
@@ -421,15 +439,23 @@ class Ecosystem extends Model
     public function scopeForListing($query)
     {
         return $query->select([
-            'id', 'creator_id', 'ecosystem_title', 'organization_name', 
-            'description', 'work_region', 'issues_addressed', 'needed_roles', 
-            'is_active', 'created_at', 'updated_at'
+            'id',
+            'creator_id',
+            'ecosystem_title',
+            'organization_name',
+            'description',
+            'work_region',
+            'issues_addressed',
+            'needed_roles',
+            'is_active',
+            'created_at',
+            'updated_at'
         ])
-        ->with([
-            'creator:id,name,email',
-            'acceptedUsers:id,name,assigned_role',
-            'likes:id,ecosystem_id,user_id'
-        ]);
+            ->with([
+                'creator:id,name,email',
+                'acceptedUsers:id,name,assigned_role',
+                'likes:id,ecosystem_id,user_id'
+            ]);
     }
 
     /**
@@ -451,11 +477,11 @@ class Ecosystem extends Model
     public function scopeWithRoleDiversity($query)
     {
         return $query->with([
-            'acceptedUsers' => function($q) {
+            'acceptedUsers' => function ($q) {
                 $q->join('profiles', 'users.id', '=', 'profiles.user_id')
-                  ->join('peran', 'profiles.peran_id', '=', 'peran.id')
-                  ->select('users.id', 'users.name', 'users.assigned_role', 'peran.nama as role_name')
-                  ->whereNotNull('profiles.peran_id');
+                    ->join('peran', 'profiles.peran_id', '=', 'peran.id')
+                    ->select('users.id', 'users.name', 'users.assigned_role', 'peran.nama as role_name')
+                    ->whereNotNull('profiles.peran_id');
             }
         ]);
     }
@@ -647,7 +673,7 @@ class Ecosystem extends Model
 
         // Get existing roles from ecosystem (already in memory)
         $alreadyExistsRole = collect($this->existing_roles ?? [])->toArray();
-        
+
         // Get role names in single query instead of loop
         $existingRoleNames = \App\Models\Peran::whereIn('id', $alreadyExistsRole)
             ->pluck('nama')
@@ -753,22 +779,22 @@ class Ecosystem extends Model
     {
         // Contribution types distribution
         $contributionTypes = [
-            'volunteer' => $this->contributions()->whereHas('contribution', function($query) {
+            'volunteer' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->where('name', 'like', '%relawan%')->orWhere('name', 'like', '%volunteer%');
             })->count(),
-            'funding' => $this->contributions()->whereHas('contribution', function($query) {
+            'funding' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->where('name', 'like', '%dana%')->orWhere('name', 'like', '%funding%');
             })->count(),
-            'expertise' => $this->contributions()->whereHas('contribution', function($query) {
+            'expertise' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->where('name', 'like', '%keahlian%')->orWhere('name', 'like', '%expertise%');
             })->count(),
-            'resources' => $this->contributions()->whereHas('contribution', function($query) {
+            'resources' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->where('name', 'like', '%sumber%')->orWhere('name', 'like', '%resource%');
             })->count(),
-            'promotion' => $this->contributions()->whereHas('contribution', function($query) {
+            'promotion' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->where('name', 'like', '%promosi%')->orWhere('name', 'like', '%promotion%');
             })->count(),
-            'other' => $this->contributions()->whereHas('contribution', function($query) {
+            'other' => $this->contributions()->whereHas('contribution', function ($query) {
                 $query->whereNotIn('name', ['Relawan', 'Dana', 'Keahlian', 'Sumber Daya', 'Promosi']);
             })->count(),
         ];

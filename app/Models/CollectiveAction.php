@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CollectiveAction extends Model
 {
@@ -34,6 +35,24 @@ class CollectiveAction extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($action) {
+            // Invalidate activity timeline cache untuk semua user yang terlibat
+            foreach ($action->users as $user) {
+                Cache::tags('activity_timeline')
+                    ->forget("activity_timeline:{$user->id}:{$action->pasar_kolaboraya_id}");
+            }
+        });
+
+        static::deleted(function ($action) {
+            foreach ($action->users as $user) {
+                Cache::tags('activity_timeline')
+                    ->forget("activity_timeline:{$user->id}:{$action->pasar_kolaboraya_id}");
+            }
+        });
+    }
 
     /**
      * Get the creator of this collective action
