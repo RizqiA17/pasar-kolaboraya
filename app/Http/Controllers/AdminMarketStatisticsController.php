@@ -84,7 +84,7 @@ class AdminMarketStatisticsController extends Controller
             'users_in_ecosystems' => DB::table('ecosystem_users')
                 ->join('ecosystems', 'ecosystem_users.ecosystem_id', '=', 'ecosystems.id')
                 ->where('ecosystems.pasar_kolaboraya_id', $pasarKolaborayaId)
-                ->where('ecosystem_users.status', 'accepted')
+                // ->where('ecosystem_users.status', 'accepted')
                 ->distinct('ecosystem_users.user_id')
                 ->count('ecosystem_users.user_id'),
             'users_contributed_ecosystems' => EcosystemContribution::whereHas('ecosystem', function($q) use ($pasarKolaborayaId) {
@@ -94,13 +94,13 @@ class AdminMarketStatisticsController extends Controller
             'users_in_actions' => DB::table('collective_action_users')
                 ->join('collective_actions', 'collective_action_users.collective_action_id', '=', 'collective_actions.id')
                 ->where('collective_actions.pasar_kolaboraya_id', $pasarKolaborayaId)
-                ->where('collective_action_users.status', 'active')
+                // ->where('collective_action_users.status', 'active')
                 ->distinct('collective_action_users.user_id')
                 ->count('collective_action_users.user_id'),
             'ecosystems_in_actions' => DB::table('collective_action_ecosystem_invitations')
                 ->join('collective_actions', 'collective_action_ecosystem_invitations.collective_action_id', '=', 'collective_actions.id')
                 ->where('collective_actions.pasar_kolaboraya_id', $pasarKolaborayaId)
-                ->where('collective_action_ecosystem_invitations.status', 'accepted')
+                // ->where('collective_action_ecosystem_invitations.status', 'accepted')
                 ->distinct('collective_action_ecosystem_invitations.ecosystem_id')
                 ->count('collective_action_ecosystem_invitations.ecosystem_id'),
             'contributions_in_actions' => CollectiveActionContribution::whereHas('collectiveAction', function($q) use ($pasarKolaborayaId) {
