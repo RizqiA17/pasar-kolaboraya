@@ -100,7 +100,7 @@ class AdminMarketStatisticsController extends Controller
             'ecosystems_in_actions' => DB::table('collective_action_ecosystem_invitations')
                 ->join('collective_actions', 'collective_action_ecosystem_invitations.collective_action_id', '=', 'collective_actions.id')
                 ->where('collective_actions.pasar_kolaboraya_id', $pasarKolaborayaId)
-                // ->where('collective_action_ecosystem_invitations.status', 'accepted')
+                ->where('collective_action_ecosystem_invitations.status', 'accepted')
                 ->distinct('collective_action_ecosystem_invitations.ecosystem_id')
                 ->count('collective_action_ecosystem_invitations.ecosystem_id'),
             'contributions_in_actions' => CollectiveActionContribution::whereHas('collectiveAction', function($q) use ($pasarKolaborayaId) {
