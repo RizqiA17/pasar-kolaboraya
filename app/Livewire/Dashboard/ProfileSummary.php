@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Dashboard;
 
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ProfileSummary extends Component
 {
@@ -16,30 +17,36 @@ class ProfileSummary extends Component
     public function mount()
     {
         $this->user = Auth::user();
-        $this->profile = $this->user->profile;
-        
+
+        // Cache profile utama
+        $this->profile = Cache::tags('profile')->rememberForever(
+            "profile:{$this->user->id}",
+            fn() => $this->user->profile
+        );
+
         if ($this->profile) {
-            $this->skills = $this->profile->skills;
-            $this->interests = $this->profile->interests;
-            $this->contributions = $this->profile->contributions;
+            // Cache skills
+            $this->skills = Cache::tags('profile')->rememberForever(
+                "profile:{$this->user->id}:skills",
+                fn() => $this->profile->skills
+            );
+
+            // Cache interests
+            $this->interests = Cache::tags('profile')->rememberForever(
+                "profile:{$this->user->id}:interests",
+                fn() => $this->profile->interests
+            );
         }
     }
 
     public function render()
     {
-        // Get all skills and interests including custom ones
-        $allSkills = $this->profile ? $this->profile->getAllSkills() : collect();
-        $allInterests = $this->profile ? $this->profile->getAllInterests() : collect();
-        
+        $allSkills = $this->skills ? $this->profile->getAllSkills() : collect();
+        $allInterests = $this->interests ? $this->profile->getAllInterests() : collect();
+
         return view('livewire.dashboard.profile-summary', [
             'allSkills' => $allSkills,
             'allInterests' => $allInterests,
         ]);
     }
 }
-
-
-
-
-
-

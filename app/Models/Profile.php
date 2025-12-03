@@ -30,16 +30,23 @@ class Profile extends Model
     protected static function booted()
     {
         static::saved(function ($profile) {
-            Cache::tags(['profile'])
-                ->forget("profile:{$profile->user_id}");
+            // Hapus cache utama profile
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}");
+
+            // Hapus cache per bagian
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}:skills");
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}:interests");
         });
 
         static::deleted(function ($profile) {
-            Cache::tags(['profile'])
-                ->forget("profile:{$profile->user_id}");
+            // Hapus cache utama profile
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}");
+
+            // Hapus cache per bagian
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}:skills");
+            Cache::tags(['profile'])->forget("profile:{$profile->user_id}:interests");
         });
     }
-
 
     /**
      * Get social media links with backward compatibility
