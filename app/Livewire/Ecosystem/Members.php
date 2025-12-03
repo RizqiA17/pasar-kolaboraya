@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Ecosystem;
 
-use App\Models\Ecosystem;
 use App\Models\User;
-use App\Services\NotificationService;
-use App\Events\EcosystemUserStatusUpdated;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Ecosystem;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+use App\Services\NotificationService;
+use Illuminate\Support\Facades\Cache;
+use App\Events\EcosystemUserStatusUpdated;
 
 #[Layout('components.layouts.app', ['title' => 'Manajemen Anggota Ekosistem'])]
 class Members extends Component
@@ -112,6 +113,8 @@ class Members extends Component
             'status' => 'accepted',
             'joined_at' => now(),
         ]);
+
+        Cache::tags("stats:ecosystems")->forget("stats:ecosystems:{$userId}");
 
         // Send notification to the accepted user
         $notificationService = app(NotificationService::class);

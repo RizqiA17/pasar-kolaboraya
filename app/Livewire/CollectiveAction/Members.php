@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\NotificationService;
 use App\Events\CollectiveActionUserStatusUpdated;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -119,6 +120,8 @@ class Members extends Component
             'status' => 'active',
             'joined_at' => now(),
         ]);
+
+        Cache::tags("stats:collective_actions")->forget("stats:collective_actions:{$userId}");
 
         // Send notification to the accepted user
         $notificationService = app(NotificationService::class);

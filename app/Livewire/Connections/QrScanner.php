@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Connections;
 
-use App\Models\ConnectionQr;
-use App\Models\Connection;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Connection;
+use App\Models\ConnectionQr;
 use App\Events\ConnectionSuccess;
+use Illuminate\Support\Facades\Auth;
 use App\Services\NotificationService;
+use Illuminate\Support\Facades\Cache;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QrScanner extends Component
 {
@@ -285,6 +286,12 @@ class QrScanner extends Component
                 'pasar_kolaboraya_id' => $pasarKolaborayaId,
                 'status' => 'accepted',
             ]);
+        }
+
+        if ($connection) {
+            // Invalidate cache untuk kedua user
+            Cache::tags('stats:connections')->forget("stats:connections:{$requesterId}");
+            Cache::tags('stats:connections')->forget("stats:connections:{$receiverId}");
         }
 
         // Get user models for broadcasting
