@@ -6,6 +6,7 @@ use App\Models\Ecosystem;
 use App\Models\EcosystemContribution;
 use App\Models\Contribution;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -13,13 +14,15 @@ use Livewire\Component;
 class Contribute extends Component
 {
     public Ecosystem $ecosystem;
+
     public $contribution_id = '';
     public $contribution_description = '';
     public $contribution_amount = '';
     public $contribution_details = [];
     public $contribution_custom_type = '';
 
-    public $contributionTypes;
+    public $contributionTypes = [];
+    public $selectedContribution = null;
 
     public $resourceTypes = [
         'dana' => 'Dana/Pendanaan',
@@ -32,58 +35,86 @@ class Contribute extends Component
         'relasi' => 'Relasi/Networking',
     ];
 
-    protected $rules = [
-        'contribution_id' => 'required|exists:contributions,id',
-        'contribution_description' => 'required|string|min:10|max:1000',
-        'contribution_amount' => 'nullable|numeric|min:0',
-        'contribution_details' => 'nullable|array',
-        'contribution_custom_type' => 'nullable|string|max:255',
-    ];
-
+    /**
+     * Validation rules
+     */
     protected function rules()
     {
-        $rules = $this->rules;
-        
-        // Add amount validation for funding contributions
-        $selectedContribution = $this->contributionTypes->where('id', $this->contribution_id)->first();
-        if ($selectedContribution && str_contains(strtolower($selectedContribution->name), 'dana')) {
-            $rules['contribution_amount'] = 'required|numeric|min:1';
+        $rules = [
+            'contribution_id' => 'required|exists:contributions,id',
+            'contribution_description' => 'required|string|min:10|max:1000',
+            'contribution_amount' => 'nullable|numeric|min:0',
+            'contribution_details' => 'nullable|array',
+            'contribution_custom_type' => 'nullable|string|max:255',
+        ];
+
+        if ($this->selectedContribution) {
+            $name = strtolower($this->selectedContribution->name);
+
+            if (str_contains($name, 'dana') || str_contains($name, 'funding')) {
+                $rules['contribution_amount'] = 'required|numeric|min:1';
+            }
+
+            if (str_contains($name, 'lainnya') || str_contains($name, 'other')) {
+                $rules['contribution_custom_type'] = 'required|string|max:255';
+            }
         }
-        
-        // Add custom type validation for "Lainnya" contributions
-        if ($selectedContribution && (str_contains(strtolower($selectedContribution->name), 'lainnya') || str_contains(strtolower($selectedContribution->name), 'other'))) {
-            $rules['contribution_custom_type'] = 'required|string|max:255';
-        }
-        
+
         return $rules;
     }
 
+    /**
+     * Mount component
+     */
     public function mount(Ecosystem $ecosystem)
     {
         $this->ecosystem = $ecosystem;
-        
-        // Load contribution types from database
-        $this->contributionTypes = Contribution::all();
-        
-        // Check if user is authenticated
+
         if (!Auth::check()) {
             abort(403, 'Akses ditolak. Anda harus login untuk berkontribusi.');
         }
 
-        // Check if user can contribute
         if (!$this->ecosystem->canUserContribute(Auth::user())) {
-            abort(403, 'Anda tidak dapat berkontribusi ke ekosistem ini. Pastikan Anda adalah anggota yang diterima dan belum berkontribusi sebelumnya.');
+            abort(403, 'Anda tidak dapat berkontribusi ke ekosistem ini.');
         }
+
+        // Ambil contribution types dari cache array
+        $this->contributionTypes = Cache::tags('contributions')->get('contributions:list_array') ?? [];
+
+        // Jika ingin fallback kalau cache kosong
+        if (empty($this->contributionTypes)) {
+            $this->contributionTypes = Contribution::select('id', 'name')
+                ->orderBy('name')
+                ->get()
+                ->toArray();
+
+            Cache::tags('contributions')->put('contributions:list_array', $this->contributionTypes, 3600);
+        }
+
+        // dd($this->contributionTypes);
     }
 
-    public function updatedContributionId()
+
+    /**
+     * Load selected contribution from cache or DB
+     */
+    public function updatedContributionId($value)
     {
-        // Reset amount when changing type
+        $this->selectedContribution = Cache::remember(
+            "contribution:item:{$value}",
+            3600,
+            fn() => Contribution::select('id', 'name')->find($value)
+        );
+
+        // Reset fields related to contribution type
         $this->contribution_amount = '';
         $this->contribution_details = [];
         $this->contribution_custom_type = '';
     }
 
+    /**
+     * Add a new resource detail row
+     */
     public function addResourceDetail()
     {
         $this->contribution_details[] = [
@@ -94,25 +125,31 @@ class Contribute extends Component
         ];
     }
 
+    /**
+     * Remove a resource detail row
+     */
     public function removeResourceDetail($index)
     {
         unset($this->contribution_details[$index]);
         $this->contribution_details = array_values($this->contribution_details);
     }
 
+    /**
+     * Submit contribution
+     */
     public function submitContribution()
     {
         $this->validate();
 
-        // Prepare contribution details
         $details = [];
-        $selectedContribution = $this->contributionTypes->where('id', $this->contribution_id)->first();
-        if ($selectedContribution && str_contains(strtolower($selectedContribution->name), 'sumber daya') && !empty($this->contribution_details)) {
+        $c = $this->selectedContribution;
+
+        // Only keep details if contribution is a resource type
+        if ($c && str_contains(strtolower($c->name), 'sumber daya') && !empty($this->contribution_details)) {
             $details = $this->contribution_details;
         }
 
-        // Create contribution
-        $contribution = EcosystemContribution::create([
+        EcosystemContribution::create([
             'ecosystem_id' => $this->ecosystem->id,
             'user_id' => Auth::id(),
             'contribution_id' => $this->contribution_id,
@@ -124,13 +161,16 @@ class Contribute extends Component
             'offered_at' => now(),
         ]);
 
-        session()->flash('message', 'Kontribusi Anda telah berhasil diajukan dan sedang menunggu persetujuan dari pemilik ekosistem.');
+        session()->flash('message', 'Kontribusi Anda berhasil diajukan.');
 
         return redirect()->route('ecosystem.dashboard', $this->ecosystem);
     }
 
     public function render()
     {
-        return view('livewire.ecosystem.contribute');
+        return view('livewire.ecosystem.contribute', [
+            'contributionTypes' => $this->contributionTypes,
+            'resourceTypes' => $this->resourceTypes,
+        ]);
     }
 }

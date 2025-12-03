@@ -45,7 +45,7 @@ class AdminController extends Controller
                 'interests' => Interest::count(),
                 'skills' => Skill::count(),
                 'contributions' => Contribution::count(),
-                'event_categories' => EventCategory::count(),   
+                'event_categories' => EventCategory::count(),
                 'peran' => Peran::count(),
                 'ecosystem_builders_pending' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'pending')->count(),
                 'ecosystem_builders_approved' => User::where('is_ecosystem_builder', true)->where('ecosystem_builder_status', 'approved')->count(),
@@ -59,26 +59,30 @@ class AdminController extends Controller
             ->latest()
             ->take(5)
             ->get();
-            
-        $recentEcosystems = Ecosystem::with(['creator' => function($query) {
-            $query->withoutTrashed();
-        }])
-        ->whereHas('creator', function($query) {
-            $query->withoutTrashed();
-        })
-        ->latest()
-        ->take(5)
-        ->get();
-        
-        $recentCollectiveActions = CollectiveAction::with(['creator' => function($query) {
-            $query->withoutTrashed();
-        }])
-        ->whereHas('creator', function($query) {
-            $query->withoutTrashed();
-        })
-        ->latest()
-        ->take(5)
-        ->get();
+
+        $recentEcosystems = Ecosystem::with([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ])
+            ->whereHas('creator', function ($query) {
+                $query->withoutTrashed();
+            })
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentCollectiveActions = CollectiveAction::with([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ])
+            ->whereHas('creator', function ($query) {
+                $query->withoutTrashed();
+            })
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', compact('stats', 'recentUsers', 'recentEcosystems', 'recentCollectiveActions'));
     }
@@ -93,7 +97,7 @@ class AdminController extends Controller
         if ($request->has('search') && $request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%');
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -144,20 +148,30 @@ class AdminController extends Controller
         if (method_exists($user, 'trashed') && $user->trashed()) {
             return redirect()->route('admin.users')->with('error', 'User not found.');
         }
-        
-        $user->load(['profile', 'sentConnections' => function($query) {
-            $query->with(['receiver' => function($subQuery) {
-                $subQuery->withoutTrashed();
-            }])->whereHas('receiver', function($subQuery) {
-                $subQuery->withoutTrashed();
-            });
-        }, 'receivedConnections' => function($query) {
-            $query->with(['requester' => function($subQuery) {
-                $subQuery->withoutTrashed();
-            }])->whereHas('requester', function($subQuery) {
-                $subQuery->withoutTrashed();
-            });
-        }, 'collaborations', 'events']);
+
+        $user->load([
+            'profile',
+            'sentConnections' => function ($query) {
+                $query->with([
+                    'receiver' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('receiver', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            },
+            'receivedConnections' => function ($query) {
+                $query->with([
+                    'requester' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('requester', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            },
+            'collaborations',
+            'events'
+        ]);
         return view('admin.users.show', compact('user'));
     }
 
@@ -170,7 +184,7 @@ class AdminController extends Controller
         if (method_exists($user, 'trashed') && $user->trashed()) {
             return redirect()->route('admin.users')->with('error', 'User not found.');
         }
-        
+
         return view('admin.users.edit', compact('user'));
     }
 
@@ -183,7 +197,7 @@ class AdminController extends Controller
         if (method_exists($user, 'trashed') && $user->trashed()) {
             return redirect()->route('admin.users')->with('error', 'User not found.');
         }
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', new UniqueEmailForActiveUsers($user->id)],
@@ -195,7 +209,7 @@ class AdminController extends Controller
         // Handle assigned_role and ecosystem builder status
         $assignedRole = $request->assigned_role;
         $isEcosystemBuilder = $assignedRole === 'Ecosystem Builder';
-        
+
         // Update user with assigned_role and ecosystem builder status
         $user->update([
             'name' => $request->name,
@@ -224,23 +238,32 @@ class AdminController extends Controller
      */
     public function marketAnalysis(Request $request)
     {
-        $query = PasarKolaboraya::with(['creator' => function($query) {
-            $query->withoutTrashed();
-        }, 'acceptedUsers' => function($query) {
-            $query->withoutTrashed();
-        }, 'ecosystems' => function($query) {
-            $query->with(['creator' => function($subQuery) {
-                $subQuery->withoutTrashed();
-            }])->whereHas('creator', function($subQuery) {
-                $subQuery->withoutTrashed();
-            });
-        }, 'collectiveActions' => function($query) {
-            $query->with(['creator' => function($subQuery) {
-                $subQuery->withoutTrashed();
-            }])->whereHas('creator', function($subQuery) {
-                $subQuery->withoutTrashed();
-            });
-        }])->whereHas('creator', function($query) {
+        $query = PasarKolaboraya::with([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'acceptedUsers' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'ecosystems' => function ($query) {
+                $query->with([
+                    'creator' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('creator', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            },
+            'collectiveActions' => function ($query) {
+                $query->with([
+                    'creator' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('creator', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            }
+        ])->whereHas('creator', function ($query) {
             $query->withoutTrashed();
         });
 
@@ -271,30 +294,36 @@ class AdminController extends Controller
     public function showMarketAnalysis(PasarKolaboraya $pasarKolaboraya)
     {
         $pasarKolaboraya->load([
-            'creator' => function($query) {
+            'creator' => function ($query) {
                 $query->withoutTrashed();
-            }, 
-            'acceptedUsers' => function($query) {
+            },
+            'acceptedUsers' => function ($query) {
                 $query->withoutTrashed()->with(['profile.skills']);
-            }, 
-            'ecosystems' => function($query) {
-                $query->with(['creator' => function($subQuery) {
-                    $subQuery->withoutTrashed();
-                }])->whereHas('creator', function($subQuery) {
-                    $subQuery->withoutTrashed();
-                });
-            }, 
-            'collectiveActions' => function($query) {
-                $query->with(['creator' => function($subQuery) {
-                    $subQuery->withoutTrashed();
-                }])->whereHas('creator', function($subQuery) {
+            },
+            'ecosystems' => function ($query) {
+                $query->with([
+                    'creator' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('creator', function ($subQuery) {
                     $subQuery->withoutTrashed();
                 });
             },
-            'pasarKolaborayaUsers' => function($query) {
-                $query->with(['user' => function($subQuery) {
-                    $subQuery->withoutTrashed()->with(['profile.skills']);
-                }])->whereHas('user', function($subQuery) {
+            'collectiveActions' => function ($query) {
+                $query->with([
+                    'creator' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('creator', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            },
+            'pasarKolaborayaUsers' => function ($query) {
+                $query->with([
+                    'user' => function ($subQuery) {
+                        $subQuery->withoutTrashed()->with(['profile.skills']);
+                    }
+                ])->whereHas('user', function ($subQuery) {
                     $subQuery->withoutTrashed();
                 });
             }
@@ -314,40 +343,40 @@ class AdminController extends Controller
         $totalUsers = $pasarKolaboraya->acceptedUsers->count();
         $totalEcosystems = $pasarKolaboraya->ecosystems->count();
         $totalCollectiveActions = $pasarKolaboraya->collectiveActions->count();
-        
+
         // Calculate connection density
         $totalConnections = Connection::where('pasar_kolaboraya_id', $pasarKolaboraya->id)
             ->where('status', 'accepted')
             ->count();
-        
+
         $connectionDensity = $totalUsers > 1 ? round(($totalConnections / ($totalUsers * ($totalUsers - 1) / 2)) * 100, 2) : 0;
-        
+
         // Calculate ecosystem health score
         $ecosystemHealthScore = $this->calculateEcosystemHealthScore($pasarKolaboraya);
-        
+
         // Calculate collective action quality score
         $collectiveActionQualityScore = $this->calculateCollectiveActionQualityScore($pasarKolaboraya);
-        
+
         // Calculate collaboration index
         $collaborationIndex = $this->calculateCollaborationIndex($pasarKolaboraya);
-        
+
         // Calculate participation rate
         $activeUsers = $pasarKolaboraya->acceptedUsers->where('active_pasar_kolaboraya_id', $pasarKolaboraya->id)->count();
         $participationRate = $totalUsers > 0 ? round(($activeUsers / $totalUsers) * 100, 2) : 0;
-        
+
         // Calculate growth metrics
         $daysSinceStart = $pasarKolaboraya->created_at->diffInDays(now());
         $userGrowthRate = $daysSinceStart > 0 ? round(($totalUsers / $daysSinceStart) * 30, 2) : 0; // per month
-        
+
         // Calculate engagement score
         $engagementScore = $this->calculateEngagementScore($pasarKolaboraya);
-        
+
         // Calculate network diversity
         $networkDiversity = $this->calculateNetworkDiversity($pasarKolaboraya);
-        
+
         // Calculate resource utilization
         $resourceUtilization = $this->calculateResourceUtilization($pasarKolaboraya);
-        
+
         // Calculate overall health score
         $overallHealthScore = round((
             $ecosystemHealthScore * 0.25 +
@@ -385,14 +414,15 @@ class AdminController extends Controller
     private function calculateEcosystemHealthScore(PasarKolaboraya $pasarKolaboraya)
     {
         $ecosystems = $pasarKolaboraya->ecosystems;
-        if ($ecosystems->isEmpty()) return 0;
-        
+        if ($ecosystems->isEmpty())
+            return 0;
+
         $totalScore = 0;
         foreach ($ecosystems as $ecosystem) {
             $ekosistemData = $ecosystem->calculateEkosistemScore();
             $totalScore += $ekosistemData['ekosistem_score'];
         }
-        
+
         return round($totalScore / $ecosystems->count(), 2);
     }
 
@@ -402,14 +432,15 @@ class AdminController extends Controller
     private function calculateCollectiveActionQualityScore(PasarKolaboraya $pasarKolaboraya)
     {
         $collectiveActions = $pasarKolaboraya->collectiveActions;
-        if ($collectiveActions->isEmpty()) return 0;
-        
+        if ($collectiveActions->isEmpty())
+            return 0;
+
         $totalScore = 0;
         foreach ($collectiveActions as $action) {
             $aksiData = $action->calculateAksiScore();
             $totalScore += $aksiData['aksi_score'];
         }
-        
+
         return round($totalScore / $collectiveActions->count(), 2);
     }
 
@@ -419,16 +450,17 @@ class AdminController extends Controller
     private function calculateCollaborationIndex(PasarKolaboraya $pasarKolaboraya)
     {
         $collectiveActions = $pasarKolaboraya->collectiveActions;
-        if ($collectiveActions->isEmpty()) return 0;
-        
+        if ($collectiveActions->isEmpty())
+            return 0;
+
         $totalParticipants = 0;
         foreach ($collectiveActions as $action) {
             $totalParticipants += $action->users()->count();
         }
-        
+
         $avgParticipants = $totalParticipants / $collectiveActions->count();
         $totalUsers = $pasarKolaboraya->acceptedUsers->count();
-        
+
         return $totalUsers > 0 ? round(($avgParticipants / $totalUsers) * 100, 2) : 0;
     }
 
@@ -438,28 +470,29 @@ class AdminController extends Controller
     private function calculateEngagementScore(PasarKolaboraya $pasarKolaboraya)
     {
         $totalUsers = $pasarKolaboraya->acceptedUsers->count();
-        if ($totalUsers === 0) return 0;
-        
+        if ($totalUsers === 0)
+            return 0;
+
         $activeUsers = $pasarKolaboraya->acceptedUsers->where('active_pasar_kolaboraya_id', $pasarKolaboraya->id)->count();
-        $usersWithConnections = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+        $usersWithConnections = $pasarKolaboraya->acceptedUsers->filter(function ($user) use ($pasarKolaboraya) {
             return $user->sentConnections()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->where('status', 'accepted')->count() > 0;
         })->count();
-        
-        $usersWithEcosystems = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+
+        $usersWithEcosystems = $pasarKolaboraya->acceptedUsers->filter(function ($user) use ($pasarKolaboraya) {
             return $user->ecosystems()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->count() > 0;
         })->count();
-        
-        $usersWithActions = $pasarKolaboraya->acceptedUsers->filter(function($user) use ($pasarKolaboraya) {
+
+        $usersWithActions = $pasarKolaboraya->acceptedUsers->filter(function ($user) use ($pasarKolaboraya) {
             return $user->activeCollectiveActions()->where('pasar_kolaboraya_id', $pasarKolaboraya->id)->count() > 0;
         })->count();
-        
+
         $engagementScore = (
             ($activeUsers / $totalUsers) * 30 +
             ($usersWithConnections / $totalUsers) * 25 +
             ($usersWithEcosystems / $totalUsers) * 25 +
             ($usersWithActions / $totalUsers) * 20
         );
-        
+
         return round($engagementScore, 2);
     }
 
@@ -469,16 +502,17 @@ class AdminController extends Controller
     private function calculateNetworkDiversity(PasarKolaboraya $pasarKolaboraya)
     {
         $users = $pasarKolaboraya->acceptedUsers;
-        if ($users->isEmpty()) return 0;
-        
+        if ($users->isEmpty())
+            return 0;
+
         $sectors = $users->pluck('organization_name')->filter()->unique()->count();
-        $skills = $users->flatMap(function($user) {
+        $skills = $users->flatMap(function ($user) {
             return $user->profile ? $user->profile->skills->pluck('name') : collect();
         })->unique()->count();
-        
+
         $maxPossibleDiversity = 100; // Assuming max 10 sectors and 50 skills
         $diversityScore = min(100, ($sectors * 5) + ($skills * 2));
-        
+
         return round($diversityScore, 2);
     }
 
@@ -488,20 +522,21 @@ class AdminController extends Controller
     private function calculateResourceUtilization(PasarKolaboraya $pasarKolaboraya)
     {
         $collectiveActions = $pasarKolaboraya->collectiveActions;
-        if ($collectiveActions->isEmpty()) return 0;
-        
+        if ($collectiveActions->isEmpty())
+            return 0;
+
         $totalResources = 0;
         $utilizedResources = 0;
-        
+
         foreach ($collectiveActions as $action) {
             $requiredResources = is_array($action->required_resources) ? count($action->required_resources) : 0;
             $totalResources += $requiredResources;
-            
+
             // Count how many resources are actually provided
             $providedResources = $action->contributions()->count();
             $utilizedResources += min($providedResources, $requiredResources);
         }
-        
+
         return $totalResources > 0 ? round(($utilizedResources / $totalResources) * 100, 2) : 0;
     }
 
@@ -514,7 +549,7 @@ class AdminController extends Controller
         if (method_exists($user, 'trashed') && $user->trashed()) {
             return redirect()->route('admin.users')->with('error', 'User not found.');
         }
-        
+
         if ($user->isSuperAdmin() && User::where('role', 'super_admin')->count() <= 1) {
             return redirect()->back()->with('error', 'Cannot delete the last super admin.');
         }
@@ -528,9 +563,11 @@ class AdminController extends Controller
      */
     public function ecosystems(Request $request)
     {
-        $query = Ecosystem::with(['creator' => function($query) {
-            $query->withoutTrashed();
-        }])->whereHas('creator', function($query) {
+        $query = Ecosystem::with([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ])->whereHas('creator', function ($query) {
             $query->withoutTrashed();
         });
 
@@ -568,11 +605,14 @@ class AdminController extends Controller
      */
     public function showEcosystem(Ecosystem $ecosystem)
     {
-        $ecosystem->load(['creator' => function($query) {
-            $query->withoutTrashed();
-        }, 'users' => function($query) {
-            $query->withoutTrashed();
-        }]);
+        $ecosystem->load([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'users' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ]);
         return view('admin.ecosystems.show', compact('ecosystem'));
     }
 
@@ -590,9 +630,11 @@ class AdminController extends Controller
      */
     public function collectiveActions(Request $request)
     {
-        $query = CollectiveAction::with(['creator' => function($query) {
-            $query->withoutTrashed();
-        }])->whereHas('creator', function($query) {
+        $query = CollectiveAction::with([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ])->whereHas('creator', function ($query) {
             $query->withoutTrashed();
         });
 
@@ -626,17 +668,23 @@ class AdminController extends Controller
      */
     public function showCollectiveAction(CollectiveAction $collectiveAction)
     {
-        $collectiveAction->load(['creator' => function($query) {
-            $query->withoutTrashed();
-        }, 'contributors' => function($query) {
-            $query->withoutTrashed();
-        }, 'participatingEcosystems' => function($query) {
-            $query->with(['creator' => function($subQuery) {
-                $subQuery->withoutTrashed();
-            }])->whereHas('creator', function($subQuery) {
-                $subQuery->withoutTrashed();
-            });
-        }]);
+        $collectiveAction->load([
+            'creator' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'contributors' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'participatingEcosystems' => function ($query) {
+                $query->with([
+                    'creator' => function ($subQuery) {
+                        $subQuery->withoutTrashed();
+                    }
+                ])->whereHas('creator', function ($subQuery) {
+                    $subQuery->withoutTrashed();
+                });
+            }
+        ]);
         return view('admin.collective-actions.show', compact('collectiveAction'));
     }
 
@@ -654,13 +702,16 @@ class AdminController extends Controller
      */
     public function connections(Request $request)
     {
-        $query = Connection::with(['requester' => function($query) {
+        $query = Connection::with([
+            'requester' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'receiver' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ])->whereHas('requester', function ($query) {
             $query->withoutTrashed();
-        }, 'receiver' => function($query) {
-            $query->withoutTrashed();
-        }])->whereHas('requester', function($query) {
-            $query->withoutTrashed();
-        })->whereHas('receiver', function($query) {
+        })->whereHas('receiver', function ($query) {
             $query->withoutTrashed();
         });
 
@@ -694,12 +745,15 @@ class AdminController extends Controller
         if (method_exists($connection, 'trashed') && $connection->trashed()) {
             return redirect()->route('admin.connections')->with('error', 'Connection not found.');
         }
-        
-        $connection->load(['requester' => function($query) {
-            $query->withoutTrashed();
-        }, 'receiver' => function($query) {
-            $query->withoutTrashed();
-        }]);
+
+        $connection->load([
+            'requester' => function ($query) {
+                $query->withoutTrashed();
+            },
+            'receiver' => function ($query) {
+                $query->withoutTrashed();
+            }
+        ]);
         return view('admin.connections.show', compact('connection'));
     }
 
@@ -712,7 +766,7 @@ class AdminController extends Controller
         if (method_exists($connection, 'trashed') && $connection->trashed()) {
             return redirect()->route('admin.connections')->with('error', 'Connection not found.');
         }
-        
+
         $connection->delete();
         return redirect()->route('admin.connections')->with('success', 'Connection deleted successfully.');
     }
@@ -777,7 +831,7 @@ class AdminController extends Controller
         if (method_exists($interest, 'trashed') && $interest->trashed()) {
             return redirect()->route('admin.interests')->with('error', 'Interest not found.');
         }
-        
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('interests')->ignore($interest->id)],
         ]);
@@ -796,7 +850,7 @@ class AdminController extends Controller
         if (method_exists($interest, 'trashed') && $interest->trashed()) {
             return redirect()->route('admin.interests')->with('error', 'Interest not found.');
         }
-        
+
         $interest->delete();
         return redirect()->route('admin.interests')->with('success', 'Interest deleted successfully.');
     }
@@ -861,7 +915,7 @@ class AdminController extends Controller
         if (method_exists($skill, 'trashed') && $skill->trashed()) {
             return redirect()->route('admin.skills')->with('error', 'Skill not found.');
         }
-        
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('skills')->ignore($skill->id)],
         ]);
@@ -880,7 +934,7 @@ class AdminController extends Controller
         if (method_exists($skill, 'trashed') && $skill->trashed()) {
             return redirect()->route('admin.skills')->with('error', 'Skill not found.');
         }
-        
+
         $skill->delete();
         return redirect()->route('admin.skills')->with('success', 'Skill deleted successfully.');
     }
@@ -890,15 +944,34 @@ class AdminController extends Controller
      */
     public function contributions(Request $request)
     {
+        $hasFilters = $request->filled('search')
+            || $request->filled('status')
+            || $request->filled('date_from')
+            || $request->filled('date_to');
+
+        if (!$hasFilters) {
+            // Ambil data cached atau query baru dalam bentuk array
+            $contributions = Cache::tags('contributions')->remember('contributions:list_array', 3600, function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray(); // langsung array, bukan Collection
+            });
+
+            return view('admin.contributions.index', [
+                'contributions' => $contributions
+            ]);
+        }
+
+        // Query normal jika ada filter
         $query = Contribution::withCount('profiles');
 
-        // Search filter
-        if ($request->has('search') && $request->search) {
+        if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Status filter based on usage
-        if ($request->has('status') && $request->status) {
+        if ($request->filled('status')) {
             if ($request->status === 'used') {
                 $query->having('profiles_count', '>', 0);
             } elseif ($request->status === 'unused') {
@@ -906,21 +979,19 @@ class AdminController extends Controller
             }
         }
 
-        // Time-based filters
-        if ($request->has('date_from') && $request->date_from) {
+        if ($request->filled('date_from')) {
             $query->whereDate('created_at', '>=', $request->date_from);
         }
 
-        if ($request->has('date_to') && $request->date_to) {
+        if ($request->filled('date_to')) {
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Sort by creation date (newest first by default)
         $query->orderBy('created_at', 'desc');
 
-        $contributions = $query->paginate(15)->appends($request->query());
-
-        return view('admin.contributions.index', compact('contributions'));
+        return view('admin.contributions.index', [
+            'contributions' => $query->get()->toArray()
+        ]);
     }
 
     /**
@@ -934,7 +1005,12 @@ class AdminController extends Controller
 
         Contribution::create($request->only('name'));
 
-        return redirect()->route('admin.contributions')->with('success', 'Contribution created successfully.');
+        // Flush semua cache tag 'contributions'
+        Cache::tags('contributions')->flush();
+
+        return redirect()
+            ->route('admin.contributions')
+            ->with('success', 'Contribution created successfully.');
     }
 
     /**
@@ -942,18 +1018,17 @@ class AdminController extends Controller
      */
     public function updateContribution(Request $request, Contribution $contribution)
     {
-        // Check if contribution is soft deleted (if Contribution model uses SoftDeletes)
-        if (method_exists($contribution, 'trashed') && $contribution->trashed()) {
-            return redirect()->route('admin.contributions')->with('error', 'Contribution not found.');
-        }
-        
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('contributions')->ignore($contribution->id)],
         ]);
 
         $contribution->update($request->only('name'));
 
-        return redirect()->route('admin.contributions')->with('success', 'Contribution updated successfully.');
+        Cache::tags('contributions')->flush();
+
+        return redirect()
+            ->route('admin.contributions')
+            ->with('success', 'Contribution updated successfully.');
     }
 
     /**
@@ -961,13 +1036,13 @@ class AdminController extends Controller
      */
     public function deleteContribution(Contribution $contribution)
     {
-        // Check if contribution is soft deleted (if Contribution model uses SoftDeletes)
-        if (method_exists($contribution, 'trashed') && $contribution->trashed()) {
-            return redirect()->route('admin.contributions')->with('error', 'Contribution not found.');
-        }
-        
         $contribution->delete();
-        return redirect()->route('admin.contributions')->with('success', 'Contribution deleted successfully.');
+
+        Cache::tags('contributions')->flush();
+
+        return redirect()
+            ->route('admin.contributions')
+            ->with('success', 'Contribution deleted successfully.');
     }
 
     /**
@@ -1030,7 +1105,7 @@ class AdminController extends Controller
         if (method_exists($eventCategory, 'trashed') && $eventCategory->trashed()) {
             return redirect()->route('admin.event-categories')->with('error', 'Event category not found.');
         }
-        
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('event_categories')->ignore($eventCategory->id)],
         ]);
@@ -1049,7 +1124,7 @@ class AdminController extends Controller
         if (method_exists($eventCategory, 'trashed') && $eventCategory->trashed()) {
             return redirect()->route('admin.event-categories')->with('error', 'Event category not found.');
         }
-        
+
         $eventCategory->delete();
         return redirect()->route('admin.event-categories')->with('success', 'Event category deleted successfully.');
     }
@@ -1097,7 +1172,7 @@ class AdminController extends Controller
         // Search filter
         if ($request->has('search') && $request->search) {
             $query->where('nama', 'like', '%' . $request->search . '%')
-                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+                ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
         }
 
 
