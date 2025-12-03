@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Ecosystem;
 
-use App\Models\Ecosystem;
-use App\Models\EcosystemContribution;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Ecosystem;
+use App\Models\Contribution;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+use App\Models\EcosystemContribution;
+use Illuminate\Support\Facades\Cache;
 
 #[Layout('components.layouts.app', ['title' => 'Kontribusi Ekosistem'])]
 class Contributions extends Component
@@ -209,7 +211,17 @@ class Contributions extends Component
 
     public function getContributionTypesProperty()
     {
-        return \App\Models\Contribution::all();
+        return Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        );
     }
 
     public function getStatsProperty()

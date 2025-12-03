@@ -2,16 +2,17 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\Profile;
-use App\Models\Interest;
 use App\Models\Skill;
+use App\Models\Profile;
+use Livewire\Component;
+use App\Models\Interest;
 use App\Models\Contribution;
-use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\Layout;
-use Livewire\Component;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 #[Layout('components.layouts.sign-auth', ['title' => 'Lengkapi Profil'])]
 class ProfileSetup extends Component
@@ -835,7 +836,17 @@ class ProfileSetup extends Component
     {
         $interests = Interest::all();
         $skills = Skill::all();
-        $contributions = Contribution::all();
+        $contributions = Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        );
         $completionPercentage = $this->getProfileCompletionPercentage();
 
         return view('livewire.auth.profile-setup', compact('interests', 'skills', 'contributions', 'completionPercentage'));

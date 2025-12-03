@@ -3,11 +3,13 @@
 namespace App\Livewire\Profile;
 
 use App\Models\User;
+use Livewire\Component;
 use App\Models\Connection;
+use App\Models\Contribution;
 use App\Models\SystemSetting;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 #[Layout('components.layouts.app', ['title' => 'Profile'])]
 class ViewProfile extends Component
@@ -178,11 +180,21 @@ class ViewProfile extends Component
         // Get all skills and interests including custom ones
         $allSkills = $this->profile ? $this->profile->getAllSkills() : collect();
         $allInterests = $this->profile ? $this->profile->getAllInterests() : collect();
-        
+
         return view('livewire.profile.view-profile', [
             'skills' => \App\Models\Skill::all(),
             'interests' => \App\Models\Interest::all(),
-            'contributions' => \App\Models\Contribution::all(),
+            'contributions' => Cache::tags('contributions')->remember(
+                'contributions:list_array',
+                3600,
+                function () {
+                    return Contribution::select('id', 'name', 'created_at')
+                        ->withCount('profiles')
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                }
+            ),
             'allSkills' => $allSkills,
             'allInterests' => $allInterests,
         ]);

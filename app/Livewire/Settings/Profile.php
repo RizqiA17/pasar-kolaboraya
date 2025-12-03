@@ -3,13 +3,15 @@
 namespace App\Livewire\Settings;
 
 use App\Models\User;
-use App\Models\Profile as ProfileModel;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
-use App\Rules\UniqueEmailForActiveUsers;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Contribution;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Profile as ProfileModel;
+use Illuminate\Support\Facades\Session;
+use App\Rules\UniqueEmailForActiveUsers;
 
 #[Layout('components.layouts.app', ['title' => 'Profile'])]
 class Profile extends Component
@@ -227,7 +229,17 @@ class Profile extends Component
         return view('livewire.settings.profile', [
             'skills' => \App\Models\Skill::all(),
             'interests' => \App\Models\Interest::all(),
-            'contributions' => \App\Models\Contribution::all(),
+            'contributions' => Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        ),
             'allSkills' => $allSkills,
             'allInterests' => $allInterests,
         ]);

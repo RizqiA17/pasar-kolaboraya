@@ -3,19 +3,20 @@
 namespace App\Livewire\Settings;
 
 use App\Models\User;
+use App\Models\Peran;
 use App\Models\Skill;
 use Livewire\Component;
 use App\Models\Interest;
 use App\Models\Contribution;
-use App\Models\Peran;
+use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
-use App\Rules\UniqueEmailForActiveUsers;
 use Livewire\Attributes\Layout;
 use App\Services\ProfileService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Cache;
+use App\Rules\UniqueEmailForActiveUsers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 #[Layout('components.layouts.app', ['title' => 'Profile Settings'])]
@@ -40,12 +41,12 @@ class ProfileSettings extends Component
     // Temporary file properties for upload
     public $tempProfilePhoto;
     public $tempBanner;
-    
+
     // Track if temporary files have changed
     public $hasTempProfilePhoto = false;
     public $hasTempBanner = false;
     public $isProcessing = false;
-    
+
     // Track if data has changed to disable upload buttons
     public $hasDataChanged = false;
 
@@ -118,7 +119,17 @@ class ProfileSettings extends Component
     {
         $this->interests = Interest::all();
         $this->skills = Skill::all();
-        $this->contributions = Contribution::all();
+        $this->contributions = Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        );
         // $this->peran = Peran::all();
         $this->tab = request()->get('tab', 'profile');
 
@@ -138,7 +149,7 @@ class ProfileSettings extends Component
         $this->organization_name = $user->organization_name ?? '';
         $this->phone_number = $user->phone_number ?? '';
         $this->vision = $profile->vision ?? '';
-        
+
         // Debug log
         Log::info('ProfileSettings Mount Debug', [
             'user_id' => $user->id,
@@ -233,21 +244,21 @@ class ProfileSettings extends Component
     public function updatedSocialMediaItems($value, $key)
     {
         $this->hasDataChanged = true;
-        
+
         // Extract index from key (e.g., "0.custom_link" -> 0)
         $parts = explode('.', $key);
         if (count($parts) >= 2) {
             $index = $parts[0];
             $field = $parts[1];
-            
+
             // Clear errors for this specific field when user starts typing
             $this->resetErrorBag("socialMediaItems.{$index}.{$field}");
-            
+
             // Also clear any session error messages
             if (session()->has('error')) {
                 session()->forget('error');
             }
-            
+
             // Real-time validation for the specific field
             $this->validateSocialMediaField($index, $field, $value);
         }
@@ -308,11 +319,11 @@ class ProfileSettings extends Component
         if ($this->isProcessing) {
             return 'Sedang memproses...';
         }
-        
+
         if ($this->hasDataChanged) {
             return 'Simpan perubahan data terlebih dahulu';
         }
-        
+
         return 'File siap diupload';
     }
 
@@ -325,10 +336,10 @@ class ProfileSettings extends Component
                 'has_data_changed' => $this->hasDataChanged,
                 'social_media_items_count' => count($this->socialMediaItems)
             ]);
-            
+
             // Remove empty social media items first
             $this->removeEmptySocialMediaItems();
-            
+
             // Validate all fields using Livewire validation
             $this->validate([
                 'name' => ['required', 'string', 'max:255'],
@@ -349,10 +360,10 @@ class ProfileSettings extends Component
                 'socialMediaItems.*.username' => ['nullable', 'string', 'max:255'],
                 'socialMediaItems.*.custom_link' => ['nullable', 'string', 'max:500'],
             ]);
-            
+
             // Custom validation for social media items after Livewire validation
             $this->validateSocialMediaItems();
-            
+
             // Check if there are any validation errors after custom validation
             if ($this->getErrorBag()->any()) {
                 // Log validation errors
@@ -360,7 +371,7 @@ class ProfileSettings extends Component
                     'user_id' => $this->getUser()->id,
                     'errors' => $this->getErrorBag()->getMessages()
                 ]);
-                
+
                 // Show error message to user
                 session()->flash('error', 'Terdapat kesalahan pada data yang diisi. Silakan periksa dan lengkapi data yang diperlukan.');
                 return; // Stop execution if there are validation errors
@@ -406,13 +417,13 @@ class ProfileSettings extends Component
 
             $this->hasDataChanged = false;
             $this->dispatch('profile-updated');
-            
+
             // Log successful update
             Log::info('Profile updated successfully', [
                 'user_id' => $user->id,
                 'profile_id' => $user->profile->id ?? null
             ]);
-            
+
             if ($user->email_verified_at == null) {
                 try {
                     $this->getUser()->sendEmailVerificationNotification();
@@ -427,17 +438,17 @@ class ProfileSettings extends Component
             }
 
             session()->flash('message', 'Profil berhasil diperbarui!');
-            
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log validation exception
             Log::warning('Profile validation failed', [
                 'user_id' => $this->getUser()->id ?? null,
                 'errors' => $e->errors()
             ]);
-            
+
             // Show error message to user
             session()->flash('error', 'Terdapat kesalahan pada data yang diisi. Silakan periksa dan lengkapi data yang diperlukan.');
-            
+
             // Re-throw validation exceptions to show field errors
             throw $e;
         } catch (\Exception $e) {
@@ -445,7 +456,7 @@ class ProfileSettings extends Component
                 'user_id' => $this->getUser()->id ?? null,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             session()->flash('error', 'Terjadi kesalahan saat menyimpan profil. Silakan coba lagi atau hubungi administrator jika masalah berlanjut.');
         }
     }
@@ -533,7 +544,7 @@ class ProfileSettings extends Component
             if ($success) {
                 $this->dispatch('profile-updated');
                 session()->flash('message', 'Minat berhasil diperbarui!');
-                
+
                 Log::info('User interests updated successfully', [
                     'user_id' => $user->id,
                     'interests_count' => count($this->selectedInterests),
@@ -549,7 +560,7 @@ class ProfileSettings extends Component
                 'user_id' => $this->getUser()->id ?? null,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             session()->flash('error', 'Terjadi kesalahan saat memperbarui minat. Silakan coba lagi.');
         }
     }
@@ -592,7 +603,7 @@ class ProfileSettings extends Component
                 'user_id' => $this->getUser()->id ?? null,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             session()->flash('error', 'Terjadi kesalahan saat memperbarui keahlian. Silakan coba lagi.');
         }
     }
@@ -739,8 +750,8 @@ class ProfileSettings extends Component
             ]);
 
             $profileService = new ProfileService();
-        /** @var User $user */
-        $user = $this->getUser();
+            /** @var User $user */
+            $user = $this->getUser();
             $success = $profileService->updateProfilePhoto($user, $this->tempProfilePhoto);
 
             if ($success) {
@@ -776,8 +787,8 @@ class ProfileSettings extends Component
             ]);
 
             $profileService = new ProfileService();
-        /** @var User $user */
-        $user = $this->getUser();
+            /** @var User $user */
+            $user = $this->getUser();
             $success = $profileService->updateBanner($user, $this->tempBanner);
 
             if ($success) {
@@ -804,7 +815,7 @@ class ProfileSettings extends Component
         $rawSocialMedia = $profile->getRawOriginal('social_media');
         $socialMedia = json_decode($rawSocialMedia, true) ?? [];
         $this->socialMediaItems = [];
-        
+
         if (is_array($socialMedia)) {
             // Check if it's old format (associative array with platform => url)
             $isOldFormat = false;
@@ -814,7 +825,7 @@ class ProfileSettings extends Component
                     break;
                 }
             }
-            
+
             if ($isOldFormat) {
                 // Convert old format to new format
                 foreach ($socialMedia as $platform => $url) {
@@ -832,7 +843,7 @@ class ProfileSettings extends Component
                 $processedSocialMedia = $profile->social_media ?? [];
                 foreach ($processedSocialMedia as $item) {
                     if (is_array($item) && !empty($item['platform'])) {
-                    $this->socialMediaItems[] = [
+                        $this->socialMediaItems[] = [
                             'platform' => $item['platform'],
                             'username' => $item['username'] ?? '',
                             'custom_link' => $item['custom_link'] ?? '',
@@ -852,7 +863,7 @@ class ProfileSettings extends Component
             'custom_link' => '',
             'use_custom_link' => false
         ];
-        
+
         // Clear any session error messages when adding new social media
         if (session()->has('error')) {
             session()->forget('error');
@@ -863,27 +874,27 @@ class ProfileSettings extends Component
     {
         unset($this->socialMediaItems[$index]);
         $this->socialMediaItems = array_values($this->socialMediaItems); // Re-index array
-        
+
         // Clear all social media errors when removing items
         $this->clearSocialMediaErrors();
     }
-    
+
     /**
      * Remove empty social media items automatically
      * Only remove items that are completely empty (no platform selected)
      */
     public function removeEmptySocialMediaItems()
     {
-        $this->socialMediaItems = array_filter($this->socialMediaItems, function($item) {
+        $this->socialMediaItems = array_filter($this->socialMediaItems, function ($item) {
             // Only remove items that have no platform selected
             // Keep items with platform even if username/link is empty (for validation)
             return !empty($item['platform']);
         });
-        
+
         // Re-index array
         $this->socialMediaItems = array_values($this->socialMediaItems);
     }
-    
+
 
     public function formatSocialMediaForSave()
     {
@@ -893,13 +904,13 @@ class ProfileSettings extends Component
             if (empty($item['platform'])) {
                 continue;
             }
-            
+
             $socialMediaItem = [
                 'platform' => $item['platform']
             ];
-            
+
             $useCustomLink = $item['use_custom_link'] ?? false;
-            
+
             if ($useCustomLink) {
                 // Only save if custom_link is not empty
                 if (!empty($item['custom_link'])) {
@@ -1010,9 +1021,9 @@ class ProfileSettings extends Component
             if (empty($item['platform'])) {
                 continue;
             }
-            
+
             $useCustomLink = $item['use_custom_link'] ?? false;
-            
+
             if ($useCustomLink) {
                 // If using custom link, custom_link is required and must be valid URL
                 if (empty($item['custom_link'])) {
@@ -1028,7 +1039,7 @@ class ProfileSettings extends Component
             }
         }
     }
-    
+
     /**
      * Clear all social media validation errors
      */
@@ -1036,18 +1047,18 @@ class ProfileSettings extends Component
     {
         $errorBag = $this->getErrorBag();
         $errorsToRemove = [];
-        
+
         foreach ($errorBag->getMessages() as $key => $messages) {
             if (str_starts_with($key, 'socialMediaItems.')) {
                 $errorsToRemove[] = $key;
             }
         }
-        
+
         foreach ($errorsToRemove as $key) {
             $this->resetErrorBag($key);
         }
     }
-    
+
     /**
      * Clear all validation errors
      */
@@ -1060,20 +1071,20 @@ class ProfileSettings extends Component
     {
         if (isset($this->socialMediaItems[$index])) {
             $this->socialMediaItems[$index]['use_custom_link'] = !$this->socialMediaItems[$index]['use_custom_link'];
-            
+
             // Clear errors for this specific item when toggling
             $this->clearSocialMediaItemErrors($index);
-            
+
             // Clear session error messages
             if (session()->has('error')) {
                 session()->forget('error');
             }
-            
+
             // Don't clear the fields - keep both values
             // User can switch between username and custom link without losing data
         }
     }
-    
+
     /**
      * Clear errors for a specific social media item
      */
@@ -1082,7 +1093,7 @@ class ProfileSettings extends Component
         $this->resetErrorBag("socialMediaItems.{$index}.custom_link");
         $this->resetErrorBag("socialMediaItems.{$index}.username");
     }
-    
+
     /**
      * Clear errors for a specific field
      */
@@ -1090,7 +1101,7 @@ class ProfileSettings extends Component
     {
         $this->resetErrorBag($field);
     }
-    
+
     /**
      * Validate a specific social media field in real-time
      */
@@ -1099,16 +1110,16 @@ class ProfileSettings extends Component
         if (!isset($this->socialMediaItems[$index])) {
             return;
         }
-        
+
         $item = $this->socialMediaItems[$index];
-        
+
         // Skip validation if platform is not selected
         if (empty($item['platform'])) {
             return;
         }
-        
+
         $useCustomLink = $item['use_custom_link'] ?? false;
-        
+
         if ($field === 'custom_link' && $useCustomLink) {
             // If using custom link, custom_link is required and must be valid URL
             if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
@@ -1121,8 +1132,8 @@ class ProfileSettings extends Component
             }
         }
     }
-    
-    
+
+
 
     public function getGeneratedUrl($index)
     {

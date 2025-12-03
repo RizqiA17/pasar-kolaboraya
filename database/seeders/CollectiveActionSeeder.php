@@ -2,15 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\CollectiveAction;
-use App\Models\CollectiveActionEcosystemInvitation;
-use App\Models\CollectiveActionUser;
-use App\Models\CollectiveActionContribution;
-use App\Models\Ecosystem;
 use App\Models\User;
+use App\Models\Ecosystem;
+use Illuminate\Support\Str;
 use App\Models\Contribution;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use App\Models\CollectiveAction;
+use App\Models\CollectiveActionUser;
+use Illuminate\Support\Facades\Cache;
+use App\Models\CollectiveActionContribution;
+use App\Models\CollectiveActionEcosystemInvitation;
 
 class CollectiveActionSeeder extends Seeder
 {
@@ -27,7 +28,17 @@ class CollectiveActionSeeder extends Seeder
 
         $ecosystems = Ecosystem::where('is_active', true)->get();
         $users = User::where('role', 'user')->get();
-        $contributions = Contribution::all();
+        $contributions = Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        );
         $pasarKolaboraya = \App\Models\PasarKolaboraya::where('status', 'active')->first();
 
         if ($ecosystems->isEmpty()) {

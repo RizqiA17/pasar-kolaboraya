@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ecosystem;
-use App\Models\EcosystemContribution;
 use App\Models\User;
+use App\Models\Ecosystem;
 use App\Models\Contribution;
 use Illuminate\Database\Seeder;
+use App\Models\EcosystemContribution;
+use Illuminate\Support\Facades\Cache;
 
 class EcosystemContributionSeeder extends Seeder
 {
@@ -23,7 +24,17 @@ class EcosystemContributionSeeder extends Seeder
 
         $ecosystems = Ecosystem::where('is_active', true)->get();
         $users = User::where('role', 'user')->get();
-        $contributions = Contribution::all();
+        $contributions = Cache::tags('contributions')->remember(
+            'contributions:list_array',
+            3600,
+            function () {
+                return Contribution::select('id', 'name', 'created_at')
+                    ->withCount('profiles')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+        );
 
         if ($ecosystems->isEmpty()) {
             $this->command->warn('No active ecosystems found. Skipping ecosystem contribution creation.');
