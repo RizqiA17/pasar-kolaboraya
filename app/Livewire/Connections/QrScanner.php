@@ -292,6 +292,8 @@ class QrScanner extends Component
             // Invalidate cache untuk kedua user
             Cache::tags('stats:connections')->forget("stats:connections:{$requesterId}");
             Cache::tags('stats:connections')->forget("stats:connections:{$receiverId}");
+            Connection::clearUserConnectionCache($requesterId);
+            Connection::clearUserConnectionCache($receiverId);
         }
 
         // Get user models for broadcasting

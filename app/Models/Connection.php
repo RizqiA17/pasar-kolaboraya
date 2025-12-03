@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Peran;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Connection extends Model
 {
@@ -65,7 +67,7 @@ class Connection extends Model
         if (!$user->hasActivePasarKolaboraya()) {
             return $query->whereRaw('1 = 0'); // Return empty result
         }
-        
+
         return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
     }
 
@@ -73,194 +75,163 @@ class Connection extends Model
      * Calculate Pilar I - Koneksi scoring metrics
      * Focus on role diversity: roles in connections / total roles in database
      */
+
     public static function calculateKoneksiScore($userId, $pasarKolaborayaId = null)
     {
-        $user = User::find($userId);
-        if (!$user) {
-            return [
-                'diversity_score' => 0,
-                'koneksi_score' => 0,
-                'details' => []
-            ];
-        }
+        $cacheKey = "connection_score:user:{$userId}:session:" . ($pasarKolaborayaId ?: 'active');
+        $tags = ["connection", "connection:user:{$userId}"];
 
-        // Use active session if no specific session provided
-        if (!$pasarKolaborayaId) {
-            $pasarKolaborayaId = $user->active_pasar_kolaboraya_id;
-        }
-
-        if (!$pasarKolaborayaId) {
-            return [
-                'diversity_score' => 0,
-                'koneksi_score' => 0,
-                'details' => []
-            ];
-        }
-
-        // Get user's accepted connections
-        $userConnections = Connection::where('pasar_kolaboraya_id', $pasarKolaborayaId)
-            ->where('status', 'accepted')
-            ->where(function ($query) use ($userId) {
-                $query->where('requester_id', $userId)
-                    ->orWhere('receiver_id', $userId);
-            })
-            ->get();
-
-        $acceptedConnections = $userConnections->count();
-
-        // Get unique users connected to this specific user
-        $connectedUserIds = $userConnections
-            ->flatMap(function ($connection) use ($userId) {
-                return $connection->requester_id == $userId 
-                    ? [$connection->receiver_id] 
-                    : [$connection->requester_id];
-            })
-            ->unique()
-            ->values();
-
-        $n = $connectedUserIds->count();
-
-        // Get all available roles from database
-        $totalRolesInDatabase = \App\Models\Peran::count();
-        
-        // Network Diversity (based on user roles) - only for user's connected users
-        $diversityScore = 0;
-        $roleCategories = [];
-        $uniqueRolesInConnections = [];
-        
-        if ($n > 0) {
-            // Get only the user's connected users with their roles
-            $connectedUsers = User::whereIn('id', $connectedUserIds)
-                ->with('profile.peran')
-                ->get();
-
-            // Count roles from user profiles
-            foreach ($connectedUsers as $connectedUser) {
-                if ($connectedUser->profile && $connectedUser->profile->peran) {
-                    $roleName = $connectedUser->profile->peran->nama;
-                    $roleCategories[$roleName] = ($roleCategories[$roleName] ?? 0) + 1;
-                    $uniqueRolesInConnections[$roleName] = true;
-                }
+        return Cache::tags($tags)->rememberForever($cacheKey, function () use ($userId, $pasarKolaborayaId) {
+            $user = User::find($userId);
+            if (!$user) {
+                return self::emptyScore();
             }
 
-            // Calculate diversity score as percentage of roles covered
-            $uniqueRolesCount = count($uniqueRolesInConnections);
-            if ($totalRolesInDatabase > 0) {
-                $diversityScore = ($uniqueRolesCount / $totalRolesInDatabase) * 100;
+            $pasarKolaborayaId = self::resolveSession($user, $pasarKolaborayaId);
+            if (!$pasarKolaborayaId) {
+                return self::emptyScore();
             }
-        }
 
-        // Calculate final Koneksi score (only diversity score)
-        $koneksiScore = $diversityScore;
+            $connections = self::getAcceptedConnections($userId, $pasarKolaborayaId);
+            if ($connections->isEmpty()) {
+                return self::emptyScore();
+            }
 
-        return [
-            'diversity_score' => round($diversityScore, 1),
-            'koneksi_score' => round($koneksiScore, 1),
-            'details' => [
-                'accepted_connections' => $acceptedConnections,
-                'connected_users_count' => $n,
-                'role_categories' => $roleCategories,
-                'unique_roles_count' => count($uniqueRolesInConnections),
-                'total_roles_in_database' => $totalRolesInDatabase,
-                'role_coverage_percentage' => round($diversityScore, 1)
-            ]
-        ];
+            $connectedUsers = self::extractConnectedUsers($connections, $userId);
+            $metrics = self::calculateRoleDiversity($connectedUsers);
+
+            return [
+                'diversity_score' => $metrics['diversity_score'],
+                'koneksi_score' => $metrics['diversity_score'],
+                'details' => [
+                    'accepted_connections' => $connections->count(),
+                    'connected_users_count' => $connectedUsers->count(),
+                    'role_categories' => $metrics['role_categories'],
+                    'unique_roles_count' => $metrics['unique_roles'],
+                    'total_roles_in_database' => $metrics['total_roles'],
+                    'role_coverage_percentage' => $metrics['diversity_score'],
+                ]
+            ];
+        });
+    }
+
+    public static function getConnectionQualityMetrics($userId, $pasarKolaborayaId = null)
+    {
+        $cacheKey = "connection_quality:user:{$userId}:session:" . ($pasarKolaborayaId ?: 'active');
+        $tags = ["connection", "connection:user:{$userId}"];
+
+        return Cache::tags($tags)->rememberForever($cacheKey, function () use ($userId, $pasarKolaborayaId) {
+            $user = User::find($userId);
+            if (!$user) {
+                return self::emptyQuality();
+            }
+
+            $pasarKolaborayaId = self::resolveSession($user, $pasarKolaborayaId);
+            if (!$pasarKolaborayaId) {
+                return self::emptyQuality();
+            }
+
+            $connections = self::getAcceptedConnections($userId, $pasarKolaborayaId);
+            if ($connections->isEmpty()) {
+                return self::emptyQuality();
+            }
+
+            $connectedUsers = self::extractConnectedUsers($connections, $userId);
+            $metrics = self::calculateRoleDiversity($connectedUsers);
+
+            return [
+                'jumlah_koneksi' => $connections->count(),
+                'kualitas_koneksi' => $metrics['diversity_score'],
+                'keragaman_peran' => $metrics['diversity_score'],
+                'jumlah_peran_unik' => $metrics['unique_roles'],
+                'total_peran_database' => $metrics['total_roles'],
+                'persentase_cakupan' => $metrics['diversity_score'],
+            ];
+        });
     }
 
     /**
-     * Get connection quality metrics for a specific user
-     * Focus on role diversity: roles in connections / total roles in database
+     * Helpers
      */
-    public static function getConnectionQualityMetrics($userId, $pasarKolaborayaId = null)
+
+    public static function clearUserConnectionCache($userId)
     {
-        $user = User::find($userId);
-        if (!$user) {
-            return [
-                'jumlah_koneksi' => 0,
-                'kualitas_koneksi' => 0,
-                'keragaman_peran' => 0,
-                'jumlah_peran_unik' => 0,
-                'total_peran_database' => 0,
-                'persentase_cakupan' => 0
-            ];
-        }
+        Cache::tags("connection:user:{$userId}")->flush();
+    }
 
-        // Use active session if no specific session provided
-        if (!$pasarKolaborayaId) {
-            $pasarKolaborayaId = $user->active_pasar_kolaboraya_id;
-        }
+    private static function resolveSession($user, $pasarKolaborayaId)
+    {
+        return $pasarKolaborayaId ?: $user->active_pasar_kolaboraya_id;
+    }
 
-        if (!$pasarKolaborayaId) {
-            return [
-                'jumlah_koneksi' => 0,
-                'kualitas_koneksi' => 0,
-                'keragaman_peran' => 0,
-                'jumlah_peran_unik' => 0,
-                'total_peran_database' => 0,
-                'persentase_cakupan' => 0
-            ];
-        }
+    private static function emptyScore()
+    {
+        return [
+            'diversity_score' => 0,
+            'koneksi_score' => 0,
+            'details' => ['total_roles_in_database' => Peran::count()]
+        ];
+    }
 
-        // Get accepted connections
-        $connections = Connection::where(function ($query) use ($userId) {
-            $query->where('requester_id', $userId)
-                ->orWhere('receiver_id', $userId);
-        })
-        ->where('pasar_kolaboraya_id', $pasarKolaborayaId)
-        ->where('status', 'accepted')
-        ->with(['requester.profile.peran', 'receiver.profile.peran'])
-        ->get();
+    private static function emptyQuality()
+    {
+        return [
+            'jumlah_koneksi' => 0,
+            'kualitas_koneksi' => 0,
+            'keragaman_peran' => 0,
+            'jumlah_peran_unik' => 0,
+            'total_peran_database' => 0,
+            'persentase_cakupan' => 0
+        ];
+    }
 
-        if ($connections->isEmpty()) {
-            return [
-                'jumlah_koneksi' => 0,
-                'kualitas_koneksi' => 0,
-                'keragaman_peran' => 0,
-                'jumlah_peran_unik' => 0,
-                'total_peran_database' => 0,
-                'persentase_cakupan' => 0
-            ];
-        }
+    private static function getAcceptedConnections($userId, $sessionId)
+    {
+        return Connection::where('pasar_kolaboraya_id', $sessionId)
+            ->where('status', 'accepted')
+            ->where(function ($q) use ($userId) {
+                $q->where('requester_id', $userId)
+                    ->orWhere('receiver_id', $userId);
+            })
+            ->with(['requester.profile.peran', 'receiver.profile.peran'])
+            ->get();
+    }
 
-        // Get total roles in database
-        $totalRolesInDatabase = \App\Models\Peran::count();
+    private static function extractConnectedUsers($connections, $userId)
+    {
+        return $connections->map(function ($c) use ($userId) {
+            return $c->requester_id == $userId ? $c->receiver : $c->requester;
+        })->unique('id')->values();
+    }
 
-        // Calculate role diversity metrics
-        $totalConnections = $connections->count();
+    private static function calculateRoleDiversity($connectedUsers)
+    {
+        $totalRoles = Peran::count();
         $roleCategories = [];
         $uniqueRoles = [];
 
-        foreach ($connections as $connection) {
-            // Determine which user is the connection (not the current user)
-            $connectedUser = $connection->requester_id == $userId ? $connection->receiver : $connection->requester;
-            
-            if ($connectedUser && $connectedUser->profile && $connectedUser->profile->peran) {
-                $roleName = $connectedUser->profile->peran->nama;
-                $roleCategories[$roleName] = ($roleCategories[$roleName] ?? 0) + 1;
-                $uniqueRoles[$roleName] = true;
+        foreach ($connectedUsers as $user) {
+            $role = $user->profile->peran->nama ?? null;
+            if ($role) {
+                $roleCategories[$role] = ($roleCategories[$role] ?? 0) + 1;
+                $uniqueRoles[$role] = true;
             }
         }
 
-        // Calculate diversity score as percentage of roles covered
-        $uniqueRolesCount = count($uniqueRoles);
-        $diversityScore = 0;
-        
-        if ($totalRolesInDatabase > 0) {
-            $diversityScore = ($uniqueRolesCount / $totalRolesInDatabase) * 100;
-        }
+        $uniqueCount = count($uniqueRoles);
 
-        // Calculate quality score based on diversity
-        $qualityScore = $diversityScore;
+        $diversityScore = ($totalRoles > 0)
+            ? round(($uniqueCount / $totalRoles) * 100, 1)
+            : 0;
 
         return [
-            'jumlah_koneksi' => $totalConnections,
-            'kualitas_koneksi' => round($qualityScore, 1),
-            'keragaman_peran' => round($diversityScore, 1),
-            'jumlah_peran_unik' => $uniqueRolesCount,
-            'total_peran_database' => $totalRolesInDatabase,
-            'persentase_cakupan' => round($diversityScore, 1)
+            'diversity_score' => $diversityScore,
+            'role_categories' => $roleCategories,
+            'unique_roles' => $uniqueCount,
+            'total_roles' => $totalRoles
         ];
     }
+
 }
 
 

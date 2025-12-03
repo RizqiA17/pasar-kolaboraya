@@ -859,6 +859,7 @@ public function getConnectionStatus($otherUserId)
         }
 
         $this->update(['active_pasar_kolaboraya_id' => $pasarKolaboraya->id]);
+        Connection::clearUserConnectionCache($this->id);
         return true;
     }
 
