@@ -379,6 +379,8 @@ class ProfileSetup extends Component
                     }
                     $profile->contributions()->sync($contributionData);
                 }
+
+                Cache::tags("profile")->forget("profile:{$user->id}");
                 
                 return $profile;
             });
@@ -852,7 +854,3 @@ class ProfileSetup extends Component
         return view('livewire.auth.profile-setup', compact('interests', 'skills', 'contributions', 'completionPercentage'));
     }
 }
-
-
-
-

@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class ProfileProgress extends Component
@@ -20,83 +21,79 @@ class ProfileProgress extends Component
     public function calculateProfileCompletion()
     {
         $user = Auth::user();
-        $profile = $user->profile;
-        
+
+        $profile = Cache::tags('profile')->rememberForever("profile:{$user->id}", fn() => $user->profile);
+
         $this->totalFields = 0;
         $this->filledFields = 0;
         $this->missingFields = [];
 
-        // Basic info fields - now from user table
-        $user = Auth::user();
+        // Basic fields
         $basicFields = [
             'organization_type' => 'Tipe Organisasi',
             'organization_name' => 'Nama Organisasi',
-            'phone_number' => 'Nomor Telepon'
+            'phone_number' => 'Nomor Telepon',
         ];
 
+        // Configurasi umum field non-basic
+        $advancedFields = [
+            [
+                'label' => 'Visi/Misi',
+                'isFilled' => fn() => !empty($profile?->vision),
+            ],
+            [
+                'label' => 'Media Sosial',
+                'isFilled' => function () use ($profile) {
+                    return collect($profile?->social_media ?? [])
+                        ->contains(
+                            fn($social) =>
+                            isset($social['platform']) &&
+                            in_array(strtolower($social['platform']), [
+                                'linkedin',
+                                'twitter',
+                                'instagram',
+                                'facebook',
+                                'website'
+                            ]) &&
+                            (!empty($social['username']) || !empty($social['custom_link']))
+                        );
+                },
+            ],
+            [
+                'label' => 'Keahlian',
+                'isFilled' => fn() => ($profile?->skills?->count() ?? 0) > 0,
+            ],
+            [
+                'label' => 'Minat',
+                'isFilled' => fn() => ($profile?->interests?->count() ?? 0) > 0,
+            ],
+        ];
+
+        // Proses basic fields
         foreach ($basicFields as $field => $label) {
             $this->totalFields++;
-            if ($user && !empty($user->$field)) {
+            if (!empty($user->$field)) {
                 $this->filledFields++;
             } else {
                 $this->missingFields[] = $label;
             }
         }
 
-        // Vision field from profile table
-        $this->totalFields++;
-        if ($profile && !empty($profile->vision)) {
-            $this->filledFields++;
-        } else {
-            $this->missingFields[] = 'Visi/Misi';
-        }
-
-        // Social media (dijadikan 1 field)
-        $this->totalFields++;
-        $hasSocialMedia = false;
-        if ($profile && !empty($profile->social_media) && is_array($profile->social_media)) {
-            $socialMedia = $profile->social_media;
-            $expectedPlatforms = ['linkedin', 'twitter', 'instagram', 'facebook', 'website'];
-            foreach ($socialMedia as $social) {
-                if (
-                    isset($social['platform']) &&
-                    in_array(strtolower($social['platform']), $expectedPlatforms) &&
-                    (
-                        (!empty($social['username']) && $social['username'] !== null) ||
-                        (!empty($social['custom_link']) && $social['custom_link'] !== null)
-                    )
-                ) {
-                    $hasSocialMedia = true;
-                    break;
-                }
+        // Proses advanced fields
+        foreach ($advancedFields as $field) {
+            $this->totalFields++;
+            if (($field['isFilled'])()) {
+                $this->filledFields++;
+            } else {
+                $this->missingFields[] = $field['label'];
             }
         }
-        
-        if ($hasSocialMedia) {
-            $this->filledFields++;
-        } else {
-            $this->missingFields[] = 'Media Sosial';
-        }
 
-        // Skills
-        $this->totalFields++;
-        if ($profile && $profile->skills && $profile->skills->count() > 0) {
-            $this->filledFields++;
-        } else {
-            $this->missingFields[] = 'Keahlian';
-        }
-
-        // Interests
-        $this->totalFields++;
-        if ($profile && $profile->interests && $profile->interests->count() > 0) {
-            $this->filledFields++;
-        } else {
-            $this->missingFields[] = 'Minat';
-        }
-
-
-        $this->completionPercentage = $this->totalFields > 0 ? round(($this->filledFields / $this->totalFields) * 100) : 0;
+        $this->completionPercentage = $this->totalFields > 0
+            ? round(($this->filledFields / $this->totalFields) * 100)
+            : 0;
     }
+
 
     public function goToProfileSetup()
     {

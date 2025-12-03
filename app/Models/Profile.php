@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Profile extends Model
 {
@@ -26,18 +27,32 @@ class Profile extends Model
         'social_media' => 'array',
     ];
 
+    protected static function booted()
+    {
+        static::saved(function ($profile) {
+            Cache::tags(['profile'])
+                ->forget("profile:{$profile->user_id}");
+        });
+
+        static::deleted(function ($profile) {
+            Cache::tags(['profile'])
+                ->forget("profile:{$profile->user_id}");
+        });
+    }
+
+
     /**
      * Get social media links with backward compatibility
      */
     public function getSocialMediaAttribute($value)
     {
         $socialMedia = json_decode($value, true) ?? [];
-        
+
         // If empty, return empty array
         if (empty($socialMedia)) {
             return [];
         }
-        
+
         // Check if this is old format (key-value pairs)
         $isOldFormat = false;
         foreach ($socialMedia as $key => $val) {
@@ -46,12 +61,12 @@ class Profile extends Model
                 break;
             }
         }
-        
+
         // If old format, convert to new format
         if ($isOldFormat) {
             return \App\Helpers\SocialLinkFormatter::convertOldFormat($socialMedia);
         }
-        
+
         // Return as is if already new format
         return $socialMedia;
     }
@@ -75,7 +90,7 @@ class Profile extends Model
     {
         $socialMedia = $this->social_media ?? [];
         $formatted = [];
-        
+
         foreach ($socialMedia as $item) {
             if (!empty($item['platform'])) {
                 $url = \App\Helpers\SocialLinkFormatter::generateProfileUrl(
@@ -83,13 +98,13 @@ class Profile extends Model
                     $item['username'] ?? null,
                     $item['custom_link'] ?? null
                 );
-                
+
                 if ($url && $url !== '#') {
                     $formatted[$item['platform']] = $url;
                 }
             }
         }
-        
+
         return $formatted;
     }
 
