@@ -2,13 +2,14 @@
 
 namespace App\Livewire\CollectiveAction;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Ecosystem;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Models\CollectiveAction;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Models\CollectiveActionEcosystemInvitation;
 
 #[Layout('components.layouts.app', ['title' => 'Aksi Kolektif'])]
@@ -21,10 +22,10 @@ class Browse extends Component
     public $selectedScope = '';
     public $selectedStatus = '';
     public $hasCollectiveAction = false;
-    
+
     // Tab system
     public $activeTab = 'actions';
-    
+
     // Invitation filters
     public $invitationSearch = '';
     public $invitationStatus = '';
@@ -124,48 +125,61 @@ class Browse extends Component
 
     public function getInvitationsProperty()
     {
-        /** @var User|null $user */
         $user = Auth::user();
-        
         if (!$user || !$user->isEcosystemBuilder()) {
             return collect();
         }
 
-        $query = CollectiveActionEcosystemInvitation::with(['collectiveAction', 'invitedBy'])
-            ->whereHas('ecosystem', function ($q) use ($user) {
-                $q->where('creator_id', $user->id);
+        $pasarId = $user->active_pasar_kolaboraya_id;
+        $page = request('page', 1);
+        $searchHash = md5($this->invitationSearch ?? '');
+        $status = $this->invitationStatus ?? 'all';
+
+        $cacheKey = "collective:invitations:list:{$user->id}:{$pasarId}:{$searchHash}:{$status}:{$page}";
+
+        return Cache::tags("collective:invitations:user:{$user->id}")
+            ->remember($cacheKey, 3600, function () use ($user) {
+                $query = CollectiveActionEcosystemInvitation::with(['collectiveAction', 'invitedBy'])
+                    ->whereHas('ecosystem', function ($q) use ($user) {
+                        $q->where('creator_id', $user->id)
+                            ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id);
+                    });
+
+                if ($this->invitationSearch) {
+                    $query->whereHas('collectiveAction', function ($q) {
+                        $q->where(function ($sub) {
+                            $sub->where('title', 'like', '%' . $this->invitationSearch . '%')
+                                ->orWhere('description', 'like', '%' . $this->invitationSearch . '%');
+                        });
+                    });
+                }
+
+                if ($this->invitationStatus) {
+                    $query->where('status', $this->invitationStatus);
+                }
+
+                return $query->latest()->paginate(12);
             });
-
-        // Search filter
-        if ($this->invitationSearch) {
-            $query->whereHas('collectiveAction', function ($q) {
-                $q->where('title', 'like', '%' . $this->invitationSearch . '%')
-                  ->orWhere('description', 'like', '%' . $this->invitationSearch . '%');
-            });
-        }
-
-        // Status filter
-        if ($this->invitationStatus) {
-            $query->where('status', $this->invitationStatus);
-        }
-
-        return $query->latest()->paginate(12);
     }
 
     public function getPendingInvitationsCountProperty()
     {
-        /** @var User|null $user */
         $user = Auth::user();
-        
         if (!$user || !$user->isEcosystemBuilder()) {
             return 0;
         }
 
-        return CollectiveActionEcosystemInvitation::whereHas('ecosystem', function ($q) use ($user) {
-            $q->where('creator_id', $user->id);
-        })->where('status', 'pending')->count();
-    }
+        $pasarId = $user->active_pasar_kolaboraya_id;
+        $cacheKey = "collective:invitations:count:{$user->id}:{$pasarId}";
 
+        return Cache::tags("collective:invitations:user:{$user->id}")
+            ->remember($cacheKey, 3600, function () use ($user) {
+                return CollectiveActionEcosystemInvitation::whereHas('ecosystem', function ($q) use ($user) {
+                    $q->where('creator_id', $user->id)
+                        ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id);
+                })->where('status', 'pending')->count();
+            });
+    }
 
     public function contributeToAction($actionId)
     {
@@ -182,14 +196,14 @@ class Browse extends Component
     public function render()
     {
         $collectiveActions = $this->collectiveActions;
-        
+
         // Add like data for each collective action
         $collectiveActions->getCollection()->transform(function ($action) {
             $action->likeCount = $action->likes()->count();
             $action->isLiked = Auth::user() ? $action->isLikedBy(Auth::user()) : false;
             return $action;
         });
-        
+
         return view('livewire.collective-action.browse', [
             'collectiveActions' => $collectiveActions,
             'invitations' => $this->invitations,

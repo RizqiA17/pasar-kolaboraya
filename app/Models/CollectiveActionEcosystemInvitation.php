@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,6 +22,29 @@ class CollectiveActionEcosystemInvitation extends Model
     protected $casts = [
         'responded_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($invitation) {
+            Cache::tags([
+                "collective:invitations:user:{$invitation->ecosystem->creator_id}"
+            ])->flush();
+        });
+
+        static::deleted(function ($invitation) {
+            Cache::tags([
+                "collective:invitations:user:{$invitation->ecosystem->creator_id}"
+            ])->flush();
+        });
+    }
+
+    public static function clearInvitationCache($userId)
+    {
+        Cache::tags([
+            "collective:invitations:user:{$userId}"
+        ])->flush();
+    }
+
 
     /**
      * Get the collective action this invitation belongs to
@@ -51,7 +75,7 @@ class CollectiveActionEcosystemInvitation extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'Menunggu',
             'accepted' => 'Diterima',
             'declined' => 'Ditolak',
@@ -104,7 +128,7 @@ class CollectiveActionEcosystemInvitation extends Model
      */
     public function getRoleLabelAttribute(): string
     {
-        return match($this->role) {
+        return match ($this->role) {
             'admin' => 'Admin',
             'member' => 'Anggota',
             default => ucfirst($this->role),

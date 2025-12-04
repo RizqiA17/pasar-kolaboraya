@@ -2,6 +2,7 @@
 
 namespace App\Livewire\CollectiveAction;
 
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 use App\Models\Ecosystem;
 use Illuminate\Support\Str;
@@ -104,13 +105,13 @@ class Create extends Component
     {
         // dd($creatorEcosystem = Auth::user()->acceptedEcosystems->first());
         $this->validate();
-        
+
         // Custom validation: at least one resource must be selected
         $allResources = array_merge(
             $this->required_resources,
             array_filter($this->custom_resources)
         );
-        
+
         if (empty($allResources)) {
             $this->addError('required_resources', 'Minimal pilih 1 jenis sumber daya yang dibutuhkan');
             return;
@@ -221,6 +222,8 @@ class Create extends Component
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+
+            Cache::tags("collective:invitations:user:{$action->id}")->flush();
         }
         if (!empty($invitations)) {
             CollectiveActionEcosystemInvitation::insert($invitations);
