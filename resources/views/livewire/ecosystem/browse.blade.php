@@ -1,28 +1,29 @@
 <div class="space-y-6" wire:poll.30s="refreshData">
-    <!-- Header -->
+    {{-- Header --}}
     <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
         <div class="flex justify-between items-start max-sm:flex-col">
             <div>
                 <h1 class="text-2xl font-bold mb-2">Jelajahi Ekosistem Kolaborasi</h1>
-                <p class="text-blue-100">Temukan dan bergabung dengan ekosistem yang sesuai dengan minat dan keahlian
-                    Anda</p>
+                <p class="text-blue-100">Temukan dan bergabung dengan ekosistem sesuai minat dan keahlian Anda</p>
             </div>
+
             <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
-                @if (auth()->user() && auth()->user()->isApprovedEcosystemBuilder() && !$hasEcosystem)
+                @php $user = auth()->user(); @endphp
+
+                @if ($user?->isApprovedEcosystemBuilder() && !$hasEcosystem)
                     <flux:button class="max-sm:w-full" :href="route('ecosystem.create')" wire:navigate>
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                            </path>
+                            <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         Buat Ekosistem
                     </flux:button>
                 @endif
-                @if (Auth::user()->canJoinEcosystemsAndActions())
+
+                @if ($user?->canJoinEcosystemsAndActions())
                     <flux:button class="max-sm:w-full" :href="route('ecosystem.qr.scanner')" wire:navigate>
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
-                            </path>
+                            <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM17 8h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1z" />
                         </svg>
                         Scan QR Code
                     </flux:button>
@@ -31,15 +32,13 @@
         </div>
     </div>
 
-    <!-- Filters -->
+    {{-- Filter Box --}}
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Filter Pencarian</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <!-- Search -->
-            <flux:input wire:model.live.debounce.300ms="search" :placeholder="'Cari ekosistem...'" type="search" />
+            <flux:input wire:model.live.debounce.300ms="search" type="search" :placeholder="'Cari ekosistem...'" />
 
-            <!-- Region Filter -->
             <flux:select wire:model.live="selectedRegion" placeholder="Pilih Wilayah">
                 <option value="">Semua Wilayah</option>
                 @foreach ($regions as $region)
@@ -47,36 +46,34 @@
                 @endforeach
             </flux:select>
 
-            <!-- Issue Filter -->
             <flux:select wire:model.live="selectedIssue" placeholder="Pilih Isu">
                 <option value="">Semua Isu</option>
-                @foreach ($interests as $interest)
-                    <option value="{{ $interest->id }}">{{ $interest->name }}</option>
+                @foreach ($interests as $i)
+                    <option value="{{ $i->id }}">{{ $i->name }}</option>
                 @endforeach
             </flux:select>
 
-            <!-- Needed Role Filter -->
             <flux:select wire:model.live="selectedNeededRole" placeholder="Keahlian Dibutuhkan">
                 <option value="">Semua Keahlian</option>
-                @foreach ($skills as $skill)
-                    <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+                @foreach ($skills as $s)
+                    <option value="{{ $s->id }}">{{ $s->name }}</option>
                 @endforeach
             </flux:select>
         </div>
 
-        @if ($search || $selectedRegion || $selectedIssue || $selectedNeededRole)
+        @php $filtered = $search || $selectedRegion || $selectedIssue || $selectedNeededRole; @endphp
+
+        @if ($filtered)
             <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-600 dark:text-gray-400">
                     {{ $ecosystems->total() }} ekosistem ditemukan
                 </span>
-                <flux:button wire:click="clearFilters" variant="outline" size="sm">
-                    Hapus Filter
-                </flux:button>
+                <flux:button wire:click="clearFilters" variant="outline" size="sm">Hapus Filter</flux:button>
             </div>
         @endif
     </div>
 
-    <!-- Flash Messages -->
+    {{-- Flash Message --}}
     @if (session('error'))
         <div
             class="bg-accent-red/10 dark:bg-accent-red/20 border border-accent-red/20 dark:border-accent-red/30 rounded-xl p-4">
@@ -84,173 +81,164 @@
         </div>
     @endif
 
-    <!-- Ecosystems Grid -->
+    {{-- Ecosystem List --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse($ecosystems as $ecosystem)
+        @forelse ($ecosystems as $e)
+            @php
+                $userStatus = $user ? $e->getUserStatus($user) : null;
+                $issues = collect($e->issues_addressed);
+                $roles = collect($e->needed_roles);
+                $issuesCount = $issues->count();
+                $roleCount = $roles->count();
+            @endphp
+
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
-                <!-- Header -->
                 <div class="p-6">
+                    {{-- Title --}}
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex-1">
                             <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2">
-                                {{ $ecosystem->ecosystem_title }}
-                            </h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                {{ $ecosystem->organization_name }}
-                            </p>
+                                {{ $e->ecosystem_title }}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $e->organization_name }}</p>
                         </div>
                         <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 ml-4">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
-                            {{ $ecosystem->work_region }}
+                            {{ $e->work_region }}
                         </div>
                     </div>
 
-                    @if ($ecosystem->description)
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
-                            {{ $ecosystem->description }}
-                        </p>
+                    {{-- Description --}}
+                    @if ($e->description)
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ $e->description }}</p>
                     @endif
 
-                    <!-- Issues Addressed -->
-                    @if ($ecosystem->issues_addressed)
+                    {{-- Issues --}}
+                    @if ($issuesCount)
                         <div class="mb-4">
                             <h4
                                 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                                Isu yang Diperjuangkan
-                            </h4>
+                                Isu yang Diperjuangkan</h4>
+
                             <div class="flex flex-wrap gap-1">
-                                @foreach (collect($ecosystem->issues_addressed)->take(3) as $issueId)
+                                @foreach ($issues->take(3) as $id)
                                     @php
-                                        // Check if it's a numeric ID (predefined issue) or string (custom issue)
-                                        if (is_numeric($issueId) && $issueId > 0) {
-                                            $interest = $interests->find($issueId);
-                                            $issueName = $interest ? $interest->name : null;
-                                        } else {
-                                            // It's a custom issue (string)
-                                            $issueName = $issueId;
-                                        }
+                                        $name = is_numeric($id) ? $interests->find($id)->name ?? null : $id;
                                     @endphp
-                                    @if ($issueName)
+                                    @if ($name)
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-light-blue dark:bg-primary-blue text-primary-blue dark:text-primary-light-blue">
-                                            {{ $issueName }}
+                                            {{ $name }}
                                         </span>
                                     @endif
                                 @endforeach
-                                @if (count($ecosystem->issues_addressed) > 3)
+
+                                @if ($issuesCount > 3)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
-                                        +{{ count($ecosystem->issues_addressed) - 3 }} lainnya
+                                        class="inline-flex px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                                        +{{ $issuesCount - 3 }} lainnya
                                     </span>
                                 @endif
                             </div>
                         </div>
                     @endif
 
-                    <!-- Needed Roles -->
-                    @if ($ecosystem->needed_roles)
+                    {{-- Needed Roles --}}
+                    @if ($roleCount)
                         <div class="mb-4">
                             <h4
                                 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                                Keahlian Anggota
-                            </h4>
+                                Keahlian Anggota</h4>
+
                             <div class="flex flex-wrap gap-1">
-                                @foreach (collect($ecosystem->needed_roles)->take(3) as $roleId)
-                                    @php
-                                        $skill = $skills->find($roleId);
-                                    @endphp
+                                @foreach ($roles->take(3) as $rid)
+                                    @php $skill = $skills->find($rid); @endphp
+
                                     @if ($skill)
                                         <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange dark:text-neutral-orange">
+                                            class="inline-flex px-2 py-1 rounded-full text-xs bg-neutral-orange/20 dark:bg-neutral-orange/30 text-neutral-orange">
                                             {{ $skill->name }}
                                         </span>
                                     @endif
                                 @endforeach
-                                @if (count($ecosystem->needed_roles) > 3)
+
+                                @if ($roleCount > 3)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
-                                        +{{ count($ecosystem->needed_roles) - 3 }} lainnya
+                                        class="inline-flex px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                                        +{{ $roleCount - 3 }} lainnya
                                     </span>
                                 @endif
                             </div>
                         </div>
                     @endif
 
-                    <!-- Stats -->
+                    {{-- Stats --}}
                     <div class="flex items-center justify-between mb-4 text-sm text-gray-600 dark:text-gray-400">
                         <div class="flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                <path
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            {{ $ecosystem->accepted_users_count ?? $ecosystem->acceptedUsers->count() }} anggota
+                            {{ $e->accepted_users_count ?? $e->acceptedUsers->count() }} anggota
                         </div>
-                        @if ($ecosystem->max_users)
-                            <div class="text-xs">
-                                Maks: {{ $ecosystem->max_users }}
-                            </div>
+
+                        @if ($e->max_users)
+                            <div class="text-xs">Maks: {{ $e->max_users }}</div>
                         @endif
                     </div>
 
-                    <!-- Creator -->
+                    {{-- Creator --}}
                     <div class="flex items-center mb-4">
-                        <div class="flex-shrink-0 mr-3">
-                            <div
-                                class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                {{ $ecosystem->creator->initials() }}
-                            </div>
+                        <div
+                            class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium mr-3">
+                            {{ $e->creator->initials() }}
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                {{ $ecosystem->creator->name }}
-                            </p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                Ecosystem Builder
-                            </p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $e->creator->name }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Ecosystem Builder</p>
                         </div>
                     </div>
 
-                    <!-- Like Button and Status -->
+                    {{-- Like + Status --}}
                     <div class="flex items-center justify-between mb-4 gap-3">
-                        <!-- Like Button -->
-                        <button id="like-button-{{ $ecosystem->id }}"
-                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $ecosystem->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600' }}"
-                            onclick="toggleLike('ecosystem', {{ $ecosystem->id }}, '{{ $ecosystem->id }}')">
-                            <svg id="like-icon-{{ $ecosystem->id }}" class="w-4 h-4" fill="currentColor"
+                        <button id="like-button-{{ $e->id }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                                {{ $e->isLiked
+                                    ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400' }}"
+                            onclick="toggleLike('ecosystem', {{ $e->id }}, '{{ $e->id }}')">
+
+                            <svg id="like-icon-{{ $e->id }}" class="w-4 h-4" fill="currentColor"
                                 viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                    clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
                             </svg>
-                            <span id="like-count-{{ $ecosystem->id }}"
-                                class="font-medium">{{ $ecosystem->likeCount }}</span>
+
+                            <span id="like-count-{{ $e->id }}">{{ $e->likeCount }}</span>
                         </button>
 
-                        <!-- User Status Badge -->
-                        @php
-                            $userStatus = Auth::user() ? $ecosystem->getUserStatus(Auth::user()) : null;
-                        @endphp
+                        {{-- Status --}}
                         @if ($userStatus === 'accepted')
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green dark:text-white/70">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green/20 dark:bg-secondary-green/30 text-neutral-green">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor">
+                                    <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                                 Sudah Bergabung
                             </span>
-                        @elseif($userStatus === 'pending')
+                        @elseif ($userStatus === 'pending')
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700 dark:text-secondary-yellow">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow/20 dark:bg-secondary-yellow/30 text-yellow-700">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor">
+                                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 Menunggu Persetujuan
                             </span>
@@ -258,92 +246,78 @@
                     </div>
                 </div>
 
-                <!-- Footer -->
+                {{-- Footer --}}
                 <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
-                    @php
-                        $canJoin = Auth::user() ? $ecosystem->canUserJoin(Auth::user()) : false;
-                    @endphp
-
-                    @if ($canJoin)
-                        @if (Auth::user()->canJoinEcosystemsAndActions())
-                            <!-- Join button for tamu and partisipan users -->
-                            <flux:button wire:click="joinEcosystem({{ $ecosystem->id }})" variant="primary"
+                    @if ($e->can_join)
+                        @if ($user?->canJoinEcosystemsAndActions())
+                            <flux:button wire:click="joinEcosystem({{ $e->id }})" variant="primary"
                                 size="sm" class="w-full">
                                 Bergabung
                             </flux:button>
                         @else
-                            <!-- Message for komunitas users who can only connect -->
-                            <span class="text-sm text-gray-500 dark:text-gray-400">
-                                Hanya dapat terhubung dengan pengguna lain
-                            </span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Hanya dapat terhubung dengan
+                                pengguna lain</span>
                         @endif
-                    @elseif($ecosystem->canUserContribute(Auth::user()))
-                        <!-- Contribute button for users who can contribute -->
-                        <flux:button href="{{ route('ecosystem.contribute', $ecosystem) }}" variant="primary"
-                            size="sm" class="w-full" wire:navigate>
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    @elseif ($e->can_contribute)
+                        <flux:button href="{{ route('ecosystem.contribute', $e) }}" variant="primary" size="sm"
+                            class="w-full" wire:navigate>
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor">
+                                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6v12m6-6H6" />
                             </svg>
                             Berkontribusi
                         </flux:button>
                     @else
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            @if ($ecosystem->max_users && $ecosystem->acceptedUsers->count() >= $ecosystem->max_users)
-                                Ekosistem Penuh
-                            @endif
-                        </span>
+                        @if ($e->is_full)
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Ekosistem Penuh</span>
+                        @endif
                     @endif
 
-                    <!-- Dashboard Link for all authenticated users -->
-                    @if (Auth::user())
+                    @if ($user)
                         <div class="mt-2">
-                            <a href="{{ route('ecosystem.dashboard', $ecosystem) }}"
-                                class="w-full inline-flex items-center justify-center px-3 py-2 rounded-lg text-sm {{ $ecosystem->creator_id === Auth::id() ? 'bg-primary-blue hover:bg-primary-blue/90' : 'bg-gray-600 hover:bg-gray-700' }} text-white font-medium transition-colors duration-200"
+                            <a href="{{ route('ecosystem.dashboard', $e) }}"
+                                class="w-full inline-flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium text-white transition-colors duration-200
+                                   {{ $e->creator_is_user ? 'bg-primary-blue hover:bg-primary-blue/90' : 'bg-gray-600 hover:bg-gray-700' }}"
                                 wire:navigate>
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor">
+                                    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                 </svg>
-                                {{ $ecosystem->creator_id === Auth::id() ? 'Dashboard' : 'Lihat Dashboard' }}
+
+                                {{ $e->creator_is_user ? 'Dashboard' : 'Lihat Dashboard' }}
                             </a>
                         </div>
                     @endif
                 </div>
             </div>
+
         @empty
             <div class="col-span-full text-center py-12">
-                <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor">
+                    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Belum Ada Ekosistem
-                </h3>
+
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Belum Ada Ekosistem</h3>
+
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
-                    @if ($search || $selectedRegion || $selectedIssue || $selectedNeededRole)
-                        Tidak ada ekosistem yang sesuai dengan filter Anda.
-                    @else
-                        Belum ada ekosistem yang tersedia saat ini.
-                    @endif
+                    {{ $filtered ? 'Tidak ada ekosistem yang sesuai dengan filter Anda.' : 'Belum ada ekosistem yang tersedia saat ini.' }}
                 </p>
-                @if ($search || $selectedRegion || $selectedIssue || $selectedNeededRole)
-                    <flux:button wire:click="clearFilters" variant="outline">
-                        Hapus Filter
-                    </flux:button>
+
+                @if ($filtered)
+                    <flux:button wire:click="clearFilters" variant="outline">Hapus Filter</flux:button>
                 @endif
             </div>
         @endforelse
     </div>
 
-    <!-- Pagination -->
+    {{-- Pagination --}}
     @if ($ecosystems->hasPages())
-        <div class="mt-6">
-            {{ $ecosystems->links() }}
-        </div>
+        <div class="mt-6">{{ $ecosystems->links() }}</div>
     @endif
 </div>
+
 
 @push('scripts')
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>

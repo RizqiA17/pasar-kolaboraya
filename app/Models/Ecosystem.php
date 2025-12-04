@@ -37,7 +37,9 @@ class Ecosystem extends Model
 
     protected static function booted()
     {
+
         static::saved(function ($ecosystem) {
+            static::clearPasarCache($ecosystem);
             // Invalidate activity timeline cache untuk semua user yang terkait
             foreach ($ecosystem->users as $user) {
                 Cache::tags('activity_timeline')
@@ -46,11 +48,19 @@ class Ecosystem extends Model
         });
 
         static::deleted(function ($ecosystem) {
+            static::clearPasarCache($ecosystem);
             foreach ($ecosystem->users as $user) {
                 Cache::tags('activity_timeline')
                     ->forget("activity_timeline:{$user->id}:{$ecosystem->pasar_kolaboraya_id}");
             }
         });
+    }
+
+    public static function clearPasarCache($ecosystem)
+    {
+        $pasarId = $ecosystem->pasar_kolaboraya_id;
+
+        Cache::tags(["ecosystem:pasar:{$pasarId}"])->flush();
     }
 
     /**

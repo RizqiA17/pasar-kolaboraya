@@ -37,41 +37,48 @@ class Browse extends Component
     {
         $this->interests = Interest::all();
         $this->skills = Skill::all();
-        
-        // Get unique regions from existing ecosystems
-        // Filter by user's active session
+
+        // load regions through cached method
+        $this->loadRegions();
+    }
+
+    public function loadRegions()
+    {
         $user = Auth::user();
-        $regionsQuery = Ecosystem::where('is_active', true)
-            ->forUserActiveSession($user); // Filter by user's active session
-        
-        // Role-based filtering: Ecosystem builders only see regions from their own ecosystems
-        if ($user && $user instanceof User && $user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
-            $regionsQuery->where('creator_id', $user->id);
-        }
-        
-        $this->regions = $regionsQuery
-            ->distinct()
-            ->pluck('work_region')
-            ->filter()
-            ->sort()
-            ->values();
+        $pasarId = $user->active_pasar_kolaboraya_id;
+
+        $cacheKey = "ecosystem:pasar:{$pasarId}:regions";
+
+        $this->regions = Cache::tags(["ecosystem:pasar:{$pasarId}"])
+            ->remember($cacheKey, 3600, function () use ($user, $pasarId) {
+
+                $query = Ecosystem::where('is_active', true)
+                    ->where('pasar_kolaboraya_id', $pasarId);
+
+                if ($user->isEcosystemBuilder() && !$user->isSuperAdmin()) {
+                    $query->where('creator_id', $user->id);
+                }
+
+                return $query->distinct()
+                    ->pluck('work_region')
+                    ->filter()
+                    ->sort()
+                    ->values();
+            });
     }
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
-
     public function updatingSelectedRegion()
     {
         $this->resetPage();
     }
-
     public function updatingSelectedIssue()
     {
         $this->resetPage();
     }
-
     public function updatingSelectedNeededRole()
     {
         $this->resetPage();
@@ -89,34 +96,51 @@ class Browse extends Component
     public function getEcosystemsProperty()
     {
         $user = Auth::user();
-        
-        // Use optimized scope for listing
+        $pasarId = $user->active_pasar_kolaboraya_id;
+
+        // Cache ID list global per pasar
+        $ecosystemIds = Cache::tags(["ecosystem:pasar:{$pasarId}"])
+            ->remember("ecosystem:pasar:{$pasarId}:ids", 3600, function () use ($pasarId) {
+                return Ecosystem::where('is_active', true)
+                    ->where('pasar_kolaboraya_id', $pasarId)
+                    ->pluck('id')
+                    ->toArray();
+            });
+
+        // Cache has ecosystem (per-user)
+        $this->hasEcosystem = Cache::tags(["ecosystem:pasar:{$pasarId}"])
+            ->remember(
+                "user:{$user->id}:pasar:{$pasarId}:has_ecosystem",
+                300,
+                function () use ($user) {
+                    return Ecosystem::where('creator_id', $user->id)
+                        ->where('is_active', true)
+                        ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)
+                        ->exists();
+                }
+            );
+
+        // Base query using cached IDs
         $query = Ecosystem::forListing()
-            ->where('is_active', true)
+            ->with([
+                'acceptedUsers:id', // needed for is_full
+                'likes',            // needed for like count
+                'creator:id,name',
+            ])
+            ->whereIn('id', $ecosystemIds)
             ->forUserActiveSession($user);
 
-        // Cache hasEcosystem check
-        $this->hasEcosystem = Cache::remember(
-            "user_has_ecosystem_{$user->id}_{$user->active_pasar_kolaboraya_id}", 
-            300, 
-            function () use ($user) {
-                return Ecosystem::where('creator_id', $user->id)
-                    ->where('is_active', true)
-                    ->where('pasar_kolaboraya_id', $user->active_pasar_kolaboraya_id)
-                    ->exists();
-            }
-        );
-
-        // Search filter with full-text search optimization
+        // Search
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('ecosystem_title', 'like', '%' . $this->search . '%')
-                  ->orWhere('organization_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
+            $search = '%' . $this->search . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('ecosystem_title', 'like', $search)
+                    ->orWhere('organization_name', 'like', $search)
+                    ->orWhere('description', 'like', $search);
             });
         }
 
-        // Region filter
+        // Region
         if ($this->selectedRegion) {
             $query->where('work_region', 'like', '%' . $this->selectedRegion . '%');
         }
@@ -131,19 +155,34 @@ class Browse extends Component
             $query->whereJsonContains('needed_roles', $this->selectedNeededRole);
         }
 
-        return $query->latest()->paginate(12);
+        $ecosystems = $query->latest()->paginate(12);
+
+        // enrich ecosystem data before reaching Blade (prevent Blade queries)
+        $ecosystems->getCollection()->transform(function ($eco) use ($user) {
+
+            $eco->can_join = $eco->canUserJoin($user);
+            $eco->can_contribute = $eco->canUserContribute($user);
+            $eco->creator_is_user = $eco->creator_id === $user->id;
+            $eco->is_full = $eco->max_users && $eco->acceptedUsers->count() >= $eco->max_users;
+
+            $eco->likeCount = $eco->likes->count();
+            $eco->isLiked = $user ? $eco->likes->contains('user_id', $user->id) : false;
+
+            return $eco;
+        });
+
+        return $ecosystems;
     }
 
     public function joinEcosystem($ecosystemId)
     {
         $ecosystem = Ecosystem::findOrFail($ecosystemId);
-        
+
         if (!$ecosystem->canUserJoin(Auth::user())) {
             session()->flash('error', 'Anda tidak dapat bergabung dengan ekosistem ini.');
             return;
         }
 
-        // Redirect to join form
         return redirect()->route('ecosystem.join', $ecosystem);
     }
 
@@ -155,17 +194,8 @@ class Browse extends Component
 
     public function render()
     {
-        $ecosystems = $this->ecosystems;
-        
-        // Add like data for each ecosystem
-        $ecosystems->getCollection()->transform(function ($ecosystem) {
-            $ecosystem->likeCount = $ecosystem->likes()->count();
-            $ecosystem->isLiked = Auth::user() ? $ecosystem->isLikedBy(Auth::user()) : false;
-            return $ecosystem;
-        });
-        
         return view('livewire.ecosystem.browse', [
-            'ecosystems' => $ecosystems,
+            'ecosystems' => $this->ecosystems,
         ]);
     }
 }
