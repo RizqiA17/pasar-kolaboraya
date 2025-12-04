@@ -22,7 +22,7 @@
 
         <div class="w-full max-w-md">
             <div
-                class="rounded-2xl border pt-12 border-white/60 dark:border-slate-700/50 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl shadow-xl dark:shadow-slate-900/50">
+                class="rounded-2xl border pt-12 border-white/60 dark:border-slate-700/50 bg-white/70 dark:bg-slate-800/80 backdrop-blur-xl shadow-xl dark:shadow-slate-900/50">
                 <div class="flex justify-center items-center relative">
                     <a href="{{ route('home') }}"
                         class="flex items-center font-semibold text-zinc-800 dark:text-slate-200" wire:navigate>

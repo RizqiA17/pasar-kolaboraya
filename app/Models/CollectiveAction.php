@@ -44,6 +44,8 @@ class CollectiveAction extends Model
                 Cache::tags('activity_timeline')
                     ->forget("activity_timeline:{$user->id}:{$action->pasar_kolaboraya_id}");
             }
+
+            Cache::tags('collective_action')->forget("collective_action:{$action->id}");
         });
 
         static::deleted(function ($action) {
@@ -51,8 +53,11 @@ class CollectiveAction extends Model
                 Cache::tags('activity_timeline')
                     ->forget("activity_timeline:{$user->id}:{$action->pasar_kolaboraya_id}");
             }
+
+            Cache::tags('collective_action')->forget("collective_action:{$action->id}");
         });
     }
+
 
     /**
      * Get the creator of this collective action

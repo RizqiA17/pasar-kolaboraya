@@ -39,7 +39,7 @@
 
         <div class="w-full max-w-md max-h-svh overflow-y-auto">
             <div
-                class="rounded-2xl lg:h-svh max-h-svh overflow-y-auto pt-12 flex flex-col justify-center gap-4 lg:gap-8 border lg:rounded-r-none border-white/60 dark:border-slate-700/50 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl shadow-xl dark:shadow-slate-900/50">
+                class="rounded-2xl lg:h-svh max-h-svh overflow-y-auto pt-12 flex flex-col justify-center gap-4 lg:gap-8 border lg:rounded-r-none border-white/60 dark:border-slate-700/50 bg-white/70 dark:bg-slate-800/80 backdrop-blur-xl shadow-xl dark:shadow-slate-900/50">
                 <div class="flex items-center justify-center relative">
                     <a href="{{ route('home') }}"
                         class="flex items-center font-semibold text-zinc-800 dark:text-slate-200" wire:navigate>

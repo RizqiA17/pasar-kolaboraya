@@ -145,6 +145,7 @@
             @forelse($collectiveActions as $action)
                 <div
                     class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+
                     <!-- Header -->
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
@@ -154,10 +155,10 @@
                                 </h3>
                                 <div class="flex items-center gap-3 mb-3">
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs 
-                                    @if ($action->scale === 'kecil') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                    @elseif($action->scale === 'sedang') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
-                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs
+                                @if ($action->scale === 'kecil') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                                @elseif($action->scale === 'sedang') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
+                                @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
                                         {{ $action->scale_label }}
                                     </span>
                                     <span
@@ -166,10 +167,10 @@
                                     </span>
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs
-                                    @if ($action->status === 'planning') bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange
-                                    @elseif($action->status === 'active') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                    @elseif($action->status === 'completed') bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400
-                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                @if ($action->status === 'planning') bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange
+                                @elseif($action->status === 'active') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                                @elseif($action->status === 'completed') bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400
+                                @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
                                         {{ $action->status_label }}
                                     </span>
                                 </div>
@@ -192,23 +193,23 @@
                         </div>
 
                         <!-- Required Resources -->
-                        @if ($action->required_resources)
+                        @if ($action->required_resources_limited)
                             <div class="mb-4">
                                 <h4
                                     class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                                     Sumber Daya Dibutuhkan
                                 </h4>
                                 <div class="flex flex-wrap gap-1">
-                                    @foreach (collect($action->required_resources)->take(4) as $resource)
+                                    @foreach ($action->required_resources_limited as $resource)
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange">
                                             {{ ucfirst($resource) }}
                                         </span>
                                     @endforeach
-                                    @if (count($action->required_resources) > 4)
+                                    @if ($action->required_resources_count > 4)
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
-                                            +{{ count($action->required_resources) - 4 }} lainnya
+                                            +{{ $action->required_resources_count - 4 }} lainnya
                                         </span>
                                     @endif
                                 </div>
@@ -226,7 +227,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>
-                                {{ $action->acceptedInvitations()->count() }} ekosistem terlibat
+                                {{ $action->accepted_count }} ekosistem terlibat
                                 <span class="text-xs text-gray-500 ml-1">(termasuk penyelenggara)</span>
                             </div>
                         </div>
@@ -268,7 +269,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                                 </svg>
-                                {{ $action->contributions()->distinct('user_id')->count() }} kontributor
+                                {{ $action->contributors_count }} kontributor
                             </div>
                         </div>
 
@@ -290,31 +291,25 @@
                             </div>
                         </div>
 
-                        <!-- Like Button and Status -->
+                        <!-- Like Button and User Status -->
                         <div class="flex items-center justify-between mb-4 gap-3">
-                            <!-- Like Button -->
                             <button id="like-button-{{ $action->id }}"
-                                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ $action->isLiked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
+                                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                            {{ $action->is_liked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
                                 onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
                                 <svg id="like-icon-{{ $action->id }}"
-                                    class="w-4 h-4 {{ $action->isLiked ? 'fill-red-600' : 'fill-gray-600' }}"
+                                    class="w-4 h-4 {{ $action->is_liked ? 'fill-red-600' : 'fill-gray-600' }}"
                                     viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                                         clip-rule="evenodd"></path>
                                 </svg>
                                 <span id="like-count-{{ $action->id }}"
-                                    class="font-medium">{{ $action->likeCount }}</span>
+                                    class="font-medium">{{ $action->like_count }}</span>
                             </button>
 
-                            <!-- User Status Badge -->
-                            @php
-                                $user = Auth::user();
-                                $isUserRegistered = $user ? $action->isUserRegistered($user) : false;
-                                $userStatus = $user && $isUserRegistered ? $action->getUserStatus($user) : null;
-                            @endphp
-                            @if ($isUserRegistered)
-                                @if ($userStatus === 'active')
+                            @if ($action->is_user_registered)
+                                @if ($action->user_status === 'active')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
@@ -324,34 +319,19 @@
                                         </svg>
                                         Sudah Bergabung
                                     </span>
-                                @elseif($userStatus === 'pending_approval')
+                                @elseif ($action->user_status === 'pending_approval')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
                                         Menunggu Persetujuan
                                     </span>
-                                @elseif($userStatus === 'rejected')
+                                @elseif ($action->user_status === 'rejected')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
                                         Ditolak
                                     </span>
-                                @elseif($userStatus === 'inactive')
+                                @elseif ($action->user_status === 'inactive')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                                        </svg>
                                         Tidak Aktif
                                     </span>
                                 @endif
@@ -359,126 +339,34 @@
                         </div>
                     </div>
 
-                    <!-- Footer -->
+                    <!-- Footer Buttons -->
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
-                        @php
-                            $user = Auth::user();
-                            $userContribution = $user
-                                ? $action->contributions()->where('user_id', $user->id)->first()
-                                : null;
-                            $canContribute = $user ? $action->canUserContribute($user) : false;
-                            $canJoin = $user ? $action->canUserJoin($user) : false;
-                            $isUserRegistered = $user ? $action->isUserRegistered($user) : false;
-                            $userStatus = $user && $isUserRegistered ? $action->getUserStatus($user) : null;
-                        @endphp
-
-                        @if ($isUserRegistered)
-                            @if ($action->canUserContribute(Auth::user()))
-                                <!-- Contribute button for users who can contribute -->
-                                <div class="flex space-x-2">
-                                    <flux:button href="{{ route('collective-action.contribute', $action) }}"
-                                        variant="primary" wire:navigate size="sm"
-                                        class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90 border border-primary-blue hover:border-primary-blue/80 dark:border-secondary-green dark:hover:border-secondary-green/80 shadow-sm">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                        Berkontribusi
-                                    </flux:button>
-                                    <flux:button href="{{ route('collective-action.show', $action) }}"
-                                        variant="outline" size="sm" class="flex-1">
-                                        Lihat Detail
-                                    </flux:button>
-                                </div>
-                            @else
-                                <!-- Simple buttons for users who cannot contribute -->
-                                <div class="flex space-x-2">
-                                    <flux:button href="{{ route('collective-action.show', $action) }}"
-                                        variant="outline" size="sm" class="flex-1">
-                                        Lihat Detail
-                                    </flux:button>
-                                </div>
+                        <div class="flex space-x-2">
+                            @if ($action->can_user_contribute)
+                                <flux:button href="{{ route('collective-action.contribute', $action) }}"
+                                    variant="primary" wire:navigate size="sm" class="flex-1">Berkontribusi
+                                </flux:button>
+                            @elseif ($action->can_user_join)
+                                <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary"
+                                    wire:navigate size="sm" class="flex-1">Bergabung</flux:button>
+                            @elseif ($action->user_contribution)
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm
+                                    @if ($action->user_contribution_status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
+                                    @elseif ($action->user_contribution_status === 'offered') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
+                                    @elseif ($action->user_contribution_status === 'completed') bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-primary-blue
+                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                    {{ ucfirst(str_replace('_', ' ', $action->user_contribution_status)) }}
+                                </span>
                             @endif
-                        @elseif($canJoin)
-                            @if (Auth::user()->canJoinEcosystemsAndActions())
-                                <!-- Join and detail buttons for tamu and partisipan users -->
-                                <div class="flex space-x-2">
-                                    <flux:button href="{{ route('collective-action.join', $action) }}"
-                                        variant="primary" wire:navigate size="sm"
-                                        class="flex-1 bg-primary-blue hover:bg-primary-blue/90 dark:bg-secondary-green dark:hover:bg-secondary-green/90 border border-primary-blue hover:border-primary-blue/80 dark:border-secondary-green dark:hover:border-secondary-green/80 shadow-sm">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                        Bergabung
-                                    </flux:button>
-                                    <flux:button href="{{ route('collective-action.show', $action) }}"
-                                        variant="outline" size="sm" class="flex-1">
-                                        Lihat Detail
-                                    </flux:button>
-                                </div>
-                            @else
-                                <!-- Simple buttons for komunitas users who can only connect -->
-                                <div class="flex space-x-2">
-                                    <flux:button href="{{ route('collective-action.show', $action) }}"
-                                        variant="outline" size="sm" class="flex-1">
-                                        Lihat Detail
-                                    </flux:button>
-                                </div>
-                            @endif
-                        @elseif($userContribution)
-                            @php $status = $userContribution->status; @endphp
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                            @if ($status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                            @elseif($status === 'offered') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
-                            @elseif($status === 'completed') bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-primary-blue
-                            @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    @if ($status === 'accepted')
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    @elseif($status === 'offered')
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    @elseif($status === 'completed')
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    @else
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    @endif
-                                </svg>
-                                @if ($status === 'accepted')
-                                    Kontribusi Diterima
-                                @elseif($status === 'offered')
-                                    Menunggu Persetujuan
-                                @elseif($status === 'completed')
-                                    Kontribusi Selesai
-                                @else
-                                    Kontribusi Ditolak
-                                @endif
-                            </span>
-                        @else
                             <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
-                                size="sm" class="w-full">
-                                Lihat Detail
-                            </flux:button>
-                        @endif
+                                size="sm" class="flex-1">Lihat Detail</flux:button>
+                        </div>
                     </div>
                 </div>
             @empty
                 <div class="col-span-full text-center py-12">
-                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                        Belum Ada Aksi Kolektif
-                    </h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Belum Ada Aksi Kolektif</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
                         @if ($search || $selectedScale || $selectedScope || $selectedStatus)
                             Tidak ada aksi kolektif yang sesuai dengan filter Anda.
@@ -487,15 +375,12 @@
                         @endif
                     </p>
                     @if ($search || $selectedScale || $selectedScope || $selectedStatus)
-                        <flux:button wire:click="clearFilters" variant="outline">
-                            Hapus Filter
-                        </flux:button>
+                        <flux:button wire:click="clearFilters" variant="outline">Hapus Filter</flux:button>
                     @endif
                 </div>
             @endforelse
         </div>
 
-        <!-- Pagination -->
         @if ($collectiveActions->hasPages())
             <div class="mt-6">
                 {{ $collectiveActions->links() }}
