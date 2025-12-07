@@ -11,7 +11,7 @@
     @livewireScripts
 </head>
 
-<body class="min-h-screen bg-primary-light-blue block! dark:bg-gray-950">
+<body class="min-h-screen bg-primary-light-blue block! dark:bg-gray-950/80">
     {{-- Decorative SVG Elements --}}
     <x-decorative-svgs-subtle />
 

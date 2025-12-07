@@ -1,18 +1,18 @@
 @if($hasActiveSession)
-    <div class="bg-blue-50 dark:bg-green-700/20 rounded-xl p-4 border border-blue-200 dark:border-green-400/50">
+    <div class="bg-blue-50 dark:bg-green-700/20 rounded-xl p-4 border border-blue-200 dark:border-secondary-green">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-blue-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-teal-800 rounded-full flex items-center justify-center">
                     <flux:icon.cube class="w-5 h-5 text-blue-600 dark:text-green-300" />
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-blue-800 dark:text-green-200">
+                    <h3 class="text-sm font-semibold text-blue-800 dark:text-secondary-green">
                         Sesi Aktif
                     </h3>
-                    <p class="text-xs text-blue-700 dark:text-green-100 font-medium">
-                        {{ $activePasarKolaboraya->name }}
+                    <p class="text-xs text-blue-700 dark:text-slate-200 font-medium">
+                        {{ $activePasarKolaboraya['name'] }}
                     </p>
-                    <p class="text-xs text-blue-600 dark:text-green-200">
+                    <p class="text-xs text-blue-600 dark:text-secondary-green">
                         {{ $memberCount }} anggota aktif
                     </p>
                 </div>

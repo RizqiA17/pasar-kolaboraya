@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\CustomVerifyEmail;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\EmailVerificationNotification;
+use Cache;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,6 +79,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'ecosystem_builder_approved_at' => 'datetime',
             'qr_code_generated_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(){
+        static::saved(function ($user) {
+            Cache::tags("active_pasar_kolaboraya:{$user->id}")->flush();
+        });
+        static::deleted(function ($user) {
+            Cache::tags("active_pasar_kolaboraya:{$user->id}")->flush();
+        });
     }
 
     /**
@@ -785,7 +795,7 @@ public function getConnectionStatus($otherUserId)
     /**
      * Get the active Pasar Kolaboraya for this user
      */
-    public function activePasarKolaboraya(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function activePasarKolaboraya()
     {
         return $this->belongsTo(PasarKolaboraya::class, 'active_pasar_kolaboraya_id');
     }

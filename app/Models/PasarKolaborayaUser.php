@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -23,6 +24,15 @@ class PasarKolaborayaUser extends Model
         'joined_at' => 'datetime',
         'responded_at' => 'datetime',
     ];
+
+    protected static function booted(){
+        static::saved(function ($pasarKolaborayaUser) {
+            Cache::tags("active_pasar_kolaboraya_member_count:{$pasarKolaborayaUser->pasar_kolaboraya_id}")->flush();
+        });
+        static::deleted(function ($pasarKolaborayaUser) {
+            Cache::tags("active_pasar_kolaboraya_member_count:{$pasarKolaborayaUser->pasar_kolaboraya_id}")->flush();
+        });
+    }
 
     /**
      * Get the Pasar Kolaboraya
