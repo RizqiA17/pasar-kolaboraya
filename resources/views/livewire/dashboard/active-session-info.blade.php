@@ -1,5 +1,5 @@
 @if($hasActiveSession)
-    <div class="bg-blue-50 dark:bg-green-700/20 rounded-xl p-4 border border-blue-200 dark:border-secondary-green">
+    <div class="h-fit bg-blue-50 dark:bg-green-700/20 rounded-xl p-4 border border-blue-200 dark:border-secondary-green/50">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-blue-100 dark:bg-teal-800 rounded-full flex items-center justify-center">
@@ -9,7 +9,7 @@
                     <h3 class="text-sm font-semibold text-blue-800 dark:text-secondary-green">
                         Sesi Aktif
                     </h3>
-                    <p class="text-xs text-blue-700 dark:text-slate-200 font-medium">
+                    <p class="text-gray-700 dark:text-slate-300 text-xs">
                         {{ $activePasarKolaboraya['name'] }}
                     </p>
                     <p class="text-xs text-blue-600 dark:text-secondary-green">
@@ -28,7 +28,7 @@
         </div>
     </div>
 @else
-    <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-800">
+    <div class="h-fit bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-200 dark:border-accent-orange/50">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-amber-100 dark:bg-amber-800 rounded-full flex items-center justify-center">
                 <flux:icon.exclamation-triangle class="w-5 h-5 text-amber-600 dark:text-amber-300" />

@@ -354,12 +354,18 @@
                     <flux:menu.radio.group>
                         <div class="p-4">
                             <div class="flex items-center gap-3">
-                                <span class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-xl">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
-                                        {{ auth()->user()->initials() }}
+                                @if (auth()->user()->profile?->profile_photo)
+                                    <img class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-xl"
+                                        src="{{ asset('storage/' . auth()->user()->profile->profile_photo) }}"
+                                        alt="">
+                                @else
+                                    <span class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-xl">
+                                        <span
+                                            class="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg text-lg font-semibold">
+                                            {{ auth()->user()->initials() }}
+                                        </span>
                                     </span>
-                                </span>
+                                @endif
 
                                 <div class="grid flex-1 text-start">
                                     <span

@@ -14,9 +14,33 @@ use Illuminate\Support\Facades\Session;
 class Stats extends Component
 {
     public string $type;
+    public string $title;
+    public string $description;
+    public string $icon;
+    public string $iconColor;
+    public string $iconBgColor;
+    public string $link;
 
-    public function mount()
-    {
+    public function mount(
+
+        string $type,
+        string $title,
+        string $description,
+        string $icon,
+        string $iconColor,
+        string $iconBgColor,
+        string $link
+
+    ) {
+
+        $this->type = $type;
+        $this->title = $title;
+        $this->description = $description;
+        $this->icon = $icon;
+        $this->iconColor = $iconColor;
+        $this->iconBgColor = $iconBgColor;
+        $this->link = $link;
+
         // Ensure user is authenticated and session is valid
         if (!Auth::check()) {
             $this->redirect(route('login'));
