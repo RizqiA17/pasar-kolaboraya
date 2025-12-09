@@ -1,8 +1,8 @@
-<section class="w-full overflow-x-hidden">
+<section class="mx-auto max-w-7xl min-w-0">
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {{-- Tabs Navigation --}}
-    <div class="flex flex-wrap col-span-1 space-x-2 sm:space-x-4 mb-4">
+        <div class="flex flex-wrap col-span-1 space-x-2 sm:space-x-4 mb-4">
             <button wire:click="setTab('qr-scan')"
                 class="px-3 sm:px-4 py-2 font-medium text-sm sm:text-base
                     {{ $tab === 'qr-scan'
@@ -19,39 +19,14 @@
                 Koneksi
             </button>
         </div>
-
-        {{-- SearchBar hanya muncul di tab "list" --}}
-        <div class="col-span-1 w-full flex justify-end lg:justify-end mb-4 lg:mb-0">
-            @if ($tab === 'list')
-                <livewire:components.search-bar :placeholder="'Cari Koneksi...'" :model="\App\Models\Connection::class" :fields="['requester.name', 'receiver.name']"
-                    wire:model="results" searchFocus="list" />
-            @endif
-        </div>
     </div>
     {{-- Content Sections --}}
-    @if ($tab === 'requests')
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-3 sm:p-4">
-                <livewire:connections.requested-connection :isContent="true" />
-            </div>
-        </div>
-    @endif
-
     @if ($tab === 'qr-scan')
         <livewire:connections.qr-scanner />
     @endif
 
     @if ($tab === 'list')
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-3 sm:p-4 border-b border-neutral-100 dark:border-slate-700">
-                <h2 class="text-base sm:text-lg font-semibold">Semua Koneksi</h2>
-            </div>
-            @if ($searchResults)
-                <livewire:connections.list-connection />
-            @else
-                <livewire:connections.list-connection />
-            @endif
-        </div>
+        <livewire:connections.list-connection />
     @endif
     <script>
         window.addEventListener('update-page-title', event => {

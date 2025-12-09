@@ -33,7 +33,7 @@
     </div>
 
     {{-- Filter Box --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6">
         <h2 class="text-lg font-semibold mb-4">Filter Pencarian</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -82,7 +82,7 @@
     @endif
 
     {{-- Ecosystem List --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
         @forelse ($ecosystems as $e)
             @php
                 $userStatus = $user ? $e->getUserStatus($user) : null;
@@ -93,29 +93,29 @@
             @endphp
 
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
-                <div class="p-6">
+                class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+                <div class="p-6 flex-grow flex flex-col">
                     {{-- Title --}}
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2">
-                                {{ $e->ecosystem_title }}</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $e->organization_name }}</p>
-                        </div>
-                        <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 ml-4">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex items-start flex-col mb-4 gap-1">
+                        <h3 class="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2">
+                            {{ $e->ecosystem_title }}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ $e->organization_name }}</p>
+                        <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 w-full">
+                            <svg class="w-4! h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
-                            {{ $e->work_region }}
+                            <p class="w-full truncate">
+                                {{ $e->work_region }}
+                            </p>
                         </div>
                     </div>
 
                     {{-- Description --}}
                     @if ($e->description)
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ $e->description }}</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">{{ $e->description }}</p>
                     @endif
 
                     {{-- Issues --}}

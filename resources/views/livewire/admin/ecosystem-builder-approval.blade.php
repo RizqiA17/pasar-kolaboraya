@@ -6,7 +6,7 @@
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 overflow-hidden shadow rounded-lg">
             <div class="p-5">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -72,7 +72,7 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-6">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 shadow rounded-lg mb-6">
         <div class="px-4 py-5 sm:p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Users Table -->
-    <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-5 sm:px-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Daftar Ecosystem Builder</h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">Kelola status dan persetujuan Ecosystem
@@ -198,7 +198,7 @@
     @if ($showApprovalModal && $selectedUser)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50"
             wire:click="resetApprovalModal">
-            <div class="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-700 w-96 shadow-lg rounded-md bg-white dark:bg-gray-800"
+            <div class="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-700 w-96 shadow-lg rounded-md bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700"
                 wire:click.stop>
                 <div class="mt-3">
                     <div

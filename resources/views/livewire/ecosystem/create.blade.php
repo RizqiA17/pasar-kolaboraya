@@ -44,7 +44,7 @@
 
     <form wire:submit="createEcosystem" class="flex flex-col gap-6 max-w-6xl mx-auto">
         <!-- Form Section: Informasi Dasar -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Dasar</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,7 +77,7 @@
         </div>
 
         <!-- Form Section: Isu dan Peran -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Isu dan Peran</h2>
 
             <!-- Issues Addressed -->
@@ -113,7 +113,7 @@
                             <!-- Main Selector Input -->
                             <div class="relative">
                                 <input type="text" x-model="mainInput" placeholder="Pilih isu yang diperjuangkan..."
-                                    class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all duration-200"
+                                    class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all duration-200"
                                     readonly @click="open = !open">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
@@ -139,7 +139,7 @@
                                 <!-- Search Input -->
                                 <div class="relative">
                                     <input type="text" wire:model.live="issueSearch" placeholder="Cari isu..."
-                                        class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm"
+                                        class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm"
                                         @click.stop>
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none"
@@ -152,7 +152,7 @@
 
                                 <!-- Dropdown List -->
                                 <div
-                                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                     @foreach ($this->getFilteredInterests() as $interest)
                                         <div class="multi-option {{ in_array($interest->id, is_array($selectedIssues) ? $selectedIssues : []) ? 'bg-blue-50 dark:bg-blue-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
                                             @click.stop="toggleItem({{ $interest->id }})">
@@ -174,7 +174,7 @@
                                                 <div class="flex items-center"
                                                     x-show="selectedItems.includes({{ $interest->id }})">
                                                     <span
-                                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-primary-blue/50 dark:text-blue-200">
                                                         Terpilih
                                                     </span>
                                                 </div>
@@ -348,7 +348,7 @@
                                 <div class="relative">
                                     <input type="text" x-model="mainInput"
                                         placeholder="Pilih peran yang sudah ada..."
-                                        class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 cursor-pointer transition-all duration-200"
+                                        class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 cursor-pointer transition-all duration-200"
                                         readonly @click="open = !open">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
@@ -375,7 +375,7 @@
                                     <div class="relative">
                                         <input type="text" wire:model.live="roleSearch"
                                             placeholder="Cari peran..."
-                                            class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 shadow-sm"
+                                            class="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 shadow-sm"
                                             @click.stop>
                                         <div
                                             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -390,7 +390,7 @@
 
                                     <!-- Dropdown List -->
                                     <div
-                                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                         @foreach ($this->getFilteredRoles() as $role)
                                             <div class="multi-option {{ in_array($role->id, is_array($selectedExistingRoles) ? $selectedExistingRoles : []) ? 'bg-green-50 dark:bg-green-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
                                                 @click.stop="toggleItem({{ $role->id }})">
@@ -412,7 +412,7 @@
                                                     <div class="flex items-center"
                                                         x-show="selectedItems.includes({{ $role->id }})">
                                                         <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-secondary-green/50 dark:text-emerald-200">
                                                             Terpilih
                                                         </span>
                                                     </div>
@@ -509,7 +509,7 @@
 
                         <!-- Form Section: Deskripsi dan Ketentuan -->
                         <div
-                            class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border mb-6 border-gray-100 dark:border-gray-700">
+                            class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 shadow-sm border mb-6 border-gray-100 dark:border-gray-700">
                             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Deskripsi dan
                                 Ketentuan</h2>
 

@@ -8,7 +8,7 @@
             </div>
 
             <!-- QR Code Display -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
                 <div class="text-center w-full">
                     <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Scan QR Code untuk Bergabung</h2>
                     <div class="flex justify-center mb-3 sm:mb-4">

@@ -32,7 +32,7 @@
     </div>
 
     <!-- Tabs -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         @if (Auth::user()->isEcosystemBuilder())
             <div class="flex space-x-1 mb-6">
                 <button wire:click="$set('activeTab', 'actions')"
@@ -144,7 +144,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @forelse($collectiveActions as $action)
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md transition-shadow">
 
                     <!-- Header -->
                     <div class="p-6">
@@ -391,7 +391,7 @@
         <div class="space-y-4">
             @forelse($invitations as $invitation)
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md transition-shadow">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex-1">

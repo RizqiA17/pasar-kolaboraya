@@ -15,7 +15,7 @@
     </div>
 
     <!-- Invitation Details -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Detail Undangan
         </h2>
@@ -124,7 +124,7 @@
     </div>
 
     <!-- Response Form -->
-    <form wire:submit="respondToInvitation" class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm space-y-6">
+    <form wire:submit="respondToInvitation" class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm space-y-6">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
             Respons Undangan
         </h2>

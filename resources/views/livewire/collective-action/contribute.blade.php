@@ -16,7 +16,7 @@
     </div>
 
     <!-- Collective Action Info -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Detail Aksi Kolektif
         </h2>
@@ -111,7 +111,7 @@
 
     <!-- Contribution Form -->
     <div class="space-y-6">
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                 Form Kontribusi
             </h2>

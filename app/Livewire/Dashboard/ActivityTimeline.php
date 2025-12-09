@@ -61,8 +61,8 @@ class ActivityTimeline extends Component
                 ->map(function ($item) {
                     $item->type = 'ecosystem_contribution';
                     $contributionName = $item->contribution->name ?? 'Ekosistem';
-                    $item->title = 'Kontribusi ' . $contributionName . ' - ' . $item->ecosystem->ecosystem_title;
-                    $item->ecosystem_title = $item->ecosystem->ecosystem_title;
+                    $item->title = $item->ecosystem->ecosystem_title;
+                    $item->description = $contributionName ? 'Kontribusi ' . $contributionName : $item->ecosystem->description;
                     return $item;
                 });
 
@@ -76,7 +76,8 @@ class ActivityTimeline extends Component
                 ->map(function ($item) {
                     $item->type = 'collective_action_contribution';
                     $contributionName = $item->contribution->name ?? 'Aksi Kolektif';
-                    $item->title = 'Kontribusi ' . $contributionName . ' - ' . $item->collectiveAction->title;
+                    $item->title = $item->collectiveAction->title;
+                    $item->description = $contributionName ? 'Kontribusi ' . $contributionName : $item->collectiveAction->description;
                     return $item;
                 });
 

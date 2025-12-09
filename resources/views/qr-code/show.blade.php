@@ -10,7 +10,7 @@
 
             <!-- QR Code Display -->
             <div
-                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 text-center w-full overflow-hidden">
+                class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 text-center w-full overflow-hidden">
                 <!-- QR Code Display -->
                 <div class="mb-4 sm:mb-6">
                     <div class="flex justify-center mb-3 sm:mb-4">

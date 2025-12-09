@@ -167,7 +167,7 @@
 
     <!-- Status Management (Admin Only) -->
     @if ($collectiveAction->canUserManage(Auth::user()))
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Kelola Status Aksi</h2>
             <div class="flex flex-wrap gap-3">
                 @foreach (['planning' => 'Perencanaan', 'active' => 'Aktif', 'completed' => 'Selesai', 'cancelled' => 'Dibatalkan'] as $status => $label)
@@ -192,7 +192,7 @@
 
     <!-- Invitation Management (Admin Only) -->
     @if ($collectiveAction->canUserManage(Auth::user()))
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Undang Ekosistem Lain</h2>
                 @if (count($available_ecosystems) > 0)
@@ -657,7 +657,7 @@
     <!-- Action Overview -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Admin Count -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center">
                 <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
                     <svg class="w-6 h-6 text-primary-blue dark:text-blue-400" fill="none" stroke="currentColor"
@@ -674,7 +674,7 @@
         </div>
 
         <!-- Member Count -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center">
                 <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
                     <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
@@ -691,7 +691,7 @@
         </div>
 
         <!-- Contributor Count -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center">
                 <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
                     <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor"
@@ -709,7 +709,7 @@
         </div>
 
         <!-- Pending Contributions -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center">
                 <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                     <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor"
@@ -727,7 +727,7 @@
         </div>
 
         <!-- Accepted Contributions -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <div class="flex items-center">
                 <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
                     <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor"
@@ -750,7 +750,7 @@
         $analyticsData = $collectiveAction->getCollectiveActionsAnalytics();
     @endphp
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Aksi Kolektif</h2>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -791,7 +791,7 @@
     </div>
 
     <!-- Action Quality Metrics (Pilar III - Aksi Kolektif) -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Kualitas Aksi Kolektif</h2>
             <span
@@ -978,7 +978,7 @@
     <!-- Action Details -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Basic Information -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Aksi</h2>
 
             <div class="space-y-4">
@@ -1151,7 +1151,7 @@
         </div>
 
         <!-- Participating Ecosystems -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ekosistem yang Berpartisipasi</h2>
 
             @if ($participatingEcosystems->count() > 0)
@@ -1193,7 +1193,7 @@
     </div>
 
     <!-- Contribution Section -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Kontribusi</h2>
             <div class="flex gap-3">
@@ -1632,7 +1632,7 @@
     <!-- Members Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Admin Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Admin</h2>
 
             @if ($adminUsers->count() > 0)
@@ -1670,7 +1670,7 @@
         </div>
 
         <!-- Member Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                 <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
                 <div class="flex items-center gap-3">
@@ -1733,7 +1733,7 @@
         </div>
 
         <!-- Contributor Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                 <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontributor</h2>
                 <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
@@ -2581,7 +2581,7 @@
                 const modal = document.createElement('div');
                 modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
                 modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg p-6 max-w-md mx-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bagikan Lokasi</h3>
                     <textarea readonly class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" rows="4">${text}</textarea>
                     <div class="flex gap-2 mt-4">

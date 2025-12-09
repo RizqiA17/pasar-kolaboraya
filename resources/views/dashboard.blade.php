@@ -206,32 +206,7 @@
                         <livewire:dashboard.profile-progress />
 
                         <!-- Activity Section - Consistent spacing and layout -->
-                        <div
-                            class="relative overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700">
-                            <div class="absolute top-0 left-0 w-20 h-20 opacity-10">
-                                <img src="{{ Storage::url('web/ASET VISUAL/WEBP/4.webp') }}" alt=""
-                                    class="w-full h-full object-contain">
-                            </div>
-
-                            <div class="relative z-10 p-6">
-                                <div class="flex items-center justify-between mb-4 gap-2">
-                                    <div>
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-slate-200">Aktivitas
-                                            Terbaru</h3>
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Lihat apa yang terjadi di
-                                            komunitas Anda</p>
-                                    </div>
-                                    <div
-                                        class="w-12 h-12 min-w-12 bg-primary-blue rounded-lg flex items-center justify-center shadow-lg">
-                                        <flux:icon.clock class="size-6 text-white" />
-                                    </div>
-                                </div>
-
-                                <div class="relative">
-                                    <livewire:dashboard.activity-timeline />
-                                </div>
-                            </div>
-                        </div>
+                        <livewire:dashboard.activity-timeline />
 
                     </div>
 

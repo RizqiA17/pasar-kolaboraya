@@ -6,26 +6,26 @@
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Total User</div>
             <div class="text-2xl font-semibold text-primary-blue dark:text-secondary-green">{{ $stats['total'] }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Menunggu</div>
             <div class="text-2xl font-semibold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Disetujui</div>
             <div class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ $stats['approved'] }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Ditolak</div>
             <div class="text-2xl font-semibold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow mb-6">
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Users List -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green">Daftar User</h3>
         </div>
@@ -83,7 +83,7 @@
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($users as $user)
                         <tr>
                             <td class="px-6 py-4">
@@ -216,8 +216,8 @@
                 <div class="fixed inset-0 bg-black/75 transition-opacity -z-10" wire:click="resetApprovalModal"></div>
 
                 <div
-                    class="inline-block bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full">
-                    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    class="inline-block bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full">
+                    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-4">
                             @if ($selectedUser->trashed())
                                 Detail User (Dihapus): {{ $selectedUser->name }}
@@ -393,7 +393,7 @@
                     @if ($selectedUser->trashed())
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="resetApprovalModal"
-                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Tutup
                             </button>
                         </div>
@@ -408,14 +408,14 @@
                                 Tolak
                             </button>
                             <button wire:click="resetApprovalModal"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Batal
                             </button>
                         </div>
                     @else
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="resetApprovalModal"
-                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Tutup
                             </button>
                         </div>

@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <!-- Header with actions -->
                     <div class="flex justify-between items-center mb-6">
@@ -29,7 +29,7 @@
                         <div class="space-y-4">
                             @foreach($notifications as $notification)
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 
-                            {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-gray-800 border-l-4 border-l-blue-500' }}">
+                            {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 border-l-4 border-l-blue-500' }}">
                                     <div class="flex items-start justify-between">
                                         <div class="flex-1">
                                             <div class="flex items-center space-x-2">

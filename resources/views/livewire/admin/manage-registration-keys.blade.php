@@ -19,30 +19,30 @@
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Total Kode</div>
             <div class="text-2xl font-semibold text-primary-blue dark:text-secondary-green">{{ $stats['total'] ?? 0 }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Aktif</div>
             <div class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ $stats['active'] ?? 0 }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Partisipan</div>
             <div class="text-2xl font-semibold text-purple-600 dark:text-purple-400">{{ $stats['partisipan'] ?? 0 }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Tamu</div>
             <div class="text-2xl font-semibold text-yellow-600 dark:text-yellow-400">{{ $stats['tamu'] ?? 0 }}</div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow p-6">
             <div class="text-sm font-medium text-gray-500 dark:text-slate-400">Komunitas</div>
             <div class="text-2xl font-semibold text-indigo-600 dark:text-indigo-400">{{ $stats['komunitas'] ?? 0 }}</div>
         </div>
     </div>
 
     <!-- Keys List -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green">Daftar Kode Registrasi</h3>
         </div>
@@ -67,7 +67,7 @@
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($keys as $key)
                         <tr>
                             <td class="px-6 py-4">
@@ -146,9 +146,9 @@
                 <div class="fixed inset-0 bg-black/75 transition-opacity -z-10" wire:click="closeModals"></div>
 
                 <div
-                    class="inline-block bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                    class="inline-block bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
                     <form wire:submit="createKey">
-                        <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-4">Buat Kode Registrasi Baru
                             </h3>
 
@@ -236,7 +236,7 @@
                                 Buat Kode
                             </button>
                             <button type="button" wire:click="closeModals"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Batal
                             </button>
                         </div>
@@ -252,9 +252,9 @@
                 <div class="fixed inset-0 bg-black/75 transition-opacity -z-10" wire:click="closeModals"></div>
 
                 <div
-                    class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    class="inline-block align-bottom bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <form wire:submit="updateKey">
-                        <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-4">Edit Kode Registrasi
                             </h3>
 
@@ -339,7 +339,7 @@
                                 Simpan Perubahan
                             </button>
                             <button type="button" wire:click="closeModals"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Batal
                             </button>
                         </div>

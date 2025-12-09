@@ -27,27 +27,27 @@
                 <div class="flex items-center">
                     @if ($qualityLevel === 'Excellent')
                         <span
-                            class="inline-flex items-center rounded-full bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 text-sm font-bold text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-200 border border-green-200 dark:border-green-700">
+                            class="inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-bold text-blue-800 dark:bg-primary-blue/50 dark:text-blue-200">
                             Luar Biasa
                         </span>
                     @elseif($qualityLevel === 'Good')
                         <span
-                            class="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 text-sm font-bold text-blue-800 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-700">
+                            class="inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-sm font-bold text-emerald-800 dark:bg-secondary-green/50 dark:text-emerald-200">
                             Baik
                         </span>
                     @elseif($qualityLevel === 'Fair')
                         <span
-                            class="inline-flex items-center rounded-full bg-gradient-to-r from-yellow-100 to-orange-100 px-4 py-2 text-sm font-bold text-yellow-800 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-700">
+                            class="inline-flex items-center rounded-full bg-yellow-100 px-4 py-2 text-sm font-bold text-yellow-800 dark:bg-secondary-yellow/50 dark:text-yellow-200">
                             Cukup
                         </span>
                     @elseif($qualityLevel === 'Poor')
                         <span
-                            class="inline-flex items-center rounded-full bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 text-sm font-bold text-orange-800 dark:from-orange-900/30 dark:to-red-900/30 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
+                            class="inline-flex items-center rounded-full bg-orange-100 px-4 py-2 text-sm font-bold text-orange-800 dark:bg-accent-orange/50 dark:text-orange-200">
                             Kurang
                         </span>
                     @else
                         <span
-                            class="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-bold text-red-800 dark:bg-red-600/40 dark:text-red-200">
+                            class="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-bold text-red-800 dark:bg-accent-red/50 dark:text-red-200">
                             Sangat Kurang
                         </span>
                     @endif
@@ -150,56 +150,45 @@
             <h4 class="text-sm font-semibold text-accent-orange mb-3 flex items-center">
                 Rekomendasi Peningkatan Keragaman Peran
             </h4>
-            <div class="space-y-2 text-sm text-amber-700 dark:text-amber-500">
+            <ul class="list-disc ml-5 space-y-1 text-sm text-amber-700 dark:text-amber-500">
                 @if ($diversityScore < 20)
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    <li>
                         <span>Koneksi dengan pengguna dari berbagai peran untuk meningkatkan cakupan peran</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
-                        <span>Target minimal 5-10 peran berbeda dari {{ $totalRolesInDatabase }} peran yang
-                            tersedia</span>
-                    </div>
+                    </li>
+                    <li>
+                        <span>Target minimal 5-10 peran berbeda dari {{ $totalRolesInDatabase }} peran yang tersedia</span>
+                        </li>
                 @elseif($diversityScore < 40)
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    <li>
                         <span>Terus perluas koneksi dengan peran yang belum ada dalam jaringan</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    </li>
+                    <li>
                         <span>Fokus pada peran yang berbeda dari latar belakang profesional Anda</span>
-                    </div>
+                    </li>
                 @elseif($diversityScore < 60)
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    <li>
                         <span>Jaringan Anda sudah cukup beragam, pertahankan keseimbangan peran</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    </li>
+                    <li>
                         <span>Koneksi dengan peran yang jarang ditemukan untuk meningkatkan cakupan</span>
-                    </div>
+                    </li>
                 @else
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    <li>
                         <span>Excellent! Jaringan Anda memiliki cakupan peran yang sangat baik</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    </li>
+                    <li>
                         <span>Pertahankan keseimbangan dan terus kembangkan koneksi yang bermakna</span>
-                    </div>
+                    </li>
                 @endif
                 @if ($uniqueRolesCount < 5)
-                    <div class="flex items-start">
-                        <span class="mr-2">•</span>
+                    <li>
                         <span>Usahakan memiliki minimal 5 peran berbeda dalam jaringan koneksi</span>
-                    </div>
+                    </li>
                 @endif
-                <div class="flex items-start">
-                    <span class="mr-2">•</span>
+                <li>
                     <span>Total {{ $totalRolesInDatabase }} peran tersedia di platform</span>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -67,7 +67,7 @@
             @endif
 
             <!-- Scanner Section -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
                 <!-- Manual Input -->
                 <div class="mb-4 sm:mb-6">
                     <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">

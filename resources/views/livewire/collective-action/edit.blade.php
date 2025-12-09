@@ -67,7 +67,7 @@
 
     <form wire:submit="updateAction" class="flex flex-col gap-6 w-full max-w-6xl mx-auto">
         <!-- Form Section: Informasi Dasar -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 w-full shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 w-full shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Dasar</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -153,7 +153,7 @@
         </div>
 
         <!-- Form Section: Waktu dan Tempat -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700"
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700"
             x-data="{
                 map: null,
                 marker: null,
@@ -416,7 +416,7 @@
                                 @focus="if(searchResults.length > 0) showSuggestions = true"
                                 @blur="setTimeout(() => showSuggestions = false, 200)"
                                 placeholder="Contoh: Jakarta, Bandung, atau Online - ketik untuk mencari"
-                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
+                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                             >
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,7 +443,7 @@
                              x-transition:enter-start="opacity-0 transform -translate-y-2"
                              x-transition:enter-end="opacity-100 transform translate-y-0"
                              class="absolute left-0 right-0 z-10 mt-2">
-                            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                 <template x-for="(result, index) in searchResults" :key="index">
                                     <div @click="selectLocation(result)" 
                                          class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
@@ -484,7 +484,7 @@
         </div>
 
         <!-- Form Section: Sumber Daya yang Dibutuhkan -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Sumber Daya yang Dibutuhkan
             </h2>
@@ -521,7 +521,7 @@
                         <!-- Main Selector Input -->
                         <div class="relative">
                             <input type="text" x-model="mainInput" placeholder="Pilih sumber daya yang diperlukan..."
-                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all duration-200"
+                                class="w-full pl-10 pr-12 py-3 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all duration-200"
                                 readonly @click="open = !open">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
@@ -544,7 +544,7 @@
                             x-transition:enter-start="opacity-0 transform -translate-y-2"
                             x-transition:enter-end="opacity-100 transform translate-y-0"
                             class="absolute left-0 right-0 z-10 mt-2">
-                            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($resourceTypes as $key => $label)
                                     <div class="multi-option {{ in_array($key, is_array($required_resources) ? $required_resources : []) ? 'bg-blue-50 dark:bg-blue-900/20' : '' }} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200"
                                         @click.stop="toggleItem('{{ $key }}')">
@@ -566,7 +566,7 @@
                                             <div class="flex items-center"
                                                 x-show="selectedItems.includes('{{ $key }}')">
                                                 <span
-                                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-primary-blue/50 dark:text-blue-200">
                                                     Terpilih
                                                 </span>
                                             </div>
@@ -663,7 +663,7 @@
         </div>
 
         <!-- Form Section: Syarat Kolaborasi -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Syarat Kolaborasi
             </h2>

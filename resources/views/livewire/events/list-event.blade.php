@@ -86,7 +86,7 @@
     <!-- Daftar Aksi -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($events as $event)
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 dark:border-gray-700 group">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 dark:border-gray-700 group">
                 <a href="{{ route('events.show', $event) }}" class="block">
                     <div class="relative">
                         @if ($event->banner)
@@ -216,7 +216,7 @@
     <!-- Pagination -->
     @if($events->hasPages())
         <div class="mt-8 flex justify-center">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-2">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-2">
                 {{ $events->links() }}
             </div>
         </div>

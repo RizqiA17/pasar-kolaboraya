@@ -21,7 +21,7 @@
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <div class="text-center">
                     <!-- QR Code -->
                     <div class="flex justify-center mb-6">

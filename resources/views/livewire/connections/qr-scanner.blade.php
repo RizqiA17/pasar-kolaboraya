@@ -3,11 +3,12 @@
         <div class="max-w-4xl mx-auto w-full">
             {{-- Header --}}
             <div class="text-center mb-6 sm:mb-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Kode Koneksi</h1>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Berikan kode koneksi untuk terhubung
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-200 mb-2">Kode Koneksi</h1>
+                <p class="text-sm sm:text-base text-gray-700 dark:text-slate-300">Berikan kode koneksi untuk terhubung
                     dengan user
                     lain</p>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-4">Proses koneksi membutuhkan persetujuan
+                <p class="text-sm sm:text-base text-gray-500 dark:text-slate-400 mt-4">Proses koneksi membutuhkan
+                    persetujuan
                     dari kedua belah pihak. Setelah Anda menyetujui permintaan koneksi, pengguna tersebut akan dapat
                     melihat informasi yang Anda pilih untuk ditampilkan di halaman profil.</p>
             </div>
@@ -29,9 +30,9 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 w-full">
                 {{-- My QR Code Section --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
                     <div class="text-center w-full">
-                        <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-slate-200">
                             @if ($connectionStatus === 'idle')
                                 Kode Koneksi Anda
                             @elseif($connectionStatus === 'waiting_for_response')
@@ -52,7 +53,7 @@
                                 </div>
                             </div> --}}
                             <p
-                                class="text-md sm:text-lg text-bold text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 break-all px-2 text-center">
+                                class="text-xl text-bold text-gray-700 dark:text-slate-300 my-3 sm:my-4 break-all px-2 text-center">
                                 {{ $myQrCode }}
                             </p>
                         @endif
@@ -121,7 +122,7 @@
                 </div>
 
                 {{-- Scanner Section --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full overflow-hidden">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
                     <div class="text-center w-full">
                         <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                             Masukkan Kode Koneksi
@@ -184,30 +185,30 @@
 
             {{-- Instructions --}}
             <div
-                class="mt-6 sm:mt-8 bg-blue-50 dark:bg-green-900/20 border border-blue-200 dark:border-green-800/30 rounded-xl p-4 sm:p-6 w-full overflow-hidden">
-                <h3 class="text-sm sm:text-lg font-semibold text-blue-900 dark:text-secondary-green mb-2 sm:mb-3">
+                class="mt-6 sm:mt-8 bg-white dark:bg-slate-900 shadow-lg rounded-xl p-4 sm:p-6 w-full overflow-hidden">
+                <h3 class="text-sm sm:text-lg font-semibold text-primary-blue dark:text-secondary-green mb-2 sm:mb-3">
                     Cara Menggunakan Kode Koneksi:
                 </h3>
                 <div class="space-y-3 sm:space-y-4">
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-blue-200 dark:border-blue-700">
-                        <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                        class="bg-neutral-50 dark:bg-zinc-800 shadow-lg rounded-lg p-3 sm:p-4">
+                        <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-2">
                             Langkah 1: Inisiator (User A)
                         </h4>
                         <ol
-                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-blue-800 dark:text-teal-100">
+                            class="list-decimal ml-5 space-y-1 text-sm text-gray-700 dark:text-slate-200">
                             <li>Klik "Buat Kode Baru" untuk membuat Kode Koneksi</li>
                             <li>Tunjukkan Kode Koneksi kepada User B untuk dimasukkan</li>
                         </ol>
                     </div>
 
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-green-200 dark:border-green-700">
-                        <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100 mb-2">
+                        class="bg-neutral-50 dark:bg-zinc-800 shadow-lg rounded-lg p-3 sm:p-4">
+                        <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-2">
                             Langkah 2: Responder (User B)
                         </h4>
                         <ol
-                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-green-800 dark:text-green-100">
+                            class="list-decimal ml-5 space-y-1 text-sm text-gray-700 dark:text-slate-200">
                             <li>Masukkan Kode Koneksi User A ke dalam input field</li>
                             <li>Sistem akan otomatis membuat Kode Response baru</li>
                             <li>Tunjukkan Kode Response kepada User A untuk dimasukkan</li>
@@ -215,12 +216,12 @@
                     </div>
 
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-purple-200 dark:border-purple-700">
-                        <h4 class="text-sm sm:text-base font-semibold text-purple-900 dark:text-purple-100 mb-2">
+                        class="bg-neutral-50 dark:bg-zinc-800 shadow-lg rounded-lg p-3 sm:p-4">
+                        <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-2">
                             Langkah 3: Penyelesaian (User A)
                         </h4>
                         <ol
-                            class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-purple-800 dark:text-purple-100">
+                            class="list-decimal ml-5 space-y-1 text-sm text-gray-700 dark:text-slate-200">
                             <li>Masukkan Kode Response dari User B ke dalam input field</li>
                             <li>Koneksi berhasil dibuat dan kedua user terhubung!</li>
                         </ol>
@@ -228,12 +229,12 @@
                 </div>
 
                 <div
-                    class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
-                    <p class="text-xs sm:text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>💡 Tips Penting:</strong>
+                    class="mt-4 p-3 bg-orange-50 dark:bg-orange-800/20 rounded-lg">
+                    <p class="text-sm font-semibold text-accent-orange">
+                        <strong>Tips Penting:</strong>
                     </p>
                     <ul
-                        class="list-disc list-inside space-y-1 text-xs sm:text-sm text-yellow-700 dark:text-yellow-300 mt-2">
+                        class="list-disc ml-5 space-y-1 text-sm text-amber-700 dark:text-amber-500 mt-2">
                         <li>Kode Koneksi berlaku selama 5 menit dan akan otomatis diperbarui</li>
                         <li>Jika Kode tidak valid, tekan "Buat Kode Baru" untuk membuat Kode baru</li>
                         <li>Anda tidak dapat memasukkan Kode Koneksi sendiri</li>

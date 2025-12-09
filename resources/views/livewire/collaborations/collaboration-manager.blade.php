@@ -4,7 +4,7 @@
     $isFormDisabled = !$collaborationsEnabled && !$isSuperAdmin;
 @endphp
 
-<div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+<div class="p-6 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow-lg">
     <!-- Header -->
     <div class="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center mb-8">
         <div class="col-span-1">
@@ -461,7 +461,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg">
                                     <div
                                         class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mr-3">
                                         <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none"
@@ -576,7 +576,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg">
                                     <div
                                         class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mr-3">
                                         <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none"
@@ -727,7 +727,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                <div class="flex items-center mb-4 p-3 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg">
                                     <div
                                         class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mr-3">
                                         <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none"
@@ -857,7 +857,7 @@
     <!-- Invite Users Form -->
     @if ($showInviteForm && $selectedCollaboration)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
+            <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 p-6 rounded-lg max-w-md w-full mx-4">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
                     Undang User ke "{{ $selectedCollaboration->title }}"
                 </h3>

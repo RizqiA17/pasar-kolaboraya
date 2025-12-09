@@ -445,7 +445,7 @@
                     $analyticsData = $analyticsData ?? $ecosystem->getEcosystemAnalytics();
                 @endphp
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm mt-6">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analisis Kontribusi Ekosistem
                     </h2>
 
@@ -489,7 +489,7 @@
                 <!-- Members and Contributions Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Members Section -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+                    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 shadow-sm">
                         <div
                             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Anggota</h2>
@@ -614,7 +614,7 @@
                     </div>
 
                     <!-- Contributions Section -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-sm">
+                    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-4 sm:p-6 shadow-sm">
                         <div
                             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
                             <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Kontribusi
@@ -1127,7 +1127,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 dark:text-slate-400">Kualitas Ekosistem:</span>
                                     <span
-                                        class="px-2 py-1 rounded-full text-xs font-medium {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') }}">
+                                        class="px-2 py-1 rounded-full text-xs font-medium {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'bg-emerald-100 text-emerald-800 dark:bg-secondary-green/50 dark:text-emerald-200' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'bg-yellow-100 text-yellow-800 dark:bg-secondary-yellow/50 dark:text-yellow-200' : 'bg-red-100 text-red-800 dark:bg-accent-red/50 dark:text-red-200') }}">
                                         {{ $ecosystemQuality['ekosistem_score'] }}% -
                                         {{ $ecosystemQuality['ekosistem_score'] >= 80 ? 'Sangat Baik' : ($ecosystemQuality['ekosistem_score'] >= 60 ? 'Baik' : 'Perlu Ditingkatkan') }}
                                     </span>

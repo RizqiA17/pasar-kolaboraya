@@ -1,6 +1,6 @@
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Header -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <div class="flex items-center mb-4">
             <a href="{{ route('ecosystem.browse') }}"
                 class="mr-4 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
@@ -26,7 +26,7 @@
     </div>
 
     <!-- Join Form -->
-    <form wire:submit="joinEcosystem" class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm space-y-6">
+    <form wire:submit="joinEcosystem" class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm space-y-6">
 
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
             Formulir Bergabung
@@ -70,7 +70,7 @@
     </form>
 
     <!-- Ecosystem Details -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Detail Ekosistem
         </h2>

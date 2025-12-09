@@ -1,5 +1,4 @@
-<div
-    class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 p-8">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 p-8">
     {{-- SVG Accent Elements --}}
     <div class="absolute top-0 left-0 w-32 h-32 opacity-10">
         <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt="" class="w-full h-full object-contain">
@@ -9,7 +8,7 @@
     </div>
 
     <div class="relative z-10">
-        <div class="flex items-center justify-between mb-6 relative">
+        <div class="flex items-center justify-between mb-6 relative w-full min-w-0">
             <div>
                 <h3 class="text-xl font-bold text-gray-900 dark:text-slate-200">Ringkasan Profil</h3>
                 <p class="text-gray-700 dark:text-slate-300 text-sm">Informasi tentang Anda</p>
@@ -64,7 +63,7 @@
                 @endif
 
                 @if ($profile->vision)
-                    <div class="flex items-start">
+                    <div class="flex items-start w-full min-w-0">
                         <div
                             class="min-w-10! h-10! bg-accent-red rounded-xl flex items-center justify-center mr-4 mt-1">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,16 +71,21 @@
                                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <div class="text-sm font-bold text-accent-red">Visi/Misi</div>
-                            <div class="text-gray-700 dark:text-slate-200 mb-3 text-xs">
-                                {{ Str::limit($profile->vision, 100) }}</div>
+                            <div class="text-gray-700 dark:text-slate-200 text-xs line-clamp-2 w-full min-w-0">
+                                {{ $profile->vision }}</div>
                         </div>
                     </div>
                 @endif
             </div>
 
-            <div class="border-t border-gray-200 dark:border-gray-700 my-6"></div>
+            @if (
+                ($allSkills && $allSkills->count() > 0) ||
+                    ($allInterests && $allInterests->count() > 0) ||
+                    ($profile->social_media && is_array($profile->social_media) && count($profile->social_media) > 0))
+                <div class="border-t border-gray-200 dark:border-gray-700 my-6"></div>
+            @endif
 
             <!-- Skills with Enhanced Design -->
             @if ($allSkills && $allSkills->count() > 0)
@@ -187,6 +191,9 @@
                     <div class="flex flex-col gap-3">
                         @foreach ($profile->formatted_social_media as $platform => $url)
                             @if ($url && !empty($url))
+                            @php
+                                $url
+                            @endphp
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3">
 
@@ -282,12 +289,12 @@
                                         <div class="text-xs font-medium text-gray-900 dark:text-slate-300">
                                             {{ ucfirst($platform) }}</div>
                                         <div class="text-sm font-semibold text-gray-900 dark:text-slate-200">
-                                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
+                                            <a href="{{ strtolower($platform) == 'website' ? $url : str_replace('@', '', $url) }}" target="_blank" rel="noopener noreferrer"
                                                 class="hover:underline">
                                                 @if (strtolower($platform) == 'website')
-                                                    {{ $url }} 
+                                                    {{ $url }}
                                                 @else
-                                                    &#64;{{ last(explode('/', trim(parse_url($url, PHP_URL_PATH), '/'))) }}
+                                                    &#64;{{ ltrim(last(explode('/', trim(parse_url($url, PHP_URL_PATH), '/'))), '@') }}
                                                 @endif
                                             </a>
                                         </div>
@@ -295,45 +302,6 @@
                                 </div>
                             @endif
                         @endforeach
-                    </div>
-                </div>
-            @endif
-
-            <!-- Location with Enhanced Design -->
-            @if ($profile->location)
-                <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-4 flex items-center">
-                        <div
-                            class="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center mr-3">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        Lokasi
-                    </h4>
-                    <div
-                        class="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border border-orange-100 dark:border-orange-800">
-                        <div
-                            class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-4">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium text-orange-700 dark:text-orange-300">Lokasi</div>
-                            <div class="text-lg font-semibold text-orange-900 dark:text-orange-100">
-                                {{ $profile->location }}</div>
-                        </div>
                     </div>
                 </div>
             @endif

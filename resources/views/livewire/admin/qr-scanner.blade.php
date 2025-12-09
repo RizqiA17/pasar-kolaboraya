@@ -28,7 +28,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Scanner Section -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow-md p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Scanner QR Code</h2>
                     
                     <!-- Manual Input -->
@@ -111,7 +111,7 @@
                 </div>
 
                 <!-- Validation Result -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow-md p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Hasil Validasi</h2>
                     
                     @if ($validationResult)
@@ -206,7 +206,7 @@
 
             <!-- Scan History -->
             @if ($showHistory && count($scanHistory) > 0)
-                <div class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="mt-8 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Riwayat Scan</h2>
                         <button 
@@ -229,7 +229,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pesan</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach ($scanHistory as $scan)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $scan['timestamp'] }}</td>

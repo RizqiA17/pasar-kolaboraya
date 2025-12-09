@@ -41,11 +41,11 @@
                 @elseif($completionPercentage >= 70)
                     <div class="flex items-center rounded-2xl">
                         <div
-                            class="w-12 min-w-12 h-12 text-xl font-bold bg-yellow-400 rounded-full flex items-center justify-center mr-4">
+                            class="w-12 min-w-12 h-12 text-xl font-bold bg-secondary-yellow rounded-full flex items-center justify-center mr-4">
                             <flux:icon.sparkles class="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <div class="text-lg font-bold text-yellow-400">Hampir Sempurna!</div>
+                            <div class="text-lg font-bold text-secondary-yellow">Hampir Sempurna!</div>
                             <div class="text-gray-700 dark:text-slate-300 text-sm">Tinggal sedikit lagi untuk profil
                                 lengkap
                             </div>
@@ -65,14 +65,14 @@
                     </div>
                 @else
                     <div
-                        class="flex items-center p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-700 rounded-2xl">
+                        class="flex items-center">
                         <div
-                            class="w-12 min-w-12 h-12 text-xl font-bold bg-gradient-to-br from-red-400 to-pink-500 rounded-full flex items-center justify-center mr-4">
+                            class="w-12 min-w-12 h-12 text-xl font-bold bg-accent-red rounded-full flex items-center justify-center mr-4">
                             <flux:icon.exclamation-triangle class="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <div class="text-lg font-bold text-red-800 dark:text-red-200">Ayo Mulai!</div>
-                            <div class="text-red-600 dark:text-red-300">Lengkapi profil untuk pengalaman terbaik</div>
+                            <div class="text-lg font-bold text-accent-red">Ayo Mulai!</div>
+                            <div class="text-gray-700 dark:text-slate-300 text-sm">Lengkapi profil untuk pengalaman terbaik</div>
                         </div>
                     </div>
                 @endif
@@ -80,7 +80,7 @@
                 <div class="flex flex-col items-center">
                     <div class="text-secondary-green text-lg font-bold">
                         <span
-                            class="@if ($completionPercentage >= 100) text-secondary-green @elseif ($completionPercentage >= 70) text-yellow-400 @elseif($completionPercentage >= 40) text-accent-orange @endif">{{ $filledFields }}</span>/{{ $totalFields }}
+                            class="@if ($completionPercentage >= 100) text-secondary-green @elseif ($completionPercentage >= 70) text-secondary-yellow @elseif($completionPercentage >= 40) text-accent-orange @endif">{{ $filledFields }}</span>/{{ $totalFields }}
                     </div>
                     <div class="text-sm text-gray-700 dark:text-slate-300">Field Terisi</div>
                 </div>
@@ -94,7 +94,7 @@
                 <span class="text-lg font-semibold text-gray-700 dark:text-slate-200">Progress</span>
                 <div class="flex items-center space-x-2">
                     <span
-                        class="text-lg font-semibold @if ($completionPercentage >= 100) text-secondary-green @elseif($completionPercentage >= 70) text-yellow-400 @elseif($completionPercentage >= 40) text-accent-orange @endif">
+                        class="text-lg font-semibold @if ($completionPercentage >= 100) text-secondary-green @elseif($completionPercentage >= 70) text-secondary-yellow @elseif($completionPercentage >= 40) text-accent-orange @endif">
                         {{ $completionPercentage }}%
                     </span>
                     @if ($completionPercentage >= 100)
@@ -111,7 +111,7 @@
 
             <div class="relative">
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
-                    <div class="h-4 rounded-full transition-all duration-1000 ease-out relative overflow-hidden {{ $completionPercentage >= 100 ? 'bg-secondary-green' : ($completionPercentage >= 70 ? 'bg-gradient-to-r from-accent-orange to-yellow-400' : ($completionPercentage >= 40 ? 'bg-gradient-to-r from-accent-red via-orange-700 to-accent-orange' : 'bg-accent-red')) }}"
+                    <div class="h-4 rounded-full transition-all duration-1000 ease-out relative overflow-hidden {{ $completionPercentage >= 100 ? 'bg-secondary-green' : ($completionPercentage >= 70 ? 'bg-gradient-to-r from-accent-orange to-secondary-yellow' : ($completionPercentage >= 40 ? 'bg-gradient-to-r from-accent-red via-orange-700 to-accent-orange' : 'bg-accent-red')) }}"
                         style="width: {{ $completionPercentage }}%">
                         <div
                             class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse">

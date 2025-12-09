@@ -18,7 +18,7 @@
 <body class="h-full bg-gray-50 dark:bg-gray-900">
     <div class="min-h-full">
         <!-- Navigation -->
-        <nav class="bg-white dark:bg-gray-800 shadow">
+        <nav class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 shadow">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex">
