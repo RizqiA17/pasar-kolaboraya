@@ -13,6 +13,148 @@ use Illuminate\Support\Facades\Cache;
 class ActivityTimeline extends Component
 {
 
+    public function placeholder()
+    {
+        return <<<'HTML'
+        <div class="relative overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 shadow-lg animate-pulse">
+            <div class="absolute top-0 left-0 w-20 h-20 opacity-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+
+            <div class="relative z-10 p-6">
+                <div class="flex items-center justify-between mb-4 gap-2">
+                    <div>
+                        <div class="h-5 w-40 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
+                        <div class="h-4 w-56 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                    </div>
+                    <div class="w-12 h-12 min-w-12 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                </div>
+
+                <div class="space-y-4">
+
+                    <!-- ITEM 1 -->
+                    <div class="relative">
+                        <div class="absolute max-sm:hidden left-6 top-8 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+                        <div class="flex items-start relative">
+                            <div class="relative max-sm:hidden mt-1">
+                                <div class="h-12 w-12 bg-gray-300 dark:bg-gray-700 rounded-2xl"></div>
+                            </div>
+
+                            <div class="sm:ml-6 flex-grow w-full min-w-0">
+                                <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
+                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+
+                                        <div class="flex-1 flex flex-col justify-between w-full min-w-0">
+                                            <div>
+                                                <div class="h-5 w-48 bg-gray-300 dark:bg-gray-600 rounded mb-3"></div>
+
+                                                <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+
+                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                    <div class="h-5 w-32 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                    <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                </div>
+
+                                                <div class="h-4 w-3/4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                                                <div class="h-3 w-1/2 bg-gray-300 dark:bg-gray-600 rounded mt-2"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
+                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ITEM 2 -->
+                    <div class="relative">
+                        <div class="absolute max-sm:hidden left-6 top-8 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+                        <div class="flex items-start relative">
+                            <div class="relative max-sm:hidden mt-1">
+                                <div class="h-12 w-12 bg-gray-300 dark:bg-gray-700 rounded-2xl"></div>
+                            </div>
+
+                            <div class="sm:ml-6 flex-grow w-full min-w-0">
+                                <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
+                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+
+                                        <div class="flex-1 flex flex-col justify-between w-full min-w-0">
+                                            <div>
+                                                <div class="h-5 w-44 bg-gray-300 dark:bg-gray-600 rounded mb-3"></div>
+
+                                                <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+
+                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                    <div class="h-5 w-28 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                    <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                </div>
+
+                                                <div class="h-4 w-3/4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                                                <div class="h-3 w-1/2 bg-gray-300 dark:bg-gray-600 rounded mt-2"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
+                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ITEM 3 -->
+                    <div class="relative">
+                        <div class="absolute max-sm:hidden left-6 top-8 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+                        <div class="flex items-start relative">
+                            <div class="relative max-sm:hidden mt-1">
+                                <div class="h-12 w-12 bg-gray-300 dark:bg-gray-700 rounded-2xl"></div>
+                            </div>
+
+                            <div class="sm:ml-6 flex-grow w-full min-w-0">
+                                <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
+                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+
+                                        <div class="flex-1 flex flex-col justify-between w-full min-w-0">
+                                            <div>
+                                                <div class="h-5 w-52 bg-gray-300 dark:bg-gray-600 rounded mb-3"></div>
+
+                                                <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+
+                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                    <div class="h-5 w-32 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                    <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                                </div>
+
+                                                <div class="h-4 w-3/4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                                                <div class="h-3 w-1/2 bg-gray-300 dark:bg-gray-600 rounded mt-2"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
+                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        HTML;
+    }
+
+
+
     public function getActivitiesProperty()
     {
         $user = Auth::user();

@@ -161,14 +161,14 @@
                         </div>
 
                         <div class="col-span-1 lg:hidden sm:col-span-2 lg:col-span-3">
-                            <livewire:dashboard.active-session-info />
+                            <livewire:dashboard.active-session-info lazy />
                         </div>
 
                         <!-- Connections Card -->
                         <livewire:dashboard.stats type="connections" title="Koneksi"
                             description="Jaringan profesional yang terhubung" :link="route('connections', ['tab' => 'list'])" icon="link"
                             iconColor="text-gray-900 dark:text-blue-400"
-                            iconBgColor="bg-blue-200/80 dark:bg-blue-400/20" />
+                            iconBgColor="bg-blue-200/80 dark:bg-blue-400/20" lazy />
 
                         @if (auth()->user()->canAccessEcosystem())
                             
@@ -176,13 +176,13 @@
                             <livewire:dashboard.stats type="ecosystems" title="Kolaborasi"
                                 description="Ekosistem yang diikuti" :link="route('ecosystem.browse')" icon="users"
                                 iconColor="text-gray-900 dark:text-purple-400"
-                                iconBgColor="bg-purple-200/80 dark:bg-purple-400/20" />
+                                iconBgColor="bg-purple-200/80 dark:bg-purple-400/20" lazy />
                             
                             <!-- Collective Actions Card -->
                             <livewire:dashboard.stats type="collective_actions" title="Aksi Kolektif"
                                 description="Aksi kolektif yang diikuti" :link="route('collective-action.browse')" icon="users"
                                 iconColor="text-gray-900 dark:text-emerald-400"
-                                iconBgColor="bg-emerald-200/80 dark:bg-emerald-400/20" />
+                                iconBgColor="bg-emerald-200/80 dark:bg-emerald-400/20" lazy />
                         @endif
 
                         <!-- QR Code Card -->
@@ -193,7 +193,7 @@
 
                     <div class="col-span-1 flex-col gap-4 lg:flex hidden mt-auto">
                         <!-- Sesi Pasar -->
-                        <livewire:dashboard.active-session-info />
+                        <livewire:dashboard.active-session-info lazy />
                         <!-- QR Code Card -->
                         <x-dashboard.my-qr-code />
                     </div>
@@ -203,21 +203,21 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     <!-- Profile Progress - Takes 3 columns on large screens -->
                     <div class="lg:col-span-2 space-y-6 order-2 lg:order-1">
-                        <livewire:dashboard.profile-progress />
+                        <livewire:dashboard.profile-progress lazy />
 
                         <!-- Activity Section - Consistent spacing and layout -->
-                        <livewire:dashboard.activity-timeline />
+                        <livewire:dashboard.activity-timeline lazy />
 
                     </div>
 
                     <!-- Right Sidebar - Single column, consistent spacing -->
                     <div class="space-y-6 order-1 lg:order-2">
                         <!-- Survey Card - Show active survey -->
-                        <livewire:dashboard.survey-card />
+                        <livewire:dashboard.survey-card lazy />
                         <!-- Connection Quality - Only show if connections exist -->
-                        <livewire:dashboard.connection-quality />
+                        <livewire:dashboard.connection-quality lazy />
                         <!-- Profile Summary - Only show if profile exists and has data -->
-                        <livewire:dashboard.profile-summary />
+                        <livewire:dashboard.profile-summary lazy />
                     </div>
                 </div>
 

@@ -19,6 +19,12 @@ class SurveyCard extends Component
         }
     }
 
+    public function placeholder(){
+        return <<<'HTML'
+            <div class="m-0"></div>
+        HTML;
+    }
+
     public function participateInSurvey()
     {
         if (!$this->activeSurvey) {

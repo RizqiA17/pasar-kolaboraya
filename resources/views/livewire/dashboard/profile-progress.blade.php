@@ -9,18 +9,6 @@
     </div>
 
     <div class="relative z-10">
-        {{-- <div class="flex items-center justify-between mb-6 flex-wrap">
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-slate-200">Kelengkapan Profil</h3>
-                <p class="text-gray-700 dark:text-slate-300 text-sm">Lengkapi profil Anda untuk pengalaman terbaik</p>
-            </div>
-            @if ($completionPercentage < 100)
-                <flux:button wire:click="goToProfileSetup" variant="primary" size="sm" icon="pencil-square"
-                    class="bg-primary-blue hover:bg-teal-600 transition-colors">
-                    Lengkapi Profil
-                </flux:button>
-            @endif
-        </div> --}}
 
         <!-- Enhanced Status Message -->
         <div class="mb-8">

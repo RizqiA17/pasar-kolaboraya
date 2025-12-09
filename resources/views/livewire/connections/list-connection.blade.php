@@ -11,7 +11,7 @@
     <x-svg-accent position="center-right" size="w-12 h-12" opacity="opacity-10" />
     <x-svg-accent position="bottom-right" size="w-14 h-14" opacity="opacity-10" />
 
-    <div class="grid grid-cols-[repeat(auto-fill,_minmax(16rem,_1fr))] gap-4">
+    <div class="grid grid-cols-[repeat(auto-fill,_minmax(16rem,_1fr))] gap-4 py-4">
         @forelse ($friends as $friend)
             <x-connection.user-card :friend="$friend" />
         @empty

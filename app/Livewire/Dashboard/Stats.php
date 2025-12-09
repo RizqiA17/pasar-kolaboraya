@@ -53,6 +53,30 @@ class Stats extends Component
         }
     }
 
+    public function placeholder()
+    {
+        return <<<'HTML'
+        <div class="col-span-1 group relative overflow-hidden rounded-xl p-5 h-44 bg-gray-100 dark:bg-gray-800 animate-pulse flex flex-col">
+            <div class="relative z-10 flex flex-col flex-grow">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    </div>
+                    <div class="text-right flex flex-col gap-1">
+                        <div class="w-14 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        <div class="w-10 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    </div>
+                </div>
+
+                <div class="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+
+                <div class="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
+
+                <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded mt-auto"></div>
+            </div>
+        </div>
+        HTML;
+    }
+
     public function getCountProperty()
     {
         try {
