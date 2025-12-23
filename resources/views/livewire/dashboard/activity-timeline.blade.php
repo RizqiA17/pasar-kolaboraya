@@ -61,7 +61,7 @@
                             <div class="sm:ml-6 flex-grow w-full min-w-0">
                                 <div
                                     class="bg-neutral-50 dark:bg-zinc-800 rounded-2xl p-5 dark:border-t dark:border-slate-700 shadow-sm min-h-[140px]">
-                                    <div class="flex items-start justify-between h-full max-sm:flex-col">
+                                    <div class="flex items-start justify-between h-full gap-4 flex-col">
                                         <div class="flex-1 flex flex-col justify-between w-full min-w-0">
                                             <div>
                                                 <h4
@@ -73,7 +73,7 @@
                                                     {{ $activity->description }}
                                                 </p>
 
-                                                <div class="flex items-center max-sm:items-start gap-2 mb-3 max-sm:flex-col">
+                                                <div class="flex items-center max-sm:items-start sm:justify-between gap-2 mb-3 flex-wrap">
                                                     @if ($activity->type === 'collective_action')
                                                         <span
                                                             class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-secondary-green/50 dark:text-emerald-200">
@@ -168,28 +168,28 @@
                                         </div>
 
                                         <!-- Action Button -->
-                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
+                                        <div class="w-full">
                                             @if ($activity->type === 'collective_action')
                                                 <a href="{{ route('collective-action.show', $activity->id) }}"
-                                                    class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-secondary-green hover:bg-emerald-600 rounded-lg transition-colors whitespace-nowrap">
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-secondary-green hover:bg-emerald-600 rounded-md transition-colors whitespace-nowrap">
                                                     Lihat Aksi Kolektif
                                                     <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                                 </a>
                                             @elseif($activity->type === 'ecosystem')
                                                 <a href="{{ route('ecosystem.dashboard', $activity->id) }}"
-                                                    class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-accent-red hover:bg-red-600 rounded-lg transition-colors whitespace-nowrap">
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-accent-red hover:bg-red-600 rounded-md transition-colors whitespace-nowrap">
                                                     Lihat Ekosistem
                                                     <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                                 </a>
                                             @elseif($activity->type === 'ecosystem_contribution')
                                                 <a href="{{ route('ecosystem.dashboard', $activity->ecosystem_id) }}"
-                                                    class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-primary-blue hover:bg-sky-600 rounded-lg transition-colors whitespace-nowrap">
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-primary-blue hover:bg-sky-600 rounded-md transition-colors whitespace-nowrap">
                                                     Lihat Ekosistem
                                                     <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                                 </a>
                                             @elseif($activity->type === 'collective_action_contribution')
                                                 <a href="{{ route('collective-action.show', $activity->collective_action_id) }}"
-                                                    class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-accent-orange hover:bg-orange-600 rounded-lg transition-colors whitespace-nowrap">
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-accent-orange hover:bg-orange-600 rounded-md transition-colors whitespace-nowrap">
                                                     Lihat Aksi Kolektif
                                                     <flux:icon.arrow-right class="w-4 h-4 ml-2" />
                                                 </a>

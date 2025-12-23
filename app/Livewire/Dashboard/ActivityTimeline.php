@@ -41,7 +41,7 @@ class ActivityTimeline extends Component
 
                             <div class="sm:ml-6 flex-grow w-full min-w-0">
                                 <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
-                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+                                    <div class="flex items-start justify-between gap-4 flex-col h-full">
 
                                         <div class="flex-1 flex flex-col justify-between w-full min-w-0">
                                             <div>
@@ -49,7 +49,7 @@ class ActivityTimeline extends Component
 
                                                 <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
 
-                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                <div class="flex items-center max-sm:items-start sm:justify-between gap-2 mb-3 flex-wrap">
                                                     <div class="h-5 w-32 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                     <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                 </div>
@@ -59,8 +59,8 @@ class ActivityTimeline extends Component
                                             </div>
                                         </div>
 
-                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
-                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        <div class="w-full">
+                                            <div class="h-6 w-32 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
                                         </div>
 
                                     </div>
@@ -80,7 +80,7 @@ class ActivityTimeline extends Component
 
                             <div class="sm:ml-6 flex-grow w-full min-w-0">
                                 <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
-                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+                                    <div class="flex items-start justify-between gap-4 flex-col h-full">
 
                                         <div class="flex-1 flex flex-col justify-between w-full min-w-0">
                                             <div>
@@ -88,7 +88,7 @@ class ActivityTimeline extends Component
 
                                                 <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
 
-                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                <div class="flex items-center max-sm:items-start sm:justify-between gap-2 mb-3 flex-wrap">
                                                     <div class="h-5 w-28 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                     <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                 </div>
@@ -98,8 +98,8 @@ class ActivityTimeline extends Component
                                             </div>
                                         </div>
 
-                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
-                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        <div class="w-full">
+                                            <div class="h-6 w-32 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
                                         </div>
 
                                     </div>
@@ -119,7 +119,7 @@ class ActivityTimeline extends Component
 
                             <div class="sm:ml-6 flex-grow w-full min-w-0">
                                 <div class="bg-gray-200 dark:bg-zinc-700 rounded-2xl p-5 min-h-[140px] shadow-sm">
-                                    <div class="flex items-start justify-between max-sm:flex-col h-full">
+                                    <div class="flex items-start justify-between gap-4 flex-col h-full">
 
                                         <div class="flex-1 flex flex-col justify-between w-full min-w-0">
                                             <div>
@@ -127,7 +127,7 @@ class ActivityTimeline extends Component
 
                                                 <div class="h-4 w-full bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
 
-                                                <div class="flex items-center max-sm:flex-col gap-2 mb-4">
+                                                <div class="flex items-center max-sm:items-start sm:justify-between gap-2 mb-3 flex-wrap">
                                                     <div class="h-5 w-32 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                     <div class="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                                                 </div>
@@ -137,8 +137,8 @@ class ActivityTimeline extends Component
                                             </div>
                                         </div>
 
-                                        <div class="sm:ml-4 flex-shrink-0 max-sm:w-full max-sm:mt-4">
-                                            <div class="h-10 w-40 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+                                        <div class="w-full">
+                                            <div class="h-6 w-32 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
                                         </div>
 
                                     </div>

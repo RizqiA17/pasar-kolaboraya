@@ -275,14 +275,25 @@
                                 class="text-coral dark:text-coral-400 font-semibold">memperluas dampak</span>.
                         </p>
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a href="{{ route('register') }}"
-                                class="inline-flex items-center px-8 py-4 bg-navy dark:bg-secondary-green text-white rounded-full text-lg font-semibold hover:bg-sky-700 dark:hover:bg-teal-600 transition">
-                                Bergabung Sekarang
-                                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
+                            @auth
+                                <a href="{{ url('/dashboard') }}"
+                                    class="inline-flex items-center px-8 py-4 bg-navy dark:bg-secondary-green text-white rounded-full text-lg font-semibold hover:bg-sky-700 dark:hover:bg-teal-600 transition">
+                                    Beranda
+                                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}"
+                                    class="inline-flex items-center px-8 py-4 bg-navy dark:bg-secondary-green text-white rounded-full text-lg font-semibold hover:bg-sky-700 dark:hover:bg-teal-600 transition">
+                                    Bergabung Sekarang
+                                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                </a>
+                            @endauth
                             {{-- <a href="{{ route('public.ecosystem.mapping') }}"
                                 class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-secondary-green to-primary-blue text-white rounded-full text-lg font-semibold hover:from-teal-600 hover:to-sky-700 transition">
                                 <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -371,40 +382,50 @@
        .text-purple { color: #9C6BFF; } */
         /* SVG Animation Styles */
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(5deg);
             }
         }
+
         @keyframes rotate {
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
         }
+
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
+
         .animate-rotate {
             animation: rotate 20s linear infinite;
         }
+
         .animate-float-delay-1 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 1s;
         }
+
         .animate-float-delay-2 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 2s;
         }
+
         .animate-float-delay-3 {
             animation: float 6s ease-in-out infinite;
             animation-delay: 3s;
         }
+
         /* Mobile Menu Styles */
         .mobile-menu-open {
             opacity: 1 !important;

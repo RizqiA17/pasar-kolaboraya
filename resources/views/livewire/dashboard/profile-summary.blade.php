@@ -1,17 +1,17 @@
 <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 p-8">
     {{-- SVG Accent Elements --}}
     <div class="absolute top-0 left-0 w-32 h-32 opacity-10">
-        <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt="" class="w-full h-full object-contain">
+        <img src="{{ Storage::url('web/ASET VISUAL/SVG/8.svg') }}" alt="" class="object-contain w-full h-full">
     </div>
     <div class="absolute bottom-0 right-0 w-24 h-24 opacity-10">
-        <img src="{{ Storage::url('web/ASET VISUAL/SVG/13.svg') }}" alt="" class="w-full h-full object-contain">
+        <img src="{{ Storage::url('web/ASET VISUAL/SVG/13.svg') }}" alt="" class="object-contain w-full h-full">
     </div>
 
     <div class="relative z-10">
-        <div class="flex items-center justify-between mb-6 relative w-full min-w-0">
+        <div class="relative flex items-center justify-between w-full min-w-0 mb-6">
             <div>
                 <h3 class="text-xl font-bold text-gray-900 dark:text-slate-200">Ringkasan Profil</h3>
-                <p class="text-gray-700 dark:text-slate-300 text-sm">Informasi tentang Anda</p>
+                <p class="text-sm text-gray-700 dark:text-slate-300">Informasi tentang Anda</p>
             </div>
             <flux:button href="{{ route(name: 'settings.profile-settings') }}" size="sm" class="">
                 <svg class="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
 
         @if ($profile)
             <!-- Basic Info with Enhanced Design -->
-            <div class="space-y-4 mb-6">
+            <div class="mb-6 space-y-4">
                 @if ($user->organization_name)
                     <div class="flex items-center">
                         <div
@@ -73,7 +73,7 @@
                         </div>
                         <div class="min-w-0">
                             <div class="text-sm font-bold text-accent-red">Visi/Misi</div>
-                            <div class="text-gray-700 dark:text-slate-200 text-xs line-clamp-2 w-full min-w-0">
+                            <div class="w-full min-w-0 text-xs text-gray-700 dark:text-slate-200 line-clamp-2">
                                 {{ $profile->vision }}</div>
                         </div>
                     </div>
@@ -84,15 +84,15 @@
                 ($allSkills && $allSkills->count() > 0) ||
                     ($allInterests && $allInterests->count() > 0) ||
                     ($profile->social_media && is_array($profile->social_media) && count($profile->social_media) > 0))
-                <div class="border-t border-gray-200 dark:border-gray-700 my-6"></div>
+                <div class="my-6 border-t border-gray-200 dark:border-gray-700"></div>
             @endif
 
             <!-- Skills with Enhanced Design -->
             @if ($allSkills && $allSkills->count() > 0)
                 <div class="mb-8">
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-4 flex items-center">
+                    <h4 class="flex items-center mb-4 text-lg font-semibold text-gray-700 dark:text-slate-200">
                         <div
-                            class="w-8 h-8 bg-primary-blue transition-colors rounded-lg flex items-center justify-center mr-3">
+                            class="flex items-center justify-center w-8 h-8 mr-3 transition-colors rounded-lg bg-primary-blue">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
@@ -105,7 +105,7 @@
                         @foreach ($allSkills->take(5) as $skillData)
                             @if ($skillData->custom_name)
                                 <span
-                                    class="inline-flex items-center px-4 py-2 rounded-full text-sky-800 dark:text-sky-200 text-sm font-medium bg-sky-100 dark:bg-primary-blue/50 shadow-sm">
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full shadow-sm text-sky-800 dark:text-sky-200 bg-sky-100 dark:bg-primary-blue/50">
                                     {{ $skillData->custom_name }}
                                     <span class="ml-1 text-xs opacity-75">(Custom)</span>
                                 </span>
@@ -115,7 +115,7 @@
                                 @endphp
                                 @if ($skill && $skill->name)
                                     <span
-                                        class="inline-flex items-center px-4 py-2 rounded-full text-sky-800 dark:text-sky-200 text-sm font-medium bg-sky-100 dark:bg-primary-blue/50 shadow-sm">
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full shadow-sm text-sky-800 dark:text-sky-200 bg-sky-100 dark:bg-primary-blue/50">
                                         {{ $skill->name }}
                                     </span>
                                 @endif
@@ -123,7 +123,7 @@
                         @endforeach
                         @if ($allSkills->count() > 5)
                             <span
-                                class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm">
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-full shadow-sm bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 dark:border-gray-600">
                                 +{{ $allSkills->count() - 5 }} lagi
                             </span>
                         @endif
@@ -134,8 +134,8 @@
             <!-- Interests with Enhanced Design -->
             @if ($allInterests && $allInterests->count() > 0)
                 <div class="mb-8">
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-4 flex items-center">
-                        <div class="w-8 h-8 bg-secondary-green rounded-lg flex items-center justify-center mr-3">
+                    <h4 class="flex items-center mb-4 text-lg font-semibold text-gray-700 dark:text-slate-200">
+                        <div class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-secondary-green">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
@@ -148,7 +148,7 @@
                         @foreach ($allInterests->take(5) as $interestData)
                             @if ($interestData->custom_name)
                                 <span
-                                    class="inline-flex items-center px-4 py-2 rounded-full text-emerald-800 dark:text-emerald-200 text-sm font-medium bg-emerald-100 dark:bg-secondary-green/50 shadow-sm">
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full shadow-sm text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50">
                                     {{ $interestData->custom_name }}
                                     <span class="ml-1 text-xs opacity-75">(Custom)</span>
                                 </span>
@@ -158,7 +158,7 @@
                                 @endphp
                                 @if ($interest && $interest->name)
                                     <span
-                                        class="inline-flex items-center px-4 py-2 rounded-full text-emerald-800 dark:text-emerald-200 text-sm font-medium bg-emerald-100 dark:bg-secondary-green/50 shadow-sm">
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full shadow-sm text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50">
                                         {{ $interest->name }}
                                     </span>
                                 @endif
@@ -166,7 +166,7 @@
                         @endforeach
                         @if ($allInterests->count() > 5)
                             <span
-                                class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm">
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-full shadow-sm bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 dark:border-gray-600">
                                 +{{ $allInterests->count() - 5 }} lagi
                             </span>
                         @endif
@@ -177,9 +177,9 @@
             <!-- Social Media with Enhanced Design -->
             @if ($profile->social_media && is_array($profile->social_media) && count($profile->social_media) > 0)
                 <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-4 flex items-center">
+                    <h4 class="flex items-center mb-4 text-lg font-semibold text-gray-700 dark:text-slate-200">
                         <div
-                            class="w-8 h-8 bg-accent-red transition-colors rounded-lg flex items-center justify-center mr-3">
+                            class="flex items-center justify-center w-8 h-8 mr-3 transition-colors rounded-lg bg-accent-red">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2">
@@ -195,7 +195,7 @@
                                 $url
                             @endphp
                                 <div class="flex items-center">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3">
+                                    <div class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg">
 
                                         @if (strtolower($platform) == 'instagram')
                                             <svg class="w-5 h-5 text-pink-500" viewBox="0 0 32 32" fill="none"
@@ -266,7 +266,7 @@
                                             </svg>
                                         @elseif(strtolower($platform) == 'x')
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                class="bi bi-twitter-x w-5 h-5" viewBox="0 0 16 16">
+                                                class="w-5 h-5 bi bi-twitter-x" viewBox="0 0 16 16">
                                                 <path
                                                     d="M12.6 0.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867 -5.07 -4.425 5.07H0.316l5.733 -6.57L0 0.75h5.063l3.495 4.633L12.601 0.75Zm-0.86 13.028h1.36L4.323 2.145H2.865z"
                                                     stroke-width="1"></path>
@@ -307,16 +307,16 @@
             @endif
         @else
             <!-- Empty State with Enhanced Design -->
-            <div class="text-center py-12">
+            <div class="py-12 text-center">
                 <div
-                    class="w-20 h-20 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    class="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                 </div>
-                <h4 class="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-2">Belum Ada Profil</h4>
-                <p class="text-gray-600 dark:text-gray-400 mb-6">Buat profil Anda untuk memulai perjalanan kolaborasi
+                <h4 class="mb-2 text-lg font-semibold text-gray-700 dark:text-slate-200">Belum Ada Profil</h4>
+                <p class="mb-6 text-gray-600 dark:text-gray-400">Buat profil Anda untuk memulai perjalanan kolaborasi
                 </p>
                 <flux:button href="{{ route(name: 'settings.profile-settings') }}" variant="primary"
                     class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700">

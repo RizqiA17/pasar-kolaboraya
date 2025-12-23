@@ -81,7 +81,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    protected static function booted(){
+    protected static function booted()
+    {
         static::saved(function ($user) {
             Cache::tags("active_pasar_kolaboraya:{$user->id}")->flush();
         });
@@ -169,7 +170,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUserTypeLabelAttribute(): string
     {
-        return match($this->user_type) {
+        return match ($this->user_type) {
             'partisipan' => 'Partisipan',
             'tamu' => 'Tamu',
             'komunitas' => 'Komunitas',
@@ -182,7 +183,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getApprovalStatusLabelAttribute(): string
     {
-        return match($this->approval_status) {
+        return match ($this->approval_status) {
             'pending' => 'Menunggu Persetujuan',
             'approved' => 'Disetujui',
             'rejected' => 'Ditolak',
@@ -253,8 +254,8 @@ class User extends Authenticatable implements MustVerifyEmail
             $query->where('requester_id', $this->id)
                 ->orWhere('receiver_id', $this->id);
         })
-        ->where('status', 'accepted')
-        ->forUserActiveSession($this); // Filter by user's active session
+            ->where('status', 'accepted')
+            ->forUserActiveSession($this); // Filter by user's active session
     }
 
     /**
@@ -275,13 +276,13 @@ class User extends Authenticatable implements MustVerifyEmail
             $query->where('requester_id', $this->id)
                 ->orWhere('receiver_id', $this->id);
         })
-        ->where('status', 'accepted');
+            ->where('status', 'accepted');
 
         // If user has active session, filter by it, otherwise show all connections
         if ($this->hasActivePasarKolaboraya()) {
             $query->where(function ($q) {
                 $q->where('pasar_kolaboraya_id', $this->active_pasar_kolaboraya_id)
-                  ->orWhereNull('pasar_kolaboraya_id'); // Include old connections without session
+                    ->orWhereNull('pasar_kolaboraya_id'); // Include old connections without session
             });
         }
 
@@ -298,7 +299,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(EventUser::class)->where('user_id', $this->id);
     }
 
-    public function mutualConnections(){
+    public function mutualConnections()
+    {
         return $this->hasMany(Connection::class)
             ->where('status', 'accepted');
     }
@@ -324,14 +326,16 @@ class User extends Authenticatable implements MustVerifyEmail
             });
     }
 
-    public function pendingReceivedConnections(){
+    public function pendingReceivedConnections()
+    {
         return $this->hasMany(Connection::class, 'receiver_id')
             ->where('receiver_id', $this->id)
             ->where('status', 'pending')
             ->forUserActiveSession($this); // Filter by user's active session
     }
 
-    public function pendingSentConnections(){
+    public function pendingSentConnections()
+    {
         return $this->hasMany(Connection::class, 'requester_id')
             ->where('requester_id', $this->id)
             ->where('status', 'pending')
@@ -468,7 +472,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get connection status with another user
      */
-public function getConnectionStatus($otherUserId)
+    public function getConnectionStatus($otherUserId)
     {
         $currentUserId = $this->id;
 
@@ -484,8 +488,8 @@ public function getConnectionStatus($otherUserId)
             $query->where('requester_id', $otherUserId)
                 ->where('receiver_id', $currentUserId);
         })
-        ->forUserActiveSession($this) // Filter by user's active session
-        ->first();
+            ->forUserActiveSession($this) // Filter by user's active session
+            ->first();
 
         if (!$existingConnection) {
             return 'not_connected';
@@ -806,8 +810,8 @@ public function getConnectionStatus($otherUserId)
     public function pasarKolaborayas(): BelongsToMany
     {
         return $this->belongsToMany(PasarKolaboraya::class, 'pasar_kolaboraya_users')
-                    ->withPivot(['status', 'role', 'invited_by', 'join_reason', 'admin_notes', 'joined_at', 'responded_at'])
-                    ->withTimestamps();
+            ->withPivot(['status', 'role', 'invited_by', 'join_reason', 'admin_notes', 'joined_at', 'responded_at'])
+            ->withTimestamps();
     }
 
     /**
@@ -911,7 +915,7 @@ public function getConnectionStatus($otherUserId)
         if (!$user->hasActivePasarKolaboraya()) {
             return $query->whereRaw('1 = 0'); // Return empty result
         }
-        
+
         return $query->forPasarKolaboraya($user->active_pasar_kolaboraya_id);
     }
 
@@ -937,8 +941,8 @@ public function getConnectionStatus($otherUserId)
     public function containers(): BelongsToMany
     {
         return $this->belongsToMany(Container::class, 'container_users')
-                    ->withPivot(['role', 'status', 'joined_at'])
-                    ->withTimestamps();
+            ->withPivot(['role', 'status', 'joined_at'])
+            ->withTimestamps();
     }
 
     /**
@@ -1009,12 +1013,12 @@ public function getConnectionStatus($otherUserId)
     public function generateQrCode(): string
     {
         $qrCode = 'PK_' . $this->id . '_' . time() . '_' . Str::random(16);
-        
+
         $this->update([
             'qr_code' => $qrCode,
             'qr_code_generated_at' => now(),
         ]);
-        
+
         return $qrCode;
     }
 
@@ -1026,7 +1030,7 @@ public function getConnectionStatus($otherUserId)
         if (!$this->qr_code) {
             $this->generateQrCode();
         }
-        
+
         return [
             'qr_code' => $this->qr_code,
             'user_id' => $this->id,
@@ -1045,7 +1049,7 @@ public function getConnectionStatus($otherUserId)
         if (!$this->qr_code || !$this->qr_code_generated_at) {
             return false;
         }
-        
+
         // QR code expires after 30 days
         return true;
     }
@@ -1063,13 +1067,10 @@ public function getConnectionStatus($otherUserId)
             ->where('users.id', '!=', $this->id);
     }
 
-    /**
-     * Get user's notifications
-     */
-    public function notifications()
-    {
-        return $this->morphMany(\App\Models\Notification::class, 'notifiable');
-    }
+    // public function notifications()
+    // {
+    //     return $this->morphMany(\App\Models\Notification::class, 'notifiable');
+    // }
 
     /**
      * Get unread notifications count
@@ -1087,11 +1088,11 @@ public function getConnectionStatus($otherUserId)
         if ($this->is_ecosystem_builder) {
             return 'Ecosystem Builder';
         }
-        
+
         if ($this->assigned_role) {
             return $this->assigned_role;
         }
-        
+
         return 'Belum Dipilih';
     }
 
@@ -1116,7 +1117,7 @@ public function getConnectionStatus($otherUserId)
                 'approved_at' => $this->ecosystem_builder_approved_at,
             ];
         }
-        
+
         if ($this->assigned_role) {
             return [
                 'type' => 'assigned_role',
@@ -1125,7 +1126,7 @@ public function getConnectionStatus($otherUserId)
                 'approved_at' => null,
             ];
         }
-        
+
         return [
             'type' => 'none',
             'label' => 'Belum Dipilih',
@@ -1149,4 +1150,25 @@ public function getConnectionStatus($otherUserId)
     {
         return $this->hasMany(EcosystemLike::class);
     }
+    
+    /**
+     * Get user's notifications
+     */
+    public function notificationReceivers()
+    {
+        return $this->hasMany(NotificationReceiver::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasManyThrough(
+            Notification::class,
+            NotificationReceiver::class,
+            'user_id',
+            'id',
+            'id',
+            'notification_id'
+        );
+    }
+
 }

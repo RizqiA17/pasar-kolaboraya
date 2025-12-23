@@ -1,12 +1,12 @@
 <div class="space-y-6" wire:poll.30s="refreshData">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-blue to-secondary-green text-white rounded-xl p-6">
-        <div class="flex justify-between items-start max-sm:flex-col">
+    <div class="p-6 text-white bg-gradient-to-r from-primary-blue to-secondary-green rounded-xl">
+        <div class="flex items-start justify-between max-sm:flex-col">
             <div>
-                <h1 class="text-2xl font-bold mb-2">Aksi Kolektif</h1>
+                <h1 class="mb-2 text-2xl font-bold">Aksi Kolektif</h1>
                 <p class="text-blue-100">Bergabung dengan gerakan kolaboratif untuk perubahan sosial yang lebih besar</p>
             </div>
-            <div class="flex-shrink-0 flex sm:flex-col max-sm:mt-4 max-sm:w-full gap-2 max-sm:flex-wrap">
+            <div class="flex flex-shrink-0 gap-2 sm:flex-col max-sm:mt-4 max-sm:w-full max-sm:flex-wrap">
                 @if (Auth::user()->canJoinEcosystemsAndActions())
                     <flux:button wire:navigate href="{{ route('collective-action.qr.scanner') }}" variant="primary"
                         class="bg-white text-primary-blue hover:bg-gray-50 max-sm:w-full">
@@ -34,7 +34,7 @@
     <!-- Tabs -->
     <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl p-6 shadow-sm">
         @if (Auth::user()->isEcosystemBuilder())
-            <div class="flex space-x-1 mb-6">
+            <div class="flex mb-6 space-x-1">
                 <button wire:click="$set('activeTab', 'actions')"
                     class="px-4 py-2 text-sm font-medium rounded-lg transition-colors
                 @if ($activeTab === 'actions') bg-primary-blue text-white 
@@ -58,13 +58,13 @@
             </div>
         @endif
         @if ($activeTab === 'actions')
-            <h2 class="text-lg font-semibold mb-4">Filter Pencarian</h2>
+            <h2 class="mb-4 text-lg font-semibold">Filter Pencarian</h2>
         @else
-            <h2 class="text-lg font-semibold mb-4">Undangan Aksi Kolektif</h2>
+            <h2 class="mb-4 text-lg font-semibold">Undangan Aksi Kolektif</h2>
         @endif
 
         @if ($activeTab === 'actions')
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-4">
                 <!-- Search -->
                 <flux:input wire:model.live.debounce.300ms="search" :placeholder="'Cari aksi kolektif...'"
                     type="search" />
@@ -95,7 +95,7 @@
             </div>
 
             @if ($search || $selectedScale || $selectedScope || $selectedStatus)
-                <div class="flex justify-between items-center">
+                <div class="flex items-center justify-between">
                     <span class="text-sm text-gray-600 dark:text-gray-400">
                         {{ $collectiveActions->total() }} aksi kolektif ditemukan
                     </span>
@@ -106,7 +106,7 @@
             @endif
         @else
             <!-- Invitation Status Filter -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">
                 <flux:select wire:model.live="invitationStatus" placeholder="Filter Status Undangan">
                     <option value="">Semua Status</option>
                     <option value="pending">Menunggu</option>
@@ -128,66 +128,67 @@
 
     <!-- Flash Messages -->
     @if (session('error'))
-        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
+        <div class="p-4 border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 rounded-xl">
             <p class="text-red-700 dark:text-red-300">{{ session('error') }}</p>
         </div>
     @endif
 
     @if (session('message'))
-        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
+        <div class="p-4 border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800 rounded-xl">
             <p class="text-green-700 dark:text-green-300">{{ session('message') }}</p>
         </div>
     @endif
 
     @if ($activeTab === 'actions')
         <!-- Collective Actions Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-[repeat(auto-fill,_minmax(384px,_1fr))] gap-6">
             @forelse($collectiveActions as $action)
                 <div
-                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md transition-shadow">
+                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md flex flex-col hover:scale-105 transition-[scale,shadow] duration-300">
 
                     <!-- Header -->
-                    <div class="p-6">
+                    <a href="{{ route('collective-action.show', $action) }}" class="flex flex-col flex-grow p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex-1">
-                                <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2 line-clamp-2">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-200 line-clamp-1">
                                     {{ $action->title }}
                                 </h3>
-                                <div class="flex items-center gap-3 mb-3">
+                                <div class="flex items-center gap-3 my-3">
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs
-                                @if ($action->scale === 'kecil') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                @elseif($action->scale === 'sedang') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
-                                @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                            @if ($action->scale === 'kecil') text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50
+                                            @elseif($action->scale === 'sedang') text-yellow-800 bg-yellow-100 dark:text-yellow-200 dark:bg-secondary-yellow/50
+                                            @else text-red-800 dark:text-red-200 bg-red-100 dark:bg-accent-red/50 @endif">
                                         {{ $action->scale_label }}
                                     </span>
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-sky-600">
+                                        class="inline-flex items-center px-2 py-1 text-xs rounded-full text-sky-800 bg-sky-100 dark:text-sky-200 dark:bg-primary-blue/50">
                                         {{ $action->scope_label }}
                                     </span>
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs
-                                @if ($action->status === 'planning') bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange
-                                @elseif($action->status === 'active') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                @elseif($action->status === 'completed') bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400
-                                @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                @if ($action->status === 'planning') text-orange-800 bg-orange-100 dark:text-orange-200 dark:bg-accent-orange/50
+                                @elseif($action->status === 'active') text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50
+                                @elseif($action->status === 'completed') text-gray-800 bg-gray-100 dark:text-slate-200 dark:bg-gray-500/50
+                                @else text-red-800 bg-red-100 dark:text-red-200 dark:bg-secondary-red/50 @endif">
                                         {{ $action->status_label }}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
+                        <p
+                            class="flex-grow mb-4 text-sm text-gray-700 dark:text-gray-300 line-clamp-3 min-h-15 max-h-15">
                             {{ $action->description }}
                         </p>
 
                         <!-- Goals -->
-                        <div class="mb-4">
+                        <div class="flex-grow mb-4">
                             <h4
-                                class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                                class="mb-2 text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
                                 Tujuan
                             </h4>
-                            <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 min-h-10 max-h-10">
                                 {{ $action->goals }}
                             </p>
                         </div>
@@ -196,19 +197,19 @@
                         @if ($action->required_resources_limited)
                             <div class="mb-4">
                                 <h4
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                                    class="mb-2 text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
                                     Sumber Daya Dibutuhkan
                                 </h4>
                                 <div class="flex flex-wrap gap-1">
                                     @foreach ($action->required_resources_limited as $resource)
                                         <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange">
+                                            class="inline-flex items-center px-2 py-1 text-xs text-white rounded-full bg-neutral-orange dark:bg-neutral-orange/20 dark:text-neutral-orange">
                                             {{ ucfirst($resource) }}
                                         </span>
                                     @endforeach
                                     @if ($action->required_resources_count > 4)
                                         <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
+                                            class="inline-flex items-center px-2 py-1 text-xs text-white bg-gray-600 rounded-full dark:bg-gray-600/20 dark:text-gray-400">
                                             +{{ $action->required_resources_count - 4 }} lainnya
                                         </span>
                                     @endif
@@ -219,7 +220,7 @@
                         <!-- Participating Ecosystems -->
                         <div class="mb-4">
                             <h4
-                                class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                                class="mb-2 text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
                                 Ekosistem Berpartisipasi
                             </h4>
                             <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
@@ -228,7 +229,7 @@
                                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>
                                 {{ $action->accepted_count }} ekosistem terlibat
-                                <span class="text-xs text-gray-500 ml-1">(termasuk penyelenggara)</span>
+                                <span class="ml-1 text-xs text-gray-500">(termasuk penyelenggara)</span>
                             </div>
                         </div>
 
@@ -249,7 +250,7 @@
                                 </div>
                             </div>
                             @if ($action->location)
-                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <div class="flex items-center mt-1 text-sm text-gray-600 dark:text-gray-400">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -257,7 +258,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    {{ $action->location }}
+                                    <p class="line-clamp-1">{{ $action->location }}</p>
                                 </div>
                             @endif
                         </div>
@@ -273,32 +274,34 @@
                             </div>
                         </div>
 
-                        <!-- Creator -->
-                        <div class="flex items-center mb-4">
-                            <div class="flex-shrink-0 mr-3">
-                                <div
-                                    class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                    {{ $action->creator->initials() }}
+                        <div class="flex items-center justify-between gap-3 mb-4">
+                            <!-- Creator -->
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div
+                                        class="flex items-center justify-center w-8 h-8 text-sm font-medium text-white rounded-full bg-gradient-to-r from-primary-blue to-secondary-green">
+                                        {{ $action->creator->initials() }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $action->creator->name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        Penyelenggara
+                                    </p>
                                 </div>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                    {{ $action->creator->name }}
-                                </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    Penyelenggara
-                                </p>
-                            </div>
-                        </div>
 
-                        <!-- Like Button and User Status -->
-                        <div class="flex items-center justify-between mb-4 gap-3">
+                            <!-- Like Button and User Status -->
                             <button id="like-button-{{ $action->id }}"
                                 class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                            {{ $action->is_liked ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600' }}"
-                                onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}')">
+                                {{ $action->is_liked
+                                    ? 'text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-400'
+                                    : 'text-gray-600 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400' }}"
+                                onclick="toggleLike('collective-action', {{ $action->id }}, '{{ $action->id }}', event)">
                                 <svg id="like-icon-{{ $action->id }}"
-                                    class="w-4 h-4 {{ $action->is_liked ? 'fill-red-600' : 'fill-gray-600' }}"
+                                    class="w-8 h-8 {{ $action->is_liked ? 'fill-red-600' : 'fill-gray-600' }}"
                                     viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
@@ -308,66 +311,51 @@
                                     class="font-medium">{{ $action->like_count }}</span>
                             </button>
 
-                            @if ($action->is_user_registered)
-                                @if ($action->user_status === 'active')
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Sudah Bergabung
-                                    </span>
-                                @elseif ($action->user_status === 'pending_approval')
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow">
-                                        Menunggu Persetujuan
-                                    </span>
-                                @elseif ($action->user_status === 'rejected')
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red">
-                                        Ditolak
-                                    </span>
-                                @elseif ($action->user_status === 'inactive')
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-600 text-white dark:bg-gray-600/20 dark:text-gray-400">
-                                        Tidak Aktif
-                                    </span>
-                                @endif
-                            @endif
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Footer Buttons -->
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         <div class="flex space-x-2">
                             @if ($action->can_user_contribute)
                                 <flux:button href="{{ route('collective-action.contribute', $action) }}"
                                     variant="primary" wire:navigate size="sm" class="flex-1">Berkontribusi
                                 </flux:button>
+                                <span
+                                    class="flex items-center justify-center w-8 h-8 px-2 py-1 text-xs rounded-full text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50">
+                                    <flux:icon.check class="size-4" />
+                                </span>
                             @elseif ($action->can_user_join)
                                 <flux:button href="{{ route('collective-action.join', $action) }}" variant="primary"
                                     wire:navigate size="sm" class="flex-1">Bergabung</flux:button>
                             @elseif ($action->user_contribution)
                                 <span
                                     class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                                    @if ($action->user_contribution_status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                    @elseif ($action->user_contribution_status === 'offered') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
-                                    @elseif ($action->user_contribution_status === 'completed') bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-primary-blue
-                                    @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                    @if ($action->user_contribution_status === 'accepted') text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50
+                                    @elseif ($action->user_contribution_status === 'offered') text-yellow-800 bg-yellow-100 dark:text-yellow-200 dark:bg-secondary-yellow/50
+                                    @elseif ($action->user_contribution_status === 'completed') text-sky-800 bg-sky-100 dark:text-sky-200 dark:bg-primary-blue/50
+                                    @else text-red-800 bg-red-100 dark:text-red-200 dark:bg-secondary-red/50 @endif">
                                     {{ ucfirst(str_replace('_', ' ', $action->user_contribution_status)) }}
                                 </span>
+                            @elseif ($action->is_user_registered && $action->user_status === 'pending_approval')
+                                <span
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-full dark:text-yellow-200 dark:bg-secondary-yellow/50 w-fit">
+                                    Menunggu Persetujuan
+                                </span>
+                            @else
+                                <div class="flex items-center h-8!">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Anda sudah aktif dalm
+                                        ekosistem ini</span>
+                                </div>
                             @endif
-                            <flux:button href="{{ route('collective-action.show', $action) }}" variant="outline"
-                                size="sm" class="flex-1">Lihat Detail</flux:button>
+
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center py-12">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Belum Ada Aksi Kolektif</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                <div class="py-12 text-center col-span-full">
+                    <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Belum Ada Aksi Kolektif</h3>
+                    <p class="mb-4 text-gray-600 dark:text-gray-400">
                         @if ($search || $selectedScale || $selectedScope || $selectedStatus)
                             Tidak ada aksi kolektif yang sesuai dengan filter Anda.
                         @else
@@ -388,14 +376,14 @@
         @endif
     @else
         <!-- Invitations List -->
-        <div class="space-y-4">
+        <div class="grid grid-cols-[repeat(auto-fill,_minmax(512px,_1fr))] gap-6">
             @forelse($invitations as $invitation)
                 <div
                     class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-xl  overflow-hidden hover:shadow-md transition-shadow">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex-1">
-                                <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">
+                                <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
                                     {{ $invitation->collectiveAction->title }}
                                 </h3>
 
@@ -404,60 +392,46 @@
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs
                                         @if ($invitation->status === 'pending') bg-secondary-yellow text-white dark:bg-secondary-yellow/20 dark:text-secondary-yellow
-                                        @elseif($invitation->status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                        @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                        @elseif($invitation->status === 'accepted') text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50
+                                        @else text-red-800 bg-red-100 dark:text-red-200 dark:bg-secondary-red/50 @endif">
                                         {{ $invitation->status_label }}
                                     </span>
 
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-blue text-white dark:bg-primary-blue/20 dark:text-sky-600">
+                                        class="inline-flex items-center px-2 py-1 text-xs text-sky-800 bg-sky-100 dark:text-sky-200 dark:bg-primary-blue/50">
                                         {{ $invitation->collectiveAction->scale_label }}
                                     </span>
 
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-orange text-white dark:bg-neutral-orange/20 dark:text-neutral-orange">
+                                        class="inline-flex items-center px-2 py-1 text-xs text-white rounded-full bg-neutral-orange dark:bg-neutral-orange/20 dark:text-neutral-orange">
                                         {{ $invitation->collectiveAction->scope_label }}
                                     </span>
                                 </div>
                             </div>
                         </div>
-
+                        
                         <!-- Description -->
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
+                        <p class="mb-4 text-sm text-gray-700 dark:text-gray-300 line-clamp-3 h-15">
                             {{ $invitation->collectiveAction->description }}
                         </p>
-
+                        
                         <!-- Invitation Message -->
                         @if ($invitation->invitation_message)
-                            <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <div class="p-3 mb-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                                 <h4
-                                    class="text-xs font-medium text-blue-800 dark:text-blue-200 uppercase tracking-wide mb-1">
+                                    class="mb-1 text-xs font-medium tracking-wide text-blue-800 uppercase dark:text-blue-200">
                                     Pesan Undangan
-                                </h4>
-                                <p class="text-sm text-blue-700 dark:text-blue-300">
+                                <p class="text-sm text-blue-700 dark:text-blue-300 line-clamp-2 h-10">
                                     {{ $invitation->invitation_message }}
                                 </p>
                             </div>
                         @endif
-
-                        <!-- Response Message -->
-                        @if ($invitation->response_message)
-                            <div class="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <h4
-                                    class="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
-                                    Pesan Respons
-                                </h4>
-                                <p class="text-sm text-gray-700 dark:text-gray-300">
-                                    {{ $invitation->response_message }}
-                                </p>
-                            </div>
-                        @endif
-
+                            
                         <!-- Invited By -->
                         <div class="flex items-center mb-4">
                             <div class="flex-shrink-0 mr-3">
                                 <div
-                                    class="w-8 h-8 bg-gradient-to-r from-primary-blue to-secondary-green rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                    class="flex items-center justify-center w-8 h-8 text-sm font-medium text-white rounded-full bg-gradient-to-r from-primary-blue to-secondary-green">
                                     {{ $invitation->invitedBy->initials() }}
                                 </div>
                             </div>
@@ -497,9 +471,9 @@
                     </div>
 
                     <!-- Footer Actions -->
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         @if ($invitation->status === 'pending')
-                            <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
                                 <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -510,7 +484,7 @@
                                 </div>
                                 <div class="flex space-x-2">
                                     <a href="{{ route('collective-action.respond-invitation', $invitation) }}"
-                                        class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors bg-orange-600 rounded-lg hover:bg-orange-700">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -530,8 +504,8 @@
                                 <div class="flex items-center">
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm
-                                        @if ($invitation->status === 'accepted') bg-secondary-green text-white dark:bg-secondary-green/20 dark:text-secondary-green
-                                        @else bg-accent-red text-white dark:bg-accent-red/20 dark:text-accent-red @endif">
+                                        @if ($invitation->status === 'accepted') text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-secondary-green/50
+                                        @else text-red-800 bg-red-100 dark:text-red-200 dark:bg-secondary-red/50 @endif">
                                         @if ($invitation->status === 'accepted')
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -561,16 +535,16 @@
                     </div>
                 </div>
             @empty
-                <div class="text-center py-12">
+                <div class="py-12 text-center">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">
                         Belum Ada Undangan
                     </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    <p class="mb-4 text-gray-600 dark:text-gray-400">
                         @if ($invitationSearch || $invitationStatus)
                             Tidak ada undangan yang sesuai dengan filter Anda.
                         @else
@@ -661,8 +635,8 @@
                 </div>
                 <div class="flex-1">
                     <h4 class="font-semibold">Undangan Aksi Kolektif Baru</h4>
-                    <p class="text-sm mt-1">${invitation.collective_action.title}</p>
-                    <p class="text-xs mt-1 opacity-90">Dari: ${invitation.invited_by.name}</p>
+                    <p class="mt-1 text-sm">${invitation.collective_action.title}</p>
+                    <p class="mt-1 text-xs opacity-90">Dari: ${invitation.invited_by.name}</p>
                 </div>
                 <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 text-white hover:text-gray-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -693,6 +667,9 @@
 
         // Like functionality
         function toggleLike(type, id, elementId) {
+            event.stopPropagation();
+            event.preventDefault();
+
             const button = document.getElementById(`like-button-${elementId}`);
             const icon = document.getElementById(`like-icon-${elementId}`);
             const count = document.getElementById(`like-count-${elementId}`);
@@ -712,24 +689,20 @@
                     if (data.success) {
                         // Update button state
                         if (data.isLiked) {
-                            button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
-                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600',
-                                'border-gray-200', 'dark:border-gray-600');
-                            button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20',
-                                'dark:text-red-400', 'dark:hover:bg-red-900/30', 'border-red-200',
-                                'dark:border-red-800');
+                            button.classList.remove('text-gray-600', 'hover:text-gray-700', 'dark:text-gray-500',
+                                'dark:hover:text-gray-400');
+                            button.classList.add('text-red-600', 'hover:text-red-700', 'dark:text-red-500',
+                                'dark:hover:text-red-400');
                             // Update icon fill
                             if (icon) {
                                 icon.classList.remove('fill-gray-600');
                                 icon.classList.add('fill-red-600');
                             }
                         } else {
-                            button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200',
-                                'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30',
-                                'border-red-200', 'dark:border-red-800');
-                            button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
-                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600',
-                                'border-gray-200', 'dark:border-gray-600');
+                            button.classList.remove('text-red-600', 'hover:text-red-700', 'dark:text-red-500',
+                                'dark:hover:text-red-400');
+                            button.classList.add('text-gray-600', 'hover:text-gray-700', 'dark:text-gray-500',
+                                'dark:hover:text-gray-400');
                             // Update icon fill
                             if (icon) {
                                 icon.classList.remove('fill-red-600');
@@ -764,15 +737,15 @@
                         const count = document.getElementById(`like-count-${elementId}`);
 
                         if (data.isLiked) {
-                            button.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
-                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
-                            button.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200', 'dark:bg-red-900/20',
-                                'dark:text-red-400', 'dark:hover:bg-red-900/30');
+                            button.classList.remove('text-gray-600', 'hover:text-gray-700', 'dark:text-gray-500',
+                                'dark:hover:text-gray-400');
+                            button.classList.add('text-red-600', 'hover:text-red-700', 'dark:text-red-500',
+                                'dark:hover:text-red-400');
                         } else {
-                            button.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200',
-                                'dark:bg-red-900/20', 'dark:text-red-400', 'dark:hover:bg-red-900/30');
-                            button.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200',
-                                'dark:bg-gray-700', 'dark:text-gray-400', 'dark:hover:bg-gray-600');
+                            button.classList.remove('text-red-600', 'hover:text-red-700', 'dark:text-red-500',
+                                'dark:hover:text-red-400');
+                            button.classList.add('text-gray-600', 'hover:text-gray-700', 'dark:text-gray-500',
+                                'dark:hover:text-gray-400');
                         }
 
                         count.textContent = data.likeCount;
