@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationReceiver;
+use Illuminate\Support\Facades\Cache;
 use App\Services\NotificationRedisService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    public function haveUnread(Request $request): JsonResponse
+    {
+        $haveUnread = Cache::tags("notification:{$request->user()->id}")->remember("user:{$request->user()->id}:notifications:have_unread", 300, function () use ($request) {
+            return NotificationReceiver::where('user_id', $request->user()->id)->where('is_read', false)->exists();
+        });
+        return response()->json([
+            'data' => [
+                'have_unread' => $haveUnread
+            ],
+        ]);
+    }
     /**
      * Recent notification (latest only)
      */

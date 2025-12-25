@@ -18,11 +18,7 @@ class Notification extends Model
         'type',
         'title',
         'message',
-        'data',
-    ];
-
-    protected $casts = [
-        'data' => 'array',
+        'redirect_url',
     ];
 
     protected static function boot()

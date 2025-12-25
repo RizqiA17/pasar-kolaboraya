@@ -98,6 +98,7 @@ Route::prefix('v1/app')
 
 Route::middleware(['web', 'auth'])->prefix('notifications')->group(function () {
 
+    Route::get('/have-unread', [NotificationController::class, 'haveUnread']);
     Route::get('/recent', [NotificationController::class, 'recent']);
     Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
     Route::post('/{receiver}/read', [NotificationController::class, 'markAsRead']);

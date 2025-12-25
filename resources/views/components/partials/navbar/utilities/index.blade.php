@@ -2,7 +2,8 @@
     <!-- Dark Mode Toggle -->
     <x-dark-mode-toggle class="relative z-10" />
 
-    @include('components.partials.navbar.utilities.notification')
+    {{-- @include('components.partials.navbar.utilities.notification') --}}
+    <livewire:notification.notification-dropdown />
 
     @include('components.partials.navbar.utilities.user-menu')
 </div>

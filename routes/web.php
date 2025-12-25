@@ -5,6 +5,7 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Settings\Appearance;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifiedEmail;
 use App\Livewire\Collaborations\Create;
@@ -81,12 +82,12 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
     Route::post('/broadcasting/auth', function () {
         return response()->json(['status' => 'success']);
     })->name('broadcasting.auth');
-    
+
     // QR status check route (for polling fallback)
     Route::get('/qr/status', [QrCodeController::class, 'checkStatus'])->name('qr.status');
 
     Route::post('/set-pasar', [QrCodeController::class, 'setPasar'])->name('set.pasar');
-    
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
@@ -192,7 +193,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
         // Collective Action Like routes
         Route::post('collective-actions/{collectiveAction}/like', [App\Http\Controllers\LikeController::class, 'toggleCollectiveActionLike'])->name('collective-action.like');
         Route::get('collective-actions/{collectiveAction}/like-status', [App\Http\Controllers\LikeController::class, 'getCollectiveActionLikeStatus'])->name('collective-action.like-status');
-        
+
         // Ecosystem Like routes
         Route::post('ecosystem/{ecosystem}/like', [App\Http\Controllers\LikeController::class, 'toggleEcosystemLike'])->name('ecosystem.like');
         Route::get('ecosystem/{ecosystem}/like-status', [App\Http\Controllers\LikeController::class, 'getEcosystemLikeStatus'])->name('ecosystem.like-status');
@@ -294,7 +295,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/pasar-kolaboraya/create', \App\Livewire\Admin\CreatePasarKolaboraya::class)->name('pasar-kolaboraya.create');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/users', \App\Livewire\Admin\ManagePasarKolaborayaUsers::class)->name('pasar-kolaboraya.users');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/qr-scanner', \App\Livewire\Admin\PasarKolaborayaQrScanner::class)->name('pasar-kolaboraya.qr-scanner');
-    
+
     // Pasar Kolaboraya export routes
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/export-csv', [App\Http\Controllers\Admin\PasarKolaborayaExportController::class, 'exportCsv'])->name('pasar-kolaboraya.export-csv');
     Route::get('/pasar-kolaboraya/{pasarKolaboraya}/export-sql', [App\Http\Controllers\Admin\PasarKolaborayaExportController::class, 'exportSql'])->name('pasar-kolaboraya.export-sql');
@@ -302,6 +303,33 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     // QR Code Scanner for admin
     Route::get('/qr-scanner', \App\Livewire\Admin\QrScanner::class)->name('qr-scanner');
 });
+
+Route::get('/sse/notifications', function () {
+    $userId = auth()->id();
+
+    return response()->stream(function () use ($userId) {
+        set_time_limit(0);
+
+        while (true) {
+            $count = Redis::get("user:$userId:notifications:unread_count");
+
+            if ($count > 0) {
+                echo "event: notification\n";
+                echo "data: {$count}\n\n";
+                ob_flush();
+                flush();
+            }
+
+            sleep(3);
+        }
+    }, 200, [
+        'Content-Type' => 'text/event-stream',
+        'Cache-Control' => 'no-cache',
+        'Connection' => 'keep-alive',
+        'X-Accel-Buffering' => 'no',
+    ]);
+})->middleware('auth');
+
 
 // Route::get('/test', function () {
 //     return view('test');

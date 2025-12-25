@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('title')->nullable();
             $table->text('message');
 
-            $table->json('data')->nullable();
+            $table->string('redirect_url', 255)->nullable();
 
             $table->timestamps();
 

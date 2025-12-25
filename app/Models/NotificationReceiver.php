@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,10 @@ class NotificationReceiver extends Model
         'is_read' => 'boolean',
         'read_at' => 'datetime',
     ];
+
+    public static function clearNotifications($userId){
+        Cache::tags("notification:{$userId}")->flush();
+    }
 
     /**
      * Notification event
