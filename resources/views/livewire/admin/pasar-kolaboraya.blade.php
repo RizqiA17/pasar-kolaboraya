@@ -50,7 +50,7 @@
 
 
     <!-- Pasar Kolaboraya List -->
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div class="grid grid-cols-[repeat(auto-fill,_minmax(512px,_1fr))] gap-4">
         @forelse($pasarKolaborayas as $pasarKolaboraya)
             <x-admin.pasar-kolaboraya.list-card :pasar="$pasarKolaboraya">
                 <x-slot:actions>

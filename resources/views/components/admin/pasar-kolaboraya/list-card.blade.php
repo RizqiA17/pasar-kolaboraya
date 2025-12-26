@@ -6,8 +6,8 @@
             <div class="flex items-start justify-between mb-3">
                 <div class="flex items-center space-x-3">
                     <div
-                        class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
-                        <flux:icon.cube class="w-5 h-5 text-white" />
+                        class="flex items-center justify-center w-10 h-10 bg-primary-blue/20 dark:bg-secondary-green/20 rounded-xl">
+                        <flux:icon.cube class="w-5 h-5 text-primary-blue dark:text-secondary-green" />
                     </div>
 
                     <div>
@@ -34,7 +34,7 @@
                         </button>
 
                         <div x-show="open" x-transition
-                            class="absolute right-0 z-20 w-48 mt-2 bg-white border rounded-md shadow-xl dark:bg-slate-900 border-slate-200 dark:border-slate-700">
+                            class="absolute right-0 z-20 w-48 p-1 mt-2 bg-white border rounded-md shadow-xl dark:bg-slate-900 border-slate-200 dark:border-slate-700">
                             <div class="text-sm">
                                 {{ $actions }}
                             </div>
