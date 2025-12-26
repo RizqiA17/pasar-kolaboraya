@@ -1,14 +1,7 @@
 <div class="space-y-6">
     <!-- Page Header -->
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h1
-                class="mb-2 text-xl font-bold text-transparent md:text-3xl bg-primary-blue dark:bg-secondary-green bg-clip-text">
-                Dashboard Admin</h1>
-            <p class="max-w-2xl text-sm text-gray-600 dark:text-gray-300">Selamat datang kembali,
-                {{ auth()->user()->name }}! Berikut adalah aktivitas terbaru di sistem Anda.</p>
-        </div>
-    </div>
+    <x-admin.header title="Dashboard Admin"
+        description="Selamat datang kembali, {{ auth()->user()->name }}! Berikut adalah aktivitas terbaru di sistem Anda." />
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 sm:gap-4 lg:gap-6">
@@ -111,10 +104,12 @@
 
         <!-- Recent Collective Actions -->
         <x-admin.dashboard.recent title="Aksi Kolektif Terbaru" :link="route('admin.collective-actions')"
-            titleColor="text-secondary-green dark:text-emerald-400" linkHoverColor="hover:text-secondary-green/80 dark:hover:text-emerald-400/80">
+            titleColor="text-secondary-green dark:text-emerald-400"
+            linkHoverColor="hover:text-secondary-green/80 dark:hover:text-emerald-400/80">
             @forelse($recentCollectiveActions as $collectiveAction)
                 <div class="flex items-center space-x-3">
-                    <div class="flex items-center justify-center w-8 h-8 bg-emerald-100 rounded-lg dark:bg-emerald-900/20">
+                    <div
+                        class="flex items-center justify-center w-8 h-8 bg-emerald-100 rounded-lg dark:bg-emerald-900/20">
                         <flux:icon name="calendar" class="w-4 h-4 text-secondary-green dark:text-emerald-400" />
                     </div>
 

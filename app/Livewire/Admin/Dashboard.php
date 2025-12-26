@@ -16,6 +16,7 @@ use App\Models\Contribution;
 use App\Models\EventCategory;
 use App\Models\Peran;
 
+#[Layout('layouts.admin', ['title' => 'Admin Dashboard'])]
 class Dashboard extends Component
 {
     public array $stats = [];
@@ -23,7 +24,6 @@ class Dashboard extends Component
     public $recentEcosystems;
     public $recentCollectiveActions;
 
-    #[Layout('layouts.admin', ['title' => 'Admin Dashboard'])]
     public function mount(): void
     {
         $this->stats = Cache::remember('admin_dashboard_stats', 300, function () {
@@ -80,7 +80,7 @@ class Dashboard extends Component
             ->get(['id', 'name', 'email', 'created_at']);
 
         $this->recentEcosystems = Ecosystem::query()
-            ->whereHas('creator', fn ($q) => $q->withoutTrashed())
+            ->whereHas('creator', fn($q) => $q->withoutTrashed())
             ->with([
                 'creator:id,name'
             ])
@@ -89,7 +89,7 @@ class Dashboard extends Component
             ->get(['id', 'ecosystem_title', 'creator_id', 'created_at']);
 
         $this->recentCollectiveActions = CollectiveAction::query()
-            ->whereHas('creator', fn ($q) => $q->withoutTrashed())
+            ->whereHas('creator', fn($q) => $q->withoutTrashed())
             ->with([
                 'creator:id,name'
             ])

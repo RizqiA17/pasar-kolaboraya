@@ -11,7 +11,7 @@
     
     <x-navbar />
 
-    <main class="h-[calc(100svh_-_56px)]">
+    <main class="min-h-[calc(100svh_-_56px)]">
         @yield('content')
     </main>
 
