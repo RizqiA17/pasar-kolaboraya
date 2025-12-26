@@ -221,9 +221,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/', App\Livewire\Admin\Dashboard::class)->name('dashboard');
 
     // Users management
-    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::get('/users', App\Livewire\Admin\User::class)->name('users');
     Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('users.show');
-    Route::get('/users/{user}/edit', [App\Http\Controllers\AdminController::class, 'editUser'])->name('users.edit');
+    Route::get('/users/{user}/edit', App\Livewire\Admin\UserEdit::class)->name('users.edit');
     Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
 
