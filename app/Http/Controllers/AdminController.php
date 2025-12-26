@@ -169,8 +169,6 @@ class AdminController extends Controller
                     $subQuery->withoutTrashed();
                 });
             },
-            'collaborations',
-            'events'
         ]);
         return view('admin.users.show', compact('user'));
     }

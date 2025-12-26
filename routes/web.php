@@ -222,23 +222,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
 
     // Users management
     Route::get('/users', App\Livewire\Admin\User::class)->name('users');
-    Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('users.show');
+    Route::get('/users/{user}', App\Livewire\Admin\UserShow::class)->name('users.show');
     Route::get('/users/{user}/edit', App\Livewire\Admin\UserEdit::class)->name('users.edit');
     Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
 
     // Ecosystems management
-    Route::get('/ecosystems', [App\Http\Controllers\AdminController::class, 'ecosystems'])->name('ecosystems');
+    Route::get('/ecosystems', App\Livewire\Admin\Ecosystem::class)->name('ecosystems');
     Route::get('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'showEcosystem'])->name('ecosystems.show');
     Route::delete('/ecosystems/{ecosystem}', [App\Http\Controllers\AdminController::class, 'deleteEcosystem'])->name('ecosystems.delete');
 
     // Collective Actions management
-    Route::get('/collective-actions', [App\Http\Controllers\AdminController::class, 'collectiveActions'])->name('collective-actions');
+    Route::get('/collective-actions', App\Livewire\Admin\CollectiveAction::class)->name('collective-actions');
     Route::get('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'showCollectiveAction'])->name('collective-actions.show');
     Route::delete('/collective-actions/{collectiveAction}', [App\Http\Controllers\AdminController::class, 'deleteCollectiveAction'])->name('collective-actions.delete');
 
     // Connections management
-    Route::get('/connections', [App\Http\Controllers\AdminController::class, 'connections'])->name('connections');
+    Route::get('/connections', App\Livewire\Admin\connection::class)->name('connections');
     Route::get('/connections/{connection}', [App\Http\Controllers\AdminController::class, 'showConnection'])->name('connections.show');
 
     // Market Analysis
@@ -250,10 +250,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/ecosystem-builders', App\Livewire\Admin\EcosystemBuilderApproval::class)->name('ecosystem-builders');
 
     // Registration Keys management
-    Route::get('/registration-keys', App\Livewire\Admin\ManageRegistrationKeys::class)->name('registration-keys');
+    Route::get('/registration-keys', App\Livewire\Admin\RegistrationKey::class)->name('registration-keys');
 
     // User Approval management
-    Route::get('/user-approvals', App\Livewire\Admin\UserApprovalManagement::class)->name('user-approvals');
+    Route::get('/user-approvals', App\Livewire\Admin\UserApproval::class)->name('user-approvals');
 
     // Master data management
     Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');

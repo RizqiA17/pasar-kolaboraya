@@ -7,7 +7,7 @@
         class="p-4 space-y-4 sm:p-6 rounded-xl shadow-lg bg-white dark:bg-slate-900 dark:border-t! dark:border-slate-700">
 
         <!-- Search & Filters -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
             <!-- Search Input -->
             <flux:input wire:model.live.debounce.500ms="search" placeholder="Cari pengguna berdasarkan nama atau email..."
                 class="w-full" label="Cari" />
@@ -43,7 +43,7 @@
             </div>
 
         </div>
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
 
             <!-- Date From -->
             <flux:input wire:model.live="date_from" type="date" placeholder="Dari tanggal" class="w-full"
@@ -51,12 +51,13 @@
             <!-- Date To -->
             <flux:input wire:model.live="date_to" type="date" placeholder="Sampai tanggal" class="w-full"
                 label="Sampai Tanggal" />
-
-            <div class="w-full sm:w-auto col-span-2 flex justify-end items-end">
-                <flux:button wire:click="clearFilters" variant="outline">
-                    Hapus Filter
-                </flux:button>
-            </div>
+            @if ($search || $role || $peran_peserta || $status || $date_from || $date_to)
+                <div class="w-full sm:w-auto lg:col-span-2 col-span-1 flex justify-end items-end">
+                    <flux:button wire:click="clearFilters" variant="outline">
+                        Hapus Filter
+                    </flux:button>
+                </div>
+            @endif
         </div>
 
         <!-- Active Filters Display -->
@@ -217,124 +218,129 @@
         </div>
 
         <!-- Desktop Table View -->
-        <div class="hidden overflow-x-auto lg:block rounded-xl">
-            <table class="w-full">
-                <thead class="bg-slate-50 dark:bg-slate-700/50 =">
-                    <tr>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
-                            Pengguna
-                        </th>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
-                            Tipe
-                        </th>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
-                            Peran
-                        </th>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
-                            Bergabung
-                        </th>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
-                            Status
-                        </th>
-                        <th
-                            class="px-6 pb-4 pt-5 text-xs font-medium tracking-wider text-right uppercase text-primary-blue/60 dark:text-slate-300">
-                            Aksi
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                    @forelse($users as $user)
-                        <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center space-x-3">
-                                    <x-ui.avatar :user="$user" size="md" />
-                                    <div>
-                                        <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">
-                                            {{ $user->name }}
-                                        </div>
-                                        <div class="text-sm text-gray-600 dark:text-slate-300">
-                                            {{ $user->email }}
+        <div class="hidden lg:block relative">
+            <!-- Horizontal Scroll Wrapper -->
+            <div class="overflow-x-auto max-w-[calc(100svw_-_320px)]">
+                <table class="min-w-[1100px] w-full border-collapse">
+                    <thead class="bg-slate-50 dark:bg-slate-700/50">
+                        <tr>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300">
+                                Pengguna
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300">
+                                Tipe
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300">
+                                Peran
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300">
+                                Bergabung
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300">
+                                Status
+                            </th>
+
+                            <!-- STICKY HEADER -->
+                            <th
+                                class="px-6 py-4 text-right text-xs font-medium uppercase text-primary-blue/60 dark:text-slate-300 sticky right-0 z-20 bg-slate-50 dark:bg-slate-700/50">
+                                Aksi
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        @forelse($users as $user)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <x-ui.avatar :user="$user" size="md" />
+                                        <div>
+                                            <div
+                                                class="text-sm font-medium text-primary-blue dark:text-secondary-green">
+                                                {{ $user->name }}
+                                            </div>
+                                            <div class="text-sm text-gray-600 dark:text-slate-300">
+                                                {{ $user->email }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $roleColors[$user->role] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' }}">
-                                    {{ ucfirst(str_replace('_', ' ', $user->role)) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                @if ($user->is_ecosystem_builder)
+                                </td>
+
+                                <td class="px-6 py-4">
                                     <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full dark:bg-purple-900 dark:text-purple-200">
-                                        Ecosystem Builder
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                                {{ $roleColors[$user->role] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' }}">
+                                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
                                     </span>
-                                @elseif($user->assigned_role)
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-200">
-                                        {{ $user->assigned_role }}
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full dark:bg-gray-600 dark:text-gray-200">
-                                        Belum Dipilih
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-sm text-primary-blue dark:text-secondary-green">
-                                {{ $user->created_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4">
-                                @if ($user->email_verified_at)
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-200">
-                                        Terverifikasi
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold text-orange-800 bg-orange-100 rounded-full dark:bg-orange-900 dark:text-orange-200">
-                                        Belum Terverifikasi
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end space-x-2">
-                                    <a href="{{ route('admin.users.show', $user) }}"
-                                        class="text-sm font-medium text-primary-blue dark:text-secondary-green">
-                                        Lihat
-                                    </a>
-                                    <a href="{{ route('admin.users.edit', $user) }}"
-                                        class="text-sm font-medium text-accent-orange">
-                                        Edit
-                                    </a>
-                                    @if (!$user->isSuperAdmin() || $superAdminCount > 1)
-                                        <button wire:click="deleteUser({{ $user->id }})"
-                                            class="text-sm font-medium text-accent-red">
-                                            Hapus
-                                        </button>
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    @if ($user->is_ecosystem_builder)
+                                        <span class="badge-purple">Ecosystem Builder</span>
+                                    @elseif($user->assigned_role)
+                                        <span class="badge-blue">{{ $user->assigned_role }}</span>
+                                    @else
+                                        <span class="badge-gray">Belum Dipilih</span>
                                     @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
-                                <flux:icon.clipboard-document-list class="mx-auto mb-4 text-gray-400 size-16" />
-                                <h3 class="mb-2 text-lg font-medium text-primary-blue dark:text-secondary-green">
-                                    Tidak ada pengguna ditemukan
-                                </h3>
-                                <p class="text-gray-600 dark:text-slate-300">Coba sesuaikan kriteria pencarian Anda</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </td>
+
+                                <td class="px-6 py-4 text-sm text-primary-blue dark:text-secondary-green">
+                                    {{ $user->created_at->format('M d, Y') }}
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    @if ($user->email_verified_at)
+                                        <span class="badge-green">Terverifikasi</span>
+                                    @else
+                                        <span class="badge-orange">Belum Terverifikasi</span>
+                                    @endif
+                                </td>
+
+                                <!-- STICKY ACTION CELL -->
+                                <td
+                                    class="px-6 py-4 text-right sticky right-0 z-10 bg-white dark:bg-slate-900 shadow-[-8px_0_12px_-8px_rgba(0,0,0,0.15)]">
+
+                                    <div class="flex items-center justify-end gap-3">
+                                        <a href="{{ route('admin.users.show', $user) }}"
+                                            class="text-sm font-medium text-primary-blue dark:text-secondary-green">
+                                            Lihat
+                                        </a>
+
+                                        <a href="{{ route('admin.users.edit', $user) }}"
+                                            class="text-sm font-medium text-accent-orange">
+                                            Edit
+                                        </a>
+
+                                        @if (!$user->isSuperAdmin() || $superAdminCount > 1)
+                                            <button wire:click="deleteUser({{ $user->id }})"
+                                                class="text-sm font-medium text-accent-red">
+                                                Hapus
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-12 text-center">
+                                    <flux:icon.clipboard-document-list class="mx-auto mb-4 text-gray-400 size-16" />
+                                    <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green">
+                                        Tidak ada pengguna ditemukan
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-slate-300">
+                                        Coba sesuaikan kriteria pencarian Anda
+                                    </p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
