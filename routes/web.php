@@ -218,7 +218,7 @@ Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'check.us
 
 // Admin routes - only accessible by super admin
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status', VerifiedEmail::class, 'super.admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', App\Livewire\Admin\Dashboard::class)->name('dashboard');
 
     // Users management
     Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');

@@ -3,12 +3,6 @@
 
 <head>
     @include('partials.head')
-    @if ($title)
-        <title>{{ $title }} - {{ config('app.name') }}</title>
-    @endif
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @livewireStyles
-    @livewireScripts
 </head>
 
 <body class="min-h-screen bg-primary-light-blue block! dark:bg-gray-950/80">

@@ -1,75 +1,42 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <title>{{ $title ?? 'Admin Dashboard' }} - {{ config('app.name', 'Laravel') }}</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
-</head>
-<body class="h-full bg-gray-50 dark:bg-gray-900">
-    <div class="min-h-full">
-        <!-- Navigation -->
-        <nav class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 shadow">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex">
-                        <!-- Logo -->
-                        <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-gray-800 dark:text-white">
-                                Admin Panel
-                            </a>
+@extends('layouts.app')
+
+@section('content')
+        <div class="flex">
+
+            <x-admin.sidebar />
+
+            <!-- Main content -->
+            <div class="lg:pl-64 flex flex-col flex-1">
+                <!-- Mobile menu button -->
+                <div class="lg:hidden max-w-svw">
+                    <div
+                        class="flex items-center justify-between h-16 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-white/20 dark:border-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h1 class="text-lg font-bold text-slate-800 dark:text-slate-200">Panel Admin</h1>
                         </div>
-                        
-                        <!-- Navigation Links -->
-                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a href="{{ route('admin.dashboard') }}" class="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('admin.users') }}" class="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                Users
-                            </a>
-                            <a href="{{ route('admin.qr-scanner') }}" class="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                QR Scanner
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- User Menu -->
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <span class="text-sm text-gray-500 dark:text-gray-300">
-                                {{ Auth::user()->name }}
-                            </span>
-                        </div>
-                        <div class="ml-3">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                    Logout
-                                </button>
-                            </form>
+                        <div class="flex items-center space-x-2">
+                            <button type="button" id="mobile-menu-button"
+                                class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-        
-        <!-- Main Content -->
-        <main class="py-6">
-            {{ $slot }}
-        </main>
-    </div>
-    
-    @livewireScripts
-</body>
-</html>
 
+                <!-- Page content -->
+                <main class="flex-1 p-4 sm:p-6 max-lg:mb-24">
+                    {{ $slot }}
+                </main>
+            </div>
+        </div>
+@endsection
