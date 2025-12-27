@@ -3,7 +3,7 @@
     <x-admin.header title="Kelola Persetujuan User" description="Kelola persetujuan dan penolakan user yang mendaftar" />
 
     <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
         <x-admin.dashboard.stat-card iconColor="text-primary-blue dark:text-secondary-green" title="Total User"
             :stats="$stats['total'] ?? 0" />
         <x-admin.dashboard.stat-card iconColor="text-yellow-600 dark:text-yellow-400" title="Menunggu"
@@ -29,7 +29,7 @@
             <flux:input wire:model.live="date_to" type="date" placeholder="Sampai tanggal" class="w-full"
                 label="Sampai Tanggal" /> --}}
             @if ($search || $status)
-                <div class="w-full sm:w-auto 2xl:col-span-4 lg:col-span-2 col-span-1 flex justify-end items-end">
+                <div class="flex items-end justify-end w-full col-span-1 sm:w-auto 2xl:col-span-4 lg:col-span-2">
                     <flux:button wire:click="clearFilters" variant="outline">
                         Hapus Filter
                     </flux:button>
@@ -64,153 +64,172 @@
     </div>
 
     <!-- Users List -->
-    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg shadow">
+    <div class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green">Daftar User</h3>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-50 dark:bg-gray-700">
+        <!-- Horizontal Scroll Wrapper -->
+        <div class="overflow-x-auto max-w-[calc(100svw_-_48px)] sm:max-w-[calc(100svw_-_320px)]">
+            <table class="min-w-[1200px] w-full border-collapse">
+                <thead class="bg-slate-50 dark:bg-slate-700/50">
                     <tr>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            User</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            User
+                        </th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Tipe</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            Tipe
+                        </th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Status</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            Status
+                        </th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Peran</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            Peran
+                        </th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Tanggal Daftar</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            Tanggal Daftar
+                        </th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Diapprove Oleh</th>
+                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-primary-blue/60 dark:text-slate-300">
+                            Diapprove Oleh
+                        </th>
+
+                        <!-- STICKY HEADER -->
                         <th
-                            class="px-6 py-3 text-right text-xs font-medium text-primary-blue/60 dark:text-slate-300 uppercase">
-                            Aksi</th>
+                            class="sticky right-0 z-20 px-6 py-4 text-xs font-medium tracking-wider text-right uppercase text-primary-blue/60 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50">
+                            Aksi
+                        </th>
                     </tr>
                 </thead>
-                <tbody
-                    class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 divide-y divide-gray-200 dark:divide-gray-700">
+
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                     @forelse($users as $user)
-                        <tr>
+                        <tr class="transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50">
+
+                            <!-- USER -->
                             <td class="px-6 py-4">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <div
-                                            class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                            <span class="text-sm font-medium text-white">
-                                                {{ strtoupper(substr($user->name, 0, 2)) }}
-                                            </span>
-                                        </div>
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
+                                        <span class="text-sm font-medium text-white">
+                                            {{ strtoupper(substr($user->name, 0, 2)) }}
+                                        </span>
                                     </div>
-                                    <div class="ml-4">
+
+                                    <div>
                                         <div class="text-sm font-medium text-primary-blue dark:text-secondary-green">
-                                            {{ $user->name }}</div>
-                                        <div class="text-sm text-gray-600 dark:text-slate-300">{{ $user->email }}</div>
+                                            {{ $user->name }}
+                                        </div>
+                                        <div class="text-sm text-gray-600 dark:text-slate-300">
+                                            {{ $user->email }}
+                                        </div>
                                     </div>
                                 </div>
                             </td>
+
+                            <!-- TIPE -->
                             <td class="px-6 py-4">
                                 <span
-                                    class="px-2 py-1 text-xs font-medium rounded-full
-                                    {{ $user->user_type === 'partisipan'
-                                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                                        : ($user->user_type === 'tamu'
-                                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                            : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200') }}">
+                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                                {{ $user->user_type === 'partisipan'
+                                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                                    : ($user->user_type === 'tamu'
+                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                                        : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400') }}">
                                     {{ $user->user_type_label }}
                                 </span>
                             </td>
+
+                            <!-- STATUS -->
                             <td class="px-6 py-4">
-                                <div class="flex flex-col space-y-1">
+                                <div class="flex flex-col gap-1">
                                     <span
-                                        class="px-2 py-1 text-xs font-medium rounded-full
-                                        {{ $user->approval_status === 'pending'
-                                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                            : ($user->approval_status === 'approved'
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200') }}">
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                                    {{ $user->approval_status === 'pending'
+                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                                        : ($user->approval_status === 'approved'
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                            : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400') }}">
                                         {{ $user->approval_status_label }}
                                     </span>
+
                                     @if ($user->trashed())
                                         <span
-                                            class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                                            class="inline-flex px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full dark:bg-gray-900/20 dark:text-gray-400">
                                             Dihapus
                                         </span>
                                     @endif
                                 </div>
                             </td>
+
+                            <!-- PERAN -->
                             <td class="px-6 py-4">
                                 @if ($user->assigned_role)
-                                    @if ($user->assigned_role === 'Ecosystem Builder')
-                                        <div class="flex flex-col space-y-1">
-                                            <span
-                                                class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                                {{ $user->assigned_role }}
-                                            </span>
-                                        </div>
-                                    @else
-                                        <span
-                                            class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                            {{ $user->assigned_role }}
-                                        </span>
-                                    @endif
+                                    <span
+                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                                    {{ $user->assigned_role === 'Ecosystem Builder'
+                                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' }}">
+                                        {{ $user->assigned_role }}
+                                    </span>
                                 @else
-                                    <span class="text-gray-500 dark:text-slate-400 text-sm">-</span>
+                                    <span class="text-sm text-gray-500 dark:text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
+
+                            <!-- TANGGAL DAFTAR -->
+                            <td class="px-6 py-4 text-sm text-gray-600 dark:text-slate-300">
                                 {{ $user->created_at->format('d M Y H:i') }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
+
+                            <!-- APPROVED BY -->
+                            <td class="px-6 py-4 text-sm text-gray-600 dark:text-slate-300">
                                 @if ($user->approvedBy)
                                     {{ $user->approvedBy->name }}
                                     <div class="text-xs text-gray-500 dark:text-slate-400">
-                                        {{ $user->approved_at ? $user->approved_at->format('d M Y H:i') : '' }}
+                                        {{ optional($user->approved_at)->format('d M Y H:i') }}
                                     </div>
                                 @else
-                                    <span class="text-gray-500 dark:text-slate-400">-</span>
+                                    -
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end space-x-2">
-                                    @if ($user->trashed())
-                                        <span class="text-gray-500 dark:text-slate-400 text-sm">Tidak dapat
-                                            diakses</span>
-                                    @elseif($user->approval_status === 'pending')
-                                        <button wire:click="openApprovalModal({{ $user->id }})"
-                                            class="text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400 text-sm font-medium">
-                                            Kelola
-                                        </button>
-                                    @else
-                                        <button wire:click="openApprovalModal({{ $user->id }})"
-                                            class="text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green text-sm font-medium">
-                                            Lihat Detail
-                                        </button>
-                                    @endif
-                                </div>
+
+                            <!-- STICKY ACTION CELL -->
+                            <td
+                                class="px-6 py-4 text-right sticky right-0 z-10
+                            bg-white dark:bg-slate-900
+                            shadow-[-8px_0_12px_-8px_rgba(0,0,0,0.15)]">
+
+                                @if ($user->trashed())
+                                    <span class="text-sm text-gray-500 dark:text-slate-400">
+                                        Tidak dapat diakses
+                                    </span>
+                                @elseif($user->approval_status === 'pending')
+                                    <button wire:click="openApprovalModal({{ $user->id }})"
+                                        class="text-sm font-medium text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">
+                                        Kelola
+                                    </button>
+                                @else
+                                    <button wire:click="openApprovalModal({{ $user->id }})"
+                                        class="text-sm font-medium text-gray-600 dark:text-slate-300 hover:text-primary-blue dark:hover:text-secondary-green">
+                                        Lihat Detail
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-gray-600 dark:text-slate-300">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
-                                    </path>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-primary-blue dark:text-secondary-green">Tidak
-                                    ada user</h3>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-slate-300">Belum ada user yang
-                                    mendaftar.
+                            <td colspan="7" class="px-6 py-12 text-center">
+                                <p class="text-lg font-medium text-primary-blue dark:text-secondary-green">
+                                    Tidak ada user
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-slate-300">
+                                    Belum ada user yang mendaftar
                                 </p>
                             </td>
                         </tr>
@@ -219,24 +238,25 @@
             </table>
         </div>
 
-        @if ($users->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                {{ $users->links() }}
-            </div>
-        @endif
+
     </div>
+    @if ($users->hasPages())
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            {{ $users->links() }}
+        </div>
+    @endif
 
     <!-- Approval Modal -->
     @if ($isApprovalModalOpen && $selectedUser)
         <div class="fixed inset-0 z-50 overflow-y-auto">
             <div class="fixed inset-0 z-50 flex items-center justify-center">
-                <div class="fixed inset-0 bg-black/75 transition-opacity -z-10" wire:click="resetApprovalModal"></div>
+                <div class="fixed inset-0 transition-opacity bg-black/75 -z-10" wire:click="resetApprovalModal"></div>
 
                 <div
                     class="inline-block bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full">
                     <div
                         class="bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg font-medium text-primary-blue dark:text-secondary-green mb-4">
+                        <h3 class="mb-4 text-lg font-medium text-primary-blue dark:text-secondary-green">
                             @if ($selectedUser->trashed())
                                 Detail User (Dihapus): {{ $selectedUser->name }}
                             @elseif($selectedUser->approval_status === 'pending')
@@ -248,11 +268,11 @@
 
                         <div class="space-y-6">
                             <!-- User Info -->
-                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
                                 <div class="flex items-center space-x-4">
-                                    <div class="flex-shrink-0 h-16 w-16">
+                                    <div class="flex-shrink-0 w-16 h-16">
                                         <div
-                                            class="h-16 w-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                                            class="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
                                             <span class="text-xl font-medium text-white">
                                                 {{ strtoupper(substr($selectedUser->name, 0, 2)) }}
                                             </span>
@@ -264,7 +284,7 @@
                                         <p class="text-sm text-gray-600 dark:text-slate-300">
                                             {{ $selectedUser->email }}
                                         </p>
-                                        <div class="mt-2 flex space-x-2">
+                                        <div class="flex mt-2 space-x-2">
                                             <span
                                                 class="px-2 py-1 text-xs font-medium rounded-full
                                                 {{ $selectedUser->user_type === 'partisipan'
@@ -292,16 +312,15 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Tanggal
+                                        class="block mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">Tanggal
                                         Daftar</label>
                                     <p class="text-sm text-primary-blue dark:text-secondary-green">
                                         {{ $selectedUser->created_at->format('d M Y H:i') }}</p>
                                 </div>
                                 <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Kode
+                                    <label class="block mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">Kode
                                         Registrasi</label>
-                                    <p class="text-sm text-primary-blue dark:text-secondary-green font-mono">
+                                    <p class="font-mono text-sm text-primary-blue dark:text-secondary-green">
                                         {{ $selectedUser->registration_key ?: '-' }}</p>
                                 </div>
                             </div>
@@ -309,10 +328,10 @@
                             @if ($selectedUser->approval_status !== 'pending')
                                 @if ($selectedUser->approval_status === 'rejected')
                                     <div
-                                        class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                                        class="p-4 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/20 dark:border-red-800">
                                         <div class="flex">
                                             <div class="flex-shrink-0">
-                                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20"
+                                                <svg class="w-5 h-5 text-red-400" viewBox="0 0 20 20"
                                                     fill="currentColor">
                                                     <path fill-rule="evenodd"
                                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -338,14 +357,14 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Peran</label>
+                                                class="block mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">Peran</label>
                                             <div class="flex items-center space-x-2">
                                                 <p class="text-sm text-primary-blue dark:text-secondary-green">
                                                     {{ $selectedUser->assigned_role ?: '-' }}
                                                 </p>
                                                 @if ($selectedUser->assigned_role === 'Ecosystem Builder')
                                                     <span
-                                                        class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                                        class="px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded-full dark:bg-purple-900 dark:text-purple-200">
                                                         Ecosystem Builder
                                                     </span>
                                                 @endif
@@ -353,7 +372,7 @@
                                         </div>
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Diapprove
+                                                class="block mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">Diapprove
                                                 Oleh</label>
                                             <p class="text-sm text-primary-blue dark:text-secondary-green">
                                                 {{ $selectedUser->approvedBy ? $selectedUser->approvedBy->name : '-' }}
@@ -363,7 +382,7 @@
                                     @if ($selectedUser->approval_reason)
                                         <div>
                                             <label
-                                                class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-1">Alasan</label>
+                                                class="block mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">Alasan</label>
                                             <p class="text-sm text-gray-600 dark:text-slate-300">
                                                 {{ $selectedUser->approval_reason }}</p>
                                         </div>
@@ -374,10 +393,10 @@
                             @if ($selectedUser->approval_status === 'pending')
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Peran
+                                        class="block mb-2 text-sm font-medium text-gray-500 dark:text-slate-400">Peran
                                         yang Akan Diberikan</label>
                                     <select wire:model="assignedPeran"
-                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                                         @if ($selectedUser->user_type === 'tamu')
                                             <option value="Tamu" selected>Tamu</option>
                                         @elseif ($selectedUser->user_type === 'komunitas')
@@ -391,19 +410,19 @@
                                         @endforeach
                                     </select>
                                     @error('assignedPeran')
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                        <span class="text-sm text-red-500">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Alasan
+                                        class="block mb-2 text-sm font-medium text-gray-500 dark:text-slate-400">Alasan
                                         (Opsional)</label>
                                     <textarea wire:model="approvalReason" rows="3"
-                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Alasan persetujuan atau penolakan..."></textarea>
                                     @error('approvalReason')
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                        <span class="text-sm text-red-500">{{ $message }}</span>
                                     @enderror
                                 </div>
                             @endif
@@ -411,20 +430,20 @@
                     </div>
 
                     @if ($selectedUser->trashed())
-                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="resetApprovalModal"
                                 class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Tutup
                             </button>
                         </div>
                     @elseif($selectedUser->approval_status === 'pending')
-                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="approveUser({{ $selectedUser->id }})"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-secondary-green text-base font-medium text-white hover:bg-secondary-green/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-green sm:ml-3 sm:w-auto sm:text-sm">
+                                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-secondary-green hover:bg-secondary-green/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-green sm:ml-3 sm:w-auto sm:text-sm">
                                 Setujui
                             </button>
                             <button wire:click="rejectUser({{ $selectedUser->id }})"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-accent-red text-base font-medium text-white hover:bg-accent-red/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-red sm:ml-3 sm:w-auto sm:text-sm">
+                                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-accent-red hover:bg-accent-red/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-red sm:ml-3 sm:w-auto sm:text-sm">
                                 Tolak
                             </button>
                             <button wire:click="resetApprovalModal"
@@ -433,7 +452,7 @@
                             </button>
                         </div>
                     @else
-                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button wire:click="resetApprovalModal"
                                 class="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-slate-900 shadow-lg dark:border-t! dark:border-slate-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Tutup

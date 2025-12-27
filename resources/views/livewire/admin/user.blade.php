@@ -195,7 +195,7 @@
                                     Edit
                                 </a>
                                 @if (!$user->isSuperAdmin() || $superAdminCount > 1)
-                                    <button wire:click="deleteUser({{ $user->id }})"
+                                    <button wire:click="delete({{ $user->id }})" wire:confirm="Yakin hapus user ini?"
                                         class="text-xs font-medium text-accent-red hover:text-red-700 dark:text-accent-red-400 dark:hover:text-red-400">
                                         Hapus
                                     </button>
@@ -317,7 +317,7 @@
                                         </a>
 
                                         @if (!$user->isSuperAdmin() || $superAdminCount > 1)
-                                            <button wire:click="deleteUser({{ $user->id }})"
+                                            <button wire:click="delete({{ $user->id }})" wire:confirm="Yakin hapus user ini?"
                                                 class="text-sm font-medium text-accent-red">
                                                 Hapus
                                             </button>

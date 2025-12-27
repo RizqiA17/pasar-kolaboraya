@@ -26,6 +26,13 @@ class PasarKolaboraya extends Component
         }
     }
 
+    public function clearFilters()
+    {
+        $this->search = '';
+        $this->statusFilter = 'all';
+    }
+
+
     /* ==========================
         Lazy Load Controls
     ========================== */

@@ -34,23 +34,63 @@
     </div>
 
     <!-- Filters -->
-    <div class="p-4 rounded-xl bg-white dark:bg-slate-900 shadow">
-        <div class="flex flex-col gap-4 sm:flex-row">
-            <flux:input wire:model.live.debounce.500ms="search" placeholder="Cari nama atau deskripsi..."
-                class="flex-1" />
+    <div
+        class="p-4 space-y-4 sm:p-6 rounded-xl shadow-lg bg-white dark:bg-slate-900 dark:border-t! dark:border-slate-700">
 
-            <flux:select wire:model.live="statusFilter" class="sm:w-48">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
+
+            <!-- Search -->
+            <flux:input wire:model.live.debounce.500ms="search" placeholder="Cari nama atau deskripsi..." class="w-full"
+                label="Pencarian" />
+
+            <!-- Status -->
+            <flux:select wire:model.live="statusFilter" class="w-full" label="Status">
                 <flux:select.option value="all">Semua Status</flux:select.option>
                 <flux:select.option value="active">Aktif</flux:select.option>
                 <flux:select.option value="inactive">Tidak Aktif</flux:select.option>
                 <flux:select.option value="archived">Diarsipkan</flux:select.option>
             </flux:select>
+
+            <!-- Clear Filter -->
+            @if ($search || $statusFilter !== 'all')
+                <div class="flex items-end justify-end lg:col-span-2 2xl:col-span-2">
+                    <flux:button wire:click="clearFilters" variant="outline">
+                        Hapus Filter
+                    </flux:button>
+                </div>
+            @endif
         </div>
+
+        <!-- Active Filters -->
+        @if ($search || $statusFilter !== 'all')
+            <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+                <div class="flex flex-wrap gap-2">
+                    <span class="w-full text-xs text-gray-600 sm:text-sm dark:text-slate-300 sm:w-auto">
+                        Filter aktif:
+                    </span>
+
+                    @if ($search)
+                        <span
+                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900/20 dark:text-blue-400">
+                            Pencarian: "{{ $search }}"
+                        </span>
+                    @endif
+
+                    @if ($statusFilter !== 'all')
+                        <span
+                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900/20 dark:text-green-400">
+                            Status: {{ ucfirst($statusFilter) }}
+                        </span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 
 
+
     <!-- Pasar Kolaboraya List -->
-    <div class="grid grid-cols-[repeat(auto-fill,_minmax(512px,_1fr))] gap-4">
+    <div class="grid sm:grid-cols-[repeat(auto-fill,_minmax(512px,_1fr))] gap-4">
         @forelse($pasarKolaborayas as $pasarKolaboraya)
             <x-admin.pasar-kolaboraya.list-card :pasar="$pasarKolaboraya">
                 <x-slot:actions>
@@ -81,20 +121,16 @@
                     </a>
 
                     <!-- Export Data Buttons -->
-                    <div class="w-full mt-2 lg:w-auto lg:mt-0">
-                        <div class="flex flex-wrap gap-2">
-                            <a href="{{ route('admin.pasar-kolaboraya.export-csv', $pasarKolaboraya) }}"
-                                class="flex items-center w-full px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
-                                <flux:icon.arrow-down-tray class="w-4 h-4 mr-2" />
-                                Export CSV
-                            </a>
-                            {{-- <a href="{{ route('admin.pasar-kolaboraya.export-sql', $pasarKolaboraya) }}"
+                    <a href="{{ route('admin.pasar-kolaboraya.export-csv', $pasarKolaboraya) }}"
+                        class="flex items-center w-full px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <flux:icon.arrow-down-tray class="w-4 h-4 mr-2" />
+                        Export CSV
+                    </a>
+                    {{-- <a href="{{ route('admin.pasar-kolaboraya.export-sql', $pasarKolaboraya) }}"
                                 variant="outline" arrow-down-tray"
                                 title="Download data user dalam format SQL untuk import ke database">
                                 Export SQL
                             </a> --}}
-                        </div>
-                    </div>
 
                     @if ($pasarKolaboraya->status !== 'archived')
                         <button wire:click="deletePasarKolaboraya({{ $pasarKolaboraya->id }})"
@@ -108,22 +144,38 @@
                 </x-slot:actions>
             </x-admin.pasar-kolaboraya.list-card>
         @empty
-            <div
-                class="p-8 text-center border shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl sm:p-12 border-white/20 dark:border-slate-700/50">
+            @if ($search || $statusFilter !== 'all')
                 <div
-                    class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl">
-                    <flux:icon.cube class="w-8 h-8 text-primary-blue dark:text-primary-blue" />
+                    class="p-8 col-span-full text-center border shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl sm:p-12 border-white/20 dark:border-slate-700/50">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl">
+                        <flux:icon.cube class="w-8 h-8 text-primary-blue dark:text-primary-blue" />
+                    </div>
+                    <h3 class="mb-2 text-xl font-semibold text-primary-blue dark:text-secondary-green">
+                        Tidak ada Pasar Kolaboraya yang cocok
+                    </h3>
+                    <p class="max-w-md mx-auto mb-6 text-gray-600 dark:text-slate-300">
+                        Coba sesuaikan filter pencarian anda.
+                    </p>
                 </div>
-                <h3 class="mb-2 text-xl font-semibold text-primary-blue dark:text-secondary-green">
-                    Belum ada Pasar Kolaboraya
-                </h3>
-                <p class="max-w-md mx-auto mb-6 text-gray-600 dark:text-slate-300">
-                    Mulai dengan membuat Pasar Kolaboraya pertama Anda untuk mengelola sesi kolaborasi pengguna.
-                </p>
-                <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
-                    Buat Pasar Kolaboraya
-                </flux:button>
-            </div>
+            @else
+                <div
+                    class="p-8 col-span-full text-center border shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl sm:p-12 border-white/20 dark:border-slate-700/50">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl">
+                        <flux:icon.cube class="w-8 h-8 text-primary-blue dark:text-primary-blue" />
+                    </div>
+                    <h3 class="mb-2 text-xl font-semibold text-primary-blue dark:text-secondary-green">
+                        Belum ada Pasar Kolaboraya
+                    </h3>
+                    <p class="max-w-md mx-auto mb-6 text-gray-600 dark:text-slate-300">
+                        Mulai dengan membuat Pasar Kolaboraya pertama Anda untuk mengelola sesi kolaborasi pengguna.
+                    </p>
+                    <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
+                        Buat Pasar Kolaboraya
+                    </flux:button>
+                </div>
+            @endif
         @endforelse
     </div>
 

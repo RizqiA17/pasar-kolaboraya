@@ -11,7 +11,7 @@
                     </div>
 
                     <div>
-                        <a href="{{ route('admin.market-analysis.show', $pasar->id) }}"
+                        <a href="{{ route('admin.pasar-kolaboraya.users', $pasar->id) }}"
                             class="text-lg font-semibold text-primary-blue dark:text-secondary-green hover:text-sky-800 dark:hover:text-teal-400">
                             {{ $pasar->name }}
                         </a>
@@ -29,7 +29,7 @@
                     <!-- Dropdown Action -->
                     <div x-data="{ open: false }" class="relative">
                         <button type="button" @click="open = !open" @click.outside="open = false"
-                            class="p-2 transition rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            class="py-2 transition rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">
                             <flux:icon.ellipsis-vertical class="w-5 h-5" />
                         </button>
 
@@ -50,10 +50,11 @@
                 {{ $pasar->description == '' ? 'Tidak ada deskripsi' : $pasar->description }}
             </p>
 
-            <div class="flex flex-wrap gap-4 mb-4 text-sm text-gray-500 items-cente dark:text-slate-400">
+            <div
+                class="flex flex-wrap gap-4 max-sm:justify-between mb-4 text-sm text-gray-500 items-cente dark:text-slate-400">
                 <div class="flex items-center">
                     <flux:icon.users class="w-4 h-4 mr-2" />
-                    <span class="font-medium">{{ $pasar->acceptedUsers->count() }}</span> anggota
+                    <span class="font-medium">{{ $pasar->acceptedUsers->count() }} </span> anggota
                 </div>
 
                 <div class="flex items-center">
@@ -83,8 +84,8 @@
                 @endif
 
                 @if ($pasar->status === 'active')
-                    <flux:button onclick="downloadQR('{{ $pasar->qr_code }}')" variant="outline" size="sm" class="max-sm:w-full"
-                        icon="arrow-down-tray">
+                    <flux:button onclick="downloadQR('{{ $pasar->qr_code }}')" variant="outline" size="sm"
+                        class="max-sm:w-full" icon="arrow-down-tray">
                         Download QR
                     </flux:button>
                     <flux:button href="{{ route('admin.pasar-kolaboraya.qr-scanner', $pasar) }}" variant="outline"

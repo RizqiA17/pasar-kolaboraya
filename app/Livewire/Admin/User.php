@@ -49,6 +49,12 @@ class User extends Component
         ]);
     }
 
+    public function delete($id){
+        $user = UserModel::findOrFail($id);
+        $user->delete();
+        session()->flash('success', 'User berhasil dihapus.');
+    }
+
     public function getUsersProperty()
     {
         $query = UserModel::with(['profile']);

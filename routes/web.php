@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 // Admin Market Statistics Route (Admin Only)
 Route::middleware(['auth', 'check.login.status', VerifiedEmail::class, 'super.admin'])->group(function () {
-    Route::get('admin/market-statistics', [App\Http\Controllers\AdminMarketStatisticsController::class, 'index'])->name('admin.market.statistics');
+    Route::get('admin/market-statistics', App\Livewire\Admin\PasarStatistics::class)->name('admin.market.statistics');
 });
 
 // Pasar Kolaboraya QR Registration Routes (Admin Only - Auth Required)
@@ -256,12 +256,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::get('/user-approvals', App\Livewire\Admin\UserApproval::class)->name('user-approvals');
 
     // Master data management
-    Route::get('/interests', [App\Http\Controllers\AdminController::class, 'interests'])->name('interests');
+    Route::get('/interests', App\Livewire\Admin\Interest::class)->name('interests');
     Route::post('/interests', [App\Http\Controllers\AdminController::class, 'createInterest'])->name('interests.create');
     Route::put('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'updateInterest'])->name('interests.update');
     Route::delete('/interests/{interest}', [App\Http\Controllers\AdminController::class, 'deleteInterest'])->name('interests.delete');
 
-    Route::get('/skills', [App\Http\Controllers\AdminController::class, 'skills'])->name('skills');
+    Route::get('/skills', App\Livewire\Admin\Skill::class)->name('skills');
     Route::post('/skills', [App\Http\Controllers\AdminController::class, 'createSkill'])->name('skills.create');
     Route::put('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'updateSkill'])->name('skills.update');
     Route::delete('/skills/{skill}', [App\Http\Controllers\AdminController::class, 'deleteSkill'])->name('skills.delete');
@@ -277,13 +277,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'check.login.status'
     Route::delete('/event-categories/{eventCategory}', [App\Http\Controllers\AdminController::class, 'deleteEventCategory'])->name('event-categories.delete');
 
     // Peran management
-    Route::get('/peran', [App\Http\Controllers\AdminController::class, 'peran'])->name('peran');
-    Route::post('/peran', [App\Http\Controllers\AdminController::class, 'createPeran'])->name('peran.create');
+    Route::get('/peran', App\Livewire\Admin\Role::class)->name('peran');
+    Route::post('/peran', action: [App\Http\Controllers\AdminController::class, 'createPeran'])->name('peran.create');
     Route::put('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'updatePeran'])->name('peran.update');
     Route::delete('/peran/{peran}', [App\Http\Controllers\AdminController::class, 'deletePeran'])->name('peran.delete');
 
     // System settings management
-    Route::get('/system-settings', [App\Http\Controllers\AdminController::class, 'systemSettings'])->name('system-settings');
+    Route::get('/system-settings', App\Livewire\Admin\SystemSetting::class)->name('system-settings');
     Route::put('/system-settings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('system-settings.update');
 
     // Survey management routes

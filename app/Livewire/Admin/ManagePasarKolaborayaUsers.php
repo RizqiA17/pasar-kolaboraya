@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('components.admin.layout', ['title' => 'Kelola User Pasar Kolaboraya'])]
+#[Layout('layouts.admin', ['title' => 'Kelola User Pasar Kolaboraya'])]
 class ManagePasarKolaborayaUsers extends Component
 {
     use WithPagination;
@@ -35,11 +35,16 @@ class ManagePasarKolaborayaUsers extends Component
         $this->loadStats();
     }
 
+    public function clearFilters()
+    {
+        $this->search = '';
+    }
+
     public function updatedSearch()
     {
+        $this->resetPage();
         $this->loadAvailableUsers();
         $this->updateSelectAllState();
-        $this->resetPage();
     }
 
     public function updatedStatusFilter()
@@ -271,15 +276,20 @@ class ManagePasarKolaborayaUsers extends Component
                 $q->whereNull('deleted_at');
             });
 
-        // Apply status filter
-        if ($this->statusFilter !== 'all') {
-            $query->where('status', $this->statusFilter);
+        if ($this->search !== '') {
+            $query->whereHas('user', function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            });
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate($this->perPage);
+        $users = $query
+            ->latest()
+            ->paginate($this->perPage);
 
         return view('livewire.admin.manage-pasar-kolaboraya-users', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
+
 }
