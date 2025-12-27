@@ -59,10 +59,10 @@
                 @endforelse
             </div>
             <!-- Footer -->
-            <a href="{{ route('notifications.index') }}"
+            {{-- <a href="{{ route('notifications.index') }}"
                 class="block px-4 py-3 text-xs font-medium text-center text-blue-600 border-t dark:text-blue-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
                 Lihat semua notifikasi
-            </a>
+            </a> --}}
         </div>
     </flux:menu>
 </x-flux::dropdown>
