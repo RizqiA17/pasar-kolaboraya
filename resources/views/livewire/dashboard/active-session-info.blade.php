@@ -18,10 +18,11 @@
                 </div>
             </div>
             <flux:button 
-                wire:click="switchSession"
+                href="{{route('pasar-kolaboraya.select')}}"
                 size="xs"
                 variant="primary"
                 class=""
+                wire:navigate
             >
                 Ganti Sesi
             </flux:button>
@@ -44,7 +45,7 @@
             <flux:button 
                 href="{{ route('pasar-kolaboraya.select') }}"
                 size="xs"
-                {{-- variant="secondary" --}}
+                wire:navigate
                 class="text-amber-600 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-800"
             >
                 Pilih Sesi

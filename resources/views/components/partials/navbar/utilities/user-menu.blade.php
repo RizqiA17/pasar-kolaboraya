@@ -56,6 +56,13 @@
 
             <!-- Active Session Information -->
             @if (auth()->user()->hasActivePasarKolaboraya())
+            @php
+                $pasarKolaboraya = Cache::tags("active_pasar_kolaboraya:{$user->id}")->rememberForever("active_pasar_kolaboraya:{$user->id}", function () use ($user) {
+                        $pasar = $user->activePasarKolaboraya;
+                        $total = $pasar->acceptedUsers()->count();
+                        return array_merge($pasar->toArray(), ['totalAcceptedUsers' => $total]);
+                    });
+            @endphp
                 <div class="px-4 py-3 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20">
                     <div class="flex items-center space-x-3">
                         <div class="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full dark:bg-blue-800">
@@ -66,10 +73,10 @@
                                 Sesi Aktif
                             </h4>
                             <p class="text-xs text-blue-600 dark:text-blue-300">
-                                {{ auth()->user()->activePasarKolaboraya->name }}
+                                {{ $pasarKolaboraya['name'] }}
                             </p>
                             <p class="text-xs text-blue-500 dark:text-blue-400">
-                                {{ auth()->user()->activePasarKolaboraya->acceptedUsers->count() }} anggota
+                                {{ $pasarKolaboraya['totalAcceptedUsers'] }} anggota
                             </p>
                         </div>
                         <flux:button href="{{ route('pasar-kolaboraya.select') }}" size="xs"

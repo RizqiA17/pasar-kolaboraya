@@ -87,7 +87,7 @@ class Stats extends Component
             }
 
             return match ($this->type) {
-                'connections' => Cache::tags('stats:connections')->rememberForever(
+                'connections' => Cache::tags("stats:connections:{$user->id}:{$user->active_pasar_kolaboraya_id}")->rememberForever(
                     "stats:connections:{$user->id}",
                     fn() => Connection::forUserActiveSession($user)
                         ->where('status', 'accepted')
@@ -97,13 +97,13 @@ class Stats extends Component
                                 ->orWhere('receiver_id', $user->id)
                         )->count()
                 ),
-                'ecosystems' => Cache::tags('stats:ecosystems')->rememberForever(
+                'ecosystems' => Cache::tags("stats:ecosystems:{$user->id}:{$user->active_pasar_kolaboraya_id}")->rememberForever(
                     "stats:ecosystems:{$user->id}",
                     fn() => Ecosystem::forUserActiveSession($user)
                         ->whereHas('acceptedUsers', fn($query) => $query->where('user_id', $user->id))
                         ->count()
                 ),
-                'collective_actions' => Cache::tags('stats:collective_actions')->rememberForever(
+                'collective_actions' => Cache::tags("stats:collective_actions:{$user->id}:{$user->active_pasar_kolaboraya_id}")->rememberForever(
                     "stats:collective_actions:{$user->id}",
                     fn() => CollectiveAction::forUserActiveSession($user)
                         ->whereHas('acceptedUsers', fn($query) => $query->where('user_id', $user->id))

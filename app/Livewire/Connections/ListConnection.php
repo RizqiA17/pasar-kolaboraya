@@ -50,15 +50,11 @@ class ListConnection extends Component
         foreach ($connections as $connection) {
             // ambil user + relasi + count
             // dd($connection);
-            $user = User::with(['connections', 'collaborations', 'events'])
+            $user = User::with(['connections'])
                 ->withCount([
                     'connections' => function ($query) {
                         $query->where('status', 'accepted');
                     },
-                    'collaborations' => function ($query) {
-                        $query->where('status', 'accepted');
-                    },
-                    'events'
                 ])
                 ->find($connection[0]['receiver_id'] == Auth::id() ? $connection[0]['requester_id'] : $connection[0]['receiver_id']);
 
@@ -67,8 +63,6 @@ class ListConnection extends Component
                     'id' => $user->id,
                     'name' => $user->name,
                     'connections_count' => $user->connections_count,
-                    'collaborations_count' => $user->collaborations_count,
-                    'events_count' => $user->events_count,
                 ]);
             }
         }
@@ -122,15 +116,11 @@ class ListConnection extends Component
             $friend = $item->requester_id == Auth::id() ? $item->receiver : $item->requester;
 
             // Load the friend with their relationships
-            $friend = User::with(['connections', 'collaborations', 'events'])
+            $friend = User::with(['connections'])
                 ->withCount([
                     'connections' => function ($query) {
                         $query->where('status', 'accepted');
-                    },
-                    'collaborations' => function ($query) {
-                        $query->where('status', 'accepted');
-                    },
-                    'events'
+                    }
                 ])
                 ->find($friend->id);
 
@@ -138,8 +128,6 @@ class ListConnection extends Component
                 'id' => $friend->id,
                 'name' => $friend->name,
                 'connections_count' => $friend->connections_count,
-                'collaborations_count' => $friend->collaborations_count,
-                'events_count' => $friend->events_count
             ];
         });
     }

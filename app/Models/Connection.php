@@ -19,6 +19,22 @@ class Connection extends Model
         'status',
     ];
 
+    protected static function booted(){
+        static::saved(function ($connection) {
+            static::clearCache($connection->receiver);
+            static::clearCache($connection->requester);
+        });
+
+        static::deleted(function ($connection) {
+            static::clearCache($connection->receiver);
+            static::clearCache($connection->requester);
+        });
+    }
+
+    public static function clearCache($user){
+        Cache::tags("stats:connections:{$user->id}:{$user->active_pasar_kolaboraya_id}")->flush();
+    }
+
     public function requester()
     {
         return $this->belongsTo(User::class, 'requester_id');
